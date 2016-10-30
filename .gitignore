@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs
+/LibMpc/LibMpc.xproj.user
+/LibMpc/obj/Debug/netstandard1.6
+/LibMpc/bin/Debug/netstandard1.6
+/LibMpc/project.lock.json
