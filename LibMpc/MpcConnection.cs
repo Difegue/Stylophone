@@ -1,21 +1,3 @@
-/*
- * Copyright 2008 Matthias Sessler
- * 
- * This file is part of LibMpc.net.
- *
- * LibMpc.net is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * LibMpc.net is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with LibMpc.net.  If not, see <http://www.gnu.org/licenses/>.
- */
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,11 +10,6 @@ using System.Text.RegularExpressions;
 namespace Libmpc
 {
     /// <summary>
-    /// The delegate for the <see cref="MpcConnection.OnConnected"/> and <see cref="MpcConnection.OnDisconnected"/> events.
-    /// </summary>
-    /// <param name="connection">The connection firing the event.</param>
-    public delegate void MpcConnectionEventDelegate( MpcConnection connection );
-    /// <summary>
     /// Keeps the connection to the MPD server and handels the most basic structure of the
     /// MPD protocol. The high level commands are handeled in the <see cref="Libmpc.Mpc"/>
     /// class.
@@ -42,11 +19,11 @@ namespace Libmpc
         /// <summary>
         /// Is fired when a connection to a MPD server is established.
         /// </summary>
-        public event MpcConnectionEventDelegate OnConnected;
+        public event EventHandler OnConnected;
         /// <summary>
         /// Is fired when the connection to the MPD server is closed.
         /// </summary>
-        public event MpcConnectionEventDelegate OnDisconnected;
+        public event EventHandler OnDisconnected;
 
         private static readonly string FIRST_LINE_PREFIX = "OK MPD ";
 
@@ -55,58 +32,58 @@ namespace Libmpc
 
         private static readonly Regex ACK_REGEX = new Regex("^ACK \\[(?<code>[0-9]*)@(?<nr>[0-9]*)] \\{(?<command>[a-z]*)} (?<message>.*)$");
 
-        private IPEndPoint ipEndPoint = null;
+        private IPEndPoint _ipEndPoint;
 
-        private TcpClient tcpClient = null;
-        private NetworkStream networkStream = null;
+        private TcpClient _tcpClient;
+        private NetworkStream _networkStream;
 
-        private StreamReader reader;
-        private StreamWriter writer;
+        private StreamReader _reader;
+        private StreamWriter _writer;
 
-        private string version;
+        private string _version;
         /// <summary>
         /// If the connection to the MPD is connected.
         /// </summary>
-        public bool Connected { get { return (this.tcpClient != null) && this.tcpClient.Connected; } }
+        public bool Connected { get { return (_tcpClient != null) && _tcpClient.Connected; } }
         /// <summary>
         /// The version of the MPD.
         /// </summary>
-        public string Version { get { return this.version; } }
+        public string Version { get { return _version; } }
 
-        private bool autoConnect = false;
+        private bool _autoConnect = false;
         /// <summary>
         /// If a connection should be established when a command is to be
         /// executed in disconnected state.
         /// </summary>
         public bool AutoConnect
         {
-            get{ return this.autoConnect; }
-            set { this.autoConnect = value; }
+            get{ return _autoConnect; }
+            set { _autoConnect = value; }
         }
-        /// <summary>
-        /// Creates a new MpdConnection.
-        /// </summary>
-        public MpcConnection() {}
+        
         /// <summary>
         /// Creates a new MpdConnection.
         /// </summary>
         /// <param name="server">The IPEndPoint of the MPD server.</param>
-        public MpcConnection(IPEndPoint server) { this.Connect(server); }
+        public MpcConnection(IPEndPoint server)
+        {
+            Connect(server);
+        }
         /// <summary>
         /// The IPEndPoint of the MPD server.
         /// </summary>
         /// <exception cref="AlreadyConnectedException">When a conenction to a MPD server is already established.</exception>
         public IPEndPoint Server
         {
-            get { return this.ipEndPoint; }
+            get { return _ipEndPoint; }
             set
             {
-                if (this.Connected)
+                if (Connected)
                     throw new AlreadyConnectedException();
 
-                this.ipEndPoint = value;
+                _ipEndPoint = value;
 
-                this.ClearConnectionFields();
+                ClearConnectionFields();
             }
         }
         /// <summary>
@@ -115,8 +92,8 @@ namespace Libmpc
         /// <param name="server">The IPEndPoint of the server.</param>
         public void Connect(IPEndPoint server)
         {
-            this.Server = server;
-            this.Connect();
+            Server = server;
+            Connect();
         }
         /// <summary>
         /// Connects to the MPD server who's IPEndPoint was set in the Server property.
@@ -124,51 +101,51 @@ namespace Libmpc
         /// <exception cref="InvalidOperationException">If no IPEndPoint was set to the Server property.</exception>
         public void Connect()
         {
-            if (this.ipEndPoint == null)
+            if (_ipEndPoint == null)
                 throw new InvalidOperationException("Server IPEndPoint not set.");
 
-            if (this.Connected)
+            if (Connected)
                 throw new AlreadyConnectedException();
 
-            this.tcpClient = new TcpClient(
-                this.ipEndPoint.Address.ToString(), 
-                this.ipEndPoint.Port);
-            this.networkStream = this.tcpClient.GetStream();
 
-            this.reader = new StreamReader(this.networkStream, Encoding.UTF8);
-            this.writer = new StreamWriter(this.networkStream, Encoding.UTF8);
-            this.writer.NewLine = "\n";
+            _tcpClient = new TcpClient();
+            var connection = _tcpClient.ConnectAsync(_ipEndPoint.Address, _ipEndPoint.Port);
+            connection.Wait();
 
-            string firstLine = this.reader.ReadLine();
+            _networkStream = _tcpClient.GetStream();
+
+            _reader = new StreamReader(_networkStream, Encoding.UTF8);
+            _writer = new StreamWriter(_networkStream, Encoding.UTF8);
+            _writer.NewLine = "\n";
+
+            string firstLine = _reader.ReadLine();
             if( !firstLine.StartsWith( FIRST_LINE_PREFIX ) )
             {
-                this.Disconnect();
+                Disconnect();
                 throw new InvalidDataException("Response of mpd does not start with \"" + FIRST_LINE_PREFIX + "\"." );
             }
-            this.version = firstLine.Substring(FIRST_LINE_PREFIX.Length);
+            _version = firstLine.Substring(FIRST_LINE_PREFIX.Length);
 
-            this.writer.WriteLine();
-            this.writer.Flush();
+            _writer.WriteLine();
+            _writer.Flush();
 
-            this.readResponse();
+            ReadResponse();
 
-            if( this.OnConnected != null )
-                this.OnConnected.Invoke( this );
+            OnConnected?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// Disconnects from the current MPD server.
         /// </summary>
         public void Disconnect()
         {
-            if (this.tcpClient == null)
+            if (_tcpClient == null)
                 return;
 
-            this.networkStream.Close();
+            _networkStream.Dispose();
 
-            this.ClearConnectionFields();
+            ClearConnectionFields();
 
-            if( this.OnDisconnected != null )
-                this.OnDisconnected.Invoke( this );
+            OnDisconnected?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// Executes a simple command without arguments on the MPD server and returns the response.
@@ -185,18 +162,18 @@ namespace Libmpc
             if (command.Contains("\n"))
                 throw new ArgumentException("command contains newline");
 
-            this.CheckConnected();
+            CheckConnected();
 
             try
             {
-                this.writer.WriteLine(command);
-                this.writer.Flush();
+                _writer.WriteLine(command);
+                _writer.Flush();
 
-                return this.readResponse();
+                return ReadResponse();
             }
             catch (Exception)
             {
-                try { this.Disconnect(); }
+                try { Disconnect(); }
                 catch (Exception) { }
                 throw;
             }
@@ -227,34 +204,34 @@ namespace Libmpc
                     throw new ArgumentException("argument[" + i + "] contains newline");
             }
 
-            this.CheckConnected();
+            CheckConnected();
 
             try
             {
-                this.writer.Write(command);
+                _writer.Write(command);
                 foreach (string arg in argument)
                 {
-                    this.writer.Write(' ');
-                    this.WriteToken(arg);
+                    _writer.Write(' ');
+                    WriteToken(arg);
                 }
-                this.writer.WriteLine();
-                this.writer.Flush();
+                _writer.WriteLine();
+                _writer.Flush();
 
-                return this.readResponse();
+                return ReadResponse();
             }
             catch (Exception)
             {
-                try { this.Disconnect(); } catch (Exception) { }
+                try { Disconnect(); } catch (Exception) { }
                 throw;
             }
         }
 
         private void CheckConnected()
         {
-            if (!this.Connected)
+            if (!Connected)
             {
-                if (this.autoConnect)
-                    this.Connect();
+                if (_autoConnect)
+                    Connect();
                 else
                     throw new NotConnectedException();
             }
@@ -265,25 +242,25 @@ namespace Libmpc
         {
             if (token.Contains(" "))
             {
-                this.writer.Write("\"");
+                _writer.Write("\"");
                 foreach (char chr in token)
                     if (chr == '"')
-                        this.writer.Write("\\\"");
+                        _writer.Write("\\\"");
                     else
-                        this.writer.Write(chr);
+                        _writer.Write(chr);
             }
             else
-                this.writer.Write(token);
+                _writer.Write(token);
         }
 
-        private MpdResponse readResponse()
+        private MpdResponse ReadResponse()
         {
             List<string> ret = new List<string>();
-            string line = this.reader.ReadLine();
+            string line = _reader.ReadLine();
             while (!(line.Equals(OK) || line.StartsWith(ACK)))
             {
                 ret.Add(line);
-                line = this.reader.ReadLine();
+                line = _reader.ReadLine();
             }
             if (line.Equals(OK))
                 return new MpdResponse(new ReadOnlyCollection<string>(ret));
@@ -306,11 +283,11 @@ namespace Libmpc
 
         private void ClearConnectionFields() 
         {
-            this.tcpClient = null;
-            this.networkStream = null;
-            this.reader = null;
-            this.writer = null;
-            this.version = null;
+            _tcpClient?.Dispose();
+            _networkStream?.Dispose();
+            _reader?.Dispose();
+            _writer?.Dispose();
+            _version = string.Empty;
         }
     }
 }
