@@ -19,11 +19,11 @@ namespace Libmpc
         /// <summary>
         /// Is fired when a connection to a MPD server is established.
         /// </summary>
-        public event EventHandler OnConnected;
+        public event EventHandler Connected;
         /// <summary>
         /// Is fired when the connection to the MPD server is closed.
         /// </summary>
-        public event EventHandler OnDisconnected;
+        public event EventHandler Disconnected;
 
         private static readonly string FIRST_LINE_PREFIX = "OK MPD ";
 
@@ -44,7 +44,7 @@ namespace Libmpc
         /// <summary>
         /// If the connection to the MPD is connected.
         /// </summary>
-        public bool Connected { get { return (_tcpClient != null) && _tcpClient.Connected; } }
+        public bool IsConnected { get { return (_tcpClient != null) && _tcpClient.Connected; } }
         /// <summary>
         /// The version of the MPD.
         /// </summary>
@@ -67,7 +67,7 @@ namespace Libmpc
         /// <param name="server">The IPEndPoint of the MPD server.</param>
         public MpcConnection(IPEndPoint server)
         {
-            Connect(server);
+            Server = server;
         }
         /// <summary>
         /// The IPEndPoint of the MPD server.
@@ -78,7 +78,7 @@ namespace Libmpc
             get { return _ipEndPoint; }
             set
             {
-                if (Connected)
+                if (IsConnected)
                     throw new AlreadyConnectedException();
 
                 _ipEndPoint = value;
@@ -86,15 +86,7 @@ namespace Libmpc
                 ClearConnectionFields();
             }
         }
-        /// <summary>
-        /// Connects to a MPD server.
-        /// </summary>
-        /// <param name="server">The IPEndPoint of the server.</param>
-        public void Connect(IPEndPoint server)
-        {
-            Server = server;
-            Connect();
-        }
+        
         /// <summary>
         /// Connects to the MPD server who's IPEndPoint was set in the Server property.
         /// </summary>
@@ -104,7 +96,7 @@ namespace Libmpc
             if (_ipEndPoint == null)
                 throw new InvalidOperationException("Server IPEndPoint not set.");
 
-            if (Connected)
+            if (IsConnected)
                 throw new AlreadyConnectedException();
 
 
@@ -131,7 +123,7 @@ namespace Libmpc
 
             ReadResponse();
 
-            OnConnected?.Invoke(this, EventArgs.Empty);
+            Connected?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// Disconnects from the current MPD server.
@@ -145,7 +137,7 @@ namespace Libmpc
 
             ClearConnectionFields();
 
-            OnDisconnected?.Invoke(this, EventArgs.Empty);
+            Disconnected?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// Executes a simple command without arguments on the MPD server and returns the response.
@@ -175,7 +167,7 @@ namespace Libmpc
             {
                 try { Disconnect(); }
                 catch (Exception) { }
-                throw;
+                return null; // TODO: Create Null Object for MpdResponse
             }
         }
         /// <summary>
@@ -228,7 +220,7 @@ namespace Libmpc
 
         private void CheckConnected()
         {
-            if (!Connected)
+            if (!IsConnected)
             {
                 if (_autoConnect)
                     Connect();

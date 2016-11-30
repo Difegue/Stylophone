@@ -1,19 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace Libmpc
 {
-    /// <summary>
-    /// The delegate for the <see cref="MpcConnection.OnConnected"/> and <see cref="MpcConnection.OnDisconnected"/> events.
-    /// </summary>
-    /// <param name="connection">The connection firing the event.</param>
-    public delegate void MpcEventDelegate(Mpc connection);
+    public interface IMpc
+    {
+        bool IsConnected { get; }
+        bool Connect();
+
+        event EventHandler Connected;
+        event EventHandler Disconnected;
+
+        MpdOutput[] Outputs();
+        MpdStatistics Stats();
+    }
+
     /// <summary>
     /// The Mpc class implements all commands for the MPD. It takes care of command building
     /// and parsing the response into .net objects.
     /// </summary>
-    public class Mpc
+    public class Mpc : IMpc
     {
         private const string TAG_ANY = "any";
         private const string TAG_FILENAME = "filename";
@@ -32,84 +40,66 @@ namespace Libmpc
 
         private static readonly Regex STATUS_AUDIO_REGEX = new Regex("^(?<sampleRate>[0-9]*):(?<bits>[0-9]*):(?<channels>[0-9]*)$");
 
-        private readonly MpcConnectionEventDelegate onMpcConnectionConnectedDelegate;
-        private readonly MpcConnectionEventDelegate onMpcConnectionDisconnectedDelegate;
+        private MpcConnection _connection;
+        private IPEndPoint _server;
 
-        private MpcConnection connection = null;
-
-        /// <summary>
-        /// Creates a new Mpc.
-        /// </summary>
-        public Mpc()
+        public Mpc(IPEndPoint server)
         {
-            this.onMpcConnectionConnectedDelegate = new MpcConnectionEventDelegate(this.onMpcConnectionConnected);
-            this.onMpcConnectionDisconnectedDelegate = new MpcConnectionEventDelegate(this.onMpcConnectionDisconnected);
+            _server = server;
         }
+
         /// <summary>
         /// Is fired when a connection to a MPD server is established.
         /// </summary>
-        public event MpcEventDelegate OnConnected;
+        public event EventHandler Connected
+        {
+            add { ConnectedRelayEvent += value; }
+            remove { ConnectedRelayEvent -= value; }
+        }
+
+        private event EventHandler ConnectedRelayEvent;
+
         /// <summary>
         /// Is fired when the connection to the MPD server is closed.
         /// </summary>
-        public event MpcEventDelegate OnDisconnected;
-        /// <summary>
-        /// If the Mpc object has a connection that is connected to an MPD.
-        /// </summary>
-        public bool Connected
+        public event EventHandler Disconnected
         {
-            get { return this.connection == null ? false : this.connection.Connected; }
+            add { DisconnectedRelayEvent += value; }
+            remove { DisconnectedRelayEvent -= value; }
         }
+
+        private event EventHandler DisconnectedRelayEvent;
+
         /// <summary>
-        /// The MpcConnection used to talk to the server.
+        /// Connection status to MPD Server.
         /// </summary>
-        public MpcConnection Connection
+        public bool IsConnected => _connection?.IsConnected ?? false;
+
+        public bool Connect()
         {
-            get { return this.connection; }
-            set 
+            if (_connection == null)
             {
-                if (this.connection != null)
-                {
-                    this.connection.OnConnected -= this.onMpcConnectionConnectedDelegate;
-                    this.connection.OnDisconnected -= this.onMpcConnectionDisconnectedDelegate;
-
-                    if (this.connection.Connected)
-                        this.onMpcConnectionDisconnected( this.connection );
-                }
-
-                this.connection = value;
-
-                if (this.connection != null)
-                {
-                    this.connection.OnConnected += this.onMpcConnectionConnectedDelegate;
-                    this.connection.OnDisconnected += this.onMpcConnectionDisconnectedDelegate;
-
-                    if (this.connection.Connected)
-                        this.onMpcConnectionConnected(this.connection);
-                }
+                _connection = new MpcConnection(_server);
+                _connection.Connected += OnConnected;
+                _connection.Disconnected += OnDisconnected;
             }
+
+            if (!_connection.IsConnected)
+            {
+                _connection.Connect();
+            }
+
+            return _connection.IsConnected;
         }
 
-        private MpcConnection getConnection()
+        private void OnConnected(object sender, EventArgs e)
         {
-            MpcConnection ret = this.connection;
-            if (ret == null)
-                throw new NotConnectedException();
-            else
-                return ret;
+            ConnectedRelayEvent?.Invoke(this, e);
         }
 
-
-        private void onMpcConnectionConnected(MpcConnection connection)
+        private void OnDisconnected(object sender, EventArgs e)
         {
-            if (this.OnConnected != null)
-                this.OnConnected.Invoke(this);
-        }
-
-        private void onMpcConnectionDisconnected(MpcConnection connection)
-        {
-            if (this.OnDisconnected != null)
-                this.OnDisconnected.Invoke(this);
+            DisconnectedRelayEvent?.Invoke(this, e);
         }
 
         #region Admin Commands
@@ -120,7 +110,7 @@ namespace Libmpc
         /// <returns>If the action was successful.</returns>
         public bool DisableOutput(int id)
         {
-            return !this.getConnection().Exec("disableoutput", new string[] { id.ToString() }).IsError;
+            return !_connection.Exec("disableoutput", new string[] { id.ToString() }).IsError;
         }
         /// <summary>
         /// Enables an MPD output.
@@ -129,7 +119,7 @@ namespace Libmpc
         /// <returns>If the action was successful.</returns>
         public bool EnableOutput(int id)
         {
-            return !this.getConnection().Exec("enableoutput", new string[] { id.ToString() }).IsError;
+            return !_connection.Exec("enableoutput", new string[] { id.ToString() }).IsError;
         }
         /// <summary>
         /// Lists all outputs of the MPD.
@@ -137,7 +127,7 @@ namespace Libmpc
         /// <returns>The list of all MPD outputs.</returns>
         public MpdOutput[] Outputs()
         {
-            MpdResponse response = this.getConnection().Exec("outputs");
+            MpdResponse response = _connection.Exec("outputs");
             if (response.Message.Count % 3 != 0)
                 throw new InvalidMpdResponseException();
 
@@ -154,7 +144,7 @@ namespace Libmpc
                     throw new InvalidMpdResponseException("Invalid form of line " + (i * 3));
                 if (!idLine.Key.Equals("outputid"))
                     throw new InvalidMpdResponseException("Key of line " + (i * 3) + " is not 'outputid'");
-                if( !int.TryParse(idLine.Value, out id) )
+                if (!int.TryParse(idLine.Value, out id))
                     throw new InvalidMpdResponseException("Value of line " + (i * 3) + " is not a number");
 
                 KeyValuePair<string, string> nameLine = response[i * 3 + 1];
@@ -183,7 +173,7 @@ namespace Libmpc
         /// <returns>The list of tag types the MPD supports.</returns>
         public string[] TagTypes()
         {
-            MpdResponse response = this.getConnection().Exec("tagtypes");
+            MpdResponse response = _connection.Exec("tagtypes");
 
             string[] ret = new string[response.Message.Count];
 
@@ -203,9 +193,9 @@ namespace Libmpc
         /// <returns>An sequential number of the update process.</returns>
         public int Update()
         {
-            MpdResponse response = this.getConnection().Exec("update");
-            
-            if( response.Message.Count != 1 )
+            MpdResponse response = _connection.Exec("update");
+
+            if (response.Message.Count != 1)
                 throw new InvalidMpdResponseException("Respose message has more than one line.");
 
             int ret;
@@ -233,7 +223,7 @@ namespace Libmpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = this.getConnection().Exec("find", new string[] { this.toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("find", new string[] { toTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -247,7 +237,7 @@ namespace Libmpc
         /// <returns>All values found in files of the MPD for the given attribute.</returns>
         public List<string> List(ScopeSpecifier scopeSpecifier)
         {
-            MpdResponse response = this.getConnection().Exec("list", new string[] { this.toTag(scopeSpecifier) });
+            MpdResponse response = _connection.Exec("list", new string[] { toTag(scopeSpecifier) });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -266,7 +256,7 @@ namespace Libmpc
             if (searchValue == null)
                 throw new ArgumentNullException("searchValue");
 
-            MpdResponse response = this.getConnection().Exec("list", new string[] { this.toTag(resultTag), this.toTag(searchTag), searchValue });
+            MpdResponse response = _connection.Exec("list", new string[] { toTag(resultTag), toTag(searchTag), searchValue });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -283,7 +273,7 @@ namespace Libmpc
             if (path == null)
                 throw new ArgumentNullException("path");
 
-            MpdResponse response = this.getConnection().Exec("listall", new string[] { path });
+            MpdResponse response = _connection.Exec("listall", new string[] { path });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -300,7 +290,7 @@ namespace Libmpc
             if (path == null)
                 throw new ArgumentNullException("path");
 
-            MpdResponse response = this.getConnection().Exec("listallinfo", new string[] { path });
+            MpdResponse response = _connection.Exec("listallinfo", new string[] { path });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -313,7 +303,7 @@ namespace Libmpc
         /// <returns>The listing of the root directory.</returns>
         public MpdDirectoryListing LsInfo()
         {
-            return this.LsInfo(null);
+            return LsInfo(null);
         }
         /// <summary>
         /// Returns the directory listing of the given path.
@@ -324,16 +314,16 @@ namespace Libmpc
         {
             MpdResponse response;
             if (path == null)
-                response = this.getConnection().Exec("lsinfo");
+                response = _connection.Exec("lsinfo");
             else
-                response = this.getConnection().Exec("lsinfo", new string[] { path });
+                response = _connection.Exec("lsinfo", new string[] { path });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
 
             return new MpdDirectoryListing(
-                MpdFile.buildList(response), 
-                response.getAttributeValueList("directory"), 
+                MpdFile.buildList(response),
+                response.getAttributeValueList("directory"),
                 response.getAttributeValueList("playlist"));
         }
         /// <summary>
@@ -347,7 +337,7 @@ namespace Libmpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = this.getConnection().Exec("search", new string[] { this.toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("search", new string[] { toTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -367,7 +357,7 @@ namespace Libmpc
             if (filename == null)
                 throw new ArgumentNullException("filename");
 
-            MpdResponse response = this.getConnection().Exec("add", new string[] { filename });
+            MpdResponse response = _connection.Exec("add", new string[] { filename });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -382,7 +372,7 @@ namespace Libmpc
             if (filename == null)
                 throw new ArgumentNullException("filename");
 
-            MpdResponse response = this.getConnection().Exec("add", new string[] { filename });
+            MpdResponse response = _connection.Exec("add", new string[] { filename });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -391,10 +381,10 @@ namespace Libmpc
                 throw new InvalidMpdResponseException("Returned more than one line for command addid.");
 
             string id = response["Id"];
-            if( id == null )
+            if (id == null)
                 throw new InvalidMpdResponseException("Tag Id missing in response to command addid.");
             int tryId = -1;
-            if( !int.TryParse(id, out tryId) )
+            if (!int.TryParse(id, out tryId))
                 throw new InvalidMpdResponseException("Tag Id in response to command addid does not contain an number.");
 
             return tryId;
@@ -404,7 +394,7 @@ namespace Libmpc
         /// </summary>
         public void Clear()
         {
-            MpdResponse response = this.getConnection().Exec("clear");
+            MpdResponse response = _connection.Exec("clear");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -415,7 +405,7 @@ namespace Libmpc
         /// <returns>The information of the current song.</returns>
         public MpdFile CurrentSong()
         {
-            MpdResponse response = this.getConnection().Exec("currentsong");
+            MpdResponse response = _connection.Exec("currentsong");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -428,7 +418,7 @@ namespace Libmpc
         /// <param name="nr">The index of the track to remove from the playlist.</param>
         public void Delete(int nr)
         {
-            MpdResponse response = this.getConnection().Exec("delete", new string[] { nr.ToString() });
+            MpdResponse response = _connection.Exec("delete", new string[] { nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -439,7 +429,7 @@ namespace Libmpc
         /// <param name="id">The id of the track to remove from the playlist.</param>
         public void DeleteId(int id)
         {
-            MpdResponse response = this.getConnection().Exec("deleteid", new string[] { id.ToString() });
+            MpdResponse response = _connection.Exec("deleteid", new string[] { id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -448,12 +438,12 @@ namespace Libmpc
         /// Loads the playlist with the given name.
         /// </summary>
         /// <param name="name">The name of the playlist to load.</param>
-        public void Load( string name )
+        public void Load(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("load", new string[] { name });
+            MpdResponse response = _connection.Exec("load", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -470,7 +460,7 @@ namespace Libmpc
             if (newName == null)
                 throw new ArgumentNullException("newName");
 
-            MpdResponse response = this.getConnection().Exec("rename", new string[] { oldName, newName });
+            MpdResponse response = _connection.Exec("rename", new string[] { oldName, newName });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -482,7 +472,7 @@ namespace Libmpc
         /// <param name="newNr">The new index of the track in the playlist.</param>
         public void Move(int oldNr, int newNr)
         {
-            MpdResponse response = this.getConnection().Exec("move", new string[] { oldNr.ToString(), newNr.ToString() });
+            MpdResponse response = _connection.Exec("move", new string[] { oldNr.ToString(), newNr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -494,7 +484,7 @@ namespace Libmpc
         /// <param name="nr">The new index of the track in the playlist.</param>
         public void MoveId(int id, int nr)
         {
-            MpdResponse response = this.getConnection().Exec("moveid", new string[] { id.ToString(), nr.ToString() });
+            MpdResponse response = _connection.Exec("moveid", new string[] { id.ToString(), nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -505,7 +495,7 @@ namespace Libmpc
         /// <returns>The meta data of the items in the current playlist.</returns>
         public List<MpdFile> PlaylistInfo()
         {
-            MpdResponse response = this.getConnection().Exec("playlistinfo");
+            MpdResponse response = _connection.Exec("playlistinfo");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -517,9 +507,9 @@ namespace Libmpc
         /// </summary>
         /// <param name="nr">The index of the track in the playlist.</param>
         /// <returns>The meta data of the track in the current playlist.</returns>
-        public MpdFile PlaylistInfo( int nr )
+        public MpdFile PlaylistInfo(int nr)
         {
-            MpdResponse response = this.getConnection().Exec("playlistinfo", new string[] { nr.ToString() } );
+            MpdResponse response = _connection.Exec("playlistinfo", new string[] { nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -532,7 +522,7 @@ namespace Libmpc
         /// <returns>The meta data of the items in the current playlist.</returns>
         public List<MpdFile> PlaylistId()
         {
-            MpdResponse response = this.getConnection().Exec("playlistid");
+            MpdResponse response = _connection.Exec("playlistid");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -546,7 +536,7 @@ namespace Libmpc
         /// <returns>The meta data of the track in the current playlist.</returns>
         public MpdFile PlaylistId(int id)
         {
-            MpdResponse response = this.getConnection().Exec("playlistid", new string[] { id.ToString() });
+            MpdResponse response = _connection.Exec("playlistid", new string[] { id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -558,9 +548,9 @@ namespace Libmpc
         /// </summary>
         /// <param name="version">The version number.</param>
         /// <returns>All changed songs in the playlist since the given version.</returns>
-        public List<MpdFile> Plchanges( int version )
+        public List<MpdFile> Plchanges(int version)
         {
-            MpdResponse response = this.getConnection().Exec("plchanges", new string[] {version.ToString()});
+            MpdResponse response = _connection.Exec("plchanges", new string[] { version.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -575,9 +565,9 @@ namespace Libmpc
         /// The ids and positions of the changed tracks in the playlist since the given version as KeyValuePairs. 
         /// The key is the index and the id is the value.
         /// </returns>
-        public List<KeyValuePair<int, int>> PlChangesPosId( int version )
+        public List<KeyValuePair<int, int>> PlChangesPosId(int version)
         {
-            MpdResponse response = this.getConnection().Exec("plchangesposid", new string[] { version.ToString() });
+            MpdResponse response = _connection.Exec("plchangesposid", new string[] { version.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -590,7 +580,7 @@ namespace Libmpc
             for (int i = 0; i < response.Count; i += 2)
             {
                 KeyValuePair<string, string> posLine = response[i];
-                KeyValuePair<string, string> idLine = response[i+1];
+                KeyValuePair<string, string> idLine = response[i + 1];
 
                 if ((posLine.Key == null) || (posLine.Value == null))
                     throw new InvalidMpdResponseException("Invalid format of line " + i + "!");
@@ -624,7 +614,7 @@ namespace Libmpc
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("rm", new string[] { name });
+            MpdResponse response = _connection.Exec("rm", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -638,7 +628,7 @@ namespace Libmpc
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("save", new string[] { name });
+            MpdResponse response = _connection.Exec("save", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -648,7 +638,7 @@ namespace Libmpc
         /// </summary>
         public void Shuffle()
         {
-            MpdResponse response = this.getConnection().Exec("shuffle");
+            MpdResponse response = _connection.Exec("shuffle");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -660,7 +650,7 @@ namespace Libmpc
         /// <param name="nr2">The index of the second track.</param>
         public void Swap(int nr1, int nr2)
         {
-            MpdResponse response = this.getConnection().Exec("swap", new string[] { nr1.ToString(), nr2.ToString() });
+            MpdResponse response = _connection.Exec("swap", new string[] { nr1.ToString(), nr2.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -672,7 +662,7 @@ namespace Libmpc
         /// <param name="id2">The id of the second track.</param>
         public void SwapId(int id1, int id2)
         {
-            MpdResponse response = this.getConnection().Exec("swapid", new string[] { id1.ToString(), id2.ToString() });
+            MpdResponse response = _connection.Exec("swapid", new string[] { id1.ToString(), id2.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -687,7 +677,7 @@ namespace Libmpc
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("listplaylist", new string[] { name });
+            MpdResponse response = _connection.Exec("listplaylist", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -704,7 +694,7 @@ namespace Libmpc
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("listplaylistinfo", new string[] { name });
+            MpdResponse response = _connection.Exec("listplaylistinfo", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -723,7 +713,7 @@ namespace Libmpc
             if (file == null)
                 throw new ArgumentNullException("file");
 
-            MpdResponse response = this.getConnection().Exec("playlistadd", new string[] { name, file });
+            MpdResponse response = _connection.Exec("playlistadd", new string[] { name, file });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -737,7 +727,7 @@ namespace Libmpc
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("playlistclear", new string[] { name });
+            MpdResponse response = _connection.Exec("playlistclear", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -752,7 +742,7 @@ namespace Libmpc
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("playlistdelete", new string[] { name, id.ToString() });
+            MpdResponse response = _connection.Exec("playlistdelete", new string[] { name, id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -768,7 +758,7 @@ namespace Libmpc
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = this.getConnection().Exec("playlistmove", new string[] { id.ToString(), nr.ToString() });
+            MpdResponse response = _connection.Exec("playlistmove", new string[] { id.ToString(), nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -784,7 +774,7 @@ namespace Libmpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = this.getConnection().Exec("playlistfind", new string[] { this.toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("playlistfind", new string[] { toTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -802,7 +792,7 @@ namespace Libmpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = this.getConnection().Exec("playlistsearch", new string[] { this.toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("playlistsearch", new string[] { toTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -818,7 +808,7 @@ namespace Libmpc
         /// <param name="seconds">The seconds to crossfade between songs.</param>
         public void Crossfade(int seconds)
         {
-            MpdResponse response = this.getConnection().Exec("crossfade", new string[] { seconds.ToString() });
+            MpdResponse response = _connection.Exec("crossfade", new string[] { seconds.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -828,7 +818,7 @@ namespace Libmpc
         /// </summary>
         public void Next()
         {
-            MpdResponse response = this.getConnection().Exec("next");
+            MpdResponse response = _connection.Exec("next");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -839,7 +829,7 @@ namespace Libmpc
         /// <param name="pause">If the playback should be paused or resumed.</param>
         public void Pause(bool pause)
         {
-            MpdResponse response = this.getConnection().Exec("pause", new string[] { pause ? "1" : "0" });
+            MpdResponse response = _connection.Exec("pause", new string[] { pause ? "1" : "0" });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -849,7 +839,7 @@ namespace Libmpc
         /// </summary>
         public void Play()
         {
-            MpdResponse response = this.getConnection().Exec("play");
+            MpdResponse response = _connection.Exec("play");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -860,7 +850,7 @@ namespace Libmpc
         /// <param name="nr">The index of the track in the playlist to start playing.</param>
         public void Play(int nr)
         {
-            MpdResponse response = this.getConnection().Exec("play", new string[] { nr.ToString() });
+            MpdResponse response = _connection.Exec("play", new string[] { nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -870,7 +860,7 @@ namespace Libmpc
         /// </summary>
         public void PlayId()
         {
-            MpdResponse response = this.getConnection().Exec("playid");
+            MpdResponse response = _connection.Exec("playid");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -881,7 +871,7 @@ namespace Libmpc
         /// <param name="id">The id of the track to start playing.</param>
         public void PlayId(int id)
         {
-            MpdResponse response = this.getConnection().Exec("playid", new string[] { id.ToString() });
+            MpdResponse response = _connection.Exec("playid", new string[] { id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -891,7 +881,7 @@ namespace Libmpc
         /// </summary>
         public void Previous()
         {
-            MpdResponse response = this.getConnection().Exec("previous");
+            MpdResponse response = _connection.Exec("previous");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -902,7 +892,7 @@ namespace Libmpc
         /// <param name="random">If the MPD playlist should be played randomly.</param>
         public void Random(bool random)
         {
-            MpdResponse response = this.getConnection().Exec("random", new string[] { random ? "1" : "0" });
+            MpdResponse response = _connection.Exec("random", new string[] { random ? "1" : "0" });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -913,7 +903,7 @@ namespace Libmpc
         /// <param name="repeat">If the MPD should repeat the playlist.</param>
         public void Repeat(bool repeat)
         {
-            MpdResponse response = this.getConnection().Exec("repeat", new string[] { repeat ? "1" : "0" });
+            MpdResponse response = _connection.Exec("repeat", new string[] { repeat ? "1" : "0" });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -925,7 +915,7 @@ namespace Libmpc
         /// <param name="time">The number of seconds to start playback on.</param>
         public void Seek(int nr, int time)
         {
-            MpdResponse response = this.getConnection().Exec("seek", new string[] { nr.ToString(), time.ToString() });
+            MpdResponse response = _connection.Exec("seek", new string[] { nr.ToString(), time.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -937,7 +927,7 @@ namespace Libmpc
         /// <param name="time">The number of seconds to start playback on.</param>
         public void SeekId(int id, int time)
         {
-            MpdResponse response = this.getConnection().Exec("seekid", new string[] { id.ToString(), time.ToString() });
+            MpdResponse response = _connection.Exec("seekid", new string[] { id.ToString(), time.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -953,7 +943,7 @@ namespace Libmpc
             if (vol > 100)
                 throw new ArgumentException("vol > 100");
 
-            MpdResponse response = this.getConnection().Exec("setvol", new string[] { vol.ToString() });
+            MpdResponse response = _connection.Exec("setvol", new string[] { vol.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -963,7 +953,7 @@ namespace Libmpc
         /// </summary>
         public void Stop()
         {
-            MpdResponse response = this.getConnection().Exec("stop");
+            MpdResponse response = _connection.Exec("stop");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -977,7 +967,7 @@ namespace Libmpc
         /// </summary>
         public void ClearError()
         {
-            this.getConnection().Exec("clearerror");
+            _connection.Exec("clearerror");
         }
         /// <summary>
         /// Returns which commands the current user has access to. 
@@ -985,7 +975,7 @@ namespace Libmpc
         /// <returns>The commands the current user has access to.</returns>
         public List<string> Commands()
         {
-            MpdResponse response = this.getConnection().Exec("commands");
+            MpdResponse response = _connection.Exec("commands");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -998,7 +988,7 @@ namespace Libmpc
         /// <returns>The commands the current user does has access to.</returns>
         public List<string> NotCommands()
         {
-            MpdResponse response = this.getConnection().Exec("notcommands");
+            MpdResponse response = _connection.Exec("notcommands");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -1015,14 +1005,14 @@ namespace Libmpc
             if (password == null)
                 throw new ArgumentNullException("password");
 
-            return this.getConnection().Exec("password", new string[] { password }).IsError;
+            return _connection.Exec("password", new string[] { password }).IsError;
         }
         /// <summary>
         /// Sends a ping command to the server and waits for the response.
         /// </summary>
         public void Ping()
         {
-            this.getConnection().Exec("ping");
+            _connection.Exec("ping");
         }
         /// <summary>
         /// Requests the current statistics from the MPD,
@@ -1030,7 +1020,7 @@ namespace Libmpc
         /// <returns>The current statistics fromt the MPD.</returns>
         public MpdStatistics Stats()
         {
-            MpdResponse response = this.getConnection().Exec("stats");
+            MpdResponse response = _connection.Exec("stats");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -1045,7 +1035,7 @@ namespace Libmpc
 
             foreach (KeyValuePair<string, string> line in response)
             {
-                if( ( line.Key != null ) && ( line.Value!=null ) )
+                if ((line.Key != null) && (line.Value != null))
                     switch (line.Key)
                     {
                         case "artists":
@@ -1108,7 +1098,7 @@ namespace Libmpc
         /// <returns>The current status of the MPD.</returns>
         public MpdStatus Status()
         {
-            MpdResponse response = this.getConnection().Exec("status");
+            MpdResponse response = _connection.Exec("status");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -1134,7 +1124,7 @@ namespace Libmpc
 
             foreach (KeyValuePair<string, string> line in response)
             {
-                if ( (line.Key != null) && (line.Value!=null) )
+                if ((line.Key != null) && (line.Value != null))
                     switch (line.Key)
                     {
                         case "volume":
@@ -1219,7 +1209,7 @@ namespace Libmpc
                                 int tryValue;
                                 if (int.TryParse(line.Value.Substring(0, index), out tryValue))
                                     timeElapsed = tryValue;
-                                if (int.TryParse(line.Value.Substring(index+1), out tryValue))
+                                if (int.TryParse(line.Value.Substring(index + 1), out tryValue))
                                     timeTotal = tryValue;
                             }
                             break;
