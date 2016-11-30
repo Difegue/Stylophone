@@ -24,68 +24,29 @@ namespace LibMpc
 
         private static readonly Regex ACK_REGEX = new Regex("^ACK \\[(?<code>[0-9]*)@(?<nr>[0-9]*)] \\{(?<command>[a-z]*)} (?<message>.*)$");
 
-        private IPEndPoint _ipEndPoint;
+        private readonly IPEndPoint _server;
 
         private TcpClient _tcpClient;
         private NetworkStream _networkStream;
-
         private StreamReader _reader;
         private StreamWriter _writer;
 
         private string _version;
-        /// <summary>
-        /// If the connection to the MPD is connected.
-        /// </summary>
-        public bool IsConnected { get { return (_tcpClient != null) && _tcpClient.Connected; } }
-        /// <summary>
-        /// The version of the MPD.
-        /// </summary>
-        public string Version { get { return _version; } }
 
-        private bool _autoConnect = false;
-        /// <summary>
-        /// If a connection should be established when a command is to be
-        /// executed in disconnected state.
-        /// </summary>
-        public bool AutoConnect
-        {
-            get{ return _autoConnect; }
-            set { _autoConnect = value; }
-        }
-        
-        /// <summary>
-        /// Creates a new MpdConnection.
-        /// </summary>
-        /// <param name="server">The IPEndPoint of the MPD server.</param>
         public MpcConnection(IPEndPoint server)
         {
-            Server = server;
-        }
-        /// <summary>
-        /// The IPEndPoint of the MPD server.
-        /// </summary>
-        /// <exception cref="AlreadyConnectedException">When a conenction to a MPD server is already established.</exception>
-        public IPEndPoint Server
-        {
-            get { return _ipEndPoint; }
-            set
-            {
-                if (IsConnected)
-                    throw new AlreadyConnectedException();
+            if (IsConnected) return;
 
-                _ipEndPoint = value;
-
-                ClearConnectionFields();
-            }
+            ClearConnectionFields();
+            _server = server;
         }
-        
-        /// <summary>
-        /// Connects to the MPD server who's IPEndPoint was set in the Server property.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">If no IPEndPoint was set to the Server property.</exception>
+
+        public bool IsConnected => (_tcpClient != null) && _tcpClient.Connected;
+        public string Version => _version;
+
         public async Task ConnectAsync()
         {
-            if (_ipEndPoint == null)
+            if (_server == null)
                 throw new InvalidOperationException("Server IPEndPoint not set.");
 
             if (IsConnected)
@@ -93,7 +54,7 @@ namespace LibMpc
 
 
             _tcpClient = new TcpClient();
-            await _tcpClient.ConnectAsync(_ipEndPoint.Address, _ipEndPoint.Port);
+            await _tcpClient.ConnectAsync(_server.Address, _server.Port);
 
             _networkStream = _tcpClient.GetStream();
 
@@ -116,10 +77,12 @@ namespace LibMpc
         /// <summary>
         /// Disconnects from the current MPD server.
         /// </summary>
-        public Task Disconnect()
+        private Task Disconnect()
         {
             if (_tcpClient == null)
+            {
                 return Task.CompletedTask;
+            }
 
             _networkStream.Dispose();
             ClearConnectionFields();
@@ -132,7 +95,7 @@ namespace LibMpc
         /// <param name="command">The command to execute.</param>
         /// <returns>The MPD server response parsed into a basic object.</returns>
         /// <exception cref="ArgumentException">If the command contains a space of a newline charakter.</exception>
-        public MpdResponse Exec(string command)
+        public async Task<MpdResponse> Exec(string command)
         {
             if (command == null)
                 throw new ArgumentNullException("command");
@@ -141,7 +104,8 @@ namespace LibMpc
             if (command.Contains("\n"))
                 throw new ArgumentException("command contains newline");
 
-            CheckConnected();
+            // TODO: Integrate connection status in MpdResponse
+            var connectionResult = await CheckConnectionAsync();
 
             try
             {
@@ -152,8 +116,7 @@ namespace LibMpc
             }
             catch (Exception)
             {
-                try { Disconnect(); }
-                catch (Exception) { }
+                try { await Disconnect(); } catch (Exception) { }
                 return null; // TODO: Create Null Object for MpdResponse
             }
         }
@@ -164,7 +127,7 @@ namespace LibMpc
         /// <param name="argument">The arguments of the command.</param>
         /// <returns>The MPD server response parsed into a basic object.</returns>
         /// <exception cref="ArgumentException">If the command contains a space of a newline charakter.</exception>
-        public MpdResponse Exec(string command, string[] argument)
+        public async Task<MpdResponse> Exec(string command, string[] argument)
         {
             if (command == null)
                 throw new ArgumentNullException("command");
@@ -183,7 +146,8 @@ namespace LibMpc
                     throw new ArgumentException("argument[" + i + "] contains newline");
             }
 
-            CheckConnected();
+            // TODO: Integrate connection status in MpdResponse
+            var connectionResult = await CheckConnectionAsync();
 
             try
             {
@@ -200,21 +164,19 @@ namespace LibMpc
             }
             catch (Exception)
             {
-                try { Disconnect(); } catch (Exception) { }
+                try { await Disconnect(); } catch (Exception) { }
                 throw;
             }
         }
 
-        private void CheckConnected()
+        private async Task<bool> CheckConnectionAsync()
         {
             if (!IsConnected)
             {
-                if (_autoConnect)
-                    ConnectAsync();
-                else
-                    throw new NotConnectedException();
+                await ConnectAsync();
             }
 
+            return IsConnected;
         }
 
         private void WriteToken(string token)
@@ -262,10 +224,10 @@ namespace LibMpc
 
         private void ClearConnectionFields() 
         {
-            _tcpClient?.Dispose();
-            _networkStream?.Dispose();
-            _reader?.Dispose();
             _writer?.Dispose();
+            _reader?.Dispose();
+            _networkStream?.Dispose();
+            _tcpClient?.Dispose();
             _version = string.Empty;
         }
     }

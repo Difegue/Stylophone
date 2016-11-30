@@ -6,34 +6,22 @@ using System.Threading.Tasks;
 
 namespace LibMpc
 {
-    public interface IMpc
-    {
-        bool IsConnected { get; }
-        Task<bool> ConnectAsync();
-
-        MpdOutput[] Outputs();
-        MpdStatistics Stats();
-    }
-
     /// <summary>
     /// The Mpc class implements all commands for the MPD. It takes care of command building
     /// and parsing the response into .net objects.
     /// </summary>
-    public class Mpc : IMpc
+    public class Mpc
     {
         private static readonly Regex STATUS_AUDIO_REGEX = new Regex("^(?<sampleRate>[0-9]*):(?<bits>[0-9]*):(?<channels>[0-9]*)$");
 
+        private readonly IPEndPoint _server;
         private MpcConnection _connection;
-        private IPEndPoint _server;
 
         public Mpc(IPEndPoint server)
         {
             _server = server;
         }
 
-        /// <summary>
-        /// Connection status to MPD Server.
-        /// </summary>
         public bool IsConnected => _connection?.IsConnected ?? false;
 
         public async Task<bool> ConnectAsync()
@@ -57,26 +45,30 @@ namespace LibMpc
         /// </summary>
         /// <param name="id">The id of the output.</param>
         /// <returns>If the action was successful.</returns>
-        public bool DisableOutput(int id)
+        public async Task<bool> DisableOutputAsync(int id)
         {
-            return !_connection.Exec("disableoutput", new string[] { id.ToString() }).IsError;
+            var mpdResponse = await _connection.Exec("disableoutput", new string[] { id.ToString() });
+            return !mpdResponse.IsError;
         }
+
         /// <summary>
         /// Enables an MPD output.
         /// </summary>
         /// <param name="id">The id of the output.</param>
         /// <returns>If the action was successful.</returns>
-        public bool EnableOutput(int id)
+        public async Task<bool> EnableOutputAsync(int id)
         {
-            return !_connection.Exec("enableoutput", new string[] { id.ToString() }).IsError;
+            var mpdResponse = await _connection.Exec("enableoutput", new string[] { id.ToString() });
+            return !mpdResponse.IsError;
         }
+
         /// <summary>
         /// Lists all outputs of the MPD.
         /// </summary>
         /// <returns>The list of all MPD outputs.</returns>
-        public MpdOutput[] Outputs()
+        public async Task<MpdOutput[]> OutputsAsync()
         {
-            MpdResponse response = _connection.Exec("outputs");
+            MpdResponse response = await _connection.Exec("outputs");
             if (response.Message.Count % 3 != 0)
                 throw new InvalidMpdResponseException();
 
@@ -120,9 +112,9 @@ namespace LibMpc
         /// Returns the list of tag types the MPD supports.
         /// </summary>
         /// <returns>The list of tag types the MPD supports.</returns>
-        public string[] TagTypes()
+        public async Task<string[]> TagTypesAsync()
         {
-            MpdResponse response = _connection.Exec("tagtypes");
+            MpdResponse response = await _connection.Exec("tagtypes");
 
             string[] ret = new string[response.Message.Count];
 
@@ -140,9 +132,9 @@ namespace LibMpc
         /// Starts an update of the MPD database.
         /// </summary>
         /// <returns>An sequential number of the update process.</returns>
-        public int Update()
+        public async Task<int> UpdateAsync()
         {
-            MpdResponse response = _connection.Exec("update");
+            MpdResponse response = await _connection.Exec("update");
 
             if (response.Message.Count != 1)
                 throw new InvalidMpdResponseException("Respose message has more than one line.");
@@ -167,12 +159,12 @@ namespace LibMpc
         /// <param name="scopeSpecifier">Specifies the attribute to search for.</param>
         /// <param name="token">The value the files attribute must have to be included in the result.</param>
         /// <returns>All files in the database who's attribute matches the given token.</returns>
-        public List<MpdFile> Find(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> FindAsync(ScopeSpecifier scopeSpecifier, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("find", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("find", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -184,9 +176,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="scopeSpecifier">The attribute who's values are requested.</param>
         /// <returns>All values found in files of the MPD for the given attribute.</returns>
-        public List<string> List(ScopeSpecifier scopeSpecifier)
+        public async Task<List<string>> ListAsync(ScopeSpecifier scopeSpecifier)
         {
-            MpdResponse response = _connection.Exec("list", new string[] { TagConverter.ToTag(scopeSpecifier) });
+            MpdResponse response = await _connection.Exec("list", new string[] { TagConverter.ToTag(scopeSpecifier) });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -200,12 +192,12 @@ namespace LibMpc
         /// <param name="searchTag">The attribute whos value should match a given value for the file to be included in the result.</param>
         /// <param name="searchValue">The value the searchTag attribute must match for the file to be included in the result.</param>
         /// <returns>All values found in files of the MPD for the given attribute.</returns>
-        public List<string> List(ScopeSpecifier resultTag, ScopeSpecifier searchTag, string searchValue)
+        public async Task<List<string>> ListAsync(ScopeSpecifier resultTag, ScopeSpecifier searchTag, string searchValue)
         {
             if (searchValue == null)
                 throw new ArgumentNullException("searchValue");
 
-            MpdResponse response = _connection.Exec("list", new string[] { TagConverter.ToTag(resultTag), TagConverter.ToTag(searchTag), searchValue });
+            MpdResponse response = await _connection.Exec("list", new string[] { TagConverter.ToTag(resultTag), TagConverter.ToTag(searchTag), searchValue });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -217,12 +209,12 @@ namespace LibMpc
         /// </summary>
         /// <param name="path">The path whos subdirectories and their files are requested.</param>
         /// <returns>The names of all files and directory found under the given path.</returns>
-        public List<string> ListAll(string path)
+        public async Task<List<string>> ListAllAsync(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
 
-            MpdResponse response = _connection.Exec("listall", new string[] { path });
+            MpdResponse response = await _connection.Exec("listall", new string[] { path });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -234,12 +226,12 @@ namespace LibMpc
         /// </summary>
         /// <param name="path">The path of which the file information is requested.</param>
         /// <returns>The information of all files found in the given path and its subdirectories.</returns>
-        public List<MpdFile> ListAllInfo(string path)
+        public async Task<List<MpdFile>> ListAllInfoAsync(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
 
-            MpdResponse response = _connection.Exec("listallinfo", new string[] { path });
+            MpdResponse response = await _connection.Exec("listallinfo", new string[] { path });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -250,22 +242,22 @@ namespace LibMpc
         /// Returns the directory listing of the root directory.
         /// </summary>
         /// <returns>The listing of the root directory.</returns>
-        public MpdDirectoryListing LsInfo()
+        public async Task<MpdDirectoryListing> LsInfoAsync()
         {
-            return LsInfo(null);
+            return await LsInfoAsync(null);
         }
         /// <summary>
         /// Returns the directory listing of the given path.
         /// </summary>
         /// <param name="path">The path whos listing is requested.</param>
         /// <returns>The directory listing of the given path.</returns>
-        public MpdDirectoryListing LsInfo(string path)
+        public async Task<MpdDirectoryListing> LsInfoAsync(string path)
         {
             MpdResponse response;
             if (path == null)
-                response = _connection.Exec("lsinfo");
+                response = await _connection.Exec("lsinfo");
             else
-                response = _connection.Exec("lsinfo", new string[] { path });
+                response = await _connection.Exec("lsinfo", new string[] { path });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -281,12 +273,12 @@ namespace LibMpc
         /// <param name="scopeSpecifier">Specifies the attribute to search for.</param>
         /// <param name="token">The value the files attribute must have to be included in the result.</param>
         /// <returns>All files in the database who's attribute matches the given token.</returns>
-        public List<MpdFile> Search(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> SearchAsync(ScopeSpecifier scopeSpecifier, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("search", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("search", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -301,12 +293,12 @@ namespace LibMpc
         /// Adds a file to the playlist.
         /// </summary>
         /// <param name="filename">The name and path of the file to add.</param>
-        public void Add(string filename)
+        public async Task AddAsync(string filename)
         {
             if (filename == null)
                 throw new ArgumentNullException("filename");
 
-            MpdResponse response = _connection.Exec("add", new string[] { filename });
+            MpdResponse response = await _connection.Exec("add", new string[] { filename });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -316,12 +308,12 @@ namespace LibMpc
         /// </summary>
         /// <param name="filename">The name and path of the file to add.</param>
         /// <rereturns>The id of the file in the playlist.</rereturns>
-        public int AddId(string filename)
+        public async Task<int> AddIdAsync(string filename)
         {
             if (filename == null)
                 throw new ArgumentNullException("filename");
 
-            MpdResponse response = _connection.Exec("add", new string[] { filename });
+            MpdResponse response = await _connection.Exec("add", new string[] { filename });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -341,9 +333,9 @@ namespace LibMpc
         /// <summary>
         /// Clears the playlist.
         /// </summary>
-        public void Clear()
+        public async Task ClearAsync()
         {
-            MpdResponse response = _connection.Exec("clear");
+            MpdResponse response = await _connection.Exec("clear");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -352,9 +344,9 @@ namespace LibMpc
         /// Returns the information of the current song.
         /// </summary>
         /// <returns>The information of the current song.</returns>
-        public MpdFile CurrentSong()
+        public async Task<MpdFile> CurrentSongAsync()
         {
-            MpdResponse response = _connection.Exec("currentsong");
+            MpdResponse response = await _connection.Exec("currentsong");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -365,9 +357,9 @@ namespace LibMpc
         /// Deletes the track with the given index from the current playlist.
         /// </summary>
         /// <param name="nr">The index of the track to remove from the playlist.</param>
-        public void Delete(int nr)
+        public async Task DeleteAsync(int nr)
         {
-            MpdResponse response = _connection.Exec("delete", new string[] { nr.ToString() });
+            MpdResponse response = await _connection.Exec("delete", new string[] { nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -376,9 +368,9 @@ namespace LibMpc
         /// Deletes the track with the given id from the current playlist.
         /// </summary>
         /// <param name="id">The id of the track to remove from the playlist.</param>
-        public void DeleteId(int id)
+        public async Task DeleteIdAsync(int id)
         {
-            MpdResponse response = _connection.Exec("deleteid", new string[] { id.ToString() });
+            MpdResponse response = await _connection.Exec("deleteid", new string[] { id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -387,12 +379,12 @@ namespace LibMpc
         /// Loads the playlist with the given name.
         /// </summary>
         /// <param name="name">The name of the playlist to load.</param>
-        public void Load(string name)
+        public async Task LoadAsync(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("load", new string[] { name });
+            MpdResponse response = await _connection.Exec("load", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -402,14 +394,14 @@ namespace LibMpc
         /// </summary>
         /// <param name="oldName">The old name of the playlist.</param>
         /// <param name="newName">The new name of the playlist.</param>
-        public void Rename(string oldName, string newName)
+        public async Task RenameAsync(string oldName, string newName)
         {
             if (oldName == null)
                 throw new ArgumentNullException("oldName");
             if (newName == null)
                 throw new ArgumentNullException("newName");
 
-            MpdResponse response = _connection.Exec("rename", new string[] { oldName, newName });
+            MpdResponse response = await _connection.Exec("rename", new string[] { oldName, newName });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -419,9 +411,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="oldNr">The old index of the track in the playlist.</param>
         /// <param name="newNr">The new index of the track in the playlist.</param>
-        public void Move(int oldNr, int newNr)
+        public async Task MoveAsync(int oldNr, int newNr)
         {
-            MpdResponse response = _connection.Exec("move", new string[] { oldNr.ToString(), newNr.ToString() });
+            MpdResponse response = await _connection.Exec("move", new string[] { oldNr.ToString(), newNr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -431,9 +423,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="id">The id of the track to move.</param>
         /// <param name="nr">The new index of the track in the playlist.</param>
-        public void MoveId(int id, int nr)
+        public async Task MoveIdAsync(int id, int nr)
         {
-            MpdResponse response = _connection.Exec("moveid", new string[] { id.ToString(), nr.ToString() });
+            MpdResponse response = await _connection.Exec("moveid", new string[] { id.ToString(), nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -442,9 +434,9 @@ namespace LibMpc
         /// Returns the meta data of the items in the current playlist.
         /// </summary>
         /// <returns>The meta data of the items in the current playlist.</returns>
-        public List<MpdFile> PlaylistInfo()
+        public async Task<List<MpdFile>> PlaylistInfoAsync()
         {
-            MpdResponse response = _connection.Exec("playlistinfo");
+            MpdResponse response = await _connection.Exec("playlistinfo");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -456,9 +448,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="nr">The index of the track in the playlist.</param>
         /// <returns>The meta data of the track in the current playlist.</returns>
-        public MpdFile PlaylistInfo(int nr)
+        public async Task<MpdFile> PlaylistInfoAsync(int nr)
         {
-            MpdResponse response = _connection.Exec("playlistinfo", new string[] { nr.ToString() });
+            MpdResponse response = await _connection.Exec("playlistinfo", new string[] { nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -469,9 +461,9 @@ namespace LibMpc
         /// Returns the meta data of the items in the current playlist.
         /// </summary>
         /// <returns>The meta data of the items in the current playlist.</returns>
-        public List<MpdFile> PlaylistId()
+        public async Task<List<MpdFile>> PlaylistIdAsync()
         {
-            MpdResponse response = _connection.Exec("playlistid");
+            MpdResponse response = await _connection.Exec("playlistid");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -483,9 +475,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="id">The id of the track in the playlist.</param>
         /// <returns>The meta data of the track in the current playlist.</returns>
-        public MpdFile PlaylistId(int id)
+        public async Task<MpdFile> PlaylistIdAsync(int id)
         {
-            MpdResponse response = _connection.Exec("playlistid", new string[] { id.ToString() });
+            MpdResponse response = await _connection.Exec("playlistid", new string[] { id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -497,9 +489,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="version">The version number.</param>
         /// <returns>All changed songs in the playlist since the given version.</returns>
-        public List<MpdFile> Plchanges(int version)
+        public async Task<List<MpdFile>> PlchangesAsync(int version)
         {
-            MpdResponse response = _connection.Exec("plchanges", new string[] { version.ToString() });
+            MpdResponse response = await _connection.Exec("plchanges", new string[] { version.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -514,9 +506,9 @@ namespace LibMpc
         /// The ids and positions of the changed tracks in the playlist since the given version as KeyValuePairs. 
         /// The key is the index and the id is the value.
         /// </returns>
-        public List<KeyValuePair<int, int>> PlChangesPosId(int version)
+        public async Task<List<KeyValuePair<int, int>>> PlChangesPosIdAsync(int version)
         {
-            MpdResponse response = _connection.Exec("plchangesposid", new string[] { version.ToString() });
+            MpdResponse response = await _connection.Exec("plchangesposid", new string[] { version.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -558,12 +550,12 @@ namespace LibMpc
         /// Removes the playlist with the given name.
         /// </summary>
         /// <param name="name">The name of the playlist to remove.</param>
-        public void Rm(string name)
+        public async Task RmAsync(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("rm", new string[] { name });
+            MpdResponse response = await _connection.Exec("rm", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -572,12 +564,12 @@ namespace LibMpc
         /// Saves the current playlist with the given name.
         /// </summary>
         /// <param name="name">The name to the save the currenty playlist.</param>
-        public void Save(string name)
+        public async Task SaveAsync(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("save", new string[] { name });
+            MpdResponse response = await _connection.Exec("save", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -585,9 +577,9 @@ namespace LibMpc
         /// <summary>
         /// Shuffles the current playlist.
         /// </summary>
-        public void Shuffle()
+        public async Task ShuffleAsync()
         {
-            MpdResponse response = _connection.Exec("shuffle");
+            MpdResponse response = await _connection.Exec("shuffle");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -597,9 +589,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="nr1">The index of the first track.</param>
         /// <param name="nr2">The index of the second track.</param>
-        public void Swap(int nr1, int nr2)
+        public async Task SwapAsync(int nr1, int nr2)
         {
-            MpdResponse response = _connection.Exec("swap", new string[] { nr1.ToString(), nr2.ToString() });
+            MpdResponse response = await _connection.Exec("swap", new string[] { nr1.ToString(), nr2.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -609,9 +601,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="id1">The id of the first track.</param>
         /// <param name="id2">The id of the second track.</param>
-        public void SwapId(int id1, int id2)
+        public async Task SwapIdAsync(int id1, int id2)
         {
-            MpdResponse response = _connection.Exec("swapid", new string[] { id1.ToString(), id2.ToString() });
+            MpdResponse response = await _connection.Exec("swapid", new string[] { id1.ToString(), id2.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -621,12 +613,12 @@ namespace LibMpc
         /// </summary>
         /// <param name="name">The playlist whos filename are requested.</param>
         /// <returns>The filenames of the tracks in the given playlist.</returns>
-        public List<string> ListPlaylist(string name)
+        public async Task<List<string>> ListPlaylistAsync(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("listplaylist", new string[] { name });
+            MpdResponse response = await _connection.Exec("listplaylist", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -638,12 +630,12 @@ namespace LibMpc
         /// </summary>
         /// <param name="name">The playlist whos files meta data are requested.</param>
         /// <returns>The meta data of the tracks in the given playlist.</returns>
-        public List<MpdFile> ListPlaylistInfo(string name)
+        public async Task<List<MpdFile>> ListPlaylistInfoAsync(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("listplaylistinfo", new string[] { name });
+            MpdResponse response = await _connection.Exec("listplaylistinfo", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -655,14 +647,14 @@ namespace LibMpc
         /// </summary>
         /// <param name="name">The name of the playlist.</param>
         /// <param name="file">The path and name of the file to add.</param>
-        public void PlaylistAdd(string name, string file)
+        public async Task PlaylistAddAsync(string name, string file)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
             if (file == null)
                 throw new ArgumentNullException("file");
 
-            MpdResponse response = _connection.Exec("playlistadd", new string[] { name, file });
+            MpdResponse response = await _connection.Exec("playlistadd", new string[] { name, file });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -671,12 +663,12 @@ namespace LibMpc
         /// Clears all tracks from a playlist.
         /// </summary>
         /// <param name="name">The name of the playlist to clear.</param>
-        public void PlaylistClear(string name)
+        public async Task PlaylistClearAsync(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("playlistclear", new string[] { name });
+            MpdResponse response = await _connection.Exec("playlistclear", new string[] { name });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -686,12 +678,12 @@ namespace LibMpc
         /// </summary>
         /// <param name="name">The name of the playlist</param>
         /// <param name="id">The id of the track to delete.</param>
-        public void PlaylistDelete(string name, int id)
+        public async Task PlaylistDeleteAsync(string name, int id)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("playlistdelete", new string[] { name, id.ToString() });
+            MpdResponse response = await _connection.Exec("playlistdelete", new string[] { name, id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -702,12 +694,12 @@ namespace LibMpc
         /// <param name="name">The name of the playlist.</param>
         /// <param name="id">The id of the track to move.</param>
         /// <param name="nr">The position to move the track to.</param>
-        public void PlaylistMove(string name, int id, int nr)
+        public async Task PlaylistMoveAsync(string name, int id, int nr)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
 
-            MpdResponse response = _connection.Exec("playlistmove", new string[] { id.ToString(), nr.ToString() });
+            MpdResponse response = await _connection.Exec("playlistmove", new string[] { id.ToString(), nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -718,12 +710,12 @@ namespace LibMpc
         /// <param name="scopeSpecifier">The attribute to search for the given value.</param>
         /// <param name="token">The value to search for in the given attribute.</param>
         /// <returns>The meta data for all tracks in the current playlist whos attribute equals the given value.</returns>
-        public List<MpdFile> PlaylistFind(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> PlaylistFindAsync(ScopeSpecifier scopeSpecifier, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("playlistfind", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("playlistfind", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -736,12 +728,12 @@ namespace LibMpc
         /// <param name="scopeSpecifier">The attribute to search for the given value.</param>
         /// <param name="token">The value to search for in the given attribute.</param>
         /// <returns>The meta data for all tracks in the current playlist whos attribute contains the given value.</returns>
-        public List<MpdFile> PlaylistSearch(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> PlaylistSearchAsync(ScopeSpecifier scopeSpecifier, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("playlistsearch", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("playlistsearch", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -755,9 +747,9 @@ namespace LibMpc
         /// Sets the seconds to crossfade between songs.
         /// </summary>
         /// <param name="seconds">The seconds to crossfade between songs.</param>
-        public void Crossfade(int seconds)
+        public async Task CrossfadeAsync(int seconds)
         {
-            MpdResponse response = _connection.Exec("crossfade", new string[] { seconds.ToString() });
+            MpdResponse response = await _connection.Exec("crossfade", new string[] { seconds.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -765,9 +757,9 @@ namespace LibMpc
         /// <summary>
         /// Starts the playback of the next song in the playlist-
         /// </summary>
-        public void Next()
+        public async Task NextAsync()
         {
-            MpdResponse response = _connection.Exec("next");
+            MpdResponse response = await _connection.Exec("next");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -776,9 +768,9 @@ namespace LibMpc
         /// Sets the MPD to pause or resume the playback.
         /// </summary>
         /// <param name="pause">If the playback should be paused or resumed.</param>
-        public void Pause(bool pause)
+        public async Task PauseAsync(bool pause)
         {
-            MpdResponse response = _connection.Exec("pause", new string[] { pause ? "1" : "0" });
+            MpdResponse response = await _connection.Exec("pause", new string[] { pause ? "1" : "0" });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -786,9 +778,9 @@ namespace LibMpc
         /// <summary>
         /// Starts the playback of the current item in the playlist.
         /// </summary>
-        public void Play()
+        public async Task PlayAsync()
         {
-            MpdResponse response = _connection.Exec("play");
+            MpdResponse response = await _connection.Exec("play");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -797,9 +789,9 @@ namespace LibMpc
         /// Starts the playback of the item with the given index in the playlist.
         /// </summary>
         /// <param name="nr">The index of the track in the playlist to start playing.</param>
-        public void Play(int nr)
+        public async Task PlayAsync(int nr)
         {
-            MpdResponse response = _connection.Exec("play", new string[] { nr.ToString() });
+            MpdResponse response = await _connection.Exec("play", new string[] { nr.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -807,9 +799,9 @@ namespace LibMpc
         /// <summary>
         /// Starts the playback of the track in the playlist with the id 0.
         /// </summary>
-        public void PlayId()
+        public async Task PlayIdAsync()
         {
-            MpdResponse response = _connection.Exec("playid");
+            MpdResponse response = await _connection.Exec("playid");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -818,9 +810,9 @@ namespace LibMpc
         /// Starts the playback of the track in the playlist with the given id.
         /// </summary>
         /// <param name="id">The id of the track to start playing.</param>
-        public void PlayId(int id)
+        public async Task PlayIdAsync(int id)
         {
-            MpdResponse response = _connection.Exec("playid", new string[] { id.ToString() });
+            MpdResponse response = await _connection.Exec("playid", new string[] { id.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -828,9 +820,9 @@ namespace LibMpc
         /// <summary>
         /// Starts the playback of the previous track in the playlist.
         /// </summary>
-        public void Previous()
+        public async Task PreviousAsync()
         {
-            MpdResponse response = _connection.Exec("previous");
+            MpdResponse response = await _connection.Exec("previous");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -839,9 +831,9 @@ namespace LibMpc
         /// Sets the MPD to random or sequential playback.
         /// </summary>
         /// <param name="random">If the MPD playlist should be played randomly.</param>
-        public void Random(bool random)
+        public async Task RandomAsync(bool random)
         {
-            MpdResponse response = _connection.Exec("random", new string[] { random ? "1" : "0" });
+            MpdResponse response = await _connection.Exec("random", new string[] { random ? "1" : "0" });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -850,9 +842,9 @@ namespace LibMpc
         /// Sets if the MPD should repeat the playlist.
         /// </summary>
         /// <param name="repeat">If the MPD should repeat the playlist.</param>
-        public void Repeat(bool repeat)
+        public async Task RepeatAsync(bool repeat)
         {
-            MpdResponse response = _connection.Exec("repeat", new string[] { repeat ? "1" : "0" });
+            MpdResponse response = await _connection.Exec("repeat", new string[] { repeat ? "1" : "0" });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -862,9 +854,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="nr">The index of the song in the playlist.</param>
         /// <param name="time">The number of seconds to start playback on.</param>
-        public void Seek(int nr, int time)
+        public async Task SeekAsync(int nr, int time)
         {
-            MpdResponse response = _connection.Exec("seek", new string[] { nr.ToString(), time.ToString() });
+            MpdResponse response = await _connection.Exec("seek", new string[] { nr.ToString(), time.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -874,9 +866,9 @@ namespace LibMpc
         /// </summary>
         /// <param name="id">The id of the song in the playlist.</param>
         /// <param name="time">The number of seconds to start playback on.</param>
-        public void SeekId(int id, int time)
+        public async Task SeekIdAsync(int id, int time)
         {
-            MpdResponse response = _connection.Exec("seekid", new string[] { id.ToString(), time.ToString() });
+            MpdResponse response = await _connection.Exec("seekid", new string[] { id.ToString(), time.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -885,14 +877,14 @@ namespace LibMpc
         /// Sets the output volume of the MPD.
         /// </summary>
         /// <param name="vol">The output volume of the MPD between 0 and 100.</param>
-        public void SetVol(int vol)
+        public async Task SetVolAsync(int vol)
         {
             if (vol < 0)
                 throw new ArgumentException("vol < 0");
             if (vol > 100)
                 throw new ArgumentException("vol > 100");
 
-            MpdResponse response = _connection.Exec("setvol", new string[] { vol.ToString() });
+            MpdResponse response = await _connection.Exec("setvol", new string[] { vol.ToString() });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -900,9 +892,9 @@ namespace LibMpc
         /// <summary>
         /// Stops the playback of the MPD.
         /// </summary>
-        public void Stop()
+        public async Task StopAsync()
         {
-            MpdResponse response = _connection.Exec("stop");
+            MpdResponse response = await _connection.Exec("stop");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -914,17 +906,17 @@ namespace LibMpc
         /// <summary>
         /// Clears the error message set in the MPD.
         /// </summary>
-        public void ClearError()
+        public async Task ClearErrorAsync()
         {
-            _connection.Exec("clearerror");
+            await _connection.Exec("clearerror");
         }
         /// <summary>
         /// Returns which commands the current user has access to. 
         /// </summary>
         /// <returns>The commands the current user has access to.</returns>
-        public List<string> Commands()
+        public async Task<List<string>> CommandsAsync()
         {
-            MpdResponse response = _connection.Exec("commands");
+            MpdResponse response = await _connection.Exec("commands");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -935,9 +927,9 @@ namespace LibMpc
         /// Returns which commands the current user does has access to. 
         /// </summary>
         /// <returns>The commands the current user does has access to.</returns>
-        public List<string> NotCommands()
+        public async Task<List<string>> NotCommandsAsync()
         {
-            MpdResponse response = _connection.Exec("notcommands");
+            MpdResponse response = await _connection.Exec("notcommands");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -949,27 +941,28 @@ namespace LibMpc
         /// </summary>
         /// <param name="password">The password to authorize to the server.</param>
         /// <returns>If the password is valid.</returns>
-        public bool Password(string password)
+        public async Task<bool> PasswordAsync(string password)
         {
             if (password == null)
                 throw new ArgumentNullException("password");
 
-            return _connection.Exec("password", new string[] { password }).IsError;
+            var mpdResponse = await _connection.Exec("password", new string[] { password });
+            return mpdResponse.IsError;
         }
         /// <summary>
         /// Sends a ping command to the server and waits for the response.
         /// </summary>
-        public void Ping()
+        public async Task PingAsync()
         {
-            _connection.Exec("ping");
+            await _connection.Exec("ping");
         }
         /// <summary>
         /// Requests the current statistics from the MPD,
         /// </summary>
         /// <returns>The current statistics fromt the MPD.</returns>
-        public MpdStatistics Stats()
+        public async Task<MpdStatistics> StatsAsync()
         {
-            MpdResponse response = _connection.Exec("stats");
+            MpdResponse response = await _connection.Exec("stats");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -1045,9 +1038,9 @@ namespace LibMpc
         /// Returns the current status of the MPD.
         /// </summary>
         /// <returns>The current status of the MPD.</returns>
-        public MpdStatus Status()
+        public async Task<MpdStatus> StatusAsync()
         {
-            MpdResponse response = _connection.Exec("status");
+            MpdResponse response = await _connection.Exec("status");
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
