@@ -1,6 +1,10 @@
-# LibMpc.net-Core
-A rewrite of LibMpc.net for .NET Core
+LibMpc Core
+===========
 
-Original project source https://libmpc.codeplex.com/, Copyright 2008 Matthias Sessler.
+.NET Client Library for [**Music Player Daemon**](https://www.musicpd.org/)
 
-The rewrite propose to move the hole library to .NET Core and to refactor some of the parts.
+## Build Status
+[![Travis](https://img.shields.io/travis/rust-lang/rust.svg?style=flat-square)]()
+
+## Base Code
+https://libmpc.codeplex.com/, Copyright 2008 Matthias Sessler.
