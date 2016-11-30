@@ -23,21 +23,6 @@ namespace LibMpc
     /// </summary>
     public class Mpc : IMpc
     {
-        private const string TAG_ANY = "any";
-        private const string TAG_FILENAME = "filename";
-
-        private const string TAG_ARTIST = "artist";
-        private const string TAG_ALBUM = "album";
-        private const string TAG_TITLE = "title";
-        private const string TAG_TRACK = "track";
-        private const string TAG_NAME = "name";
-        private const string TAG_GENRE = "genre";
-        private const string TAG_DATE = "date";
-        private const string TAG_COMPOSER = "composer";
-        private const string TAG_PERFORMER = "performer";
-        private const string TAG_COMMENT = "comment";
-        private const string TAG_DISC = "disc";
-
         private static readonly Regex STATUS_AUDIO_REGEX = new Regex("^(?<sampleRate>[0-9]*):(?<bits>[0-9]*):(?<channels>[0-9]*)$");
 
         private MpcConnection _connection;
@@ -223,7 +208,7 @@ namespace LibMpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("find", new string[] { toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("find", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -237,7 +222,7 @@ namespace LibMpc
         /// <returns>All values found in files of the MPD for the given attribute.</returns>
         public List<string> List(ScopeSpecifier scopeSpecifier)
         {
-            MpdResponse response = _connection.Exec("list", new string[] { toTag(scopeSpecifier) });
+            MpdResponse response = _connection.Exec("list", new string[] { TagConverter.ToTag(scopeSpecifier) });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -256,7 +241,7 @@ namespace LibMpc
             if (searchValue == null)
                 throw new ArgumentNullException("searchValue");
 
-            MpdResponse response = _connection.Exec("list", new string[] { toTag(resultTag), toTag(searchTag), searchValue });
+            MpdResponse response = _connection.Exec("list", new string[] { TagConverter.ToTag(resultTag), TagConverter.ToTag(searchTag), searchValue });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -337,7 +322,7 @@ namespace LibMpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("search", new string[] { toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("search", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -774,7 +759,7 @@ namespace LibMpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("playlistfind", new string[] { toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("playlistfind", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -792,7 +777,7 @@ namespace LibMpc
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = _connection.Exec("playlistsearch", new string[] { toTag(scopeSpecifier), token });
+            MpdResponse response = _connection.Exec("playlistsearch", new string[] { TagConverter.ToTag(scopeSpecifier), token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -1268,40 +1253,5 @@ namespace LibMpc
         }
 
         #endregion
-
-        private string toTag(ScopeSpecifier scopeSpecifier)
-        {
-            switch (scopeSpecifier)
-            {
-                default:
-                    throw new ArgumentException("scopeSpecifier");
-                case ScopeSpecifier.Any:
-                    return TAG_ANY;
-                case ScopeSpecifier.Filename:
-                    return TAG_FILENAME;
-                case ScopeSpecifier.Artist:
-                    return TAG_ARTIST;
-                case ScopeSpecifier.Album:
-                    return TAG_ALBUM;
-                case ScopeSpecifier.Title:
-                    return TAG_TITLE;
-                case ScopeSpecifier.Track:
-                    return TAG_TRACK;
-                case ScopeSpecifier.Name:
-                    return TAG_NAME;
-                case ScopeSpecifier.Genre:
-                    return TAG_GENRE;
-                case ScopeSpecifier.Date:
-                    return TAG_DATE;
-                case ScopeSpecifier.Composer:
-                    return TAG_COMPOSER;
-                case ScopeSpecifier.Performer:
-                    return TAG_PERFORMER;
-                case ScopeSpecifier.Comment:
-                    return TAG_COMMENT;
-                case ScopeSpecifier.Disc:
-                    return TAG_DISC;
-            }
-        }
     }
 }
