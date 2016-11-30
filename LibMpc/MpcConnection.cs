@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace LibMpc
 {
@@ -16,15 +17,6 @@ namespace LibMpc
     /// </summary>
     public class MpcConnection
     {
-        /// <summary>
-        /// Is fired when a connection to a MPD server is established.
-        /// </summary>
-        public event EventHandler Connected;
-        /// <summary>
-        /// Is fired when the connection to the MPD server is closed.
-        /// </summary>
-        public event EventHandler Disconnected;
-
         private static readonly string FIRST_LINE_PREFIX = "OK MPD ";
 
         private static readonly string OK = "OK";
@@ -91,7 +83,7 @@ namespace LibMpc
         /// Connects to the MPD server who's IPEndPoint was set in the Server property.
         /// </summary>
         /// <exception cref="InvalidOperationException">If no IPEndPoint was set to the Server property.</exception>
-        public void Connect()
+        public async Task ConnectAsync()
         {
             if (_ipEndPoint == null)
                 throw new InvalidOperationException("Server IPEndPoint not set.");
@@ -101,43 +93,38 @@ namespace LibMpc
 
 
             _tcpClient = new TcpClient();
-            var connection = _tcpClient.ConnectAsync(_ipEndPoint.Address, _ipEndPoint.Port);
-            connection.Wait();
+            await _tcpClient.ConnectAsync(_ipEndPoint.Address, _ipEndPoint.Port);
 
             _networkStream = _tcpClient.GetStream();
 
             _reader = new StreamReader(_networkStream, Encoding.UTF8);
-            _writer = new StreamWriter(_networkStream, Encoding.UTF8);
-            _writer.NewLine = "\n";
+            _writer = new StreamWriter(_networkStream, Encoding.UTF8) { NewLine = "\n" };
 
-            string firstLine = _reader.ReadLine();
-            if( !firstLine.StartsWith( FIRST_LINE_PREFIX ) )
+            var firstLine = _reader.ReadLine();
+            if (!firstLine.StartsWith(FIRST_LINE_PREFIX))
             {
-                Disconnect();
+                await Disconnect();
                 throw new InvalidDataException("Response of mpd does not start with \"" + FIRST_LINE_PREFIX + "\"." );
             }
             _version = firstLine.Substring(FIRST_LINE_PREFIX.Length);
 
-            _writer.WriteLine();
+            await _writer.WriteLineAsync();
             _writer.Flush();
 
             ReadResponse();
-
-            Connected?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// Disconnects from the current MPD server.
         /// </summary>
-        public void Disconnect()
+        public Task Disconnect()
         {
             if (_tcpClient == null)
-                return;
+                return Task.CompletedTask;
 
             _networkStream.Dispose();
-
             ClearConnectionFields();
 
-            Disconnected?.Invoke(this, EventArgs.Empty);
+            return Task.CompletedTask;
         }
         /// <summary>
         /// Executes a simple command without arguments on the MPD server and returns the response.
@@ -223,7 +210,7 @@ namespace LibMpc
             if (!IsConnected)
             {
                 if (_autoConnect)
-                    Connect();
+                    ConnectAsync();
                 else
                     throw new NotConnectedException();
             }

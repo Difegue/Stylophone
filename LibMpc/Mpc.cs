@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace LibMpc
 {
     public interface IMpc
     {
         bool IsConnected { get; }
-        bool Connect();
-
-        event EventHandler Connected;
-        event EventHandler Disconnected;
+        Task<bool> ConnectAsync();
 
         MpdOutput[] Outputs();
         MpdStatistics Stats();
@@ -34,57 +32,23 @@ namespace LibMpc
         }
 
         /// <summary>
-        /// Is fired when a connection to a MPD server is established.
-        /// </summary>
-        public event EventHandler Connected
-        {
-            add { ConnectedRelayEvent += value; }
-            remove { ConnectedRelayEvent -= value; }
-        }
-
-        private event EventHandler ConnectedRelayEvent;
-
-        /// <summary>
-        /// Is fired when the connection to the MPD server is closed.
-        /// </summary>
-        public event EventHandler Disconnected
-        {
-            add { DisconnectedRelayEvent += value; }
-            remove { DisconnectedRelayEvent -= value; }
-        }
-
-        private event EventHandler DisconnectedRelayEvent;
-
-        /// <summary>
         /// Connection status to MPD Server.
         /// </summary>
         public bool IsConnected => _connection?.IsConnected ?? false;
 
-        public bool Connect()
+        public async Task<bool> ConnectAsync()
         {
             if (_connection == null)
             {
                 _connection = new MpcConnection(_server);
-                _connection.Connected += OnConnected;
-                _connection.Disconnected += OnDisconnected;
             }
 
             if (!_connection.IsConnected)
             {
-                _connection.Connect();
+                await _connection.ConnectAsync();
             }
 
             return _connection.IsConnected;
-        }
-
-        private void OnConnected(object sender, EventArgs e)
-        {
-            ConnectedRelayEvent?.Invoke(this, e);
-        }
-
-        private void OnDisconnected(object sender, EventArgs e)
-        {
-            DisconnectedRelayEvent?.Invoke(this, e);
         }
 
         #region Admin Commands
