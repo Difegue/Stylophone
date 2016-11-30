@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// The MpdDirectoryListing class contains the response of a MPD server to a list command.

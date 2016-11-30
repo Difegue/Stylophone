@@ -7,11 +7,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// Keeps the connection to the MPD server and handels the most basic structure of the
-    /// MPD protocol. The high level commands are handeled in the <see cref="Libmpc.Mpc"/>
+    /// MPD protocol. The high level commands are handeled in the <see cref="Mpc"/>
     /// class.
     /// </summary>
     public class MpcConnection

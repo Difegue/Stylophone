@@ -1,6 +1,6 @@
 using System;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// The MpdOutput class contains all attributes of an output device of the MPD.

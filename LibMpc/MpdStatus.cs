@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// The possible states of the MPD.

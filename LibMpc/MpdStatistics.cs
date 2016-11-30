@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// The MpdStatistics class contains statistics of the MPD file database.

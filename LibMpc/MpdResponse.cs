@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// The MpdResponse class parses the response to an MPD command in it's most

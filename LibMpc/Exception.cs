@@ -1,6 +1,6 @@
 using System;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// Is thrown when a command is to be executed on a disconnected <see cref="MpcConnection"/>

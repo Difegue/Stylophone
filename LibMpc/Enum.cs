@@ -1,4 +1,4 @@
-﻿namespace Libmpc
+﻿namespace LibMpc
 {
     /// <summary>
     /// The scope specifier for search commands.

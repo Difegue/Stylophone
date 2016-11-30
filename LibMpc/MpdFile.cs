@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libmpc
+namespace LibMpc
 {
     /// <summary>
     /// The MpdFile class contains all meta data for a file of the MPD.
