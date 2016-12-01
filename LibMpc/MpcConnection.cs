@@ -22,7 +22,6 @@ namespace LibMpc
         private static readonly string OK = "OK";
         private static readonly string ACK = "ACK";
 
-        private static readonly Regex ACK_REGEX = new Regex("^ACK \\[(?<code>[0-9]*)@(?<nr>[0-9]*)] \\{(?<command>[a-z]*)} (?<message>.*)$");
 
         private readonly IPEndPoint _server;
 
@@ -72,11 +71,9 @@ namespace LibMpc
             await _writer.WriteLineAsync();
             _writer.Flush();
 
-            ReadResponse();
+            await ReadResponseAsync();
         }
-        /// <summary>
-        /// Disconnects from the current MPD server.
-        /// </summary>
+        
         private Task Disconnect()
         {
             if (_tcpClient == null)
@@ -112,7 +109,7 @@ namespace LibMpc
                 _writer.WriteLine(command);
                 _writer.Flush();
 
-                return ReadResponse();
+                return await ReadResponseAsync();
             }
             catch (Exception)
             {
@@ -160,7 +157,7 @@ namespace LibMpc
                 _writer.WriteLine();
                 _writer.Flush();
 
-                return ReadResponse();
+                return await ReadResponseAsync();
             }
             catch (Exception)
             {
@@ -194,31 +191,25 @@ namespace LibMpc
                 _writer.Write(token);
         }
 
-        private MpdResponse ReadResponse()
+        private async Task<MpdResponse> ReadResponseAsync()
         {
-            List<string> ret = new List<string>();
-            string line = _reader.ReadLine();
-            while (!(line.Equals(OK) || line.StartsWith(ACK)))
+            var response = new List<string>();
+            var currentLine = _reader.ReadLine();
+
+            // Read response untli reach end token (OK or ACK)
+            while (!(currentLine.Equals(OK) || currentLine.StartsWith(ACK)))
             {
-                ret.Add(line);
-                line = _reader.ReadLine();
+                response.Add(currentLine);
+                currentLine = await _reader.ReadLineAsync();
             }
-            if (line.Equals(OK))
-                return new MpdResponse(new ReadOnlyCollection<string>(ret));
+
+            if (currentLine.Equals(OK))
+            {
+                return new MpdResponse(new ReadOnlyCollection<string>(response));
+            }
             else
             {
-                Match match = ACK_REGEX.Match(line);
-
-                if (match.Groups.Count != 5)
-                    throw new InvalidDataException( "Error response not as expected" );
-
-                return new MpdResponse(
-                    int.Parse( match.Result("${code}") ),
-                    int.Parse( match.Result("${nr}") ),
-                    match.Result("${command}"),
-                    match.Result("${message}"),
-                    new ReadOnlyCollection<string>(ret)
-                    );
+                return AcknowledgeResponse.Parse(currentLine, response);
             }
         }
 
@@ -229,6 +220,26 @@ namespace LibMpc
             _networkStream?.Dispose();
             _tcpClient?.Dispose();
             _version = string.Empty;
+        }
+    }
+
+    public class AcknowledgeResponse
+    {
+        private static readonly Regex AcknowledgePattern = new Regex("^ACK \\[(?<code>[0-9]*)@(?<nr>[0-9]*)] \\{(?<command>[a-z]*)} (?<message>.*)$");
+
+        public static MpdResponse Parse(string acknowledgeResponse, IList<string> payload)
+        {
+            var match = AcknowledgePattern.Match(acknowledgeResponse);
+
+            if (match.Groups.Count != 5)
+                throw new InvalidDataException("Error response not as expected");
+
+            return new MpdResponse(
+                int.Parse(match.Result("${code}")),
+                int.Parse(match.Result("${nr}")),
+                match.Result("${command}"),
+                match.Result("${message}"),
+                new ReadOnlyCollection<string>(payload));
         }
     }
 }
