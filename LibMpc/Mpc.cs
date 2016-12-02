@@ -39,6 +39,19 @@ namespace LibMpc
             return _connection.IsConnected;
         }
 
+        public async Task DisconnectAsync()
+        {
+            if (_connection == null)
+            {
+                return;
+            }
+
+            if (_connection.IsConnected)
+            {
+                await _connection?.DisconnectAsync();
+            }
+        }
+
         #region Admin Commands
         /// <summary>
         /// Disables an MPD output.
