@@ -1,5 +1,8 @@
 namespace LibMpc
 {
+    /// <summary>
+    /// https://www.musicpd.org/doc/protocol/tags.html
+    /// </summary>
     public class Tags
     {
         internal class Tag : ITag
@@ -12,10 +15,12 @@ namespace LibMpc
             public string Value { get; }
         }
 
-        public ITag Any { get; } = new Tag("any");
-        public ITag Filename { get; } = new Tag("filename");
-        public ITag Artist { get; }= new Tag("artist");
-        public ITag Album { get; }= new Tag("album");
+        public ITag Artist { get; } = new Tag("artist");
+        public ITag ArtistSort { get; } = new Tag("artistsort");
+        public ITag Album { get; } = new Tag("album");
+        public ITag AlbumSort { get; } = new Tag("albumsort");
+        public ITag AlbumArtist { get; } = new Tag("albumartist");
+        public ITag AlbumArtistSort { get; } = new Tag("albumartistsort");
         public ITag Title { get; } = new Tag("title");
         public ITag Track { get; } = new Tag("track");
         public ITag Name { get; } = new Tag("name");
