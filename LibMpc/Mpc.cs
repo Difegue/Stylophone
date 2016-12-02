@@ -156,15 +156,15 @@ namespace LibMpc
         /// <summary>
         /// Returns all files in the database who's attribute matches the given token. Works like the Search command but is case sensitive.
         /// </summary>
-        /// <param name="scopeSpecifier">Specifies the attribute to search for.</param>
+        /// <param name="tag">Specifies the attribute to search for.</param>
         /// <param name="token">The value the files attribute must have to be included in the result.</param>
         /// <returns>All files in the database who's attribute matches the given token.</returns>
-        public async Task<List<MpdFile>> FindAsync(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> FindAsync(ITag tag, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = await _connection.Exec("find", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("find", new string[] { tag.Value, token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -174,11 +174,11 @@ namespace LibMpc
         /// <summary>
         /// Returns all values found in files of the MPD for the given attribute.
         /// </summary>
-        /// <param name="scopeSpecifier">The attribute who's values are requested.</param>
+        /// <param name="tag">The attribute who's values are requested.</param>
         /// <returns>All values found in files of the MPD for the given attribute.</returns>
-        public async Task<List<string>> ListAsync(ScopeSpecifier scopeSpecifier)
+        public async Task<List<string>> ListAsync(ITag tag)
         {
-            MpdResponse response = await _connection.Exec("list", new string[] { TagConverter.ToTag(scopeSpecifier) });
+            MpdResponse response = await _connection.Exec("list", new string[] { tag.Value });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -192,12 +192,12 @@ namespace LibMpc
         /// <param name="searchTag">The attribute whos value should match a given value for the file to be included in the result.</param>
         /// <param name="searchValue">The value the searchTag attribute must match for the file to be included in the result.</param>
         /// <returns>All values found in files of the MPD for the given attribute.</returns>
-        public async Task<List<string>> ListAsync(ScopeSpecifier resultTag, ScopeSpecifier searchTag, string searchValue)
+        public async Task<List<string>> ListAsync(ITag resultTag, ITag searchTag, string searchValue)
         {
             if (searchValue == null)
                 throw new ArgumentNullException("searchValue");
 
-            MpdResponse response = await _connection.Exec("list", new string[] { TagConverter.ToTag(resultTag), TagConverter.ToTag(searchTag), searchValue });
+            MpdResponse response = await _connection.Exec("list", new string[] { resultTag.Value, searchTag.Value, searchValue });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -270,15 +270,15 @@ namespace LibMpc
         /// <summary>
         /// Returns all files in the database who's attribute matches the given token. Works like the Find command but is case insensitive.
         /// </summary>
-        /// <param name="scopeSpecifier">Specifies the attribute to search for.</param>
+        /// <param name="tag">Specifies the attribute to search for.</param>
         /// <param name="token">The value the files attribute must have to be included in the result.</param>
         /// <returns>All files in the database who's attribute matches the given token.</returns>
-        public async Task<List<MpdFile>> SearchAsync(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> SearchAsync(ITag tag, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = await _connection.Exec("search", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("search", new string[] { tag.Value, token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -707,15 +707,15 @@ namespace LibMpc
         /// <summary>
         /// Returns the meta data for all tracks in the current playlist whos attribute equals the given value.
         /// </summary>
-        /// <param name="scopeSpecifier">The attribute to search for the given value.</param>
+        /// <param name="tag">The attribute to search for the given value.</param>
         /// <param name="token">The value to search for in the given attribute.</param>
         /// <returns>The meta data for all tracks in the current playlist whos attribute equals the given value.</returns>
-        public async Task<List<MpdFile>> PlaylistFindAsync(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> PlaylistFindAsync(ITag tag, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = await _connection.Exec("playlistfind", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("playlistfind", new string[] { tag.Value, token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
@@ -725,15 +725,15 @@ namespace LibMpc
         /// <summary>
         /// Returns the meta data for all tracks in the current playlist whos attribute contains the given value.
         /// </summary>
-        /// <param name="scopeSpecifier">The attribute to search for the given value.</param>
+        /// <param name="tag">The attribute to search for the given value.</param>
         /// <param name="token">The value to search for in the given attribute.</param>
         /// <returns>The meta data for all tracks in the current playlist whos attribute contains the given value.</returns>
-        public async Task<List<MpdFile>> PlaylistSearchAsync(ScopeSpecifier scopeSpecifier, string token)
+        public async Task<List<MpdFile>> PlaylistSearchAsync(ITag tag, string token)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
 
-            MpdResponse response = await _connection.Exec("playlistsearch", new string[] { TagConverter.ToTag(scopeSpecifier), token });
+            MpdResponse response = await _connection.Exec("playlistsearch", new string[] { tag.Value, token });
 
             if (response.IsError)
                 throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);

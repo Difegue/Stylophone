@@ -13,16 +13,16 @@ namespace LibMpc
 
             public class Find : IMpcCommand
             {
-                private readonly SearchTag _searchTag;
+                private readonly ITag _tag;
                 private readonly string _searchText;
 
-                public Find(SearchTag searchTag, string searchText)
+                public Find(ITag tag, string searchText)
                 {
-                    _searchTag = searchTag;
+                    _tag = tag;
                     _searchText = searchText;
                 }
 
-                public string Value => string.Join(" ", "find", _searchTag.Value, _searchText);
+                public string Value => string.Join(" ", "find", _tag.Value, _searchText);
 
                 public object ParseResponse(object response)
                 {
@@ -32,14 +32,14 @@ namespace LibMpc
 
             public class List : IMpcCommand
             {
-                private readonly SearchTag _searchTag;
+                private readonly ITag _tag;
 
-                public List(SearchTag searchTag)
+                public List(ITag tag)
                 {
-                    _searchTag = searchTag;
+                    _tag = tag;
                 }
 
-                public string Value => string.Join(" ", "list", _searchTag);
+                public string Value => string.Join(" ", "list", _tag);
 
                 public object ParseResponse(object response)
                 {
