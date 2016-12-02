@@ -3,7 +3,15 @@
 ################################################################################
 
 /.vs
+
+/LibMpc/bin
+/LibMpc/obj
 /LibMpc/LibMpc.xproj.user
-/LibMpc/obj/Debug/netstandard1.6
-/LibMpc/bin/Debug/netstandard1.6
 /LibMpc/project.lock.json
+
+/LibMpcApp/bin
+/LibMpcApp/obj
+/LibMpcApp/LibMpcApp.xproj.user
+/LibMpcApp/project.lock.json
+
+/LibMpc.sln.DotSettings.user
