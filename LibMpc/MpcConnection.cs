@@ -63,7 +63,7 @@ namespace LibMpc
             var firstLine = _reader.ReadLine();
             if (!firstLine.StartsWith(FIRST_LINE_PREFIX))
             {
-                await Disconnect();
+                await DisconnectAsync();
                 throw new InvalidDataException("Response of mpd does not start with \"" + FIRST_LINE_PREFIX + "\"." );
             }
             _version = firstLine.Substring(FIRST_LINE_PREFIX.Length);
@@ -74,7 +74,7 @@ namespace LibMpc
             await ReadResponseAsync();
         }
         
-        private Task Disconnect()
+        public Task DisconnectAsync()
         {
             if (_tcpClient == null)
             {
@@ -113,7 +113,7 @@ namespace LibMpc
             }
             catch (Exception)
             {
-                try { await Disconnect(); } catch (Exception) { }
+                try { await DisconnectAsync(); } catch (Exception) { }
                 return null; // TODO: Create Null Object for MpdResponse
             }
         }
@@ -161,7 +161,7 @@ namespace LibMpc
             }
             catch (Exception)
             {
-                try { await Disconnect(); } catch (Exception) { }
+                try { await DisconnectAsync(); } catch (Exception) { }
                 throw;
             }
         }
