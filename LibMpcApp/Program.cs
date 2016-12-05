@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Net;
-using System.Threading.Tasks;
 using LibMpc;
+using System.Collections.Generic;
 
 namespace LibMpcApp
 {
+    /// <summary>
+    /// Simple console app to test commands and parsed responses.
+    /// </summary>
     public class Program
     {
+        private static readonly Dictionary<int, Func<object, IMpcCommand>> _commands = new Dictionary<int, Func<object, IMpcCommand>>
+        {
+            { 1,  input => new Commands.Reflection.TagTypes() }
+        };
+
         public static void Main(string[] args)
         {
             var mpc = new Mpc(new IPEndPoint(IPAddress.Loopback, 6600));
@@ -27,16 +35,31 @@ namespace LibMpcApp
 
         private static void StartReadCommands(Mpc mpc)
         {
-            while(true)
+            int userInput = 0;
+            while ((userInput = DisplayMenu()) != 99)
             {
-                Console.Write("Command: ");
-                var command = Console.ReadLine();
+                Func<object, IMpcCommand> command;
+                var response = new object();
 
-                if (string.IsNullOrEmpty(command))
+                if (_commands.TryGetValue(userInput, out command))
                 {
-                    break;
+                    response = mpc.SendAsync(command(null)).GetAwaiter().GetResult();
                 }
+
+                Console.WriteLine("Response: ");
+                Console.WriteLine(response);
             }
+        }
+
+        static public int DisplayMenu()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Commands: ");
+            Console.WriteLine("1. tagtypes");
+            Console.WriteLine("99. Exit");
+            Console.WriteLine();
+            var result = Console.ReadLine();
+            return Convert.ToInt32(result);
         }
     }
 }
