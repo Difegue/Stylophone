@@ -78,84 +78,29 @@ namespace LibMpc
 
             return Task.CompletedTask;
         }
-        /// <summary>
-        /// Executes a simple command without arguments on the MPD server and returns the response.
-        /// </summary>
-        /// <param name="command">The command to execute.</param>
-        /// <returns>The MPD server response parsed into a basic object.</returns>
-        /// <exception cref="ArgumentException">If the command contains a space of a newline charakter.</exception>
-        public async Task<MpdResponse> Exec(string command)
-        {
-            if (command == null)
-                throw new ArgumentNullException("command");
-            if (command.Contains(" "))
-                throw new ArgumentException("command contains space");
-            if (command.Contains("\n"))
-                throw new ArgumentException("command contains newline");
+        
 
-            // TODO: Integrate connection status in MpdResponse
-            var connectionResult = await CheckConnectionAsync();
+        public async Task<IMpdMessage<T>> SendAsync<T>(IMpcCommand<T> command)
+        {
+            command.CheckNotNull();
+
+            var connected = await CheckConnectionAsync();
+            string[] response;
 
             try
             {
-                _writer.WriteLine(command);
+                _writer.WriteLine(command.Value);
                 _writer.Flush();
 
-                return await ReadResponseAsync();
+                response = await ReadResponseAsync();
             }
             catch (Exception)
             {
                 try { await DisconnectAsync(); } catch (Exception) { }
                 return null; // TODO: Create Null Object for MpdResponse
             }
-        }
-        /// <summary>
-        /// Executes a MPD command with arguments on the MPD server.
-        /// </summary>
-        /// <param name="command">The command to execute.</param>
-        /// <param name="argument">The arguments of the command.</param>
-        /// <returns>The MPD server response parsed into a basic object.</returns>
-        /// <exception cref="ArgumentException">If the command contains a space of a newline charakter.</exception>
-        public async Task<MpdResponse> Exec(string command, string[] argument)
-        {
-            if (command == null)
-                throw new ArgumentNullException("command");
-            if (command.Contains(" "))
-                throw new ArgumentException("command contains space");
-            if (command.Contains("\n"))
-                throw new ArgumentException("command contains newline");
 
-            if (argument == null)
-                throw new ArgumentNullException("argument");
-            for (int i = 0; i < argument.Length; i++)
-            {
-                if (argument[i] == null)
-                    throw new ArgumentNullException("argument[" + i + "]");
-                if (argument[i].Contains("\n"))
-                    throw new ArgumentException("argument[" + i + "] contains newline");
-            }
-
-            // TODO: Integrate connection status in MpdResponse
-            var connectionResult = await CheckConnectionAsync();
-
-            try
-            {
-                _writer.Write(command);
-                foreach (string arg in argument)
-                {
-                    _writer.Write(' ');
-                    WriteToken(arg);
-                }
-                _writer.WriteLine();
-                _writer.Flush();
-
-                return await ReadResponseAsync();
-            }
-            catch (Exception)
-            {
-                try { await DisconnectAsync(); } catch (Exception) { }
-                throw;
-            }
+            return new MpdMessage<T>(command, connected, response);
         }
 
         private async Task<bool> CheckConnectionAsync()
@@ -168,22 +113,7 @@ namespace LibMpc
             return IsConnected;
         }
 
-        private void WriteToken(string token)
-        {
-            if (token.Contains(" "))
-            {
-                _writer.Write("\"");
-                foreach (char chr in token)
-                    if (chr == '"')
-                        _writer.Write("\\\"");
-                    else
-                        _writer.Write(chr);
-            }
-            else
-                _writer.Write(token);
-        }
-
-        private async Task<MpdResponse> ReadResponseAsync()
+        private async Task<string[]> ReadResponseAsync()
         {
             var response = new List<string>();
 
@@ -195,7 +125,7 @@ namespace LibMpc
                 response.Add(responseLine);
             } while (!(responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack) || string.IsNullOrEmpty(responseLine)));
 
-            return new MpdResponse(response);
+            return response.ToArray();
         }
 
         private void ClearConnectionFields() 

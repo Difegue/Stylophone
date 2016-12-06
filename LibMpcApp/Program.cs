@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using LibMpc;
-using System.Collections.Generic;
 
 namespace LibMpcApp
 {
@@ -10,11 +9,6 @@ namespace LibMpcApp
     /// </summary>
     public class Program
     {
-        private static readonly Dictionary<int, Func<object, IMpcCommand>> _commands = new Dictionary<int, Func<object, IMpcCommand>>
-        {
-            { 1,  input => new Commands.Reflection.TagTypes() }
-        };
-
         public static void Main(string[] args)
         {
             var mpc = new Mpc(new IPEndPoint(IPAddress.Loopback, 6600));
@@ -38,12 +32,23 @@ namespace LibMpcApp
             int userInput = 0;
             while ((userInput = DisplayMenu()) != 99)
             {
-                Func<object, IMpcCommand> command;
                 var response = new object();
 
-                if (_commands.TryGetValue(userInput, out command))
+                switch (userInput)
                 {
-                    response = mpc.SendAsync(command(null)).GetAwaiter().GetResult();
+                    case 11:
+                        response = mpc.SendAsync(new Commands.Output.DisableOutput(0)).GetAwaiter().GetResult();
+                        break;
+                    case 12:
+                        response = mpc.SendAsync(new Commands.Output.EnableOutput(0)).GetAwaiter().GetResult();
+                        break;
+                    case 13:
+                        response = mpc.SendAsync(new Commands.Output.Outputs()).GetAwaiter().GetResult();
+                        break;
+
+                    case 24:
+                        response = mpc.SendAsync(new Commands.Reflection.TagTypes()).GetAwaiter().GetResult();
+                        break;
                 }
 
                 Console.WriteLine("Response: ");
@@ -55,7 +60,20 @@ namespace LibMpcApp
         {
             Console.WriteLine();
             Console.WriteLine("Commands: ");
-            Console.WriteLine("1. tagtypes");
+
+            // Ouput
+            Console.WriteLine();
+            Console.WriteLine("11. disableoutput 0");
+            Console.WriteLine("12. enableoutput 0");
+            Console.WriteLine("13. outputs");
+
+            // Reflection
+            Console.WriteLine();
+            Console.WriteLine("24. tagtypes");
+
+            // Database
+
+            Console.WriteLine();
             Console.WriteLine("99. Exit");
             Console.WriteLine();
             var result = Console.ReadLine();

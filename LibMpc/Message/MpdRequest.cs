@@ -1,17 +1,17 @@
 namespace LibMpc
 {
-    public interface IMpdRequest
+    public interface IMpdRequest<T>
     {
-        IMpcCommand Command { get; }
+        IMpcCommand<T> Command { get; }
     }
 
-    public class MpdRequest : IMpdRequest
+    public class MpdRequest<T> : IMpdRequest<T>
     {
-        public MpdRequest(IMpcCommand command)
+        public MpdRequest(IMpcCommand<T> command)
         {
             Command = command;
         }
 
-        public IMpcCommand Command { get; }
+        public IMpcCommand<T> Command { get; }
     }
 }

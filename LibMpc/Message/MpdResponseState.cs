@@ -7,7 +7,8 @@ namespace LibMpc
         string Status { get; }
         string ErrorMessage { get; }
         string MpdError { get; }
-        bool IsError { get; }
+        bool Error { get; }
+        bool Connected { get; }
     }
 
     public class MpdResponseState : IMpdResponseState
@@ -16,16 +17,17 @@ namespace LibMpc
 
         private readonly string _endLine;
 
-        public MpdResponseState(string endLine)
+        public MpdResponseState(string endLine, bool connected)
         {
             _endLine = endLine;
+            Connected = connected;
 
             if (!string.IsNullOrEmpty(_endLine))
             {
                 if (_endLine.Equals(Constants.Ok))
                 {
                     Status = _endLine;
-                    IsError = false;
+                    Error = false;
                 }
                 else
                 {
@@ -34,7 +36,8 @@ namespace LibMpc
             }
         }
 
-        public bool IsError { get; private set; } = true;
+        public bool Connected { get; } = false;
+        public bool Error { get; } = true;
         public string Status { get; private set; } = "UNKNOWN";
         public string ErrorMessage { get; private set; } = string.Empty;
         public string MpdError { get; private set; } = string.Empty;

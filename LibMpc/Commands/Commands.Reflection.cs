@@ -1,4 +1,6 @@
-﻿namespace LibMpc
+﻿using System.Collections.Generic;
+
+namespace LibMpc
 {
     public partial class Commands
     {
@@ -11,13 +13,13 @@
             // TODO: commands
             // TODO: notcommands
 
-            public class TagTypes : IMpcCommand
+            public class TagTypes : IMpcCommand<string>
             {
                 public string Value => "tagtypes";
 
-                public object ParseResponse(object response)
+                public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
                 {
-                    throw new System.NotImplementedException();
+                    return response;
                 }
             }
 
