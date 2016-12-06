@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LibMpc
@@ -17,12 +15,6 @@ namespace LibMpc
     /// </summary>
     public class MpcConnection
     {
-        private static readonly string FIRST_LINE_PREFIX = "OK MPD ";
-
-        private static readonly string OK = "OK";
-        private static readonly string ACK = "ACK";
-
-
         private readonly IPEndPoint _server;
 
         private TcpClient _tcpClient;
@@ -61,12 +53,12 @@ namespace LibMpc
             _writer = new StreamWriter(_networkStream, Encoding.UTF8) { NewLine = "\n" };
 
             var firstLine = _reader.ReadLine();
-            if (!firstLine.StartsWith(FIRST_LINE_PREFIX))
+            if (!firstLine.StartsWith(Constants.FirstLinePrefix))
             {
                 await DisconnectAsync();
-                throw new InvalidDataException("Response of mpd does not start with \"" + FIRST_LINE_PREFIX + "\"." );
+                throw new InvalidDataException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\"." );
             }
-            _version = firstLine.Substring(FIRST_LINE_PREFIX.Length);
+            _version = firstLine.Substring(Constants.FirstLinePrefix.Length);
 
             await _writer.WriteLineAsync();
             _writer.Flush();
@@ -194,23 +186,16 @@ namespace LibMpc
         private async Task<MpdResponse> ReadResponseAsync()
         {
             var response = new List<string>();
-            var currentLine = _reader.ReadLine();
 
             // Read response untli reach end token (OK or ACK)
-            while (!(currentLine.Equals(OK) || currentLine.StartsWith(ACK)))
+            string responseLine;
+            do
             {
-                response.Add(currentLine);
-                currentLine = await _reader.ReadLineAsync();
-            }
+                responseLine = await _reader.ReadLineAsync();
+                response.Add(responseLine);
+            } while (!(responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack) || string.IsNullOrEmpty(responseLine)));
 
-            if (currentLine.Equals(OK))
-            {
-                return new MpdResponse(new ReadOnlyCollection<string>(response));
-            }
-            else
-            {
-                return AcknowledgeResponse.Parse(currentLine, response);
-            }
+            return new MpdResponse(response);
         }
 
         private void ClearConnectionFields() 
@@ -220,26 +205,6 @@ namespace LibMpc
             _networkStream?.Dispose();
             _tcpClient?.Dispose();
             _version = string.Empty;
-        }
-    }
-
-    public class AcknowledgeResponse
-    {
-        private static readonly Regex AcknowledgePattern = new Regex("^ACK \\[(?<code>[0-9]*)@(?<nr>[0-9]*)] \\{(?<command>[a-z]*)} (?<message>.*)$");
-
-        public static MpdResponse Parse(string acknowledgeResponse, IList<string> payload)
-        {
-            var match = AcknowledgePattern.Match(acknowledgeResponse);
-
-            if (match.Groups.Count != 5)
-                throw new InvalidDataException("Error response not as expected");
-
-            return new MpdResponse(
-                int.Parse(match.Result("${code}")),
-                int.Parse(match.Result("${nr}")),
-                match.Result("${command}"),
-                match.Result("${message}"),
-                new ReadOnlyCollection<string>(payload));
         }
     }
 }
