@@ -13,7 +13,7 @@ namespace LibMpc
 
     public class MpdMessage<T> : IMpdMessage<T>
     {
-        private readonly Regex _linePattern = new Regex("^(?<key>[A-Za-z]*):[ ]{0,1}(?<value>.*)$");
+        private readonly Regex _linePattern = new Regex("^(?<key>[A-Za-z_]*):[ ]{0,1}(?<value>.*)$");
         private readonly IList<string> _rawResponse;
 
         public MpdMessage(IMpcCommand<T> command, bool connected, IReadOnlyCollection<string> response)

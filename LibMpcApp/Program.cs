@@ -49,6 +49,10 @@ namespace LibMpcApp
                     case 24:
                         response = mpc.SendAsync(new Commands.Reflection.TagTypes()).GetAwaiter().GetResult();
                         break;
+
+                    case 313:
+                        response = mpc.SendAsync(new Commands.Database.Update()).GetAwaiter().GetResult();
+                        break;
                 }
 
                 Console.WriteLine("Response: ");
@@ -61,17 +65,18 @@ namespace LibMpcApp
             Console.WriteLine();
             Console.WriteLine("Commands: ");
 
-            // Ouput
             Console.WriteLine();
             Console.WriteLine("11. disableoutput 0");
             Console.WriteLine("12. enableoutput 0");
             Console.WriteLine("13. outputs");
 
-            // Reflection
             Console.WriteLine();
+            Console.WriteLine("Reflection");
             Console.WriteLine("24. tagtypes");
 
-            // Database
+            Console.WriteLine();
+            Console.WriteLine("Database");
+            Console.WriteLine("313. update");
 
             Console.WriteLine();
             Console.WriteLine("99. Exit");

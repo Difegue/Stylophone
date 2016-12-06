@@ -76,6 +76,7 @@ namespace LibMpc
 
             public class Update : IMpcCommand<string>
             {
+                // TODO: Extend command: < update [URI] >
                 public string Value => "update";
 
                 public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
