@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace LibMpc
 {
@@ -11,7 +12,7 @@ namespace LibMpc
         {
             // TODO: count
             
-            public class Find : IMpcCommand<string>
+            public class Find : IMpcCommand<IList<IDictionary<string, string>>>
             {
                 private readonly ITag _tag;
                 private readonly string _searchText;
@@ -24,9 +25,26 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "find", _tag.Value, _searchText);
 
-                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public IDictionary<string, IList<IDictionary<string, string>>> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response.ToDefaultDictionary();
+                    var results = new Dictionary<string, IList<IDictionary<string, string>>>
+                    {
+                        { "files", new List<IDictionary<string, string>>() }
+                    };
+
+                    foreach (var line in response)
+                    {
+                        if (line.Key.Equals("file"))
+                        {
+                            results["files"].Add(new Dictionary<string, string> { { "file", line.Value } });
+                        }
+                        else
+                        {
+                            results["files"].Last().Add(line.Key, line.Value);
+                        }
+                    }
+
+                    return results;
                 }
             }
 

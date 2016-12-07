@@ -58,34 +58,8 @@ namespace LibMpc
 
             return mpdMessage;
         }
-
-        /*
-        #region Admin Commands
         
-        /// <summary>
-        /// Starts an update of the MPD database.
-        /// </summary>
-        /// <returns>An sequential number of the update process.</returns>
-        public async Task<int> UpdateAsync()
-        {
-            MpdResponse response = await _connection.SendAsync("update");
-
-            if (response.Message.Count != 1)
-                throw new InvalidMpdResponseException("Respose message has more than one line.");
-
-            int ret;
-
-            KeyValuePair<string, string> line = response[0];
-            if (!line.Key.Equals("updating_db"))
-                throw new InvalidMpdResponseException("Key of line 0 is not 'updating_db'");
-            if (!int.TryParse(line.Value, out ret))
-                throw new InvalidMpdResponseException("Value of line 0 is not a number");
-
-            return ret;
-        }
-
-        #endregion
-
+        /*
         #region Database Commands
         /// <summary>
         /// Returns all files in the database who's attribute matches the given token. Works like the Search command but is case sensitive.
