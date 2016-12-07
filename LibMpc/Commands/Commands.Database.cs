@@ -24,9 +24,9 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "find", _tag.Value, _searchText);
 
-                public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response;
+                    return response.ToDefaultDictionary();
                 }
             }
 
@@ -41,9 +41,9 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "list", _tag);
 
-                public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response;
+                    return response.ToDefaultDictionary();
                 }
             }
 
@@ -60,9 +60,9 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "listall", _path);
 
-                public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response;
+                    return response.ToDefaultDictionary();
                 }
             }
 
@@ -79,9 +79,9 @@ namespace LibMpc
                 // TODO: Extend command: < update [URI] >
                 public string Value => "update";
 
-                public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response;
+                    return response.ToDefaultDictionary();
                 }
             }
             

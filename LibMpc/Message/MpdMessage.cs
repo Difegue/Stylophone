@@ -30,9 +30,9 @@ namespace LibMpc
         public IMpdRequest<T> Request { get; }
         public IMpdResponse<T> Response { get; }
 
-        private IReadOnlyDictionary<string, IList<string>> GetValuesFromResponse()
+        private IList<KeyValuePair<string, string>> GetValuesFromResponse()
         {
-            var result = new Dictionary<string, IList<string>>();
+            var result = new List<KeyValuePair<string, string>>();
 
             foreach (var line in _rawResponse)
             {
@@ -45,14 +45,7 @@ namespace LibMpc
                         var mpdValue = match.Result("${value}");
                         if (!string.IsNullOrEmpty(mpdValue))
                         {
-                            if (!result.ContainsKey(mpdKey))
-                            {
-                                result.Add(mpdKey, new List<string>() { mpdValue });
-                            }
-                            else
-                            {
-                                result[mpdKey].Add(mpdValue);
-                            }
+                            result.Add(new KeyValuePair<string, string>(mpdKey, mpdValue));
                         }
                     }
                 }

@@ -23,9 +23,9 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "disableoutput", _outputId);
 
-                public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response;
+                    return response.ToDefaultDictionary();
                 }
             }
 
@@ -43,9 +43,9 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "enableoutput", _outputId);
 
-                public IReadOnlyDictionary<string, IList<string>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response;
+                    return response.ToDefaultDictionary();
                 }
             }
 
@@ -54,23 +54,28 @@ namespace LibMpc
             /// <summary>
             /// Shows information about all outputs.
             /// </summary>
-            public class Outputs : IMpcCommand<Dictionary<string, string>>
+            public class Outputs : IMpcCommand<IList<IDictionary<string, string>>>
             {
                 public string Value => "outputs";
-                public IReadOnlyDictionary<string, IList<Dictionary<string, string>>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response)
+                
+                public IDictionary<string, IList<IDictionary<string, string>>> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    var result = new Dictionary<string, IList<Dictionary<string, string>>>
+                    var result = new Dictionary<string, IList<IDictionary<string, string>>>
                     {
-                        {"outputs", new List<Dictionary<string, string>>()}
+                        { "outputs", new List<IDictionary<string, string>>() }
                     };
 
-                    for (var i = 0; i < response["outputid"].Count; i++)
+                    for (var i = 0; i < response.Count; i += 3)
                     {
+                        var outputId = response[i].Value;
+                        var outputName = response[i + 1].Value;
+                        var outputEnabled = response[i + 2].Value;
+
                         result["outputs"].Add(new Dictionary<string, string>
                         {
-                            { "id", response["outputid"][i] },
-                            { "name", response["outputname"][i] },
-                            { "enabled", response["outputenabled"][i] }
+                            {"id", outputId},
+                            {"name", outputName},
+                            {"enabled", outputEnabled}
                         });
                     }
 

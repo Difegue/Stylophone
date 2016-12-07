@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LibMpc
 {
@@ -6,6 +7,14 @@ namespace LibMpc
     {
         string Value { get; }
 
-        IReadOnlyDictionary<string, IList<T>> FormatResponse(IReadOnlyDictionary<string, IList<string>> response);
+        IDictionary<string, T> FormatResponse(IList<KeyValuePair<string, string>> response);
+    }
+
+    internal static class MpdCommandExtensions
+    {
+        public static IDictionary<string, string> ToDefaultDictionary(this IList<KeyValuePair<string, string>> items)
+        {
+            return items.ToDictionary(item => item.Key, item => item.Value);
+        }
     }
 }
