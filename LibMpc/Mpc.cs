@@ -52,8 +52,7 @@ namespace LibMpc
             }
         }
 
-        // TODO: create response type
-        public async Task<object> SendAsync<T>(IMpcCommand<T> command)
+        public async Task<IMpdMessage<T>> SendAsync<T>(IMpcCommand<T> command)
         {
             var mpdMessage = await _connection.SendAsync(command);
 
