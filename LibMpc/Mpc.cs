@@ -61,24 +61,7 @@ namespace LibMpc
         
         /*
         #region Database Commands
-        /// <summary>
-        /// Returns all files in the database who's attribute matches the given token. Works like the Search command but is case sensitive.
-        /// </summary>
-        /// <param name="tag">Specifies the attribute to search for.</param>
-        /// <param name="token">The value the files attribute must have to be included in the result.</param>
-        /// <returns>All files in the database who's attribute matches the given token.</returns>
-        public async Task<List<MpdFile>> FindAsync(ITag tag, string token)
-        {
-            if (token == null)
-                throw new ArgumentNullException("token");
-
-            MpdResponse response = await _connection.SendAsync("find", new string[] { tag.Value, token });
-
-            if (response.State.Error)
-                throw new MpdResponseException(response.ErrorCode, response.ErrorMessage);
-
-            return MpdFile.buildList(response);
-        }
+        
         /// <summary>
         /// Returns all values found in files of the MPD for the given attribute.
         /// </summary>
