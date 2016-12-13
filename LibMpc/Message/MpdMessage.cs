@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ namespace LibMpc
         IMpdResponse<T> Response { get; }
     }
 
+    [DebuggerDisplay("Request: {Request.Command.Value} | Response Status: {Response.State.Status}")]
     public class MpdMessage<T> : IMpdMessage<T>
     {
         private readonly Regex _linePattern = new Regex("^(?<key>[A-Za-z_]*):[ ]{0,1}(?<value>.*)$");

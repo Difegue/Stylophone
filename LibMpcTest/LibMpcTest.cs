@@ -1,9 +1,9 @@
 ﻿using LibMpc;
 using System;
-using System.IO;
+using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -28,6 +28,17 @@ namespace LibMpcTest
             {
                 _output.WriteLine("Could not connect to MPD.");
             }
+        }
+
+        [Fact]
+        public async Task ListAllTest()
+        {
+            var response = await _mpc.SendAsync(new Commands.Reflection.TagTypes());
+
+            _output.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+
+            Assert.True(response.Response.Body.Keys.Contains("tagtypes"));
+            Assert.True(response.Response.Body.Values.Any());
         }
 
         public void Dispose()
