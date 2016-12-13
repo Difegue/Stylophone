@@ -22,7 +22,7 @@ namespace LibMpcTest
 
             _mpc = new Mpc(new IPEndPoint(IPAddress.Loopback, 6600));
 
-            Console.WriteLine(_server.LogError);
+            Console.Out.WriteLine(_server.LogError);
 
             var connected = _mpc.ConnectAsync().GetAwaiter().GetResult();
             if (connected)
