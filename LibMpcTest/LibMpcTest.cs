@@ -28,8 +28,6 @@ namespace LibMpcTest
             {
                 _output.WriteLine("Could not connect to MPD.");
             }
-
-            _mpc.SendAsync(new Commands.Database.Update()).GetAwaiter().GetResult();
         }
 
         public void Dispose()

@@ -20,49 +20,136 @@ tag: MUSICBRAINZ_ALBUMID
 tag: MUSICBRAINZ_ALBUMARTISTID
 tag: MUSICBRAINZ_TRACKID
 info_end
-directory: Dir1
-mtime: 1481580300
-begin: Dir1
-song_begin: piano2-Audacity1.2.5.mp3
+directory: A long name directory with some spaces
+mtime: 1481622608
+begin: A long name directory with some spaces
+song_begin: pouring-water-into-mug-of-coffee.mp3
+Time: 4
+Artist: Geek & Dummy
+Title: Sound effect: pouring water into mug of coffee
+Date: 2013
+Date: 2013
+mtime: 1481622059
+song_end
+song_begin: short-trouser-pants-zip-closing.mp3
+Time: 1
+Artist: Geek & Dummy
+Title: Sound effect: short trouser pants zip closing
+Date: 2013
+Date: 2013
+mtime: 1481622066
+song_end
+song_begin: Ghost-Sounds.mp3
+Time: 95
+Artist: Geek & Dummy
+Title: Sound effect: ghostly haunted house (bells, ghostly laughs & knives sharpened)
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481622054
+song_end
+song_begin: starting-engine-Ford-Mondeo-Mk-3-diesel.mp3
 Time: 6
-Artist: piano2
-Genre: Blues
-mtime: 1481120569
+Artist: Geek & Dummy
+Title: Sound effect: starting engine - Ford Mondeo Mk 3 diesel
+Album: Geek & Dummy Sound Library
+Date: 2014
+Genre: soundfx
+mtime: 1481622063
 song_end
-end: Dir1
-directory: Dir2
-mtime: 1481580300
-begin: Dir2
-song_begin: c304-2.wav
-Time: 49
-mtime: 1481109933
+end: A long name directory with some spaces
+directory: Directory
+mtime: 1481622608
+begin: Directory
+song_begin: 2-Kids-Laughing.mp3
+Time: 30
+Artist: Geek & Dummy
+Title: Sound effect: two kids laughing
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481622083
 song_end
-song_begin: 32.mp3
-Time: 32
-Artist: organ
-Album: Test 2
-Date: 1995
-Genre: Rock
-mtime: 1481123918
+song_begin: ambient-noise-server-room.mp3
+Time: 71
+Artist: Geek & Dummy
+Title: Sound effect: ambient noise - server room
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481622020
 song_end
-end: Dir2
-directory: Dir3
-mtime: 1481580300
-begin: Dir3
-song_begin: piano2-Audacity1.2.5 (1).mp3
-Time: 6
-Artist: piano2
-Genre: Blues
-mtime: 1481120554
+end: Directory
+directory: Directory With Spaces
+mtime: 1481622608
+begin: Directory With Spaces
+song_begin: coin-spin-light.mp3
+Time: 5
+Artist: Geek & Dummy
+Title: Sound effect: coin spin (light coin)
+Date: 2013
+Date: 2013
+mtime: 1481622036
 song_end
-end: Dir3
-song_begin: organfinale.mp3
-Time: 13
-Artist: organ
-mtime: 1481120544
+song_begin: central-locking-Ford-Mondeo-Mk-3.mp3
+Time: 5
+Artist: Geek & Dummy
+Title: Sound effect: central locking - Ford Mondeo Mk 3
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481622024
 song_end
-song_begin: piano2-CoolEdit.mp3
-Time: 6
-Artist: piano2
-mtime: 1481120536
+song_begin: finger-snap-click.mp3
+Time: 0
+Artist: Geek & Dummy
+Title: Sound effect: finger snap/click
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481622047
+song_end
+end: Directory With Spaces
+directory: _My Directory
+mtime: 1481622608
+begin: _My Directory
+song_begin: gas-fire-lighting.mp3
+Time: 58
+Artist: Geek & Dummy
+Title: Sound effect: gas fire lighting and warming up
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481622051
+song_end
+end: _My Directory
+song_begin: teaspoon-stirring-mug-of-coffee.mp3
+Time: 4
+Artist: Geek & Dummy
+Title: Sound effect: teaspoon stirring mug of coffee
+Date: 2013
+Date: 2013
+mtime: 1481622029
+song_end
+song_begin: whistle-kettle-boiling.mp3
+Time: 36
+Artist: Geek & Dummy
+Title: Sound effect: whistle kettle boiling
+Date: 2013
+Date: 2013
+mtime: 1481622087
+song_end
+song_begin: wine-glass-double-chink-clink-cheers.mp3
+Time: 1
+Artist: Geek & Dummy
+Title: Sound effect: wine glass double chink/clink/cheers
+Date: 2013
+Date: 2013
+mtime: 1481622090
 song_end
