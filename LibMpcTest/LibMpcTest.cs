@@ -11,13 +11,18 @@ namespace LibMpcTest
 {
     public class LibMpcTest : IClassFixture<MpdServerTest>, IDisposable
     {
+        private readonly MpdServerTest _server;
         private readonly ITestOutputHelper _output;
         private readonly Mpc _mpc;
 
-        public LibMpcTest(ITestOutputHelper output)
+        public LibMpcTest(MpdServerTest server, ITestOutputHelper output)
         {
+            _server = server;
             _output = output;
+
             _mpc = new Mpc(new IPEndPoint(IPAddress.Loopback, 6600));
+
+            Console.WriteLine(_server.LogError);
 
             var connected = _mpc.ConnectAsync().GetAwaiter().GetResult();
             if (connected)

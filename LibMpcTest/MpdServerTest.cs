@@ -4,10 +4,8 @@ using System.IO;
 
 namespace LibMpcTest
 {
-    internal class MpdServerTest : IDisposable
+    public class MpdServerTest : IDisposable
     {
-        private Process _process;
-
         public MpdServerTest()
         {
             var serverPath = Path.Combine(AppContext.BaseDirectory, "Server");
@@ -17,7 +15,7 @@ namespace LibMpcTest
             var mpdExePath = Path.Combine(serverPath, "mpd.exe");
             var mpdConfPath = Path.Combine(serverPath, "mpd.conf");
 
-            _process = new Process
+            Process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -31,16 +29,19 @@ namespace LibMpcTest
                 }
             };
 
-            _process.Start();
-            var logOutput = _process.StandardOutput.ReadToEnd();
-            var logError = _process.StandardError.ReadToEnd();
+            Process.Start();
+            LogOutput = Process.StandardOutput.ReadToEnd();
+            LogError = Process.StandardError.ReadToEnd();
         }
+
+        public Process Process { get; }
+        public string LogError { get; }
+        public string LogOutput { get; }
 
         public void Dispose()
         {
-            _process?.Kill();
-            _process?.Dispose();
-            _process = null;
+            Process?.Kill();
+            Process?.Dispose();
         }
     }
 }
