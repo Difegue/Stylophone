@@ -14,4 +14,9 @@
 /LibMpcApp/LibMpcApp.xproj.user
 /LibMpcApp/project.lock.json
 
+/LibMpcTest/bin
+/LibMpcTest/obj
+/LibMpcTest/LibMpcTest.xproj.user
+/LibMpcTest/project.lock.json
+
 /LibMpc.sln.DotSettings.user

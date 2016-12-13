@@ -1,0 +1,68 @@
+info_begin
+format: 1
+mpd_version: 0.17.4
+fs_charset: cp1252
+tag: Artist
+tag: ArtistSort
+tag: Album
+tag: AlbumArtist
+tag: AlbumArtistSort
+tag: Title
+tag: Track
+tag: Name
+tag: Genre
+tag: Date
+tag: Composer
+tag: Performer
+tag: Disc
+tag: MUSICBRAINZ_ARTISTID
+tag: MUSICBRAINZ_ALBUMID
+tag: MUSICBRAINZ_ALBUMARTISTID
+tag: MUSICBRAINZ_TRACKID
+info_end
+directory: Dir1
+mtime: 1481580300
+begin: Dir1
+song_begin: piano2-Audacity1.2.5.mp3
+Time: 6
+Artist: piano2
+Genre: Blues
+mtime: 1481120569
+song_end
+end: Dir1
+directory: Dir2
+mtime: 1481580300
+begin: Dir2
+song_begin: c304-2.wav
+Time: 49
+mtime: 1481109933
+song_end
+song_begin: 32.mp3
+Time: 32
+Artist: organ
+Album: Test 2
+Date: 1995
+Genre: Rock
+mtime: 1481123918
+song_end
+end: Dir2
+directory: Dir3
+mtime: 1481580300
+begin: Dir3
+song_begin: piano2-Audacity1.2.5 (1).mp3
+Time: 6
+Artist: piano2
+Genre: Blues
+mtime: 1481120554
+song_end
+end: Dir3
+song_begin: organfinale.mp3
+Time: 13
+Artist: organ
+mtime: 1481120544
+song_end
+song_begin: piano2-CoolEdit.mp3
+Time: 6
+Artist: piano2
+mtime: 1481120536
+song_end
