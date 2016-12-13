@@ -1,10 +1,20 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace LibMpc
 {
-    public interface IMpcCommand
+    public interface IMpcCommand<T>
     {
         string Value { get; }
 
-        // TODO: Return IMpdResponse and create type-safe input.
-        object ParseResponse(object response);
+        IDictionary<string, T> FormatResponse(IList<KeyValuePair<string, string>> response);
+    }
+
+    internal static class MpdCommandExtensions
+    {
+        public static IDictionary<string, string> ToDefaultDictionary(this IList<KeyValuePair<string, string>> items)
+        {
+            return items.ToDictionary(item => item.Key, item => item.Value);
+        }
     }
 }

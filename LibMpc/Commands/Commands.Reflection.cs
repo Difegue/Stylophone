@@ -1,4 +1,7 @@
-﻿namespace LibMpc
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace LibMpc
 {
     public partial class Commands
     {
@@ -11,13 +14,18 @@
             // TODO: commands
             // TODO: notcommands
 
-            public class TagTypes : IMpcCommand
+            public class TagTypes : IMpcCommand<IList<string>>
             {
                 public string Value => "tagtypes";
 
-                public object ParseResponse(object response)
+                IDictionary<string, IList<string>> IMpcCommand<IList<string>>.FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    throw new System.NotImplementedException();
+                    var result = new Dictionary<string, IList<string>>
+                    {
+                        { "tagtypes", response.Where(item => item.Key.Equals("tagtype")).Select(item => item.Value).ToList() }
+                    };
+
+                    return result;
                 }
             }
 

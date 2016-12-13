@@ -280,6 +280,7 @@ namespace LibMpc
             builder.Append(value);
             builder.AppendLine();
         }
+        /*
         /// <summary>
         /// Returns a MpdFile object from a MpdResponse object.
         /// </summary>
@@ -475,11 +476,12 @@ namespace LibMpc
                             break;
                         case TAG_TRACK:
                             track = line.Value;
-                            /*
+                            
+                            // TODO:
                             int tryTrack;
                             if (int.TryParse(line.Value, out tryTrack))
                                 track = tryTrack;
-                             */
+                             
                             break;
                         case TAG_NAME:
                             name = line.Value;
@@ -537,5 +539,6 @@ namespace LibMpc
 
             return ret;
         }
+        */
     }
 }

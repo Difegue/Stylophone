@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace LibMpc
 {
@@ -10,8 +11,8 @@ namespace LibMpc
         public class Database
         {
             // TODO: count
-
-            public class Find : IMpcCommand
+            
+            public class Find : IMpcCommand<IList<IDictionary<string, string>>>
             {
                 private readonly ITag _tag;
                 private readonly string _searchText;
@@ -24,13 +25,30 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "find", _tag.Value, _searchText);
 
-                public object ParseResponse(object response)
+                public IDictionary<string, IList<IDictionary<string, string>>> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    throw new NotImplementedException();
+                    var results = new Dictionary<string, IList<IDictionary<string, string>>>
+                    {
+                        { "files", new List<IDictionary<string, string>>() }
+                    };
+
+                    foreach (var line in response)
+                    {
+                        if (line.Key.Equals("file"))
+                        {
+                            results["files"].Add(new Dictionary<string, string> { { "file", line.Value } });
+                        }
+                        else
+                        {
+                            results["files"].Last().Add(line.Key, line.Value);
+                        }
+                    }
+
+                    return results;
                 }
             }
 
-            public class List : IMpcCommand
+            public class List : IMpcCommand<string>
             {
                 private readonly ITag _tag;
 
@@ -41,15 +59,15 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "list", _tag);
 
-                public object ParseResponse(object response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    throw new NotImplementedException();
+                    return response.ToDefaultDictionary();
                 }
             }
 
             // TODO: findadd
 
-            public class ListAll : IMpcCommand
+            public class ListAll : IMpcCommand<string>
             {
                 private readonly string _path;
 
@@ -60,9 +78,9 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "listall", _path);
 
-                public object ParseResponse(object response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    throw new NotImplementedException();
+                    return response.ToDefaultDictionary();
                 }
             }
 
@@ -74,16 +92,17 @@ namespace LibMpc
             // TODO: searchadd
             // TODO: searchaddpl
 
-            public class Update : IMpcCommand
+            public class Update : IMpcCommand<string>
             {
+                // TODO: Extend command: < update [URI] >
                 public string Value => "update";
 
-                public object ParseResponse(object response)
+                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    throw new NotImplementedException();
+                    return response.ToDefaultDictionary();
                 }
             }
-
+            
             // TODO: rescan
         }
     }
