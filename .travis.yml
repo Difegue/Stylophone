@@ -4,6 +4,6 @@ sudo: required
 mono: none
 dotnet: 1.0.0-preview2-003131
 script:
- - dotnet restore && dotnet build **/project.json && dotnet test LibMpcTest\project.json
+ - dotnet restore && dotnet build **/project.json && dotnet test LibMpcTest/project.json
 notifications:
  email:false
