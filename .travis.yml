@@ -3,6 +3,9 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 1.0.0-preview2-003131
+befor_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -y mpd
 script:
  - dotnet restore 
  - dotnet build **/project.json 
