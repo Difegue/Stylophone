@@ -50,8 +50,9 @@ namespace LibMpc
 
             _networkStream = _tcpClient.GetStream();
 
-            _reader = new StreamReader(_networkStream, Encoding.UTF8);
-            _writer = new StreamWriter(_networkStream, Encoding.UTF8) { NewLine = "\n" };
+            // Encoding UTF8 has some problems with TcpClient: https://bugs.musicpd.org/view.php?id=4501
+            _reader = new StreamReader(_networkStream);
+            _writer = new StreamWriter(_networkStream) { NewLine = "\n" };
 
             var firstLine = _reader.ReadLine();
             if (!firstLine.StartsWith(Constants.FirstLinePrefix))
