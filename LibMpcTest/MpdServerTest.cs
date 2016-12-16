@@ -9,6 +9,11 @@ namespace LibMpcTest
     {
         public MpdServerTest()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                SendCommand("/usr/bin/pkill mpd");
+            }
+
             MpdConf.Create(Path.Combine(AppContext.BaseDirectory, "Server"));
 
             var server = GetServer();
@@ -27,44 +32,19 @@ namespace LibMpcTest
                 }
             };
 
-            Console.Out.WriteLine();
             Console.Out.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
 
             Process.Start();
-
             Console.Out.WriteLine($"Output: {Process.StandardOutput.ReadToEnd()}");
             Console.Out.WriteLine($"Error: {Process.StandardError.ReadToEnd()}");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                CheckIfServerIsRunning();
+                SendCommand("/bin/netstat -ntpl");
             }
         }
 
-        private void CheckIfServerIsRunning()
-        {
-            var netcat = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "/bin/bash",
-                    WorkingDirectory = "/bin/",
-                    Arguments = "-c \"sudo /bin/netstat -ntpl\"",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true,
-                }
-            };
-
-            netcat.Start();
-            netcat.WaitForExit();
-
-            Console.Out.WriteLine();
-            Console.Out.WriteLine("netstat -ntpl");
-            Console.Out.WriteLine($"Output: {netcat.StandardOutput.ReadToEnd()}");
-            Console.Out.WriteLine($"Error: {netcat.StandardError.ReadToEnd()}");
-        }
+        public Process Process { get; }
 
         private Server GetServer()
         {
@@ -81,9 +61,29 @@ namespace LibMpcTest
             throw new NotSupportedException("OS not supported");
         }
 
-        public Process Process { get; }
-        public string LogError { get; }
-        public string LogOutput { get; }
+        private void SendCommand(string command)
+        {
+            var netcat = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    WorkingDirectory = "/bin/",
+                    Arguments = $"-c \"sudo {command}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true,
+                }
+            };
+
+            netcat.Start();
+            netcat.WaitForExit();
+
+            Console.Out.WriteLine(command);
+            Console.Out.WriteLine($"Output: {netcat.StandardOutput.ReadToEnd()}");
+            Console.Out.WriteLine($"Error: {netcat.StandardError.ReadToEnd()}");
+        }
 
         public void Dispose()
         {
