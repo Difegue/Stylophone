@@ -21,10 +21,10 @@ namespace LibMpcTest
             _output = output;
 
             _mpc = new Mpc(new IPEndPoint(IPAddress.Loopback, 6600));
-
+            
             Console.Out.WriteLine(_server.LogError);
 
-            var connected = _mpc.ConnectAsync().GetAwaiter().GetResult();
+            var connected = Task.Run(async () => await _mpc.ConnectAsync()).Result;
             if (connected)
             {
                 _output.WriteLine("Connected to MPD.");
