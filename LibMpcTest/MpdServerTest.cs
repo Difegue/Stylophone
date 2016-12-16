@@ -32,6 +32,35 @@ namespace LibMpcTest
             Process.Start();
             LogOutput = Process.StandardOutput.ReadToEnd();
             LogError = Process.StandardError.ReadToEnd();
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                CheckIfServerIsRunning();
+            }
+        }
+
+        private void CheckIfServerIsRunning()
+        {
+            var netcat = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/netstat",
+                    WorkingDirectory = "/bin/",
+                    Arguments = "-ntpl",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true,
+                }
+            };
+
+            netcat.Start();
+            netcat.WaitForExit();
+
+            Console.Out.WriteLine("netstat:");
+            Console.Out.WriteLine($"out: {netcat.StandardOutput.ReadToEnd()}");
+            Console.Out.WriteLine($"err: {netcat.StandardError.ReadToEnd()}");
         }
 
         private Server GetServer()
