@@ -27,7 +27,7 @@ namespace LibMpcTest
                 }
             };
 
-            Console.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
+            Console.Out.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
 
             Process.Start();
             LogOutput = Process.StandardOutput.ReadToEnd();

@@ -27,11 +27,11 @@ namespace LibMpcTest
             var connected = Task.Run(async () => await _mpc.ConnectAsync()).Result;
             if (connected)
             {
-                _output.WriteLine("Connected to MPD.");
+                Console.Out.WriteLine("Connected to MPD.");
             }
             else
             {
-                _output.WriteLine("Could not connect to MPD.");
+                Console.Out.WriteLine("Could not connect to MPD.");
             }
         }
 
@@ -40,7 +40,7 @@ namespace LibMpcTest
         {
             var response = await _mpc.SendAsync(new Commands.Reflection.TagTypes());
 
-            _output.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            Console.Out.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
             Assert.True(response.Response.Body.Keys.Contains("tagtypes"));
             Assert.True(response.Response.Body.Values.Any());
