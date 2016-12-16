@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -59,11 +60,6 @@ namespace LibMpc
                 throw new InvalidDataException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\"." );
             }
             _version = firstLine.Substring(Constants.FirstLinePrefix.Length);
-
-            await _writer.WriteLineAsync();
-            _writer.Flush();
-
-            await ReadResponseAsync();
         }
         
         public Task DisconnectAsync()
@@ -123,9 +119,9 @@ namespace LibMpc
             {
                 responseLine = await _reader.ReadLineAsync();
                 response.Add(responseLine);
-            } while (!(responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack) || string.IsNullOrEmpty(responseLine)));
+            } while (!(responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack)));
 
-            return response.ToArray();
+            return response.Where(line => !string.IsNullOrEmpty(line)).ToArray();
         }
 
         private void ClearConnectionFields() 
