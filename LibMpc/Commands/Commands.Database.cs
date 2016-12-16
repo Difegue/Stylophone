@@ -67,20 +67,39 @@ namespace LibMpc
 
             // TODO: findadd
 
-            public class ListAll : IMpcCommand<IList<KeyValuePair<string, string>>>
+            public class ListAll : IMpcCommand<IList<IDictionary<string, IList<string>>>>
             {
                 public string Value => "listall";
 
-                public IDictionary<string, IList<KeyValuePair<string, string>>> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public IDictionary<string, IList<IDictionary<string, IList<string>>>> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    var results = new Dictionary<string, IList<KeyValuePair<string, string>>>
+                    var results = new Dictionary<string, IList<IDictionary<string, IList<string>>>>
                     {
-                        { "result", new List<KeyValuePair<string, string>>() }
+                        { "directories", new List<IDictionary<string, IList<string>>>() }
                     };
-
-                    foreach (var keyValuePair in response)
+                    
+                    // Add by default the root directory
+                    results["directories"].Add(new Dictionary<string, IList<string>>
                     {
-                        results["result"].Add(keyValuePair);
+                        { "path", new List<string>() },
+                        { "files", new List<string>() }
+                    });
+
+                    foreach (var line in response)
+                    {
+                        if (line.Key.Equals("file"))
+                        {
+                            results["directories"].Last()["files"].Add(line.Value);
+                        }
+
+                        if (line.Key.Equals("directory"))
+                        {
+                            results["directories"].Add(new Dictionary<string, IList<string>>
+                            {
+                                { "path", new []{ line.Value } },
+                                { "files", new List<string>() }
+                            });
+                        }
                     }
 
                     return results;

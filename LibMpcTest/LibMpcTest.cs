@@ -53,7 +53,8 @@ namespace LibMpcTest
             Console.Out.WriteLine("ListAllTest Result:");
             Console.Out.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            // TODO: Assert
+            Assert.True(response.Response.Body.Keys.Contains("directories"));
+            Assert.True(response.Response.Body["directories"].Count.Equals(5));
         }
 
         public void Dispose()
