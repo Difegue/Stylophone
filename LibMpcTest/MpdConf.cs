@@ -22,11 +22,15 @@ namespace LibMpcTest
 
             builder.AppendLine($"log_file \"{Path.Combine(rootDirectory, MPD_LOG_FILE).Replace("\\", "\\\\")}\"");
             builder.AppendLine($"db_file \"{Path.Combine(rootDirectory, MPD_DB_FILE).Replace("\\", "\\\\")}\"");
-            builder.AppendLine($"bind_to_address \"any\"");
+            builder.AppendLine("bind_to_address \"any\"");
             builder.AppendLine($"music_directory \"{Path.Combine(rootDirectory, "Music").Replace("\\", "\\\\")}\"");
             builder.AppendLine($"playlist_directory \"{Path.Combine(rootDirectory, "Playlists").Replace("\\", "\\\\")}\"");
-            builder.AppendLine($"port \"6600\"");
-            builder.AppendLine($"mixer_type \"software\"");
+            builder.AppendLine("port \"6600\"");
+            builder.AppendLine("audio_output {");
+            builder.AppendLine("type \"null\"");
+            builder.AppendLine("name \"No Output\"");
+            builder.AppendLine("mixer_type \"none\"");
+            builder.AppendLine("}");
 
             var mpdConfContent = builder.ToString();
 
