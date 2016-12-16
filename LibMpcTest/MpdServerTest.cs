@@ -30,8 +30,10 @@ namespace LibMpcTest
             Console.Out.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
 
             Process.Start();
-            LogOutput = Process.StandardOutput.ReadToEnd();
-            LogError = Process.StandardError.ReadToEnd();
+
+            Console.Out.WriteLine("mpd:");
+            Console.Out.WriteLine($"out: {Process.StandardOutput.ReadToEnd()}");
+            Console.Out.WriteLine($"err: {Process.StandardError.ReadToEnd()}");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -45,9 +47,9 @@ namespace LibMpcTest
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "/bin/netstat",
+                    FileName = "/bin/bash",
                     WorkingDirectory = "/bin/",
-                    Arguments = "-ntpl",
+                    Arguments = "-c \"sudo /bin/netstat -ntpl\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
@@ -91,14 +93,14 @@ namespace LibMpcTest
         private class Server
         {
             public static Server Linux = new Server(
-                fileName: "/usr/bin/mpd",
-                workingDirectory: "/usr/bin/",
-                arguments: string.Join(" ", Path.Combine(AppContext.BaseDirectory, "Server", "mpd.conf"), "-v"));
+                fileName: "/bin/bash",
+                workingDirectory: "/bin/",
+                arguments: $"-c \"sudo /usr/bin/mpd {Path.Combine(AppContext.BaseDirectory, "Server", "mpd.conf")} -v\"");
 
             public static Server Windows = new Server(
                 fileName: Path.Combine(AppContext.BaseDirectory, "Server", "mpd.exe"),
                 workingDirectory: Path.Combine(AppContext.BaseDirectory, "Server"),
-                arguments: string.Join(" ", Path.Combine(AppContext.BaseDirectory, "Server", "mpd.conf"), "-v"));
+                arguments: $"{Path.Combine(AppContext.BaseDirectory, "Server", "mpd.conf")} -v");
 
             private Server(string fileName, string workingDirectory, string arguments)
             {
