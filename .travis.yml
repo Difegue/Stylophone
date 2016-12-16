@@ -6,6 +6,7 @@ dotnet: 1.0.0-preview2-003131
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install -y mpd
+ - sudo apt-get install -y alsa-utils
 script:
  - dotnet restore 
  - dotnet build **/project.json 
