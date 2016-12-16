@@ -67,20 +67,23 @@ namespace LibMpc
 
             // TODO: findadd
 
-            public class ListAll : IMpcCommand<string>
+            public class ListAll : IMpcCommand<IList<KeyValuePair<string, string>>>
             {
-                private readonly string _path;
+                public string Value => "listall";
 
-                public ListAll(string path)
+                public IDictionary<string, IList<KeyValuePair<string, string>>> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    _path = path;
-                }
+                    var results = new Dictionary<string, IList<KeyValuePair<string, string>>>
+                    {
+                        { "result", new List<KeyValuePair<string, string>>() }
+                    };
 
-                public string Value => string.Join(" ", "listall", _path);
+                    foreach (var keyValuePair in response)
+                    {
+                        results["result"].Add(keyValuePair);
+                    }
 
-                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
-                {
-                    return response.ToDefaultDictionary();
+                    return results;
                 }
             }
 

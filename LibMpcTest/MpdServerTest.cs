@@ -27,13 +27,13 @@ namespace LibMpcTest
                 }
             };
 
+            Console.Out.WriteLine();
             Console.Out.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
 
             Process.Start();
 
-            Console.Out.WriteLine("mpd:");
-            Console.Out.WriteLine($"out: {Process.StandardOutput.ReadToEnd()}");
-            Console.Out.WriteLine($"err: {Process.StandardError.ReadToEnd()}");
+            Console.Out.WriteLine($"Output: {Process.StandardOutput.ReadToEnd()}");
+            Console.Out.WriteLine($"Error: {Process.StandardError.ReadToEnd()}");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -60,9 +60,10 @@ namespace LibMpcTest
             netcat.Start();
             netcat.WaitForExit();
 
-            Console.Out.WriteLine("netstat:");
-            Console.Out.WriteLine($"out: {netcat.StandardOutput.ReadToEnd()}");
-            Console.Out.WriteLine($"err: {netcat.StandardError.ReadToEnd()}");
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("netstat -ntpl");
+            Console.Out.WriteLine($"Output: {netcat.StandardOutput.ReadToEnd()}");
+            Console.Out.WriteLine($"Error: {netcat.StandardError.ReadToEnd()}");
         }
 
         private Server GetServer()
