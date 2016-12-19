@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using LibMpc.Types;
 
 namespace LibMpc
 {
@@ -12,7 +12,7 @@ namespace LibMpc
         {
             // TODO: count
             
-            public class Find : IMpcCommand<IList<IDictionary<string, string>>>
+            public class Find : IMpcCommand<IEnumerable<MpdFile>>
             {
                 private readonly ITag _tag;
                 private readonly string _searchText;
@@ -25,22 +25,25 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "find", _tag.Value, _searchText);
 
-                public IDictionary<string, IList<IDictionary<string, string>>> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public IEnumerable<MpdFile> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    var results = new Dictionary<string, IList<IDictionary<string, string>>>
-                    {
-                        { "files", new List<IDictionary<string, string>>() }
-                    };
+                    var results = new List<MpdFile>();
 
+                    var fileBuilder = new MpdFileBuidler();
                     foreach (var line in response)
                     {
                         if (line.Key.Equals("file"))
                         {
-                            results["files"].Add(new Dictionary<string, string> { { "file", line.Value } });
+                            if (fileBuilder.IsInitialized)
+                            {
+                                results.Add(fileBuilder.Build());
+                            }
+
+                            fileBuilder.Init(line.Value);
                         }
                         else
                         {
-                            results["files"].Last().Add(line.Key, line.Value);
+                            fileBuilder.WithProperty(line.Key, line.Value);
                         }
                     }
 
@@ -59,50 +62,38 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "list", _tag);
 
-                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public string FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response.ToDefaultDictionary();
+                    // TODO:
+                    return response.ToString();
                 }
             }
 
             // TODO: findadd
 
-            public class ListAll : IMpcCommand<IList<IDictionary<string, IList<string>>>>
+            public class ListAll : IMpcCommand<MpdDirectory>
             {
                 public string Value => "listall";
 
-                public IDictionary<string, IList<IDictionary<string, IList<string>>>> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public MpdDirectory FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    var results = new Dictionary<string, IList<IDictionary<string, IList<string>>>>
-                    {
-                        { "directories", new List<IDictionary<string, IList<string>>>() }
-                    };
-                    
                     // Add by default the root directory
-                    results["directories"].Add(new Dictionary<string, IList<string>>
-                    {
-                        { "path", new List<string>() },
-                        { "files", new List<string>() }
-                    });
+                    var rootDirectory = new MpdDirectory("/"); 
 
                     foreach (var line in response)
                     {
                         if (line.Key.Equals("file"))
                         {
-                            results["directories"].Last()["files"].Add(line.Value);
+                            rootDirectory.AddFile(line.Value);
                         }
 
                         if (line.Key.Equals("directory"))
                         {
-                            results["directories"].Add(new Dictionary<string, IList<string>>
-                            {
-                                { "path", new []{ line.Value } },
-                                { "files", new List<string>() }
-                            });
+                            rootDirectory.AddDirectory(line.Value);
                         }
                     }
 
-                    return results;
+                    return rootDirectory;
                 }
             }
 
@@ -119,9 +110,10 @@ namespace LibMpc
                 // TODO: Extend command: < update [URI] >
                 public string Value => "update";
 
-                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public string FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response.ToDefaultDictionary();
+                    // TODO:
+                    return response.ToString();
                 }
             }
             

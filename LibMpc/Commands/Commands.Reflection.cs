@@ -14,16 +14,13 @@ namespace LibMpc
             // TODO: commands
             // TODO: notcommands
 
-            public class TagTypes : IMpcCommand<IList<string>>
+            public class TagTypes : IMpcCommand<IEnumerable<string>>
             {
                 public string Value => "tagtypes";
 
-                IDictionary<string, IList<string>> IMpcCommand<IList<string>>.FormatResponse(IList<KeyValuePair<string, string>> response)
+                public IEnumerable<string> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    var result = new Dictionary<string, IList<string>>
-                    {
-                        { "tagtypes", response.Where(item => item.Key.Equals("tagtype")).Select(item => item.Value).ToList() }
-                    };
+                    var result = response.Where(item => item.Key.Equals("tagtype")).Select(item => item.Value);
 
                     return result;
                 }

@@ -1,5 +1,6 @@
 ﻿using LibMpc;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -25,11 +26,11 @@ namespace LibMpcTest
             var connected = Task.Run(async () => await _mpc.ConnectAsync()).Result;
             if (connected)
             {
-                Console.Out.WriteLine("Connected to MPD.");
+                WriteLine("Connected to MPD.");
             }
             else
             {
-                Console.Out.WriteLine("Could not connect to MPD.");
+                WriteLine("Could not connect to MPD.");
             }
         }
 
@@ -38,11 +39,10 @@ namespace LibMpcTest
         {
             var response = await _mpc.SendAsync(new Commands.Reflection.TagTypes());
 
-            Console.Out.WriteLine("TagTypesTest Result:");
-            Console.Out.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            WriteLine("TagTypesTest Result:");
+            WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Keys.Contains("tagtypes"));
-            Assert.True(response.Response.Body.Values.Any());
+            Assert.True(response.Response.Body.Count().Equals(17));
         }
 
         [Fact]
@@ -50,16 +50,25 @@ namespace LibMpcTest
         {
             var response = await _mpc.SendAsync(new Commands.Database.ListAll());
 
-            Console.Out.WriteLine("ListAllTest Result:");
-            Console.Out.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            WriteLine("ListAllTest Result:");
+            WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Keys.Contains("directories"));
-            Assert.True(response.Response.Body["directories"].Count.Equals(5));
+            Assert.True(response.Response.Body.SubDirectories.Count().Equals(4));
+            Assert.True(response.Response.Body.Files.Count().Equals(3));
         }
 
         public void Dispose()
         {
             _mpc?.DisconnectAsync().GetAwaiter().GetResult();
+        }
+
+        private void WriteLine(string value)
+        {
+#if DEBUG
+            Debug.WriteLine(value);
+#else
+            Console.Out.WriteLine(value);
+#endif
         }
     }
 }
