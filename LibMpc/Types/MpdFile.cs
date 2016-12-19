@@ -1,8 +1,14 @@
-﻿namespace LibMpc.Types
+﻿using System.Collections.Generic;
+
+namespace LibMpc.Types
 {
-    public class MpdFileBuidler
+    /// <summary>
+    /// The MpdFile class contains all meta data for a file of the MPD.
+    /// </summary>
+    public class MpdFile
     {
-        private const string TagFile = "file";
+        public static readonly MpdFile EmptyFile = new MpdFile(string.Empty);
+
         private const string TagTime = "Time";
         private const string TagArtist = "Artist";
         private const string TagAlbum = "Album";
@@ -18,56 +24,83 @@
         private const string TagPos = "Pos";
         private const string TagId = "Id";
 
-        private MpdFile _mpdFile;
+        private readonly IDictionary<string, string> _unknownTags = new Dictionary<string, string>();
 
-        public bool IsInitialized => _mpdFile != null;
-
-        public MpdFileBuidler Init(string file)
-        {
-            _mpdFile = new MpdFile(file);
-            return this;
-        }
-
-        public MpdFileBuidler WithProperty(string tag, string value)
-        {
-            _mpdFile.CheckNotNull();
-
-            // TODO: Parse tag
-
-            return this;
-        }
-
-        public MpdFile Build()
-        {
-            return _mpdFile;
-        }
-    }
-
-
-    /// <summary>
-    /// The MpdFile class contains all meta data for a file of the MPD.
-    /// </summary>
-    public class MpdFile
-    {
         public MpdFile(string file)
         {
             File = file;
+            IsInitialized = !string.IsNullOrEmpty(File);
         }
 
         public string File { get; }
-        public int Time { get; internal set;  } = -1;
-        public string Album { get; internal set; } = string.Empty;
-        public string Artist { get; internal set; } = string.Empty;
-        public string Title { get; internal set; } = string.Empty;
-        public string Track { get; internal set; } = string.Empty;
-        public string Name { get; internal set; } = string.Empty;
-        public string Genre { get; internal set; } = string.Empty;
-        public string Date { get; internal set; } = string.Empty;
-        public string Composer { get; internal set; } = string.Empty;
-        public string Performer { get; internal set; } = string.Empty;
-        public string Comment { get; internal set; } = string.Empty;
-        public int Disc { get; internal set; } = -1;
-        public int Pos { get; internal set; } = -1;
-        public int Id { get; internal set; } = -1;
+        public int Time { get; private set;  } = -1;
+        public string Album { get; private set; } = string.Empty;
+        public string Artist { get; private set; } = string.Empty;
+        public string Title { get; private set; } = string.Empty;
+        public string Track { get; private set; } = string.Empty;
+        public string Name { get; private set; } = string.Empty;
+        public string Genre { get; private set; } = string.Empty;
+        public string Date { get; private set; } = string.Empty;
+        public string Composer { get; private set; } = string.Empty;
+        public string Performer { get; private set; } = string.Empty;
+        public string Comment { get; private set; } = string.Empty;
+        public int Disc { get; private set; } = -1;
+        public int Pos { get; private set; } = -1;
+        public int Id { get; private set; } = -1;
+        public IDictionary<string, string> UnknownTags => _unknownTags;
+
+        internal bool IsInitialized { get; }
+
+        internal void AddTag(string tag, string value)
+        {
+            switch (tag)
+            {
+                case TagTime:
+                    Time = int.Parse(value);
+                    break;
+                case TagArtist:
+                    Artist = value;
+                    break;
+                case TagAlbum:
+                    Album = value;
+                    break;
+                case TagTitle:
+                    Title = value;
+                    break;
+                case TagTrack:
+                    Track = value;
+                    break;
+                case TagName:
+                    Name = value;
+                    break;
+                case TagGenre:
+                    Genre = value;
+                    break;
+                case TagDate:
+                    Date = value;
+                    break;
+                case TagComposer:
+                    Composer = value;
+                    break;
+                case TagPerformer:
+                    Performer = value;
+                    break;
+                case TagComment:
+                    Comment = value;
+                    break;
+                case TagDisc:
+                    Disc = int.Parse(value);
+                    break;
+                case TagPos:
+                    Pos = int.Parse(value);
+                    break;
+                case TagId:
+                    Id = int.Parse(value);
+                    break;
+                default:
+                    _unknownTags.Add(tag, value);
+                    break;
+            }
+        }
     }
 }

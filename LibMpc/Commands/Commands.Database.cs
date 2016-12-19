@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LibMpc.Types;
 
 namespace LibMpc
@@ -29,21 +30,21 @@ namespace LibMpc
                 {
                     var results = new List<MpdFile>();
 
-                    var fileBuilder = new MpdFileBuidler();
+                    var mpdFile = MpdFile.EmptyFile;
                     foreach (var line in response)
                     {
                         if (line.Key.Equals("file"))
                         {
-                            if (fileBuilder.IsInitialized)
+                            if (mpdFile.IsInitialized)
                             {
-                                results.Add(fileBuilder.Build());
+                                results.Add(mpdFile);
                             }
 
-                            fileBuilder.Init(line.Value);
+                            mpdFile = new MpdFile(line.Value);
                         }
                         else
                         {
-                            fileBuilder.WithProperty(line.Key, line.Value);
+                            mpdFile.AddTag(line.Key, line.Value);
                         }
                     }
 
@@ -71,25 +72,27 @@ namespace LibMpc
 
             // TODO: findadd
 
-            public class ListAll : IMpcCommand<MpdDirectory>
+            public class ListAll : IMpcCommand<IEnumerable<MpdDirectory>>
             {
                 public string Value => "listall";
 
-                public MpdDirectory FormatResponse(IList<KeyValuePair<string, string>> response)
+                public IEnumerable<MpdDirectory> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    // Add by default the root directory
-                    var rootDirectory = new MpdDirectory("/"); 
+                    var rootDirectory = new List<MpdDirectory>
+                    {
+                        new MpdDirectory("/") // Add by default the root directory
+                    };
 
                     foreach (var line in response)
                     {
                         if (line.Key.Equals("file"))
                         {
-                            rootDirectory.AddFile(line.Value);
+                            rootDirectory.Last().AddFile(line.Value);
                         }
 
                         if (line.Key.Equals("directory"))
                         {
-                            rootDirectory.AddDirectory(line.Value);
+                            rootDirectory.Add(new MpdDirectory(line.Value));
                         }
                     }
 

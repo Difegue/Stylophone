@@ -53,8 +53,18 @@ namespace LibMpcTest
             WriteLine("ListAllTest Result:");
             WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.SubDirectories.Count().Equals(4));
-            Assert.True(response.Response.Body.Files.Count().Equals(3));
+            Assert.True(response.Response.Body.Count().Equals(7));
+        }
+
+        [Fact]
+        public async Task FindGenreTest()
+        {
+            var response = await _mpc.SendAsync(new Commands.Database.Find(MpdTags.Genre, "soundfx"));
+
+            WriteLine("FindGenreTest Result:");
+            WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+
+            Assert.True(response.Response.Body.Count().Equals(6));
         }
 
         public void Dispose()
@@ -64,11 +74,7 @@ namespace LibMpcTest
 
         private void WriteLine(string value)
         {
-#if DEBUG
-            Debug.WriteLine(value);
-#else
             Console.Out.WriteLine(value);
-#endif
         }
     }
 }
