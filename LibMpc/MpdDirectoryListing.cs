@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using LibMpc.Types;
 
 namespace LibMpc
 {
