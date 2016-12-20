@@ -27,7 +27,7 @@ namespace LibMpcTest
             TestOutput.WriteLine("FindGenreTest Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Count().Equals(6));
+            Assert.True(response.Response.Body.Count().Equals(7));
         }
     }
 }

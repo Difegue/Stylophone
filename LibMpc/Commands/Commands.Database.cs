@@ -16,7 +16,7 @@ namespace LibMpc
             /// <summary>
             /// Finds songs in the database that is exactly "searchText".
             /// </summary>
-            public class Find : IMpcCommand<IEnumerable<MpdFile>>
+            public class Find : IMpcCommand<IEnumerable<IMpdFile>>
             {
                 private readonly ITag _tag;
                 private readonly string _searchText;
@@ -29,25 +29,19 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "find", _tag.Value, _searchText);
 
-                public IEnumerable<MpdFile> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public IEnumerable<IMpdFile> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
                     var results = new List<MpdFile>();
 
-                    var mpdFile = MpdFile.EmptyFile;
                     foreach (var line in response)
                     {
                         if (line.Key.Equals("file"))
                         {
-                            if (mpdFile.IsInitialized)
-                            {
-                                results.Add(mpdFile);
-                            }
-
-                            mpdFile = new MpdFile(line.Value);
+                            results.Add(new MpdFile(line.Value));
                         }
                         else
                         {
-                            mpdFile.AddTag(line.Key, line.Value);
+                            results.Last().AddTag(line.Key, line.Value);
                         }
                     }
 

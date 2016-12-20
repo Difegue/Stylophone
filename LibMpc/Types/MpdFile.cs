@@ -5,10 +5,8 @@ namespace LibMpc.Types
     /// <summary>
     /// The MpdFile class contains all meta data for a file of the MPD.
     /// </summary>
-    public class MpdFile
+    public class MpdFile : IMpdFile
     {
-        public static readonly MpdFile EmptyFile = new MpdFile(string.Empty);
-
         private const string TagTime = "Time";
         private const string TagArtist = "Artist";
         private const string TagAlbum = "Album";
@@ -28,8 +26,9 @@ namespace LibMpc.Types
 
         public MpdFile(string file)
         {
+            file.CheckNotNull();
+
             File = file;
-            IsInitialized = !string.IsNullOrEmpty(File);
         }
 
         public string File { get; }
@@ -48,8 +47,6 @@ namespace LibMpc.Types
         public int Pos { get; private set; } = -1;
         public int Id { get; private set; } = -1;
         public IDictionary<string, string> UnknownTags => _unknownTags;
-
-        internal bool IsInitialized { get; }
 
         internal void AddTag(string tag, string value)
         {
