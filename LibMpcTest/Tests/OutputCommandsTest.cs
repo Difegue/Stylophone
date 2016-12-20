@@ -12,9 +12,9 @@ namespace LibMpcTest
         public async Task DisableOutputTest()
         {
             var responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
-            Assert.True(responseOutputs.Response.Body.Single(output => output.Id.Equals(2)).IsEnabled);
+            Assert.True(responseOutputs.Response.Body.Single(output => output.Id.Equals(0)).IsEnabled);
 
-            var response = await Mpc.SendAsync(new Commands.Output.DisableOutput(2));
+            var response = await Mpc.SendAsync(new Commands.Output.DisableOutput(0));
 
             TestOutput.WriteLine("DisableOutputTest Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
@@ -23,7 +23,7 @@ namespace LibMpcTest
             Assert.True(response.Response.State.Status.Equals("OK"));
 
             responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
-            Assert.False(responseOutputs.Response.Body.Single(output => output.Id.Equals(2)).IsEnabled);
+            Assert.False(responseOutputs.Response.Body.Single(output => output.Id.Equals(0)).IsEnabled);
         }
 
         [Fact]
