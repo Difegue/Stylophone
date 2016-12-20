@@ -32,11 +32,11 @@ namespace LibMpcTest
                 }
             };
 
-            TestUtils.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
+            TestOutput.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
 
             Process.Start();
-            TestUtils.WriteLine($"Output: {Process.StandardOutput.ReadToEnd()}");
-            TestUtils.WriteLine($"Error: {Process.StandardError.ReadToEnd()}");
+            TestOutput.WriteLine($"Output: {Process.StandardOutput.ReadToEnd()}");
+            TestOutput.WriteLine($"Error: {Process.StandardError.ReadToEnd()}");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -80,16 +80,16 @@ namespace LibMpcTest
             netcat.Start();
             netcat.WaitForExit();
 
-            TestUtils.WriteLine(command);
-            TestUtils.WriteLine($"Output: {netcat.StandardOutput.ReadToEnd()}");
-            TestUtils.WriteLine($"Error: {netcat.StandardError.ReadToEnd()}");
+            TestOutput.WriteLine(command);
+            TestOutput.WriteLine($"Output: {netcat.StandardOutput.ReadToEnd()}");
+            TestOutput.WriteLine($"Error: {netcat.StandardError.ReadToEnd()}");
         }
 
         public void Dispose()
         {
             Process?.Kill();
             Process?.Dispose();
-            TestUtils.WriteLine("Server Stopped.");
+            TestOutput.WriteLine("Server Stopped.");
         }
 
         private class Server

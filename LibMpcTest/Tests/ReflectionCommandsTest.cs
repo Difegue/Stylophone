@@ -13,8 +13,8 @@ namespace LibMpcTest
         {
             var response = await Mpc.SendAsync(new Commands.Reflection.TagTypes());
 
-            TestUtils.WriteLine("TagTypesTest Result:");
-            TestUtils.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine("TagTypesTest Result:");
+            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
             Assert.True(response.Response.Body.Count().Equals(17));
         }

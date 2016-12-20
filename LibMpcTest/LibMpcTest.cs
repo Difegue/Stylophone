@@ -1,5 +1,4 @@
 ﻿using LibMpc;
-using System.Diagnostics;
 using Xunit;
 
 namespace LibMpcTest
@@ -12,13 +11,5 @@ namespace LibMpcTest
         }
 
         internal Mpc Mpc { get; }
-    }
-
-    internal class TestUtils
-    {
-        internal static void WriteLine(string value)
-        {
-            Debug.WriteLine(value);
-        }
     }
 }

@@ -52,7 +52,26 @@ namespace LibMpc
                 }
             }
 
-            // TODO: toggleoutput // Turns an output on or off, depending on the current state.
+            /// <summary>
+            /// Turns an output on or off, depending on the current state.
+            /// </summary>
+            public class ToggleOutput : IMpcCommand<string>
+            {
+                private readonly int _outputId;
+
+                public ToggleOutput(int outputId)
+                {
+                    _outputId = outputId;
+                }
+
+                public string Value => string.Join(" ", "toggleoutput", _outputId);
+
+                public string FormatResponse(IList<KeyValuePair<string, string>> response)
+                {
+                    // Response should be empty.
+                    return string.Join(", ", response);
+                }
+            }
 
             /// <summary>
             /// Shows information about all outputs.

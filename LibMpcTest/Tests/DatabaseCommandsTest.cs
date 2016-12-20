@@ -13,8 +13,8 @@ namespace LibMpcTest
         {
             var response = await Mpc.SendAsync(new Commands.Database.ListAll());
 
-            TestUtils.WriteLine("ListAllTest Result:");
-            TestUtils.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine("ListAllTest Result:");
+            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
             Assert.True(response.Response.Body.Count().Equals(7));
         }
@@ -24,8 +24,8 @@ namespace LibMpcTest
         {
             var response = await Mpc.SendAsync(new Commands.Database.Find(MpdTags.Genre, "soundfx"));
 
-            TestUtils.WriteLine("FindGenreTest Result:");
-            TestUtils.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine("FindGenreTest Result:");
+            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
             Assert.True(response.Response.Body.Count().Equals(6));
         }

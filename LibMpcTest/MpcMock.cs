@@ -12,7 +12,7 @@ namespace LibMpcTest
             Client = new Mpc(new IPEndPoint(IPAddress.Loopback, 6600));
 
             var connected = Task.Run(async () => await Client.ConnectAsync()).Result;
-            TestUtils.WriteLine($"Connected to MPD : {connected}");
+            TestOutput.WriteLine($"Connected to MPD : {connected}");
         }
 
         public Mpc Client { get; }
@@ -20,7 +20,7 @@ namespace LibMpcTest
         public void Dispose()
         {
             Client?.DisconnectAsync().GetAwaiter().GetResult();
-            TestUtils.WriteLine($"Disconnected from MPD.");
+            TestOutput.WriteLine($"Disconnected from MPD.");
         }
     }
 }
