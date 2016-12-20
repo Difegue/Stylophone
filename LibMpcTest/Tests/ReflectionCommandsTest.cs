@@ -61,7 +61,20 @@ namespace LibMpcTest
             TestOutput.WriteLine($"DecodersTest (decoders: {response.Response.Body.Count()}) Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            // TODO: Assert
+            // Different answer from MPD on Windows and on Linux.
+            // Check some of the decoders.
+            Assert.True(response.Response.Body.Any(decoder => decoder.Name.Equals("mad")));
+            Assert.True(response.Response.Body.Any(decoder => decoder.Suffixes.Any(suffix => suffix.Equals("mp3"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.MediaTypes.Any(mediaType => mediaType.Equals("audio/mpeg"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.Name.Equals("flac")));
+            Assert.True(response.Response.Body.Any(decoder => decoder.Suffixes.Any(suffix => suffix.Equals("flac"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.MediaTypes.Any(mediaType => mediaType.Equals("audio/flac"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.MediaTypes.Any(mediaType => mediaType.Equals("audio/x-flac"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.Name.Equals("ffmpeg")));
+            Assert.True(response.Response.Body.Any(decoder => decoder.Suffixes.Any(suffix => suffix.Equals("aac"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.Suffixes.Any(suffix => suffix.Equals("mpeg"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.MediaTypes.Any(mediaType => mediaType.Equals("audio/aac"))));
+            Assert.True(response.Response.Body.Any(decoder => decoder.MediaTypes.Any(mediaType => mediaType.Equals("audio/mpeg"))));
         }
     }
 }
