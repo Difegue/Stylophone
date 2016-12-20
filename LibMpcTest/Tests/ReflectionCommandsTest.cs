@@ -9,6 +9,17 @@ namespace LibMpcTest
     public partial class LibMpcTest
     {
         [Fact]
+        public async Task CommandsTest()
+        {
+            var response = await Mpc.SendAsync(new Commands.Reflection.Commands());
+
+            TestOutput.WriteLine($"CommandsTest (commands: {response.Response.Body.Count()}) Result:");
+            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+
+            Assert.True(response.Response.Body.Count().Equals(84));
+        }
+
+        [Fact]
         public async Task TagTypesTest()
         {
             var response = await Mpc.SendAsync(new Commands.Reflection.TagTypes());

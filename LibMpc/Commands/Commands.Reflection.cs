@@ -11,7 +11,22 @@ namespace LibMpc
         public static class Reflection
         {
             // TODO: config
-            // TODO: commands
+
+            /// <summary>
+            /// Shows which commands the current user has access to.
+            /// </summary>
+            public class Commands : IMpcCommand<IEnumerable<string>>
+            {
+                public string Value => "commands";
+
+                public IEnumerable<string> FormatResponse(IList<KeyValuePair<string, string>> response)
+                {
+                    var result = response.Where(item => item.Key.Equals("command")).Select(item => item.Value);
+
+                    return result;
+                }
+            }
+
             // TODO: notcommands
 
             public class TagTypes : IMpcCommand<IEnumerable<string>>
