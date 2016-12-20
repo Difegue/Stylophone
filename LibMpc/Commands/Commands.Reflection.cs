@@ -41,7 +41,18 @@ namespace LibMpc
                 }
             }
 
-            // TODO: urlhandlers
+            public class UrlHandlers : IMpcCommand<IEnumerable<string>>
+            {
+                public string Value => "urlhandlers";
+
+                public IEnumerable<string> FormatResponse(IList<KeyValuePair<string, string>> response)
+                {
+                    var result = response.Where(item => item.Key.Equals("handler")).Select(item => item.Value);
+
+                    return result;
+                }
+            }
+
             // TODO: decoders
         }
     }

@@ -31,5 +31,16 @@ namespace LibMpcTest
 
             Assert.True(response.Response.Body.Count().Equals(17));
         }
+
+        [Fact]
+        public async Task UrlHandlersTest()
+        {
+            var response = await Mpc.SendAsync(new Commands.Reflection.UrlHandlers());
+
+            TestOutput.WriteLine($"UrlHandlersTest (handlers: {response.Response.Body.Count()}) Result:");
+            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+
+            Assert.True(response.Response.Body.Count().Equals(11));
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace LibMpc
         }
 
         public bool IsConnected => _connection?.IsConnected ?? false;
+        public string Version => _connection?.Version ?? "Unknown";
 
         public async Task<bool> ConnectAsync()
         {
