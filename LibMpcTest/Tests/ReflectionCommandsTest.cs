@@ -52,5 +52,16 @@ namespace LibMpcTest
             Assert.True(response.Response.Body.Any(handler => handler.Equals("gopher://")));
             Assert.True(response.Response.Body.Any(handler => handler.Equals("rtp://")));
         }
+
+        [Fact]
+        public async Task DecodersTest()
+        {
+            var response = await Mpc.SendAsync(new Commands.Reflection.Decoders());
+
+            TestOutput.WriteLine($"DecodersTest (decoders: {response.Response.Body.Count()}) Result:");
+            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+
+            // TODO: Assert
+        }
     }
 }
