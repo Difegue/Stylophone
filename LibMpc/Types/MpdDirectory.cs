@@ -5,7 +5,7 @@ namespace LibMpc.Types
 {
     public class MpdDirectory
     {
-        private readonly IList<MpdFile> _files = new List<MpdFile>();
+        private readonly IList<IMpdFilePath> _files = new List<IMpdFilePath>();
 
         public MpdDirectory(string path)
         {
@@ -19,7 +19,7 @@ namespace LibMpc.Types
 
         public string Path { get; }
         public string Name { get; }
-        public IEnumerable<MpdFile> Files => _files;
+        public IEnumerable<IMpdFilePath> Files => _files;
 
         internal void AddFile(string file)
         {

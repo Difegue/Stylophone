@@ -5,7 +5,7 @@ namespace LibMpc.Types
     /// <summary>
     /// The MpdFile class contains all meta data for a file of the MPD.
     /// </summary>
-    public class MpdFile : IMpdFile
+    internal class MpdFile : IMpdFile
     {
         private const string TagTime = "Time";
         private const string TagArtist = "Artist";
@@ -24,7 +24,7 @@ namespace LibMpc.Types
 
         private readonly IDictionary<string, string> _unknownTags = new Dictionary<string, string>();
 
-        public MpdFile(string file)
+        internal MpdFile(string file)
         {
             file.CheckNotNull();
 
