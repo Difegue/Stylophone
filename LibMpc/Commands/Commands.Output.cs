@@ -26,8 +26,8 @@ namespace LibMpc
 
                 public string FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    // TODO:
-                    return response.ToString();
+                    // Response should be empty.
+                    return string.Join(", ", response);
                 }
             }
 
@@ -47,8 +47,8 @@ namespace LibMpc
 
                 public string FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    // TODO:
-                    return response.ToString();
+                    // Response should be empty.
+                    return string.Join(", ", response);
                 }
             }
 
@@ -69,7 +69,7 @@ namespace LibMpc
                     {
                         var outputId = int.Parse(response[i].Value);
                         var outputName = response[i + 1].Value;
-                        var outputEnabled = bool.Parse(response[i + 2].Value);
+                        var outputEnabled = response[i + 2].Value == "1";
 
                         result.Add(new MpdOutput(outputId, outputName, outputEnabled));
                     }
