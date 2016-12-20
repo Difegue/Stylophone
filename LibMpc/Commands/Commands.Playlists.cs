@@ -21,6 +21,25 @@ namespace LibMpc
             /// </summary>
             public static class Stored
             {
+                public class ListPlaylist : IMpcCommand<IEnumerable<IMpdFilePath>>
+                {
+                    private readonly string _playlistName;
+
+                    public ListPlaylist(string playlistName)
+                    {
+                        _playlistName = playlistName;
+                    }
+
+                    public string Value => string.Join(" ", "listplaylist", $"\"{_playlistName}\"");
+
+                    public IEnumerable<IMpdFilePath> FormatResponse(IList<KeyValuePair<string, string>> response)
+                    {
+                        var results = response.Where(line => line.Key.Equals("file")).Select(line => new MpdFile(line.Value));
+
+                        return results;
+                    }
+                }
+
                 /// <summary>
                 /// Prints a list of the playlist directory.
                 /// </summary>
