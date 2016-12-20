@@ -12,7 +12,10 @@ namespace LibMpc
         public class Database
         {
             // TODO: count
-            
+
+            /// <summary>
+            /// Finds songs in the database that is exactly "searchText".
+            /// </summary>
             public class Find : IMpcCommand<IEnumerable<MpdFile>>
             {
                 private readonly ITag _tag;

@@ -11,7 +11,7 @@ namespace LibMpc
         /// </summary>
         public static class Reflection
         {
-            // TODO: config
+            // config : This command is only permitted to "local" clients (connected via UNIX domain socket).
 
             /// <summary>
             /// Shows which commands the current user has access to.
@@ -28,7 +28,7 @@ namespace LibMpc
                 }
             }
 
-            // TODO: notcommands
+            // TODO: notcommands : Shows which commands the current user does not have access to.
 
             /// <summary>
             /// Shows a list of available song metadata.
