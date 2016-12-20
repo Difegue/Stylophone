@@ -30,6 +30,9 @@ namespace LibMpc
 
             // TODO: notcommands
 
+            /// <summary>
+            /// Shows a list of available song metadata.
+            /// </summary>
             public class TagTypes : IMpcCommand<IEnumerable<string>>
             {
                 public string Value => "tagtypes";
@@ -42,6 +45,9 @@ namespace LibMpc
                 }
             }
 
+            /// <summary>
+            /// Gets a list of available URL handlers.
+            /// </summary>
             public class UrlHandlers : IMpcCommand<IEnumerable<string>>
             {
                 public string Value => "urlhandlers";
@@ -54,6 +60,9 @@ namespace LibMpc
                 }
             }
 
+            /// <summary>
+            /// Print a list of decoder plugins, followed by their supported suffixes and MIME types.
+            /// </summary>
             public class Decoders : IMpcCommand<IEnumerable<MpdDecoderPlugin>>
             {
                 public string Value => "decoders";
