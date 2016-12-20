@@ -17,8 +17,13 @@ namespace LibMpcTest
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
             // Different answer from MPD on Windows and on Linux, beacuse of Version.
-            // Check only if response is not empty
-            Assert.True(response.Response.Body.Any());
+            // Check some of the commands.
+            Assert.True(response.Response.Body.Any(command => command.Equals("listall")));
+            Assert.True(response.Response.Body.Any(command => command.Equals("outputs")));
+            Assert.True(response.Response.Body.Any(command => command.Equals("pause")));
+            Assert.True(response.Response.Body.Any(command => command.Equals("play")));
+            Assert.True(response.Response.Body.Any(command => command.Equals("setvol")));
+            Assert.True(response.Response.Body.Any(command => command.Equals("stop")));
         }
 
         [Fact]
@@ -40,7 +45,12 @@ namespace LibMpcTest
             TestOutput.WriteLine($"UrlHandlersTest (handlers: {response.Response.Body.Count()}) Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Count().Equals(11));
+            // Different answer from MPD on Windows and on Linux.
+            // Check some of the handlers.
+            Assert.True(response.Response.Body.Any(handler => handler.Equals("http://")));
+            Assert.True(response.Response.Body.Any(handler => handler.Equals("mms://")));
+            Assert.True(response.Response.Body.Any(handler => handler.Equals("gopher://")));
+            Assert.True(response.Response.Body.Any(handler => handler.Equals("rtp://")));
         }
     }
 }
