@@ -22,7 +22,7 @@ namespace LibMpc.Types
         private const string TagPos = "Pos";
         private const string TagId = "Id";
 
-        private readonly IDictionary<string, string> _unknownTags = new Dictionary<string, string>();
+        private readonly IDictionary<string, string> _unknownMetadata = new Dictionary<string, string>();
 
         internal MpdFile(string file)
         {
@@ -46,7 +46,7 @@ namespace LibMpc.Types
         public int Disc { get; private set; } = -1;
         public int Pos { get; private set; } = -1;
         public int Id { get; private set; } = -1;
-        public IDictionary<string, string> UnknownTags => _unknownTags;
+        public IDictionary<string, string> UnknownMetadata => _unknownMetadata;
 
         internal void AddTag(string tag, string value)
         {
@@ -95,7 +95,7 @@ namespace LibMpc.Types
                     Id = int.Parse(value);
                     break;
                 default:
-                    _unknownTags.Add(tag, value);
+                    _unknownMetadata.Add(tag, value);
                     break;
             }
         }

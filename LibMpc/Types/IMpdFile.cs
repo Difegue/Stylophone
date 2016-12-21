@@ -23,6 +23,6 @@ namespace LibMpc.Types
         int Disc { get; }
         int Pos { get; }
         int Id { get; }
-        IDictionary<string, string> UnknownTags { get; }
+        IDictionary<string, string> UnknownMetadata { get; }
     }
 }
