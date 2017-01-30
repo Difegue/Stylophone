@@ -40,6 +40,37 @@ namespace LibMpc
                     }
                 }
 
+                public class ListPlaylistInfo : IMpcCommand<IEnumerable<IMpdFile>>
+                {
+                    private readonly string _playlistName;
+
+                    public ListPlaylistInfo(string playlistName)
+                    {
+                        _playlistName = playlistName;
+                    }
+
+                    public string Value => string.Join(" ", "listplaylistinfo", $"\"{_playlistName}\"");
+
+                    public IEnumerable<IMpdFile> FormatResponse(IList<KeyValuePair<string, string>> response)
+                    {
+                        var results = new List<MpdFile>();
+
+                        foreach (var line in response)
+                        {
+                            if (line.Key.Equals("file"))
+                            {
+                                results.Add(new MpdFile(line.Value));
+                            }
+                            else
+                            {
+                                results.Last().AddTag(line.Key, line.Value);
+                            }
+                        }
+
+                        return results;
+                    }
+                }
+
                 /// <summary>
                 /// Prints a list of the playlist directory.
                 /// </summary>
