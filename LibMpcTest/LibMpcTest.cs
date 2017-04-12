@@ -1,15 +1,29 @@
 ﻿using LibMpc;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace LibMpcTest
 {
-    public partial class LibMpcTest : IClassFixture<MpdMock>, IClassFixture<MpcMock>
+    [TestClass]
+    public partial class LibMpcTest
     {
-        public LibMpcTest(MpcMock mpc)
+        private static MpdMock _mpdMock;
+
+        [ClassInitialize]
+        public static void Init(TestContext context)
         {
-            Mpc = mpc.Client;
+            _mpdMock = new MpdMock();
+            _mpdMock.Start();
+
+            Mpc = new MpcMock().Client;
         }
 
-        internal Mpc Mpc { get; }
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            _mpdMock.Dispose();
+        }
+
+        internal static Mpc Mpc { get; private set; }
     }
 }

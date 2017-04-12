@@ -1,69 +1,69 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Xunit;
 using LibMpc;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LibMpcTest
 {
     public partial class LibMpcTest
     {
-        [Fact]
+        [TestMethod]
         public async Task DisableOutputTest()
         {
             var responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
-            Assert.True(responseOutputs.Response.Body.Single(output => output.Id.Equals(0)).IsEnabled);
+            Assert.IsTrue(responseOutputs.Response.Body.Single(output => output.Id.Equals(0)).IsEnabled);
 
             var response = await Mpc.SendAsync(new Commands.Output.DisableOutput(0));
 
             TestOutput.WriteLine("DisableOutputTest Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Equals(string.Empty));
-            Assert.True(response.Response.State.Status.Equals("OK"));
+            Assert.IsTrue(response.Response.Body.Equals(string.Empty));
+            Assert.IsTrue(response.Response.State.Status.Equals("OK"));
 
             responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
-            Assert.False(responseOutputs.Response.Body.Single(output => output.Id.Equals(0)).IsEnabled);
+            Assert.IsFalse(responseOutputs.Response.Body.Single(output => output.Id.Equals(0)).IsEnabled);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task EnableOutputTest()
         {
             var responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
             // By default should be disable from mpd.config
-            Assert.False(responseOutputs.Response.Body.Single(output => output.Id.Equals(1)).IsEnabled);
+            Assert.IsFalse(responseOutputs.Response.Body.Single(output => output.Id.Equals(1)).IsEnabled);
 
             var response = await Mpc.SendAsync(new Commands.Output.EnableOutput(1));
 
             TestOutput.WriteLine("EnableOutputTest Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Equals(string.Empty));
-            Assert.True(response.Response.State.Status.Equals("OK"));
+            Assert.IsTrue(response.Response.Body.Equals(string.Empty));
+            Assert.IsTrue(response.Response.State.Status.Equals("OK"));
 
             responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
-            Assert.True(responseOutputs.Response.Body.Single(output => output.Id.Equals(1)).IsEnabled);
+            Assert.IsTrue(responseOutputs.Response.Body.Single(output => output.Id.Equals(1)).IsEnabled);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task ToggleOutputTest()
         {
             var responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
-            Assert.True(responseOutputs.Response.Body.Single(output => output.Id.Equals(2)).IsEnabled);
+            Assert.IsTrue(responseOutputs.Response.Body.Single(output => output.Id.Equals(2)).IsEnabled);
 
             var response = await Mpc.SendAsync(new Commands.Output.ToggleOutput(2));
 
             TestOutput.WriteLine("ToggleOutputTest Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Equals(string.Empty));
-            Assert.True(response.Response.State.Status.Equals("OK"));
+            Assert.IsTrue(response.Response.Body.Equals(string.Empty));
+            Assert.IsTrue(response.Response.State.Status.Equals("OK"));
 
             responseOutputs = await Mpc.SendAsync(new Commands.Output.Outputs());
-            Assert.False(responseOutputs.Response.Body.Single(output => output.Id.Equals(2)).IsEnabled);
+            Assert.IsFalse(responseOutputs.Response.Body.Single(output => output.Id.Equals(2)).IsEnabled);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task LisOutputsTest()
         {
             var response = await Mpc.SendAsync(new Commands.Output.Outputs());
@@ -71,7 +71,7 @@ namespace LibMpcTest
             TestOutput.WriteLine("LisOutputsTest Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-            Assert.True(response.Response.Body.Count().Equals(3));
+            Assert.IsTrue(response.Response.Body.Count().Equals(3));
         }
     }
 }

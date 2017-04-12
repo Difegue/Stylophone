@@ -7,7 +7,7 @@ namespace LibMpcTest
 {
     public class MpdMock : IDisposable
     {
-        public MpdMock()
+        public void Start()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -44,7 +44,7 @@ namespace LibMpcTest
             }
         }
 
-        public Process Process { get; }
+        public Process Process { get; private set; }
 
         private Server GetServer()
         {
