@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LibMpc
@@ -14,6 +14,7 @@ namespace LibMpc
     {
         private static readonly Regex STATUS_AUDIO_REGEX = new Regex("^(?<sampleRate>[0-9]*):(?<bits>[0-9]*):(?<channels>[0-9]*)$");
 
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private readonly IPEndPoint _server;
         private MpcConnection _connection;
 
@@ -23,6 +24,7 @@ namespace LibMpc
         }
 
         public bool IsConnected => _connection?.IsConnected ?? false;
+        public string Version => _connection?.Version ?? "Unknown";
 
         public async Task<bool> ConnectAsync()
         {
@@ -54,9 +56,15 @@ namespace LibMpc
 
         public async Task<IMpdMessage<T>> SendAsync<T>(IMpcCommand<T> command)
         {
-            var mpdMessage = await _connection.SendAsync(command);
-
-            return mpdMessage;
+            await _semaphore.WaitAsync();
+            try
+            {
+                return await _connection.SendAsync(command);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
         
         /*
