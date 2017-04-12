@@ -1,5 +1,3 @@
-using MpcNET.Commands;
-
 namespace MpcNET.Message
 {
     public interface IMpdRequest<T>

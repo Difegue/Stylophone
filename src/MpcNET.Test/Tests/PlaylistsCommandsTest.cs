@@ -13,7 +13,7 @@ namespace MpcNET.Test
         [DataRow("_My Playlist", 5)]
         public async Task ListPlaylistTest(string playlistName, int numberOfFiles)
         {
-            var response = await Mpc.SendAsync(new Commands.Commands.Playlists.Stored.ListPlaylist(playlistName));
+            var response = await Mpc.SendAsync(new Commands.Playlists.Stored.ListPlaylist(playlistName));
 
             TestOutput.WriteLine($"ListPlaylistTest (playlistName: {playlistName}) Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
@@ -27,7 +27,7 @@ namespace MpcNET.Test
         [DataRow("_My Playlist", 5)]
         public async Task ListPlaylistInfoTest(string playlistName, int numberOfFiles)
         {
-            var response = await Mpc.SendAsync(new Commands.Commands.Playlists.Stored.ListPlaylistInfo(playlistName));
+            var response = await Mpc.SendAsync(new Commands.Playlists.Stored.ListPlaylistInfo(playlistName));
 
             TestOutput.WriteLine($"ListPlaylistTest (playlistName: {playlistName}) Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
@@ -41,7 +41,7 @@ namespace MpcNET.Test
         [TestMethod]
         public async Task ListPlaylistsTest()
         {
-            var response = await Mpc.SendAsync(new Commands.Commands.Playlists.Stored.ListPlaylists());
+            var response = await Mpc.SendAsync(new Commands.Playlists.Stored.ListPlaylists());
 
             TestOutput.WriteLine($"ListPlaylistsTest Result:");
             TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));

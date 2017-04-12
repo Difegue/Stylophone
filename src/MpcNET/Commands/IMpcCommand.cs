@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MpcNET.Commands
+namespace MpcNET
 {
     public interface IMpcCommand<out T>
     {

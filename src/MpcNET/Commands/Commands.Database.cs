@@ -3,7 +3,7 @@ using System.Linq;
 using MpcNET.Tags;
 using MpcNET.Types;
 
-namespace MpcNET.Commands
+namespace MpcNET
 {
     public partial class Commands
     {
@@ -70,6 +70,9 @@ namespace MpcNET.Commands
 
             // TODO: findadd
 
+            /// <summary>
+            /// Lists all songs and directories in URI.
+            /// </summary>
             public class ListAll : IMpcCommand<IEnumerable<MpdDirectory>>
             {
                 public string Value => "listall";

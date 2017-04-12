@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MpcNET.Types;
 
-namespace MpcNET.Commands
+namespace MpcNET
 {
     public partial class Commands
     {

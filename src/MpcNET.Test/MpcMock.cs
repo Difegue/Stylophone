@@ -8,7 +8,8 @@ namespace MpcNET.Test
     {
         public MpcMock()
         {
-            Client = new Mpc(new IPEndPoint(IPAddress.Loopback, 6600));
+            var mpdEndpoint = new IPEndPoint(IPAddress.Loopback, 6600);
+            Client = new Mpc(mpdEndpoint);
 
             var connected = Task.Run(async () => await Client.ConnectAsync()).Result;
             TestOutput.WriteLine($"Connected to MPD : {connected}; Version: {Client.Version}");
