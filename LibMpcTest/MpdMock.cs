@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace LibMpcTest
 {
-    public class MpdServerTest : IDisposable
+    public class MpdMock : IDisposable
     {
-        public MpdServerTest()
+        public MpdMock()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -32,11 +32,11 @@ namespace LibMpcTest
                 }
             };
 
-            Console.Out.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
+            TestOutput.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
 
             Process.Start();
-            Console.Out.WriteLine($"Output: {Process.StandardOutput.ReadToEnd()}");
-            Console.Out.WriteLine($"Error: {Process.StandardError.ReadToEnd()}");
+            TestOutput.WriteLine($"Output: {Process.StandardOutput.ReadToEnd()}");
+            TestOutput.WriteLine($"Error: {Process.StandardError.ReadToEnd()}");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -80,15 +80,16 @@ namespace LibMpcTest
             netcat.Start();
             netcat.WaitForExit();
 
-            Console.Out.WriteLine(command);
-            Console.Out.WriteLine($"Output: {netcat.StandardOutput.ReadToEnd()}");
-            Console.Out.WriteLine($"Error: {netcat.StandardError.ReadToEnd()}");
+            TestOutput.WriteLine(command);
+            TestOutput.WriteLine($"Output: {netcat.StandardOutput.ReadToEnd()}");
+            TestOutput.WriteLine($"Error: {netcat.StandardError.ReadToEnd()}");
         }
 
         public void Dispose()
         {
             Process?.Kill();
             Process?.Dispose();
+            TestOutput.WriteLine("Server Stopped.");
         }
 
         private class Server

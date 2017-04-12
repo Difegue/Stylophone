@@ -21,23 +21,36 @@ tag: MUSICBRAINZ_ALBUMARTISTID
 tag: MUSICBRAINZ_TRACKID
 info_end
 directory: A long name directory with some spaces
-mtime: 1481622608
+mtime: 1482142041
 begin: A long name directory with some spaces
-song_begin: pouring-water-into-mug-of-coffee.mp3
-Time: 4
-Artist: Geek & Dummy
-Title: Sound effect: pouring water into mug of coffee
-Date: 2013
-Date: 2013
-mtime: 1481622059
-song_end
+directory: Sub Directory Two
+mtime: 1482142041
+begin: A long name directory with some spaces/Sub Directory Two
 song_begin: short-trouser-pants-zip-closing.mp3
 Time: 1
 Artist: Geek & Dummy
 Title: Sound effect: short trouser pants zip closing
 Date: 2013
 Date: 2013
-mtime: 1481622066
+mtime: 1481623577
+song_end
+song_begin: starting-engine-Ford-Mondeo-Mk-3-diesel.mp3
+Time: 6
+Artist: Geek & Dummy
+Title: Sound effect: starting engine - Ford Mondeo Mk 3 diesel
+Album: Geek & Dummy Sound Library
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+end: A long name directory with some spaces/Sub Directory Two
+song_begin: pouring-water-into-mug-of-coffee.mp3
+Time: 4
+Artist: Geek & Dummy
+Title: Sound effect: pouring water into mug of coffee
+Date: 2013
+Date: 2013
+mtime: 1481623577
 song_end
 song_begin: Ghost-Sounds.mp3
 Time: 95
@@ -47,20 +60,11 @@ Album: Geek & Dummy Sound Library
 Date: 2014
 Date: 2014
 Genre: soundfx
-mtime: 1481622054
-song_end
-song_begin: starting-engine-Ford-Mondeo-Mk-3-diesel.mp3
-Time: 6
-Artist: Geek & Dummy
-Title: Sound effect: starting engine - Ford Mondeo Mk 3 diesel
-Album: Geek & Dummy Sound Library
-Date: 2014
-Genre: soundfx
-mtime: 1481622063
+mtime: 1481623577
 song_end
 end: A long name directory with some spaces
 directory: Directory
-mtime: 1481622608
+mtime: 1482142041
 begin: Directory
 song_begin: 2-Kids-Laughing.mp3
 Time: 30
@@ -70,7 +74,7 @@ Album: Geek & Dummy Sound Library
 Date: 2014
 Date: 2014
 Genre: soundfx
-mtime: 1481622083
+mtime: 1481623577
 song_end
 song_begin: ambient-noise-server-room.mp3
 Time: 71
@@ -80,20 +84,15 @@ Album: Geek & Dummy Sound Library
 Date: 2014
 Date: 2014
 Genre: soundfx
-mtime: 1481622020
+mtime: 1481623577
 song_end
 end: Directory
 directory: Directory With Spaces
-mtime: 1481622608
+mtime: 1482142041
 begin: Directory With Spaces
-song_begin: coin-spin-light.mp3
-Time: 5
-Artist: Geek & Dummy
-Title: Sound effect: coin spin (light coin)
-Date: 2013
-Date: 2013
-mtime: 1481622036
-song_end
+directory: SubDirectory One
+mtime: 1482142041
+begin: Directory With Spaces/SubDirectory One
 song_begin: central-locking-Ford-Mondeo-Mk-3.mp3
 Time: 5
 Artist: Geek & Dummy
@@ -102,7 +101,16 @@ Album: Geek & Dummy Sound Library
 Date: 2014
 Date: 2014
 Genre: soundfx
-mtime: 1481622024
+mtime: 1481623577
+song_end
+end: Directory With Spaces/SubDirectory One
+song_begin: coin-spin-light.mp3
+Time: 5
+Artist: Geek & Dummy
+Title: Sound effect: coin spin (light coin)
+Date: 2013
+Date: 2013
+mtime: 1481623577
 song_end
 song_begin: finger-snap-click.mp3
 Time: 0
@@ -112,11 +120,11 @@ Album: Geek & Dummy Sound Library
 Date: 2014
 Date: 2014
 Genre: soundfx
-mtime: 1481622047
+mtime: 1481623577
 song_end
 end: Directory With Spaces
 directory: _My Directory
-mtime: 1481622608
+mtime: 1482142041
 begin: _My Directory
 song_begin: gas-fire-lighting.mp3
 Time: 58
@@ -126,7 +134,7 @@ Album: Geek & Dummy Sound Library
 Date: 2014
 Date: 2014
 Genre: soundfx
-mtime: 1481622051
+mtime: 1481623577
 song_end
 end: _My Directory
 song_begin: teaspoon-stirring-mug-of-coffee.mp3
@@ -135,7 +143,7 @@ Artist: Geek & Dummy
 Title: Sound effect: teaspoon stirring mug of coffee
 Date: 2013
 Date: 2013
-mtime: 1481622029
+mtime: 1481623577
 song_end
 song_begin: whistle-kettle-boiling.mp3
 Time: 36
@@ -143,7 +151,7 @@ Artist: Geek & Dummy
 Title: Sound effect: whistle kettle boiling
 Date: 2013
 Date: 2013
-mtime: 1481622087
+mtime: 1481623577
 song_end
 song_begin: wine-glass-double-chink-clink-cheers.mp3
 Time: 1
@@ -151,5 +159,5 @@ Artist: Geek & Dummy
 Title: Sound effect: wine glass double chink/clink/cheers
 Date: 2013
 Date: 2013
-mtime: 1481622090
+mtime: 1481623577
 song_end

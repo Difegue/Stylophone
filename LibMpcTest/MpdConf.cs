@@ -28,7 +28,20 @@ namespace LibMpcTest
             builder.AppendLine("port \"6600\"");
             builder.AppendLine("audio_output {");
             builder.AppendLine("type \"null\"");
-            builder.AppendLine("name \"No Output\"");
+            builder.AppendLine("name \"Enabled output to be disabled\"");
+            builder.AppendLine("enabled \"true\"");
+            builder.AppendLine("mixer_type \"none\"");
+            builder.AppendLine("}");
+            builder.AppendLine("audio_output {");
+            builder.AppendLine("type \"null\"");
+            builder.AppendLine("name \"Disabled output to be enabled\"");
+            builder.AppendLine("enabled \"false\"");
+            builder.AppendLine("mixer_type \"none\"");
+            builder.AppendLine("}");
+            builder.AppendLine("audio_output {");
+            builder.AppendLine("type \"null\"");
+            builder.AppendLine("name \"Enabled output to be toggled\"");
+            builder.AppendLine("enabled \"true\"");
             builder.AppendLine("mixer_type \"none\"");
             builder.AppendLine("}");
 

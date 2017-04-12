@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LibMpc.Types;
 
 namespace LibMpc
 {
@@ -23,9 +24,10 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "disableoutput", _outputId);
 
-                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public string FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response.ToDefaultDictionary();
+                    // Response should be empty.
+                    return string.Join(", ", response);
                 }
             }
 
@@ -43,40 +45,52 @@ namespace LibMpc
 
                 public string Value => string.Join(" ", "enableoutput", _outputId);
 
-                public IDictionary<string, string> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public string FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    return response.ToDefaultDictionary();
+                    // Response should be empty.
+                    return string.Join(", ", response);
                 }
             }
 
-            // TODO: toggleoutput // Turns an output on or off, depending on the current state.
+            /// <summary>
+            /// Turns an output on or off, depending on the current state.
+            /// </summary>
+            public class ToggleOutput : IMpcCommand<string>
+            {
+                private readonly int _outputId;
+
+                public ToggleOutput(int outputId)
+                {
+                    _outputId = outputId;
+                }
+
+                public string Value => string.Join(" ", "toggleoutput", _outputId);
+
+                public string FormatResponse(IList<KeyValuePair<string, string>> response)
+                {
+                    // Response should be empty.
+                    return string.Join(", ", response);
+                }
+            }
 
             /// <summary>
             /// Shows information about all outputs.
             /// </summary>
-            public class Outputs : IMpcCommand<IList<IDictionary<string, string>>>
+            public class Outputs : IMpcCommand<IEnumerable<MpdOutput>>
             {
                 public string Value => "outputs";
                 
-                public IDictionary<string, IList<IDictionary<string, string>>> FormatResponse(IList<KeyValuePair<string, string>> response)
+                public IEnumerable<MpdOutput> FormatResponse(IList<KeyValuePair<string, string>> response)
                 {
-                    var result = new Dictionary<string, IList<IDictionary<string, string>>>
-                    {
-                        { "outputs", new List<IDictionary<string, string>>() }
-                    };
+                    var result = new List<MpdOutput>();
 
                     for (var i = 0; i < response.Count; i += 3)
                     {
-                        var outputId = response[i].Value;
+                        var outputId = int.Parse(response[i].Value);
                         var outputName = response[i + 1].Value;
-                        var outputEnabled = response[i + 2].Value;
+                        var outputEnabled = response[i + 2].Value == "1";
 
-                        result["outputs"].Add(new Dictionary<string, string>
-                        {
-                            {"id", outputId},
-                            {"name", outputName},
-                            {"enabled", outputEnabled}
-                        });
+                        result.Add(new MpdOutput(outputId, outputName, outputEnabled));
                     }
 
                     return result;
