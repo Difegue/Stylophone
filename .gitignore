@@ -4,19 +4,12 @@
 
 /src/.vs
 
-/src/LibMpc/bin
-/src/LibMpc/obj
-/src/LibMpc/LibMpc.xproj.user
-/src/LibMpc/project.lock.json
+/src/MpcNET/bin
+/src/MpcNET/obj
 
-/src/LibMpcApp/bin
-/src/LibMpcApp/obj
-/src/LibMpcApp/LibMpcApp.xproj.user
-/src/LibMpcApp/project.lock.json
+/src/MpcNET.Test/bin
+/src/MpcNET.Test/obj
 
-/src/LibMpcTest/bin
-/src/LibMpcTest/obj
-/src/LibMpcTest/LibMpcTest.xproj.user
-/src/LibMpcTest/project.lock.json
 
-/src/LibMpc.sln.DotSettings.user
+/src/MpcNET.sln.DotSettings.user
+/src/MpcNET.Test/MpcNET.Test.csproj.DotSettings
