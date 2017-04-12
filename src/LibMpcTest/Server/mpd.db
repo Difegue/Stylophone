@@ -1,0 +1,163 @@
+info_begin
+format: 1
+mpd_version: 0.17.4
+fs_charset: cp1252
+tag: Artist
+tag: ArtistSort
+tag: Album
+tag: AlbumArtist
+tag: AlbumArtistSort
+tag: Title
+tag: Track
+tag: Name
+tag: Genre
+tag: Date
+tag: Composer
+tag: Performer
+tag: Disc
+tag: MUSICBRAINZ_ARTISTID
+tag: MUSICBRAINZ_ALBUMID
+tag: MUSICBRAINZ_ALBUMARTISTID
+tag: MUSICBRAINZ_TRACKID
+info_end
+directory: A long name directory with some spaces
+mtime: 1482142041
+begin: A long name directory with some spaces
+directory: Sub Directory Two
+mtime: 1482142041
+begin: A long name directory with some spaces/Sub Directory Two
+song_begin: short-trouser-pants-zip-closing.mp3
+Time: 1
+Artist: Geek & Dummy
+Title: Sound effect: short trouser pants zip closing
+Date: 2013
+Date: 2013
+mtime: 1481623577
+song_end
+song_begin: starting-engine-Ford-Mondeo-Mk-3-diesel.mp3
+Time: 6
+Artist: Geek & Dummy
+Title: Sound effect: starting engine - Ford Mondeo Mk 3 diesel
+Album: Geek & Dummy Sound Library
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+end: A long name directory with some spaces/Sub Directory Two
+song_begin: pouring-water-into-mug-of-coffee.mp3
+Time: 4
+Artist: Geek & Dummy
+Title: Sound effect: pouring water into mug of coffee
+Date: 2013
+Date: 2013
+mtime: 1481623577
+song_end
+song_begin: Ghost-Sounds.mp3
+Time: 95
+Artist: Geek & Dummy
+Title: Sound effect: ghostly haunted house (bells, ghostly laughs & knives sharpened)
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+end: A long name directory with some spaces
+directory: Directory
+mtime: 1482142041
+begin: Directory
+song_begin: 2-Kids-Laughing.mp3
+Time: 30
+Artist: Geek & Dummy
+Title: Sound effect: two kids laughing
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+song_begin: ambient-noise-server-room.mp3
+Time: 71
+Artist: Geek & Dummy
+Title: Sound effect: ambient noise - server room
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+end: Directory
+directory: Directory With Spaces
+mtime: 1482142041
+begin: Directory With Spaces
+directory: SubDirectory One
+mtime: 1482142041
+begin: Directory With Spaces/SubDirectory One
+song_begin: central-locking-Ford-Mondeo-Mk-3.mp3
+Time: 5
+Artist: Geek & Dummy
+Title: Sound effect: central locking - Ford Mondeo Mk 3
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+end: Directory With Spaces/SubDirectory One
+song_begin: coin-spin-light.mp3
+Time: 5
+Artist: Geek & Dummy
+Title: Sound effect: coin spin (light coin)
+Date: 2013
+Date: 2013
+mtime: 1481623577
+song_end
+song_begin: finger-snap-click.mp3
+Time: 0
+Artist: Geek & Dummy
+Title: Sound effect: finger snap/click
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+end: Directory With Spaces
+directory: _My Directory
+mtime: 1482142041
+begin: _My Directory
+song_begin: gas-fire-lighting.mp3
+Time: 58
+Artist: Geek & Dummy
+Title: Sound effect: gas fire lighting and warming up
+Album: Geek & Dummy Sound Library
+Date: 2014
+Date: 2014
+Genre: soundfx
+mtime: 1481623577
+song_end
+end: _My Directory
+song_begin: teaspoon-stirring-mug-of-coffee.mp3
+Time: 4
+Artist: Geek & Dummy
+Title: Sound effect: teaspoon stirring mug of coffee
+Date: 2013
+Date: 2013
+mtime: 1481623577
+song_end
+song_begin: whistle-kettle-boiling.mp3
+Time: 36
+Artist: Geek & Dummy
+Title: Sound effect: whistle kettle boiling
+Date: 2013
+Date: 2013
+mtime: 1481623577
+song_end
+song_begin: wine-glass-double-chink-clink-cheers.mp3
+Time: 1
+Artist: Geek & Dummy
+Title: Sound effect: wine glass double chink/clink/cheers
+Date: 2013
+Date: 2013
+mtime: 1481623577
+song_end

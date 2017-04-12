@@ -2,21 +2,21 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
+/src/.vs
 
-/LibMpc/bin
-/LibMpc/obj
-/LibMpc/LibMpc.xproj.user
-/LibMpc/project.lock.json
+/src/LibMpc/bin
+/src/LibMpc/obj
+/src/LibMpc/LibMpc.xproj.user
+/src/LibMpc/project.lock.json
 
-/LibMpcApp/bin
-/LibMpcApp/obj
-/LibMpcApp/LibMpcApp.xproj.user
-/LibMpcApp/project.lock.json
+/src/LibMpcApp/bin
+/src/LibMpcApp/obj
+/src/LibMpcApp/LibMpcApp.xproj.user
+/src/LibMpcApp/project.lock.json
 
-/LibMpcTest/bin
-/LibMpcTest/obj
-/LibMpcTest/LibMpcTest.xproj.user
-/LibMpcTest/project.lock.json
+/src/LibMpcTest/bin
+/src/LibMpcTest/obj
+/src/LibMpcTest/LibMpcTest.xproj.user
+/src/LibMpcTest/project.lock.json
 
-/LibMpc.sln.DotSettings.user
+/src/LibMpc.sln.DotSettings.user
