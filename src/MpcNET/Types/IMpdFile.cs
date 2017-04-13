@@ -4,7 +4,7 @@ namespace MpcNET.Types
 {
     public interface IMpdFilePath
     {
-        string File { get; }
+        string Path { get; }
     }
 
     public interface IMpdFile : IMpdFilePath

@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace MpcNET.Test
 {
@@ -13,7 +12,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Reflection.Commands());
 
             TestOutput.WriteLine($"CommandsTest (commands: {response.Response.Body.Count()}) Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             // Different answer from MPD on Windows and on Linux, beacuse of Version.
             // Check some of the commands.
@@ -31,7 +30,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Reflection.TagTypes());
 
             TestOutput.WriteLine("TagTypesTest Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             Assert.IsTrue(response.Response.Body.Count().Equals(17));
         }
@@ -42,7 +41,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Reflection.UrlHandlers());
 
             TestOutput.WriteLine($"UrlHandlersTest (handlers: {response.Response.Body.Count()}) Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             // Different answer from MPD on Windows and on Linux.
             // Check some of the handlers.
@@ -58,7 +57,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Reflection.Decoders());
 
             TestOutput.WriteLine($"DecodersTest (decoders: {response.Response.Body.Count()}) Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             // Different answer from MPD on Windows and on Linux.
             // Check some of the decoders.

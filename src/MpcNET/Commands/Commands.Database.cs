@@ -5,7 +5,7 @@ using MpcNET.Types;
 
 namespace MpcNET
 {
-    public partial class Commands
+    public static partial class Commands
     {
         /// <summary>
         /// https://www.musicpd.org/doc/protocol/database.html

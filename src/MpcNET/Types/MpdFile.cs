@@ -29,10 +29,10 @@ namespace MpcNET.Types
         {
             file.CheckNotNull();
 
-            File = file;
+            Path = file;
         }
 
-        public string File { get; }
+        public string Path { get; }
         public int Time { get; private set;  } = -1;
         public string Album { get; private set; } = string.Empty;
         public string Artist { get; private set; } = string.Empty;
@@ -45,7 +45,7 @@ namespace MpcNET.Types
         public string Performer { get; private set; } = string.Empty;
         public string Comment { get; private set; } = string.Empty;
         public int Disc { get; private set; } = -1;
-        public int Pos { get; private set; } = -1;
+        public int Pos { get; set; } = -1;
         public int Id { get; private set; } = -1;
         public IDictionary<string, string> UnknownMetadata => _unknownMetadata;
 

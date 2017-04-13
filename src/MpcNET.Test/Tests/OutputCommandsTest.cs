@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace MpcNET.Test
 {
@@ -16,7 +15,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Output.DisableOutput(0));
 
             TestOutput.WriteLine("DisableOutputTest Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             Assert.IsTrue(response.Response.Body.Equals(string.Empty));
             Assert.IsTrue(response.Response.State.Status.Equals("OK"));
@@ -35,7 +34,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Output.EnableOutput(1));
 
             TestOutput.WriteLine("EnableOutputTest Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             Assert.IsTrue(response.Response.Body.Equals(string.Empty));
             Assert.IsTrue(response.Response.State.Status.Equals("OK"));
@@ -53,7 +52,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Output.ToggleOutput(2));
 
             TestOutput.WriteLine("ToggleOutputTest Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             Assert.IsTrue(response.Response.Body.Equals(string.Empty));
             Assert.IsTrue(response.Response.State.Status.Equals("OK"));
@@ -68,7 +67,7 @@ namespace MpcNET.Test
             var response = await Mpc.SendAsync(new Commands.Output.Outputs());
 
             TestOutput.WriteLine("LisOutputsTest Result:");
-            TestOutput.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            TestOutput.WriteLine(response);
 
             Assert.IsTrue(response.Response.Body.Count().Equals(3));
         }
