@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using MpcNET.Utils;
 
 namespace MpcNET.Types
 {
@@ -8,97 +7,324 @@ namespace MpcNET.Types
     /// </summary>
     internal class MpdFile : IMpdFile
     {
-        private const string TagTime = "Time";
-        private const string TagArtist = "Artist";
-        private const string TagAlbum = "Album";
-        private const string TagTitle = "Title";
-        private const string TagTrack = "Track";
-        private const string TagName = "Name";
-        private const string TagGenre = "Genre";
-        private const string TagDate = "Date";
-        private const string TagComposer = "Composer";
-        private const string TagPerformer = "Performer";
-        private const string TagComment = "Comment";
-        private const string TagDisc = "Disc";
-        private const string TagPos = "Pos";
-        private const string TagId = "Id";
+        internal const string TagFile = "file";
+        internal const string TagTime = "Time";
+        internal const string TagArtist = "Artist";
+        internal const string TagAlbum = "Album";
+        internal const string TagTitle = "Title";
+        internal const string TagTrack = "Track";
+        internal const string TagName = "Name";
+        internal const string TagGenre = "Genre";
+        internal const string TagDate = "Date";
+        internal const string TagComposer = "Composer";
+        internal const string TagPerformer = "Performer";
+        internal const string TagComment = "Comment";
+        internal const string TagDisc = "Disc";
+        internal const string TagPos = "Pos";
+        internal const string TagId = "Id";
 
-        private readonly IDictionary<string, string> _unknownMetadata = new Dictionary<string, string>();
+        internal const int NoTime = -1;
+        internal const string NoAlbum = null;
+        internal const string NoArtist = null;
+        internal const string NoTitle = null;
+        internal const string NoTrack = null;
+        internal const string NoName = null;
+        internal const string NoGenre = null;
+        internal const string NoDate = null;
+        internal const string NoComposer = null;
+        internal const string NoPerformer = null;
+        internal const string NoComment = null;
+        internal const int NoDisc = -1;
+        internal const int NoPos = -1;
+        internal const int NoId = -1;
 
-        internal MpdFile(string file)
+        internal MpdFile(
+            string path,
+            int time = NoTime,
+            string album = NoAlbum,
+            string artist = NoArtist,
+            string title = NoTitle,
+            string track = NoTrack,
+            string name = NoName,
+            string genre = NoGenre,
+            string date = NoDate,
+            string composer = NoComposer,
+            string performer = NoPerformer,
+            string comment = NoComment,
+            int disc = NoDisc,
+            int pos = NoPos,
+            int id = NoId,
+            IReadOnlyDictionary<string, string> unknownMetadata = null)
         {
-            file.CheckNotNull();
-
-            Path = file;
+            this.Path = path;
+            this.Time = time;
+            this.Album = album;
+            this.Artist = artist;
+            this.Title = title;
+            this.Track = track;
+            this.Name = name;
+            this.Genre = genre;
+            this.Date = date;
+            this.Composer = composer;
+            this.Performer = performer;
+            this.Comment = comment;
+            this.Disc = disc;
+            this.Pos = pos;
+            this.Id = id;
+            this.UnknownMetadata = unknownMetadata ?? new Dictionary<string, string>();
         }
 
         public string Path { get; }
-        public int Time { get; private set;  } = -1;
-        public string Album { get; private set; } = string.Empty;
-        public string Artist { get; private set; } = string.Empty;
-        public string Title { get; private set; } = string.Empty;
-        public string Track { get; private set; } = string.Empty;
-        public string Name { get; private set; } = string.Empty;
-        public string Genre { get; private set; } = string.Empty;
-        public string Date { get; private set; } = string.Empty;
-        public string Composer { get; private set; } = string.Empty;
-        public string Performer { get; private set; } = string.Empty;
-        public string Comment { get; private set; } = string.Empty;
-        public int Disc { get; private set; } = -1;
-        public int Pos { get; set; } = -1;
-        public int Id { get; private set; } = -1;
-        public IDictionary<string, string> UnknownMetadata => _unknownMetadata;
+        public int Time { get; }
+        public string Album { get; }
+        public string Artist { get; }
+        public string Title { get; }
+        public string Track { get; }
+        public string Name { get; }
+        public string Genre { get; }
+        public string Date { get; }
+        public string Composer { get; }
+        public string Performer { get; }
+        public string Comment { get; }
+        public int Disc { get; }
+        public int Pos { get; set; }
+        public int Id { get; }
+        public IReadOnlyDictionary<string, string> UnknownMetadata { get; }
 
-        internal void AddTag(string tag, string value)
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Time"/> property set.
+        /// </summary>
+        public bool HasTime => this.Time != NoTime;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Album"/> property set.
+        /// </summary>
+        public bool HasAlbum => this.Album != NoAlbum;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Artist"/> property set.
+        /// </summary>
+        public bool HasArtist => this.Artist != NoArtist;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Title"/> property set.
+        /// </summary>
+        public bool HasTitle => this.Title != NoTitle;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Track"/> property set.
+        /// </summary>
+        public bool HasTrack => this.Track != NoTrack;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Name"/> property set.
+        /// </summary>
+        public bool HasName => this.Name != NoName;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Genre"/> property set.
+        /// </summary>
+        public bool HasGenre => this.Genre != NoGenre;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Date"/> property set.
+        /// </summary>
+        public bool HasDate => this.Date != NoDate;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Composer"/> property set.
+        /// </summary>
+        public bool HasComposer => this.Composer != NoComposer;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Performer"/> property set.
+        /// </summary>
+        public bool HasPerformer => this.Performer != NoPerformer;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Comment"/> property set.
+        /// </summary>
+        public bool HasComment => this.Comment != NoComment;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Disc"/> property set.
+        /// </summary>
+        public bool HasDisc => this.Disc != NoDisc;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Pos"/> property set.
+        /// </summary>
+        public bool HasPos => this.Pos != NoPos;
+
+        /// <summary>
+        /// If the MpdFile has the <see cref="Id"/> property set.
+        /// </summary>
+        public bool HasId => this.Id != NoId;
+
+        internal static MpdFile Create(string path, int pos)
         {
-            switch (tag)
+            return new MpdFile(path, pos: pos);
+        }
+
+        internal static (IMpdFile mpdFile, int index) Create(IList<KeyValuePair<string, string>> response, int startIndex)
+        {
+            string file;
+            if (response.Count <= startIndex)
             {
-                case TagTime:
-                    Time = int.Parse(value);
-                    break;
-                case TagArtist:
-                    Artist = value;
-                    break;
-                case TagAlbum:
-                    Album = value;
-                    break;
-                case TagTitle:
-                    Title = value;
-                    break;
-                case TagTrack:
-                    Track = value;
-                    break;
-                case TagName:
-                    Name = value;
-                    break;
-                case TagGenre:
-                    Genre = value;
-                    break;
-                case TagDate:
-                    Date = value;
-                    break;
-                case TagComposer:
-                    Composer = value;
-                    break;
-                case TagPerformer:
-                    Performer = value;
-                    break;
-                case TagComment:
-                    Comment = value;
-                    break;
-                case TagDisc:
-                    Disc = int.Parse(value);
-                    break;
-                case TagPos:
-                    Pos = int.Parse(value);
-                    break;
-                case TagId:
-                    Id = int.Parse(value);
-                    break;
-                default:
-                    _unknownMetadata.Add(tag, value);
-                    break;
+                return (null, -1);
             }
+
+            var fileKeyValuePair = response[startIndex];
+            if (fileKeyValuePair.Key == "file")
+            {
+                file = fileKeyValuePair.Value;
+            }
+            else
+            {
+                return (null, -1);
+            }
+
+            int time = NoTime;
+            string album = NoAlbum;
+            string artist = NoArtist;
+            string title = NoTitle;
+            string track = NoTrack;
+            string name = NoName;
+            string genre = NoGenre;
+            string date = NoDate;
+            string composer = NoComposer;
+            string performer = NoPerformer;
+            string comment = NoComment;
+            int disc = NoDisc;
+            int pos = NoPos;
+            int id = NoId;
+            var unknownMetadata = new Dictionary<string, string>();
+            for (var index = startIndex + 1; index < response.Count; index++)
+            {
+                var line = response[index];
+                if (line.Key != null)
+                {
+                    switch (line.Key)
+                    {
+                        case TagFile:
+                            return (new MpdFile(
+                                file,
+                                time,
+                                album,
+                                artist,
+                                title,
+                                track,
+                                name,
+                                genre,
+                                date,
+                                composer,
+                                performer,
+                                comment,
+                                disc,
+                                pos,
+                                id), index - 1);
+                        case TagTime:
+                            if (int.TryParse(line.Value, out int tryTime))
+                            {
+                                time = tryTime;
+                            }
+                            break;
+                        case TagAlbum:
+                            album = line.Value;
+                            break;
+                        case TagArtist:
+                            artist = line.Value;
+                            break;
+                        case TagTitle:
+                            title = line.Value;
+                            break;
+                        case TagTrack:
+                            track = line.Value;
+                            break;
+                        case TagName:
+                            name = line.Value;
+                            break;
+                        case TagGenre:
+                            genre = line.Value;
+                            break;
+                        case TagDate:
+                            date = line.Value;
+                            break;
+                        case TagComposer:
+                            composer = line.Value;
+                            break;
+                        case TagPerformer:
+                            performer = line.Value;
+                            break;
+                        case TagComment:
+                            comment = line.Value;
+                            break;
+                        case TagDisc:
+                            if (int.TryParse(line.Value, out var tryDisc))
+                            {
+                                disc = tryDisc;
+                            }
+
+                            break;
+                        case TagPos:
+                            if (int.TryParse(line.Value, out var tryPos))
+                            {
+                                pos = tryPos;
+                            }
+
+                            break;
+                        case TagId:
+                            if (int.TryParse(line.Value, out var tryId))
+                            {
+                                id = tryId;
+                            }
+
+                            break;
+                        default:
+                            unknownMetadata.Add(line.Key, line.Value);
+                            break;
+                    }
+                }
+            }
+
+            return (new MpdFile(
+                file,
+                time,
+                album,
+                artist,
+                title,
+                track,
+                name,
+                genre,
+                date,
+                composer,
+                performer,
+                comment,
+                disc,
+                pos,
+                id), response.Count - 1);
+        }
+
+        public static IEnumerable<IMpdFile> CreateList(IList<KeyValuePair<string, string>> response)
+        {
+            var mpdFiles = new List<IMpdFile>();
+            for (var index = 0; index < response.Count; index++)
+            {
+                var (mpdFile, lastIndex) = Create(response, index);
+                if (mpdFile != null)
+                {
+                    mpdFiles.Add(mpdFile);
+                    index = lastIndex;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return mpdFiles;
         }
     }
 }
+

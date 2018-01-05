@@ -1,100 +1,34 @@
 ﻿using System.Collections.Generic;
+using MpcNET.Commands.Output;
 using MpcNET.Types;
 
-namespace MpcNET
+namespace MpcNET.Commands
 {
-    public static partial class Commands
+    public static partial class Command
     {
         /// <summary>
         /// https://www.musicpd.org/doc/protocol/output_commands.html
         /// </summary>
         public class Output
         {
-            /// <summary>
-            /// Turns an output off.
-            /// </summary>
-            public class DisableOutput : IMpcCommand<string>
+            public static IMpcCommand<IEnumerable<MpdOutput>> Outputs()
             {
-                private readonly int _outputId;
-
-                public DisableOutput(int outputId)
-                {
-                    _outputId = outputId;
-                }
-
-                public string Value => string.Join(" ", "disableoutput", _outputId);
-
-                public string FormatResponse(IList<KeyValuePair<string, string>> response)
-                {
-                    // Response should be empty.
-                    return string.Join(", ", response);
-                }
+                return new OutputsCommand();
             }
 
-            /// <summary>
-            /// Turns an output on.
-            /// </summary>
-            public class EnableOutput : IMpcCommand<string>
+            public static IMpcCommand<string> DisableOutput(int outputId)
             {
-                private readonly int _outputId;
-
-                public EnableOutput(int outputId)
-                {
-                    _outputId = outputId;
-                }
-
-                public string Value => string.Join(" ", "enableoutput", _outputId);
-
-                public string FormatResponse(IList<KeyValuePair<string, string>> response)
-                {
-                    // Response should be empty.
-                    return string.Join(", ", response);
-                }
+                return new DisableOutputCommand(outputId);
             }
 
-            /// <summary>
-            /// Turns an output on or off, depending on the current state.
-            /// </summary>
-            public class ToggleOutput : IMpcCommand<string>
+            public static IMpcCommand<string> EnableOutput(int outputId)
             {
-                private readonly int _outputId;
-
-                public ToggleOutput(int outputId)
-                {
-                    _outputId = outputId;
-                }
-
-                public string Value => string.Join(" ", "toggleoutput", _outputId);
-
-                public string FormatResponse(IList<KeyValuePair<string, string>> response)
-                {
-                    // Response should be empty.
-                    return string.Join(", ", response);
-                }
+                return new EnableOutputCommand(outputId);
             }
 
-            /// <summary>
-            /// Shows information about all outputs.
-            /// </summary>
-            public class Outputs : IMpcCommand<IEnumerable<MpdOutput>>
+            public static IMpcCommand<string> ToggleOutput(int outputId)
             {
-                public string Value => "outputs";
-                
-                public IEnumerable<MpdOutput> FormatResponse(IList<KeyValuePair<string, string>> response)
-                {
-                    var result = new List<MpdOutput>();
-
-                    for (var i = 0; i < response.Count; i += 3)
-                    {
-                        var outputId = int.Parse(response[i].Value);
-                        var outputName = response[i + 1].Value;
-                        var outputEnabled = response[i + 2].Value == "1";
-
-                        result.Add(new MpdOutput(outputId, outputName, outputEnabled));
-                    }
-
-                    return result;
-                }
+                return new ToggleOutputCommand(outputId);
             }
         }
     }

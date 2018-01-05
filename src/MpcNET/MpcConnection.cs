@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using MpcNET.Message;
 using MpcNET.Utils;
@@ -17,18 +18,20 @@ namespace MpcNET
     /// </summary>
     public class MpcConnection
     {
+        private readonly Encoding encoding = new UTF8Encoding();
         private readonly IPEndPoint _server;
 
         private TcpClient _tcpClient;
         private NetworkStream _networkStream;
-        private StreamReader _reader;
-        private StreamWriter _writer;
 
         private string _version;
 
         public MpcConnection(IPEndPoint server)
         {
-            if (IsConnected) return;
+            if (this.IsConnected)
+            {
+                return;
+            }
 
             ClearConnectionFields();
             _server = server;
@@ -52,18 +55,19 @@ namespace MpcNET
             _networkStream = _tcpClient.GetStream();
 
             // Encoding UTF8 has some problems with TcpClient: https://bugs.musicpd.org/view.php?id=4501
-            _reader = new StreamReader(_networkStream);
-            _writer = new StreamWriter(_networkStream) { NewLine = "\n" };
-
-            var firstLine = _reader.ReadLine();
-            if (!firstLine.StartsWith(Constants.FirstLinePrefix))
+            using (var reader = new StreamReader(_networkStream, this.encoding, true, 512, true))
             {
-                await DisconnectAsync();
-                throw new InvalidDataException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\"." );
+                var firstLine = await reader.ReadLineAsync();
+                if (!firstLine.StartsWith(Constants.FirstLinePrefix))
+                {
+                    await DisconnectAsync();
+                    throw new InvalidDataException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\".");
+                }
+
+                _version = firstLine.Substring(Constants.FirstLinePrefix.Length);
             }
-            _version = firstLine.Substring(Constants.FirstLinePrefix.Length);
         }
-        
+
         public Task DisconnectAsync()
         {
             if (_tcpClient == null)
@@ -76,7 +80,7 @@ namespace MpcNET
 
             return Task.CompletedTask;
         }
-        
+
 
         public async Task<IMpdMessage<T>> SendAsync<T>(IMpcCommand<T> command)
         {
@@ -87,14 +91,28 @@ namespace MpcNET
 
             try
             {
-                _writer.WriteLine(command.Value);
-                _writer.Flush();
+                Console.WriteLine("Command: " + command.Value);
+                // Encoding UTF8 has some problems with TcpClient: https://bugs.musicpd.org/view.php?id=4501
+
+                using (var writer = new StreamWriter(_networkStream, this.encoding, 512, true) { NewLine = "\n" })
+                {
+                    writer.WriteLine(command.Value);
+                    writer.Flush();
+                }
 
                 response = await ReadResponseAsync();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                try { await DisconnectAsync(); } catch (Exception) { }
+                Console.WriteLine("Exception:" + exception);
+                try
+                {
+                    await DisconnectAsync();
+                }
+                catch (Exception)
+                {
+                }
+
                 return null; // TODO: Create Null Object for MpdResponse
             }
 
@@ -116,20 +134,28 @@ namespace MpcNET
             var response = new List<string>();
 
             // Read response untli reach end token (OK or ACK)
-            string responseLine;
-            do
+            using (var reader = new StreamReader(_networkStream, this.encoding, true, 512, true))
             {
-                responseLine = await _reader.ReadLineAsync();
-                response.Add(responseLine);
-            } while (!(responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack)));
+                string responseLine;
+                do
+                {
+                    responseLine = await reader.ReadLineAsync();
+                    Console.WriteLine("ReadLine:|" + responseLine + "|");
+                    if (responseLine == null)
+                    {
+                        Console.WriteLine("Received null");
+                        responseLine = string.Empty;
+                        continue;
+                    }
+                    response.Add(responseLine);
+                } while (!(responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack)));
+            }
 
             return response.Where(line => !string.IsNullOrEmpty(line)).ToArray();
         }
 
-        private void ClearConnectionFields() 
+        private void ClearConnectionFields()
         {
-            _writer?.Dispose();
-            _reader?.Dispose();
             _networkStream?.Dispose();
             _tcpClient?.Dispose();
             _version = string.Empty;

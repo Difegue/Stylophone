@@ -1,119 +1,13 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace MpcNET
 {
-    /// <summary>
-    /// The possible states of the MPD.
-    /// </summary>
-    public enum MpdState
-    {
-        /// <summary>
-        /// The state of the MPD could not be translated into this enumeration.
-        /// </summary>
-        Unknown,
-        /// <summary>
-        /// The MPD is playing a track.
-        /// </summary>
-        Play,
-        /// <summary>
-        /// The MPD is not playing a track.
-        /// </summary>
-        Stop,
-        /// <summary>
-        /// The playback of the MPD is currently paused.
-        /// </summary>
-        Pause
-    }
     /// <summary>
     /// The MpdStatus class contains all values describing the current status of the MPD.
     /// </summary>
     public class MpdStatus
     {
-        private int volume;
-        private bool repeat;
-        private bool random;
-        private int playlist;
-        private int playlistLength;
-        private int xFade;
-        private MpdState state;
-        private int song;
-        private int songId;
-        private int timeElapsed;
-        private int timeTotal;
-        private int bitrate;
-        private int audioSampleRate;
-        private int audioBits;
-        private int audioChannels;
-        private int updatingDb;
-        private string error;
-        /// <summary>
-        /// The current volume of the output.
-        /// </summary>
-        public int Volume { get { return this.volume; } }
-        /// <summary>
-        /// If the playlist is repeated after finish.
-        /// </summary>
-        public bool Repeat { get { return this.repeat; } }
-        /// <summary>
-        /// If the playlist is played in random order.
-        /// </summary>
-        public bool Random { get { return this.random; } }
-        /// <summary>
-        /// The version number of the playlist.
-        /// </summary>
-        public int Playlist { get { return this.playlist; } }
-        /// <summary>
-        /// The length of the playlist.
-        /// </summary>
-        public int PlaylistLength { get { return this.playlistLength; } }
-        /// <summary>
-        /// The number of seconds crossfaded between song changes.
-        /// </summary>
-        public int XFade { get { return this.xFade; } }
-        /// <summary>
-        /// The state of the MPD.
-        /// </summary>
-        public MpdState State { get { return this.state; } }
-        /// <summary>
-        /// The index of the currently played song in the playlist.
-        /// </summary>
-        public int Song { get { return this.song; } }
-        /// <summary>
-        /// The id of the song currently played.
-        /// </summary>
-        public int SongId { get { return this.songId; } }
-        /// <summary>
-        /// The number of seconds already played of the current song.
-        /// </summary>
-        public int TimeElapsed { get { return this.timeElapsed; } }
-        /// <summary>
-        /// The length of the current song in seconds.
-        /// </summary>
-        public int TimeTotal { get { return this.timeTotal; } }
-        /// <summary>
-        /// The bitrate of the current song.
-        /// </summary>
-        public int Bitrate { get { return this.bitrate; } }
-        /// <summary>
-        /// The audio sample rate of the current song.
-        /// </summary>
-        public int AudioSampleRate { get { return this.audioSampleRate; } }
-        /// <summary>
-        /// The audio bits of the current song.
-        /// </summary>
-        public int AudioBits { get { return this.audioBits; } }
-        /// <summary>
-        /// The number of audio channels of the current song.
-        /// </summary>
-        public int AudioChannels { get { return this.audioChannels; } }
-        /// <summary>
-        /// The number of the update on the MPD database currently running.
-        /// </summary>
-        public int UpdatingDb { get { return this.updatingDb; } }
-        /// <summary>
-        /// An error message, if there is an error.
-        /// </summary>
-        public string Error { get { return this.error; } }
         /// <summary>
         /// Creates a new MpdStatus object.
         /// </summary>
@@ -126,8 +20,10 @@ namespace MpcNET
         /// <param name="state">The state of the MPD.</param>
         /// <param name="song">The index of the currently played song in the playlist.</param>
         /// <param name="songId">The id of the song currently played.</param>
-        /// <param name="timeElapsed">The number of seconds already played of the current song.</param>
-        /// <param name="timeTotal">The length of the current song in seconds.</param>
+        /// <param name="nextSong">The next song.</param>
+        /// <param name="nextSongId">The next song identifier.</param>
+        /// <param name="elapsed">The elapsed.</param>
+        /// <param name="duration">The duration.</param>
         /// <param name="bitrate">The bitrate of the current song.</param>
         /// <param name="audioSampleRate">The audio sample rate of the current song.</param>
         /// <param name="audioBits">The audio bits of the current song.</param>
@@ -144,34 +40,126 @@ namespace MpcNET
             MpdState state,
             int song,
             int songId,
-            int timeElapsed,
-            int timeTotal,
+            int nextSong, 
+            int nextSongId,
+            TimeSpan elapsed,
+            TimeSpan duration,
             int bitrate,
             int audioSampleRate,
             int audioBits,
             int audioChannels,
             int updatingDb,
-            string error
-            )
+            string error)
         {
-            this.volume = volume;
-            this.repeat = repeat;
-            this.random = random;
-            this.playlist = playlist;
-            this.playlistLength = playlistLength;
-            this.xFade = xFade;
-            this.state = state;
-            this.song = song;
-            this.songId = songId;
-            this.timeElapsed = timeElapsed;
-            this.timeTotal = timeTotal;
-            this.bitrate = bitrate;
-            this.audioSampleRate = audioSampleRate;
-            this.audioBits = audioBits;
-            this.audioChannels = audioChannels;
-            this.updatingDb = updatingDb;
-            this.error = error;
+            this.Volume = volume;
+            this.Repeat = repeat;
+            this.Random = random;
+            this.Playlist = playlist;
+            this.PlaylistLength = playlistLength;
+            this.XFade = xFade;
+            this.State = state;
+            this.Song = song;
+            this.SongId = songId;
+            NextSong = nextSong;
+            NextSongId = nextSongId;
+            this.Elapsed = elapsed;
+            this.Duration = duration;
+            this.Bitrate = bitrate;
+            this.AudioSampleRate = audioSampleRate;
+            this.AudioBits = audioBits;
+            this.AudioChannels = audioChannels;
+            this.UpdatingDb = updatingDb;
+            this.Error = error;
         }
+
+        /// <summary>
+        /// The current volume of the output.
+        /// </summary>
+        public int Volume { get; }
+
+        /// <summary>
+        /// If the playlist is repeated after finish.
+        /// </summary>
+        public bool Repeat { get; }
+
+        /// <summary>
+        /// If the playlist is played in random order.
+        /// </summary>
+        public bool Random { get; }
+
+        /// <summary>
+        /// The version number of the playlist.
+        /// </summary>
+        public int Playlist { get; }
+
+        /// <summary>
+        /// The length of the playlist.
+        /// </summary>
+        public int PlaylistLength { get; }
+
+        /// <summary>
+        /// The number of seconds crossfaded between song changes.
+        /// </summary>
+        public int XFade { get; }
+
+        /// <summary>
+        /// The state of the MPD.
+        /// </summary>
+        public MpdState State { get; }
+
+        /// <summary>
+        /// The index of the currently played song in the playlist.
+        /// </summary>
+        public int Song { get; }
+
+        /// <summary>
+        /// The id of the song currently played.
+        /// </summary>
+        public int SongId { get; }
+
+        public int NextSong { get; }
+        public int NextSongId { get; }
+
+        /// <summary>
+        /// The number of seconds already played of the current song.
+        /// </summary>
+        public TimeSpan Elapsed { get; }
+
+        /// <summary>
+        /// The length of the current song in seconds.
+        /// </summary>
+        public TimeSpan Duration { get; }
+
+        /// <summary>
+        /// The bitrate of the current song.
+        /// </summary>
+        public int Bitrate { get; }
+
+        /// <summary>
+        /// The audio sample rate of the current song.
+        /// </summary>
+        public int AudioSampleRate { get; }
+
+        /// <summary>
+        /// The audio bits of the current song.
+        /// </summary>
+        public int AudioBits { get; }
+
+        /// <summary>
+        /// The number of audio channels of the current song.
+        /// </summary>
+        public int AudioChannels { get; }
+
+        /// <summary>
+        /// The number of the update on the MPD database currently running.
+        /// </summary>
+        public int UpdatingDb { get; }
+
+        /// <summary>
+        /// An error message, if there is an error.
+        /// </summary>
+        public string Error { get; }
+
         /// <summary>
         /// Returns a string representation of the object maily for debugging purpuses.
         /// </summary>
@@ -180,13 +168,13 @@ namespace MpcNET
         {
             StringBuilder builder = new StringBuilder();
 
-            appendInt(builder, "volume", this.volume);
-            appendBool(builder, "repeat", this.repeat);
-            appendBool(builder, "random", this.random);
-            appendInt(builder, "playlist", this.playlist);
-            appendInt(builder, "playlistlength", this.playlistLength);
-            appendInt(builder, "xfade", this.xFade);
-            switch (this.state)
+            AppendInt(builder, "volume", this.Volume);
+            AppendBool(builder, "repeat", this.Repeat);
+            AppendBool(builder, "random", this.Random);
+            AppendInt(builder, "playlist", this.Playlist);
+            AppendInt(builder, "playlistlength", this.PlaylistLength);
+            AppendInt(builder, "xfade", this.XFade);
+            switch (this.State)
             {
                 case MpdState.Play:
                     builder.AppendLine("state: play");
@@ -198,38 +186,39 @@ namespace MpcNET
                     builder.AppendLine("state: stop");
                     break;
             }
-            appendInt(builder, "song", this.song);
-            appendInt(builder, "songid", this.songId);
-            if ((this.timeElapsed >= 0) || (this.timeTotal >= 0))
+
+            AppendInt(builder, "song", this.Song);
+            AppendInt(builder, "songid", this.SongId);
+            if (this.Elapsed > TimeSpan.Zero || this.Duration > TimeSpan.Zero)
             {
                 builder.Append("time: ");
-                builder.Append(this.timeElapsed);
+                builder.Append(this.Elapsed);
                 builder.Append(":");
-                builder.Append(this.timeTotal);
+                builder.Append(this.Duration);
                 builder.AppendLine();
             }
-            appendInt(builder, "bitrate", this.bitrate);
-            if ((this.audioSampleRate >= 0) || (this.audioBits >= 0) || (this.audioChannels >= 0))
+            AppendInt(builder, "bitrate", this.Bitrate);
+            if ((AudioSampleRate >= 0) || (this.AudioBits >= 0) || (this.AudioChannels >= 0))
             {
                 builder.Append("audio: ");
-                builder.Append(this.audioSampleRate);
+                builder.Append(this.AudioSampleRate);
                 builder.Append(":");
-                builder.Append(this.audioBits);
+                builder.Append(this.AudioBits);
                 builder.Append(":");
-                builder.Append(this.audioChannels);
+                builder.Append(this.AudioChannels);
                 builder.AppendLine();
             }
-            appendInt(builder, "updating_db", this.updatingDb);
-            if (this.error != null)
+            AppendInt(builder, "updating_db", this.UpdatingDb);
+            if (this.Error != null)
             {
                 builder.Append("error: ");
-                builder.AppendLine(this.error);
+                builder.AppendLine(this.Error);
             }
 
             return builder.ToString();
         }
 
-        private static void appendInt(StringBuilder builder, string name, int value)
+        private static void AppendInt(StringBuilder builder, string name, int value)
         {
             if (value < 0)
                 return;
@@ -240,7 +229,7 @@ namespace MpcNET
             builder.AppendLine();
         }
 
-        private static void appendBool(StringBuilder builder, string name, bool value)
+        private static void AppendBool(StringBuilder builder, string name, bool value)
         {
             builder.Append(name);
             builder.Append(": ");

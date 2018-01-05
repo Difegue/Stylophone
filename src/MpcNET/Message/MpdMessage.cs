@@ -6,12 +6,6 @@ using Newtonsoft.Json;
 
 namespace MpcNET.Message
 {
-    public interface IMpdMessage<T>
-    {
-        IMpdRequest<T> Request { get; }
-        IMpdResponse<T> Response { get; }
-    }
-
     [DebuggerDisplay("Request: {Request.Command.Value} | Response Status: {Response.State.Status}")]
     public class MpdMessage<T> : IMpdMessage<T>
     {
@@ -30,7 +24,10 @@ namespace MpcNET.Message
         }
 
         public IMpdRequest<T> Request { get; }
+
         public IMpdResponse<T> Response { get; }
+
+        public bool IsResponseValid => this.Response.State.Status == "OK";
 
         private IList<KeyValuePair<string, string>> GetValuesFromResponse()
         {

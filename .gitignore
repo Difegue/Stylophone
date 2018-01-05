@@ -14,3 +14,5 @@
 /src/MpcNET.sln.DotSettings.user
 /src/MpcNET.Test/MpcNET.Test.csproj.DotSettings
 /src/MpcNET/MpcNET.csproj.DotSettings
+/.vs
+*.user
