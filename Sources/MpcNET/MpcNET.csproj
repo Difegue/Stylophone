@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MpcNET</AssemblyName>
+    <PackageId>MpcNET</PackageId>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>MpcNET</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\MpcNET.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\MpcNET.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="MpcNET.csproj.DotSettings" />
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Commands\StatusCommandFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Sundew.Base" Version="3.1.0-pre013" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+  </ItemGroup>
+
+</Project>

@@ -16,3 +16,7 @@
 /src/MpcNET/MpcNET.csproj.DotSettings
 /.vs
 *.user
+/Sources/.vs/MpcNET/v15
+/Sources/MpcNET/bin/Debug/netstandard2.0
+/Sources/MpcNET/obj
+/Sources/MpcNET.Test/obj
