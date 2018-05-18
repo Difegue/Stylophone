@@ -1,16 +1,16 @@
-using MpcNET.Message;
-
 namespace MpcNET.Test
 {
+    using MpcNET.Message;
+
     public static class MpdMessageExtension
     {
         public static bool HasSuccessResponse<T>(this IMpdMessage<T> message)
         {
-            return message.Response.State.Connected &&
-                   message.Response.State.Status == "OK" &&
-                   !message.Response.State.Error &&
-                   message.Response.State.ErrorMessage == string.Empty &&
-                   message.Response.State.MpdError == string.Empty;
+            return message.Response.Result.Connected &&
+                   message.Response.Result.Status == "OK" &&
+                   !message.Response.Result.Error &&
+                   message.Response.Result.ErrorMessage == string.Empty &&
+                   message.Response.Result.MpdError == string.Empty;
         }
     }
 }

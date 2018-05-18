@@ -1,8 +1,8 @@
-﻿using System;
-using MpcNET.Message;
-
-namespace MpcNET.Test
+﻿namespace MpcNET.Test
 {
+    using System;
+    using MpcNET.Message;
+
     internal static class TestOutput
     {
         internal static void WriteLine(string value)

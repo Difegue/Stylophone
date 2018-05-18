@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CurrentPlaylistCommandFactory.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="CurrentPlaylistCommandFactory.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -11,12 +11,12 @@ namespace MpcNET.Commands
     using MpcNET.Types;
 
     /// <summary>
-    /// https://www.musicpd.org/doc/protocol/queue.html
+    /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
     public class CurrentPlaylistCommandFactory : ICurrentPlaylistCommandFactory
     {
         /// <summary>
-        /// Command: add
+        /// Command: add.
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <returns>An <see cref="AddCommand"/>.</returns>
@@ -26,7 +26,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: addid
+        /// Command: addid.
         /// </summary>
         /// <param name="songPath">The song path.</param>
         /// <returns>An <see cref="AddIdCommand"/>.</returns>
@@ -36,7 +36,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: clear
+        /// Command: clear.
         /// </summary>
         /// <returns>An <see cref="ClearCommand"/>.</returns>
         public IMpcCommand<string> Clear()
@@ -45,7 +45,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: playlist
+        /// Command: playlist.
         /// </summary>
         /// <returns>A <see cref="PlaylistCommand"/>.</returns>
         public IMpcCommand<IEnumerable<IMpdFile>> GetAllSongsInfo()
@@ -54,7 +54,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: delete
+        /// Command: delete.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns>A <see cref="DeleteCommand" />.</returns>
@@ -64,7 +64,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: deleteid
+        /// Command: deleteid.
         /// </summary>
         /// <param name="songId">The song identifier.</param>
         /// <returns>A <see cref="DeleteIdCommand"/>.</returns>
@@ -74,7 +74,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: playlistid
+        /// Command: playlistid.
         /// </summary>
         /// <param name="songId">The song identifier.</param>
         /// <returns>A <see cref="PlaylistIdCommand" />.</returns>
@@ -84,7 +84,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: playlistinfo
+        /// Command: playlistinfo.
         /// </summary>
         /// <returns>A <see cref="PlaylistInfoCommand" />.</returns>
         public IMpcCommand<IEnumerable<IMpdFile>> GetAllSongMetadata()

@@ -20,3 +20,5 @@
 /Sources/MpcNET/bin/Debug/netstandard2.0
 /Sources/MpcNET/obj
 /Sources/MpcNET.Test/obj
+/Sources/MpcNET/bin
+/Sources/MpcNET.Test/bin/Debug/netcoreapp2.0

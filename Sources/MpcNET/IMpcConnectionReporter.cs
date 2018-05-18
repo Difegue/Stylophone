@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMpcConnectionObserver.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="IMpcConnectionReporter.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace MpcNET
     /// <summary>
     /// Interface for implementing an observer for <see cref="MpcConnection"/>.
     /// </summary>
-    public interface IMpcConnectionObserver
+    public interface IMpcConnectionReporter
     {
         /// <summary>
         /// Called when connecting.

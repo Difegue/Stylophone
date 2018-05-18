@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlaylistIdCommand.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="PlaylistIdCommand.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------

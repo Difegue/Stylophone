@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MpcConnection.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="MpcConnection.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace MpcNET
     {
         private static readonly Encoding Encoding = new UTF8Encoding();
         private readonly ICommandFactory commandFactory;
-        private readonly IMpcConnectionObserver mpcConnectionObserver;
+        private readonly IMpcConnectionReporter mpcConnectionReporter;
         private readonly IPEndPoint server;
 
         private TcpClient tcpClient;
@@ -40,11 +40,11 @@ namespace MpcNET
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="commandFactory">The command factory.</param>
-        /// <param name="mpcConnectionObserver">The MPC connection logger.</param>
-        public MpcConnection(IPEndPoint server, ICommandFactory commandFactory = null, IMpcConnectionObserver mpcConnectionObserver = null)
+        /// <param name="mpcConnectionReporter">The MPC connection logger.</param>
+        public MpcConnection(IPEndPoint server, ICommandFactory commandFactory = null, IMpcConnectionReporter mpcConnectionReporter = null)
         {
             this.commandFactory = commandFactory ?? new CommandFactory();
-            this.mpcConnectionObserver = mpcConnectionObserver;
+            this.mpcConnectionReporter = mpcConnectionReporter;
             this.ClearConnectionFields();
             this.server = server ?? throw new ArgumentNullException("Server IPEndPoint not set.", nameof(server));
         }
@@ -106,7 +106,7 @@ namespace MpcNET
             IReadOnlyList<string> response = new List<string>();
             var sendAttempter = new Attempter(3);
             var commandText = command.Serialize();
-            this.mpcConnectionObserver?.Sending(commandText);
+            this.mpcConnectionReporter?.Sending(commandText);
             while (sendAttempter.Attempt())
             {
                 try
@@ -129,9 +129,9 @@ namespace MpcNET
                 catch (Exception exception)
                 {
                     lastException = exception;
-                    this.mpcConnectionObserver?.SendException(commandText, sendAttempter.CurrentAttempt, exception);
+                    this.mpcConnectionReporter?.SendException(commandText, sendAttempter.CurrentAttempt, exception);
                     await this.ReconnectAsync(true);
-                    this.mpcConnectionObserver?.RetrySend(commandText, sendAttempter.CurrentAttempt);
+                    this.mpcConnectionReporter?.RetrySend(commandText, sendAttempter.CurrentAttempt);
                 }
             }
 
@@ -186,14 +186,14 @@ namespace MpcNET
             var connectAttempter = new Attempter(3);
             while (connectAttempter.Attempt())
             {
-                this.mpcConnectionObserver?.Connecting(isReconnect, connectAttempter.CurrentAttempt);
+                this.mpcConnectionReporter?.Connecting(isReconnect, connectAttempter.CurrentAttempt);
                 await this.DisconnectAsync(false);
 
                 this.tcpClient = new TcpClient();
                 await this.tcpClient.ConnectAsync(this.server.Address, this.server.Port);
                 if (this.tcpClient.Connected)
                 {
-                    this.mpcConnectionObserver?.ConnectionAccepted(isReconnect, connectAttempter.CurrentAttempt);
+                    this.mpcConnectionReporter?.ConnectionAccepted(isReconnect, connectAttempter.CurrentAttempt);
                     break;
                 }
             }
@@ -209,7 +209,7 @@ namespace MpcNET
                 }
 
                 this.version = firstLine.Substring(Constants.FirstLinePrefix.Length);
-                this.mpcConnectionObserver?.Connected(isReconnect, connectAttempter.CurrentAttempt, firstLine);
+                this.mpcConnectionReporter?.Connected(isReconnect, connectAttempter.CurrentAttempt, firstLine);
             }
         }
 
@@ -222,7 +222,7 @@ namespace MpcNET
                 do
                 {
                     responseLine = await reader.ReadLineAsync();
-                    this.mpcConnectionObserver.ReadResponse(responseLine);
+                    this.mpcConnectionReporter.ReadResponse(responseLine);
                     if (responseLine == null)
                     {
                         break;
@@ -238,14 +238,14 @@ namespace MpcNET
 
         private Task DisconnectAsync(bool isExplicitDisconnect)
         {
-            this.mpcConnectionObserver?.Disconnecting(isExplicitDisconnect);
+            this.mpcConnectionReporter?.Disconnecting(isExplicitDisconnect);
             if (this.tcpClient == null)
             {
                 return Task.CompletedTask;
             }
 
             this.ClearConnectionFields();
-            this.mpcConnectionObserver?.Disconnected(isExplicitDisconnect);
+            this.mpcConnectionReporter?.Disconnected(isExplicitDisconnect);
             return Task.CompletedTask;
         }
 

@@ -1,25 +1,25 @@
-using System;
-using System.Net;
-using System.Threading.Tasks;
-
 namespace MpcNET.Test
 {
+    using System;
+    using System.Net;
+    using System.Threading.Tasks;
+
     public class MpcMock : IDisposable
     {
         public MpcMock()
         {
             var mpdEndpoint = new IPEndPoint(IPAddress.Loopback, 6600);
-            Client = new Mpc(mpdEndpoint);
+            this.Client = new MpcConnection(mpdEndpoint);
 
-            var connected = Task.Run(async () => await Client.ConnectAsync()).Result;
-            TestOutput.WriteLine($"Connected to MPD : {connected}; Version: {Client.Version}");
+            Task.Run(async () => await this.Client.ConnectAsync()).Wait();
+            TestOutput.WriteLine($"Connected to MPD Version: {this.Client.Version}");
         }
 
-        public Mpc Client { get; }
+        public MpcConnection Client { get; }
 
         public void Dispose()
         {
-            Client?.DisconnectAsync().GetAwaiter().GetResult();
+            this.Client?.DisconnectAsync().GetAwaiter().GetResult();
             TestOutput.WriteLine($"Disconnected from MPD.");
         }
     }

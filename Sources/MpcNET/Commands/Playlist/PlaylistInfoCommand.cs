@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlaylistInfoCommand.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="PlaylistInfoCommand.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -10,7 +10,7 @@ namespace MpcNET.Commands.Playlist
     using MpcNET.Types;
 
     /// <summary>
-    /// Displays a list of all songs in the playlist,
+    /// Displays a list of all songs in the playlist.
     /// </summary>
     internal class PlaylistInfoCommand : IMpcCommand<IEnumerable<IMpdFile>>
     {

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ListAllCommand.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="ListAllCommand.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ namespace MpcNET.Commands.Database
         {
             var rootDirectory = new List<MpdDirectory>
             {
-                new MpdDirectory("/") // Add by default the root directory
+                new MpdDirectory("/"), // Add by default the root directory
             };
 
             foreach (var line in response)

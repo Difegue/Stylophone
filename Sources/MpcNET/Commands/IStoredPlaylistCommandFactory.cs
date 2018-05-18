@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IStoredPlaylistCommandFactory.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="IStoredPlaylistCommandFactory.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -16,28 +16,28 @@ namespace MpcNET.Commands
     public interface IStoredPlaylistCommandFactory
     {
         /// <summary>
-        /// Command: load
+        /// Command: load.
         /// </summary>
         /// <param name="playlistName">Name of the playlist.</param>
         /// <returns>A <see cref="LoadCommand" />.</returns>
         IMpcCommand<string> Load(string playlistName);
 
         /// <summary>
-        /// Command: listplaylist
+        /// Command: listplaylist.
         /// </summary>
         /// <param name="playlistName">Name of the playlist.</param>
         /// <returns>A <see cref="ListPlaylistCommand" />.</returns>
         IMpcCommand<IEnumerable<IMpdFilePath>> GetContent(string playlistName);
 
         /// <summary>
-        /// Command: listplaylistinfo
+        /// Command: listplaylistinfo.
         /// </summary>
         /// <param name="playlistName">Name of the playlist.</param>
         /// <returns>A <see cref="ListPlaylistInfoCommand" />.</returns>
         IMpcCommand<IEnumerable<IMpdFile>> GetContentWithMetadata(string playlistName);
 
         /// <summary>
-        /// Command: listplaylists
+        /// Command: listplaylists.
         /// </summary>
         /// <returns>A <see cref="ListPlaylistsCommand" />.</returns>
         IMpcCommand<IEnumerable<MpdPlaylist>> GetAll();

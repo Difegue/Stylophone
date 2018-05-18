@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MpdFile.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="MpdFile.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -187,7 +187,7 @@ namespace MpcNET.Types
             return new MpdFile(path, pos: pos);
         }
 
-        internal static(IMpdFile mpdFile, int index) Create(
+        internal static (IMpdFile mpdFile, int index) Create(
             IReadOnlyList<KeyValuePair<string, string>> response,
             int startIndex)
         {
@@ -334,7 +334,7 @@ namespace MpcNET.Types
             var mpdFiles = new List<IMpdFile>();
             for (var index = 0; index < response.Count; index++)
             {
-                var(mpdFile, lastIndex) = Create(response, index);
+                var (mpdFile, lastIndex) = Create(response, index);
                 if (mpdFile != null)
                 {
                     mpdFiles.Add(mpdFile);

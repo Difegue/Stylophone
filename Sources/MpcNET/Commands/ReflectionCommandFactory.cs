@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionCommandFactory.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="ReflectionCommandFactory.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace MpcNET.Commands
     using MpcNET.Types;
 
     /// <summary>
-    /// https://www.musicpd.org/doc/protocol/reflection_commands.html
+    /// https://www.musicpd.org/doc/protocol/reflection_commands.html.
     /// </summary>
     public class ReflectionCommandFactory : IReflectionCommandFactory
     {

@@ -1,13 +1,13 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FindTags.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="FindTags.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace MpcNET.Tags
 {
     /// <summary>
-    /// https://www.musicpd.org/doc/protocol/database.html : find {TYPE} {WHAT} [...] [window START:END]
+    /// https://www.musicpd.org/doc/protocol/database.html : find {TYPE} {WHAT} [...] [window START:END].
     /// </summary>
     public class FindTags
     {

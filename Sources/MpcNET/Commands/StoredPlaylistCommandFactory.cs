@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StoredPlaylistCommandFactory.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="StoredPlaylistCommandFactory.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -11,12 +11,12 @@ namespace MpcNET.Commands
     using MpcNET.Types;
 
     /// <summary>
-    /// https://www.musicpd.org/doc/protocol/playlist_files.html
+    /// https://www.musicpd.org/doc/protocol/playlist_files.html.
     /// </summary>
     public class StoredPlaylistCommandFactory : IStoredPlaylistCommandFactory
     {
         /// <summary>
-        /// Command: load
+        /// Command: load.
         /// </summary>
         /// <param name="playlistName">Name of the playlist.</param>
         /// <returns>A <see cref="LoadCommand" />.</returns>
@@ -26,7 +26,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: listplaylist
+        /// Command: listplaylist.
         /// </summary>
         /// <param name="playlistName">Name of the playlist.</param>
         /// <returns>A <see cref="ListPlaylistCommand" />.</returns>
@@ -36,7 +36,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: listplaylistinfo
+        /// Command: listplaylistinfo.
         /// </summary>
         /// <param name="playlistName">Name of the playlist.</param>
         /// <returns>A <see cref="ListPlaylistInfoCommand" />.</returns>
@@ -46,7 +46,7 @@ namespace MpcNET.Commands
         }
 
         /// <summary>
-        /// Command: listplaylists
+        /// Command: listplaylists.
         /// </summary>
         /// <returns>A <see cref="ListPlaylistsCommand" />.</returns>
         public IMpcCommand<IEnumerable<MpdPlaylist>> GetAll()

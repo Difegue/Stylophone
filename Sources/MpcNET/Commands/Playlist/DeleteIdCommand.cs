@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeleteIdCommand.cs" company="Hukano">
-// Copyright (c) Hukano. All rights reserved.
+// <copyright file="DeleteIdCommand.cs" company="MpcNET">
+// Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace MpcNET.Commands.Playlist
     using System.Collections.Generic;
 
     /// <summary>
-    /// Deletes the song SONGID from the playlist
+    /// Deletes the song SONGID from the playlist.
     /// </summary>
     internal class DeleteIdCommand : IMpcCommand<string>
     {

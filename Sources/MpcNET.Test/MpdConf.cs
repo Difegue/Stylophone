@@ -1,8 +1,8 @@
-using System.IO;
-using System.Text;
-
 namespace MpcNET.Test
 {
+    using System.IO;
+    using System.Text;
+
     public class MpdConf
     {
         private const string MPD_CONF_FILE = "mpd.conf";

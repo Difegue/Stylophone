@@ -1,24 +1,24 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-
 namespace MpcNET.Test
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Runtime.InteropServices;
+
     public class MpdMock : IDisposable
     {
         public void Start()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                SendCommand("/usr/bin/pkill mpd");
+                this.SendCommand("/usr/bin/pkill mpd");
             }
 
             MpdConf.Create(Path.Combine(AppContext.BaseDirectory, "Server"));
 
-            var server = GetServer();
+            var server = this.GetServer();
 
-            Process = new Process
+            this.Process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -32,15 +32,15 @@ namespace MpcNET.Test
                 }
             };
 
-            TestOutput.WriteLine($"Starting Server: {Process.StartInfo.FileName} {Process.StartInfo.Arguments}");
+            TestOutput.WriteLine($"Starting Server: {this.Process.StartInfo.FileName} {this.Process.StartInfo.Arguments}");
 
-            Process.Start();
-            TestOutput.WriteLine($"Output: {Process.StandardOutput.ReadToEnd()}");
-            TestOutput.WriteLine($"Error: {Process.StandardError.ReadToEnd()}");
+            this.Process.Start();
+            TestOutput.WriteLine($"Output: {this.Process.StandardOutput.ReadToEnd()}");
+            TestOutput.WriteLine($"Error: {this.Process.StandardError.ReadToEnd()}");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                SendCommand("/bin/netstat -ntpl");
+                this.SendCommand("/bin/netstat -ntpl");
             }
         }
 
@@ -87,8 +87,8 @@ namespace MpcNET.Test
 
         public void Dispose()
         {
-            Process?.Kill();
-            Process?.Dispose();
+            this.Process?.Kill();
+            this.Process?.Dispose();
             TestOutput.WriteLine("Server Stopped.");
         }
 
@@ -106,9 +106,9 @@ namespace MpcNET.Test
 
             private Server(string fileName, string workingDirectory, string arguments)
             {
-                FileName = fileName;
-                WorkingDirectory = workingDirectory;
-                Arguments = arguments;
+                this.FileName = fileName;
+                this.WorkingDirectory = workingDirectory;
+                this.Arguments = arguments;
             }
 
             public string FileName { get; }
