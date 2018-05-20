@@ -4,14 +4,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace MpcNET
 {
     using System;
+    using Sundew.Base.Reporting;
 
     /// <summary>
     /// Interface for implementing an observer for <see cref="MpcConnection"/>.
     /// </summary>
-    public interface IMpcConnectionReporter
+    public interface IMpcConnectionReporter : IReporter
     {
         /// <summary>
         /// Called when connecting.

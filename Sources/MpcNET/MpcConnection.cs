@@ -36,12 +36,22 @@ namespace MpcNET
         private string version;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MpcConnection"/> class.
+        /// </summary>
+        /// <param name="server">The server.</param>
+        /// <param name="mpcConnectionReporter">The MPC connection reporter.</param>
+        public MpcConnection(IPEndPoint server, IMpcConnectionReporter mpcConnectionReporter = null)
+            : this(server, null, mpcConnectionReporter)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MpcConnection" /> class.
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="commandFactory">The command factory.</param>
         /// <param name="mpcConnectionReporter">The MPC connection logger.</param>
-        public MpcConnection(IPEndPoint server, ICommandFactory commandFactory = null, IMpcConnectionReporter mpcConnectionReporter = null)
+        public MpcConnection(IPEndPoint server, ICommandFactory commandFactory, IMpcConnectionReporter mpcConnectionReporter = null)
         {
             this.commandFactory = commandFactory ?? new CommandFactory();
             this.mpcConnectionReporter = mpcConnectionReporter;
