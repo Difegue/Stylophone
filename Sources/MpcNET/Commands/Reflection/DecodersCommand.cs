@@ -11,11 +11,25 @@ namespace MpcNET.Commands.Reflection
 
     /// <summary>
     /// Print a list of decoder plugins, followed by their supported suffixes and MIME types.
+    /// https://www.musicpd.org/doc/protocol/reflection_commands.html.
     /// </summary>
-    internal class DecodersCommand : IMpcCommand<IEnumerable<MpdDecoderPlugin>>
+    public class DecodersCommand : IMpcCommand<IEnumerable<MpdDecoderPlugin>>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "decoders";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<MpdDecoderPlugin> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             var result = new List<MpdDecoderPlugin>();

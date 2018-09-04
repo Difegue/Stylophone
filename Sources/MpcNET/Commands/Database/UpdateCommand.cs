@@ -8,15 +8,37 @@ namespace MpcNET.Commands.Database
 {
     using System.Collections.Generic;
 
-    internal class UpdateCommand : IMpcCommand<string>
+    /// <summary>
+    /// Updates the specified URI.
+    /// https://www.musicpd.org/doc/protocol/database.html.
+    /// </summary>
+    public class UpdateCommand : IMpcCommand<string>
     {
         private readonly string uri;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateCommand"/> class.
+        /// </summary>
+        public UpdateCommand()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateCommand"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
         public UpdateCommand(string uri)
         {
             this.uri = uri;
         }
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize()
         {
             if (string.IsNullOrEmpty(this.uri))
@@ -38,6 +60,13 @@ namespace MpcNET.Commands.Database
             return string.Join(" ", "update", newUri);
         }
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return string.Join(", ", response);

@@ -10,11 +10,25 @@ namespace MpcNET.Commands.Playlist
 
     /// <summary>
     /// Clears the current playlist.
+    /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    internal class ClearCommand : IMpcCommand<string>
+    public class ClearCommand : IMpcCommand<string>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "clear";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return string.Join(", ", response);

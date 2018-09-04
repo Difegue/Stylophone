@@ -10,7 +10,7 @@ namespace MpcNET.Test
         [TestMethod]
         public async Task CommandsTest()
         {
-            var response = await Mpc.SendAsync(commands => commands.Reflection.Commands());
+            var response = await Mpc.SendAsync(new Commands.Reflection.CommandsCommand());
 
             TestOutput.WriteLine($"CommandsTest (commands: {response.Response.Content.Count()}) Result:");
             TestOutput.WriteLine(response);
@@ -28,7 +28,7 @@ namespace MpcNET.Test
         [TestMethod]
         public async Task TagTypesTest()
         {
-            var response = await Mpc.SendAsync(commands => commands.Reflection.TagTypes());
+            var response = await Mpc.SendAsync(new Commands.Reflection.TagTypesCommand());
 
             TestOutput.WriteLine("TagTypesTest Result:");
             TestOutput.WriteLine(response);
@@ -39,7 +39,7 @@ namespace MpcNET.Test
         [TestMethod]
         public async Task UrlHandlersTest()
         {
-            var response = await Mpc.SendAsync(commands => commands.Reflection.UrlHandlers());
+            var response = await Mpc.SendAsync(new Commands.Reflection.UrlHandlersCommand());
 
             TestOutput.WriteLine($"UrlHandlersTest (handlers: {response.Response.Content.Count()}) Result:");
             TestOutput.WriteLine(response);
@@ -55,7 +55,7 @@ namespace MpcNET.Test
         [TestMethod]
         public async Task DecodersTest()
         {
-            var response = await Mpc.SendAsync(commands => commands.Reflection.Decoders());
+            var response = await Mpc.SendAsync(new Commands.Reflection.DecodersCommand());
 
             TestOutput.WriteLine($"DecodersTest (decoders: {response.Response.Content.Count()}) Result:");
             TestOutput.WriteLine(response);

@@ -11,11 +11,25 @@ namespace MpcNET.Commands.Reflection
 
     /// <summary>
     /// Gets a list of available URL handlers.
+    /// https://www.musicpd.org/doc/protocol/reflection_commands.html.
     /// </summary>
-    internal class UrlHandlersCommand : IMpcCommand<IEnumerable<string>>
+    public class UrlHandlersCommand : IMpcCommand<IEnumerable<string>>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "urlhandlers";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<string> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             var result = response.Where(item => item.Key.Equals("handler")).Select(item => item.Value);

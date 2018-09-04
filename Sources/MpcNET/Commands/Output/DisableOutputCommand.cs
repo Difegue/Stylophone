@@ -10,18 +10,36 @@ namespace MpcNET.Commands.Output
 
     /// <summary>
     /// Turns an output off.
+    /// https://www.musicpd.org/doc/protocol/output_commands.html.
     /// </summary>
-    internal class DisableOutputCommand : IMpcCommand<string>
+    public class DisableOutputCommand : IMpcCommand<string>
     {
         private readonly int outputId;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisableOutputCommand"/> class.
+        /// </summary>
+        /// <param name="outputId">The output identifier.</param>
         public DisableOutputCommand(int outputId)
         {
             this.outputId = outputId;
         }
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => string.Join(" ", "disableoutput", this.outputId);
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             // Response should be empty.

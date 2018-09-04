@@ -29,12 +29,12 @@
 
         private static async Task SendCommand(string command)
         {
-            var response = await Mpc.SendAsync(_ => new PassthroughCommand(command));
+            var response = await Mpc.SendAsync(new PassthroughCommand(command));
             TestOutput.WriteLine(response);
         }
         private static async Task SendCommand<T>(IMpcCommand<T> command)
         {
-            var response = await Mpc.SendAsync(_ => command);
+            var response = await Mpc.SendAsync(command);
             TestOutput.WriteLine(response);
         }
 

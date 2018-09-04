@@ -12,18 +12,36 @@ namespace MpcNET.Commands.Playlist
 
     /// <summary>
     /// Lists the songs in the playlist.
+    /// https://www.musicpd.org/doc/protocol/playlist_files.html.
     /// </summary>
-    internal class ListPlaylistCommand : IMpcCommand<IEnumerable<IMpdFilePath>>
+    public class ListPlaylistCommand : IMpcCommand<IEnumerable<IMpdFilePath>>
     {
         private readonly string playlistName;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListPlaylistCommand"/> class.
+        /// </summary>
+        /// <param name="playlistName">Name of the playlist.</param>
         public ListPlaylistCommand(string playlistName)
         {
             this.playlistName = playlistName;
         }
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => string.Join(" ", "listplaylist", $"\"{this.playlistName}\"");
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<IMpdFilePath> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             var results = response.Where(line => line.Key.Equals("file")).Select(line => new MpdFile(line.Value));

@@ -11,11 +11,25 @@ namespace MpcNET.Commands.Playlist
 
     /// <summary>
     /// Displays a list of all songs in the playlist.
+    /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    internal class PlaylistInfoCommand : IMpcCommand<IEnumerable<IMpdFile>>
+    public class PlaylistInfoCommand : IMpcCommand<IEnumerable<IMpdFile>>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "playlistinfo";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<IMpdFile> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return MpdFile.CreateList(response);

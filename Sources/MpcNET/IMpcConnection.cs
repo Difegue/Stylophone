@@ -38,8 +38,10 @@ namespace MpcNET
         /// Sends the command asynchronously.
         /// </summary>
         /// <typeparam name="TResponse">The response type.</typeparam>
-        /// <param name="commandSelector">The command selector.</param>
-        /// <returns>The send task.</returns>
-        Task<IMpdMessage<TResponse>> SendAsync<TResponse>(Func<ICommandFactory, IMpcCommand<TResponse>> commandSelector);
+        /// <param name="mpcCommand">The command selector.</param>
+        /// <returns>
+        /// The send task.
+        /// </returns>
+        Task<IMpdMessage<TResponse>> SendAsync<TResponse>(IMpcCommand<TResponse> mpcCommand);
     }
 }

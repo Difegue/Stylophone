@@ -26,34 +26,19 @@ namespace MpcNET
     public class MpcConnection : IMpcConnection
     {
         private static readonly Encoding Encoding = new UTF8Encoding();
-        private readonly ICommandFactory commandFactory;
         private readonly IMpcConnectionReporter mpcConnectionReporter;
         private readonly IPEndPoint server;
 
         private TcpClient tcpClient;
         private NetworkStream networkStream;
 
-        private string version;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MpcConnection"/> class.
-        /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="mpcConnectionReporter">The MPC connection reporter.</param>
-        public MpcConnection(IPEndPoint server, IMpcConnectionReporter mpcConnectionReporter = null)
-            : this(server, null, mpcConnectionReporter)
-        {
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MpcConnection" /> class.
         /// </summary>
         /// <param name="server">The server.</param>
-        /// <param name="commandFactory">The command factory.</param>
         /// <param name="mpcConnectionReporter">The MPC connection logger.</param>
-        public MpcConnection(IPEndPoint server, ICommandFactory commandFactory, IMpcConnectionReporter mpcConnectionReporter = null)
+        public MpcConnection(IPEndPoint server, IMpcConnectionReporter mpcConnectionReporter = null)
         {
-            this.commandFactory = commandFactory ?? new CommandFactory();
             this.mpcConnectionReporter = mpcConnectionReporter;
             this.ClearConnectionFields();
             this.server = server ?? throw new ArgumentNullException("Server IPEndPoint not set.", nameof(server));
@@ -62,7 +47,7 @@ namespace MpcNET
         /// <summary>
         /// Gets the version.
         /// </summary>
-        public string Version => this.version;
+        public string Version { get; private set; }
 
         /// <summary>
         /// Connects asynchronously.
@@ -95,19 +80,18 @@ namespace MpcNET
         /// Sends the command asynchronously.
         /// </summary>
         /// <typeparam name="TResponse">The response type.</typeparam>
-        /// <param name="commandSelector">The command selector.</param>
+        /// <param name="mpcCommand">The MPC command.</param>
         /// <returns>
         /// The send task.
         /// </returns>
-        public async Task<IMpdMessage<TResponse>> SendAsync<TResponse>(Func<ICommandFactory, IMpcCommand<TResponse>> commandSelector)
+        public async Task<IMpdMessage<TResponse>> SendAsync<TResponse>(IMpcCommand<TResponse> mpcCommand)
         {
             if (this.tcpClient == null)
             {
                 await this.ReconnectAsync(true);
             }
 
-            var command = commandSelector?.Invoke(this.commandFactory);
-            if (command == null)
+            if (mpcCommand == null)
             {
                 throw new CommandNullException();
             }
@@ -115,7 +99,7 @@ namespace MpcNET
             Exception lastException = null;
             IReadOnlyList<string> response = new List<string>();
             var sendAttempter = new Attempter(3);
-            var commandText = command.Serialize();
+            var commandText = mpcCommand.Serialize();
             this.mpcConnectionReporter?.Sending(commandText);
             while (sendAttempter.Attempt())
             {
@@ -155,10 +139,10 @@ namespace MpcNET
                 {
                 }
 
-                return new ErrorMpdMessage<TResponse>(command, new ErrorMpdResponse<TResponse>(lastException));
+                return new ErrorMpdMessage<TResponse>(mpcCommand, new ErrorMpdResponse<TResponse>(lastException));
             }
 
-            return new MpdMessage<TResponse>(command, true, response);
+            return new MpdMessage<TResponse>(mpcCommand, true, response);
         }
 
         /// <summary>
@@ -218,7 +202,7 @@ namespace MpcNET
                     throw new MpcConnectException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\".");
                 }
 
-                this.version = firstLine.Substring(Constants.FirstLinePrefix.Length);
+                this.Version = firstLine.Substring(Constants.FirstLinePrefix.Length);
                 this.mpcConnectionReporter?.Connected(isReconnect, connectAttempter.CurrentAttempt, firstLine);
             }
         }
@@ -263,7 +247,7 @@ namespace MpcNET
         {
             this.networkStream?.Dispose();
             this.tcpClient?.Dispose();
-            this.version = string.Empty;
+            this.Version = string.Empty;
             this.tcpClient = null;
             this.networkStream = null;
         }

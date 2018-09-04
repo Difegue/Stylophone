@@ -11,18 +11,36 @@ namespace MpcNET.Commands.Playlist
 
     /// <summary>
     /// Displays song ID in the playlist.
+    /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    internal class PlaylistIdCommand : IMpcCommand<IEnumerable<IMpdFile>>
+    public class PlaylistIdCommand : IMpcCommand<IEnumerable<IMpdFile>>
     {
         private readonly int songId;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistIdCommand"/> class.
+        /// </summary>
+        /// <param name="songId">The song identifier.</param>
         public PlaylistIdCommand(int songId)
         {
             this.songId = songId;
         }
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => string.Join(" ", new[] { "playlistid" }, this.songId);
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<IMpdFile> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return MpdFile.CreateList(response);

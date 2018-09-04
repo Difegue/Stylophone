@@ -10,7 +10,11 @@ namespace MpcNET.Commands.Status
     using System.Collections.Generic;
     using System.Diagnostics;
 
-    internal class StatusCommand : IMpcCommand<MpdStatus>
+    /// <summary>
+    /// Gets the status.
+    /// https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+    /// </summary>
+    public class StatusCommand : IMpcCommand<MpdStatus>
     {
         private const string VolumeText = "volume";
         private const string RepeatText = "repeat";
@@ -33,8 +37,21 @@ namespace MpcNET.Commands.Status
         private const string MixrampDbText = "mixrampdb";
         private const string UpdatingDbText = "updating_db";
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "status";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public MpdStatus Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             int volume = -1;

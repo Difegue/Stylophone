@@ -13,11 +13,25 @@ namespace MpcNET.Commands.Reflection
 
     /// <summary>
     /// Shows a list of available song metadata.
+    /// https://www.musicpd.org/doc/protocol/reflection_commands.html.
     /// </summary>
-    internal class TagTypesCommand : IMpcCommand<IEnumerable<string>>
+    public class TagTypesCommand : IMpcCommand<IEnumerable<string>>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "tagtypes";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<string> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             var result = response.Where(item => item.Key.Equals("tagtype")).Select(item => item.Value);

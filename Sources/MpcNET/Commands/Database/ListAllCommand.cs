@@ -12,11 +12,25 @@ namespace MpcNET.Commands.Database
 
     /// <summary>
     /// Lists all songs and directories in URI.
+    /// https://www.musicpd.org/doc/protocol/database.html.
     /// </summary>
-    internal class ListAllCommand : IMpcCommand<IEnumerable<MpdDirectory>>
+    public class ListAllCommand : IMpcCommand<IEnumerable<MpdDirectory>>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "listall";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<MpdDirectory> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             var rootDirectory = new List<MpdDirectory>

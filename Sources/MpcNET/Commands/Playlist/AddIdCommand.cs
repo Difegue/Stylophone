@@ -10,18 +10,36 @@ namespace MpcNET.Commands.Playlist
 
     /// <summary>
     /// Adds a song to the playlist (non-recursive) and returns the song id.
+    /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    internal class AddIdCommand : IMpcCommand<string>
+    public class AddIdCommand : IMpcCommand<string>
     {
         private readonly string uri;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddIdCommand"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
         public AddIdCommand(string uri)
         {
             this.uri = uri;
         }
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => string.Join(" ", "addid", $"\"{this.uri}\"");
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return string.Join(", ", response);

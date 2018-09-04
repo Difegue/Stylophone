@@ -13,7 +13,7 @@
         [DataRow("_My Playlist", 5)]
         public async Task ListPlaylistTest(string playlistName, int numberOfFiles)
         {
-            var response = await Mpc.SendAsync(commands => commands.StoredPlaylist.GetContent(playlistName));
+            var response = await Mpc.SendAsync(new Commands.Playlist.ListPlaylistCommand(playlistName));
 
             TestOutput.WriteLine($"ListPlaylistTest (playlistName: {playlistName}) Result:");
             TestOutput.WriteLine(response);
@@ -27,7 +27,7 @@
         [DataRow("_My Playlist", 5)]
         public async Task ListPlaylistInfoTest(string playlistName, int numberOfFiles)
         {
-            var response = await Mpc.SendAsync(commands => commands.StoredPlaylist.GetContentWithMetadata(playlistName));
+            var response = await Mpc.SendAsync(new Commands.Playlist.ListPlaylistInfoCommand(playlistName));
 
             TestOutput.WriteLine($"ListPlaylistTest (playlistName: {playlistName}) Result:");
             TestOutput.WriteLine(response);
@@ -41,7 +41,7 @@
         [TestMethod]
         public async Task ListPlaylistsTest()
         {
-            var response = await Mpc.SendAsync(commands => commands.StoredPlaylist.GetAll());
+            var response = await Mpc.SendAsync(new Commands.Playlist.ListPlaylistsCommand());
 
             TestOutput.WriteLine($"ListPlaylistsTest Result:");
             TestOutput.WriteLine(response);
@@ -117,57 +117,57 @@
 
         private async Task Check_Empty_Queue()
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.GetAllSongsInfo());
+            var message = await Mpc.SendAsync(new Commands.Playlist.PlaylistCommand());
             Assert.IsTrue(message.HasSuccessResponse());
             Assert.IsFalse(message.Response.Content.Any());
         }
 
         private async Task Load_Playlist(string playlistName)
         {
-            var message = await Mpc.SendAsync(commands => commands.StoredPlaylist.Load(playlistName));
+            var message = await Mpc.SendAsync(new Commands.Playlist.LoadCommand(playlistName));
             Assert.IsTrue(message.HasSuccessResponse());
         }
 
         private async Task Clear_Queue()
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.Clear());
+            var message = await Mpc.SendAsync(new Commands.Playlist.ClearCommand());
             Assert.IsTrue(message.HasSuccessResponse());
         }
 
         private async Task Check_Queue_HasSongs(int nrOfSongs)
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.GetAllSongsInfo());
+            var message = await Mpc.SendAsync(new Commands.Playlist.PlaylistCommand());
             Assert.IsTrue(message.HasSuccessResponse());
             Assert.IsTrue(message.Response.Content.Count() == nrOfSongs);
         }
 
         private async Task Add_Directory(string directory)
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.AddDirectory(directory));
+            var message = await Mpc.SendAsync(new Commands.Playlist.AddCommand(directory));
             Assert.IsTrue(message.HasSuccessResponse());
         }
 
         private async Task Add_File(string file)
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.AddSong(file));
+            var message = await Mpc.SendAsync(new Commands.Playlist.AddIdCommand(file));
             Assert.IsTrue(message.HasSuccessResponse());
         }
 
         private async Task Remove_Position(int position)
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.RemoveSongByPosition(position));
+            var message = await Mpc.SendAsync(new Commands.Playlist.DeleteCommand(position));
             Assert.IsTrue(message.HasSuccessResponse());
         }
 
         private async Task Remove_Id(int songId)
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.RemoveSongById(songId));
+            var message = await Mpc.SendAsync(new Commands.Playlist.DeleteIdCommand(songId));
             Assert.IsTrue(message.HasSuccessResponse());
         }
 
         private async Task<int> Get_Song_Id()
         {
-            var message = await Mpc.SendAsync(commands => commands.CurrentPlaylist.GetAllSongMetadata());
+            var message = await Mpc.SendAsync(new Commands.Playlist.PlaylistInfoCommand());
             return message.Response.Content.Single().Id;
         }
     }

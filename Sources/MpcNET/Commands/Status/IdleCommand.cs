@@ -8,15 +8,29 @@ namespace MpcNET.Commands.Status
 {
     using System.Collections.Generic;
 
-    internal class IdleCommand : IMpcCommand<string>
+    /// <summary>
+    /// Idles mpd until something happens.
+    /// https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+    /// </summary>
+    public class IdleCommand : IMpcCommand<string>
     {
         private readonly string subSystem;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdleCommand"/> class.
+        /// </summary>
+        /// <param name="subSystem">The sub system.</param>
         public IdleCommand(string subSystem)
         {
             this.subSystem = subSystem;
         }
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize()
         {
             if (string.IsNullOrEmpty(this.subSystem))
@@ -27,6 +41,13 @@ namespace MpcNET.Commands.Status
             return "idle " + this.subSystem;
         }
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return string.Join(", ", response);

@@ -11,11 +11,25 @@ namespace MpcNET.Commands.Output
 
     /// <summary>
     /// Shows information about all outputs.
+    /// https://www.musicpd.org/doc/protocol/output_commands.html.
     /// </summary>
-    internal class OutputsCommand : IMpcCommand<IEnumerable<MpdOutput>>
+    public class OutputsCommand : IMpcCommand<IEnumerable<MpdOutput>>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "outputs";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IEnumerable<MpdOutput> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             var result = new List<MpdOutput>();

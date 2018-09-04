@@ -9,10 +9,27 @@ namespace MpcNET.Commands.Status
     using System.Collections.Generic;
     using MpcNET.Types;
 
-    internal class CurrentSongCommand : IMpcCommand<IMpdFile>
+    /// <summary>
+    /// Gets the current song.
+    /// https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+    /// </summary>
+    public class CurrentSongCommand : IMpcCommand<IMpdFile>
     {
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => "currentsong";
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public IMpdFile Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return MpdFile.Create(response, 0).mpdFile;

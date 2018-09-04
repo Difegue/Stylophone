@@ -10,18 +10,36 @@ namespace MpcNET.Commands.Output
 
     /// <summary>
     /// Turns an output on or off, depending on the current state.
+    /// https://www.musicpd.org/doc/protocol/output_commands.html.
     /// </summary>
-    internal class ToggleOutputCommand : IMpcCommand<string>
+    public class ToggleOutputCommand : IMpcCommand<string>
     {
         private readonly int outputId;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ToggleOutputCommand"/> class.
+        /// </summary>
+        /// <param name="outputId">The output identifier.</param>
         public ToggleOutputCommand(int outputId)
         {
             this.outputId = outputId;
         }
 
+        /// <summary>
+        /// Serializes the command.
+        /// </summary>
+        /// <returns>
+        /// The serialize command.
+        /// </returns>
         public string Serialize() => string.Join(" ", "toggleoutput", this.outputId);
 
+        /// <summary>
+        /// Deserializes the specified response text pairs.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>
+        /// The deserialized response.
+        /// </returns>
         public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
             return string.Join(", ", response);
