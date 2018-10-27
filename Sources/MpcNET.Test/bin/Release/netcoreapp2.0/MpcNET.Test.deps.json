@@ -11,7 +11,7 @@
           "MSTest.TestAdapter": "1.3.0",
           "MSTest.TestFramework": "1.3.0",
           "Microsoft.NET.Test.Sdk": "15.7.2",
-          "MpcNET.SundewFork": "0.0.1-pre005"
+          "MpcNET.SundewFork": "0.0.1-pre007"
         },
         "runtime": {
           "MpcNET.Test.dll": {}
@@ -989,7 +989,7 @@
           }
         }
       },
-      "MpcNET.SundewFork/0.0.1-pre005": {
+      "MpcNET.SundewFork/0.0.1-pre007": {
         "dependencies": {
           "Newtonsoft.Json": "11.0.2",
           "Sundew.Base": "3.2.0-pre024",
@@ -1504,7 +1504,7 @@
       "path": "system.xml.xpath.xmldocument/4.0.1",
       "hashPath": "system.xml.xpath.xmldocument.4.0.1.nupkg.sha512"
     },
-    "MpcNET.SundewFork/0.0.1-pre005": {
+    "MpcNET.SundewFork/0.0.1-pre007": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

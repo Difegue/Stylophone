@@ -253,6 +253,40 @@
             The deserialized response.
             </returns>
         </member>
+        <member name="T:MpcNET.Commands.Playback.PauseResumeCommand">
+            <summary>
+            Command to pause or resume.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.PauseResumeCommand" /> class.
+            </summary>
+            <param name="pause">if set to <c>true</c> [pause].</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.PauseResumeCommand"/> class.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.Deserialize(System.Collections.Generic.IReadOnlyList{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
         <member name="T:MpcNET.Commands.Playback.PlayCommand">
             <summary>
             Command to start playback.
@@ -303,29 +337,6 @@
             </returns>
         </member>
         <member name="M:MpcNET.Commands.Playback.PlayIdCommand.Deserialize(System.Collections.Generic.IReadOnlyList{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Deserializes the specified response text pairs.
-            </summary>
-            <param name="response">The response.</param>
-            <returns>
-            The deserialized response.
-            </returns>
-        </member>
-        <member name="T:MpcNET.Commands.Playback.PlayPauseCommand">
-            <summary>
-            Command to play or pause.
-            https://www.musicpd.org/doc/protocol/playback_commands.html.
-            </summary>
-        </member>
-        <member name="M:MpcNET.Commands.Playback.PlayPauseCommand.Serialize">
-            <summary>
-            Serializes the command.
-            </summary>
-            <returns>
-            The serialize command.
-            </returns>
-        </member>
-        <member name="M:MpcNET.Commands.Playback.PlayPauseCommand.Deserialize(System.Collections.Generic.IReadOnlyList{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
             <summary>
             Deserializes the specified response text pairs.
             </summary>
