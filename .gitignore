@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -22,3 +22,4 @@
 /Sources/MpcNET.Test/obj
 /Sources/MpcNET/bin
 /Sources/MpcNET.Test/bin/Debug/netcoreapp2.0
+/Sources/.vs
