@@ -232,12 +232,12 @@ namespace MpcNET
 
         private Task DisconnectAsync(bool isExplicitDisconnect)
         {
-            this.mpcConnectionReporter?.Disconnecting(isExplicitDisconnect);
             if (this.tcpClient == null)
             {
                 return Task.CompletedTask;
             }
 
+            this.mpcConnectionReporter?.Disconnecting(isExplicitDisconnect);
             this.ClearConnectionFields();
             this.mpcConnectionReporter?.Disconnected(isExplicitDisconnect);
             return Task.CompletedTask;
