@@ -111,7 +111,7 @@ namespace MpcNET
                         await writer.FlushAsync();
                     }
 
-                    response = await this.ReadResponseAsync();
+                    response = await this.ReadResponseAsync(commandText);
                     if (response.Any())
                     {
                         lastException = null;
@@ -207,7 +207,7 @@ namespace MpcNET
             }
         }
 
-        private async Task<IReadOnlyList<string>> ReadResponseAsync()
+        private async Task<IReadOnlyList<string>> ReadResponseAsync(string commandText)
         {
             var response = new List<string>();
             using (var reader = new StreamReader(this.networkStream, Encoding, true, 512, true))
@@ -216,7 +216,7 @@ namespace MpcNET
                 do
                 {
                     responseLine = await reader.ReadLineAsync();
-                    this.mpcConnectionReporter.ReadResponse(responseLine);
+                    this.mpcConnectionReporter.ReadResponse(responseLine, commandText);
                     if (responseLine == null)
                     {
                         break;

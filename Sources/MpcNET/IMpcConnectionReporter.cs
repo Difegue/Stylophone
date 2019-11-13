@@ -62,7 +62,8 @@ namespace MpcNET
         /// Called when response is read.
         /// </summary>
         /// <param name="responseLine">The response line.</param>
-        void ReadResponse(string responseLine);
+        /// <param name="commandText">The command text.</param>
+        void ReadResponse(string responseLine, string commandText);
 
         /// <summary>
         /// Called when disconnecting.
