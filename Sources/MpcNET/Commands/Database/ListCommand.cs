@@ -7,13 +7,14 @@
 namespace MpcNET.Commands.Database
 {
     using System.Collections.Generic;
+    using System.Linq;
     using MpcNET.Tags;
 
     /// <summary>
     /// Lists the specified tag.
     /// https://www.musicpd.org/doc/protocol/database.html.
     /// </summary>
-    public class ListCommand : IMpcCommand<string>
+    public class ListCommand : IMpcCommand<List<string>>
     {
         private readonly ITag tag;
 
@@ -41,10 +42,9 @@ namespace MpcNET.Commands.Database
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public List<string> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
         {
-            // TODO:
-            return response.ToString();
+            return response.Select(x => x.Value).ToList();
         }
     }
 
