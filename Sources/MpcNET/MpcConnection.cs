@@ -216,7 +216,7 @@ namespace MpcNET
                 do
                 {
                     responseLine = await reader.ReadLineAsync();
-                    this.mpcConnectionReporter.ReadResponse(responseLine, commandText);
+                    this.mpcConnectionReporter?.ReadResponse(responseLine, commandText);
                     if (responseLine == null)
                     {
                         break;
