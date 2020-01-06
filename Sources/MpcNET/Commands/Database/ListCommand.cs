@@ -17,6 +17,8 @@ namespace MpcNET.Commands.Database
     public class ListCommand : IMpcCommand<List<string>>
     {
         private readonly ITag tag;
+        private readonly ITag filterTag;
+        private readonly string filterValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ListCommand"/> class.
@@ -28,12 +30,31 @@ namespace MpcNET.Commands.Database
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ListCommand"/> class.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="filterTag">The filter tag.</param>
+        /// <param name="filterValue">Filter value.</param>
+        public ListCommand(ITag tag, ITag filterTag, string filterValue)
+        {
+            this.tag = tag;
+            this.filterTag = filterTag;
+            this.filterValue = filterValue;
+        }
+
+        /// <summary>
         /// Serializes the command.
         /// </summary>
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => string.Join(" ", "list", this.tag.Value);
+        public string Serialize()
+        {
+            if (this.filterTag == null)
+                return string.Join(" ", "list", this.tag.Value);
+
+            return string.Join(" ", "list", this.tag.Value, this.filterTag.Value, escape(this.filterValue));
+        }
 
         /// <summary>
         /// Deserializes the specified response text pairs.
@@ -46,6 +67,8 @@ namespace MpcNET.Commands.Database
         {
             return response.Select(x => x.Value).ToList();
         }
+
+        private string escape(string value) => string.Format("\"{0}\"", value.Replace("\\", "\\\\").Replace("\"", "\\\""));
     }
 
     // TODO: rescan
