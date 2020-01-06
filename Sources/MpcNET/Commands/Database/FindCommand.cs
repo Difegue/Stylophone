@@ -7,6 +7,7 @@
 namespace MpcNET.Commands.Database
 {
     using System.Collections.Generic;
+    using System.Linq;
     using MpcNET.Tags;
     using MpcNET.Types;
 
@@ -16,8 +17,7 @@ namespace MpcNET.Commands.Database
     /// </summary>
     public class FindCommand : IMpcCommand<IEnumerable<IMpdFile>>
     {
-        private readonly ITag tag;
-        private readonly string searchText;
+        private readonly List<KeyValuePair<ITag, string>> filters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommand"/> class.
@@ -26,8 +26,17 @@ namespace MpcNET.Commands.Database
         /// <param name="searchText">The search text.</param>
         public FindCommand(ITag tag, string searchText)
         {
-            this.tag = tag;
-            this.searchText = searchText;
+            this.filters = new List<KeyValuePair<ITag, string>>();
+            this.filters.Add(new KeyValuePair<ITag, string>(tag, searchText));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindCommand"/> class.
+        /// </summary>
+        /// <param name="filters">List of key/value filters</param>
+        public FindCommand(List<KeyValuePair<ITag, string>> filters)
+        {
+            this.filters = filters;
         }
 
         /// <summary>
@@ -36,7 +45,14 @@ namespace MpcNET.Commands.Database
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => string.Join(" ", "find", this.tag.Value, this.searchText);
+        public string Serialize() =>
+            string.Join(" ",
+              "find",
+              string.Join(" ",
+                this.filters
+                  .Select(x => string.Join(" ",
+                    x.Key.Value, escape(x.Value)))
+                  .ToArray()));
 
         /// <summary>
         /// Deserializes the specified response text pairs.
@@ -49,7 +65,8 @@ namespace MpcNET.Commands.Database
         {
             return MpdFile.CreateList(response);
         }
-    }
 
+        private string escape(string value) => string.Format("\"{0}\"", value.Replace("\\", "\\\\").Replace("\"", "\\\""));
+    }
     // TODO: rescan
 }
