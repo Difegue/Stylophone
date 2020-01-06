@@ -32,7 +32,7 @@ namespace MpcNET.Commands.Database
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => string.Join(" ", "list", this.tag);
+        public string Serialize() => string.Join(" ", "list", this.tag.Value);
 
         /// <summary>
         /// Deserializes the specified response text pairs.
