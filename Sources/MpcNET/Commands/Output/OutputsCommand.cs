@@ -34,13 +34,14 @@ namespace MpcNET.Commands.Output
         {
             var result = new List<MpdOutput>();
 
-            for (var i = 0; i < response.Count; i += 3)
+            for (var i = 0; i < response.Count; i += 4)
             {
                 var outputId = int.Parse(response[i].Value);
                 var outputName = response[i + 1].Value;
-                var outputEnabled = response[i + 2].Value == "1";
+                var outputPlugin = response[i + 2].Value;
+                var outputEnabled = response[i + 3].Value == "1";
 
-                result.Add(new MpdOutput(outputId, outputName, outputEnabled));
+                result.Add(new MpdOutput(outputId, outputName, outputPlugin, outputEnabled));
             }
 
             return result;

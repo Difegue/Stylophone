@@ -16,11 +16,13 @@ namespace MpcNET.Types
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="name">The name.</param>
+        /// <param name="plugin">The plugin name.</param>
         /// <param name="enabled">if set to <c>true</c> [enabled].</param>
-        public MpdOutput(int id, string name, bool enabled)
+        public MpdOutput(int id, string name, string plugin, bool enabled)
         {
             this.Id = id;
             this.Name = name;
+            this.Plugin = plugin;
             this.IsEnabled = enabled;
         }
 
@@ -39,6 +41,14 @@ namespace MpcNET.Types
         /// The name.
         /// </value>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the plugin name.
+        /// </summary>
+        /// <value>
+        /// The plugin name.
+        /// </value>
+        public string Plugin { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is enabled.
