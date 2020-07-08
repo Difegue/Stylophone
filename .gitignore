@@ -23,3 +23,9 @@
 /Sources/MpcNET/bin
 /Sources/MpcNET.Test/bin/Debug/netcoreapp2.0
 /Sources/.vs
+/Sources/FluentMPC.Core/bin/Debug/netstandard2.0
+/Sources/FluentMPC/bin/x86/Debug
+/Sources/FluentMPC/obj
+/Sources/FluentMPC.Core/obj
+/Sources/FluentMPC.Tests.MSTest/obj
+*.pfx

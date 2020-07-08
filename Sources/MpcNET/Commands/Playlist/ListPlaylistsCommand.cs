@@ -31,11 +31,11 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<MpdPlaylist> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IEnumerable<MpdPlaylist> Deserialize(SerializedResponse response)
         {
             var result = new List<MpdPlaylist>();
 
-            foreach (var line in response)
+            foreach (var line in response.ResponseValues)
             {
                 if (line.Key.Equals("playlist"))
                 {

@@ -61,9 +61,9 @@ namespace MpcNET.Commands.Database
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<IMpdFile> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IEnumerable<IMpdFile> Deserialize(SerializedResponse response)
         {
-            return MpdFile.CreateList(response);
+            return MpdFile.CreateList(response.ResponseValues);
         }
 
         private string escape(string value) => string.Format("\"{0}\"", value.Replace("\\", "\\\\").Replace("\"", "\\\""));

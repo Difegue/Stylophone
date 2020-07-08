@@ -30,16 +30,16 @@ namespace MpcNET.Commands.Output
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<MpdOutput> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IEnumerable<MpdOutput> Deserialize(SerializedResponse response)
         {
             var result = new List<MpdOutput>();
 
-            for (var i = 0; i < response.Count; i += 4)
+            for (var i = 0; i < response.ResponseValues.Count; i += 4)
             {
-                var outputId = int.Parse(response[i].Value);
-                var outputName = response[i + 1].Value;
-                var outputPlugin = response[i + 2].Value;
-                var outputEnabled = response[i + 3].Value == "1";
+                var outputId = int.Parse(response.ResponseValues[i].Value);
+                var outputName = response.ResponseValues[i + 1].Value;
+                var outputPlugin = response.ResponseValues[i + 2].Value;
+                var outputEnabled = response.ResponseValues[i + 3].Value == "1";
 
                 result.Add(new MpdOutput(outputId, outputName, outputPlugin, outputEnabled));
             }

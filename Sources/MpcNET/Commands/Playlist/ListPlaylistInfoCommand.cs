@@ -41,9 +41,9 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<IMpdFile> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IEnumerable<IMpdFile> Deserialize(SerializedResponse response)
         {
-            return MpdFile.CreateList(response);
+            return MpdFile.CreateList(response.ResponseValues);
         }
     }
 }

@@ -30,12 +30,12 @@ namespace MpcNET.Commands.Reflection
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<MpdDecoderPlugin> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IEnumerable<MpdDecoderPlugin> Deserialize(SerializedResponse response)
         {
             var result = new List<MpdDecoderPlugin>();
 
             var mpdDecoderPlugin = MpdDecoderPlugin.Empty;
-            foreach (var line in response)
+            foreach (var line in response.ResponseValues)
             {
                 if (line.Key.Equals("plugin"))
                 {

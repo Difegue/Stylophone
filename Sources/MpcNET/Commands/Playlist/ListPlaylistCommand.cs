@@ -42,9 +42,9 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<IMpdFilePath> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IEnumerable<IMpdFilePath> Deserialize(SerializedResponse response)
         {
-            var results = response.Where(line => line.Key.Equals("file")).Select(line => new MpdFile(line.Value));
+            var results = response.ResponseValues.Where(line => line.Key.Equals("file")).Select(line => new MpdFile(line.Value));
 
             return results;
         }

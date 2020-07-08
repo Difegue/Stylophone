@@ -25,6 +25,6 @@ namespace MpcNET
         /// </summary>
         /// <param name="response">The response.</param>
         /// <returns>The deserialized response.</returns>
-        TValue Deserialize(IReadOnlyList<KeyValuePair<string, string>> response);
+        TValue Deserialize(SerializedResponse response);
     }
 }

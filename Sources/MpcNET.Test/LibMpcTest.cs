@@ -52,9 +52,9 @@
                 return this.command;
             }
 
-            public IList<string> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+            public IList<string> Deserialize(SerializedResponse response)
             {
-                var result = response.Select(atrb => $"{atrb.Key}: {atrb.Value}").ToList();
+                var result = response.ResponseValues.Select(atrb => $"{atrb.Key}: {atrb.Value}").ToList();
                 return result;
             }
         }

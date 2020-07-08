@@ -30,9 +30,9 @@ namespace MpcNET.Commands.Status
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IMpdFile Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IMpdFile Deserialize(SerializedResponse response)
         {
-            return MpdFile.Create(response, 0).mpdFile;
+            return MpdFile.Create(response.ResponseValues, 0).mpdFile;
         }
     }
 }

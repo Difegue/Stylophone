@@ -25,7 +25,7 @@ namespace MpcNET
     /// </summary>
     public class MpcConnection : IMpcConnection
     {
-        private static readonly Encoding Encoding = new UTF8Encoding();
+        private readonly Encoding Encoding = new UTF8Encoding();
         private readonly IMpcConnectionReporter mpcConnectionReporter;
         private readonly IPEndPoint server;
 
@@ -97,7 +97,10 @@ namespace MpcNET
             }
 
             Exception lastException = null;
+            
             IReadOnlyList<string> response = new List<string>();
+            byte[] rawResponse = null;
+
             var sendAttempter = new Attempter(3);
             var commandText = mpcCommand.Serialize();
             this.mpcConnectionReporter?.Sending(commandText);
@@ -111,7 +114,7 @@ namespace MpcNET
                         await writer.FlushAsync();
                     }
 
-                    response = await this.ReadResponseAsync(commandText);
+                    (rawResponse, response) = this.ReadResponse(commandText);
                     if (response.Any())
                     {
                         lastException = null;
@@ -142,7 +145,7 @@ namespace MpcNET
                 return new ErrorMpdMessage<TResponse>(mpcCommand, new ErrorMpdResponse<TResponse>(lastException));
             }
 
-            return new MpdMessage<TResponse>(mpcCommand, true, response);
+            return new MpdMessage<TResponse>(mpcCommand, true, response, rawResponse);
         }
 
         /// <summary>
@@ -196,7 +199,7 @@ namespace MpcNET
             using (var reader = new StreamReader(this.networkStream, Encoding, true, 512, true))
             {
                 var firstLine = await reader.ReadLineAsync();
-                if (!firstLine.StartsWith(Constants.FirstLinePrefix))
+                if (firstLine != null && !firstLine.StartsWith(Constants.FirstLinePrefix))
                 {
                     await this.DisconnectAsync(false);
                     throw new MpcConnectException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\".");
@@ -207,15 +210,39 @@ namespace MpcNET
             }
         }
 
-        private async Task<IReadOnlyList<string>> ReadResponseAsync(string commandText)
+        private Tuple<byte[],IReadOnlyList<string>> ReadResponse(string commandText)
         {
             var response = new List<string>();
-            using (var reader = new StreamReader(this.networkStream, Encoding, true, 512, true))
+            byte[] binaryResponse = null;
+
+            var reader = new MpdResponseReader(this.networkStream, Encoding);
+            MpdResponseReader.NextData nextData;
+
+            string responseLine;
+            while ((nextData = reader.ReportNextData()) != MpdResponseReader.NextData.Eof)
             {
-                string responseLine;
-                do
+                // If the incoming data is binary, read it raw
+                if (nextData == MpdResponseReader.NextData.BinaryData)
                 {
-                    responseLine = await reader.ReadLineAsync();
+                    // The reader already knows the length of the binary data, so we just tell it to read.
+                    // MPD binary responses usually don't go past 8192 bytes.
+                    byte[] buf = new byte[8192];
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        do
+                        {
+                            var bytesRead = reader.ReadBinaryData(buf, 0, buf.Length);
+                            ms.Write(buf, 0, bytesRead);
+                        } while (reader.ReportNextData() == MpdResponseReader.NextData.BinaryData);
+
+                        binaryResponse = ms.ToArray();
+                    }
+                }
+                else // else, read string as usual
+                {
+                    responseLine = reader.ReadString();
+
                     this.mpcConnectionReporter?.ReadResponse(responseLine, commandText);
                     if (responseLine == null)
                     {
@@ -223,11 +250,18 @@ namespace MpcNET
                     }
 
                     response.Add(responseLine);
+
+                    if (responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack))
+                    {
+                        // Stop reading the stream
+                        break;
+                    }
+
                 }
-                while (!(responseLine.Equals(Constants.Ok) || responseLine.StartsWith(Constants.Ack)));
+
             }
 
-            return response;
+            return new Tuple<byte[], IReadOnlyList<string>>(binaryResponse, response);
         }
 
         private Task DisconnectAsync(bool isExplicitDisconnect)

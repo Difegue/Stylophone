@@ -30,9 +30,9 @@ namespace MpcNET.Commands.Reflection
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<string> Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public IEnumerable<string> Deserialize(SerializedResponse response)
         {
-            var result = response.Where(item => item.Key.Equals("handler")).Select(item => item.Value);
+            var result = response.ResponseValues.Where(item => item.Key.Equals("handler")).Select(item => item.Value);
 
             return result;
         }

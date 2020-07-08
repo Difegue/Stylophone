@@ -40,10 +40,10 @@ namespace MpcNET.Commands.Output
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public string Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public string Deserialize(SerializedResponse response)
         {
             // Response should be empty.
-            return string.Join(", ", response);
+            return string.Join(", ", response.ResponseValues);
         }
     }
 }

@@ -14,14 +14,16 @@ namespace MpcNET.Message
     internal class MpdMessage<T> : IMpdMessage<T>
     {
         private readonly Regex linePattern = new Regex(@"^(?<key>[\w-]*):[ ]{0,1}(?<value>.*)$");
-        private readonly IList<string> rawResponse;
+        private readonly IList<string> fullResponse;
+        private readonly byte[] binaryData;
 
-        public MpdMessage(IMpcCommand<T> command, bool connected, IReadOnlyCollection<string> response)
+        public MpdMessage(IMpcCommand<T> command, bool connected, IReadOnlyCollection<string> response, byte[] binaryData)
         {
             this.Request = new MpdRequest<T>(command);
 
+            this.binaryData = binaryData;
             var endLine = response.Skip(response.Count - 1).Single();
-            this.rawResponse = response.Take(response.Count - 1).ToList();
+            this.fullResponse = response.Take(response.Count - 1).ToList();
 
             var values = this.Request.Command.Deserialize(this.GetValuesFromResponse());
             this.Response = new MpdResponse<T>(endLine, values, connected);
@@ -38,11 +40,11 @@ namespace MpcNET.Message
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
-        private IReadOnlyList<KeyValuePair<string, string>> GetValuesFromResponse()
+        private SerializedResponse GetValuesFromResponse()
         {
             var result = new List<KeyValuePair<string, string>>();
 
-            foreach (var line in this.rawResponse)
+            foreach (var line in this.fullResponse)
             {
                 var match = this.linePattern.Match(line);
                 if (match.Success)
@@ -55,11 +57,12 @@ namespace MpcNET.Message
                         {
                             result.Add(new KeyValuePair<string, string>(mpdKey, mpdValue));
                         }
+
                     }
                 }
             }
 
-            return result;
+            return new SerializedResponse { ResponseValues = result, BinaryData = binaryData };
         }
     }
 }

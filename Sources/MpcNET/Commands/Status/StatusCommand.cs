@@ -52,7 +52,7 @@ namespace MpcNET.Commands.Status
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public MpdStatus Deserialize(IReadOnlyList<KeyValuePair<string, string>> response)
+        public MpdStatus Deserialize(SerializedResponse response)
         {
             int volume = -1;
             bool repeat = false;
@@ -76,7 +76,7 @@ namespace MpcNET.Commands.Status
             double mixrampDb = -1;
             int updatingDb = -1;
             string error = string.Empty;
-            foreach (var keyValuePair in response)
+            foreach (var keyValuePair in response.ResponseValues)
             {
                 var value = keyValuePair.Value;
                 switch (keyValuePair.Key)
