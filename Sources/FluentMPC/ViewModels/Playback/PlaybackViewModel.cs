@@ -1,12 +1,15 @@
 ﻿using FluentMPC.Helpers;
 using FluentMPC.Services;
+using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Status;
 using MpcNET.Types;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
@@ -135,17 +138,24 @@ namespace FluentMPC.ViewModels.Playback
         /// </summary>
         public double MediaVolume
         {
-            get => MPDConnectionService.CurrentStatus.Volume;
+            get => _internalVolume;
             set
             {
+                Set(ref _internalVolume, value);
+
+                // Cancel older volumeTasks
+                cts.Cancel();
+                cts = new CancellationTokenSource();
+
                 // Set the volume
-                Task.Run(async () =>
+                volumeTasks.Add(Task.Run(async () =>
                 {
                     using (var c = await MPDConnectionService.GetConnectionAsync())
                     {
                         await c.SendAsync(new SetVolumeCommand((byte)value));
                     }
-                });
+                    Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
+                },cts.Token));
 
                 // Update the UI
                 if ((int)value == 0)
@@ -169,9 +179,11 @@ namespace FluentMPC.ViewModels.Playback
                     VolumeIcon = "\uE767";
                 }
 
-                OnPropertyChanged(nameof(MediaVolume));
             }
         }
+        private CancellationTokenSource cts = new CancellationTokenSource();
+        private List<Task> volumeTasks = new List<Task>();
+        private double _internalVolume = MPDConnectionService.CurrentStatus.Volume;
 
         /// <summary>
         ///     Are tracks shuffled
@@ -270,8 +282,9 @@ namespace FluentMPC.ViewModels.Playback
 
             await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                // Set the current time value
-                CurrentTimeValue = MPDConnectionService.CurrentStatus.Elapsed.TotalSeconds;
+                // Set the current time value - if the user isn't scrobbling the slider
+                if (!_isUserMovingSlider)
+                    CurrentTimeValue = MPDConnectionService.CurrentStatus.Elapsed.TotalSeconds;
 
                 // Get the remaining time for the track
                 var remainingTime = MPDConnectionService.CurrentStatus.Duration.Subtract(MPDConnectionService.CurrentStatus.Elapsed);
@@ -301,11 +314,10 @@ namespace FluentMPC.ViewModels.Playback
             else
                 IsRepeatEnabled = true;
 
-            //TODO repeat not implemented
-            /*using (var c = MPDConnectionService.GetConnection())
+            using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                c.SendAsync(new MpcNET.Commands.)
-            }*/
+                await c.SendAsync(new RepeatCommand(IsRepeatEnabled));
+            }
         }
 
         /// <summary>
@@ -318,11 +330,10 @@ namespace FluentMPC.ViewModels.Playback
             else
                 IsShuffleEnabled = true;
 
-            //TODO random not implemented
-            /*using (var c = MPDConnectionService.GetConnection())
+            using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                c.SendAsync(new MpcNET.Commands.)
-            }*/
+                await c.SendAsync(new RandomCommand(IsShuffleEnabled));
+            }
 
             UpdateUpNext();
         }
@@ -404,19 +415,29 @@ namespace FluentMPC.ViewModels.Playback
 
         #region Methods
 
+        private bool _isUserMovingSlider = false;
+        public void OnPlayingSliderMoving()
+        {
+            _isUserMovingSlider = true;
+        }
+
         public async void OnPlayingSliderChange()
-        { 
-        
+        {
             if (CurrentTrack == null)
                 return;
 
             // Set the track position
-            using (var c = MPDConnectionService.GetConnectionAsync())
+            using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                // TODO seekcur not implemented
-                //  SimpleIoc.Default.GetInstance<IPlaybackService>().SetTrackPosition(TimeSpan.FromSeconds(CurrentTimeValue));
-                //await c.SendAsync(new PreviousCommand());
+                await c.SendAsync(new SeekCurCommand(CurrentTimeValue));
             }
+
+            // Wait for MPD Status to catch up before we start auto-updating the slider again
+            _ = Task.Run(() =>
+              {
+                  Thread.Sleep(1000);
+                  _isUserMovingSlider = false;
+              });
         }
 
         /// <summary>
@@ -446,7 +467,7 @@ namespace FluentMPC.ViewModels.Playback
                     if (response.IsResponseValid)
                     {
                         // Set the new current track, updating the UI
-                        CurrentTrack = await TrackViewModel.FromMpdFile(response.Response.Content);
+                        CurrentTrack = new TrackViewModel(response.Response.Content);
                     }
                     else
                     {
@@ -476,6 +497,19 @@ namespace FluentMPC.ViewModels.Playback
 
             await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
+                // Remove completed requests
+                volumeTasks.RemoveAll(t => t.IsCompleted);
+
+                // Update volume to match the server value -- If we're not setting it ourselves
+                if (volumeTasks.Count == 0)
+                {
+                    _internalVolume = MPDConnectionService.CurrentStatus.Volume;
+                    OnPropertyChanged(nameof(MediaVolume));
+                }
+
+                OnPropertyChanged(nameof(IsRepeatEnabled));
+                OnPropertyChanged(nameof(IsShuffleEnabled));
+
                 switch (MPDConnectionService.CurrentStatus.State)
                 {
                     case MpdState.Play:

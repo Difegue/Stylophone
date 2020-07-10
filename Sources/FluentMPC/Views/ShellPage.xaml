@@ -18,46 +18,54 @@
         </ic:EventTriggerBehavior>
     </i:Interaction.Behaviors>
 
-    <winui:NavigationView
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <winui:NavigationView Grid.Row="0"
         x:Name="navigationView"
         IsBackButtonVisible="Visible"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
         SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
         IsSettingsVisible="True"
-        ExpandedModeThresholdWidth="1280"
+        ExpandedModeThresholdWidth="900"
         Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
-        <winui:NavigationView.MenuItems>
-            <!--
+            <winui:NavigationView.MenuItems>
+                <!--
             TODO WTS: Change the symbols for each item as appropriate for your app
             More on Segoe UI Symbol icons: https://docs.microsoft.com/windows/uwp/style/segoe-ui-symbol-font
             Or to use an IconElement instead of a Symbol see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/UWP/projectTypes/navigationpane.md
             Edit String/en-US/Resources.resw: Add a menu item title for each page
             -->
-            <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Document" helpers:NavHelper.NavigateTo="views:OverlayView" />
-            <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Document" helpers:NavHelper.NavigateTo="views:LibraryPage" />
-            <winui:NavigationViewItem x:Uid="Shell_Playlists" Icon="Document" helpers:NavHelper.NavigateTo="views:PlaylistsPage" />
-            <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="Document" helpers:NavHelper.NavigateTo="views:FoldersPage" />
-        </winui:NavigationView.MenuItems>
-        <i:Interaction.Behaviors>
-            <behaviors:NavigationViewHeaderBehavior
+                <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Document" helpers:NavHelper.NavigateTo="views:OverlayView" />
+                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Document" helpers:NavHelper.NavigateTo="views:LibraryPage" />
+                <winui:NavigationViewItem x:Uid="Shell_Playlists" Icon="Document" helpers:NavHelper.NavigateTo="views:PlaylistsPage" />
+                <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="Document" helpers:NavHelper.NavigateTo="views:FoldersPage" />
+            </winui:NavigationView.MenuItems>
+            <i:Interaction.Behaviors>
+                <behaviors:NavigationViewHeaderBehavior
                 DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}">
-                <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock
+                    <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock
                                 Text="{Binding}"
                                 Style="{ThemeResource TitleTextBlockStyle}"
                                 Margin="{StaticResource SmallLeftRightMargin}" />
-                        </Grid>
-                    </DataTemplate>
-                </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-            </behaviors:NavigationViewHeaderBehavior>
-            <ic:EventTriggerBehavior EventName="ItemInvoked">
-                <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
-            </ic:EventTriggerBehavior>
-        </i:Interaction.Behaviors>
-        <Grid>
-            <Frame x:Name="shellFrame" />
-        </Grid>
-    </winui:NavigationView>
+                            </Grid>
+                        </DataTemplate>
+                    </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+                </behaviors:NavigationViewHeaderBehavior>
+                <ic:EventTriggerBehavior EventName="ItemInvoked">
+                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+                </ic:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+            <Grid>
+                <Frame x:Name="shellFrame" />
+            </Grid>
+        </winui:NavigationView>
+        <views:NowPlayingBar Grid.Row="1" />
+    </Grid>
+    
 </Page>

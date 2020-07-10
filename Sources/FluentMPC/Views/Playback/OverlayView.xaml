@@ -17,7 +17,11 @@
     <Page.Resources>
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
 
-        <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:BoolToBrushConverter
+            x:Key="BoolToBrushConverter"
+            FalseColor="SystemControlDisabledTransparentBrush"
+            TrueColor="ButtonRevealBackgroundPointerOver" />
+
     </Page.Resources>
 
     <Grid Background="{ThemeResource SystemControlAcrylicElementBrush}"
@@ -87,7 +91,10 @@
             </Grid>
 
             <!-- Slider -->
+            <!-- TODO: ManipulationStarting doesn't work ?-->
             <Slider ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
+                    ManipulationMode="All"
+                    ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
                     PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
                     Margin="25,-10,25,0"
                     Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}"
@@ -98,10 +105,9 @@
                         HorizontalAlignment="Center"
                         Margin="0,0,0,20"
                         VerticalAlignment="Center">
-                <!-- Shuffle TODO bring back booltobackground-->
                 <Button Margin="5,0"
                         Style="{StaticResource CircleButtonStyle}"
-                        Visibility="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                        Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                         Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
                         Width="40" Height="40">
                     <ToolTipService.ToolTip>
@@ -166,7 +172,7 @@
                 <!-- Repeat -->
                 <Button Margin="5,0"
                         Style="{StaticResource CircleButtonStyle}"
-                        Visibility="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                        Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                         Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
                         Width="40" Height="40">
                     <ToolTipService.ToolTip>

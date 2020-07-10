@@ -116,6 +116,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="ksemenenko.ColorThief">
+      <Version>1.1.1.4</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
     </PackageReference>
@@ -197,6 +200,9 @@
     <Compile Include="Views\NowPlayingPage.xaml.cs">
       <DependentUpon>NowPlayingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Playback\NowPlayingBar.xaml.cs">
+      <DependentUpon>NowPlayingBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Playback\OverlayView.xaml.cs">
       <DependentUpon>OverlayView.xaml</DependentUpon>
     </Compile>
@@ -257,6 +263,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\NowPlayingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Playback\NowPlayingBar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

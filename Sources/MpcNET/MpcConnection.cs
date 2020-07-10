@@ -205,7 +205,7 @@ namespace MpcNET
                     throw new MpcConnectException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\".");
                 }
 
-                this.Version = firstLine.Substring(Constants.FirstLinePrefix.Length);
+                this.Version = firstLine?.Substring(Constants.FirstLinePrefix.Length);
                 this.mpcConnectionReporter?.Connected(isReconnect, connectAttempter.CurrentAttempt, firstLine);
             }
         }

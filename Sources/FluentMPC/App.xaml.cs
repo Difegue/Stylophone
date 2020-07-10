@@ -26,6 +26,7 @@ namespace FluentMPC
 
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
+            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             if (!args.PrelaunchActivated)
             {
                 await ActivationService.ActivateAsync(args);

@@ -1,0 +1,608 @@
+﻿<UserControl
+    x:Class="FluentMPC.Views.NowPlayingBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:converters="using:FluentMPC.Helpers"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="80"
+    Loaded="OnLoaded"
+    Unloaded="OnUnloaded"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:SliderValueConverter x:Key="SliderValueConverter" />
+
+        <converters:BoolToBrushConverter
+            x:Key="BoolToBrushConverter"
+            FalseColor="SystemControlDisabledTransparentBrush"
+            TrueColor="ButtonRevealBackgroundPointerOver" />
+
+        <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <!--  Content  -->
+    <Grid
+        x:Name="RootGrid"
+        Height="81"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Background="Transparent">
+        <!--  Split the content into two main sections  -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Track Background  -->
+        <controls:ImageEx
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Canvas.ZIndex="5"
+            Opacity="1"
+            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
+            Stretch="UniformToFill" />
+
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Canvas.ZIndex="6" >
+            <Border.Background>
+                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.4" TintColor="{StaticResource SystemAccentColor}"></AcrylicBrush>
+            </Border.Background>
+        </Border>
+
+        <Button
+            Grid.Column="0"
+            Width="320"
+            Height="80"
+            Padding="0"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            CornerRadius="3,0,0,3"
+            Background="Transparent"
+            BorderThickness="1"
+            Canvas.ZIndex="10"
+            Click="{x:Bind PlaybackViewModel.NavigateNowPlaying}"
+            Style="{ThemeResource ButtonRevealStyle}">
+            <Grid>
+
+                <!--  Track Image and Navigate to now playing  -->
+                <controls:DropShadowPanel
+                    Width="70"
+                    Height="70"
+                    Margin="6,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    BlurRadius="10"
+                    OffsetY="2"
+                    ShadowOpacity="0.6"
+                    Color="Black">
+
+                    <Grid
+                        Width="70"
+                        Height="70"
+                        CornerRadius="3">
+                        <Image
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
+                            Stretch="UniformToFill"
+                            />
+                    </Grid>
+                </controls:DropShadowPanel>
+
+                <!--  Track title and user  -->
+                <StackPanel Margin="88,0,0,2" VerticalAlignment="Center">
+                    <TextBlock
+                        MaxHeight="50"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Title, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="Wrap" />
+
+                    <TextBlock
+                        Margin="0,2,0,0"
+                        FontSize="12"
+                        Opacity="0.8"
+                        Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
+                </StackPanel>
+            </Grid>
+        </Button>
+
+        <!--  Hold the rest of the content  -->
+        <Grid
+            x:Name="MainContent"
+            Grid.Column="1"
+            Canvas.ZIndex="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Buttons  -->
+            <StackPanel
+                Grid.Column="0"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <!--  Shuffle  -->
+                <Button
+                    x:Name="ShuffleButton"
+                    Width="40"
+                    Height="40"
+                    Margin="5,0"
+                    Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
+                    Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
+                    Style="{StaticResource CircleButtonStyle}"
+                    Visibility="Collapsed">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Toggle Shuffle" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE8B1;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Back  -->
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="5,0"
+                    Click="{x:Bind PlaybackViewModel.SkipPrevious}"
+                    Style="{StaticResource CircleButtonStyle}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Previous Track" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE892;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Play / Pause  -->
+                <Button
+                    Width="52"
+                    Height="52"
+                    Margin="5,0"
+                    Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
+                    Style="{StaticResource CircleButtonStyle}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Play/Pause" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="26"
+                            Text="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Next  -->
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="5,0"
+                    Click="{x:Bind PlaybackViewModel.SkipNext}"
+                    Style="{StaticResource CircleButtonStyle}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Next Track" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE893;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Repeat  -->
+                <Button
+                    x:Name="RepeatButton"
+                    Width="40"
+                    Height="40"
+                    Margin="5,0"
+                    Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
+                    Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
+                    Style="{StaticResource CircleButtonStyle}"
+                    Visibility="Collapsed">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Toggle Repeat" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE8ED;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <!--  Slider  -->
+            <Grid
+                Grid.Column="1"
+                Margin="20,0,20,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    MinWidth="40"
+                    Opacity="0.8"
+                    Text="{x:Bind PlaybackViewModel.TimeListened, Mode=OneWay}" />
+
+                <Slider
+                    x:Name="ProgressBar"
+                    Grid.Column="1"
+                    Margin="15,2,15,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Stretch"
+                    Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
+                    ManipulationMode="All"
+                    ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
+                    PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
+                    ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
+                    Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}" />
+
+                <ProgressBar
+                    x:Name="LoadingBar"
+                    Grid.Column="1"
+                    Margin="15,2,15,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
+                    IsIndeterminate="True" />
+
+                <TextBlock
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    MinWidth="40"
+                    FontWeight="SemiBold"
+                    Opacity="0.8"
+                    Text="{x:Bind PlaybackViewModel.TimeRemaining, Mode=OneWay}" />
+            </Grid>
+
+            <Border
+                Grid.Column="1"
+                Width="Auto"
+                Height="5"
+                Margin="20,0,20,0"
+                HorizontalAlignment="Stretch" />
+
+            <!--  Misc Buttons  -->
+            <StackPanel
+                Grid.Column="2"
+                Margin="0,0,0,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+
+                <!--  Sound  -->
+                <StackPanel Margin="0,0,0,0"
+                x:Name="SoundPanel"
+                Visibility="Collapsed"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                    <Button x:Name="MuteButton" Width="40" Height="40" Margin="0,0,15,0"
+                            Click="{x:Bind PlaybackViewModel.ToggleMute}" Style="{StaticResource CircleButtonStyle}">
+                        <Button.Content>
+                            <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                            TextAlignment="Center" />
+                        </Button.Content>
+                    </Button>
+                    <Slider Width="105" Padding="0" Margin="0,0,15,0" VerticalAlignment="Center" Maximum="100" Minimum="0" Orientation="Horizontal"
+                            Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
+                </StackPanel>
+                
+
+                <!-- Compact Sound -->
+                <Button 
+                    x:Name="SoundFlyout"
+                    Width="40"
+                    Height="40"
+                    Margin="5,0"
+                    Style="{StaticResource CircleButtonStyle}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Change Volume" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <Flyout Placement="Top">
+                            <StackPanel
+                                Width="245"
+                                Padding="20,10"
+                                Orientation="Horizontal">
+                                <Button
+                                    Width="40"
+                                    Height="40"
+                                    Margin="0,0,15,0"
+                                    Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                                    Style="{StaticResource CircleButtonStyle}">
+                                    <Button.Content>
+                                        <TextBlock
+                                            FontFamily="Segoe MDL2 Assets"
+                                            FontSize="18"
+                                            Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                                            TextAlignment="Center" />
+                                    </Button.Content>
+                                </Button>
+                                <Slider
+                                    Width="105"
+                                    Padding="0"
+                                    VerticalAlignment="Center"
+                                    Maximum="100"
+                                    Minimum="0"
+                                    Orientation="Horizontal"
+                                    Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
+                                <TextBlock
+                                    Margin="15,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Text="{x:Bind PlaybackViewModel.MediaVolume, Mode=OneWay}" />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+
+                <!--  Compact Overlay  -->
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="5,0"
+                    Click="{x:Bind PlaybackViewModel.SwitchToCompactView}"
+                    Style="{StaticResource CircleButtonStyle}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Compact Overlay Mode" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE8B9;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel
+            Grid.Column="2"
+            Margin="0,0,20,0"
+            Canvas.ZIndex="10"
+            Orientation="Horizontal">
+            <!--  More  -->
+            <Button
+                x:Name="MoreButton"
+                Width="40"
+                Height="40"
+                Margin="5,0"
+                Style="{StaticResource CircleButtonStyle}">
+                <ToolTipService.ToolTip>
+                    <ToolTip Content="More Actions" />
+                </ToolTipService.ToolTip>
+                <Button.Content>
+                    <TextBlock
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="18"
+                        Text="&#xE712;"
+                        TextAlignment="Center" />
+                </Button.Content>
+                <Button.Flyout>
+                    <MenuFlyout Placement="Top">
+
+                        <!--  Add to a playlist  -->
+                        <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.DisplayPlaylist}" Text="Add to playlist">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE142;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+
+                        <MenuFlyoutSeparator Opacity="0.4" />
+
+                        <!--  Media casting  -->
+                        <MenuFlyoutSubItem Text="Cast track to device">
+                            <MenuFlyoutSubItem.Icon>
+                                <FontIcon Glyph="&#xEC15;" />
+                            </MenuFlyoutSubItem.Icon>
+                            <MenuFlyoutSubItem.Items>
+                                <!--  Media casting (Miracast, DLNA, Bluetooth  -->
+                                <MenuFlyoutItem  Text="via Miracast/DLNA/Bluetooth">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xEC15;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <!--  Google Cast / Chromecast  -->
+                                <MenuFlyoutItem  Text="via Chromecast (beta)">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xEC15;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <!--  AirPlay  -->
+                                <MenuFlyoutItem  Text="via Airplay (beta)">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xEC15;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyoutSubItem.Items>
+                        </MenuFlyoutSubItem>
+
+                        <!--  Project Rome  -->
+                        <MenuFlyoutItem  Text="Continue playing on device">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xF623;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+
+                        <!--  Change the playback speed  -->
+                        <MenuFlyoutSubItem Text="Playback speed">
+                            <MenuFlyoutSubItem.Icon>
+                                <FontIcon Glyph="&#xEC57;" />
+                            </MenuFlyoutSubItem.Icon>
+                            <MenuFlyoutSubItem.Items>
+                                <MenuFlyoutItem Text="0.25x">
+                                    <MenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="MenuFlyoutItem">
+                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
+                                                <RadioButton
+                                                    Content="{TemplateBinding Text}"
+                                                    GroupName="PlaybackRate"
+                                                    Tag="0.25" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </MenuFlyoutItem.Template>
+                                </MenuFlyoutItem>
+
+                                <MenuFlyoutItem Text="0.50x">
+                                    <MenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="MenuFlyoutItem">
+                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
+                                                <RadioButton
+                                                    Content="{TemplateBinding Text}"
+                                                    GroupName="PlaybackRate"
+                                                    Tag="0.5" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </MenuFlyoutItem.Template>
+                                </MenuFlyoutItem>
+
+                                <MenuFlyoutItem Text="0.75x">
+                                    <MenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="MenuFlyoutItem">
+                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
+                                                <RadioButton
+                                                    Content="{TemplateBinding Text}"
+                                                    GroupName="PlaybackRate"
+                                                    Tag="0.75" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </MenuFlyoutItem.Template>
+                                </MenuFlyoutItem>
+
+                                <MenuFlyoutItem Text="Normal">
+                                    <MenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="MenuFlyoutItem">
+                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
+                                                <RadioButton
+                                                    Content="{TemplateBinding Text}"
+                                                    GroupName="PlaybackRate"
+                                                    IsChecked="True"
+                                                    Tag="normal" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </MenuFlyoutItem.Template>
+                                </MenuFlyoutItem>
+
+                                <MenuFlyoutItem Text="1.25x">
+                                    <MenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="MenuFlyoutItem">
+                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
+                                                <RadioButton
+                                                    Content="{TemplateBinding Text}"
+                                                    GroupName="PlaybackRate"
+                                                    Tag="1.25" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </MenuFlyoutItem.Template>
+                                </MenuFlyoutItem>
+
+                                <MenuFlyoutItem Text="1.50x">
+                                    <MenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="MenuFlyoutItem">
+                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
+                                                <RadioButton
+                                                    Content="{TemplateBinding Text}"
+                                                    GroupName="PlaybackRate"
+                                                    Tag="1.5" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </MenuFlyoutItem.Template>
+                                </MenuFlyoutItem>
+
+                                <MenuFlyoutItem Text="2.00x">
+                                    <MenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="MenuFlyoutItem">
+                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
+                                                <RadioButton
+                                                    Content="{TemplateBinding Text}"
+                                                    GroupName="PlaybackRate"
+                                                    Tag="2" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </MenuFlyoutItem.Template>
+                                </MenuFlyoutItem>
+                            </MenuFlyoutSubItem.Items>
+                        </MenuFlyoutSubItem>
+
+                        <MenuFlyoutSeparator Opacity="0.4" />
+
+                        <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View artist page"> <!-- TODO view artist -->
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE8D4;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+
+                        <MenuFlyoutItem
+                            Click="{x:Bind PlaybackViewModel.NavigateNowPlayingInfo}"
+                            Icon="MusicInfo"
+                            Text="View track information" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1200" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SoundFlyout.Visibility" Value="Collapsed" />
+                        <Setter Target="SoundPanel.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>
