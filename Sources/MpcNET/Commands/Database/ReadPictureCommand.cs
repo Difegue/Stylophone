@@ -8,20 +8,20 @@ using System.Text;
 namespace MpcNET.Commands.Database
 {
     /// <summary>
-    /// Gets the album art for the given song.
+    /// Gets the album art for the given song, using ID3 metadata.
     /// https://www.musicpd.org/doc/html/protocol.html#the-music-database
     /// </summary>
-    public class AlbumArtCommand : IMpcCommand<MpdBinaryData>
+    public class ReadPictureCommand : IMpcCommand<MpdBinaryData>
     {
         private readonly string path;
         private readonly int binaryOffset;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlbumArtCommand"/> class.
+        /// Initializes a new instance of the <see cref="ReadPictureCommand"/> class.
         /// </summary>
         /// <param name="path">The URI.</param>
         /// <param name="offset">Binary data offset if needed</param>
-        public AlbumArtCommand(string path, int offset = 0)
+        public ReadPictureCommand(string path, int offset = 0)
         {
             this.path = path;
             this.binaryOffset = offset;
@@ -33,7 +33,7 @@ namespace MpcNET.Commands.Database
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => $"albumart \"{path}\" {binaryOffset}";
+        public string Serialize() => $"readpicture \"{path}\" {binaryOffset}";
 
         /// <summary>
         /// Deserializes the specified response text pairs.

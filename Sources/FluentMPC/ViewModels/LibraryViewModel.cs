@@ -7,9 +7,12 @@ using FluentMPC.Core.Models;
 using FluentMPC.Core.Services;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
+using FluentMPC.ViewModels.Items;
 using FluentMPC.Views;
 
 using Microsoft.Toolkit.Uwp.UI.Animations;
+using MpcNET.Commands.Database;
+using MpcNET.Tags;
 
 namespace FluentMPC.ViewModels
 {
@@ -17,9 +20,9 @@ namespace FluentMPC.ViewModels
     {
         private ICommand _itemClickCommand;
 
-        public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<SampleOrder>(OnItemClick));
+        public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<AlbumViewModel>(OnItemClick));
 
-        public ObservableCollection<SampleOrder> Source { get; } = new ObservableCollection<SampleOrder>();
+        public ObservableCollection<AlbumViewModel> Source { get; } = new ObservableCollection<AlbumViewModel>();
 
         public LibraryViewModel()
         {
@@ -29,20 +32,24 @@ namespace FluentMPC.ViewModels
         {
             Source.Clear();
 
-            // TODO WTS: Replace this with your actual data
-            var data = await SampleDataService.GetContentGridDataAsync();
-            foreach (var item in data)
+            using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                Source.Add(item);
+                var response = await c.SendAsync(new ListCommand(MpdTags.Album));
+
+                if (response.IsResponseValid)
+                    foreach (var item in response.Response.Content)
+                    {
+                        Source.Add(new AlbumViewModel(item));
+                    }
             }
         }
 
-        private void OnItemClick(SampleOrder clickedItem)
+        private void OnItemClick(AlbumViewModel clickedItem)
         {
             if (clickedItem != null)
             {
                 NavigationService.Frame.SetListDataItemForNextConnectedAnimation(clickedItem);
-                NavigationService.Navigate<LibraryDetailPage>(clickedItem.OrderID);
+                NavigationService.Navigate<LibraryDetailPage>(clickedItem.Name);
             }
         }
     }

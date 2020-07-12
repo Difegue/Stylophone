@@ -1,7 +1,8 @@
 ﻿using System;
-
+using System.Threading.Tasks;
 using FluentMPC.ViewModels;
-
+using FluentMPC.ViewModels.Items;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -21,6 +22,11 @@ namespace FluentMPC.Views
             base.OnNavigatedTo(e);
 
             await ViewModel.LoadDataAsync();
+        }
+
+        private void AlbumClicked(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.ItemClickCommand.Execute(e.ClickedItem);
         }
     }
 }

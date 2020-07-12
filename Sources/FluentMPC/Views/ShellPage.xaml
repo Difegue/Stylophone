@@ -26,6 +26,7 @@
         <winui:NavigationView Grid.Row="0"
         x:Name="navigationView"
         IsBackButtonVisible="Visible"
+        PaneTitle="ThinWhiteDuke"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
         SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
         IsSettingsVisible="True"
@@ -38,10 +39,10 @@
             Or to use an IconElement instead of a Symbol see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/UWP/projectTypes/navigationpane.md
             Edit String/en-US/Resources.resw: Add a menu item title for each page
             -->
-                <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Document" helpers:NavHelper.NavigateTo="views:OverlayView" />
-                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Document" helpers:NavHelper.NavigateTo="views:LibraryPage" />
-                <winui:NavigationViewItem x:Uid="Shell_Playlists" Icon="Document" helpers:NavHelper.NavigateTo="views:PlaylistsPage" />
-                <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="Document" helpers:NavHelper.NavigateTo="views:FoldersPage" />
+                <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Audio" helpers:NavHelper.NavigateTo="views:ServerQueuePage" />
+                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Contact2" helpers:NavHelper.NavigateTo="views:LibraryPage" />
+                <winui:NavigationViewItem x:Uid="Shell_Playlists" Icon="MusicInfo" helpers:NavHelper.NavigateTo="views:PlaylistsPage" />
+                <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="MapDrive" helpers:NavHelper.NavigateTo="views:FoldersPage" />
             </winui:NavigationView.MenuItems>
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior

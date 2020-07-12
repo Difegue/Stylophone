@@ -34,10 +34,16 @@ namespace FluentMPC.Services
 
         public static async Task InitializeAsync()
         {
-            IPAddress.TryParse("192.168.0.4", out var ipAddress);
-            _mpdEndpoint = new IPEndPoint(ipAddress, 6600);
-
-            _connection = await GetConnectionAsync();
+            try
+            {
+                IPAddress.TryParse("192.168.0.4", out var ipAddress);
+                _mpdEndpoint = new IPEndPoint(ipAddress, 6600);
+                _connection = await GetConnectionAsync();
+            } catch (Exception e)
+            {
+                // TODO
+            }
+            
 
             InitializeStatusUpdater();
         }

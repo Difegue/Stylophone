@@ -6,39 +6,65 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:FluentMPC.Core.Models"
+    xmlns:models="using:FluentMPC.Core.Models" xmlns:items="using:FluentMPC.ViewModels.Items"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
-        <controls:AdaptiveGridView
+
+        <GridView
             Padding="{StaticResource MediumLeftRightMargin}"
             animations:Connected.ListItemElementName="itemThumbnail"
             animations:Connected.ListItemKey="animationKeyLibrary"
-            DesiredWidth="180"
-            ItemHeight="160"
             IsItemClickEnabled="True"
-            ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
+            ItemClick="AlbumClicked"
             ItemsSource="{x:Bind ViewModel.Source,Mode=OneWay}"
-            SelectionMode="None"
-            StretchContentForSingleRow="False">
-            <controls:AdaptiveGridView.ItemTemplate>
-                <DataTemplate x:DataType="models:SampleOrder">
-                    <Grid
-                        x:Name="itemThumbnail"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                        Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <FontIcon Glyph="{x:Bind Symbol}" />
-                            <TextBlock
+            SelectionMode="None">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealBackgroundShowsAboveContentStyle}">
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="items:AlbumViewModel">
+
+                    <StackPanel x:Name="itemThumbnail" Padding="12,0,12,12" 
+                                HorizontalAlignment="Left">
+
+                        <controls:DropShadowPanel
+                        Width="180"
+                        Height="180"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        BlurRadius="10"
+                        OffsetY="2"
+                        ShadowOpacity="0.6"
+                        Color="Black">
+
+                            <Grid Width="180" Height="180" CornerRadius="3" BorderThickness="2"
+                                  BorderBrush="{ThemeResource ButtonRevealBorderBrush}">
+                                <Grid.Background>
+                                    <ImageBrush ImageSource="{x:Bind AlbumArt}" Stretch="UniformToFill"></ImageBrush>
+                                </Grid.Background>
+                            </Grid>
+                        </controls:DropShadowPanel>
+
+                        <TextBlock
                                 Margin="{StaticResource XXSmallTopMargin}"
-                                HorizontalAlignment="Center"
-                                Style="{ThemeResource BodyTextStyle}"
-                                Text="{x:Bind Company}" />
-                        </StackPanel>
-                    </Grid>
+                                Style="{ThemeResource BaseTextBlockStyle}"
+                                Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
+                                Text="{x:Bind Name}" ToolTipService.ToolTip="{x:Bind Name}" />
+                        <TextBlock
+                                Margin="{StaticResource XXSmallTopMargin}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
+                                x:Phase="1"
+                                Text="{x:Bind Artist}" ToolTipService.ToolTip="{x:Bind Artist}"/>
+                    </StackPanel>
+                    
+
                 </DataTemplate>
-            </controls:AdaptiveGridView.ItemTemplate>
-        </controls:AdaptiveGridView>
+            </GridView.ItemTemplate>
+        </GridView>
     </Grid>
 </Page>

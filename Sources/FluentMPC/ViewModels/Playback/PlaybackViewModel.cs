@@ -1,5 +1,6 @@
 ﻿using FluentMPC.Helpers;
 using FluentMPC.Services;
+using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using MpcNET;
 using MpcNET.Commands.Playback;
@@ -467,7 +468,7 @@ namespace FluentMPC.ViewModels.Playback
                     if (response.IsResponseValid)
                     {
                         // Set the new current track, updating the UI
-                        CurrentTrack = new TrackViewModel(response.Response.Content);
+                        CurrentTrack = new TrackViewModel(response.Response.Content, true);
                     }
                     else
                     {
@@ -507,6 +508,8 @@ namespace FluentMPC.ViewModels.Playback
                     OnPropertyChanged(nameof(MediaVolume));
                 }
 
+                _isShuffledEnabled = MPDConnectionService.CurrentStatus.Random;
+                _isRepeatEnabled = MPDConnectionService.CurrentStatus.Repeat;
                 OnPropertyChanged(nameof(IsRepeatEnabled));
                 OnPropertyChanged(nameof(IsShuffleEnabled));
 

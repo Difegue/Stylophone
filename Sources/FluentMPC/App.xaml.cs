@@ -40,7 +40,7 @@ namespace FluentMPC
 
         private ActivationService CreateActivationService()
         {
-            return new ActivationService(this, typeof(Views.NowPlayingPage), new Lazy<UIElement>(CreateShell));
+            return new ActivationService(this, typeof(Views.ServerQueuePage), new Lazy<UIElement>(CreateShell));
         }
 
         private UIElement CreateShell()

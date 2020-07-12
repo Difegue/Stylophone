@@ -154,6 +154,8 @@
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
     <Compile Include="Behaviors\TreeViewCollapseBehavior.cs" />
+    <Compile Include="Helpers\AlternatingRowListView.cs" />
+    <Compile Include="Helpers\SecondsToTimeConverter.cs" />
     <Compile Include="Helpers\BoolToBrushConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\MiscHelpers.cs" />
@@ -179,9 +181,10 @@
     <Compile Include="ViewModels\FoldersViewModel.cs" />
     <Compile Include="ViewModels\LibraryDetailViewModel.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
-    <Compile Include="ViewModels\NowPlayingViewModel.cs" />
+    <Compile Include="ViewModels\Items\AlbumViewModel.cs" />
+    <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\Playback\PlaybackViewModel.cs" />
-    <Compile Include="ViewModels\Playback\TrackViewModel.cs" />
+    <Compile Include="ViewModels\Items\TrackViewModel.cs" />
     <Compile Include="ViewModels\PlaylistsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -197,8 +200,8 @@
     <Compile Include="Views\LibraryPage.xaml.cs">
       <DependentUpon>LibraryPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NowPlayingPage.xaml.cs">
-      <DependentUpon>NowPlayingPage.xaml</DependentUpon>
+    <Compile Include="Views\ServerQueuePage.xaml.cs">
+      <DependentUpon>ServerQueuePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Playback\NowPlayingBar.xaml.cs">
       <DependentUpon>NowPlayingBar.xaml</DependentUpon>
@@ -262,7 +265,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NowPlayingPage.xaml">
+    <Page Include="Views\ServerQueuePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
