@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -35,7 +36,7 @@ namespace FluentMPC.Helpers
                 : string.Format("{0:D2}:{1:D2}:{2:D2}", (int)timeSpan.TotalHours, timeSpan.Minutes, timeSpan.Seconds);
         }
 
-        public async static Task<BitmapImage> GetAlbumArtAsync(IMpdFile f)
+        public async static Task<BitmapImage> GetAlbumArtAsync(IMpdFile f, int albumArtWidth)
         {
             // TODO: Add some cache 
             BitmapImage result = null;
@@ -81,18 +82,20 @@ namespace FluentMPC.Helpers
                         await DispatcherHelper.ExecuteOnUIThreadAsync(
                             async () => result = await ImageFromBytes(data.ToArray()));
                     else
-                        // TODO fallback
-                        result = new BitmapImage();
+                        throw new Exception();
                 }
             }
             catch (Exception e)
             {
-                // TODO fallback
-                result = new BitmapImage();
+                // Fallback
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                    result = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png")));
             }
 
-            return result;
+            if (albumArtWidth > 0)
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() => result.DecodePixelWidth = albumArtWidth);
 
+            return result;
         }
         public async static Task<BitmapImage> ImageFromBytes(byte[] bytes)
         {
@@ -103,8 +106,6 @@ namespace FluentMPC.Helpers
                 stream.Seek(0);
                 await image.SetSourceAsync(stream);
             }
-            // TODO: Move this elsewhere to retain access to the HQ bitmapimage
-            //image.DecodePixelWidth = 70;
             return image;
         }
     }

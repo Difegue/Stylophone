@@ -27,6 +27,7 @@ namespace FluentMPC.ViewModels.Playback
     public class PlaybackViewModel : Observable
     {
         private readonly CoreDispatcher _currentUiDispatcher;
+        private readonly int _artWidth;
 
         #region Getters and Setters
 
@@ -234,9 +235,10 @@ namespace FluentMPC.ViewModels.Playback
         public PlaybackViewModel() : this(CoreApplication.MainView.Dispatcher)
         { }
 
-        public PlaybackViewModel(CoreDispatcher uiDispatcher)
+        public PlaybackViewModel(CoreDispatcher uiDispatcher, int albumArtWidth = -1)
         {
             _currentUiDispatcher = uiDispatcher;
+            _artWidth = albumArtWidth;
 
             // Bind the methods that we need
             MPDConnectionService.StatusChanged += OnStateChange;
@@ -464,11 +466,10 @@ namespace FluentMPC.ViewModels.Playback
                 // Run all this on the UI thread
                 await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-
                     if (response.IsResponseValid)
                     {
                         // Set the new current track, updating the UI
-                        CurrentTrack = new TrackViewModel(response.Response.Content, true);
+                        CurrentTrack = new TrackViewModel(response.Response.Content, true, _artWidth);
                     }
                     else
                     {

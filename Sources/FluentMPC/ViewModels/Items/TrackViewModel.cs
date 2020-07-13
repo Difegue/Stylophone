@@ -30,7 +30,7 @@ namespace FluentMPC.ViewModels.Items
             get => _albumArt;
             private set
             {
-                Set(ref _albumArt, value);
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _albumArt, value));
 
                 //TODO: get dominant color of albumart
                 //var colorThief = new ColorThief();
@@ -66,14 +66,20 @@ namespace FluentMPC.ViewModels.Items
 
         public ICommand AddToPlayListCommand;
 
-        public TrackViewModel(IMpdFile file, bool getAlbumArt)
+        public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1)
         {
             File = file;
-            AlbumArt = new BitmapImage();
+            AlbumArt = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
 
             // Fire off an async request to get the album art from MPD.
             if (getAlbumArt)
-                Task.Run(async () => AlbumArt = await MiscHelpers.GetAlbumArtAsync(File));
+                Task.Run(async () =>
+                {
+                    // For the now playing bar, the album art is rendered at 70px wide.
+                    // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
+                    var art = await MiscHelpers.GetAlbumArtAsync(File, albumArtWidth);
+                    AlbumArt = art;
+                });
         }
 
     }

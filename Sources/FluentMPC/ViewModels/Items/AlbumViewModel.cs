@@ -70,7 +70,7 @@ namespace FluentMPC.ViewModels.Items
 
             // Fire off an async request to get the album art from MPD.
             if (Files.Count > 0)
-                _ = Task.Run(async () => AlbumArt = await MiscHelpers.GetAlbumArtAsync(Files[0]));
+                _ = Task.Run(async () => AlbumArt = await MiscHelpers.GetAlbumArtAsync(Files[0],180));
         }
     }
 }
