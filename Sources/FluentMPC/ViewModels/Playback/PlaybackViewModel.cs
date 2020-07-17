@@ -355,7 +355,7 @@ namespace FluentMPC.ViewModels.Playback
 
         public void NavigateNowPlaying()
         {
-            //App.NavigateTo(typeof(XboxPlayingView));
+            NavigationService.Navigate(typeof(FluentMPC.Views.OverlayView));
         }
 
         public void NavigateNowPlayingInfo()

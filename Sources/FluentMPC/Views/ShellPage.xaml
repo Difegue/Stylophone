@@ -41,8 +41,9 @@
             -->
                 <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Audio" helpers:NavHelper.NavigateTo="views:ServerQueuePage" />
                 <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Contact2" helpers:NavHelper.NavigateTo="views:LibraryPage" />
-                <winui:NavigationViewItem x:Uid="Shell_Playlists" Icon="MusicInfo" helpers:NavHelper.NavigateTo="views:PlaylistsPage" />
                 <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="MapDrive" helpers:NavHelper.NavigateTo="views:FoldersPage" />
+                <winui:NavigationViewItemHeader Content="Playlists"/>
+                <winui:NavigationViewItem x:Uid="Shell_Playlists" Icon="MusicInfo" helpers:NavHelper.NavigateTo="views:PlaylistsPage" />
             </winui:NavigationView.MenuItems>
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior

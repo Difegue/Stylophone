@@ -1,4 +1,5 @@
-﻿using FluentMPC.ViewModels.Playback;
+﻿using FluentMPC.Services;
+using FluentMPC.ViewModels.Playback;
 using System;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -25,9 +26,12 @@ namespace FluentMPC.Views
             //TitlebarHelper.UpdateTitlebarStyle();
         }
 
-        private async void NavigateToMainView()
+        private void NavigateToMainView()
         {
-            var currentViewId = -1;
+            NavigationService.GoBack();
+
+            /*
+             var currentViewId = -1;
 
             await CoreWindow.GetForCurrentThread().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -39,6 +43,7 @@ namespace FluentMPC.Views
             // Switch to this window
             await ApplicationViewSwitcher.SwitchAsync(_mainAppViewId, currentViewId,
                 ApplicationViewSwitchingOptions.ConsolidateViews);
+            */
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
