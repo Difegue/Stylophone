@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -23,9 +24,12 @@ namespace FluentMPC.ViewModels
 
         private async void MPDConnectionService_SongChanged(object sender, SongChangedEventArgs e)
         {
-            await DispatcherHelper.ExecuteOnUIThreadAsync(async () => await LoadDataAsync());
+            // TODO handle queue updates
+            //await LoadDataAsync();
             // TODO focus played track
-            //e.NewSongId
+
+            // Update IsPlaying status, scrolling is handled in code-behind
+            Source.Where(t => t.File.Id == e.NewSongId).First().UpdatePlayingStatus();
         }
 
         private ICommand _itemClickCommand;

@@ -33,7 +33,7 @@
 
                     <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE8D6;" Grid.Column="1" Margin="-12,0,0,0"
                               FontSize="24" Foreground="{ThemeResource SystemAccentColor}" VerticalAlignment="Center"
-                                Visibility="{x:Bind IsPlaying, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
                 
                 <TextBlock Grid.Column="1"

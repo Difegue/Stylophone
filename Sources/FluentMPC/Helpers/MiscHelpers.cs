@@ -48,8 +48,12 @@ namespace FluentMPC.Helpers
             WriteableBitmap result;
             var foundUsableArt = false;
 
+            // This allows to cache per album, avoiding saving the same album art a ton of times.
+            // Doesn't work if files in an album have different albumarts, but that happens so rarely it's fine to ignore it.
+            var uniqueIdentifier = f.HasAlbum ? f.Album : f.Title;
+
             // Try loading from art cache first
-            result = await LoadImageFromFile(f.Id);
+            result = await LoadImageFromFile(uniqueIdentifier);
 
             if (result != null)
                 return result;
@@ -98,11 +102,12 @@ namespace FluentMPC.Helpers
             catch (Exception e)
             {
                 // Fallback
-                result = await BitmapFactory.FromContent(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
+                await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                    result = await BitmapFactory.FromContent(new Uri("ms-appx:///Assets/AlbumPlaceholder.png")));
             }
 
             if (foundUsableArt)
-                await SaveArtToFileAsync(f.Id, data); //TODO use hash of data instead of ID to avoid duplicate albumart being saved
+                await SaveArtToFileAsync(uniqueIdentifier, data); 
 
             return result;
         }
@@ -122,10 +127,11 @@ namespace FluentMPC.Helpers
             }
         }
 
-        private static async Task SaveArtToFileAsync(int Id, List<byte> data)
+        private static async Task SaveArtToFileAsync(string Id, List<byte> data)
         {
+            var fileName = EscapeFilename(Id);
             StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
-            var file = await pictureFolder.CreateFileAsync(Id.ToString(), CreationCollisionOption.ReplaceExisting);
+            var file = await pictureFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
 
             await FileIO.WriteBytesAsync(file, data.ToArray());
         }
@@ -151,11 +157,11 @@ namespace FluentMPC.Helpers
             return image;
         }
 
-        private static async Task<WriteableBitmap> LoadImageFromFile(int Id)
+        private static async Task<WriteableBitmap> LoadImageFromFile(string Id)
         {
             try
             {
-                var fileName = Id.ToString();
+                var fileName = EscapeFilename(Id);
                 StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
                 
                 if (await pictureFolder.FileExistsAsync(fileName))
@@ -189,6 +195,29 @@ namespace FluentMPC.Helpers
                 await DispatcherHelper.ExecuteOnUIThreadAsync(async () => image = await BitmapFactory.FromStream(stream));
             }
             return image;
+        }
+
+        /// <summary>
+        /// Escapes an object name so that it is a valid filename.
+        /// </summary>
+        /// <param name="fileName">Original object name.</param>
+        /// <returns>Escaped name.</returns>
+        /// <remarks>
+        /// All characters that are not valid for a filename, plus "%" and ".", are converted into "%uuuu", where uuuu is the hexadecimal
+        /// unicode representation of the character.
+        /// </remarks>
+        private static string EscapeFilename(string fileName)
+        {
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+
+            // Replace "%", then replace all other characters, then replace "."
+
+            fileName = fileName.Replace("%", "%0025");
+            foreach (char invalidChar in invalidChars)
+            {
+                fileName = fileName.Replace(invalidChar.ToString(), string.Format("%{0,4:X}", Convert.ToInt16(invalidChar)).Replace(' ', '0'));
+            }
+            return fileName.Replace(".", "%002E");
         }
     }
 }

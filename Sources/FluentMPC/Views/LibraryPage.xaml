@@ -48,10 +48,10 @@
                             <Grid Width="180" Height="180" CornerRadius="3" BorderThickness="2"
                                   BorderBrush="{ThemeResource ButtonRevealBorderBrush}">
                                 <Grid.Background>
-                                    <ImageBrush ImageSource="{x:Bind AlbumArt}" Stretch="UniformToFill"></ImageBrush>
+                                    <ImageBrush ImageSource="{x:Bind AlbumArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
                                 </Grid.Background>
 
-                                <winui:ProgressRing IsActive="{x:Bind IsDetailLoading}" Width="70" Height="70"/>
+                                <winui:ProgressRing IsActive="{x:Bind IsDetailLoading, Mode=OneWay}" Width="70" Height="70"/>
                             </Grid>
                         </controls:DropShadowPanel>
 
@@ -59,12 +59,12 @@
                                 Margin="{StaticResource XXSmallTopMargin}"
                                 Style="{ThemeResource BaseTextBlockStyle}"
                                 Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
-                                Text="{x:Bind Name}" ToolTipService.ToolTip="{x:Bind Name}" />
+                                Text="{x:Bind Name, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}" />
                         <TextBlock
                                 Margin="{StaticResource XXSmallTopMargin}"
                                 Style="{ThemeResource CaptionTextBlockStyle}"
                                 Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
-                                Text="{x:Bind Artist}" ToolTipService.ToolTip="{x:Bind Artist}"/>
+                                Text="{x:Bind Artist, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Artist, Mode=OneWay}"/>
                     </StackPanel>
                     
 

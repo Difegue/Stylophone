@@ -28,7 +28,10 @@ namespace FluentMPC.ViewModels.Items
         public String Artist
         {
             get => _artist;
-            set => Set(ref _artist, value);
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _artist, value));
+            }
         }
         private String _artist;
 
@@ -42,7 +45,10 @@ namespace FluentMPC.ViewModels.Items
         public bool IsDetailLoading
         {
             get => _detailLoading;
-            set => Set(ref _detailLoading, value);
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _detailLoading, value));
+            }
         }
 
         public bool IsFullyLoaded { get; set; }
@@ -52,7 +58,7 @@ namespace FluentMPC.ViewModels.Items
             get => _albumArt;
             private set
             {
-                Set(ref _albumArt, value);
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _albumArt, value));
             }
         }
 

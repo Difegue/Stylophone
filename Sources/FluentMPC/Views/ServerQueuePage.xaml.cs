@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using FluentMPC.Services;
 using FluentMPC.ViewModels;
 using FluentMPC.ViewModels.Items;
+using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Types;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,6 +27,16 @@ namespace FluentMPC.Views
 
             await ViewModel.LoadDataAsync();
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            MPDConnectionService.SongChanged += MPDConnectionService_SongChanged;
+        }
+
+        private void MPDConnectionService_SongChanged(object sender, SongChangedEventArgs e)
+        {
+            // TODO - Don't scroll if this is caused by user interaction
+            // Scroll to the newly playing song
+            var playing = ViewModel.Source.Where(t => t.File.Id == e.NewSongId).FirstOrDefault();
+            DispatcherHelper.ExecuteOnUIThreadAsync(() => QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading));
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

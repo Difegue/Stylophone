@@ -33,21 +33,10 @@ namespace FluentMPC.ViewModels
             {
                 var album = this[i];
 
-                OnPropertyChanged(new PropertyChangedEventArgs(null));
-
-                // Propagate PropertyChangeds from the albumVMs
-                album.PropertyChanged -= Album_PropertyChanged;
-                album.PropertyChanged += Album_PropertyChanged;
-
                 if (!album.IsDetailLoading && !album.IsFullyLoaded)
                     Task.Run(async () => await album.LoadAlbumDataAsync());
                 
             }
-        }
-
-        private void Album_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(null));
         }
 
         public void Dispose()

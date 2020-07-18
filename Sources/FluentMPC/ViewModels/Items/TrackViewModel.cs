@@ -27,6 +27,8 @@ namespace FluentMPC.ViewModels.Items
 
         public bool IsPlaying => MPDConnectionService.CurrentStatus.SongId == File.Id;
 
+        internal void UpdatePlayingStatus() => DispatcherHelper.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
+
         public BitmapImage AlbumArt
         {
             get => _albumArt;
