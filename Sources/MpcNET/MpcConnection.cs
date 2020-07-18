@@ -50,6 +50,11 @@ namespace MpcNET
         public string Version { get; private set; }
 
         /// <summary>
+        /// Event emitted when the connection is cut.
+        /// </summary>
+        public event EventHandler<EventArgs> Disconnected;
+
+        /// <summary>
         /// Connects asynchronously.
         /// </summary>
         /// <returns>The connect task.</returns>
@@ -274,6 +279,8 @@ namespace MpcNET
             this.mpcConnectionReporter?.Disconnecting(isExplicitDisconnect);
             this.ClearConnectionFields();
             this.mpcConnectionReporter?.Disconnected(isExplicitDisconnect);
+
+            Disconnected?.Invoke(this, new EventArgs());
             return Task.CompletedTask;
         }
 

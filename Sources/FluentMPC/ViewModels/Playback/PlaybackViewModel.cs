@@ -154,7 +154,7 @@ namespace FluentMPC.ViewModels.Playback
                 {
                     using (var c = await MPDConnectionService.GetConnectionAsync())
                     {
-                        await c.SendAsync(new SetVolumeCommand((byte)value));
+                        await c.InternalResource.SendAsync(new SetVolumeCommand((byte)value));
                     }
                     Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
                 },cts.Token));
@@ -319,7 +319,7 @@ namespace FluentMPC.ViewModels.Playback
 
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                await c.SendAsync(new RepeatCommand(IsRepeatEnabled));
+                await c.InternalResource.SendAsync(new RepeatCommand(IsRepeatEnabled));
             }
         }
 
@@ -335,7 +335,7 @@ namespace FluentMPC.ViewModels.Playback
 
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                await c.SendAsync(new RandomCommand(IsShuffleEnabled));
+                await c.InternalResource.SendAsync(new RandomCommand(IsShuffleEnabled));
             }
 
             UpdateUpNext();
@@ -375,7 +375,7 @@ namespace FluentMPC.ViewModels.Playback
         {
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                await c.SendAsync(new PauseResumeCommand());
+                await c.InternalResource.SendAsync(new PauseResumeCommand());
             }
         }
 
@@ -386,7 +386,7 @@ namespace FluentMPC.ViewModels.Playback
         {
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                await c.SendAsync(new NextCommand());
+                await c.InternalResource.SendAsync(new NextCommand());
             }
         }
 
@@ -397,7 +397,7 @@ namespace FluentMPC.ViewModels.Playback
         {
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                await c.SendAsync(new PreviousCommand());
+                await c.InternalResource.SendAsync(new PreviousCommand());
             }
         }
 
@@ -432,7 +432,7 @@ namespace FluentMPC.ViewModels.Playback
             // Set the track position
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                await c.SendAsync(new SeekCurCommand(CurrentTimeValue));
+                await c.InternalResource.SendAsync(new SeekCurCommand(CurrentTimeValue));
             }
 
             // Wait for MPD Status to catch up before we start auto-updating the slider again
@@ -452,7 +452,7 @@ namespace FluentMPC.ViewModels.Playback
         {
             // Do nothing if running in the background
             //if (DeviceHelper.IsBackground)
-              //  return;
+            //  return;
 
             // Same track, no need to perform this logic
             if (eventArgs.NewSongId == CurrentTrack?.File.Id)
@@ -461,10 +461,10 @@ namespace FluentMPC.ViewModels.Playback
             // Get song info from MPD
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                var response = await c.SendAsync(new CurrentSongCommand());
+                var response = await c.InternalResource.SendAsync(new CurrentSongCommand());
 
                 // Run all this on the UI thread
-                await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     if (response.IsResponseValid)
                     {
@@ -473,18 +473,24 @@ namespace FluentMPC.ViewModels.Playback
                     }
                     else
                     {
-                        // TODO 
+                        // TODO, No response 
                     }
 
-                    TimeRemaining = "-" + MiscHelpers.FormatTimeString(CurrentTrack.File.Time / 1000);
-                    TimeListened = "00:00";
-                    CurrentTimeValue = 0;
-                    MaxTimeValue = CurrentTrack.File.Time;
+                    if (CurrentTrack.File != null)
+                    {
+                        TimeRemaining = "-" + MiscHelpers.FormatTimeString(CurrentTrack.File.Time / 1000);
+                        TimeListened = "00:00";
+                        CurrentTimeValue = 0;
+                        MaxTimeValue = CurrentTrack.File.Time;
 
-                    UpdateUpNext();
+                        UpdateUpNext();
 
-                    // TODO Update the tile value
-                    //IsTilePined = TileHelper.IsTilePinned("Track_" + track.TrackId);
+                        // TODO Update the tile value
+                        //IsTilePined = TileHelper.IsTilePinned("Track_" + track.TrackId);
+                    } else
+                    {
+                        // TODO no track playing
+                    }
                 });
 
             }

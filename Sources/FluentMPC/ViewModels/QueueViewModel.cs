@@ -41,7 +41,7 @@ namespace FluentMPC.ViewModels
 
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                var response = await c.SendAsync(new PlaylistInfoCommand());
+                var response = await c.InternalResource.SendAsync(new PlaylistInfoCommand());
 
                 if (response.IsResponseValid)
                     foreach (var item in response.Response.Content)

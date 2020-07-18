@@ -6,10 +6,14 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:FluentMPC.Core.Models" xmlns:items="using:FluentMPC.ViewModels.Items"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:items="using:FluentMPC.ViewModels.Items"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
     <Grid x:Name="ContentArea">
 
         <GridView
@@ -46,6 +50,8 @@
                                 <Grid.Background>
                                     <ImageBrush ImageSource="{x:Bind AlbumArt}" Stretch="UniformToFill"></ImageBrush>
                                 </Grid.Background>
+
+                                <winui:ProgressRing IsActive="{x:Bind IsDetailLoading}" Width="70" Height="70"/>
                             </Grid>
                         </controls:DropShadowPanel>
 
@@ -58,7 +64,6 @@
                                 Margin="{StaticResource XXSmallTopMargin}"
                                 Style="{ThemeResource CaptionTextBlockStyle}"
                                 Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
-                                x:Phase="1"
                                 Text="{x:Bind Artist}" ToolTipService.ToolTip="{x:Bind Artist}"/>
                     </StackPanel>
                     

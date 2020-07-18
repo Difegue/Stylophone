@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
-
+using CodeProject.ObjectPool;
 using FluentMPC.Helpers;
 using MpcNET;
 using Windows.ApplicationModel.Core;
@@ -20,8 +21,10 @@ namespace FluentMPC.Services
         // TODO: settings wireup
         private const string AddressKey = "ServerIPEndPoint";
         private const string PasswordKey = "ServerPassword";
+        private const int ConnectionPoolSize = 10;
 
         public static MpdStatus CurrentStatus { get; private set; } = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
+        public static ObjectPool<PooledObjectWrapper<MpcConnection>> ConnectionPool;
 
         public static event EventHandler<SongChangedEventArgs> SongChanged;
         public static event EventHandler<EventArgs> StatusChanged;
@@ -38,17 +41,46 @@ namespace FluentMPC.Services
             {
                 IPAddress.TryParse("192.168.0.4", out var ipAddress);
                 _mpdEndpoint = new IPEndPoint(ipAddress, 6600);
-                _connection = await GetConnectionAsync();
-            } catch (Exception e)
+                _connection = await GetConnectionInternalAsync();
+
+                ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
+                    async (t1,t2) =>
+                    {
+                        var c = await GetConnectionInternalAsync();
+                        return new PooledObjectWrapper<MpcConnection>(c)
+                        {
+                            OnReleaseResources = (c) => c.DisconnectAsync()
+                        };
+                    }
+                );
+
+            }
+            catch (Exception e)
             {
                 // TODO
             }
-            
 
             InitializeStatusUpdater();
         }
 
-        public static async Task<MpcConnection> GetConnectionAsync()
+
+        public static async Task<PooledObjectWrapper<MpcConnection>> GetConnectionAsync()
+        {
+            return await ConnectionPool.GetObjectAsync();
+        }
+
+        public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync()
+        {
+            // Don't allocate extra connections.
+            while (ConnectionPool.ObjectsInPoolCount == 0)
+            {
+                Thread.Sleep(500);
+            }
+
+            return await ConnectionPool.GetObjectAsync();
+        }
+
+        private static async Task<MpcConnection> GetConnectionInternalAsync()
         {
             var c = new MpcConnection(_mpdEndpoint);
             await c.ConnectAsync();

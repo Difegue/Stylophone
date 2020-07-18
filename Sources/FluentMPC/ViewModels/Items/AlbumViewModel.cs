@@ -1,5 +1,7 @@
-﻿using FluentMPC.Helpers;
+﻿using ColorThiefDotNet;
+using FluentMPC.Helpers;
 using FluentMPC.Services;
+using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Database;
 using MpcNET.Tags;
 using MpcNET.Types;
@@ -8,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -34,16 +38,21 @@ namespace FluentMPC.ViewModels.Items
         }
         private IList<IMpdFile> _files;
 
+        private bool _detailLoading;
+        public bool IsDetailLoading
+        {
+            get => _detailLoading;
+            set => Set(ref _detailLoading, value);
+        }
+
+        public bool IsFullyLoaded { get; set; }
+
         public BitmapImage AlbumArt
         {
             get => _albumArt;
             private set
             {
                 Set(ref _albumArt, value);
-
-                //TODO: get dominant color of albumart
-                //var colorThief = new ColorThief();
-                //QuantizedColor quantizedColor = colorThief.GetColor(decoder);
             }
         }
 
@@ -53,15 +62,15 @@ namespace FluentMPC.ViewModels.Items
         {
             Name = albumName;
             Files = new List<IMpdFile>();
-
-            Task.Run(() => LoadAlbumDataAsync());
         }
 
         public async Task LoadAlbumDataAsync()
         {
+            IsDetailLoading = true;
+
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                var findReq = await c.SendAsync(new FindCommand(MpdTags.Album, Name));
+                var findReq = await c.InternalResource.SendAsync(new FindCommand(MpdTags.Album, Name));
                 if (!findReq.IsResponseValid) return;
 
                 Files.AddRange(findReq.Response.Content);
@@ -70,7 +79,14 @@ namespace FluentMPC.ViewModels.Items
 
             // Fire off an async request to get the album art from MPD.
             if (Files.Count > 0)
-                _ = Task.Run(async () => AlbumArt = await MiscHelpers.GetAlbumArtAsync(Files[0],180));
+                _ = Task.Run(async () =>
+                {
+                    var art = await MiscHelpers.GetAlbumArtAsync(Files[0]);
+                    AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
+
+                    IsFullyLoaded = true;
+                    IsDetailLoading = false;
+                });
         }
     }
 }

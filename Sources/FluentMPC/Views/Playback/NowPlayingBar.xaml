@@ -54,7 +54,7 @@
             VerticalAlignment="Stretch"
             Canvas.ZIndex="6" >
             <Border.Background>
-                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.4" TintColor="{StaticResource SystemAccentColor}"></AcrylicBrush>
+                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" TintColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay}"></AcrylicBrush>
             </Border.Background>
         </Border>
 
