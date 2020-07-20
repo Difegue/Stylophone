@@ -7,7 +7,10 @@ using System.Windows.Input;
 using FluentMPC.Core.Models;
 using FluentMPC.Core.Services;
 using FluentMPC.Helpers;
-
+using FluentMPC.Services;
+using FluentMPC.ViewModels.Items;
+using MpcNET.Commands.Database;
+using MpcNET.Types;
 using WinUI = Microsoft.UI.Xaml.Controls;
 
 namespace FluentMPC.ViewModels
@@ -23,7 +26,7 @@ namespace FluentMPC.ViewModels
             set => Set(ref _selectedItem, value);
         }
 
-        public ObservableCollection<SampleCompany> SampleItems { get; } = new ObservableCollection<SampleCompany>();
+        public ObservableCollection<FilePathViewModel> SourceData { get; } = new ObservableCollection<FilePathViewModel>();
 
         public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<WinUI.TreeViewItemInvokedEventArgs>(OnItemInvoked));
 
@@ -33,11 +36,19 @@ namespace FluentMPC.ViewModels
 
         public async Task LoadDataAsync()
         {
-            var data = await SampleDataService.GetTreeViewDataAsync();
-            foreach (var item in data)
+            SourceData.Clear();
+
+            using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                SampleItems.Add(item);
+                var response = await c.InternalResource.SendAsync(new LsInfoCommand("/"));
+
+                if (response.IsResponseValid)
+                    foreach (var item in response.Response.Content)
+                    {
+                        SourceData.Add(new FilePathViewModel(item));
+                    }
             }
+            OnPropertyChanged(nameof(SourceData));
         }
 
         private void OnItemInvoked(WinUI.TreeViewItemInvokedEventArgs args)

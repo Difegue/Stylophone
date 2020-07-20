@@ -29,7 +29,7 @@ namespace FluentMPC.ViewModels
             // TODO focus played track
 
             // Update IsPlaying status, scrolling is handled in code-behind
-            Source.Where(t => t.File.Id == e.NewSongId).First().UpdatePlayingStatus();
+            Source.Where(t => t.File.Id == e.NewSongId).FirstOrDefault()?.UpdatePlayingStatus();
         }
 
         private ICommand _itemClickCommand;

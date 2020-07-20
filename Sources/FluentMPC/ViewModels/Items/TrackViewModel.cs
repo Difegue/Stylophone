@@ -75,13 +75,25 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
+        private ICommand _addToQueueCommand;
+        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IMpdFile>(AddToQueue));
+
+        private async void AddToQueue(IMpdFile file)
+        {
+            using (var c = await MPDConnectionService.GetConnectionAsync())
+            {
+                var response = await c.InternalResource.SendAsync(new AddIdCommand(file.Path));
+            }
+        }
+
         public ICommand AddToPlayListCommand;
+        // TODO add to playlist command
+
 
         public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1)
         {
             File = file;
             AlbumArt = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
-            //DominantColor = new UISettings().GetColorValue(UIColorType.Accent);
 
             // Fire off an async request to get the album art from MPD.
             if (getAlbumArt)

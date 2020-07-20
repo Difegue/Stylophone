@@ -6,23 +6,35 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace MpcNET.Commands.Database
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using MpcNET.Types;
 
     /// <summary>
-    /// Lists all songs and directories.
+    /// Lists the contents of the directory URI. The response contains records starting with file, directory or playlist, each followed by metadata 
     /// https://www.musicpd.org/doc/protocol/database.html.
     /// </summary>
-    public class ListAllCommand : IMpcCommand<IEnumerable<MpdDirectory>>
+    public class LsInfoCommand : IMpcCommand<IEnumerable<IMpdFilePath>>
     {
+        private readonly string uri;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LsInfoCommand"/> class.
+        /// </summary>
+        /// <param name="uri">The uri.</param>
+        public LsInfoCommand(string uri)
+        {
+            this.uri = uri;
+        }
+
         /// <summary>
         /// Serializes the command.
         /// </summary>
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => "listall";
+        public string Serialize() => $"lsinfo \"{uri}\"";
 
         /// <summary>
         /// Deserializes the specified response text pairs.
@@ -31,18 +43,17 @@ namespace MpcNET.Commands.Database
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<MpdDirectory> Deserialize(SerializedResponse response)
+        public IEnumerable<IMpdFilePath> Deserialize(SerializedResponse response)
         {
-            var rootDirectory = new List<MpdDirectory>
-            {
-                new MpdDirectory("/"), // Add by default the root directory
-            };
+            var rootDirectory = new List<IMpdFilePath>();
 
             foreach (var line in response.ResponseValues)
             {
+                // lsinfo can also return playlists, but this is a deprecated behavior I'm entirely willing to not support.
+
                 if (line.Key.Equals("file"))
                 {
-                    rootDirectory.Last().AddFile(line.Value);
+                    rootDirectory.Add(new MpdFile(line.Value));
                 }
 
                 if (line.Key.Equals("directory"))
@@ -54,7 +65,4 @@ namespace MpcNET.Commands.Database
             return rootDirectory;
         }
     }
-
-    // TODO: findadd
-    // TODO: rescan
 }

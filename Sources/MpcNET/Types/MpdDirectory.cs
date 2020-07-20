@@ -12,7 +12,7 @@ namespace MpcNET.Types
     /// <summary>
     /// Represents a MPD directory.
     /// </summary>
-    public class MpdDirectory
+    public class MpdDirectory: IMpdFilePath
     {
         private readonly List<IMpdFilePath> files = new List<IMpdFilePath>();
 

@@ -184,8 +184,8 @@
     <Compile Include="Services\ToastNotificationsService.Samples.cs" />
     <Compile Include="Services\ViewLifetimeControl.cs" />
     <Compile Include="Services\WindowManagerService.cs" />
-    <Compile Include="TemplateSelectors\SampleDataTemplateSelector.cs" />
     <Compile Include="ViewModels\FoldersViewModel.cs" />
+    <Compile Include="ViewModels\Items\FilePathViewModel.cs" />
     <Compile Include="ViewModels\LibraryDetailViewModel.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\Items\AlbumViewModel.cs" />

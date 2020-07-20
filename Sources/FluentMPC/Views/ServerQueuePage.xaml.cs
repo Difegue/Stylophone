@@ -36,7 +36,8 @@ namespace FluentMPC.Views
             // TODO - Don't scroll if this is caused by user interaction
             // Scroll to the newly playing song
             var playing = ViewModel.Source.Where(t => t.File.Id == e.NewSongId).FirstOrDefault();
-            DispatcherHelper.ExecuteOnUIThreadAsync(() => QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading));
+            if (playing != null)
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading));
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

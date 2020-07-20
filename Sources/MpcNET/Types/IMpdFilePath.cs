@@ -18,5 +18,13 @@ namespace MpcNET.Types
         /// The path.
         /// </value>
         string Path { get; }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        string Name { get; }
     }
 }

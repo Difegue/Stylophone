@@ -55,14 +55,6 @@ namespace MpcNET.Types
         string Track { get; }
 
         /// <summary>
-        /// Gets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        string Name { get; }
-
-        /// <summary>
         /// Gets the genre.
         /// </summary>
         /// <value>
@@ -160,7 +152,7 @@ namespace MpcNET.Types
         bool HasTrack { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the MpdFile has the <see cref="Name"/> property set.
+        /// Gets a value indicating whether the MpdFile has the <see cref="IMpdFilePath.Name"/> property set.
         /// </summary>
         bool HasName { get; }
 
