@@ -15,7 +15,12 @@ namespace FluentMPC.Views
         {
             InitializeComponent();
             DataContext = ViewModel;
-            ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
+            ViewModel.Initialize(shellFrame, navigationView, playlistContainer, KeyboardAccelerators);
+        }
+
+        private void Create_Playlist(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+
         }
     }
 }

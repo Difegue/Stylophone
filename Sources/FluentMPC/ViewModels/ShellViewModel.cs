@@ -7,7 +7,7 @@ using System.Windows.Input;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.Views;
-
+using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,6 +28,7 @@ namespace FluentMPC.ViewModels
         private IList<KeyboardAccelerator> _keyboardAccelerators;
         private WinUI.NavigationView _navigationView;
         private WinUI.NavigationViewItem _selected;
+        private WinUI.NavigationViewItem _playlistContainer;
         private ICommand _loadedCommand;
         private ICommand _itemInvokedCommand;
 
@@ -57,14 +58,18 @@ namespace FluentMPC.ViewModels
         {
         }
 
-        public void Initialize(Frame frame, WinUI.NavigationView navigationView, IList<KeyboardAccelerator> keyboardAccelerators)
+        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, IList<KeyboardAccelerator> keyboardAccelerators)
         {
             _navigationView = navigationView;
+            _playlistContainer = playlistContainer;
             _keyboardAccelerators = keyboardAccelerators;
             NavigationService.Frame = frame;
             NavigationService.NavigationFailed += Frame_NavigationFailed;
             NavigationService.Navigated += Frame_Navigated;
             _navigationView.BackRequested += OnBackRequested;
+
+            MPDConnectionService.PlaylistsChanged += (s,e) =>
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
         }
 
         private async void OnLoaded()
@@ -84,9 +89,15 @@ namespace FluentMPC.ViewModels
                 return;
             }
 
-            var item = _navigationView.MenuItems
+            // Slight trick of hand to avoid triggering the navigationService on items that don't have a matching page.
+            // This is done through setting SelectsOnInvoked in XAML.
+            if (args.InvokedItemContainer is WinUI.NavigationViewItem i && !i.SelectsOnInvoked)
+                return;
+
+            var item = _navigationView.MenuItems.Union(_playlistContainer.MenuItems)
                             .OfType<WinUI.NavigationViewItem>()
                             .First(menuItem => (string)menuItem.Content == (string)args.InvokedItem);
+
             var pageType = item.GetValue(NavHelper.NavigateToProperty) as Type;
             NavigationService.Navigate(pageType);
         }
@@ -133,6 +144,25 @@ namespace FluentMPC.ViewModels
             return pageType == sourcePageType;
         }
 
+        private void UpdatePlaylistNavigation()
+        {
+            // Update the navigationview by hand - It ain't clean but partial databinding would be an even bigger mess...
+            var playlists = MPDConnectionService.Playlists;
+
+            // Remove all menuitems in the "Playlists" menu
+            _playlistContainer.MenuItems.Clear();
+
+            foreach (var playlist in playlists)
+            {
+                var navigationViewItem = new WinUI.NavigationViewItem();
+                navigationViewItem.Icon = new SymbolIcon(Symbol.MusicInfo);
+                navigationViewItem.Content = playlist.Name;
+                NavHelper.SetNavigateTo(navigationViewItem, typeof(PlaylistsPage));
+                _playlistContainer.MenuItems.Add(navigationViewItem);
+            }
+
+        }
+
         private static KeyboardAccelerator BuildKeyboardAccelerator(VirtualKey key, VirtualKeyModifiers? modifiers = null)
         {
             var keyboardAccelerator = new KeyboardAccelerator() { Key = key };
@@ -150,5 +180,6 @@ namespace FluentMPC.ViewModels
             var result = NavigationService.GoBack();
             args.Handled = result;
         }
+
     }
 }

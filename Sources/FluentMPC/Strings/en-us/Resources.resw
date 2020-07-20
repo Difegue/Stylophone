@@ -231,4 +231,7 @@ Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Ma
     <value>Ok</value>
     <comment>First use prompt message primary button text</comment>
   </data>
+  <data name="Shell_NewPlaylist.Content" xml:space="preserve">
+    <value>Add Playlist</value>
+  </data>
 </root>

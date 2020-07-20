@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeProject.ObjectPool;
-using FluentMPC.Helpers;
+using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using MpcNET;
-using Windows.ApplicationModel.Core;
-using Windows.Devices.Geolocation;
-using Windows.Storage;
+using MpcNET.Types;
+using Sundew.Base.Collections;
 using Windows.System.Threading;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 
 namespace FluentMPC.Services
@@ -24,10 +24,13 @@ namespace FluentMPC.Services
         private const int ConnectionPoolSize = 10;
 
         public static MpdStatus CurrentStatus { get; private set; } = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
+
+        public static IList<MpdPlaylist> Playlists { get; private set; } = new List<MpdPlaylist>();
         public static ObjectPool<PooledObjectWrapper<MpcConnection>> ConnectionPool;
 
         public static event EventHandler<SongChangedEventArgs> SongChanged;
         public static event EventHandler<EventArgs> StatusChanged;
+        public static event EventHandler<EventArgs> PlaylistsChanged;
         public static event EventHandler<EventArgs> ConnectionLost;
 
         private static ThreadPoolTimer _statusUpdater;
@@ -71,7 +74,7 @@ namespace FluentMPC.Services
 
         public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync()
         {
-            // Don't allocate extra connections.
+            // Don't allocate extra connections for album art.
             while (ConnectionPool.ObjectsInPoolCount == 0)
             {
                 Thread.Sleep(500);
@@ -102,7 +105,23 @@ namespace FluentMPC.Services
                     CurrentStatus = newStatus;
                 }
                 else
-                    ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts
+                    ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?
+
+                var response2 = await _connection.SendAsync(new MpcNET.Commands.Playlist.ListPlaylistsCommand());
+
+                if (response2.IsResponseValid)
+                {
+                    var playlists = response2.Response.Content;
+
+                    if (!Playlists.SequenceEqual(playlists))
+                    {
+                        Playlists.Clear();
+                        Playlists.AddRange(playlists);
+                        PlaylistsChanged?.Invoke(Application.Current, new EventArgs());
+                    }
+                }
+                else
+                    ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?
 
             }, period);
         }
@@ -151,44 +170,6 @@ namespace FluentMPC.Services
             InitializeStatusUpdater();
         }
 
-        /*public static async Task SetThemeAsync(ElementTheme theme)
-        {
-            Theme = theme;
-
-            await SetRequestedThemeAsync();
-            await SaveThemeInSettingsAsync(Theme);
-        }
-
-        public static async Task SetRequestedThemeAsync()
-        {
-            foreach (var view in CoreApplication.Views)
-            {
-                await view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    if (Window.Current.Content is FrameworkElement frameworkElement)
-                    {
-                        frameworkElement.RequestedTheme = Theme;
-                    }
-                });
-            }
-        }
-
-        private static async Task<ElementTheme> LoadThemeFromSettingsAsync()
-        {
-            ElementTheme cacheTheme = ElementTheme.Default;
-            string themeName = await ApplicationData.Current.LocalSettings.ReadAsync<string>(SettingsKey);
-
-            if (!string.IsNullOrEmpty(themeName))
-            {
-                Enum.TryParse(themeName, out cacheTheme);
-            }
-
-            return cacheTheme;
-        }
-
-        private static async Task SaveThemeInSettingsAsync(ElementTheme theme)
-        {
-            await ApplicationData.Current.LocalSettings.SaveAsync(SettingsKey, theme.ToString());
-        }*/
+        
     }
 }
