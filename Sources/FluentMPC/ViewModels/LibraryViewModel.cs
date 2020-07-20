@@ -29,7 +29,7 @@ namespace FluentMPC.ViewModels
             // TODO: cancel not visible loading
 
             // Load album data for the visible range of data
-            for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex; i++)
+            for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
             {
                 var album = this[i];
 
@@ -77,7 +77,7 @@ namespace FluentMPC.ViewModels
             if (clickedItem != null)
             {
                 NavigationService.Frame.SetListDataItemForNextConnectedAnimation(clickedItem);
-                NavigationService.Navigate<LibraryDetailPage>(clickedItem.Name);
+                NavigationService.Navigate<LibraryDetailPage>(clickedItem);
             }
         }
     }

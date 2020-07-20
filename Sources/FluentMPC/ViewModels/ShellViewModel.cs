@@ -9,6 +9,7 @@ using FluentMPC.Services;
 using FluentMPC.Views;
 
 using Windows.System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
@@ -23,6 +24,7 @@ namespace FluentMPC.ViewModels
         private readonly KeyboardAccelerator _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack);
 
         private bool _isBackEnabled;
+        private Thickness _frameMargin;
         private IList<KeyboardAccelerator> _keyboardAccelerators;
         private WinUI.NavigationView _navigationView;
         private WinUI.NavigationViewItem _selected;
@@ -39,6 +41,12 @@ namespace FluentMPC.ViewModels
         {
             get { return _selected; }
             set { Set(ref _selected, value); }
+        }
+
+        public Thickness FrameMargin
+        {
+            get { return _frameMargin; }
+            set { Set(ref _frameMargin, value); }
         }
 
         public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new RelayCommand(OnLoaded));
@@ -96,6 +104,18 @@ namespace FluentMPC.ViewModels
         private void Frame_Navigated(object sender, NavigationEventArgs e)
         {
             IsBackEnabled = NavigationService.CanGoBack;
+
+            if (e.SourcePageType == typeof(LibraryDetailPage))
+            {
+                // Special margin to extend frame to the titlebar
+                // TODO:depending on viewstate, handle color of back and hambaga buttons and change margin 
+                FrameMargin = new Thickness(0, -32, 0, 0);
+            }
+            else
+            {
+                FrameMargin = new Thickness(0, 0, 0, 0);
+            }
+
             if (e.SourcePageType == typeof(SettingsPage))
             {
                 Selected = _navigationView.SettingsItem as WinUI.NavigationViewItem;

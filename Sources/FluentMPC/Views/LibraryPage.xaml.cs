@@ -21,7 +21,8 @@ namespace FluentMPC.Views
         {
             base.OnNavigatedTo(e);
 
-            await ViewModel.LoadDataAsync();
+            if (ViewModel.Source.Count == 0)
+                await ViewModel.LoadDataAsync();
         }
 
         private void AlbumClicked(object sender, ItemClickEventArgs e)

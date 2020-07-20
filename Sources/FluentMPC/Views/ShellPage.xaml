@@ -26,7 +26,7 @@
         <winui:NavigationView Grid.Row="0"
         x:Name="navigationView"
         IsBackButtonVisible="Visible"
-        PaneTitle="ThinWhiteDuke"
+        PaneTitle="Moroder"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
         SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
         IsSettingsVisible="True"
@@ -64,9 +64,10 @@
                 </ic:EventTriggerBehavior>
             </i:Interaction.Behaviors>
             <Grid>
-                <Frame x:Name="shellFrame" />
+                <Frame x:Name="shellFrame" Margin="{x:Bind ViewModel.FrameMargin, Mode=OneWay}"/>
             </Grid>
         </winui:NavigationView>
+        
         <views:NowPlayingBar Grid.Row="1" />
     </Grid>
     

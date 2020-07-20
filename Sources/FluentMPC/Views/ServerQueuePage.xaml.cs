@@ -29,6 +29,11 @@ namespace FluentMPC.Views
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
             MPDConnectionService.SongChanged += MPDConnectionService_SongChanged;
+
+            // Scroll to currently playing song
+            var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
+            if (playing != null)
+                QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
         }
 
         private void MPDConnectionService_SongChanged(object sender, SongChangedEventArgs e)

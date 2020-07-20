@@ -2,7 +2,7 @@
 
 using FluentMPC.Services;
 using FluentMPC.ViewModels;
-
+using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 
 using Windows.UI.Xaml.Controls;
@@ -23,9 +23,9 @@ namespace FluentMPC.Views
         {
             base.OnNavigatedTo(e);
             this.RegisterElementForConnectedAnimation("animationKeyLibrary", itemHero);
-            if (e.Parameter is long orderID)
+            if (e.Parameter is AlbumViewModel album)
             {
-                await ViewModel.InitializeAsync(orderID);
+                await ViewModel.InitializeAsync(album);
             }
         }
 

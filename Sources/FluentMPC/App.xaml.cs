@@ -3,6 +3,8 @@
 using FluentMPC.Services;
 
 using Windows.ApplicationModel.Activation;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
 namespace FluentMPC
@@ -27,6 +29,13 @@ namespace FluentMPC
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+
+            var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+            viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
+            viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            viewTitleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
+            viewTitleBar.ButtonInactiveForegroundColor = (Color)Resources["SystemBaseHighColor"];
+
             if (!args.PrelaunchActivated)
             {
                 await ActivationService.ActivateAsync(args);

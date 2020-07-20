@@ -1,5 +1,4 @@
-﻿using ColorThiefDotNet;
-using FluentMPC.Helpers;
+﻿using FluentMPC.Helpers;
 using FluentMPC.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Database;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -64,9 +64,21 @@ namespace FluentMPC.ViewModels.Items
 
         private BitmapImage _albumArt;
 
+        public Color DominantColor
+        {
+            get => _albumColor;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _albumColor, value));
+            }
+        }
+
+        private Color _albumColor;
+
         public AlbumViewModel(string albumName)
         {
             Name = albumName;
+            DominantColor = Colors.Black;
             Files = new List<IMpdFile>();
         }
 
@@ -80,7 +92,7 @@ namespace FluentMPC.ViewModels.Items
                 if (!findReq.IsResponseValid) return;
 
                 Files.AddRange(findReq.Response.Content);
-                Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1},{f2}");
+                Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
             }
 
             // Fire off an async request to get the album art from MPD.
@@ -89,6 +101,8 @@ namespace FluentMPC.ViewModels.Items
                 {
                     var art = await MiscHelpers.GetAlbumArtAsync(Files[0]);
                     AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
+
+                    DominantColor = await MiscHelpers.GetDominantColor(art);
 
                     IsFullyLoaded = true;
                     IsDetailLoading = false;

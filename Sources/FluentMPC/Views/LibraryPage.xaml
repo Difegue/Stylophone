@@ -10,6 +10,7 @@
     xmlns:items="using:FluentMPC.ViewModels.Items"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     Style="{StaticResource PageStyle}"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
