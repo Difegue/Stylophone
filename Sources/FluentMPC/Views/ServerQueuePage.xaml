@@ -15,7 +15,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
         <!-- DataTemplate used: -->
-        <DataTemplate x:Key="TrackListViewTemplate" x:DataType="items:TrackViewModel">
+        <DataTemplate x:Key="QueueTemplate" x:DataType="items:TrackViewModel">
             <Grid DoubleTapped="Play_Track" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -29,7 +29,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="24"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{x:Bind File.Title}" ToolTipService.ToolTip="{x:Bind File.Title}"
+                    <TextBlock Grid.Column="0" Text="{x:Bind Name}" ToolTipService.ToolTip="{x:Bind Name}"
                     VerticalAlignment="Center" MaxLines="1" TextTrimming="CharacterEllipsis" Style="{ThemeResource BaseTextBlockStyle}"/>
 
                     <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE8D6;" Grid.Column="1" Margin="-12,0,0,0"
@@ -75,9 +75,7 @@
         </DataTemplate>
     </Page.Resources>
     <Grid x:Name="ContentArea" >
-        <Grid Margin="{StaticResource MediumLeftRightMargin}">
-
-            <fluentMpc:AlternatingRowListView SelectionMode="Extended"
+        <fluentMpc:AlternatingRowListView SelectionMode="Extended"
                       AllowDrop="True"
                       CanReorderItems="True"
                       ReorderMode="Enabled"
@@ -85,14 +83,9 @@
                       x:Name="QueueList"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                      ItemTemplate="{StaticResource TrackListViewTemplate}"
-                      ItemsSource="{x:Bind ViewModel.Source}">
-                <fluentMpc:AlternatingRowListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
-                </fluentMpc:AlternatingRowListView.ItemContainerStyle>
-            </fluentMpc:AlternatingRowListView>
-        </Grid>
+                      ItemTemplate="{StaticResource QueueTemplate}"
+                      ItemsSource="{x:Bind ViewModel.Source}"
+                      ItemContainerStyle="{StaticResource TrackListStyle}">
+        </fluentMpc:AlternatingRowListView>
     </Grid>
 </Page>

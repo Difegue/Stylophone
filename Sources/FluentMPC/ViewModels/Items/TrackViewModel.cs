@@ -2,28 +2,23 @@
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
-using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
-using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Types;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.Storage.Streams;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Color = Windows.UI.Color;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Linq;
 
 namespace FluentMPC.ViewModels.Items
 {
     public class TrackViewModel : Observable
     {
         public IMpdFile File { get; }
+
+        public string Name => File.HasTitle ? File.Title : File.Path.Split('/').Last();
 
         public bool IsPlaying => MPDConnectionService.CurrentStatus.SongId == File.Id;
 

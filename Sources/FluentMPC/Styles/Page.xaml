@@ -30,6 +30,12 @@
         <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
     </Style>
 
+    <!-- Style for track listviews. -->
+    <Style x:Key="TrackListStyle" TargetType="ListViewItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
+    </Style>
+
     <!--  Circle button used on the overlay view, now playing view and now playing bar  -->
     <Style
         x:Key="CircleButtonStyle"

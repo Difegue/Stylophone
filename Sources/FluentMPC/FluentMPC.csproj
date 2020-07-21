@@ -192,7 +192,7 @@
     <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\Playback\PlaybackViewModel.cs" />
     <Compile Include="ViewModels\Items\TrackViewModel.cs" />
-    <Compile Include="ViewModels\PlaylistsViewModel.cs" />
+    <Compile Include="ViewModels\PlaylistViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\FirstRunDialog.xaml.cs">
@@ -216,11 +216,8 @@
     <Compile Include="Views\Playback\OverlayView.xaml.cs">
       <DependentUpon>OverlayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PlaylistsDetailControl.xaml.cs">
-      <DependentUpon>PlaylistsDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PlaylistsPage.xaml.cs">
-      <DependentUpon>PlaylistsPage.xaml</DependentUpon>
+    <Compile Include="Views\PlaylistPage.xaml.cs">
+      <DependentUpon>PlaylistPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -284,11 +281,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\PlaylistsDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\PlaylistsPage.xaml">
+    <Page Include="Views\PlaylistPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

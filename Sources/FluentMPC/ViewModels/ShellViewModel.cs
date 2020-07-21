@@ -99,7 +99,12 @@ namespace FluentMPC.ViewModels
                             .First(menuItem => (string)menuItem.Content == (string)args.InvokedItem);
 
             var pageType = item.GetValue(NavHelper.NavigateToProperty) as Type;
-            NavigationService.Navigate(pageType);
+
+            // Playlist items navigate with their name as parameter
+            if (_playlistContainer.MenuItems.Contains(item))
+                NavigationService.Navigate(pageType, item.Content);
+            else
+                NavigationService.Navigate(pageType);
         }
 
         private void OnBackRequested(WinUI.NavigationView sender, WinUI.NavigationViewBackRequestedEventArgs args)
@@ -157,7 +162,7 @@ namespace FluentMPC.ViewModels
                 var navigationViewItem = new WinUI.NavigationViewItem();
                 navigationViewItem.Icon = new SymbolIcon(Symbol.MusicInfo);
                 navigationViewItem.Content = playlist.Name;
-                NavHelper.SetNavigateTo(navigationViewItem, typeof(PlaylistsPage));
+                NavHelper.SetNavigateTo(navigationViewItem, typeof(PlaylistPage));
                 _playlistContainer.MenuItems.Add(navigationViewItem);
             }
 

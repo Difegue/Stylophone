@@ -50,7 +50,7 @@ namespace FluentMPC.Helpers
 
             // This allows to cache per album, avoiding saving the same album art a ton of times.
             // Doesn't work if files in an album have different albumarts, but that happens so rarely it's fine to ignore it.
-            var uniqueIdentifier = f.HasAlbum ? f.Album : f.Title;
+            var uniqueIdentifier = f.HasAlbum ? f.Album : f.HasTitle ? f.Title : f.Path;
 
             // Try loading from art cache first
             result = await LoadImageFromFile(uniqueIdentifier);

@@ -104,7 +104,7 @@
                         MaxHeight="50"
                         FontSize="14"
                         FontWeight="SemiBold"
-                        Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Title, Mode=OneWay}"
+                        Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
                         TextTrimming="CharacterEllipsis"
                         TextWrapping="Wrap" />
 
@@ -430,19 +430,12 @@
                 <Button.Flyout>
                     <MenuFlyout Placement="Top">
 
-                        <!--  Add to a playlist  -->
-                        <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.DisplayPlaylist}" Text="Add to playlist">
-                            <MenuFlyoutItem.Icon>
-                                <FontIcon Glyph="&#xE142;" />
-                            </MenuFlyoutItem.Icon>
-                        </MenuFlyoutItem>
-
                         <MenuFlyoutSeparator Opacity="0.4" />
 
                         <!--  Media casting  -->
-                        <MenuFlyoutSubItem Text="Cast track to device">
+                        <MenuFlyoutSubItem Text="Add track to playlist">
                             <MenuFlyoutSubItem.Icon>
-                                <FontIcon Glyph="&#xEC15;" />
+                                <FontIcon Glyph="&#xE142;" />
                             </MenuFlyoutSubItem.Icon>
                             <MenuFlyoutSubItem.Items>
                                 <!--  Media casting (Miracast, DLNA, Bluetooth  -->
@@ -466,8 +459,7 @@
                             </MenuFlyoutSubItem.Items>
                         </MenuFlyoutSubItem>
 
-                        <!--  Project Rome  -->
-                        <MenuFlyoutItem  Text="Continue playing on device">
+                        <MenuFlyoutItem Text="Clear Queue">
                             <MenuFlyoutItem.Icon>
                                 <FontIcon Glyph="&#xF623;" />
                             </MenuFlyoutItem.Icon>
@@ -575,7 +567,7 @@
 
                         <MenuFlyoutSeparator Opacity="0.4" />
 
-                        <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View artist page"> <!-- TODO view artist -->
+                        <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist"> <!-- TODO view artist -->
                             <MenuFlyoutItem.Icon>
                                 <FontIcon Glyph="&#xE8D4;" />
                             </MenuFlyoutItem.Icon>
@@ -584,7 +576,7 @@
                         <MenuFlyoutItem
                             Click="{x:Bind PlaybackViewModel.NavigateNowPlayingInfo}"
                             Icon="MusicInfo"
-                            Text="View track information" />
+                            Text="View Album" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

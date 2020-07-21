@@ -57,7 +57,7 @@
         </StackPanel>
 
         <StackPanel VerticalAlignment="Bottom">
-            <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Title, Mode=OneWay}"
+            <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
                        MaxLines="3"
                        FontSize="26"
                        TextWrapping="Wrap"
