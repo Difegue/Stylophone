@@ -206,7 +206,7 @@ namespace FluentMPC.Helpers
         /// All characters that are not valid for a filename, plus "%" and ".", are converted into "%uuuu", where uuuu is the hexadecimal
         /// unicode representation of the character.
         /// </remarks>
-        private static string EscapeFilename(string fileName)
+        public static string EscapeFilename(string fileName)
         {
             char[] invalidChars = Path.GetInvalidFileNameChars();
 
