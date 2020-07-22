@@ -112,9 +112,9 @@
                             RelativePanel.AlignRightWithPanel="True"
                             Margin="-24,-46,-24,-24"
                             Canvas.ZIndex="-1">
-                            <!-- <Border.Background>
-                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.6" TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"></AcrylicBrush> 
-                            </Border.Background> -->
+                            <Border.Background>
+                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.6" TintColor="{ThemeResource SystemAccentColorDark1}"></AcrylicBrush>
+                            </Border.Background>
                         </Border>
 
                         <Border RelativePanel.AlignTopWithPanel="True"
@@ -164,9 +164,7 @@
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
                             <Button Style="{StaticResource ButtonRevealStyle}">Play</Button>
                             <Button Style="{StaticResource ButtonRevealStyle}">Add to Queue</Button>
-                            <winui:ComboBox PlaceholderText="Add to Playlist">
-                                <winui:ComboBoxItem>aaaa</winui:ComboBoxItem>
-                            </winui:ComboBox>
+                            <Button Style="{StaticResource ButtonRevealStyle}">Delete Playlist</Button>
                         </StackPanel>
 
                     </RelativePanel>

@@ -12,7 +12,7 @@ namespace FluentMPC.Views
 {
     public sealed partial class LibraryDetailPage : Page
     {
-        public LibraryDetailViewModel ViewModel { get; } = new LibraryDetailViewModel();
+        public AlbumDetailViewModel ViewModel { get; } = new AlbumDetailViewModel();
 
         public LibraryDetailPage()
         {

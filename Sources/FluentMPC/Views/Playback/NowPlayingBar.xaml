@@ -26,6 +26,7 @@
     <!--  Content  -->
     <Grid
         x:Name="RootGrid"
+        RequestedTheme="Dark"
         Height="81"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
@@ -60,7 +61,8 @@
 
         <Button
             Grid.Column="0"
-            Width="320"
+            x:Name="AlbumView"
+            Width="220"
             Height="80"
             Padding="0"
             HorizontalContentAlignment="Stretch"
@@ -75,8 +77,6 @@
 
                 <!--  Track Image and Navigate to now playing  -->
                 <controls:DropShadowPanel
-                    Width="70"
-                    Height="70"
                     Margin="6,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
@@ -125,15 +125,19 @@
             Grid.Column="1"
             Canvas.ZIndex="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
             <!--  Buttons  -->
             <StackPanel
                 Grid.Column="0"
-                Margin="10,0,0,0"
+                Grid.Row="0"
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <!--  Shuffle  -->
@@ -144,8 +148,7 @@
                     Margin="5,0"
                     Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
-                    Style="{StaticResource CircleButtonStyle}"
-                    Visibility="Collapsed">
+                    Style="{StaticResource CircleButtonStyle}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Toggle Shuffle" />
                     </ToolTipService.ToolTip>
@@ -223,8 +226,7 @@
                     Margin="5,0"
                     Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
-                    Style="{StaticResource CircleButtonStyle}"
-                    Visibility="Collapsed">
+                    Style="{StaticResource CircleButtonStyle}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Toggle Repeat" />
                     </ToolTipService.ToolTip>
@@ -240,8 +242,9 @@
 
             <!--  Slider  -->
             <Grid
-                Grid.Column="1"
-                Margin="20,0,20,0"
+                Grid.Column="0"
+                Grid.Row="1"
+                Margin="20,-12,20,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
@@ -254,8 +257,8 @@
                     Grid.Column="0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    FontSize="14"
-                    FontWeight="SemiBold"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Margin="0,2,0,0"
                     MinWidth="40"
                     Opacity="0.8"
                     Text="{x:Bind PlaybackViewModel.TimeListened, Mode=OneWay}" />
@@ -263,10 +266,11 @@
                 <Slider
                     x:Name="ProgressBar"
                     Grid.Column="1"
-                    Margin="15,2,15,0"
+                    Margin="15,0,15,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Stretch"
+                    Style="{StaticResource MainSliderStyle}"
                     Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
                     ManipulationMode="All"
                     ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
@@ -287,9 +291,9 @@
                     Grid.Column="2"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    FontSize="14"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Margin="0,2,0,0"
                     MinWidth="40"
-                    FontWeight="SemiBold"
                     Opacity="0.8"
                     Text="{x:Bind PlaybackViewModel.TimeRemaining, Mode=OneWay}" />
             </Grid>
@@ -304,6 +308,7 @@
             <!--  Misc Buttons  -->
             <StackPanel
                 Grid.Column="2"
+                Grid.RowSpan="2"
                 Margin="0,0,0,0"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
@@ -330,7 +335,7 @@
                 
 
                 <!-- Compact Sound -->
-                <Button 
+                <Button
                     x:Name="SoundFlyout"
                     Width="40"
                     Height="40"
@@ -346,7 +351,7 @@
                             Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                             TextAlignment="Center" />
                     </Button.Content>
-                    <Button.Flyout>
+                    <Button.Flyout >
                         <Flyout Placement="Top">
                             <StackPanel
                                 Width="245"
@@ -430,140 +435,14 @@
                 <Button.Flyout>
                     <MenuFlyout Placement="Top">
 
-                        <MenuFlyoutSeparator Opacity="0.4" />
-
-                        <!--  Media casting  -->
-                        <MenuFlyoutSubItem Text="Add track to playlist">
-                            <MenuFlyoutSubItem.Icon>
-                                <FontIcon Glyph="&#xE142;" />
-                            </MenuFlyoutSubItem.Icon>
-                            <MenuFlyoutSubItem.Items>
-                                <!--  Media casting (Miracast, DLNA, Bluetooth  -->
-                                <MenuFlyoutItem  Text="via Miracast/DLNA/Bluetooth">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xEC15;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <!--  Google Cast / Chromecast  -->
-                                <MenuFlyoutItem  Text="via Chromecast (beta)">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xEC15;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <!--  AirPlay  -->
-                                <MenuFlyoutItem  Text="via Airplay (beta)">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xEC15;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                            </MenuFlyoutSubItem.Items>
-                        </MenuFlyoutSubItem>
-
-                        <MenuFlyoutItem Text="Clear Queue">
+                        <!--  Add to playlist  -->
+                        <MenuFlyoutItem Text="Add track to playlist">
                             <MenuFlyoutItem.Icon>
-                                <FontIcon Glyph="&#xF623;" />
+                                <FontIcon Glyph="&#xE142;" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
 
-                        <!--  Change the playback speed  -->
-                        <MenuFlyoutSubItem Text="Playback speed">
-                            <MenuFlyoutSubItem.Icon>
-                                <FontIcon Glyph="&#xEC57;" />
-                            </MenuFlyoutSubItem.Icon>
-                            <MenuFlyoutSubItem.Items>
-                                <MenuFlyoutItem Text="0.25x">
-                                    <MenuFlyoutItem.Template>
-                                        <ControlTemplate TargetType="MenuFlyoutItem">
-                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
-                                                <RadioButton
-                                                    Content="{TemplateBinding Text}"
-                                                    GroupName="PlaybackRate"
-                                                    Tag="0.25" />
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </MenuFlyoutItem.Template>
-                                </MenuFlyoutItem>
-
-                                <MenuFlyoutItem Text="0.50x">
-                                    <MenuFlyoutItem.Template>
-                                        <ControlTemplate TargetType="MenuFlyoutItem">
-                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
-                                                <RadioButton
-                                                    Content="{TemplateBinding Text}"
-                                                    GroupName="PlaybackRate"
-                                                    Tag="0.5" />
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </MenuFlyoutItem.Template>
-                                </MenuFlyoutItem>
-
-                                <MenuFlyoutItem Text="0.75x">
-                                    <MenuFlyoutItem.Template>
-                                        <ControlTemplate TargetType="MenuFlyoutItem">
-                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
-                                                <RadioButton
-                                                    Content="{TemplateBinding Text}"
-                                                    GroupName="PlaybackRate"
-                                                    Tag="0.75" />
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </MenuFlyoutItem.Template>
-                                </MenuFlyoutItem>
-
-                                <MenuFlyoutItem Text="Normal">
-                                    <MenuFlyoutItem.Template>
-                                        <ControlTemplate TargetType="MenuFlyoutItem">
-                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
-                                                <RadioButton
-                                                    Content="{TemplateBinding Text}"
-                                                    GroupName="PlaybackRate"
-                                                    IsChecked="True"
-                                                    Tag="normal" />
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </MenuFlyoutItem.Template>
-                                </MenuFlyoutItem>
-
-                                <MenuFlyoutItem Text="1.25x">
-                                    <MenuFlyoutItem.Template>
-                                        <ControlTemplate TargetType="MenuFlyoutItem">
-                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
-                                                <RadioButton
-                                                    Content="{TemplateBinding Text}"
-                                                    GroupName="PlaybackRate"
-                                                    Tag="1.25" />
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </MenuFlyoutItem.Template>
-                                </MenuFlyoutItem>
-
-                                <MenuFlyoutItem Text="1.50x">
-                                    <MenuFlyoutItem.Template>
-                                        <ControlTemplate TargetType="MenuFlyoutItem">
-                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
-                                                <RadioButton
-                                                    Content="{TemplateBinding Text}"
-                                                    GroupName="PlaybackRate"
-                                                    Tag="1.5" />
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </MenuFlyoutItem.Template>
-                                </MenuFlyoutItem>
-
-                                <MenuFlyoutItem Text="2.00x">
-                                    <MenuFlyoutItem.Template>
-                                        <ControlTemplate TargetType="MenuFlyoutItem">
-                                            <StackPanel Margin="12,10,0,0" Orientation="Horizontal">
-                                                <RadioButton
-                                                    Content="{TemplateBinding Text}"
-                                                    GroupName="PlaybackRate"
-                                                    Tag="2" />
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </MenuFlyoutItem.Template>
-                                </MenuFlyoutItem>
-                            </MenuFlyoutSubItem.Items>
-                        </MenuFlyoutSubItem>
+                        <MenuFlyoutItem Text="Clear Queue" Icon="Delete"/>
 
                         <MenuFlyoutSeparator Opacity="0.4" />
 
@@ -588,10 +467,9 @@
                         <AdaptiveTrigger MinWindowWidth="1200" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="AlbumView.Width" Value="320"/>
                         <Setter Target="SoundFlyout.Visibility" Value="Collapsed" />
                         <Setter Target="SoundPanel.Visibility" Value="Visible" />
-                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
-                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

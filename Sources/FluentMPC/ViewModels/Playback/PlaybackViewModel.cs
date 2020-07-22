@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -36,6 +37,14 @@ namespace FluentMPC.ViewModels.Playback
         /// </summary>
         public ObservableCollection<IMpdFile> Playlist { get; } = new ObservableCollection<IMpdFile>();
 
+        public IList<MpdPlaylist> Playlists => MPDConnectionService.Playlists;
+
+        private ICommand _addToPlaylistCommand;
+        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<SelectionChangedEventArgs>(AddToPlaylist));
+        private void AddToPlaylist(SelectionChangedEventArgs obj)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The current playing track
@@ -454,8 +463,8 @@ namespace FluentMPC.ViewModels.Playback
             //if (DeviceHelper.IsBackground)
             //  return;
 
-            // Same track, no need to perform this logic
-            if (eventArgs.NewSongId == CurrentTrack?.File.Id)
+            // Same track or no track, no need to perform this logic
+            if (eventArgs.NewSongId == CurrentTrack?.File?.Id)
                 return;
 
             // Get song info from MPD
@@ -466,7 +475,7 @@ namespace FluentMPC.ViewModels.Playback
                 // Run all this on the UI thread
                 await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    if (response.IsResponseValid)
+                    if (response.IsResponseValid && response.Response.Content != null)
                     {
                         // Set the new current track, updating the UI
                         CurrentTrack = new TrackViewModel(response.Response.Content, true, _artWidth);

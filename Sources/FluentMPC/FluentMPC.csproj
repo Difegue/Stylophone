@@ -186,7 +186,7 @@
     <Compile Include="Services\WindowManagerService.cs" />
     <Compile Include="ViewModels\FoldersViewModel.cs" />
     <Compile Include="ViewModels\Items\FilePathViewModel.cs" />
-    <Compile Include="ViewModels\LibraryDetailViewModel.cs" />
+    <Compile Include="ViewModels\AlbumDetailViewModel.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\Items\AlbumViewModel.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />

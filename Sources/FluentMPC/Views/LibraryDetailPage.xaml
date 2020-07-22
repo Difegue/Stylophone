@@ -8,7 +8,7 @@
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:fluentMpc="using:FluentMPC.Helpers"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:behaviors="using:FluentMPC.Behaviors" xmlns:items="using:FluentMPC.ViewModels.Items"
+    xmlns:behaviors="using:FluentMPC.Behaviors" xmlns:items="using:FluentMPC.ViewModels.Items" xmlns:types="using:MpcNET.Types" xmlns:i="using:Microsoft.Xaml.Interactivity" xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     Style="{StaticResource PageStyle}"
     behaviors:NavigationViewHeaderBehavior.HeaderMode="Minimal"
     mc:Ignorable="d">
@@ -61,12 +61,10 @@
                     Style="{ThemeResource BodyTextBlockStyle}"
                     Margin="12,0,0,0"/>
                 <Grid.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Play" Command="{x:Bind PlayTrackCommand}" CommandParameter="{x:Bind File}" />
-                        <MenuFlyoutItem Text="Play Next" Command="{x:Bind PlayTrackNextCommand}" CommandParameter="{x:Bind File}"/>
-                        <MenuFlyoutItem Text="Remove" Command="{x:Bind RemoveFromQueueCommand}" CommandParameter="{x:Bind File}"/>
-                        <MenuFlyoutItem Text="Add to Playlist" />
-                        <MenuFlyoutItem Text="???????"/>
+                    <MenuFlyout> 
+                        <MenuFlyoutItem Icon="Play" Text="Play" Command="{x:Bind PlayTrackCommand}" CommandParameter="{x:Bind File}" />
+                        <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{x:Bind AddToQueueCommand}" CommandParameter="{x:Bind File}"/>
+                        <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{x:Bind AddToPlayListCommand}" CommandParameter="{x:Bind File}"/>
                     </MenuFlyout>
                 </Grid.ContextFlyout>
             </Grid>
@@ -164,11 +162,26 @@
 
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
-                            <Button Style="{StaticResource ButtonRevealStyle}">Play</Button>
-                            <Button Style="{StaticResource ButtonRevealStyle}">Add to Queue</Button>
-                            <winui:ComboBox PlaceholderText="Add to Playlist">
-                                <winui:ComboBoxItem>aaaa</winui:ComboBoxItem>
-                            </winui:ComboBox>
+                            
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.PlayAlbumCommand}" Width="108">
+                                <StackPanel>
+                                    <SymbolIcon Symbol="Play" />
+                                    <TextBlock>Play</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddAlbumCommand}" Width="108">
+                                <StackPanel >
+                                    <SymbolIcon Symbol="Add" />
+                                    <TextBlock>Add to Queue</TextBlock>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddToPlaylistCommand}" Width="108">
+                                <StackPanel >
+                                    <SymbolIcon Symbol="MusicInfo" />
+                                    <TextBlock>Add to Playlist</TextBlock>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
 
                     </RelativePanel>

@@ -64,11 +64,13 @@
                     Margin="12,0,0,0"/>
                 <Grid.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="Play" Command="{x:Bind PlayTrackCommand}" CommandParameter="{x:Bind File}" />
+                        <MenuFlyoutItem Icon="Play" Text="Play" Command="{x:Bind PlayTrackCommand}" CommandParameter="{x:Bind File}" />
                         <MenuFlyoutItem Text="Play Next" Command="{x:Bind PlayTrackNextCommand}" CommandParameter="{x:Bind File}"/>
-                        <MenuFlyoutItem Text="Remove" Command="{x:Bind RemoveFromQueueCommand}" CommandParameter="{x:Bind File}"/>
-                        <MenuFlyoutItem Text="Add to Playlist" />
-                        <MenuFlyoutItem Text="???????"/>
+                        <MenuFlyoutItem Icon="Delete" Text="Remove" Command="{x:Bind RemoveFromQueueCommand}" CommandParameter="{x:Bind File}"/>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{x:Bind AddToPlayListCommand}" CommandParameter="{x:Bind File}"/>
+                        <MenuFlyoutItem Text="View Artist" />
+                        <MenuFlyoutItem Text="View Album"/>
                     </MenuFlyout>
                 </Grid.ContextFlyout>
             </Grid>

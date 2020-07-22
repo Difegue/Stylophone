@@ -57,8 +57,6 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
-        public ICommand PlayTrackNextCommand;
-
         private ICommand _removeCommand;
         public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new RelayCommand<IMpdFile>(RemoveTrack));
 
@@ -84,6 +82,8 @@ namespace FluentMPC.ViewModels.Items
         public ICommand AddToPlayListCommand;
         // TODO add to playlist command
 
+        public ICommand PlayTrackNextCommand;
+        // TODO move track in queue
 
         public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1)
         {
