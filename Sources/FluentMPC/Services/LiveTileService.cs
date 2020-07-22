@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using FluentMPC.Activation;
 using FluentMPC.Helpers;
-
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
 using Windows.UI.Notifications;

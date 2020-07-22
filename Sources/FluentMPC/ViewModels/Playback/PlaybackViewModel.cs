@@ -1,4 +1,5 @@
-﻿using FluentMPC.Helpers;
+﻿using FluentMPC.Core.Helpers;
+using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
@@ -9,6 +10,7 @@ using MpcNET.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -494,8 +496,6 @@ namespace FluentMPC.ViewModels.Playback
 
                         UpdateUpNext();
 
-                        // TODO Update the tile value
-                        //IsTilePined = TileHelper.IsTilePinned("Track_" + track.TrackId);
                     } else
                     {
                         // TODO no track playing

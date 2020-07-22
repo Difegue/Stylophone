@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-
+using System.Xml;
+using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Notifications;
 
 using Windows.UI.Notifications;
@@ -10,38 +11,47 @@ namespace FluentMPC.Services
 {
     internal partial class LiveTileService
     {
-        // More about Live Tiles Notifications at https://docs.microsoft.com/windows/uwp/controls-and-patterns/tiles-and-notifications-sending-a-local-tile-notification
-        public void SampleUpdate()
+        public void UpdatePlayingSong(TrackViewModel track)
         {
-            // These would be initialized with actual data
-            string from = "Jennifer Parker";
-            string subject = "Photos from our trip";
-            string body = "Check out these awesome photos I took while in New Zealand!";
+            var title = track.Name;
+            var artist = track.File.Artist;
+            var album = track.File.Album;
+
+            var f = track.File;
+            var uniqueIdentifier = f.HasAlbum ? f.Album : f.HasTitle ? f.Title : f.Path;
+
+            // Use the cached albumart
+            var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";
 
             // Construct the tile content
+            // TODO: Rework typography
             var content = new TileContent()
             {
+                
                 Visual = new TileVisual()
                 {
-                    Arguments = "Jennifer Parker",
                     TileMedium = new TileBinding()
                     {
                         Content = new TileBindingContentAdaptive()
                         {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = artUri
+                            },
                             Children =
                             {
                                 new AdaptiveText()
                                 {
-                                    Text = from
+                                    Text = title
                                 },
                                 new AdaptiveText()
                                 {
-                                    Text = subject,
+                                    Text = artist,
                                     HintStyle = AdaptiveTextStyle.CaptionSubtle
                                 },
                                 new AdaptiveText()
                                 {
-                                    Text = body,
+                                    Text = album,
                                     HintStyle = AdaptiveTextStyle.CaptionSubtle
                                 }
                             }
@@ -52,21 +62,54 @@ namespace FluentMPC.Services
                     {
                         Content = new TileBindingContentAdaptive()
                         {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = artUri
+                            },
                             Children =
                             {
                                 new AdaptiveText()
                                 {
-                                    Text = from,
+                                    Text = title,
                                     HintStyle = AdaptiveTextStyle.Subtitle
                                 },
                                 new AdaptiveText()
                                 {
-                                    Text = subject,
+                                    Text = artist,
                                     HintStyle = AdaptiveTextStyle.CaptionSubtle
                                 },
                                 new AdaptiveText()
                                 {
-                                    Text = body,
+                                    Text = album,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    },
+
+                    TileLarge = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = artUri
+                            },
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = title,
+                                    HintStyle = AdaptiveTextStyle.Subtitle
+                                },
+                                new AdaptiveText()
+                                {
+                                    Text = artist,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                },
+                                new AdaptiveText()
+                                {
+                                    Text = album,
                                     HintStyle = AdaptiveTextStyle.CaptionSubtle
                                 }
                             }
@@ -78,21 +121,6 @@ namespace FluentMPC.Services
             // Then create the tile notification
             var notification = new TileNotification(content.GetXml());
             UpdateTile(notification);
-        }
-
-        public async Task SamplePinSecondaryAsync(string pageName)
-        {
-            // TODO WTS: Call this method to Pin a Secondary Tile from a page.
-            // You also must implement the navigation to this specific page in the OnLaunched event handler on App.xaml.cs
-            var tile = new SecondaryTile(DateTime.Now.Ticks.ToString());
-            tile.Arguments = pageName;
-            tile.DisplayName = pageName;
-            tile.VisualElements.Square44x44Logo = new Uri("ms-appx:///Assets/Square44x44Logo.scale-200.png");
-            tile.VisualElements.Square150x150Logo = new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png");
-            tile.VisualElements.Wide310x150Logo = new Uri("ms-appx:///Assets/Wide310x150Logo.scale-200.png");
-            tile.VisualElements.ShowNameOnSquare150x150Logo = true;
-            tile.VisualElements.ShowNameOnWide310x150Logo = true;
-            await PinSecondaryTileAsync(tile);
         }
     }
 }

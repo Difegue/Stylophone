@@ -94,7 +94,6 @@ namespace FluentMPC.Services
         private async Task StartupAsync()
         {
             await ThemeSelectorService.SetRequestedThemeAsync();
-            Singleton<LiveTileService>.Instance.SampleUpdate();
             await FirstRunDisplayService.ShowIfAppropriateAsync();
         }
 

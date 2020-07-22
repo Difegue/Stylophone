@@ -11,6 +11,7 @@ using System.Windows.Input;
 using Color = Windows.UI.Color;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Linq;
+using FluentMPC.Core.Helpers;
 
 namespace FluentMPC.ViewModels.Items
 {
@@ -100,6 +101,8 @@ namespace FluentMPC.ViewModels.Items
                     var art = await MiscHelpers.GetAlbumArtAsync(File);
                     DominantColor = await MiscHelpers.GetDominantColor(art);
                     AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth);
+
+                    Singleton<LiveTileService>.Instance.UpdatePlayingSong(this);
                 });
         }
 

@@ -107,7 +107,8 @@ namespace FluentMPC.Services
                 else
                     ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?
 
-                var response2 = await _connection.SendAsync(new MpcNET.Commands.Playlist.ListPlaylistsCommand());
+                // TODO replace this
+                /*var response2 = await _connection.SendAsync(new MpcNET.Commands.Playlist.ListPlaylistsCommand());
 
                 if (response2.IsResponseValid)
                 {
@@ -121,7 +122,7 @@ namespace FluentMPC.Services
                     }
                 }
                 else
-                    ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?
+                    ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?*/
 
             }, period);
         }
