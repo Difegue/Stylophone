@@ -60,13 +60,6 @@
                     TextTrimming="CharacterEllipsis"
                     Style="{ThemeResource BodyTextBlockStyle}"
                     Margin="12,0,0,0"/>
-                <Grid.ContextFlyout>
-                    <MenuFlyout> 
-                        <MenuFlyoutItem Icon="Play" Text="Play" Command="{x:Bind PlayTrackCommand}" CommandParameter="{x:Bind File}" />
-                        <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{x:Bind AddToQueueCommand}" CommandParameter="{x:Bind File}"/>
-                        <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{x:Bind AddToPlayListCommand}" CommandParameter="{x:Bind File}"/>
-                    </MenuFlyout>
-                </Grid.ContextFlyout>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -93,12 +86,26 @@
 
         <fluentMpc:AlternatingRowListView SelectionMode="Extended"
                       x:Name="QueueList"
+                      DoubleTapped="Queue_Track"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
-                      ItemsSource="{x:Bind ViewModel.Source}"
-                      ItemContainerStyle="{StaticResource TrackListStyle}">
-
+                      ItemsSource="{x:Bind ViewModel.Source}">
+            <fluentMpc:AlternatingRowListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
+                    <Setter Property="ContextFlyout">
+                        <Setter.Value>
+                            <MenuFlyout Opening="MenuFlyout_Opening">
+                                <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                            </MenuFlyout>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </fluentMpc:AlternatingRowListView.ItemContainerStyle>
+            
             <fluentMpc:AlternatingRowListView.Header>
                 <controls:ScrollHeader Mode="Sticky">
 
@@ -187,7 +194,7 @@
                     </RelativePanel>
                 </controls:ScrollHeader>
             </fluentMpc:AlternatingRowListView.Header>
-
+            
         </fluentMpc:AlternatingRowListView>
 
     </Grid>

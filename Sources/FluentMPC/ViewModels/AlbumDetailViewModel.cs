@@ -56,8 +56,8 @@ namespace FluentMPC.ViewModels
         }
 
         private ICommand _playCommand;
-        public ICommand PlayAlbumCommand => _playCommand ?? (_playCommand = new RelayCommand<string>(PlayAlbum));
-        private async void PlayAlbum(string playlistName)
+        public ICommand PlayAlbumCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
+        private async void PlayAlbum()
         {
             // Clear queue, add album and play
             using (var c = await MPDConnectionService.GetConnectionAsync())

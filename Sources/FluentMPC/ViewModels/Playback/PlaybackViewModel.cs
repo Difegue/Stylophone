@@ -486,7 +486,7 @@ namespace FluentMPC.ViewModels.Playback
                         // TODO, No response 
                     }
 
-                    if (CurrentTrack.File != null)
+                    if (CurrentTrack?.File != null)
                     {
                         TimeRemaining = "-" + MiscHelpers.FormatTimeString(CurrentTrack.File.Time / 1000);
                         TimeListened = "00:00";

@@ -29,3 +29,4 @@
 /Sources/FluentMPC.Core/obj
 /Sources/FluentMPC.Tests.MSTest/obj
 *.pfx
+/Sources/FluentMPC/bin/x64/Debug
