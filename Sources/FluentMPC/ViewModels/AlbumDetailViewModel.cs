@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentMPC.Helpers;
@@ -80,6 +81,8 @@ namespace FluentMPC.ViewModels
         public async Task InitializeAsync(AlbumViewModel album)
         {
             Item = album;
+
+            //TODO recheck in case loading failed or something
 
             if (album.IsFullyLoaded)
             {

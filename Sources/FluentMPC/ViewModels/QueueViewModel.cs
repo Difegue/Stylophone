@@ -24,17 +24,12 @@ namespace FluentMPC.ViewModels
 
         private async void MPDConnectionService_SongChanged(object sender, SongChangedEventArgs e)
         {
-            // TODO handle queue updates
+            // TODO handle queue updates with QueueModified Event
             //await LoadDataAsync();
-            // TODO focus played track
 
-            // Update IsPlaying status, scrolling is handled in code-behind
-            Source.Where(t => t.File.Id == e.NewSongId).FirstOrDefault()?.UpdatePlayingStatus();
+            // scrolling is handled in code-behind
+
         }
-
-        private ICommand _itemClickCommand;
-
-        public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<TrackViewModel>(OnItemClick));
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
 
@@ -54,15 +49,6 @@ namespace FluentMPC.ViewModels
                     }
             }
             OnPropertyChanged(nameof(Source));
-        }
-
-        private void OnItemClick(TrackViewModel clickedItem)
-        {
-            if (clickedItem != null)
-            {
-                //NavigationService.Frame.SetListDataItemForNextConnectedAnimation(clickedItem);
-                //NavigationService.Navigate<LibraryDetailPage>(clickedItem.OrderID);
-            }
         }
     }
 }

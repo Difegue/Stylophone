@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMPC", "FluentMPC\Flue
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMPC.Tests.MSTest", "FluentMPC.Tests.MSTest\FluentMPC.Tests.MSTest.csproj", "{0C4B7830-1CAE-4EDC-BF92-526A50424157}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentMPC.Core", "FluentMPC.Core\FluentMPC.Core.csproj", "{94D3491C-8C2B-490F-9853-31FCB55DB415}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,36 +168,6 @@ Global
 		{0C4B7830-1CAE-4EDC-BF92-526A50424157}.Release-Stable|x86.ActiveCfg = Release|x86
 		{0C4B7830-1CAE-4EDC-BF92-526A50424157}.Release-Stable|x86.Build.0 = Release|x86
 		{0C4B7830-1CAE-4EDC-BF92-526A50424157}.Release-Stable|x86.Deploy.0 = Release|x86
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|ARM.Build.0 = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|x64.Build.0 = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Debug|x86.Build.0 = Debug|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|ARM.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|ARM.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|ARM64.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|x64.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|x64.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|x86.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release|x86.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|Any CPU.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|Any CPU.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|ARM.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|ARM.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|ARM64.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|ARM64.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|x64.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|x64.Build.0 = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|x86.ActiveCfg = Release|Any CPU
-		{94D3491C-8C2B-490F-9853-31FCB55DB415}.Release-Stable|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

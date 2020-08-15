@@ -8,18 +8,17 @@ using Sundew.Base.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
 using Windows.UI;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace FluentMPC.ViewModels.Items
 {
     public class AlbumViewModel : Observable
     {
-        public String Name {
+        public String Name
+        {
             get => _name;
             set => Set(ref _name, value);
         }
@@ -35,7 +34,8 @@ namespace FluentMPC.ViewModels.Items
         }
         private String _artist;
 
-        public IList<IMpdFile> Files {
+        public IList<IMpdFile> Files
+        {
             get => _files;
             set => Set(ref _files, value);
         }
@@ -82,31 +82,35 @@ namespace FluentMPC.ViewModels.Items
             Files = new List<IMpdFile>();
         }
 
-        public async Task LoadAlbumDataAsync()
+        public async Task LoadAlbumDataAsync(CancellationToken token = default)
         {
             IsDetailLoading = true;
 
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            try
             {
-                var findReq = await c.InternalResource.SendAsync(new FindCommand(MpdTags.Album, Name));
-                if (!findReq.IsResponseValid) return;
-
-                Files.AddRange(findReq.Response.Content);
-                Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
-            }
-
-            // Fire off an async request to get the album art from MPD.
-            if (Files.Count > 0)
-                _ = Task.Run(async () =>
+                using (var c = await MPDConnectionService.GetConnectionAsync(token))
                 {
-                    var art = await MiscHelpers.GetAlbumArtAsync(Files[0]);
-                    AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
+                    var findReq = await c.InternalResource.SendAsync(new FindCommand(MpdTags.Album, Name));
+                    if (!findReq.IsResponseValid) return;
 
+                    Files.AddRange(findReq.Response.Content);
+                    Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
+                }
+
+                // Fire off an async request to get the album art from MPD.
+                if (Files.Count > 0)
+                {
+                    var art = await MiscHelpers.GetAlbumArtAsync(Files[0], token);
+                    AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
                     DominantColor = await MiscHelpers.GetDominantColor(art);
 
                     IsFullyLoaded = true;
-                    IsDetailLoading = false;
-                });
+                };
+            }
+            finally
+            {
+                IsDetailLoading = false;
+            }
         }
     }
 }

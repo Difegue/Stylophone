@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using FluentMPC.Activation;
-using FluentMPC.Core.Helpers;
+using FluentMPC.Helpers;
 using FluentMPC.Services;
 
 using Windows.ApplicationModel.Activation;

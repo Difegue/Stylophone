@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 using FluentMPC.Activation;
 using FluentMPC.BackgroundTasks;
-using FluentMPC.Core.Helpers;
-
+using FluentMPC.Helpers;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 

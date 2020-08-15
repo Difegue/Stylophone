@@ -11,7 +11,6 @@ using System.Windows.Input;
 using Color = Windows.UI.Color;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Linq;
-using FluentMPC.Core.Helpers;
 
 namespace FluentMPC.ViewModels.Items
 {
@@ -88,6 +87,8 @@ namespace FluentMPC.ViewModels.Items
 
         public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1)
         {
+            MPDConnectionService.SongChanged += (s, e) => UpdatePlayingStatus();
+
             File = file;
             AlbumArt = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
 
@@ -99,7 +100,11 @@ namespace FluentMPC.ViewModels.Items
                     // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
 
                     var art = await MiscHelpers.GetAlbumArtAsync(File);
-                    DominantColor = await MiscHelpers.GetDominantColor(art);
+
+                    // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar only)
+                    if (albumArtWidth != -1)
+                        DominantColor = await MiscHelpers.GetDominantColor(art);
+
                     AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth);
 
                     Singleton<LiveTileService>.Instance.UpdatePlayingSong(this);

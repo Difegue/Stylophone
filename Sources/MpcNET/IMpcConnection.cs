@@ -8,6 +8,7 @@
 namespace MpcNET
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MpcNET.Message;
 
@@ -26,7 +27,7 @@ namespace MpcNET
         /// Connects asynchronously.
         /// </summary>
         /// <returns>The connect task.</returns>
-        Task ConnectAsync();
+        Task ConnectAsync(CancellationToken token);
 
         /// <summary>
         /// Disconnects asynchronously.

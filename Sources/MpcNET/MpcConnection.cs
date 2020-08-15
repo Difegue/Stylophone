@@ -13,6 +13,7 @@ namespace MpcNET
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using MpcNET.Commands;
     using MpcNET.Exceptions;
@@ -58,7 +59,7 @@ namespace MpcNET
         /// Connects asynchronously.
         /// </summary>
         /// <returns>The connect task.</returns>
-        public async Task ConnectAsync()
+        public async Task ConnectAsync(CancellationToken token = default)
         {
             if (this.tcpClient != null)
             {
@@ -69,7 +70,7 @@ namespace MpcNET
                 }
             }
 
-            await this.ReconnectAsync(false);
+            await this.ReconnectAsync(false, token);
         }
 
         /// <summary>
@@ -183,16 +184,30 @@ namespace MpcNET
             }
         }
 
-        private async Task ReconnectAsync(bool isReconnect)
+        private async Task ReconnectAsync(bool isReconnect, CancellationToken token = default)
         {
             var connectAttempter = new Attempter(3);
             while (connectAttempter.Attempt())
             {
+                token.ThrowIfCancellationRequested();
+
                 this.mpcConnectionReporter?.Connecting(isReconnect, connectAttempter.CurrentAttempt);
                 await this.DisconnectAsync(false);
 
-                this.tcpClient = new TcpClient();
-                await this.tcpClient.ConnectAsync(this.server.Address, this.server.Port);
+                tcpClient = new TcpClient();
+                using (token.Register(() => tcpClient.Close()))
+                {
+                    try
+                    {
+                        token.ThrowIfCancellationRequested();
+                        await tcpClient.ConnectAsync(server.Address, server.Port).ConfigureAwait(false);
+                    }
+                    catch (ObjectDisposedException) when (token.IsCancellationRequested)
+                    {
+                        token.ThrowIfCancellationRequested();
+                    }
+                }
+
                 if (this.tcpClient.Connected)
                 {
                     this.mpcConnectionReporter?.ConnectionAccepted(isReconnect, connectAttempter.CurrentAttempt);

@@ -1,5 +1,4 @@
-﻿using FluentMPC.Core.Helpers;
-using FluentMPC.Helpers;
+﻿using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;

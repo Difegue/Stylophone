@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Threading.Tasks;
-
-using FluentMPC.Core.Helpers;
 
 using Windows.Storage;
 using Windows.Storage.Streams;
 
 namespace FluentMPC.Helpers
 {
+
     // Use these extension methods to store and retrieve local and roaming app data
     // More details regarding storing and retrieving app data at https://docs.microsoft.com/windows/uwp/app-settings/store-and-retrieve-app-data
     public static class SettingsStorageExtensions
@@ -116,6 +116,25 @@ namespace FluentMPC.Helpers
         private static string GetFileName(string name)
         {
             return string.Concat(name, FileExtension);
+        }
+    }
+
+    public static class Json
+    {
+        public static async Task<T> ToObjectAsync<T>(string value)
+        {
+            return await Task.Run<T>(() =>
+            {
+                return JsonConvert.DeserializeObject<T>(value);
+            });
+        }
+
+        public static async Task<string> StringifyAsync(object value)
+        {
+            return await Task.Run<string>(() =>
+            {
+                return JsonConvert.SerializeObject(value);
+            });
         }
     }
 }

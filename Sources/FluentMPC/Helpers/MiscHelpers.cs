@@ -43,7 +43,8 @@ namespace FluentMPC.Helpers
                 : string.Format("{0:D2}:{1:D2}:{2:D2}", (int)timeSpan.TotalHours, timeSpan.Minutes, timeSpan.Seconds);
         }
 
-        public async static Task<WriteableBitmap> GetAlbumArtAsync(IMpdFile f)
+        //TODO move this into a dedicated class
+        public async static Task<WriteableBitmap> GetAlbumArtAsync(IMpdFile f, CancellationToken token = default)
         {
             WriteableBitmap result;
             var foundUsableArt = false;
@@ -62,7 +63,7 @@ namespace FluentMPC.Helpers
             List<byte> data = new List<byte>();
             try
             {
-                using (var c = await MPDConnectionService.GetAlbumArtConnectionAsync())
+                using (var c = await MPDConnectionService.GetAlbumArtConnectionAsync(token))
                 {
                     int totalBinarySize = 9999;
                     int currentSize = 0;
@@ -117,7 +118,10 @@ namespace FluentMPC.Helpers
             //get dominant color of albumart
             using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                await DispatcherHelper.ExecuteOnUIThreadAsync(async () => await art.ToStreamAsJpeg(stream));
+                await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                {
+                    await art.Resize(50, 50, WriteableBitmapExtensions.Interpolation.NearestNeighbor).ToStreamAsJpeg(stream);
+                });
                 stream.Seek(0);
 
                 var colorThief = new ColorThief();
@@ -145,6 +149,7 @@ namespace FluentMPC.Helpers
 
                 using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
                 {
+
                     await art.ToStreamAsJpeg(stream);
                     stream.Seek(0);
 
@@ -187,12 +192,18 @@ namespace FluentMPC.Helpers
         public async static Task<WriteableBitmap> ImageFromBytes(byte[] bytes)
         {
             WriteableBitmap image = null;
-            using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
+            using (var stream = new MemoryStream(bytes))
             {
-                await stream.WriteAsync(bytes.AsBuffer());
-                stream.Seek(0);
+                await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                {
+                    image = await BitmapFactory.FromStream(stream);
 
-                await DispatcherHelper.ExecuteOnUIThreadAsync(async () => image = await BitmapFactory.FromStream(stream));
+                    // Resize overly large images to reduce OOM risk. Is 2048 too small ?
+                    if (image.PixelWidth > 2048)
+                    {
+                        image = image.Resize(2048, 2048 * image.PixelHeight / image.PixelWidth, WriteableBitmapExtensions.Interpolation.Bilinear);
+                    }
+                });
             }
             return image;
         }

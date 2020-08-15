@@ -36,11 +36,13 @@ namespace FluentMPC.Views
                 QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
         }
 
+        private int manualSongId = -1;
+
         private void MPDConnectionService_SongChanged(object sender, SongChangedEventArgs e)
         {
             // TODO - Don't scroll if this is caused by user interaction
             // Scroll to the newly playing song
-            var playing = ViewModel.Source.Where(t => t.File.Id == e.NewSongId).FirstOrDefault();
+            var playing = ViewModel.Source.Where(t => t.File.Id == e.NewSongId && t.File.Id != manualSongId).FirstOrDefault();
             if (playing != null)
                 DispatcherHelper.ExecuteOnUIThreadAsync(() => QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading));
         }
@@ -59,7 +61,12 @@ namespace FluentMPC.Views
 
         private void Play_Track(object sender, RoutedEventArgs e)
         {
-            var trackVm = (sender as FrameworkElement).DataContext as TrackViewModel;
+            var listView = sender as Helpers.AlternatingRowListView;
+            var trackVm = listView.SelectedItem as TrackViewModel;
+            // Set this ID as manually played by the user to prevent unnecessary autoscrolling.
+            // Kind of a duct tape fix for now
+            // TODO: Apply to context menu as well, maybe main playbar buttons if the queue is showing?
+            manualSongId = trackVm.File.Id;
             trackVm.PlayTrackCommand.Execute(trackVm.File);
         }
 
@@ -68,5 +75,29 @@ namespace FluentMPC.Views
             // TODO
         }
 
+        // Propagate DataContext of the ListViewItem to the MenuFlyout.
+        // https://github.com/microsoft/microsoft-ui-xaml/issues/911
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            var menuFlyout = (MenuFlyout)sender;
+            var dataContext = menuFlyout.Target?.DataContext ?? (menuFlyout.Target as ContentControl)?.Content;
+            if (dataContext != null)
+            {
+                foreach (var item in menuFlyout.Items)
+                {
+                    var menuFlyoutItem = item as MenuFlyoutItem;
+
+                    if (menuFlyoutItem != null)
+                    {
+                        menuFlyoutItem.DataContext = dataContext;
+                    }
+                }
+            }
+            else
+            {
+                menuFlyout.Hide();
+            }
+
+        }
     }
 }

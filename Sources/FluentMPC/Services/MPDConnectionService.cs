@@ -49,7 +49,7 @@ namespace FluentMPC.Services
                 ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
                     async (t1,t2) =>
                     {
-                        var c = await GetConnectionInternalAsync();
+                        var c = await GetConnectionInternalAsync(t1);
                         return new PooledObjectWrapper<MpcConnection>(c)
                         {
                             OnReleaseResources = (c) => c.DisconnectAsync()
@@ -67,26 +67,32 @@ namespace FluentMPC.Services
         }
 
 
-        public static async Task<PooledObjectWrapper<MpcConnection>> GetConnectionAsync()
+        public static async Task<PooledObjectWrapper<MpcConnection>> GetConnectionAsync(CancellationToken token = default)
         {
-            return await ConnectionPool.GetObjectAsync();
+            return await ConnectionPool.GetObjectAsync(token);
         }
 
-        public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync()
+        public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync(CancellationToken token = default)
         {
             // Don't allocate extra connections for album art.
             while (ConnectionPool.ObjectsInPoolCount == 0)
             {
+                if (token.IsCancellationRequested)
+                    return null;
                 Thread.Sleep(500);
             }
 
-            return await ConnectionPool.GetObjectAsync();
+            return await ConnectionPool.GetObjectAsync(token);
         }
 
-        private static async Task<MpcConnection> GetConnectionInternalAsync()
+        private static async Task<MpcConnection> GetConnectionInternalAsync(CancellationToken token = default)
         {
             var c = new MpcConnection(_mpdEndpoint);
-            await c.ConnectAsync();
+
+            if (token.IsCancellationRequested)
+                return null; 
+
+            await c.ConnectAsync(token);
             return c;
         }
 

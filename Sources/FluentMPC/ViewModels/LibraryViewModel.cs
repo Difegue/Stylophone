@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using FluentMPC.Core.Models;
-using FluentMPC.Core.Services;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
@@ -24,9 +23,17 @@ namespace FluentMPC.ViewModels
     public class LazyLoadingAlbumCollection: ObservableCollection<AlbumViewModel>, IList<AlbumViewModel>, ICollection<AlbumViewModel>, IReadOnlyList<AlbumViewModel>,
         IReadOnlyCollection<AlbumViewModel>, IEnumerable<AlbumViewModel>, INotifyCollectionChanged, INotifyPropertyChanged, IItemsRangeInfo, IDisposable
     {
+        private CancellationTokenSource cts;
+
         public void RangesChanged(ItemIndexRange visibleRange, IReadOnlyList<ItemIndexRange> trackedItems)
         {
-            // TODO: cancel not visible loading
+
+            // Cancel all current heavy album loading
+            cts?.Cancel();
+            //cts?.Dispose();
+
+            cts = new CancellationTokenSource();
+            var token = cts.Token;
 
             // Load album data for the visible range of data
             for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
@@ -34,7 +41,7 @@ namespace FluentMPC.ViewModels
                 var album = this[i];
 
                 if (!album.IsDetailLoading && !album.IsFullyLoaded)
-                    Task.Run(async () => await album.LoadAlbumDataAsync());
+                    Task.Run(async () => await album.LoadAlbumDataAsync(token));
                 
             }
         }

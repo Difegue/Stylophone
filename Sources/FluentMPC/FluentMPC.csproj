@@ -170,7 +170,9 @@
     <Compile Include="Helpers\Observable.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
+    <Compile Include="Helpers\Singleton.cs" />
     <Compile Include="Helpers\SliderValueConverter.cs" />
+    <Compile Include="Helpers\TaskExtensions.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />
@@ -329,10 +331,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FluentMPC.Core\FluentMPC.Core.csproj">
-      <Project>{94D3491C-8C2B-490F-9853-31FCB55DB415}</Project>
-      <Name>FluentMPC.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MpcNET\MpcNET.csproj">
       <Project>{8994c820-7ba9-4bb8-b9ea-c608b07c4a11}</Project>
       <Name>MpcNET</Name>
