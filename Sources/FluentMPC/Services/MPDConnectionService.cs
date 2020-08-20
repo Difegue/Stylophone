@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeProject.ObjectPool;
-using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using MpcNET;
 using MpcNET.Types;
 using Sundew.Base.Collections;
@@ -75,7 +74,7 @@ namespace FluentMPC.Services
 
         public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync(CancellationToken token = default)
         {
-            // Don't allocate extra connections for album art.
+            // Don't allocate extra connections for album art, wait for one.
             while (ConnectionPool.ObjectsInPoolCount == 0)
             {
                 if (token.IsCancellationRequested)
@@ -91,7 +90,7 @@ namespace FluentMPC.Services
             var c = new MpcConnection(_mpdEndpoint);
 
             if (token.IsCancellationRequested)
-                return null; 
+                return c; 
 
             await c.ConnectAsync(token);
             return c;

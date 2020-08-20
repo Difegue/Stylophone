@@ -65,6 +65,9 @@ namespace FluentMPC.Helpers
             {
                 using (var c = await MPDConnectionService.GetAlbumArtConnectionAsync(token))
                 {
+                    if (c == null) // We got cancelled
+                            throw new Exception();
+
                     int totalBinarySize = 9999;
                     int currentSize = 0;
 
