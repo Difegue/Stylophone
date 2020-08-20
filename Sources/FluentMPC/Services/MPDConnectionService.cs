@@ -52,7 +52,7 @@ namespace FluentMPC.Services
                         var c = await GetConnectionInternalAsync(t1);
                         return new PooledObjectWrapper<MpcConnection>(c)
                         {
-                            OnReleaseResources = (c) => c.DisconnectAsync()
+                            OnReleaseResources = (c) => c?.DisconnectAsync()
                         };
                     }
                 );

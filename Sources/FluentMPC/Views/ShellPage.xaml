@@ -27,7 +27,7 @@
         <winui:NavigationView Grid.Row="0"
         x:Name="navigationView"
         IsBackButtonVisible="Visible"
-        PaneTitle="Moroder"
+        PaneTitle="Stylophone"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
         SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
         IsSettingsVisible="True"
