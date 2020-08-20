@@ -5,11 +5,21 @@ using FluentMPC.Activation;
 
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Notifications;
+using Windows.UI.Xaml;
 
 namespace FluentMPC.Services
 {
-    internal partial class ToastNotificationsService : ActivationHandler<ToastNotificationActivatedEventArgs>
+    public class InAppNotificationRequestedEventArgs : EventArgs { public string NotificationText { get; set; } public int NotificationTime { get; set; } }
+
+    internal partial class NotificationService : ActivationHandler<ToastNotificationActivatedEventArgs>
     {
+        public static event EventHandler<InAppNotificationRequestedEventArgs> InAppNotificationRequested;
+
+        public static void ShowInAppNotification(string notification, int time = 1500)
+        {
+            InAppNotificationRequested?.Invoke(Application.Current, new InAppNotificationRequestedEventArgs { NotificationText = notification, NotificationTime = time });
+        }
+
         public void ShowToastNotification(ToastNotification toastNotification)
         {
             try

@@ -63,9 +63,10 @@ namespace FluentMPC.Services
                 // TODO
             }
 
+            // TODO move this to a onConnectionEstablished event
             InitializeStatusUpdater();
+            UpdatePlaylistsAsync();
         }
-
 
         public static async Task<PooledObjectWrapper<MpcConnection>> GetConnectionAsync(CancellationToken token = default)
         {
@@ -113,24 +114,25 @@ namespace FluentMPC.Services
                 else
                     ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?
 
-                // TODO replace this
-                /*var response2 = await _connection.SendAsync(new MpcNET.Commands.Playlist.ListPlaylistsCommand());
-
-                if (response2.IsResponseValid)
-                {
-                    var playlists = response2.Response.Content;
-
-                    if (!Playlists.SequenceEqual(playlists))
-                    {
-                        Playlists.Clear();
-                        Playlists.AddRange(playlists);
-                        PlaylistsChanged?.Invoke(Application.Current, new EventArgs());
-                    }
-                }
-                else
-                    ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?*/
-
             }, period);
+        }
+        public async static void UpdatePlaylistsAsync()
+        {
+            var response = await _connection.SendAsync(new MpcNET.Commands.Playlist.ListPlaylistsCommand());
+
+            if (response.IsResponseValid)
+            {
+                var playlists = response.Response.Content;
+
+                if (!Playlists.SequenceEqual(playlists))
+                {
+                    Playlists.Clear();
+                    Playlists.AddRange(playlists);
+                    PlaylistsChanged?.Invoke(Application.Current, new EventArgs());
+                }
+            }
+            else
+                ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?*/
         }
 
         private static void CompareAndFireEvents(MpdStatus currentStatus, MpdStatus newStatus)

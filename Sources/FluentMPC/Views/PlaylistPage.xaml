@@ -60,15 +60,6 @@
                     TextTrimming="CharacterEllipsis"
                     Style="{ThemeResource BodyTextBlockStyle}"
                     Margin="12,0,0,0"/>
-                <Grid.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Play" Command="{x:Bind PlayTrackCommand}" CommandParameter="{x:Bind File}" />
-                        <MenuFlyoutItem Text="Play Next" Command="{x:Bind PlayTrackNextCommand}" CommandParameter="{x:Bind File}"/>
-                        <MenuFlyoutItem Text="Remove" Command="{x:Bind RemoveFromQueueCommand}" CommandParameter="{x:Bind File}"/>
-                        <MenuFlyoutItem Text="Add to Playlist" />
-                        <MenuFlyoutItem Text="???????"/>
-                    </MenuFlyout>
-                </Grid.ContextFlyout>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -95,14 +86,29 @@
 
         <fluentMpc:AlternatingRowListView SelectionMode="Extended"
                       x:Name="QueueList"
+                      DoubleTapped="Queue_Track"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
-                      ItemsSource="{x:Bind ViewModel.Source}"
-                      ItemContainerStyle="{StaticResource TrackListStyle}">
+                      ItemsSource="{x:Bind ViewModel.Source}">
+            <fluentMpc:AlternatingRowListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
+                    <Setter Property="ContextFlyout">
+                        <Setter.Value>
+                            <MenuFlyout Opening="MenuFlyout_Opening">
+                                <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem Icon="Remove" Text="Remove from Playlist" Command="{Binding RemoveFromPlaylistCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                            </MenuFlyout>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </fluentMpc:AlternatingRowListView.ItemContainerStyle>
 
             <fluentMpc:AlternatingRowListView.Header>
                 <controls:ScrollHeader Mode="Sticky">
+                    <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 -->
 
                     <RelativePanel RequestedTheme="Dark" Margin="24,46,24,36">
 
@@ -162,9 +168,26 @@
 
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
-                            <Button Style="{StaticResource ButtonRevealStyle}">Play</Button>
-                            <Button Style="{StaticResource ButtonRevealStyle}">Add to Queue</Button>
-                            <Button Style="{StaticResource ButtonRevealStyle}">Delete Playlist</Button>
+
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.PlayPlaylistCommand}" Width="108">
+                                <StackPanel>
+                                    <SymbolIcon Symbol="Play" />
+                                    <TextBlock>Play</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddPlaylistCommand}" Width="108">
+                                <StackPanel >
+                                    <SymbolIcon Symbol="Add" />
+                                    <TextBlock>Add to Queue</TextBlock>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.RemovePlaylistCommand}" Width="108">
+                                <StackPanel >
+                                    <SymbolIcon Symbol="Delete" />
+                                    <TextBlock>Delete Playlist</TextBlock>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
 
                     </RelativePanel>

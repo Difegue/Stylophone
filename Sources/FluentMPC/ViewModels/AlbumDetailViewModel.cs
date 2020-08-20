@@ -51,6 +51,14 @@ namespace FluentMPC.ViewModels
                 foreach (var f in Item.Files)
                 {
                     var req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
+
+                    if (req.IsResponseValid)
+                    {
+                        NotificationService.ShowInAppNotification($"Album added to Queue!");
+                    } else
+                    {
+                        NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.");
+                    }
                 }
             }
         }

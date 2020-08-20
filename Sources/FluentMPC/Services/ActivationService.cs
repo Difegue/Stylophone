@@ -94,14 +94,14 @@ namespace FluentMPC.Services
         private async Task StartupAsync()
         {
             await ThemeSelectorService.SetRequestedThemeAsync();
-            await FirstRunDisplayService.ShowIfAppropriateAsync();
+            await DialogService.ShowFirstRunDialogIfAppropriateAsync();
         }
 
         private IEnumerable<ActivationHandler> GetActivationHandlers()
         {
             yield return Singleton<BackgroundTaskService>.Instance;
             yield return Singleton<LiveTileService>.Instance;
-            yield return Singleton<ToastNotificationsService>.Instance;
+            yield return Singleton<NotificationService>.Instance;
         }
 
         private bool IsInteractive(object args)

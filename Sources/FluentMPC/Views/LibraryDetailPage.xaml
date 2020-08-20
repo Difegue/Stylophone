@@ -108,6 +108,7 @@
             
             <fluentMpc:AlternatingRowListView.Header>
                 <controls:ScrollHeader Mode="Sticky">
+                    <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 --> 
 
                     <RelativePanel RequestedTheme="Dark" Margin="24,46,24,36">
 

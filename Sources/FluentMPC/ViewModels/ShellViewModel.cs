@@ -8,7 +8,9 @@ using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.Views;
 using Microsoft.Toolkit.Uwp.Helpers;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.System;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -29,6 +31,7 @@ namespace FluentMPC.ViewModels
         private WinUI.NavigationView _navigationView;
         private WinUI.NavigationViewItem _selected;
         private WinUI.NavigationViewItem _playlistContainer;
+        private InAppNotification _notificationHolder;
         private ICommand _loadedCommand;
         private ICommand _itemInvokedCommand;
 
@@ -58,18 +61,28 @@ namespace FluentMPC.ViewModels
         {
         }
 
-        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, IList<KeyboardAccelerator> keyboardAccelerators)
+        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, InAppNotification notificationHolder, IList<KeyboardAccelerator> keyboardAccelerators)
         {
             _navigationView = navigationView;
             _playlistContainer = playlistContainer;
+            _notificationHolder = notificationHolder;
             _keyboardAccelerators = keyboardAccelerators;
             NavigationService.Frame = frame;
             NavigationService.NavigationFailed += Frame_NavigationFailed;
             NavigationService.Navigated += Frame_Navigated;
             _navigationView.BackRequested += OnBackRequested;
 
+            NotificationService.InAppNotificationRequested += Show_InAppNotification;
+
             MPDConnectionService.PlaylistsChanged += (s,e) =>
                 DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
+
+            DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
+        }
+
+        private void Show_InAppNotification(object sender, InAppNotificationRequestedEventArgs e)
+        {
+            _notificationHolder.Show(e.NotificationText, e.NotificationTime);
         }
 
         private async void OnLoaded()

@@ -4,7 +4,7 @@ using Windows.UI.Notifications;
 
 namespace FluentMPC.Services
 {
-    internal partial class ToastNotificationsService
+    internal partial class NotificationService
     {
         public void ShowToastNotificationSample()
         {

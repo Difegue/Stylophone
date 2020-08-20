@@ -37,30 +37,6 @@ namespace FluentMPC.Services
             }
         }
 
-        public async Task<bool> PinSecondaryTileAsync(SecondaryTile tile, bool allowDuplicity = false)
-        {
-            try
-            {
-                if (!await IsAlreadyPinnedAsync(tile) || allowDuplicity)
-                {
-                    return await tile.RequestCreateAsync();
-                }
-
-                return false;
-            }
-            catch (Exception)
-            {
-                // TODO WTS: Adding SecondaryTile can fail in rare conditions, please handle exceptions as appropriate to your scenario.
-                return false;
-            }
-        }
-
-        private async Task<bool> IsAlreadyPinnedAsync(SecondaryTile tile)
-        {
-            var secondaryTiles = await SecondaryTile.FindAllAsync();
-            return secondaryTiles.Any(t => t.Arguments == tile.Arguments);
-        }
-
         protected override async Task HandleInternalAsync(LaunchActivatedEventArgs args)
         {
             // If app is launched from a SecondaryTile, tile arguments property is contained in args.Arguments

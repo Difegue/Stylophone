@@ -10,11 +10,11 @@ using Windows.UI.Core;
 
 namespace FluentMPC.Services
 {
-    public static class FirstRunDisplayService
+    public static class DialogService
     {
         private static bool shown = false;
 
-        internal static async Task ShowIfAppropriateAsync()
+        internal static async Task ShowFirstRunDialogIfAppropriateAsync()
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                 CoreDispatcherPriority.Normal, async () =>

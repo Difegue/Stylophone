@@ -75,7 +75,23 @@ namespace FluentMPC.ViewModels.Items
         {
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                var response = await c.InternalResource.SendAsync(new AddIdCommand(file.Path));
+                try
+                {
+                    var response = await c.InternalResource.SendAsync(new AddIdCommand(file.Path));
+
+                    if (response.IsResponseValid)
+                    {
+                        NotificationService.ShowInAppNotification($"Added to Queue!");
+                    }
+                    else
+                    {
+                        NotificationService.ShowInAppNotification($"Couldn't add track: Invalid MPD Response.", 0);
+                    }
+                } catch (Exception e)
+                {
+                    NotificationService.ShowInAppNotification($"Couldn't add track: @{e}", 0);
+                }
+                
             }
         }
 

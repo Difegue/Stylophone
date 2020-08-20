@@ -176,14 +176,14 @@
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />
-    <Compile Include="Services\FirstRunDisplayService.cs" />
+    <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\LiveTileService.cs" />
     <Compile Include="Services\LiveTileService.Structure.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\MPDConnectionService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
-    <Compile Include="Services\ToastNotificationsService.cs" />
-    <Compile Include="Services\ToastNotificationsService.Samples.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\NotificationService.Samples.cs" />
     <Compile Include="Services\ViewLifetimeControl.cs" />
     <Compile Include="Services\WindowManagerService.cs" />
     <Compile Include="ViewModels\FoldersViewModel.cs" />
@@ -197,7 +197,7 @@
     <Compile Include="ViewModels\PlaylistViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
-    <Compile Include="Views\FirstRunDialog.xaml.cs">
+    <Compile Include="Views\Dialogs\FirstRunDialog.xaml.cs">
       <DependentUpon>FirstRunDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FoldersPage.xaml.cs">
@@ -255,7 +255,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\FirstRunDialog.xaml">
+    <Page Include="Views\Dialogs\FirstRunDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

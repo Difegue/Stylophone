@@ -2,12 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Windows.Input;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Types;
 using Windows.UI.Xaml.Media.Imaging;
@@ -18,20 +19,58 @@ namespace FluentMPC.ViewModels
     {
         public ObservableCollection<TrackViewModel> Source { get; private set; } = new ObservableCollection<TrackViewModel>();
 
-        public MpdPlaylist Item { get; private set; }
+        private ICommand _deletePlaylistCommand;
+        public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
+        private async void DeletePlaylist()
+        {
+            throw new NotImplementedException();
+
+            /* using (var c = await MPDConnectionService.GetConnectionAsync())
+             {
+                 foreach (var f in Item.Files)
+                 {
+                     var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, f.Path));
+                 }
+             }*/
+        }
+
+        private ICommand _addToQueueCommand;
+        public ICommand AddPlaylistCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
+        private async void AddToQueue()
+        {
+            using (var c = await MPDConnectionService.GetConnectionAsync())
+            {
+                await c.InternalResource.SendAsync(new LoadCommand(Name));
+            }
+        }
+
+        private ICommand _playCommand;
+        public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
+        private async void PlayAlbum()
+        {
+            // Clear queue, add playlist and play
+            using (var c = await MPDConnectionService.GetConnectionAsync())
+            {
+                var req = await c.InternalResource.SendAsync(new ClearCommand());
+                if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
+
+                await c.InternalResource.SendAsync(new LoadCommand(Name));
+                await c.InternalResource.SendAsync(new PlayCommand(0));
+            }
+        }
 
         public PlaylistViewModel()
         {
         }
 
-        public String Name
+        public string Name
         {
             get => _name;
             set => Set(ref _name, value);
         }
-        private String _name;
+        private string _name;
 
-        public String Artists
+        public string Artists
         {
             get => _artists;
             private set
@@ -39,7 +78,7 @@ namespace FluentMPC.ViewModels
                 DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _artists, value));
             }
         }
-        private String _artists;
+        private string _artists;
 
         public BitmapImage PlaylistArt
         {
