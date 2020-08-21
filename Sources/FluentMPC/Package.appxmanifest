@@ -15,7 +15,7 @@
   <mp:PhoneIdentity PhoneProductId="84D96F10-F002-4BE6-AD6A-B313AF4C682B" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>FluentMPC</DisplayName>
+    <DisplayName>Stylophone</DisplayName>
     <PublisherDisplayName>Vincent</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>

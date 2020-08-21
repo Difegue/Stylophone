@@ -73,5 +73,11 @@ namespace FluentMPC.Views
                 }
             });
         }
+
+        private void Volume_PointerWheelChanged(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
+            PlaybackViewModel.MediaVolume += 5 * delta / 120;
+        }
     }
 }

@@ -330,7 +330,7 @@
                         </Button.Content>
                     </Button>
                     <Slider Width="105" Padding="0" Margin="0,0,15,0" VerticalAlignment="Center" Maximum="100" Minimum="0" Orientation="Horizontal"
-                            Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
+                            PointerWheelChanged="Volume_PointerWheelChanged" Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                 </StackPanel>
                 
 
@@ -378,6 +378,7 @@
                                     Maximum="100"
                                     Minimum="0"
                                     Orientation="Horizontal"
+                                    PointerWheelChanged="Volume_PointerWheelChanged"
                                     Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                                 <TextBlock
                                     Margin="15,0,0,0"

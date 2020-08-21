@@ -80,26 +80,43 @@ namespace FluentMPC.ViewModels.Items
                     var response = await c.InternalResource.SendAsync(new AddIdCommand(file.Path));
 
                     if (response.IsResponseValid)
-                    {
                         NotificationService.ShowInAppNotification($"Added to Queue!");
-                    }
                     else
-                    {
                         NotificationService.ShowInAppNotification($"Couldn't add track: Invalid MPD Response.", 0);
-                    }
-                } catch (Exception e)
-                {
-                    NotificationService.ShowInAppNotification($"Couldn't add track: @{e}", 0);
                 }
-                
+                catch (Exception e)
+                {
+                    NotificationService.ShowInAppNotification($"Couldn't add track: {e}", 0);
+                }
+
             }
         }
 
-        public ICommand AddToPlayListCommand;
-        // TODO add to playlist command
+        private ICommand _addToPlaylistCommand;
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IMpdFile>(AddToPlaylist));
 
-        public ICommand PlayTrackNextCommand;
-        // TODO move track in queue
+        private async void AddToPlaylist(IMpdFile file)
+        {
+            var playlistName = await DialogService.ShowAddToPlaylistDialog();
+            if (playlistName == null) return;
+
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, File.Path));
+
+                    if (req.IsResponseValid)
+                        NotificationService.ShowInAppNotification($"Added to Playlist {playlistName}!");
+                    else
+                        NotificationService.ShowInAppNotification($"Couldn't add track: Invalid MPD Response.", 0);
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't add track: {e}", 0);
+            }
+        }
 
         public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1)
         {

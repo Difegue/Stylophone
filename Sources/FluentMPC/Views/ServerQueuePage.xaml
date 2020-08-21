@@ -85,11 +85,10 @@
                         <Setter.Value>
                             <MenuFlyout Opening="MenuFlyout_Opening">
                                 <MenuFlyoutItem Icon="Play" Text="Play" Command="{Binding PlayTrackCommand}" CommandParameter="{Binding File}" DataContext="{Binding}" />
-                                <MenuFlyoutItem Text="Play Next" Command="{Binding PlayTrackNextCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
                                 <MenuFlyoutItem Icon="Delete" Text="Remove" Command="{Binding RemoveFromQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem Text="View Artist" />
+                                <MenuFlyoutItem Text="View Artist"/>
                                 <MenuFlyoutItem Text="View Album"/>
                             </MenuFlyout>
                         </Setter.Value>

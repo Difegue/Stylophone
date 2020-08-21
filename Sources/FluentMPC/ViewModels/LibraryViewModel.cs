@@ -28,22 +28,31 @@ namespace FluentMPC.ViewModels
         public void RangesChanged(ItemIndexRange visibleRange, IReadOnlyList<ItemIndexRange> trackedItems)
         {
 
-            // Cancel all current heavy album loading
+            // Cancel all previous album loading
             cts?.Cancel();
             //cts?.Dispose();
 
             cts = new CancellationTokenSource();
             var token = cts.Token;
 
-            // Load album data for the visible range of data
-            for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
+            Task.Run(() =>
             {
-                var album = this[i];
+                // Do nothing for 250ms to avoid triggering a ton of loads if the user is just scrolling thru
+                Thread.Sleep(250);
 
-                if (!album.IsDetailLoading && !album.IsFullyLoaded)
-                    Task.Run(async () => await album.LoadAlbumDataAsync(token));
-                
-            }
+                if (token.IsCancellationRequested)
+                    return;
+
+                // Not cancelled yet, go on
+                // Load album data for the visible range of data
+                for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
+                {
+                    var album = this[i];
+
+                    if (!album.IsDetailLoading && !album.IsFullyLoaded)
+                        _ = Task.Run(async () => await album.LoadAlbumDataAsync(token));
+                }
+            });
         }
 
         public void Dispose()
@@ -77,6 +86,8 @@ namespace FluentMPC.ViewModels
                         Source.Add(new AlbumViewModel(item));
                     }
             }
+
+
         }
 
         private void OnItemClick(AlbumViewModel clickedItem)

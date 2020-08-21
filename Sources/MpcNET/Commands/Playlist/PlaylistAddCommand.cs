@@ -35,7 +35,7 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => string.Join(" ", new[] { "playlistadd " }, this.playlist, this.pathUri);
+        public string Serialize() => string.Join(" ", "playlistadd", $"\"{playlist}\"", $"\"{pathUri}\"");
 
         /// <summary>
         /// Deserializes the specified response text pairs.

@@ -43,48 +43,71 @@ namespace FluentMPC.ViewModels.Items
         }
 
         public bool IsDirectory { get; set; }
+        public bool IsLoaded { get; set; }
 
         private ObservableCollection<FilePathViewModel> _childPaths;
-        public ObservableCollection<FilePathViewModel> Children {
+        public ObservableCollection<FilePathViewModel> Children
+        {
             get => _childPaths;
             set => Set(ref _childPaths, value);
         }
 
-        public async Task UpdateChildrenAsync()
+        private bool _isLoadingChildren;
+        public async Task LoadChildrenAsync()
         {
-            var newChildren = new List<FilePathViewModel>();
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var response = await c.InternalResource.SendAsync(new LsInfoCommand(Path));
+            if (_isLoadingChildren || IsDirectory == false || _childPaths == null || Path == null) return;
 
-                if (response.IsResponseValid) 
-                    foreach (var item in response.Response.Content)
-                    {
-                        newChildren.Add(new FilePathViewModel(item));
-                    }
-                else
-                    newChildren.Add(new FilePathViewModel("💥 Failed"));
+            _isLoadingChildren = true;
+            try
+            {
+                var newChildren = new List<FilePathViewModel>();
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var response = await c.InternalResource.SendAsync(new LsInfoCommand(Path));
+
+                    if (response.IsResponseValid)
+                        foreach (var item in response.Response.Content)
+                        {
+                            newChildren.Add(new FilePathViewModel(item));
+                        }
+                    else
+                        newChildren.Add(new FilePathViewModel("💥 Failed"));
+                }
+
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                {
+                    _childPaths.Clear();
+                    _childPaths.AddRange(newChildren);
+                    IsLoaded = true;
+                });
             }
-
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            finally
             {
-                _childPaths.Clear();
-                _childPaths.AddRange(newChildren);
-            });
+                _isLoadingChildren = false;
+            }
         }
-
-        // TODO - annoying to implement it seems
-        public ICommand PlayTrackNextCommand;
 
         private ICommand _playCommand;
         public ICommand PlayCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayPath));
 
         private async void PlayPath()
         {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            // Clear queue, add album and play
+            try
             {
-                //TODO - clear, add then play
-                //var response = await c.InternalResource.SendAsync(new PlayCommand(file.Id));
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var req = await c.InternalResource.SendAsync(new ClearCommand());
+                    if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
+
+                    req = await c.InternalResource.SendAsync(new AddCommand(Path));
+                    req = await c.InternalResource.SendAsync(new PlayCommand(0));
+                    NotificationService.ShowInAppNotification($"Now Playing {Path}");
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't play content: {e}", 0);
             }
         }
 
@@ -96,12 +119,44 @@ namespace FluentMPC.ViewModels.Items
             // AddCommand adds either the full directory or the song, depending on the path given.
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {
-                var response = await c.InternalResource.SendAsync(new AddCommand(Path));
+                var req = await c.InternalResource.SendAsync(new AddCommand(Path));
+
+                if (!req.IsResponseValid)
+                {
+                    NotificationService.ShowInAppNotification($"Couldn't add file(s): Invalid MPD Response.", 0);
+                    return;
+                }
+                NotificationService.ShowInAppNotification($"File(s) added to Queue!");
             }
         }
 
-        public ICommand AddToPlayListCommand;
-        // TODO add to playlist command
+        private ICommand _addToPlaylistCommand;
+        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
+        private async void AddToPlaylist()
+        {
+            var playlistName = await DialogService.ShowAddToPlaylistDialog();
+            if (playlistName == null) return;
+
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, Path));
+
+                    if (!req.IsResponseValid)
+                    {
+                        NotificationService.ShowInAppNotification($"Couldn't add file(s): Invalid MPD Response.", 0);
+                        return;
+                    }
+
+                    NotificationService.ShowInAppNotification($"File(s) added to Playlist!");
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't add file(s): {e}", 0);
+            }
+        }
 
 
         public FilePathViewModel(IMpdFilePath file)
@@ -116,10 +171,10 @@ namespace FluentMPC.ViewModels.Items
                 _childPaths = new ObservableCollection<FilePathViewModel>();
 
                 // Add a bogus child that'll be replaced when the list is loaded
-                //TODO - resource
-                _childPaths.Add(new FilePathViewModel("Loading...")); 
+                //TODO - put string in resource
+                _childPaths.Add(new FilePathViewModel("Loading..."));
             }
-            
+
         }
 
         public FilePathViewModel(string name)

@@ -7,13 +7,24 @@ using Microsoft.Toolkit.Uwp.Helpers;
 
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Controls;
 
 namespace FluentMPC.Services
 {
     public static class DialogService
     {
-        private static bool shown = false;
 
+        public static async Task<string> ShowAddToPlaylistDialog()
+        {
+            var dialog = new AddToPlaylistDialog();
+            var result = ContentDialogResult.None;
+
+            await DispatcherHelper.ExecuteOnUIThreadAsync (async () => result = await dialog.ShowAsync());
+
+            return result == ContentDialogResult.Primary ? dialog.SelectedPlaylist : null;
+        }
+
+        private static bool shown = false;
         internal static async Task ShowFirstRunDialogIfAppropriateAsync()
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(

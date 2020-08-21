@@ -11,23 +11,21 @@
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:model="using:MpcNET.Types" xmlns:vm="using:FluentMPC.ViewModels.Items"
     Style="{StaticResource PageStyle}"
-    behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
+    behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"
     mc:Ignorable="d">
 
     <Page.Resources>
         <DataTemplate x:Key="PathTemplate" x:DataType="vm:FilePathViewModel">
             <winui:TreeViewItem
                 AutomationProperties.Name="{x:Bind Name}" HasUnrealizedChildren="{x:Bind IsDirectory}"
-                ItemsSource="{x:Bind Children, Mode=OneWay}" IsExpanded="False">
+                ItemsSource="{x:Bind Children, Mode=OneWay}" IsExpanded="False" DoubleTapped="TreeViewItem_DoubleTapped">
                 <TextBlock Text="{x:Bind Name}" Margin="{StaticResource XXSmallTopRightBottomMargin}" />
                 
                 <winui:TreeViewItem.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="Play" Command="{x:Bind PlayCommand}" />
-                        <MenuFlyoutItem Text="Play Next" Command="{x:Bind PlayTrackNextCommand}"/>
-                        <MenuFlyoutItem Text="Add to Queue" Command="{x:Bind AddToQueueCommand}"/>
-                        <MenuFlyoutItem Text="Add to Playlist" />
-                        <MenuFlyoutItem Text="???????"/>
+                        <MenuFlyoutItem Icon="Play" Text="Play" Command="{x:Bind PlayCommand}" />
+                        <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{x:Bind AddToQueueCommand}"/>
+                        <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{x:Bind AddToPlaylistCommand}"/>
                     </MenuFlyout>
                 </winui:TreeViewItem.ContextFlyout>
             </winui:TreeViewItem>
@@ -35,7 +33,7 @@
     </Page.Resources>
 
 
-    <Grid Background="{ThemeResource SystemChromeMediumLowColor}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
@@ -48,10 +46,9 @@
             </Grid.ColumnDefinitions>
             <TextBlock
                     Grid.Column="1"
-                    x:Uid="FoldersTitle"
+                    Text="MPD Filesystem"
                     Margin="{StaticResource SmallLeftMargin}"
                     Style="{StaticResource ListTitleStyle}"
-                    ToolTipService.ToolTip="Close all open folders"
                     VerticalAlignment="Center" />
             <Button
                     Grid.Column="0"
@@ -62,6 +59,7 @@
                     VerticalAlignment="Stretch"
                     VerticalContentAlignment="Center"
                     FontFamily="Segoe MDL2 Assets"
+                    ToolTipService.ToolTip="Close all open folders"
                     Command="{Binding ElementName=collapseBehavior, Path=CollapseAllCommand}"
                     Background="Transparent" />
         </Grid>

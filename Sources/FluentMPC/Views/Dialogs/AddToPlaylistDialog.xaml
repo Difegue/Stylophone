@@ -1,0 +1,20 @@
+﻿<ContentDialog
+    x:Class="FluentMPC.Views.AddToPlaylistDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Uid="AddToPlaylistDialog"
+    d:DesignHeight="345"
+    d:DesignWidth="550"
+    mc:Ignorable="d"
+    Title="Add to Playlist"
+    PrimaryButtonText="Add"
+    CloseButtonText="Cancel">
+    <ScrollViewer>
+        <StackPanel>
+            <ComboBox ItemsSource="{x:Bind Playlists}" DisplayMemberPath="Name" SelectedValuePath="Name" SelectionChanged="Update_Selected"
+                Header="Add track to the following Playlist:" PlaceholderText="Select a Playlist" Width="270" />
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

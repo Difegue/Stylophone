@@ -31,35 +31,56 @@ namespace FluentMPC.ViewModels
         public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
         private async void AddToPlaylist()
         {
-            throw new NotImplementedException();
+            var playlistName = await DialogService.ShowAddToPlaylistDialog();
+            if (playlistName == null) return;
 
-           /* using (var c = await MPDConnectionService.GetConnectionAsync())
+            try
             {
-                foreach (var f in Item.Files)
+                using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
-                    var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, f.Path));
+                    foreach (var f in Item.Files)
+                    {
+                        var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, f.Path));
+
+                        if (!req.IsResponseValid)
+                        {
+                            NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.", 0);
+                            break;
+                        }
+                    }
+                    NotificationService.ShowInAppNotification($"Album added to Playlist!");
                 }
-            }*/
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't add album: {e}", 0);
+            }
         }
 
         private ICommand _addToQueueCommand;
         public ICommand AddAlbumCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
         private async void AddToQueue()
         {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            try
             {
-                foreach (var f in Item.Files)
+                using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
-                    var req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
+                    foreach (var f in Item.Files)
+                    {
+                        var req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
 
-                    if (req.IsResponseValid)
-                    {
-                        NotificationService.ShowInAppNotification($"Album added to Queue!");
-                    } else
-                    {
-                        NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.");
+                        if (!req.IsResponseValid)
+                        {
+                            NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.", 0);
+                            break;
+                        }
                     }
+                    NotificationService.ShowInAppNotification($"Album added to Queue!");
                 }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't add album: {e}", 0);
             }
         }
 
@@ -68,17 +89,24 @@ namespace FluentMPC.ViewModels
         private async void PlayAlbum()
         {
             // Clear queue, add album and play
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            try
             {
-                var req = await c.InternalResource.SendAsync(new ClearCommand());
-                if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
-
-                foreach (var f in Item.Files)
+                using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
-                    req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
-                }
+                    var req = await c.InternalResource.SendAsync(new ClearCommand());
+                    if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
 
-                req = await c.InternalResource.SendAsync(new PlayCommand(0));
+                    foreach (var f in Item.Files)
+                    {
+                        req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
+                    }
+                    req = await c.InternalResource.SendAsync(new PlayCommand(0));
+                }
+                NotificationService.ShowInAppNotification($"Now Playing {Item.Name}");
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't play album: {e}", 0);
             }
         }
 
