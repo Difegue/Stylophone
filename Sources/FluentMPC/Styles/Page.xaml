@@ -56,7 +56,7 @@
                             x:Name="BorderCircle"
                             Fill="{TemplateBinding Background}"
                             Stroke="{TemplateBinding BorderBrush}"
-                            StrokeThickness="1" />
+                            StrokeThickness="2" />
 
                         <ContentPresenter
                             x:Name="ContentPresenter"

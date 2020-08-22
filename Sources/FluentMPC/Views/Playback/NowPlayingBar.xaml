@@ -62,7 +62,7 @@
         <Button
             Grid.Column="0"
             x:Name="AlbumView"
-            Width="220"
+            Width="160"
             Height="80"
             Padding="0"
             HorizontalContentAlignment="Stretch"
@@ -77,6 +77,8 @@
 
                 <!--  Track Image and Navigate to now playing  -->
                 <controls:DropShadowPanel
+                    x:Name="AlbumArt"
+                    Visibility="Collapsed"
                     Margin="6,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
@@ -99,7 +101,7 @@
                 </controls:DropShadowPanel>
 
                 <!--  Track title and user  -->
-                <StackPanel Margin="88,0,0,2" VerticalAlignment="Center">
+                <StackPanel x:Name="TrackTitle" Margin="12,0,0,2" VerticalAlignment="Center">
                     <TextBlock
                         MaxHeight="50"
                         FontSize="14"
@@ -143,6 +145,7 @@
                 <!--  Shuffle  -->
                 <Button
                     x:Name="ShuffleButton"
+                    Visibility="Collapsed"
                     Width="40"
                     Height="40"
                     Margin="5,0"
@@ -186,6 +189,7 @@
                     Height="52"
                     Margin="5,0"
                     Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
+                    BorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
                     Style="{StaticResource CircleButtonStyle}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Play/Pause" />
@@ -221,6 +225,7 @@
                 <!--  Repeat  -->
                 <Button
                     x:Name="RepeatButton"
+                    Visibility="Collapsed"
                     Width="40"
                     Height="40"
                     Margin="5,0"
@@ -242,7 +247,9 @@
 
             <!--  Slider  -->
             <Grid
+                x:Name="PlaybackSlider"
                 Grid.Column="0"
+                Grid.ColumnSpan="3"
                 Grid.Row="1"
                 Margin="20,-12,20,0"
                 HorizontalAlignment="Stretch"
@@ -307,9 +314,10 @@
 
             <!--  Misc Buttons  -->
             <StackPanel
+                x:Name="MiscButtons"
                 Grid.Column="2"
-                Grid.RowSpan="2"
-                Margin="0,0,0,0"
+                Grid.RowSpan="1"
+                Margin="0,0,12,0"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
 
@@ -333,7 +341,6 @@
                             PointerWheelChanged="Volume_PointerWheelChanged" Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                 </StackPanel>
                 
-
                 <!-- Compact Sound -->
                 <Button
                     x:Name="SoundFlyout"
@@ -408,66 +415,87 @@
                             TextAlignment="Center" />
                     </Button.Content>
                 </Button>
-            </StackPanel>
-        </Grid>
 
-        <StackPanel
-            Grid.Column="2"
-            Margin="0,0,20,0"
-            Canvas.ZIndex="10"
-            Orientation="Horizontal">
-            <!--  More  -->
-            <Button
+                <!--  More  -->
+                <Button
                 x:Name="MoreButton"
                 Width="40"
                 Height="40"
                 Margin="5,0"
                 Style="{StaticResource CircleButtonStyle}">
-                <ToolTipService.ToolTip>
-                    <ToolTip Content="More Actions" />
-                </ToolTipService.ToolTip>
-                <Button.Content>
-                    <TextBlock
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="More Actions" />
+                    </ToolTipService.ToolTip>
+                    <Button.Content>
+                        <TextBlock
                         FontFamily="Segoe MDL2 Assets"
                         FontSize="18"
                         Text="&#xE712;"
                         TextAlignment="Center" />
-                </Button.Content>
-                <Button.Flyout>
-                    <MenuFlyout Placement="Top">
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout Placement="Top">
 
-                        <!--  Add to playlist  -->
-                        <MenuFlyoutItem Text="Add track to playlist">
-                            <MenuFlyoutItem.Icon>
-                                <FontIcon Glyph="&#xE142;" />
-                            </MenuFlyoutItem.Icon>
-                        </MenuFlyoutItem>
+                            <!--  Add to playlist  -->
+                            <MenuFlyoutItem Text="Add track to playlist">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE142;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
 
-                        <MenuFlyoutItem Text="Clear Queue" Icon="Delete"/>
+                            <MenuFlyoutItem Text="Clear Queue" Icon="Delete"/>
 
-                        <MenuFlyoutSeparator Opacity="0.4" />
+                            <MenuFlyoutSeparator Opacity="0.4" />
 
-                        <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist"> <!-- TODO view artist -->
-                            <MenuFlyoutItem.Icon>
-                                <FontIcon Glyph="&#xE8D4;" />
-                            </MenuFlyoutItem.Icon>
-                        </MenuFlyoutItem>
+                            <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist">
+                                <!-- TODO view artist -->
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE8D4;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
 
-                        <MenuFlyoutItem
+                            <MenuFlyoutItem
                             Click="{x:Bind PlaybackViewModel.NavigateNowPlayingInfo}"
                             Icon="MusicInfo"
                             Text="View Album" />
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-        </StackPanel>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+                
+            </StackPanel>
+        </Grid>
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
-                <VisualState>
+
+                <VisualState x:Name="Normal">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1200" />
+                        <AdaptiveTrigger MinWindowWidth="630" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2"/>
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1"/>
+
+                        <Setter Target="AlbumView.Width" Value="220" />
+                    </VisualState.Setters>
+                </VisualState>
+                
+                <VisualState x:Name="Large">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2"/>
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1"/>
+                        
                         <Setter Target="AlbumView.Width" Value="320"/>
                         <Setter Target="SoundFlyout.Visibility" Value="Collapsed" />
                         <Setter Target="SoundPanel.Visibility" Value="Visible" />
