@@ -134,7 +134,7 @@ namespace FluentMPC.ViewModels
         {
             IsBackEnabled = NavigationService.CanGoBack;
 
-            if (e.SourcePageType == typeof(LibraryDetailPage) || e.SourcePageType == typeof(PlaylistPage))
+            if (e.SourcePageType == typeof(LibraryDetailPage) || e.SourcePageType == typeof(PlaylistPage) || e.SourcePageType == typeof(PlaybackView))
             {
                 // Special margin to extend frame to the titlebar
                 // TODO:depending on viewstate, handle color of back and hambaga buttons and change margin 

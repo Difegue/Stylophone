@@ -185,8 +185,8 @@
 
                 <!--  Play / Pause  -->
                 <Button
-                    Width="52"
-                    Height="52"
+                    Width="50"
+                    Height="50"
                     Margin="5,0"
                     Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
                     BorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
@@ -273,11 +273,12 @@
                 <Slider
                     x:Name="ProgressBar"
                     Grid.Column="1"
-                    Margin="15,0,15,0"
+                    Margin="15,9,15,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Stretch"
-                    Style="{StaticResource MainSliderStyle}"
+                    Style="{StaticResource CircleSlider}" Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
+                            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
                     Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
                     ManipulationMode="All"
                     ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
@@ -338,6 +339,8 @@
                         </Button.Content>
                     </Button>
                     <Slider Width="105" Padding="0" Margin="0,0,15,0" VerticalAlignment="Center" Maximum="100" Minimum="0" Orientation="Horizontal"
+                            Style="{StaticResource CircleSlider}" Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
+                            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
                             PointerWheelChanged="Volume_PointerWheelChanged" Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                 </StackPanel>
                 
@@ -381,14 +384,17 @@
                                 <Slider
                                     Width="105"
                                     Padding="0"
+                                    Margin="0,4,0,0"
                                     VerticalAlignment="Center"
                                     Maximum="100"
                                     Minimum="0"
                                     Orientation="Horizontal"
                                     PointerWheelChanged="Volume_PointerWheelChanged"
+                                    Style="{StaticResource CircleSlider}" Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
+                            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
                                     Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                                 <TextBlock
-                                    Margin="15,0,0,0"
+                                    Margin="15,-2,0,0"
                                     VerticalAlignment="Center"
                                     FontWeight="SemiBold"
                                     Text="{x:Bind PlaybackViewModel.MediaVolume, Mode=OneWay}" />

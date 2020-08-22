@@ -55,7 +55,8 @@ namespace FluentMPC.Views
                     return;
 
                 var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
-                QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
+                if (playing != null)
+                    QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
             }
         }
 

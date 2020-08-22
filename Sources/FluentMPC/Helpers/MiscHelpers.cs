@@ -16,6 +16,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 using Color = Windows.UI.Color;
 
@@ -44,8 +45,11 @@ namespace FluentMPC.Helpers
         }
 
         //TODO move this into a dedicated class
-        public async static Task<WriteableBitmap> GetAlbumArtAsync(IMpdFile f, CancellationToken token = default)
+        public async static Task<WriteableBitmap> GetAlbumArtAsync(IMpdFile f, CancellationToken token = default, CoreDispatcher dispatcher = null)
         {
+            if (dispatcher == null)
+                dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+
             WriteableBitmap result;
             var foundUsableArt = false;
 
@@ -54,7 +58,7 @@ namespace FluentMPC.Helpers
             var uniqueIdentifier = f.HasAlbum ? f.Album : f.HasTitle ? f.Title : f.Path;
 
             // Try loading from art cache first
-            result = await LoadImageFromFile(uniqueIdentifier);
+            result = await LoadImageFromFile(uniqueIdentifier, dispatcher);
 
             if (result != null)
                 return result;
@@ -98,7 +102,7 @@ namespace FluentMPC.Helpers
 
                     // Create the BitmapImage on the UI Thread.
                     if (foundUsableArt)
-                        result = await ImageFromBytes(data.ToArray());
+                        result = await ImageFromBytes(data.ToArray(), dispatcher);
                     else
                         throw new Exception();
                 }
@@ -106,7 +110,7 @@ namespace FluentMPC.Helpers
             catch (Exception e)
             {
                 // Fallback
-                await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                await DispatcherHelper.AwaitableRunAsync(dispatcher, async () =>
                     result = await BitmapFactory.FromContent(new Uri("ms-appx:///Assets/AlbumPlaceholder.png")));
             }
 
@@ -116,12 +120,15 @@ namespace FluentMPC.Helpers
             return result;
         }
 
-        internal static async Task<Color> GetDominantColor(WriteableBitmap art)
+        internal static async Task<Color> GetDominantColor(WriteableBitmap art, CoreDispatcher dispatcher = null)
         {
+            if (dispatcher == null)
+                dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+
             //get dominant color of albumart
             using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                await DispatcherHelper.AwaitableRunAsync(dispatcher, async () =>
                 {
                     await art.Resize(50, 50, WriteableBitmapExtensions.Interpolation.NearestNeighbor).ToStreamAsJpeg(stream);
                 });
@@ -143,10 +150,13 @@ namespace FluentMPC.Helpers
             await FileIO.WriteBytesAsync(file, data.ToArray());
         }
 
-        internal static async Task<BitmapImage> WriteableBitmapToBitmapImageAsync(WriteableBitmap art, int decodedPixelWidth)
+        internal static async Task<BitmapImage> WriteableBitmapToBitmapImageAsync(WriteableBitmap art, int decodedPixelWidth, CoreDispatcher dispatcher = null)
         {
+            if (dispatcher == null)
+                dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+
             BitmapImage image = null;
-            await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+            await DispatcherHelper.AwaitableRunAsync(dispatcher, async () =>
             {
                 image = new BitmapImage();
 
@@ -165,7 +175,7 @@ namespace FluentMPC.Helpers
             return image;
         }
 
-        private static async Task<WriteableBitmap> LoadImageFromFile(string Id)
+        private static async Task<WriteableBitmap> LoadImageFromFile(string Id, CoreDispatcher dispatcher)
         {
             try
             {
@@ -178,7 +188,7 @@ namespace FluentMPC.Helpers
                     var readStream = await file.OpenReadAsync();
 
                     WriteableBitmap image = null;
-                    await DispatcherHelper.ExecuteOnUIThreadAsync(async () => image = await BitmapFactory.FromStream(readStream));
+                    await DispatcherHelper.AwaitableRunAsync(dispatcher, async () => image = await BitmapFactory.FromStream(readStream));
 
                     readStream.Dispose();
                     return image;
@@ -192,12 +202,12 @@ namespace FluentMPC.Helpers
             }
         }
 
-        public async static Task<WriteableBitmap> ImageFromBytes(byte[] bytes)
+        public async static Task<WriteableBitmap> ImageFromBytes(byte[] bytes, CoreDispatcher dispatcher)
         {
             WriteableBitmap image = null;
             using (var stream = new MemoryStream(bytes))
             {
-                await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                await DispatcherHelper.AwaitableRunAsync(dispatcher, async () =>
                 {
                     image = await BitmapFactory.FromStream(stream);
 

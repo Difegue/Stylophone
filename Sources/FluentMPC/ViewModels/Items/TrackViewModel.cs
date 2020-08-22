@@ -11,11 +11,14 @@ using System.Windows.Input;
 using Color = Windows.UI.Color;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Linq;
+using Windows.UI.Core;
 
 namespace FluentMPC.ViewModels.Items
 {
     public class TrackViewModel : Observable
     {
+        private readonly CoreDispatcher _currentUiDispatcher;
+
         public IMpdFile File { get; }
 
         public string Name => File.HasTitle ? File.Title : File.Path.Split('/').Last();
@@ -29,7 +32,7 @@ namespace FluentMPC.ViewModels.Items
             get => _albumArt;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _albumArt, value));
+                DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => Set(ref _albumArt, value));
             }
         }
 
@@ -40,7 +43,7 @@ namespace FluentMPC.ViewModels.Items
             get => _albumColor;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _albumColor, value));
+                DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => Set(ref _albumColor, value));
             }
         }
 
@@ -118,9 +121,13 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
-        public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1)
+        public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1, CoreDispatcher dispatcher = null)
         {
             MPDConnectionService.SongChanged += (s, e) => UpdatePlayingStatus();
+
+            // Use specific UI dispatcher if given
+            // (Used for the compact view scenario, which rolls its own dispatcher..)
+            _currentUiDispatcher = dispatcher ?? Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
 
             File = file;
             AlbumArt = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
@@ -132,13 +139,13 @@ namespace FluentMPC.ViewModels.Items
                     // For the now playing bar, the album art is rendered at 70px wide.
                     // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
 
-                    var art = await MiscHelpers.GetAlbumArtAsync(File);
+                    var art = await MiscHelpers.GetAlbumArtAsync(File, default, _currentUiDispatcher);
 
                     // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar only)
                     if (albumArtWidth != -1)
-                        DominantColor = await MiscHelpers.GetDominantColor(art);
+                        DominantColor = await MiscHelpers.GetDominantColor(art, _currentUiDispatcher);
 
-                    AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth);
+                    AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth, _currentUiDispatcher);
 
                     Singleton<LiveTileService>.Instance.UpdatePlayingSong(this);
                 });

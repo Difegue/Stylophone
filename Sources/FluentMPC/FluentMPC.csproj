@@ -212,6 +212,9 @@
     <Compile Include="Views\LibraryPage.xaml.cs">
       <DependentUpon>LibraryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Playback\PlaybackView.xaml.cs">
+      <DependentUpon>PlaybackView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ServerQueuePage.xaml.cs">
       <DependentUpon>ServerQueuePage.xaml</DependentUpon>
     </Compile>
@@ -275,6 +278,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LibraryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Playback\PlaybackView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

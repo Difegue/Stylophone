@@ -1,6 +1,8 @@
 ﻿using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
+using FluentMPC.Views;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using MpcNET;
 using MpcNET.Commands.Playback;
@@ -365,7 +367,7 @@ namespace FluentMPC.ViewModels.Playback
 
         public void NavigateNowPlaying()
         {
-            NavigationService.Navigate(typeof(FluentMPC.Views.OverlayView));
+            NavigationService.Navigate(typeof(FluentMPC.Views.PlaybackView));
         }
 
         public void NavigateNowPlayingInfo()
@@ -478,8 +480,8 @@ namespace FluentMPC.ViewModels.Playback
                 {
                     if (response.IsResponseValid && response.Response.Content != null)
                     {
-                        // Set the new current track, updating the UI
-                        CurrentTrack = new TrackViewModel(response.Response.Content, true, _artWidth);
+                        // Set the new current track, updating the UI with the correct Dispatcher
+                        CurrentTrack = new TrackViewModel(response.Response.Content, true, _artWidth, _currentUiDispatcher);
                     }
                     else
                     {
@@ -596,20 +598,20 @@ namespace FluentMPC.ViewModels.Playback
         /// </summary>
         public async void SwitchToCompactView()
         {
-        /*    try
+            try
             {
                 var compactView = CoreApplication.CreateNewView();
                 var compactViewId = -1;
                 var currentViewId = -1;
 
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
                 {
                     // Get the Id back
                     currentViewId = ApplicationView.GetForCurrentView().Id;
                 });
 
                 // Create a new window within the view
-                await compactView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await DispatcherHelper.ExecuteOnUIThreadAsync(compactView, () =>
                 {
                     // Create a new frame and navigate it to the overlay view
                     var overlayFrame = new Frame();
@@ -637,8 +639,8 @@ namespace FluentMPC.ViewModels.Playback
             }
             catch (Exception e)
             {
-                await NavigationService.Current.CallMessageDialogAsync("An error occurred while trying to switch to compact mode. More information:\n" + e.Message, "Compact Mode Error");
-            }*/
+                NotificationService.ShowInAppNotification("An error occurred while trying to switch to compact mode. More information:\n" + e.Message, 0);
+            }
         }
 
         #endregion Method Bindings
