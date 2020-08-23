@@ -3,15 +3,12 @@ using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
 using FluentMPC.Views;
 using Microsoft.Toolkit.Uwp.Helpers;
-using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using MpcNET;
 using MpcNET.Commands.Playback;
+using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Status;
-using MpcNET.Types;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,9 +16,7 @@ using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
-using Windows.Media.Playback;
 using Windows.UI.Core;
-using Windows.UI.StartScreen;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -36,20 +31,6 @@ namespace FluentMPC.ViewModels.Playback
         #region Getters and Setters
 
         /// <summary>
-        ///     Current playlist of items
-        /// </summary>
-        public ObservableCollection<IMpdFile> Playlist { get; } = new ObservableCollection<IMpdFile>();
-
-        public IList<MpdPlaylist> Playlists => MPDConnectionService.Playlists;
-
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<SelectionChangedEventArgs>(AddToPlaylist));
-        private void AddToPlaylist(SelectionChangedEventArgs obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// The current playing track
         /// </summary>
         public TrackViewModel CurrentTrack
@@ -62,6 +43,20 @@ namespace FluentMPC.ViewModels.Playback
         }
 
         private TrackViewModel _currentTrack;
+
+        /// <summary>
+        /// The next track in queue
+        /// </summary>
+        public TrackViewModel NextTrack
+        {
+            get => _nextTrack;
+            set
+            {
+                Set(ref _nextTrack, value);
+            }
+        }
+
+        private TrackViewModel _nextTrack;
 
         /// <summary>
         ///     The amount of time spent listening to the track
@@ -262,7 +257,8 @@ namespace FluentMPC.ViewModels.Playback
             // Update info to current track
             if (MPDConnectionService.CurrentStatus != null)
                 OnTrackChange(this, new SongChangedEventArgs { NewSongId = MPDConnectionService.CurrentStatus.SongId});
-            UpdateUpNext();
+
+            UpdateUpNextAsync();
 
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
 
@@ -286,7 +282,6 @@ namespace FluentMPC.ViewModels.Playback
         /// </summary>
         private async void UpdateInformation(object sender, object e)
         {
-
             // Only call the following if the player exists, is playing
             // and the time is greater then 0.
             if (MPDConnectionService.CurrentStatus.State != MpdState.Play || MPDConnectionService.CurrentStatus.Elapsed.Milliseconds <= 0)
@@ -324,6 +319,8 @@ namespace FluentMPC.ViewModels.Playback
         /// </summary>
         public async void ToggleRepeat()
         {
+            // TODO combine with single
+
             if (MPDConnectionService.CurrentStatus.Repeat)
                 IsRepeatEnabled = false;
             else
@@ -350,7 +347,7 @@ namespace FluentMPC.ViewModels.Playback
                 await c.InternalResource.SendAsync(new RandomCommand(IsShuffleEnabled));
             }
 
-            UpdateUpNext();
+            UpdateUpNextAsync();
         }
 
         /// <summary>
@@ -358,7 +355,7 @@ namespace FluentMPC.ViewModels.Playback
         /// </summary>
         public void ToggleMute()
         {
-            // Toggle mute
+            // TODO Toggle mute
             //SimpleIoc.Default.GetInstance<IPlaybackService>().MuteTrack(!SimpleIoc.Default.GetInstance<IPlaybackService>().IsTrackMuted());
 
             // Update the UI
@@ -367,11 +364,12 @@ namespace FluentMPC.ViewModels.Playback
 
         public void NavigateNowPlaying()
         {
-            NavigationService.Navigate(typeof(FluentMPC.Views.PlaybackView));
+            NavigationService.Navigate(typeof(PlaybackView));
         }
 
         public void NavigateNowPlayingInfo()
         {
+            // TODO view album
             //App.NavigateTo(typeof(XboxPlayingView), "track-info");
         }
 
@@ -415,19 +413,6 @@ namespace FluentMPC.ViewModels.Playback
 
         #endregion Track Playback State
 
-        private void UpdateUpNext()
-        {
-            // Get and convert tracks
-            /*var playlist = SimpleIoc.Default.GetInstance<IPlaybackService>().GetPlaylist();
-
-            // Clear playlist and add items
-            Playlist.Clear();
-            foreach (var baseTrack in playlist)
-            {
-                Playlist.Add(new BaseSoundByteItem(baseTrack));
-            }*/
-        }
-
         #region Methods
 
         private bool _isUserMovingSlider = false;
@@ -454,6 +439,28 @@ namespace FluentMPC.ViewModels.Playback
                   _isUserMovingSlider = false;
               });
         }
+        private async void UpdateUpNextAsync()
+        {
+            var nextSongId = MPDConnectionService.CurrentStatus.NextSongId;
+
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var response = await c.InternalResource.SendAsync(new PlaylistIdCommand(nextSongId));
+
+                    if (response.IsResponseValid)
+                    {
+                        NextTrack = new TrackViewModel(response.Response.Content.First());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't get next song in queue: {e}", 0);
+            }
+
+        }
 
         /// <summary>
         ///     Called when MPD loads a new track. Used
@@ -462,10 +469,6 @@ namespace FluentMPC.ViewModels.Playback
         /// <param name="track"></param>
         private async void OnTrackChange(object sender, SongChangedEventArgs eventArgs)
         {
-            // Do nothing if running in the background
-            //if (DeviceHelper.IsBackground)
-            //  return;
-
             // Same track or no track, no need to perform this logic
             if (eventArgs.NewSongId == CurrentTrack?.File?.Id)
                 return;
@@ -495,24 +498,18 @@ namespace FluentMPC.ViewModels.Playback
                         CurrentTimeValue = 0;
                         MaxTimeValue = CurrentTrack.File.Time;
 
-                        UpdateUpNext();
+                        UpdateUpNextAsync();
 
                     } else
                     {
                         // TODO no track playing
                     }
                 });
-
             }
-            
         }
 
         private async void OnStateChange(object sender, EventArgs eventArgs)
         {
-            // Don't run in the background if on Xbox
-            //if (DeviceHelper.IsBackground && DeviceHelper.IsXbox)
-            //  return;
-
             await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 // Remove completed requests
@@ -563,34 +560,22 @@ namespace FluentMPC.ViewModels.Playback
             _updateInformationTimer.Tick -= UpdateInformation;
 
             Application.Current.LeavingBackground -= CurrentOnLeavingBackground;
-
-            //if (_remoteSystemSessionWatcher != null)
-            //{
-            //    // Unbind methods
-            //    _remoteSystemSessionWatcher.Added += RemoteSystemWatcher_RemoteSystemAdded;
-            //    _remoteSystemSessionWatcher.Removed += RemoteSystemWatcher_RemoteSystemRemoved;
-            //    _remoteSystemSessionWatcher.Updated += RemoteSystemWatcher_RemoteSystemUpdated;
-
-            //    _remoteSystemSessionWatcher.Stop();
-            //}
         }
 
-        #region Method Bindings
+        #region Commands
 
-        /// <summary>
-        ///     Display the playlist dialog so the user can
-        ///     add the current song to a playlist.
-        /// </summary>
-        public async void DisplayPlaylist()
+        private ICommand _addToPlaylistCommand;
+        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<SelectionChangedEventArgs>(AddToPlaylist));
+        private void AddToPlaylist(SelectionChangedEventArgs obj)
         {
             // Track must exist
             if (CurrentTrack == null)
             {
-                //await NavigationService.Current.CallMessageDialogAsync("No track is currently playing.", "Error");
+                NotificationService.ShowInAppNotification("No track is currently playing.");
                 return;
             }
 
-            //await NavigationService.Current.CallDialogAsync<AddToPlaylistDialog>(SimpleIoc.Default.GetInstance<IPlaybackService>().GetCurrentTrack());
+            CurrentTrack.AddToPlayListCommand.Execute(this);
         }
 
         /// <summary>

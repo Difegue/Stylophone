@@ -141,7 +141,7 @@ namespace FluentMPC.ViewModels.Items
 
                     var art = await MiscHelpers.GetAlbumArtAsync(File, default, _currentUiDispatcher);
 
-                    // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar only)
+                    // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
                     if (albumArtWidth != -1)
                         DominantColor = await MiscHelpers.GetDominantColor(art, _currentUiDispatcher);
 

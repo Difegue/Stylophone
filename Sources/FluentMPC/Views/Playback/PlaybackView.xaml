@@ -8,7 +8,6 @@
     mc:Ignorable="d"
     d:DesignHeight="430"
     d:DesignWidth="300"
-    Loaded="Page_Loaded"
     Unloaded="Page_Unloaded"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:behaviors="using:FluentMPC.Behaviors"
@@ -25,50 +24,94 @@
 
     </Page.Resources>
 
-    <RelativePanel Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-        <!--.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" -->
-        
-        <controls:DropShadowPanel
-                        MaxWidth="600"
-                        MaxHeight="500"
-                        Margin="{StaticResource SmallRightMargin}"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+
+    <RelativePanel>
+
+        <!--  Track Background  -->
+        <Border RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True" 
+                RelativePanel.AlignRightWithPanel="True"
+                Canvas.ZIndex="-1"
+                Background="{ThemeResource SystemControlAcrylicElementBrush}">
+
+        </Border>
+        <controls:ImageEx  HorizontalAlignment="Center" Canvas.ZIndex="-2"  Stretch="UniformToFill"
+                           Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"/>
+
+        <Grid RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True" 
+                RelativePanel.AlignRightWithPanel="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".6*" />
+                <ColumnDefinition Width=".4*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height=".5*"/>
+            </Grid.RowDefinitions>
+
+            <controls:DropShadowPanel
+                        Grid.Column="0"
+                        Grid.RowSpan="2"
                         BlurRadius="10"
                         OffsetX="4"
                         OffsetY="4"
                         ShadowOpacity="0.6"
+                        Margin="36,72,36,36"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                         Color="Black">
 
-            <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
-                          CornerRadius="3"
-                          MaxWidth="600"
-                          MaxHeight="500"/>
-        </controls:DropShadowPanel>
+                <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
+                          CornerRadius="3"/>
+            </controls:DropShadowPanel>
 
-        <StackPanel VerticalAlignment="Bottom">
-            <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
+            <StackPanel Grid.Column="1" Grid.RowSpan="2" Margin="0,72,0,36">
+                <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
+                       Style="{ThemeResource SubheaderTextBlockStyle}"
                        MaxLines="3"
-                       FontSize="26"
                        TextWrapping="Wrap"
                        TextTrimming="CharacterEllipsis"
                        Margin="25,0,25,5"
                        FontWeight="Bold" />
 
-            <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}"
-                       FontSize="14"
+                <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}"
+                       Style="{ThemeResource TitleTextBlockStyle}"
                        Margin="25,0,25,10"
                        Opacity="0.6"
                        TextTrimming="CharacterEllipsis"
                        FontWeight="Bold" />
 
-            <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Album, Mode=OneWay}"
-                       FontSize="14"
+                <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Album, Mode=OneWay}"
+                       Style="{ThemeResource TitleTextBlockStyle}"
                        Margin="25,0,25,10"
                        Opacity="0.6"
-                       TextTrimming="CharacterEllipsis"
-                       FontWeight="Bold" />
+                       MaxLines="3"
+                       TextWrapping="Wrap"
+                       TextTrimming="CharacterEllipsis" />
+            </StackPanel>
 
-            <!-- Slider Times 
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Margin="25,0,25,10" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+
+            <TextBlock Text="Up Next:"
+                       Style="{ThemeResource SubtitleTextBlockStyle}"
+                       Opacity="0.6" />
+            
+            <TextBlock Text="{x:Bind PlaybackViewModel.NextTrack.Name, Mode=OneWay}"
+                       Style="{ThemeResource SubtitleTextBlockStyle}"
+                       Margin="{StaticResource XSmallLeftMargin}"
+                       Opacity="0.6"
+                       TextWrapping="NoWrap"
+                       TextTrimming="CharacterEllipsis" />
+
+        </StackPanel>
+        
+       
+       
+        <!-- Slider Times 
             <Grid>
                 <TextBlock Grid.Column="0"
                            HorizontalAlignment="Left"
@@ -182,6 +225,6 @@
                     </Button.Content>
                 </Button>
             </StackPanel> -->
-        </StackPanel>
+        
     </RelativePanel>
 </Page>

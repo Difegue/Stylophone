@@ -19,21 +19,13 @@ namespace FluentMPC.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher);
-
-            // Set the accent color
-            //TitlebarHelper.UpdateTitlebarStyle();
+            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, 720);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             PlaybackViewModel?.Dispose();
             PlaybackViewModel = null;
-        }
-
-        private void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher);
         }
 
         private void Page_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)

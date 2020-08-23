@@ -26,7 +26,7 @@ namespace FluentMPC.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher);
+            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, 500);
             _mainAppViewId = (int)e.Parameter;
 
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
@@ -54,11 +54,6 @@ namespace FluentMPC.Views
         {
             PlaybackViewModel?.Dispose();
             PlaybackViewModel = null;
-        }
-
-        private void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher);
         }
 
         private void Page_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)

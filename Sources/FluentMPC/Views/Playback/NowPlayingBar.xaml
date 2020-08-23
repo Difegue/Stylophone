@@ -29,8 +29,7 @@
         RequestedTheme="Dark"
         Height="81"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
-        Background="Transparent">
+        VerticalAlignment="Stretch">
         <!--  Split the content into two main sections  -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -460,10 +459,11 @@
                                 </MenuFlyoutItem.Icon>
                             </MenuFlyoutItem>
 
+                            <!-- TODO view album -->
                             <MenuFlyoutItem
-                            Click="{x:Bind PlaybackViewModel.NavigateNowPlayingInfo}"
-                            Icon="MusicInfo"
-                            Text="View Album" />
+                                Click="{x:Bind PlaybackViewModel.NavigateNowPlayingInfo}"
+                                Icon="MusicInfo"
+                                Text="View Album" />
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>
