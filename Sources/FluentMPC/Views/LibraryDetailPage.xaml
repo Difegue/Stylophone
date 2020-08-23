@@ -75,7 +75,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="propertiesGroup1.(RelativePanel.RightOf)" Value="itemHero" />
-                        <Setter Target="propertiesGroup1.(RelativePanel.Below)" Value="artist" />
+                        <Setter Target="propertiesGroup1.(RelativePanel.Below)" Value="info" />
                         <Setter Target="propertiesGroup1.Width" Value="400" />
                         <Setter Target="title.Style" Value="{ThemeResource SubheaderTextBlockStyle}"/>
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}"/>
@@ -168,6 +168,9 @@
                                ToolTipService.ToolTip="{x:Bind ViewModel.Item.Artist, Mode=OneWay}"
                                Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind ViewModel.Item.Artist, Mode=OneWay}" />
 
+                        <TextBlock x:Name="info"  RelativePanel.RightOf="itemHero" RelativePanel.Below="artist" Margin="{StaticResource SmallTopMargin}"
+                                   Style="{ThemeResource BaseTextBlockStyle}" FontSize="16" Text="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}" />
+                        
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
                             

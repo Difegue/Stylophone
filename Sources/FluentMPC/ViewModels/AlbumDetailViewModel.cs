@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -24,8 +25,17 @@ namespace FluentMPC.ViewModels
             set { Set(ref _item, value); }
         }
 
+        public string PlaylistInfo
+        {
+            get => _info;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _info, value));
+            }
+        }
+        private string _info;
+
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
-        public IList<MpdPlaylist> Playlists => MPDConnectionService.Playlists;
 
         private ICommand _addToPlaylistCommand;
         public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
@@ -151,6 +161,11 @@ namespace FluentMPC.ViewModels
             {
                 Source.Add(new TrackViewModel(file));
             }
+
+            var totalTime = Source.Select(t => t.File.Time).Aggregate((t1, t2) => t1 + t2);
+            TimeSpan t = TimeSpan.FromSeconds(totalTime);
+
+            PlaylistInfo = $"{Source.Count} Tracks, Total Time: {MiscHelpers.ToReadableString(t)}";
         }
     }
 }

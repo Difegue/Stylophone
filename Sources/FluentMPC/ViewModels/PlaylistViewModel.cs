@@ -19,6 +19,8 @@ namespace FluentMPC.ViewModels
     {
         public ObservableCollection<TrackViewModel> Source { get; private set; } = new ObservableCollection<TrackViewModel>();
 
+
+
         private ICommand _deletePlaylistCommand;
         public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
         private async void DeletePlaylist()
@@ -80,6 +82,16 @@ namespace FluentMPC.ViewModels
         }
         private string _artists;
 
+        public string PlaylistInfo
+        {
+            get => _info;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _info, value));
+            }
+        }
+        private string _info;
+
         public BitmapImage PlaylistArt
         {
             get => _playlistArt;
@@ -108,6 +120,12 @@ namespace FluentMPC.ViewModels
 
                 Artists = findReq.Response.Content.
                             Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
+
+                var totalTime = Source.Select(t => t.File.Time).Aggregate((t1, t2) => t1 + t2);
+                TimeSpan t = TimeSpan.FromSeconds(totalTime);
+
+                PlaylistInfo = $"{Source.Count} Tracks, Total Time: {MiscHelpers.ToReadableString(t)}";
+
             }
         }
     }

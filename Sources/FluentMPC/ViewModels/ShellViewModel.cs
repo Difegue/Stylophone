@@ -109,7 +109,10 @@ namespace FluentMPC.ViewModels
 
             var item = _navigationView.MenuItems.Union(_playlistContainer.MenuItems)
                             .OfType<WinUI.NavigationViewItem>()
-                            .First(menuItem => (string)menuItem.Content == (string)args.InvokedItem);
+                            .FirstOrDefault(menuItem => (string)menuItem.Content == (string)args.InvokedItem);
+
+            if (item == null)
+                return;
 
             var pageType = item.GetValue(NavHelper.NavigateToProperty) as Type;
 

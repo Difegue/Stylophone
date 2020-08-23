@@ -147,6 +147,7 @@ namespace FluentMPC.ViewModels.Items
 
                     AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth, _currentUiDispatcher);
 
+                    // TODO Should this really be here?
                     Singleton<LiveTileService>.Instance.UpdatePlayingSong(this);
                 });
         }

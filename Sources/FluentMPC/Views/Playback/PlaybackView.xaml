@@ -48,26 +48,27 @@
                 <ColumnDefinition Width=".4*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height=".5*" />
-                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".7*" />
+                <RowDefinition Height=".3*"/>
             </Grid.RowDefinitions>
 
             <controls:DropShadowPanel
-                        Grid.Column="0"
-                        Grid.RowSpan="2"
+                        x:Name="AlbumArt"
+                        Grid.Row="0" Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
                         BlurRadius="10"
                         OffsetX="4"
                         OffsetY="4"
                         ShadowOpacity="0.6"
-                        Margin="36,72,36,36"
+                        Margin="24,72,24,0"
                         Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                         Color="Black">
 
-                <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
-                          CornerRadius="3"/>
+                <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" CornerRadius="3"/>
             </controls:DropShadowPanel>
 
-            <StackPanel Grid.Column="1" Grid.RowSpan="2" Margin="0,72,0,36">
+            <StackPanel x:Name="AlbumInfo" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0" >
                 <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
                        Style="{ThemeResource SubheaderTextBlockStyle}"
                        MaxLines="3"
@@ -76,15 +77,16 @@
                        Margin="25,0,25,5"
                        FontWeight="Bold" />
 
-                <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}"
-                       Style="{ThemeResource TitleTextBlockStyle}"
+                <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}" x:Name="AlbumArtist"
+                       Style="{ThemeResource BaseTextBlockStyle}"
                        Margin="25,0,25,10"
                        Opacity="0.6"
+                       MaxLines="3"
                        TextTrimming="CharacterEllipsis"
                        FontWeight="Bold" />
 
-                <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Album, Mode=OneWay}"
-                       Style="{ThemeResource TitleTextBlockStyle}"
+                <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Album, Mode=OneWay}" x:Name="AlbumName"
+                       Style="{ThemeResource SubtitleTextBlockStyle}"
                        Margin="25,0,25,10"
                        Opacity="0.6"
                        MaxLines="3"
@@ -96,12 +98,12 @@
 
         <StackPanel Orientation="Horizontal" Margin="25,0,25,10" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True">
 
-            <TextBlock Text="Up Next:"
-                       Style="{ThemeResource SubtitleTextBlockStyle}"
+            <TextBlock Text="Up Next:" x:Name="UpNext"
+                       Style="{ThemeResource BaseTextBlockStyle}"
                        Opacity="0.6" />
             
-            <TextBlock Text="{x:Bind PlaybackViewModel.NextTrack.Name, Mode=OneWay}"
-                       Style="{ThemeResource SubtitleTextBlockStyle}"
+            <TextBlock Text="{x:Bind PlaybackViewModel.NextTrack.Name, Mode=OneWay}" x:Name="UpNextTitle"
+                       Style="{ThemeResource BaseTextBlockStyle}"
                        Margin="{StaticResource XSmallLeftMargin}"
                        Opacity="0.6"
                        TextWrapping="NoWrap"
@@ -226,5 +228,34 @@
                 </Button>
             </StackPanel> -->
         
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="830" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.(Grid.Column)" Value="0" />
+                        <Setter Target="AlbumArt.(Grid.Row)" Value="0" />
+                        <Setter Target="AlbumArt.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="AlbumArt.(Grid.ColumnSpan)" Value="1" />
+                        <Setter Target="AlbumArt.Margin" Value="36,72,36,36" />
+
+                        <Setter Target="AlbumInfo.(Grid.Column)" Value="1" />
+                        <Setter Target="AlbumInfo.(Grid.Row)" Value="0" />
+                        <Setter Target="AlbumInfo.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="AlbumInfo.(Grid.ColumnSpan)" Value="1" />
+                        <Setter Target="AlbumInfo.Margin" Value="0,72,0,36" />
+                        <Setter Target="AlbumInfo.VerticalAlignment" Value="Center" />
+
+                        <Setter Target="AlbumName.Style" Value="{ThemeResource TitleTextBlockStyle}" />
+                        <Setter Target="AlbumArtist.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="UpNext.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="UpNextTitle.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </RelativePanel>
 </Page>

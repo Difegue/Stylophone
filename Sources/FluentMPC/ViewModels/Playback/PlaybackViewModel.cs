@@ -30,6 +30,8 @@ namespace FluentMPC.ViewModels.Playback
 
         #region Getters and Setters
 
+        public bool HideTrackName => NavigationService.Frame.CurrentSourcePageType != typeof(PlaybackView);
+
         /// <summary>
         /// The current playing track
         /// </summary>
@@ -261,6 +263,7 @@ namespace FluentMPC.ViewModels.Playback
             UpdateUpNextAsync();
 
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
+            NavigationService.Navigated += (s,e) => OnPropertyChanged(nameof(HideTrackName));
 
             // Start the timer if ready
             if (!_updateInformationTimer.IsEnabled)
@@ -363,7 +366,7 @@ namespace FluentMPC.ViewModels.Playback
         }
 
         public void NavigateNowPlaying()
-        {
+        {   
             NavigationService.Navigate(typeof(PlaybackView));
         }
 
@@ -451,7 +454,7 @@ namespace FluentMPC.ViewModels.Playback
 
                     if (response.IsResponseValid)
                     {
-                        NextTrack = new TrackViewModel(response.Response.Content.First());
+                        NextTrack = new TrackViewModel(response.Response.Content.First(), false, -1, _currentUiDispatcher);
                     }
                 }
             }
