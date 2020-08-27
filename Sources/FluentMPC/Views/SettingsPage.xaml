@@ -6,15 +6,47 @@
     xmlns:helper="using:FluentMPC.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
-    xmlns:xaml="using:Windows.UI.Xaml"
+    xmlns:xaml="using:Windows.UI.Xaml" xmlns:controls="using:Microsoft.UI.Xaml.Controls" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:BoolToVisibilityConverter x:Key="ReverseBoolToVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed" />
     </Page.Resources>
 
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
         <StackPanel
             x:Name="ContentArea">
+
+            <TextBlock x:Uid="Settings_Server" Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+            <StackPanel Margin="{StaticResource SmallTopBottomMargin}" HorizontalAlignment="Left" Width="300" >
+
+                <TextBox x:Uid="Settings_ServerHost" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}"/>
+
+                <controls:NumberBox x:Uid="Settings_ServerPort" SpinButtonPlacementMode="Compact" Margin="{StaticResource XSmallTopMargin}"
+                                    Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}"/>
+
+                <ProgressBar Margin="{StaticResource XSmallTopMargin}" IsIndeterminate="True"
+                             Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+
+                <StackPanel Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"
+                            Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
+                        <SymbolIcon Symbol="Clear" Foreground="Red"></SymbolIcon>
+                        <TextBlock>Couldn't find an MPD server at this address!</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"
+                            Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <SymbolIcon Symbol="MusicInfo" Foreground="Green" VerticalAlignment="Top"></SymbolIcon>
+                        <TextBlock Text="{x:Bind ViewModel.ServerInfo, Mode=OneWay}"/>
+                    </StackPanel>
+                </StackPanel>
+                
+
+            </StackPanel>
+            
             <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
                 <TextBlock x:Uid="Settings_Theme" />

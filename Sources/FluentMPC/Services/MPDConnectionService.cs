@@ -5,6 +5,8 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeProject.ObjectPool;
+using FluentMPC.Helpers;
+using FluentMPC.ViewModels;
 using MpcNET;
 using MpcNET.Types;
 using Sundew.Base.Collections;
@@ -17,12 +19,22 @@ namespace FluentMPC.Services
 
     public static class MPDConnectionService
     {
-        // TODO: settings wireup
-        private const string AddressKey = "ServerIPEndPoint";
-        private const string PasswordKey = "ServerPassword";
         private const int ConnectionPoolSize = 10;
 
         public static MpdStatus CurrentStatus { get; private set; } = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
+
+        private static bool _connected;
+
+        public static bool IsConnected
+        {
+            get { return _connected; }
+
+            set
+            {
+                _connected = value;
+                ConnectionChanged?.Invoke(Application.Current, new EventArgs());
+            }
+        }
 
         public static IList<MpdPlaylist> Playlists { get; private set; } = new List<MpdPlaylist>();
         public static ObjectPool<PooledObjectWrapper<MpcConnection>> ConnectionPool;
@@ -30,7 +42,7 @@ namespace FluentMPC.Services
         public static event EventHandler<SongChangedEventArgs> SongChanged;
         public static event EventHandler<EventArgs> StatusChanged;
         public static event EventHandler<EventArgs> PlaylistsChanged;
-        public static event EventHandler<EventArgs> ConnectionLost;
+        public static event EventHandler<EventArgs> ConnectionChanged;
 
         private static ThreadPoolTimer _statusUpdater;
         private static MpcConnection _connection;
@@ -39,14 +51,17 @@ namespace FluentMPC.Services
 
         public static async Task InitializeAsync()
         {
+            _statusUpdater?.Cancel();
+            _connection = null;
+            IsConnected = false;
             try
             {
-                IPAddress.TryParse("192.168.0.4", out var ipAddress);
-                _mpdEndpoint = new IPEndPoint(ipAddress, 6600);
+                IPAddress.TryParse(Singleton<SettingsViewModel>.Instance.ServerHost, out var ipAddress);
+                _mpdEndpoint = new IPEndPoint(ipAddress, Singleton<SettingsViewModel>.Instance.ServerPort);
                 _connection = await GetConnectionInternalAsync();
 
                 ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
-                    async (t1,t2) =>
+                    async (t1, t2) =>
                     {
                         var c = await GetConnectionInternalAsync(t1);
                         return new PooledObjectWrapper<MpcConnection>(c)
@@ -56,15 +71,15 @@ namespace FluentMPC.Services
                     }
                 );
 
+                // Connected, initialize basic data
+                InitializeStatusUpdater();
+                UpdatePlaylistsAsync();
+                IsConnected = true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                // TODO
+                IsConnected = false;
             }
-
-            // TODO move this to a onConnectionEstablished event
-            InitializeStatusUpdater();
-            UpdatePlaylistsAsync();
         }
 
         public static async Task<PooledObjectWrapper<MpcConnection>> GetConnectionAsync(CancellationToken token = default)
@@ -102,16 +117,18 @@ namespace FluentMPC.Services
 
             _statusUpdater = ThreadPoolTimer.CreatePeriodicTimer(async (source) =>
             {
+                if (_connection == null) return;
+
                 var response = await _connection.SendAsync(new MpcNET.Commands.Status.StatusCommand());
 
-                if (response.IsResponseValid)
+                if (response != null && response.IsResponseValid)
                 {
                     var newStatus = response.Response.Content;
                     CompareAndFireEvents(CurrentStatus, newStatus);
                     CurrentStatus = newStatus;
                 }
                 else
-                    ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?
+                    IsConnected = false; //TODO handle reconnection attempts?
 
             }, period);
         }
@@ -131,7 +148,7 @@ namespace FluentMPC.Services
                 }
             }
             else
-                ConnectionLost?.Invoke(Application.Current, new EventArgs()); //TODO handle reconnection attempts?*/
+                IsConnected = false; //TODO handle reconnection attempts?*/
         }
 
         private static void CompareAndFireEvents(MpdStatus currentStatus, MpdStatus newStatus)
@@ -167,17 +184,6 @@ namespace FluentMPC.Services
                 (current.NextSong == otherInput.NextSong) &&
                 (current.NextSongId == otherInput.NextSongId));
         }
-
-        public static async Task ReconnectServer()
-        {
-            _statusUpdater.Cancel();
-
-            await _connection.DisconnectAsync();
-            await _connection.ConnectAsync();
-
-            InitializeStatusUpdater();
-        }
-
         
     }
 }

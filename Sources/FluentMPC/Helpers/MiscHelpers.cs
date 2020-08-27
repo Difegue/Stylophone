@@ -160,9 +160,7 @@ namespace FluentMPC.Helpers
         {
             var fileName = EscapeFilename(Id);
             StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
-            var file = await pictureFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-
-            await FileIO.WriteBytesAsync(file, data.ToArray());
+            await pictureFolder.SaveFileAsync(data.ToArray(), fileName, CreationCollisionOption.ReplaceExisting);
         }
 
         internal static async Task<BitmapImage> WriteableBitmapToBitmapImageAsync(WriteableBitmap art, int decodedPixelWidth, CoreDispatcher dispatcher = null)

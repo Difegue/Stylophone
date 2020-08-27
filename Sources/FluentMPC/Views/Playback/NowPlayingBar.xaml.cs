@@ -25,13 +25,13 @@ namespace FluentMPC.Views
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             MPDConnectionService.StatusChanged += PlaybackSession_PlaybackStateChanged;
-            MPDConnectionService.ConnectionLost += MPDConnectionService_ConnectionLost;
+            MPDConnectionService.ConnectionChanged += MPDConnectionService_ConnectionLost;
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             MPDConnectionService.StatusChanged -= PlaybackSession_PlaybackStateChanged;
-            MPDConnectionService.ConnectionLost -= MPDConnectionService_ConnectionLost;
+            MPDConnectionService.ConnectionChanged -= MPDConnectionService_ConnectionLost;
         }
 
         /// <summary>
@@ -41,8 +41,19 @@ namespace FluentMPC.Views
         /// <param name="e"></param>
         private void MPDConnectionService_ConnectionLost(object sender, EventArgs e)
         {
-            LoadingBar.Visibility = Visibility.Visible;
-            ProgressBar.Visibility = Visibility.Collapsed;
+            DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            {
+                if (!MPDConnectionService.IsConnected)
+                {
+                    LoadingBar.Visibility = Visibility.Visible;
+                    ProgressBar.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    LoadingBar.Visibility = Visibility.Collapsed;
+                    ProgressBar.Visibility = Visibility.Visible;
+                }
+            });  
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿<Page
     x:Class="FluentMPC.Views.PlaybackView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    RequestedTheme="Dark"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -33,7 +32,7 @@
                 RelativePanel.AlignBottomWithPanel="True" 
                 RelativePanel.AlignRightWithPanel="True"
                 Canvas.ZIndex="-1"
-                Background="{ThemeResource SystemControlAcrylicElementBrush}">
+                Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}">
 
         </Border>
         <controls:ImageEx  HorizontalAlignment="Center" Canvas.ZIndex="-2"  Stretch="UniformToFill"

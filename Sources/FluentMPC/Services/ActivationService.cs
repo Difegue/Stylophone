@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FluentMPC.Activation;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
-
+using FluentMPC.ViewModels;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -67,7 +67,8 @@ namespace FluentMPC.Services
             await Singleton<BackgroundTaskService>.Instance.RegisterBackgroundTasksAsync().ConfigureAwait(false);
             await Singleton<LiveTileService>.Instance.EnableQueueAsync().ConfigureAwait(false);
             await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
-            await MPDConnectionService.InitializeAsync();
+
+            await Singleton<SettingsViewModel>.Instance.EnsureInstanceInitializedAsync(); // This also initializes MPDConnectionService
             await WindowManagerService.Current.InitializeAsync();
         }
 

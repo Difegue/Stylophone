@@ -257,7 +257,7 @@ namespace FluentMPC.ViewModels.Playback
             _updateInformationTimer.Tick += UpdateInformation;
 
             // Update info to current track
-            if (MPDConnectionService.CurrentStatus != null)
+            if (MPDConnectionService.IsConnected)
                 OnTrackChange(this, new SongChangedEventArgs { NewSongId = MPDConnectionService.CurrentStatus.SongId});
 
             UpdateUpNextAsync();

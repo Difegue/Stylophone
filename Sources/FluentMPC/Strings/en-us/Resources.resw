@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>FluentMPC</value>
+    <value>Stylophone</value>
     <comment>Application display name</comment>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>FluentMPC</value>
+    <value>Stylophone</value>
     <comment>Application description</comment>
   </data>
   <data name="Shell_NowPlaying.Content" xml:space="preserve">
@@ -178,15 +178,15 @@
     <comment>About this application title for Settings</comment>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
-    <value>Settings page placeholder text.  Your app description goes here.</value>
+    <value>MPD Client for the Universal Windows Platform, based on MpcNET. </value>
     <comment>About this application description for Settings</comment>
   </data>
   <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Privacy Statement</value>
+    <value>Source Code, License and Privacy Statement</value>
     <comment>Privacy Statement link content for Settings</comment>
   </data>
   <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://YourPrivacyUrlGoesHere/</value>
+    <value>https://github.com/Difegue/Stylophone</value>
     <comment>Here is your Privacy Statement url for Settings</comment>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
@@ -233,5 +233,15 @@ Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Ma
   </data>
   <data name="Shell_NewPlaylist.Content" xml:space="preserve">
     <value>Add Playlist</value>
+  </data>
+  <data name="Settings_Server.Text" xml:space="preserve">
+    <value>MPD Server</value>
+    <comment>Server text for Settings</comment>
+  </data>
+  <data name="Settings_ServerHost.Header" xml:space="preserve">
+    <value>Hostname</value>
+  </data>
+  <data name="Settings_ServerPort.Header" xml:space="preserve">
+    <value>Port</value>
   </data>
 </root>

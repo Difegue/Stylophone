@@ -76,8 +76,6 @@ namespace FluentMPC.ViewModels
 
             MPDConnectionService.PlaylistsChanged += (s,e) =>
                 DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
-
-            DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
         }
 
         private void Show_InAppNotification(object sender, InAppNotificationRequestedEventArgs e)
@@ -173,15 +171,20 @@ namespace FluentMPC.ViewModels
             // Remove all menuitems in the "Playlists" menu
             _playlistContainer.MenuItems.Clear();
 
-            foreach (var playlist in playlists)
+            try
             {
-                var navigationViewItem = new WinUI.NavigationViewItem();
-                navigationViewItem.Icon = new SymbolIcon(Symbol.MusicInfo);
-                navigationViewItem.Content = playlist.Name;
-                NavHelper.SetNavigateTo(navigationViewItem, typeof(PlaylistPage));
-                _playlistContainer.MenuItems.Add(navigationViewItem);
+                foreach (var playlist in playlists)
+                {
+                    var navigationViewItem = new WinUI.NavigationViewItem();
+                    navigationViewItem.Icon = new SymbolIcon(Symbol.MusicInfo);
+                    navigationViewItem.Content = playlist.Name;
+                    NavHelper.SetNavigateTo(navigationViewItem, typeof(PlaylistPage));
+                    _playlistContainer.MenuItems.Add(navigationViewItem);
+                }
+            } catch (Exception)
+            {
+                // TODO
             }
-
         }
 
         private static KeyboardAccelerator BuildKeyboardAccelerator(VirtualKey key, VirtualKeyModifiers? modifiers = null)
