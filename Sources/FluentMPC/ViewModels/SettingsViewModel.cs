@@ -7,6 +7,7 @@ using FluentMPC.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Status;
 using Windows.ApplicationModel;
+using Windows.Storage;
 using Windows.UI.Xaml;
 
 namespace FluentMPC.ViewModels
@@ -113,6 +114,74 @@ namespace FluentMPC.ViewModels
             }
         }
 
+        private ICommand _clearCacheCommand;
+
+        public ICommand ClearCacheCommand
+        {
+            get
+            {
+                if (_clearCacheCommand == null)
+                {
+                    _clearCacheCommand = new RelayCommand(
+                        async () =>
+                        {
+                            try
+                            {
+                                var cacheFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("AlbumArt");
+                                await cacheFolder.DeleteAsync();
+                                NotificationService.ShowInAppNotification("Cache has been deleted!");
+                            } catch (Exception e)
+                            {
+                                NotificationService.ShowInAppNotification($"Something went wrong while deleting cache: {e}");
+                            }
+                            
+                        });
+                }
+
+                return _clearCacheCommand;
+            }
+        }
+
+        private ICommand _rescanDbCommand;
+
+        public ICommand RescanDbCommand
+        {
+            get
+            {
+                if (_rescanDbCommand == null)
+                {
+                    _rescanDbCommand = new RelayCommand(
+                        async () =>
+                        {
+                            if (MPDConnectionService.CurrentStatus.UpdatingDb > 0)
+                            {
+                                NotificationService.ShowInAppNotification("The database is already being updated.");
+                                return;
+                            }
+
+                            try
+                            {
+                                using (var c = await MPDConnectionService.GetConnectionAsync())
+                                {
+                                    var res = await c.InternalResource.SendAsync(new MpcNET.Commands.Database.UpdateCommand());
+
+                                    if (res.IsResponseValid)
+                                        NotificationService.ShowInAppNotification("Database update started.");
+                                    else
+                                        NotificationService.ShowInAppNotification("Couldn't update DB: MPD response invalid.");
+                                }
+                            } catch (Exception e)
+                            {
+                                NotificationService.ShowInAppNotification($"Something went wrong while updating DB : {e}", 0);
+                            }
+
+                        });
+                }
+
+                return _rescanDbCommand;
+            }
+        }
+
         public SettingsViewModel()
         {
         }
@@ -123,17 +192,19 @@ namespace FluentMPC.ViewModels
         {
             if (!_hasInstanceBeenInitialized)
             {
-                ServerHost =
-                    await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<string>(nameof(ServerHost));
+                MPDConnectionService.ConnectionChanged += async (s, e) => await UpdateServerVersionAsync();
 
-                ServerPort =
-                    await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<int>(nameof(ServerPort));
+                // Initialize values directly to avoid calling CheckServerAddressAsync twice
+                _serverHost =
+                    await ApplicationData.Current.LocalSettings.ReadAsync<string>(nameof(ServerHost));
 
+                _serverPort =
+                    await ApplicationData.Current.LocalSettings.ReadAsync<int>(nameof(ServerPort));
+
+                await CheckServerAddressAsync();
                 VersionDescription = GetVersionDescription();
 
                 _hasInstanceBeenInitialized = true;
-
-                MPDConnectionService.ConnectionChanged += async (s, e) => await UpdateServerVersionAsync();
             }
         }
 

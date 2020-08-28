@@ -8,13 +8,12 @@
     d:DesignHeight="345"
     d:DesignWidth="550"
     mc:Ignorable="d"
-    Title="Add to Playlist"
     PrimaryButtonText="Add"
     CloseButtonText="Cancel">
     <ScrollViewer>
         <StackPanel>
-            <ComboBox ItemsSource="{x:Bind Playlists}" DisplayMemberPath="Name" SelectedValuePath="Name" SelectionChanged="Update_Selected"
-                Header="Add track(s) to the following Playlist:" PlaceholderText="Select a Playlist" Width="270" />
+            <ComboBox x:Uid="AddToPlaylistComboBox" ItemsSource="{x:Bind Playlists}" DisplayMemberPath="Name" SelectedValuePath="Name"
+                      SelectionChanged="Update_Selected" Width="270" />
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>

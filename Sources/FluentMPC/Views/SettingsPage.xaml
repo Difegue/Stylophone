@@ -14,13 +14,13 @@
         <converters:BoolToVisibilityConverter x:Key="ReverseBoolToVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed" />
     </Page.Resources>
 
-    <Grid Margin="{StaticResource MediumLeftRightMargin}">
+    <ScrollViewer Margin="{StaticResource MediumLeftRightMargin}">
         <StackPanel
             x:Name="ContentArea">
 
             <TextBlock x:Uid="Settings_Server" Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-            <StackPanel Margin="{StaticResource SmallTopBottomMargin}" HorizontalAlignment="Left" Width="300" >
+            <StackPanel Margin="{StaticResource SmallTopMargin}" HorizontalAlignment="Left" Width="300" >
 
                 <TextBox x:Uid="Settings_ServerHost" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}"/>
 
@@ -34,7 +34,7 @@
                     <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"
                             Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
                         <SymbolIcon Symbol="Clear" Foreground="Red"></SymbolIcon>
-                        <TextBlock>Couldn't find an MPD server at this address!</TextBlock>
+                        <TextBlock x:Uid="NoServerError"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"
@@ -46,8 +46,22 @@
                 
 
             </StackPanel>
-            
-            <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+            <TextBlock x:Uid="Settings_Database" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}"/>
+
+            <StackPanel Margin="{StaticResource XSmallTopMargin}">
+
+                <Button x:Uid="Settings_RefreshDatabase" IsEnabled="{x:Bind ViewModel.IsServerValid}" Command="{x:Bind ViewModel.RescanDbCommand}"/>
+
+                <TextBlock
+                    x:Uid="Settings_ClearAlbumCache"
+                    Margin="{StaticResource SmallTopMargin}" Style="{ThemeResource BodyTextBlockStyle}" />
+
+                <Button x:Uid="Settings_CacheButton" Margin="{StaticResource XSmallTopMargin}" Command="{x:Bind ViewModel.ClearCacheCommand}"/>
+                
+            </StackPanel>
+
+            <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
                 <TextBlock x:Uid="Settings_Theme" />
 
@@ -97,5 +111,5 @@
                 <HyperlinkButton x:Uid="Settings_PrivacyTermsLink" Margin="{StaticResource XSmallTopMargin}" />
             </StackPanel>
         </StackPanel>
-    </Grid>    
+    </ScrollViewer>    
 </Page>

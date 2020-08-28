@@ -140,12 +140,9 @@ namespace FluentMPC.Services
             {
                 var playlists = response.Response.Content;
 
-                if (!Playlists.SequenceEqual(playlists))
-                {
-                    Playlists.Clear();
-                    Playlists.AddRange(playlists);
-                    PlaylistsChanged?.Invoke(Application.Current, new EventArgs());
-                }
+                Playlists.Clear();
+                Playlists.AddRange(playlists);
+                PlaylistsChanged?.Invoke(Application.Current, new EventArgs());
             }
             else
                 IsConnected = false; //TODO handle reconnection attempts?*/

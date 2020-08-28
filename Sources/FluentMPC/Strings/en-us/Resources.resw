@@ -244,4 +244,29 @@ Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Ma
   <data name="Settings_ServerPort.Header" xml:space="preserve">
     <value>Port</value>
   </data>
+  <data name="AddToPlaylistComboBox.Header" xml:space="preserve">
+    <value>Add track(s) to the following Playlist:</value>
+  </data>
+  <data name="AddToPlaylistComboBox.PlaceholderText" xml:space="preserve">
+    <value>Select a Playlist</value>
+  </data>
+  <data name="AddToPlaylistDialog.Title" xml:space="preserve">
+    <value>Add to Playlist</value>
+  </data>
+  <data name="NoServerError.Text" xml:space="preserve">
+    <value>Couldn't find an MPD server at this address!</value>
+  </data>
+  <data name="Settings_CacheButton.Content" xml:space="preserve">
+    <value>Clear Cache</value>
+  </data>
+  <data name="Settings_ClearAlbumCache.Text" xml:space="preserve">
+    <value>Stylophone stores album art locally to avoid overloading your MPD Server. 
+If you want to clear the album art cache, click this button.</value>
+  </data>
+  <data name="Settings_Database.Text" xml:space="preserve">
+    <value>Database and Album Art</value>
+  </data>
+  <data name="Settings_RefreshDatabase.Content" xml:space="preserve">
+    <value>Update Server Database</value>
+  </data>
 </root>

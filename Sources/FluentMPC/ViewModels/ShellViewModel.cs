@@ -74,6 +74,7 @@ namespace FluentMPC.ViewModels
 
             NotificationService.InAppNotificationRequested += Show_InAppNotification;
 
+            DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
             MPDConnectionService.PlaylistsChanged += (s,e) =>
                 DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
         }

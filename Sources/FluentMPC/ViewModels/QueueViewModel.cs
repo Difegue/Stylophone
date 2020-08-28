@@ -20,6 +20,13 @@ namespace FluentMPC.ViewModels
         public QueueViewModel()
         {
             MPDConnectionService.SongChanged += MPDConnectionService_SongChanged;
+            MPDConnectionService.ConnectionChanged += MPDConnectionService_ConnectionChanged;
+        }
+
+        private void MPDConnectionService_ConnectionChanged(object sender, EventArgs e)
+        {
+            if (MPDConnectionService.IsConnected)
+                Task.Run(async () => await LoadDataAsync());
         }
 
         private async void MPDConnectionService_SongChanged(object sender, SongChangedEventArgs e)
@@ -48,7 +55,7 @@ namespace FluentMPC.ViewModels
                         Source.Add(new TrackViewModel(item, false));
                     }
             }
-            OnPropertyChanged(nameof(Source));
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(Source)));
         }
     }
 }
