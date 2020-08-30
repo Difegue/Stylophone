@@ -138,9 +138,10 @@ namespace FluentMPC.ViewModels
             else if (album.IsDetailLoading)
             {
                 // AlbumVM is currently loading, wait for it to conclude to create tracks
+                // We only look at IsDetailLoading since we don't need the album art to be loaded for tracks
                 album.PropertyChanged += async (s, e) =>
                 {
-                    if (album.IsFullyLoaded && Source.Count == 0)
+                    if (!album.IsDetailLoading && Source.Count == 0)
                         await DispatcherHelper.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 };
             }

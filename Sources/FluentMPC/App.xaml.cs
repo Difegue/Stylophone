@@ -29,6 +29,7 @@ namespace FluentMPC
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+            Windows.ApplicationModel.Core.CoreApplication.EnablePrelaunch(true);
 
             var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
