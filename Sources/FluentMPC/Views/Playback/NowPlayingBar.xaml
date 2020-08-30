@@ -239,7 +239,7 @@
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
                             FontSize="18"
-                            Text="&#xE8ED;"
+                            Text="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
                             TextAlignment="Center" />
                     </Button.Content>
                 </Button>
@@ -453,18 +453,21 @@
 
                             <MenuFlyoutSeparator Opacity="0.4" />
 
-                            <MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist">
-                                <!-- TODO view artist -->
+                            <!--<MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist">
+                                TODO view artist 
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE8D4;" />
                                 </MenuFlyoutItem.Icon>
-                            </MenuFlyoutItem>
+                            </MenuFlyoutItem> -->
 
-                            <!-- TODO view album -->
+                            <!-- TODO view album --> 
                             <MenuFlyoutItem
                                 Click="{x:Bind PlaybackViewModel.NavigateNowPlayingInfo}"
-                                Icon="MusicInfo"
-                                Text="View Album" />
+                                Text="View Album" >
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE93C;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>

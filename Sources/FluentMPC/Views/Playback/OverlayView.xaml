@@ -180,7 +180,7 @@
                         <ToolTip Content="Toggle Repeat" />
                     </ToolTipService.ToolTip>
                     <Button.Content>
-                        <TextBlock Text="&#xE8ED;"
+                        <TextBlock Text="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
                                    FontSize="18"
                                    FontFamily="Segoe MDL2 Assets"
                                    TextAlignment="Center" />

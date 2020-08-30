@@ -32,7 +32,7 @@
                     <TextBlock Grid.Column="0" Text="{x:Bind Name}" ToolTipService.ToolTip="{x:Bind Name}"
                     VerticalAlignment="Center" MaxLines="1" TextTrimming="CharacterEllipsis" Style="{ThemeResource BaseTextBlockStyle}"/>
 
-                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE8D6;" Grid.Column="1" Margin="-12,0,0,0"
+                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xF463;" Grid.Column="1" Margin="-12,0,0,0"
                               FontSize="24" Foreground="{ThemeResource SystemAccentColor}" VerticalAlignment="Center"
                                 Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
@@ -88,8 +88,11 @@
                                 <MenuFlyoutItem Icon="Delete" Text="Remove" Command="{Binding RemoveFromQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem Text="View Artist"/>
-                                <MenuFlyoutItem Text="View Album"/>
+                                <MenuFlyoutItem Text="View Album" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xE93C;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
                             </MenuFlyout>
                         </Setter.Value>
                     </Setter>

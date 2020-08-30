@@ -15,7 +15,6 @@ namespace MpcNET
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using MpcNET.Commands;
     using MpcNET.Exceptions;
     using MpcNET.Message;
     using Sundew.Base.ControlFlow;

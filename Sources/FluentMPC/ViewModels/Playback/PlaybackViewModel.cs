@@ -130,6 +130,21 @@ namespace FluentMPC.ViewModels.Playback
 
         private string _volumeIcon = "\uE767";
 
+
+        /// <summary>
+        ///     The current text for the repeat icon
+        /// </summary>
+        public string RepeatIcon
+        {
+            get => _repeatIcon;
+            private set
+            {
+                Set(ref _repeatIcon, value);
+            }
+        }
+
+        private string _repeatIcon = "\uE8EE";
+
         /// <summary>
         ///     The content on the play_pause button
         /// </summary>
@@ -153,6 +168,7 @@ namespace FluentMPC.ViewModels.Playback
             set
             {
                 Set(ref _internalVolume, value);
+                _previousVolume = -1;
 
                 // Cancel older volumeTasks
                 cts.Cancel();
@@ -194,6 +210,7 @@ namespace FluentMPC.ViewModels.Playback
         }
         private CancellationTokenSource cts = new CancellationTokenSource();
         private List<Task> volumeTasks = new List<Task>();
+        private List<Task> shuffleTasks = new List<Task>();
         private double _internalVolume = MPDConnectionService.CurrentStatus.Volume;
 
         /// <summary>
@@ -223,6 +240,26 @@ namespace FluentMPC.ViewModels.Playback
         }
 
         private bool _isRepeatEnabled;
+
+        /// <summary>
+        ///     Is the song going to loop when finished
+        /// </summary>
+        public bool IsSingleEnabled
+        {
+            get => _isSingleEnabled;
+            set
+            {
+                Set(ref _isSingleEnabled, value);
+
+                // Update UI icon
+                if (value)
+                    RepeatIcon = "\uE8ED";
+                else
+                    RepeatIcon = "\uE8EE";
+            }
+        }
+
+        private bool _isSingleEnabled;
 
         #endregion Getters and Setters
 
@@ -263,7 +300,7 @@ namespace FluentMPC.ViewModels.Playback
             UpdateUpNextAsync();
 
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
-            NavigationService.Navigated += (s,e) => OnPropertyChanged(nameof(HideTrackName));
+            NavigationService.Navigated += (s,e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(HideTrackName)));
 
             // Start the timer if ready
             if (!_updateInformationTimer.IsEnabled)
@@ -318,51 +355,84 @@ namespace FluentMPC.ViewModels.Playback
         #region Track Control Methods
 
         /// <summary>
-        ///     Toggle if the current track should repeat
+        ///     Toggle if the current track/playlist should repeat
         /// </summary>
         public async void ToggleRepeat()
         {
-            // TODO combine with single
+            // Cancel older shuffleTasks
+            cts.Cancel();
+            cts = new CancellationTokenSource();
 
-            if (MPDConnectionService.CurrentStatus.Repeat)
-                IsRepeatEnabled = false;
-            else
-                IsRepeatEnabled = true;
-
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            // No option -> repeat on -> repeat and single on -> no option
+            if (IsRepeatEnabled && IsSingleEnabled)
             {
-                await c.InternalResource.SendAsync(new RepeatCommand(IsRepeatEnabled));
+                IsRepeatEnabled = false;
+                IsSingleEnabled = false;
             }
+            else
+            if (IsRepeatEnabled && !IsSingleEnabled)
+            {
+                IsSingleEnabled = true;
+            }
+            else
+            if (!IsRepeatEnabled && !IsSingleEnabled)
+            {
+                IsRepeatEnabled = true;
+            }
+
+            // Set the volume
+            shuffleTasks.Add(Task.Run(async () =>
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    await c.InternalResource.SendAsync(new RepeatCommand(IsRepeatEnabled));
+                    await c.InternalResource.SendAsync(new SingleCommand(IsSingleEnabled));
+                }
+                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+            }, cts.Token));
+
         }
 
         /// <summary>
         ///     Toggle if the current playlist is shuffled
         /// </summary>
-        public async void ToggleShuffle()
+        public void ToggleShuffle()
         {
-            if (MPDConnectionService.CurrentStatus.Random)
-                IsShuffleEnabled = false;
-            else
-                IsShuffleEnabled = true;
+            // Cancel older shuffleTasks
+            cts.Cancel();
+            cts = new CancellationTokenSource();
 
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            IsShuffleEnabled = !IsShuffleEnabled;
+
+            // Set the volume
+            shuffleTasks.Add(Task.Run(async () =>
             {
-                await c.InternalResource.SendAsync(new RandomCommand(IsShuffleEnabled));
-            }
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    await c.InternalResource.SendAsync(new RandomCommand(IsShuffleEnabled));
+                }
 
-            UpdateUpNextAsync();
+                await DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, UpdateUpNextAsync);
+                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+            }, cts.Token));
         }
 
+        private double _previousVolume = -1;
         /// <summary>
         ///     Toggle if we should mute
         /// </summary>
         public void ToggleMute()
         {
-            // TODO Toggle mute
-            //SimpleIoc.Default.GetInstance<IPlaybackService>().MuteTrack(!SimpleIoc.Default.GetInstance<IPlaybackService>().IsTrackMuted());
-
-            // Update the UI
-            //VolumeIcon = SimpleIoc.Default.GetInstance<IPlaybackService>().IsTrackMuted() ? "\uE74F" : "\uE767";
+            // There's no mute status in MPD, so all we can do is remember the previous volume and set it to 0.
+            if (_previousVolume < 0)
+            {
+                _previousVolume = MediaVolume;
+                MediaVolume = 0;
+            }
+            else
+            {
+                MediaVolume = _previousVolume; // Setting MediaVolume automatically resets _previousVolume to -1
+            } 
         }
 
         public void NavigateNowPlaying()
@@ -517,6 +587,7 @@ namespace FluentMPC.ViewModels.Playback
             {
                 // Remove completed requests
                 volumeTasks.RemoveAll(t => t.IsCompleted);
+                shuffleTasks.RemoveAll(t => t.IsCompleted);
 
                 // Update volume to match the server value -- If we're not setting it ourselves
                 if (volumeTasks.Count == 0)
@@ -525,10 +596,21 @@ namespace FluentMPC.ViewModels.Playback
                     OnPropertyChanged(nameof(MediaVolume));
                 }
 
-                _isShuffledEnabled = MPDConnectionService.CurrentStatus.Random;
-                _isRepeatEnabled = MPDConnectionService.CurrentStatus.Repeat;
-                OnPropertyChanged(nameof(IsRepeatEnabled));
-                OnPropertyChanged(nameof(IsShuffleEnabled));
+                // Ditto for shuffle/repeat/single
+                if (shuffleTasks.Count == 0)
+                {
+                    _isShuffledEnabled = MPDConnectionService.CurrentStatus.Random;
+                    _isRepeatEnabled = MPDConnectionService.CurrentStatus.Repeat;
+                    _isSingleEnabled = MPDConnectionService.CurrentStatus.Single;
+
+                    if (_isSingleEnabled)
+                        RepeatIcon = "\uE8ED";
+                    else
+                        RepeatIcon = "\uE8EE";
+
+                    OnPropertyChanged(nameof(IsRepeatEnabled));
+                    OnPropertyChanged(nameof(IsShuffleEnabled));
+                }
 
                 switch (MPDConnectionService.CurrentStatus.State)
                 {

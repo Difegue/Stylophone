@@ -9,6 +9,7 @@ using MpcNET.Commands.Status;
 using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace FluentMPC.ViewModels
 {
@@ -158,6 +159,18 @@ namespace FluentMPC.ViewModels
                                 NotificationService.ShowInAppNotification("The database is already being updated.");
                                 return;
                             }
+
+                            ContentDialog confirmDialog = new ContentDialog
+                            {
+                                Title = "Update the Server Database?",
+                                Content = "This operation might take the server some time to complete.",
+                                PrimaryButtonText = "Refresh",
+                                CloseButtonText = "Cancel"
+                            };
+
+                            ContentDialogResult result = await confirmDialog.ShowAsync();
+                            if (result != ContentDialogResult.Primary)
+                                return;
 
                             try
                             {
