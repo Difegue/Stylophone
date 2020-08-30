@@ -130,7 +130,7 @@ namespace FluentMPC.ViewModels
 
             //TODO recheck in case loading failed or something
 
-            if (album.IsFullyLoaded)
+            if (album.AlbumArtLoaded)
             {
                 // Already loaded, create tracks now
                 CreateTrackViewModels();
@@ -141,7 +141,7 @@ namespace FluentMPC.ViewModels
                 // We only look at IsDetailLoading since we don't need the album art to be loaded for tracks
                 album.PropertyChanged += async (s, e) =>
                 {
-                    if (!album.IsDetailLoading && Source.Count == 0)
+                    if (album.Files.Count > 0 && Source.Count == 0)
                         await DispatcherHelper.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 };
             }

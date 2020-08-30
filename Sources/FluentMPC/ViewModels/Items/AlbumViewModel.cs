@@ -51,7 +51,15 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
-        public bool IsFullyLoaded { get; set; }
+        private bool _artLoaded;
+        public bool AlbumArtLoaded
+        {
+            get => _artLoaded;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _artLoaded, value));
+            }
+        }
 
         public BitmapImage AlbumArt
         {
@@ -98,14 +106,17 @@ namespace FluentMPC.ViewModels.Items
                 }
 
                 // Fire off an async request to get the album art from MPD.
-                if (Files.Count > 0)
+                Task.Run(async () =>
                 {
-                    var art = await MiscHelpers.GetAlbumArtAsync(Files[0], token);
-                    AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
-                    DominantColor = await MiscHelpers.GetDominantColor(art);
+                    if (Files.Count > 0)
+                    {
+                        var art = await MiscHelpers.GetAlbumArtAsync(Files[0], token);
+                        AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
+                        DominantColor = await MiscHelpers.GetDominantColor(art);
 
-                    IsFullyLoaded = true;
-                };
+                        AlbumArtLoaded = true;
+                    }
+                });
             }
             finally
             {

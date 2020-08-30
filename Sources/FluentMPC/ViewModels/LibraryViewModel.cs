@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -49,7 +50,7 @@ namespace FluentMPC.ViewModels
                 {
                     var album = this[i];
 
-                    if (!album.IsDetailLoading && !album.IsFullyLoaded)
+                    if (album.Files.Count == 0 && !album.IsDetailLoading)
                         _ = Task.Run(async () => await album.LoadAlbumDataAsync(token));
                 }
             });
@@ -81,13 +82,34 @@ namespace FluentMPC.ViewModels
                 var response = await c.InternalResource.SendAsync(new ListCommand(MpdTags.Album));
 
                 if (response.IsResponseValid)
-                    foreach (var item in response.Response.Content)
-                    {
-                        Source.Add(new AlbumViewModel(item));
-                    }
+                    GroupAlbumsByName(response.Response.Content);
             }
+        }
 
+        public void GroupAlbumsByName(List<string> albums)
+        {
+            var query = from item in albums
+                        group item by GetGroupHeader(item) into g
+                        orderby g.Key
+                        select new { GroupName = g.Key, Items = g };
 
+            foreach (var g in query)
+            {
+                // For whenever grouping + lazy-loading becomes easy...
+                //GroupInfosList info = new GroupInfosList();
+                //info.Key = g.GroupName + " (" + g.Items.Count() + ")";
+
+                foreach (var item in g.Items.OrderBy(s => s.ToLower()))
+                {
+                    Source.Add(new AlbumViewModel(item));
+                }
+            }
+        }
+
+        private string GetGroupHeader(string title)
+        {
+            char c = title.ToUpperInvariant().ToCharArray().First();
+            return char.IsLetter(c) ? c.ToString() : char.IsDigit(c) ? "#" : "&";
         }
 
         private void OnItemClick(AlbumViewModel clickedItem)

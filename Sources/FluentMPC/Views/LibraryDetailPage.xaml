@@ -16,6 +16,7 @@
     <Page.Resources>
         <fluentMpc:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
 
         <DataTemplate x:Key="TrackListViewTemplate" x:DataType="items:TrackViewModel">
             <Grid>
@@ -150,7 +151,8 @@
                                     <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
                                 </Grid.Background>
 
-                                <winui:ProgressRing IsActive="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay}" Width="70" Height="70"/>
+                                <winui:ProgressRing IsActive="True" Visibility="{x:Bind ViewModel.Item.AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"
+                                                    Width="70" Height="70"/>
                             </Grid>
                         </controls:DropShadowPanel>
 

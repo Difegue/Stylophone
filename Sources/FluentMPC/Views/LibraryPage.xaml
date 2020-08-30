@@ -13,7 +13,9 @@
     NavigationCacheMode="Required"
     mc:Ignorable="d">
     <Page.Resources>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
     </Page.Resources>
     <Grid x:Name="ContentArea">
 
@@ -52,7 +54,9 @@
                                     <ImageBrush ImageSource="{x:Bind AlbumArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
                                 </Grid.Background>
 
-                                <winui:ProgressRing IsActive="{x:Bind IsDetailLoading, Mode=OneWay}" Width="70" Height="70"/>
+                                <winui:ProgressRing IsActive="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                                                    Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"
+                                                    Width="70" Height="70"/>
                             </Grid>
                         </controls:DropShadowPanel>
 

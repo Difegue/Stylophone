@@ -19,12 +19,11 @@ namespace FluentMPC.ViewModels
     {
         public ObservableCollection<TrackViewModel> Source { get; private set; } = new ObservableCollection<TrackViewModel>();
 
-
-
         private ICommand _deletePlaylistCommand;
         public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
         private async void DeletePlaylist()
         {
+            // TODO
             throw new NotImplementedException();
 
             /* using (var c = await MPDConnectionService.GetConnectionAsync())
@@ -92,6 +91,13 @@ namespace FluentMPC.ViewModels
         }
         private string _info;
 
+        public bool ArtLoaded
+        {
+            get => _artLoaded;
+            set => Set(ref _artLoaded, value);
+        }
+        private bool _artLoaded;
+
         public BitmapImage PlaylistArt
         {
             get => _playlistArt;
@@ -102,6 +108,28 @@ namespace FluentMPC.ViewModels
         }
 
         private BitmapImage _playlistArt;
+
+        public BitmapImage PlaylistArt2
+        {
+            get => _playlistArt2;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt2, value));
+            }
+        }
+
+        private BitmapImage _playlistArt2;
+
+        public BitmapImage PlaylistArt3
+        {
+            get => _playlistArt3;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt3, value));
+            }
+        }
+
+        private BitmapImage _playlistArt3;
 
         public async Task LoadDataAsync(string playlistName)
         {
@@ -125,8 +153,36 @@ namespace FluentMPC.ViewModels
                 TimeSpan t = TimeSpan.FromSeconds(totalTime);
 
                 PlaylistInfo = $"{Source.Count} Tracks, Total Time: {MiscHelpers.ToReadableString(t)}";
-
             }
+
+            await Task.Run(async () =>
+            {
+                // Get album art for three albums to display in the playlist view
+                Random r = new Random();
+                var distinctAlbums = Source.GroupBy(t => t.File.Album).Select(t => t.First()).OrderBy((item) => r.Next()).ToList();
+
+                if (distinctAlbums.Count > 1)
+                {
+                    var albumart = await MiscHelpers.GetAlbumArtAsync(distinctAlbums[0].File);
+                    PlaylistArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(albumart, 150);
+                }
+
+                if (distinctAlbums.Count > 2)
+                {
+                    var albumart = await MiscHelpers.GetAlbumArtAsync(distinctAlbums[1].File);
+                    PlaylistArt2 = await MiscHelpers.WriteableBitmapToBitmapImageAsync(albumart, 150);
+                }
+                else PlaylistArt2 = PlaylistArt;
+
+                if (distinctAlbums.Count > 3)
+                {
+                    var albumart = await MiscHelpers.GetAlbumArtAsync(distinctAlbums[2].File);
+                    PlaylistArt3 = await MiscHelpers.WriteableBitmapToBitmapImageAsync(albumart, 150);
+                }
+                else PlaylistArt3 = PlaylistArt2;
+
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() => ArtLoaded = true);
+            });
         }
     }
 }
