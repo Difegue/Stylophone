@@ -12,6 +12,7 @@ using Color = Windows.UI.Color;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Linq;
 using Windows.UI.Core;
+using FluentMPC.Views;
 
 namespace FluentMPC.ViewModels.Items
 {
@@ -107,7 +108,7 @@ namespace FluentMPC.ViewModels.Items
             {
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
-                    var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, File.Path));
+                    var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, file.Path));
 
                     if (req.IsResponseValid)
                         NotificationService.ShowInAppNotification($"Added to Playlist {playlistName}!");
@@ -118,6 +119,29 @@ namespace FluentMPC.ViewModels.Items
             catch (Exception e)
             {
                 NotificationService.ShowInAppNotification($"Couldn't add track: {e}", 0);
+            }
+        }
+
+        private ICommand _viewAlbumCommand;
+        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IMpdFile>(GoToMatchingAlbum));
+
+        private void GoToMatchingAlbum(IMpdFile file)
+        {
+            try
+            {
+                if (!file.HasAlbum)
+                {
+                    NotificationService.ShowInAppNotification($"Track has no associated album.", 0);
+                    return;
+                }
+
+                // Build an AlbumViewModel from the album name and navigate to it
+                var album = new AlbumViewModel(file.Album);
+                NavigationService.Navigate<LibraryDetailPage>(album);
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't get album: {e}", 0);
             }
         }
 

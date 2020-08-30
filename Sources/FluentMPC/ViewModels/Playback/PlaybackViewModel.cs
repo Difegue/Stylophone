@@ -168,7 +168,9 @@ namespace FluentMPC.ViewModels.Playback
             set
             {
                 Set(ref _internalVolume, value);
-                _previousVolume = -1;
+
+                if (value > 0) // _previousVolume is only used to keep track of volume when muting, if the volume has changed from zero due to another client, the value becomes meaningless
+                    _previousVolume = -1;
 
                 // Cancel older volumeTasks
                 cts.Cancel();
@@ -660,7 +662,21 @@ namespace FluentMPC.ViewModels.Playback
                 return;
             }
 
-            CurrentTrack.AddToPlayListCommand.Execute(this);
+            CurrentTrack.AddToPlayListCommand.Execute(CurrentTrack.File);
+        }
+
+        private ICommand _showAlbumCommand;
+        public ICommand ShowAlbumCommand => _showAlbumCommand ?? (_showAlbumCommand = new RelayCommand<SelectionChangedEventArgs>(ShowAlbum));
+        private void ShowAlbum(SelectionChangedEventArgs obj)
+        {
+            // Track must exist
+            if (CurrentTrack == null)
+            {
+                NotificationService.ShowInAppNotification("No track is currently playing.");
+                return;
+            }
+
+            CurrentTrack.ViewAlbumCommand.Execute(CurrentTrack.File);
         }
 
         /// <summary>

@@ -442,10 +442,23 @@
                     <Button.Flyout>
                         <MenuFlyout Placement="Top">
 
-                            <!--  Add to playlist  -->
-                            <MenuFlyoutItem Text="Add track to playlist">
+                            <MenuFlyoutItem
+                            x:Name="ShuffleMenu"
+                            Text="Toggle Shuffle"
+                            Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
+                            Click="{x:Bind PlaybackViewModel.ToggleShuffle}">
                                 <MenuFlyoutItem.Icon>
-                                    <FontIcon Glyph="&#xE142;" />
+                                    <FontIcon Glyph="&#xE8B1;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <MenuFlyoutItem
+                            x:Name="RepeatMenu"
+                            Text="Toggle Repeat"
+                            Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
+                            Click="{x:Bind PlaybackViewModel.ToggleRepeat}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}" />
                                 </MenuFlyoutItem.Icon>
                             </MenuFlyoutItem>
 
@@ -460,9 +473,16 @@
                                 </MenuFlyoutItem.Icon>
                             </MenuFlyoutItem> -->
 
-                            <!-- TODO view album --> 
+                            <!--  Add to playlist  -->
+                            <MenuFlyoutItem Text="Add track to playlist" Command="{x:Bind PlaybackViewModel.AddToPlaylistCommand}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE142;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <!-- Go to Album --> 
                             <MenuFlyoutItem
-                                Click="{x:Bind PlaybackViewModel.NavigateNowPlayingInfo}"
+                                Command="{x:Bind PlaybackViewModel.ShowAlbumCommand}"
                                 Text="View Album" >
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE93C;" />
@@ -485,7 +505,9 @@
                     <VisualState.Setters>
                         <Setter Target="AlbumArt.Visibility" Value="Visible" />
                         <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
                         <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
                         <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2"/>
                         <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1"/>
@@ -501,7 +523,9 @@
                     <VisualState.Setters>
                         <Setter Target="AlbumArt.Visibility" Value="Visible" />
                         <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
                         <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
                         <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2"/>
                         <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1"/>
@@ -511,6 +535,7 @@
                         <Setter Target="SoundPanel.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
+
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>

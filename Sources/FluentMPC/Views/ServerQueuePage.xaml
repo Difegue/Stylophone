@@ -45,15 +45,18 @@
                     TextTrimming="CharacterEllipsis"
                     Style="{ThemeResource BodyTextBlockStyle}"
                     Margin="12,0,0,0"/>
-                
-                <TextBlock Grid.Column="2"
-                    Text="{x:Bind File.Album}"
+
+                <HyperlinkButton Grid.Column="2" Command="{x:Bind ViewAlbumCommand}" CommandParameter="{x:Bind File}"
+                                 Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">
+                    <TextBlock Text="{x:Bind File.Album}"
                     VerticalAlignment="Center"
                     ToolTipService.ToolTip="{x:Bind File.Album}"
                     MaxLines="1"
                     TextTrimming="CharacterEllipsis"
                     Style="{ThemeResource BodyTextBlockStyle}"
                     Margin="12,0,0,0"/>
+                </HyperlinkButton>
+                    
                 <TextBlock Grid.Column="3"
                     Text="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}"
                     ToolTipService.ToolTip="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}"
@@ -88,7 +91,7 @@
                                 <MenuFlyoutItem Icon="Delete" Text="Remove" Command="{Binding RemoveFromQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem Text="View Album" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
+                                <MenuFlyoutItem Text="View Album" Command="{Binding ViewAlbumCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
                                     <MenuFlyoutItem.Icon>
                                         <FontIcon Glyph="&#xE93C;" />
                                     </MenuFlyoutItem.Icon>
