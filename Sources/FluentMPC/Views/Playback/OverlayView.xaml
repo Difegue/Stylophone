@@ -27,6 +27,7 @@
           RequestedTheme="Dark">
 
         <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
+                          PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
                           Stretch="UniformToFill" />

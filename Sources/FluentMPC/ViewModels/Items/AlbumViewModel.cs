@@ -83,11 +83,22 @@ namespace FluentMPC.ViewModels.Items
 
         private Color _albumColor;
 
+        private bool _isLight;
+        public bool IsLight
+        {
+            get => _isLight;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _isLight, value));
+            }
+        }
+
         public AlbumViewModel(string albumName)
         {
             Name = albumName;
             DominantColor = Colors.Black;
             Files = new List<IMpdFile>();
+            IsDetailLoading = false;
         }
 
         public async Task LoadAlbumDataAsync(CancellationToken token = default)
@@ -110,10 +121,17 @@ namespace FluentMPC.ViewModels.Items
                 {
                     if (Files.Count > 0)
                     {
-                        var art = await MiscHelpers.GetAlbumArtAsync(Files[0], token);
-                        AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
-                        DominantColor = await MiscHelpers.GetDominantColor(art);
+                        var art = await AlbumArtHelpers.GetAlbumArtAsync(Files[0], token);
 
+                        if (art != null)
+                        {
+                            AlbumArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
+
+                            var color = await AlbumArtHelpers.GetDominantColor(art);
+                            IsLight = !color.IsDark;
+                            DominantColor = color.ToWindowsColor();
+                        }
+                        
                         AlbumArtLoaded = true;
                     }
                 });

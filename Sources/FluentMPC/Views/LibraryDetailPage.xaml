@@ -120,7 +120,21 @@
                             Margin="-24,-46,-24,-24"
                             Canvas.ZIndex="-1">
                             <Border.Background>
-                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.6" TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"></AcrylicBrush>
+                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"
+                                              TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"></AcrylicBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <Border RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True" 
+                            RelativePanel.AlignRightWithPanel="True"
+                            Margin="-24,-46,-24,-24"
+                            Canvas.ZIndex="-1"
+                            Opacity="0.3"
+                            Visibility="{x:Bind ViewModel.Item.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Border.Background>
+                                <SolidColorBrush Color="Black"></SolidColorBrush>
                             </Border.Background>
                         </Border>
 
@@ -147,12 +161,8 @@
                         Color="Black">
 
                             <Grid Width="200" Height="200" CornerRadius="3" BorderThickness="2">
-                                <Grid.Background>
-                                    <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
-                                </Grid.Background>
-
-                                <winui:ProgressRing IsActive="True" Visibility="{x:Bind ViewModel.Item.AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"
-                                                    Width="70" Height="70"/>
+                                <controls:ImageEx PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
+	                                            Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"/>
                             </Grid>
                         </controls:DropShadowPanel>
 
@@ -202,6 +212,10 @@
             </fluentMpc:AlternatingRowListView.Header>
             
         </fluentMpc:AlternatingRowListView>
+
+
+        <winui:ProgressRing Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            IsActive="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay}" />
 
     </Grid>
 </Page>

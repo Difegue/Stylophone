@@ -11,10 +11,11 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:behaviors="using:FluentMPC.Behaviors"
     behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
-    xmlns:converters="using:FluentMPC.Helpers">
+    xmlns:converters="using:FluentMPC.Helpers" xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters">
 
     <Page.Resources>
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
+        <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
         <converters:BoolToBrushConverter
             x:Key="BoolToBrushConverter"
@@ -35,7 +36,7 @@
                 Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}">
 
         </Border>
-        <controls:ImageEx  HorizontalAlignment="Center" Canvas.ZIndex="-2"  Stretch="UniformToFill"
+        <controls:ImageEx  HorizontalAlignment="Center" Canvas.ZIndex="-2"  Stretch="UniformToFill" 
                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"/>
 
         <Grid RelativePanel.AlignTopWithPanel="True"
@@ -64,8 +65,10 @@
                         Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                         Color="Black">
 
-                <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" CornerRadius="3"/>
-            </controls:DropShadowPanel>
+                <Grid CornerRadius="3">
+                    <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" PlaceholderSource="/Assets/AlbumPlaceholder.png" Style="{StaticResource NoAnimationImageEx}" />
+                </Grid>
+                </controls:DropShadowPanel>
 
             <StackPanel x:Name="AlbumInfo" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0" >
                 <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
@@ -95,7 +98,8 @@
 
         </Grid>
 
-        <StackPanel Orientation="Horizontal" Margin="25,0,25,10" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+        <StackPanel Orientation="Horizontal" Margin="25,0,25,10" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True"
+                    Visibility="{x:Bind PlaybackViewModel.HasNextTrack, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <TextBlock Text="Up Next:" x:Name="UpNext"
                        Style="{ThemeResource BaseTextBlockStyle}"
@@ -110,122 +114,6 @@
 
         </StackPanel>
         
-       
-       
-        <!-- Slider Times 
-            <Grid>
-                <TextBlock Grid.Column="0"
-                           HorizontalAlignment="Left"
-                           FontWeight="SemiBold"
-                           Text="{x:Bind PlaybackViewModel.TimeListened, Mode=OneWay}"
-                           Opacity="0.8"
-                           Margin="25,10,0,0"
-                           FontSize="12" />
-
-                <TextBlock HorizontalAlignment="Right"
-                           FontWeight="SemiBold"
-                           Text="{x:Bind PlaybackViewModel.TimeRemaining, Mode=OneWay}"
-                           Opacity="0.8"
-                           Margin="0,10,25,0"
-                           FontSize="12" />
-            </Grid>
-
-            Slider 
-            TODO: ManipulationStarting doesn't work ?
-            <Slider ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
-                    ManipulationMode="All"
-                    ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
-                    PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
-                    Margin="25,-10,25,0"
-                    Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}"
-                    Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}" />
-
-            Track Controls 
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        Margin="0,0,0,20"
-                        VerticalAlignment="Center">
-                <Button Margin="5,0"
-                        Style="{StaticResource CircleButtonStyle}"
-                        Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
-                        Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
-                        Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Toggle Shuffle" />
-                    </ToolTipService.ToolTip>
-                    <Button.Content>
-                        <TextBlock Text="&#xE8B1;"
-                                   FontSize="18"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
-
-                 Back 
-                <Button Margin="5,0"
-                        Style="{StaticResource CircleButtonStyle}"
-                        Click="{x:Bind PlaybackViewModel.SkipPrevious}"
-                        Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Previous Track" />
-                    </ToolTipService.ToolTip>
-                    <Button.Content>
-                        <TextBlock Text="&#xE892;"
-                                   FontSize="18"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
-
-                Play / Pause 
-                <Button Margin="5,0"
-                        Style="{StaticResource CircleButtonStyle}"
-                        Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
-                        Width="52" Height="52">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Play/Pause" />
-                    </ToolTipService.ToolTip>
-                    <Button.Content>
-                        <TextBlock Text="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
-                                   FontSize="26"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
-
-                 Next 
-                <Button Margin="5,0"
-                        Style="{StaticResource CircleButtonStyle}"
-                        Click="{x:Bind PlaybackViewModel.SkipNext}"
-                        Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Next Track" />
-                    </ToolTipService.ToolTip>
-                    <Button.Content>
-                        <TextBlock Text="&#xE893;"
-                                   FontSize="18"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
-
-                 Repeat 
-                <Button Margin="5,0"
-                        Style="{StaticResource CircleButtonStyle}"
-                        Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
-                        Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
-                        Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Toggle Repeat" />
-                    </ToolTipService.ToolTip>
-                    <Button.Content>
-                        <TextBlock Text="&#xE8ED;"
-                                   FontSize="18"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
-            </StackPanel> -->
         
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>

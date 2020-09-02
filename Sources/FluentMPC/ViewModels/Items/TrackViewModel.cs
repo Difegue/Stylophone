@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Linq;
 using Windows.UI.Core;
 using FluentMPC.Views;
+using Windows.UI;
 
 namespace FluentMPC.ViewModels.Items
 {
@@ -49,6 +50,17 @@ namespace FluentMPC.ViewModels.Items
         }
 
         private Color _albumColor;
+
+        private bool _isLight;
+        public bool IsLight
+        {
+            get => _isLight;
+            private set
+            {
+                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _isLight, value));
+            }
+        }
+
 
         private ICommand _playCommand;
         public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new RelayCommand<IMpdFile>(PlayTrack));
@@ -154,25 +166,30 @@ namespace FluentMPC.ViewModels.Items
             _currentUiDispatcher = dispatcher ?? Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
 
             File = file;
-            AlbumArt = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
+            DominantColor = Colors.Black;
 
             // Fire off an async request to get the album art from MPD.
             if (getAlbumArt)
                 Task.Run(async () =>
                 {
-                    // For the now playing bar, the album art is rendered at 70px wide.
-                    // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
-
-                    var art = await MiscHelpers.GetAlbumArtAsync(File, default, _currentUiDispatcher);
-
-                    // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
-                    if (albumArtWidth != -1)
-                        DominantColor = await MiscHelpers.GetDominantColor(art, _currentUiDispatcher);
-
-                    AlbumArt = await MiscHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth, _currentUiDispatcher);
-
                     // TODO Should this really be here?
                     Singleton<LiveTileService>.Instance.UpdatePlayingSong(this);
+
+                    // For the now playing bar, the album art is rendered at 70px wide.
+                    // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
+                    var art = await AlbumArtHelpers.GetAlbumArtAsync(File, default, _currentUiDispatcher);
+
+                    // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
+                    if ( art != null && albumArtWidth != -1)
+                    {
+                        var color = await AlbumArtHelpers.GetDominantColor(art, _currentUiDispatcher);
+                        DominantColor = color.ToWindowsColor();
+                        IsLight = !(color.IsDark);
+                    }
+
+                    if (art != null)
+                        AlbumArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth, _currentUiDispatcher);
+                    
                 });
         }
 

@@ -54,7 +54,21 @@
             VerticalAlignment="Stretch"
             Canvas.ZIndex="6" >
             <Border.Background>
-                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" TintColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay}"></AcrylicBrush>
+                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" FallbackColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay}"
+                              TintColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay}"></AcrylicBrush>
+            </Border.Background>
+        </Border>
+
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Canvas.ZIndex="6"
+            Opacity="0.3"
+            Visibility="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border.Background>
+                <SolidColorBrush Color="Black"></SolidColorBrush>
             </Border.Background>
         </Border>
 
@@ -87,17 +101,12 @@
                     ShadowOpacity="0.6"
                     Color="Black">
 
-                    <Grid
-                        Width="70"
-                        Height="70"
-                        CornerRadius="3">
-                        <Image
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
-                            Stretch="UniformToFill"
-                            />
+                    <Grid Width="70" Height="70" >
+                        <controls:ImageEx CornerRadius="3" PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"
+	                                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" />
                     </Grid>
+                   
+                    
                 </controls:DropShadowPanel>
 
                 <!--  Track title and user  -->
@@ -141,6 +150,7 @@
                 Grid.Row="0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                Margin="{StaticResource XXSmallTopMargin}"
                 Orientation="Horizontal">
                 <!--  Shuffle  -->
                 <Button

@@ -55,10 +55,13 @@ namespace FluentMPC.ViewModels.Playback
             set
             {
                 Set(ref _nextTrack, value);
+                OnPropertyChanged(nameof(HasNextTrack));
             }
         }
 
         private TrackViewModel _nextTrack;
+
+        public bool HasNextTrack => NextTrack != null;
 
         /// <summary>
         ///     The amount of time spent listening to the track

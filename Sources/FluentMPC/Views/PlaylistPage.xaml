@@ -128,7 +128,8 @@
                             Margin="-24,-46,-24,-24"
                             Canvas.ZIndex="-1">
                             <Border.Background>
-                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.6" TintColor="{ThemeResource SystemAccentColorDark1}"></AcrylicBrush>
+                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.6" FallbackColor="{ThemeResource SystemAccentColorDark1}"
+                                              TintColor="{ThemeResource SystemAccentColorDark1}"></AcrylicBrush>
                             </Border.Background>
                         </Border>
 
@@ -154,19 +155,15 @@
                         ShadowOpacity="0.6"
                         Color="Black">
 
-                            <Grid Width="150" Height="150" CornerRadius="3" BorderThickness="2" Margin="0,-50,0,0">
-                                <Grid.Background>
-                                    <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt3, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
-                                </Grid.Background>
-
-                                <winui:ProgressRing IsActive="True" Visibility="{x:Bind ViewModel.ArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"
-                                                    Width="70" Height="70"/>
+                            <Grid Width="150" Height="150" Margin="0,-50,0,0">
+                                <controls:ImageEx  CornerRadius="3" BorderThickness="2" 
+	                                            PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
+	                                            Source="{x:Bind ViewModel.PlaylistArt3, Mode=OneWay}" Stretch="UniformToFill" />
                             </Grid>
 
                         </controls:DropShadowPanel>
 
-                        <controls:DropShadowPanel Visibility="{x:Bind ViewModel.ArtLoaded, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                        RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True"
+                        <controls:DropShadowPanel RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True"
                         Margin="20,20,0,0"
                         Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                         BlurRadius="10"
@@ -174,16 +171,15 @@
                         ShadowOpacity="0.6"
                         Color="Black">
 
-                            <Grid Width="150" Height="150" CornerRadius="3" BorderThickness="2" >
-                                <Grid.Background>
-                                    <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt2, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
-                                </Grid.Background>
+                            <Grid Width="150" Height="150">
+                                <controls:ImageEx  CornerRadius="3" BorderThickness="2" 
+	                                            PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
+	                                            Source="{x:Bind ViewModel.PlaylistArt2, Mode=OneWay}" Stretch="UniformToFill" />
                             </Grid>
 
                         </controls:DropShadowPanel>
 
-                        <controls:DropShadowPanel Visibility="{x:Bind ViewModel.ArtLoaded, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                        RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True"
+                        <controls:DropShadowPanel RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True"
                         Margin="40,40,0,0"
                         Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                         BlurRadius="10"
@@ -191,10 +187,10 @@
                         ShadowOpacity="0.6"
                         Color="Black">
 
-                            <Grid Width="150" Height="150" CornerRadius="3" BorderThickness="2" >
-                                <Grid.Background>
-                                    <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
-                                </Grid.Background>
+                            <Grid Width="150" Height="150">
+                                <controls:ImageEx  CornerRadius="3" BorderThickness="2"
+	                                            PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
+	                                            Source="{x:Bind ViewModel.PlaylistArt, Mode=OneWay}" Stretch="UniformToFill" />
                             </Grid>
 
                         </controls:DropShadowPanel>
