@@ -2,6 +2,8 @@
 using FluentMPC.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Database;
+using MpcNET.Commands.Playback;
+using MpcNET.Commands.Playlist;
 using MpcNET.Tags;
 using MpcNET.Types;
 using Sundew.Base.Collections;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -93,6 +96,90 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
+        private ICommand _addToPlaylistCommand;
+        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
+        private async void AddToPlaylist()
+        {
+            var playlistName = await DialogService.ShowAddToPlaylistDialog();
+            if (playlistName == null) return;
+
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    foreach (var f in Files)
+                    {
+                        var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, f.Path));
+
+                        if (!req.IsResponseValid)
+                        {
+                            NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.", 0);
+                            break;
+                        }
+                    }
+                    NotificationService.ShowInAppNotification($"Album added to Playlist!");
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't add album: {e}", 0);
+            }
+        }
+
+        private ICommand _addToQueueCommand;
+        public ICommand AddAlbumCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
+        private async void AddToQueue()
+        {
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    foreach (var f in Files)
+                    {
+                        var req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
+
+                        if (!req.IsResponseValid)
+                        {
+                            NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.", 0);
+                            break;
+                        }
+                    }
+                    NotificationService.ShowInAppNotification($"Album added to Queue!");
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't add album: {e}", 0);
+            }
+        }
+
+        private ICommand _playCommand;
+        public ICommand PlayAlbumCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
+        private async void PlayAlbum()
+        {
+            // Clear queue, add album and play
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var req = await c.InternalResource.SendAsync(new ClearCommand());
+                    if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
+
+                    foreach (var f in Files)
+                    {
+                        req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
+                    }
+                    req = await c.InternalResource.SendAsync(new PlayCommand(0));
+                }
+                NotificationService.ShowInAppNotification($"Now Playing {Name}");
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't play album: {e}", 0);
+            }
+        }
+
+
         public AlbumViewModel(string albumName)
         {
             Name = albumName;
@@ -117,24 +204,24 @@ namespace FluentMPC.ViewModels.Items
                 }
 
                 // Fire off an async request to get the album art from MPD.
-                Task.Run(async () =>
-                {
-                    if (Files.Count > 0)
-                    {
-                        var art = await AlbumArtHelpers.GetAlbumArtAsync(Files[0], token);
+                _ = Task.Run(async () =>
+                  {
+                      if (Files.Count > 0)
+                      {
+                          var art = await AlbumArtHelpers.GetAlbumArtAsync(Files[0], token);
 
-                        if (art != null)
-                        {
-                            AlbumArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
+                          if (art != null)
+                          {
+                              AlbumArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
 
-                            var color = await AlbumArtHelpers.GetDominantColor(art);
-                            IsLight = !color.IsDark;
-                            DominantColor = color.ToWindowsColor();
-                        }
-                        
-                        AlbumArtLoaded = true;
-                    }
-                });
+                              var color = await AlbumArtHelpers.GetDominantColor(art);
+                              IsLight = !color.IsDark;
+                              DominantColor = color.ToWindowsColor();
+                          }
+
+                          AlbumArtLoaded = true;
+                      }
+                  });
             }
             finally
             {

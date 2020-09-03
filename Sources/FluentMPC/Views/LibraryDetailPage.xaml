@@ -6,15 +6,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winui="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:fluentMpc="using:FluentMPC.Helpers"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:behaviors="using:FluentMPC.Behaviors" xmlns:items="using:FluentMPC.ViewModels.Items" xmlns:types="using:MpcNET.Types" xmlns:i="using:Microsoft.Xaml.Interactivity" xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:behaviors="using:FluentMPC.Behaviors" xmlns:items="using:FluentMPC.ViewModels.Items"
     Style="{StaticResource PageStyle}"
     behaviors:NavigationViewHeaderBehavior.HeaderMode="Minimal"
     mc:Ignorable="d">
 
     <Page.Resources>
         <fluentMpc:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
+        <fluentMpc:DoubleTopThicknessConverter x:Key="DoubleTopThicknessConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
 
@@ -88,6 +90,8 @@
         <fluentMpc:AlternatingRowListView SelectionMode="Extended"
                       x:Name="QueueList"
                       DoubleTapped="Queue_Track"
+                      extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                      extensions:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
@@ -109,9 +113,9 @@
             
             <fluentMpc:AlternatingRowListView.Header>
                 <controls:ScrollHeader Mode="Sticky">
-                    <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 --> 
+                    <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 -->
 
-                    <RelativePanel RequestedTheme="Dark" Margin="24,46,24,36">
+                    <RelativePanel RequestedTheme="Dark" Padding="24,46,24,36" x:Name="Header">
 
                         <Border RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignLeftWithPanel="True"
@@ -186,20 +190,20 @@
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
                             
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.PlayAlbumCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}" Width="108">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
                                     <TextBlock>Play</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddAlbumCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
                                     <TextBlock>Add to Queue</TextBlock>
                                 </StackPanel>
                             </Button>
 
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddToPlaylistCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="MusicInfo" />
                                     <TextBlock>Add to Playlist</TextBlock>
@@ -210,6 +214,10 @@
                     </RelativePanel>
                 </controls:ScrollHeader>
             </fluentMpc:AlternatingRowListView.Header>
+
+            <fluentMpc:AlternatingRowListView.Footer>
+                <Grid Height="12"/>
+            </fluentMpc:AlternatingRowListView.Footer>
             
         </fluentMpc:AlternatingRowListView>
 
