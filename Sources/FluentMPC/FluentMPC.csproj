@@ -186,7 +186,6 @@
     <Compile Include="Services\MPDConnectionService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Services\NotificationService.Samples.cs" />
     <Compile Include="Services\ViewLifetimeControl.cs" />
     <Compile Include="Services\WindowManagerService.cs" />
     <Compile Include="ViewModels\FoldersViewModel.cs" />

@@ -3,18 +3,19 @@ using System.Threading.Tasks;
 using System.Xml;
 using FluentMPC.Helpers;
 using FluentMPC.ViewModels.Items;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.Notifications;
-
+using Windows.Storage;
 using Windows.UI.Notifications;
-using Windows.UI.StartScreen;
 
 namespace FluentMPC.Services
 {
     internal partial class LiveTileService
     {
-        public void UpdatePlayingSong(TrackViewModel track)
+
+        public async void UpdatePlayingSong(TrackViewModel track)
         {
-            // TODO escape xml characters in this since the Notifications API doesn't do it :/
+
             var title = track.Name;
             var artist = track.File.Artist;
             var album = track.File.Album;
@@ -23,15 +24,21 @@ namespace FluentMPC.Services
             var uniqueIdentifier = f.HasAlbum ? f.Album : f.HasTitle ? f.Title : f.Path;
             uniqueIdentifier = MiscHelpers.EscapeFilename(uniqueIdentifier);
 
-            // Use the cached albumart
+            // Use the cached albumart if it exists
             var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";
+
+            StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
+
+            if (!await pictureFolder.FileExistsAsync(uniqueIdentifier))
+            {
+                artUri = "ms-appx:///Assets/AlbumPlaceholder.png";
+            }
 
             // Construct the tile content
             var tileContent = new TileContent()
             {
                 Visual = new TileVisual()
                 {
-                    Branding = TileBranding.NameAndLogo,
                     TileMedium = new TileBinding()
                     {
                         Content = new TileBindingContentAdaptive()
@@ -78,7 +85,7 @@ namespace FluentMPC.Services
                                 {
                                     new AdaptiveImage()
                                     {
-                                        Source = artUri
+                                       Source = artUri
                                     }
                                 }
                             },
@@ -113,6 +120,7 @@ namespace FluentMPC.Services
                     },
                     TileLarge = new TileBinding()
                     {
+                        Branding = TileBranding.NameAndLogo,
                         Content = new TileBindingContentAdaptive()
                         {
                             TextStacking = TileTextStacking.Top,
@@ -163,7 +171,11 @@ namespace FluentMPC.Services
             };
 
             // Create the tile notification
-            var tileNotif = new TileNotification(tileContent.GetXml());
+            var xml = tileContent.GetXml();
+            var xmlStr = xml.GetXml();
+
+            var tileNotif = new TileNotification(xml);
+            tileNotif.ExpirationTime = DateTimeOffset.UtcNow.AddSeconds(track.File.Time);
 
             // And send the notification to the primary tile
             UpdateTile(tileNotif);

@@ -173,9 +173,6 @@ namespace FluentMPC.ViewModels.Items
             if (getAlbumArt)
                 Task.Run(async () =>
                 {
-                    // TODO Should this really be here?
-                    Singleton<LiveTileService>.Instance.UpdatePlayingSong(this);
-
                     // For the now playing bar, the album art is rendered at 70px wide.
                     // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
                     var art = await AlbumArtHelpers.GetAlbumArtAsync(File, default, _currentUiDispatcher);

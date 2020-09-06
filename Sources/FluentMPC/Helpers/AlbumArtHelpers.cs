@@ -83,12 +83,9 @@ namespace FluentMPC.Helpers
                         throw new Exception();
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return null;
-                // Fallback
-                //await DispatcherHelper.AwaitableRunAsync(dispatcher, async () =>
-                //    result = await BitmapFactory.FromContent(new Uri("ms-appx:///Assets/AlbumPlaceholder.png")));
             }
 
             if (foundUsableArt)

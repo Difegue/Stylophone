@@ -48,7 +48,7 @@ namespace FluentMPC.Helpers
         /// <param name="fileName">Original object name.</param>
         /// <returns>Escaped name.</returns>
         /// <remarks>
-        /// All characters that are not valid for a filename, plus "%" and ".", are converted into "%uuuu", where uuuu is the hexadecimal
+        /// All characters that are not valid for a filename, plus "%" and ".", are converted into "uuuu", where uuuu is the hexadecimal
         /// unicode representation of the character.
         /// </remarks>
         public static string EscapeFilename(string fileName)
@@ -57,12 +57,12 @@ namespace FluentMPC.Helpers
 
             // Replace "%", then replace all other characters, then replace "."
 
-            fileName = fileName.Replace("%", "%0025");
+            fileName = fileName.Replace("%", "0025");
             foreach (char invalidChar in invalidChars)
             {
-                fileName = fileName.Replace(invalidChar.ToString(), string.Format("%{0,4:X}", Convert.ToInt16(invalidChar)).Replace(' ', '0'));
+                fileName = fileName.Replace(invalidChar.ToString(), string.Format("{0,4:X}", Convert.ToInt16(invalidChar)).Replace(' ', '0'));
             }
-            return fileName.Replace(".", "%002E");
+            return fileName.Replace(".", "002E");
         }
 
         public static Windows.UI.Color ToWindowsColor(this QuantizedColor color) => Windows.UI.Color.FromArgb(color.Color.A, color.Color.R, color.Color.G, color.Color.B);

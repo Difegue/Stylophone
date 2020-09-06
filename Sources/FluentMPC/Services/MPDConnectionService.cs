@@ -211,5 +211,24 @@ namespace FluentMPC.Services
             else
                 IsConnected = false; //TODO handle reconnection attempts?*/
         }
+
+        /// <summary>
+        /// Basic method to get the current song. Independent and meant to be called by background tasks.
+        /// </summary>
+        /// <returns>The current song as a MpdFile. Throws if anything else happens 🤷</returns>
+        public static async Task<IMpdFile> GetCurrentSong()
+        {
+            IPAddress.TryParse(Singleton<SettingsViewModel>.Instance.ServerHost, out var ipAddress);
+            _mpdEndpoint = new IPEndPoint(ipAddress, Singleton<SettingsViewModel>.Instance.ServerPort);
+            var connection = await GetConnectionInternalAsync();
+
+            var response = await connection.SendAsync(new CurrentSongCommand());
+            await connection.DisconnectAsync();
+
+            if (response.IsResponseValid)
+                return response.Response.Content;
+            else
+                return null;
+        }
     }
 }

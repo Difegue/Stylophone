@@ -39,7 +39,9 @@ namespace FluentMPC.ViewModels
             Task.Run(() =>
             {
                 // Do nothing for 250ms to avoid triggering a ton of loads if the user is just scrolling thru
-                Thread.Sleep(250);
+                // Unless those are the first albums, gotta keep things snappy
+                if (visibleRange.FirstIndex != 0)
+                    Thread.Sleep(250);
 
                 if (token.IsCancellationRequested)
                     return;
