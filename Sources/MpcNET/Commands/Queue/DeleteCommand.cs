@@ -1,28 +1,29 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AddCommand.cs" company="MpcNET">
+// <copyright file="DeleteCommand.cs" company="MpcNET">
 // Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace MpcNET.Commands.Playlist
+namespace MpcNET.Commands.Queue
 {
+    using MpcNET;
     using System.Collections.Generic;
 
     /// <summary>
-    /// Adds the file URI to the playlist (directories add recursively). URI can also be a single file.
+    /// Deletes a song from the playlist.
     /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    public class AddCommand : IMpcCommand<string>
+    public class DeleteCommand : IMpcCommand<string>
     {
-        private readonly string uri;
+        private readonly int position;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddCommand"/> class.
+        /// Initializes a new instance of the <see cref="DeleteCommand"/> class.
         /// </summary>
-        /// <param name="uri">The URI.</param>
-        public AddCommand(string uri)
+        /// <param name="position">The position.</param>
+        public DeleteCommand(int position)
         {
-            this.uri = uri;
+            this.position = position;
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => string.Join(" ", "add", $"\"{this.uri}\"");
+        public string Serialize() => string.Join(" ", "delete", position);
 
         /// <summary>
         /// Deserializes the specified response text pairs.

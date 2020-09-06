@@ -1,32 +1,29 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AddCommand.cs" company="MpcNET">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DeleteIdCommand.cs" company="MpcNET">
 // Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace MpcNET.Commands.Playlist
+namespace MpcNET.Commands.Queue
 {
+    using MpcNET;
     using System.Collections.Generic;
 
     /// <summary>
-    /// Moves the song with FROM (songid) to TO (playlist index) in the playlist.
-    /// If TO is negative, it is relative to the current song in the playlist (if there is one)
+    /// Deletes the song SONGID from the playlist.
     /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    public class MoveIdCommand : IMpcCommand<string>
+    public class DeleteIdCommand : IMpcCommand<string>
     {
-        private readonly int from;
-        private readonly int to;
+        private readonly int songId;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MoveIdCommand"/> class.
+        /// Initializes a new instance of the <see cref="DeleteIdCommand"/> class.
         /// </summary>
-        /// <param name="from">From (songid)</param>
-        /// <param name="to">To (playlist index)</param>
-        public MoveIdCommand(int from, int to)
+        /// <param name="songId">The song identifier.</param>
+        public DeleteIdCommand(int songId)
         {
-            this.from = from;
-            this.to = to;
+            this.songId = songId;
         }
 
         /// <summary>
@@ -35,7 +32,7 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => string.Join(" ", "moveid", from, to);
+        public string Serialize() => string.Join(" ", "deleteid", songId);
 
         /// <summary>
         /// Deserializes the specified response text pairs.

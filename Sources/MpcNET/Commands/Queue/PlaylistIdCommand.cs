@@ -1,26 +1,39 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClearCommand.cs" company="MpcNET">
+// <copyright file="PlaylistIdCommand.cs" company="MpcNET">
 // Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace MpcNET.Commands.Playlist
+namespace MpcNET.Commands.Queue
 {
     using System.Collections.Generic;
+    using MpcNET;
+    using MpcNET.Types;
 
     /// <summary>
-    /// Clears the current playlist.
+    /// Displays song ID in the playlist.
     /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    public class ClearCommand : IMpcCommand<string>
+    public class PlaylistIdCommand : IMpcCommand<IEnumerable<IMpdFile>>
     {
+        private readonly int songId;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistIdCommand"/> class.
+        /// </summary>
+        /// <param name="songId">The song identifier.</param>
+        public PlaylistIdCommand(int songId)
+        {
+            this.songId = songId;
+        }
+
         /// <summary>
         /// Serializes the command.
         /// </summary>
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => "clear";
+        public string Serialize() => string.Join(" ", "playlistid", songId);
 
         /// <summary>
         /// Deserializes the specified response text pairs.
@@ -29,9 +42,9 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public string Deserialize(SerializedResponse response)
+        public IEnumerable<IMpdFile> Deserialize(SerializedResponse response)
         {
-            return string.Join(", ", response.ResponseValues);
+            return MpdFile.CreateList(response.ResponseValues);
         }
     }
 }

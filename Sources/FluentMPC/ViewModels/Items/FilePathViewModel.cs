@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Sundew.Base.Collections;
 using System.Linq;
+using MpcNET.Commands.Queue;
 
 namespace FluentMPC.ViewModels.Items
 {

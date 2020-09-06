@@ -1,19 +1,19 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlaylistInfoCommand.cs" company="MpcNET">
+// <copyright file="ClearCommand.cs" company="MpcNET">
 // Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace MpcNET.Commands.Playlist
+
+namespace MpcNET.Commands.Queue
 {
     using System.Collections.Generic;
-    using MpcNET.Types;
 
     /// <summary>
-    /// Displays a list of all songs in the playlist.
+    /// Clears the current playlist.
     /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    public class PlaylistInfoCommand : IMpcCommand<IEnumerable<IMpdFile>>
+    public class ClearCommand : IMpcCommand<string>
     {
         /// <summary>
         /// Serializes the command.
@@ -21,7 +21,7 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => "playlistinfo";
+        public string Serialize() => "clear";
 
         /// <summary>
         /// Deserializes the specified response text pairs.
@@ -30,9 +30,9 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<IMpdFile> Deserialize(SerializedResponse response)
+        public string Deserialize(SerializedResponse response)
         {
-            return MpdFile.CreateList(response.ResponseValues);
+            return string.Join(", ", response.ResponseValues);
         }
     }
 }

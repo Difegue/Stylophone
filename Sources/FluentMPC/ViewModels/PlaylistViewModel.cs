@@ -10,6 +10,7 @@ using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
+using MpcNET.Commands.Queue;
 using MpcNET.Types;
 using Windows.UI.Xaml.Media.Imaging;
 

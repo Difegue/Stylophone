@@ -10,7 +10,7 @@ using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
-using MpcNET.Commands.Playlist;
+using MpcNET.Commands.Queue;
 using MpcNET.Types;
 
 namespace FluentMPC.ViewModels

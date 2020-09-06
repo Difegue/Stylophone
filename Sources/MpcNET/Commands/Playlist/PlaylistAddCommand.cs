@@ -6,8 +6,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace MpcNET.Commands.Playlist
 {
-    using System.Collections.Generic;
-    using MpcNET.Types;
 
     /// <summary>
     /// Adds URI to the playlist NAME.m3u. NAME.m3u will be created if it does not exist.
@@ -19,7 +17,7 @@ namespace MpcNET.Commands.Playlist
         private readonly string pathUri;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlaylistIdCommand"/> class.
+        /// Initializes a new instance of the <see cref="PlaylistAddCommand"/> class.
         /// </summary>
         /// <param name="playlistName">The playlistn name.</param>
         /// <param name="uri">The path to add.</param>

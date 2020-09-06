@@ -1,28 +1,38 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlaylistCommand.cs" company="MpcNET">
+// <copyright file="AddIdCommand.cs" company="MpcNET">
 // Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace MpcNET.Commands.Playlist
+namespace MpcNET.Commands.Queue
 {
+    using MpcNET;
     using System.Collections.Generic;
-    using System.Linq;
-    using MpcNET.Types;
 
     /// <summary>
-    /// Displays the current playlist.
+    /// Adds a song to the playlist (non-recursive) and returns the song id.
     /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    public class PlaylistCommand : IMpcCommand<IEnumerable<IMpdFile>>
+    public class AddIdCommand : IMpcCommand<string>
     {
+        private readonly string uri;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddIdCommand"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        public AddIdCommand(string uri)
+        {
+            this.uri = uri;
+        }
+
         /// <summary>
         /// Serializes the command.
         /// </summary>
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => "playlist";
+        public string Serialize() => string.Join(" ", "addid", $"\"{uri}\"");
 
         /// <summary>
         /// Deserializes the specified response text pairs.
@@ -31,11 +41,9 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<IMpdFile> Deserialize(SerializedResponse response)
+        public string Deserialize(SerializedResponse response)
         {
-            var results = response.ResponseValues.Select(line => MpdFile.Create(line.Value, int.Parse(line.Key)));
-
-            return results;
+            return string.Join(", ", response.ResponseValues);
         }
     }
 }

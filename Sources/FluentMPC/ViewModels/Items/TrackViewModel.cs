@@ -14,6 +14,7 @@ using System.Linq;
 using Windows.UI.Core;
 using FluentMPC.Views;
 using Windows.UI;
+using MpcNET.Commands.Queue;
 
 namespace FluentMPC.ViewModels.Items
 {

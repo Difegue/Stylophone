@@ -5,7 +5,7 @@ using FluentMPC.Views;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
-using MpcNET.Commands.Playlist;
+using MpcNET.Commands.Queue;
 using MpcNET.Commands.Status;
 using System;
 using System.Collections.Generic;

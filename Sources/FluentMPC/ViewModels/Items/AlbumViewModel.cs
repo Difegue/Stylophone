@@ -4,6 +4,7 @@ using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
+using MpcNET.Commands.Queue;
 using MpcNET.Tags;
 using MpcNET.Types;
 using Sundew.Base.Collections;

@@ -1,29 +1,29 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlaylistIdCommand.cs" company="MpcNET">
+// <copyright file="AddCommand.cs" company="MpcNET">
 // Copyright (c) MpcNET. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace MpcNET.Commands.Playlist
+namespace MpcNET.Commands.Queue
 {
+    using MpcNET;
     using System.Collections.Generic;
-    using MpcNET.Types;
 
     /// <summary>
-    /// Displays song ID in the playlist.
+    /// Adds the file URI to the playlist (directories add recursively). URI can also be a single file.
     /// https://www.musicpd.org/doc/protocol/queue.html.
     /// </summary>
-    public class PlaylistIdCommand : IMpcCommand<IEnumerable<IMpdFile>>
+    public class AddCommand : IMpcCommand<string>
     {
-        private readonly int songId;
+        private readonly string uri;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlaylistIdCommand"/> class.
+        /// Initializes a new instance of the <see cref="AddCommand"/> class.
         /// </summary>
-        /// <param name="songId">The song identifier.</param>
-        public PlaylistIdCommand(int songId)
+        /// <param name="uri">The URI.</param>
+        public AddCommand(string uri)
         {
-            this.songId = songId;
+            this.uri = uri;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The serialize command.
         /// </returns>
-        public string Serialize() => string.Join(" ", "playlistid", this.songId);
+        public string Serialize() => string.Join(" ", "add", $"\"{uri}\"");
 
         /// <summary>
         /// Deserializes the specified response text pairs.
@@ -41,9 +41,9 @@ namespace MpcNET.Commands.Playlist
         /// <returns>
         /// The deserialized response.
         /// </returns>
-        public IEnumerable<IMpdFile> Deserialize(SerializedResponse response)
+        public string Deserialize(SerializedResponse response)
         {
-            return MpdFile.CreateList(response.ResponseValues);
+            return string.Join(", ", response.ResponseValues);
         }
     }
 }
