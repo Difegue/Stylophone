@@ -9,6 +9,9 @@ using FluentMPC.Helpers;
 using FluentMPC.ViewModels;
 using MpcNET;
 using MpcNET.Types;
+using MpcNET.Commands.Playlist;
+using MpcNET.Commands.Status;
+using MpcNET.Commands.Queue;
 using Sundew.Base.Collections;
 using Windows.System.Threading;
 using Windows.UI.Xaml;
@@ -20,8 +23,9 @@ namespace FluentMPC.Services
     public static class MPDConnectionService
     {
         private const int ConnectionPoolSize = 10;
+        private static MpdStatus BOGUS_STATUS = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
 
-        public static MpdStatus CurrentStatus { get; private set; } = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
+        public static MpdStatus CurrentStatus { get; private set; } = BOGUS_STATUS;
 
         private static bool _connected;
 
@@ -41,24 +45,35 @@ namespace FluentMPC.Services
 
         public static event EventHandler<SongChangedEventArgs> SongChanged;
         public static event EventHandler<EventArgs> StatusChanged;
+        public static event EventHandler<EventArgs> QueueChanged;
         public static event EventHandler<EventArgs> PlaylistsChanged;
         public static event EventHandler<EventArgs> ConnectionChanged;
 
-        private static ThreadPoolTimer _statusUpdater;
-        private static MpcConnection _connection;
-
+        private static MpcConnection _idleConnection;
+        private static MpcConnection _statusConnection;
         private static IPEndPoint _mpdEndpoint;
+
+        private static ThreadPoolTimer _statusUpdater;
+        private static CancellationTokenSource _cancelIdle;
 
         public static async Task InitializeAsync()
         {
+            _idleConnection?.SendAsync(new NoIdleCommand());
+            _idleConnection?.DisconnectAsync();
+            _statusConnection?.DisconnectAsync();
             _statusUpdater?.Cancel();
-            _connection = null;
+            _cancelIdle?.Cancel();
+            _cancelIdle = new CancellationTokenSource();
+
+            _idleConnection = null;
+            _statusConnection = null;
             IsConnected = false;
             try
             {
                 IPAddress.TryParse(Singleton<SettingsViewModel>.Instance.ServerHost, out var ipAddress);
                 _mpdEndpoint = new IPEndPoint(ipAddress, Singleton<SettingsViewModel>.Instance.ServerPort);
-                _connection = await GetConnectionInternalAsync();
+                _idleConnection = await GetConnectionInternalAsync();
+                _statusConnection = await GetConnectionInternalAsync();
 
                 ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
                     async (t1, t2) =>
@@ -72,8 +87,8 @@ namespace FluentMPC.Services
                 );
 
                 // Connected, initialize basic data
-                InitializeStatusUpdater();
-                UpdatePlaylistsAsync();
+                await UpdatePlaylistsAsync();
+                InitializeStatusUpdater(_cancelIdle.Token);
                 IsConnected = true;
             }
             catch (Exception)
@@ -105,36 +120,85 @@ namespace FluentMPC.Services
             var c = new MpcConnection(_mpdEndpoint);
 
             if (token.IsCancellationRequested)
-                return c; 
+                return c;
 
             await c.ConnectAsync(token);
             return c;
         }
 
-        private static void InitializeStatusUpdater()
+        private static void InitializeStatusUpdater(CancellationToken token = default)
         {
-            TimeSpan period = TimeSpan.FromSeconds(1);
+            // Update status every second
+            _statusUpdater = ThreadPoolTimer.CreatePeriodicTimer(async (source) => await UpdateStatusAsync(_statusConnection), TimeSpan.FromSeconds(1));
 
-            _statusUpdater = ThreadPoolTimer.CreatePeriodicTimer(async (source) =>
+            // Run an idle loop in a spare thread to fire events when needed
+            Task.Run(async () =>
             {
-                if (_connection == null) return;
-
-                var response = await _connection.SendAsync(new MpcNET.Commands.Status.StatusCommand());
-
-                if (response != null && response.IsResponseValid)
+               while (true)
                 {
-                    var newStatus = response.Response.Content;
-                    CompareAndFireEvents(CurrentStatus, newStatus);
-                    CurrentStatus = newStatus;
-                }
-                else
-                    IsConnected = false; //TODO handle reconnection attempts?
+                    if (token.IsCancellationRequested || _idleConnection == null)
+                        break;
 
-            }, period);
+                    var idleChanges = await _idleConnection.SendAsync(new IdleCommand("stored_playlist playlist player mixer output options"));
+
+                    if (idleChanges.IsResponseValid)
+                        await HandleIdleResponseAsync(idleChanges.Response.Content);
+                    else
+                        IsConnected = false; //TODO handle reconnection attempts?
+               }
+
+            });
         }
-        public async static void UpdatePlaylistsAsync()
+
+        private static async Task HandleIdleResponseAsync(string subsystems)
         {
-            var response = await _connection.SendAsync(new MpcNET.Commands.Playlist.ListPlaylistsCommand());
+            if (subsystems.Contains("playlist"))
+            {
+                // Queue has changed
+                QueueChanged?.Invoke(Application.Current, new EventArgs());
+            }
+
+            if (subsystems.Contains("stored_playlist"))
+            {
+                // m3u playlists have changed
+                await UpdatePlaylistsAsync();
+            }
+
+            if (subsystems.Contains("player") || subsystems.Contains("mixer") || subsystems.Contains("output") || subsystems.Contains("options"))
+            {
+                // Status have changed in a significant way
+                await UpdateStatusAsync(_idleConnection);
+                StatusChanged?.Invoke(Application.Current, new EventArgs());
+
+                if (subsystems.Contains("player"))
+                {
+                    // Specifically, song has changed
+                    SongChanged?.Invoke(Application.Current, new SongChangedEventArgs { NewSongId = CurrentStatus.SongId });
+                }
+            }
+        }
+
+        private async static Task UpdateStatusAsync(MpcConnection connection)
+        {
+            if (_statusConnection == null) return;
+         
+            var response = await connection.SendAsync(new StatusCommand());
+
+            if (response != null && response.IsResponseValid)
+            {
+                var oldstatus = CurrentStatus;
+                CurrentStatus = response.Response.Content;
+
+                if (oldstatus == BOGUS_STATUS) // Clean up the default null status if the idle command hasn't done it for us yet
+                    StatusChanged?.Invoke(Application.Current, new EventArgs());
+            }
+            else
+                IsConnected = false; //TODO handle reconnection attempts?
+        }
+
+        private async static Task UpdatePlaylistsAsync()
+        {
+            var response = await _idleConnection.SendAsync(new ListPlaylistsCommand());
 
             if (response.IsResponseValid)
             {
@@ -147,40 +211,5 @@ namespace FluentMPC.Services
             else
                 IsConnected = false; //TODO handle reconnection attempts?*/
         }
-
-        private static void CompareAndFireEvents(MpdStatus currentStatus, MpdStatus newStatus)
-        {
-            if (currentStatus?.SongId != newStatus?.SongId)
-            {
-                SongChanged?.Invoke(Application.Current, new SongChangedEventArgs { NewSongId = newStatus.SongId });
-            }
-
-            // Fire the StatusChanged event if the status changed (which should happen pretty often..)
-            if (!IsEqual(currentStatus,newStatus))
-                StatusChanged?.Invoke(Application.Current, new EventArgs());
-        }
-
-        private static bool IsEqual(MpdStatus current, MpdStatus otherInput)
-        {
-            // wew lads
-            if (current == null)
-                return false;
-
-            return ((current.Volume == otherInput.Volume) &&
-                (current.Repeat == otherInput.Repeat) &&
-                (current.Random == otherInput.Random) &&
-                (current.Consume == otherInput.Consume) &&
-                (current.Single == otherInput.Single) &&
-                (current.Playlist == otherInput.Playlist) &&
-                (current.State == otherInput.State) &&
-                (current.Elapsed == otherInput.Elapsed) &&
-                (current.Duration == otherInput.Duration) &&
-                (current.Song == otherInput.Song) &&
-                (current.SongId == otherInput.SongId) &&
-                (current.UpdatingDb == otherInput.UpdatingDb) &&
-                (current.NextSong == otherInput.NextSong) &&
-                (current.NextSongId == otherInput.NextSongId));
-        }
-        
     }
 }

@@ -504,6 +504,11 @@ namespace FluentMPC.ViewModels.Playback
             if (CurrentTrack == null)
                 return;
 
+            // Update TimeListened/Remaining manually according to the new slider position
+            var remainingTime = MPDConnectionService.CurrentStatus.Duration.Subtract(TimeSpan.FromSeconds(CurrentTimeValue));
+            TimeListened = MiscHelpers.FormatTimeString(CurrentTimeValue*1000);
+            TimeRemaining = "-" + MiscHelpers.FormatTimeString(remainingTime.TotalMilliseconds);
+
             // Set the track position
             using (var c = await MPDConnectionService.GetConnectionAsync())
             {

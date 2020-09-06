@@ -303,12 +303,13 @@
         </Setter>
     </Style>
 
-    <!-- ImageEx style removing the animation on placeholders. -->
+    <!-- ImageEx style removing the animation on placeholders and setting their width to 0 once the main image is loaded. -->
     <Style x:Key="NoAnimationImageEx" TargetType="controls:ImageEx">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:ImageEx">
-                    <Grid Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Grid Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                          >
                         <Image Name="PlaceholderImage"
                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
@@ -365,6 +366,13 @@
                                                          Duration="0"
                                                          Storyboard.TargetName="PlaceholderImage"
                                                          Storyboard.TargetProperty="Opacity"
+                                                         From="1"
+                                                         To="0" />
+                                        <DoubleAnimation AutoReverse="False"
+                                                         BeginTime="0"
+                                                         Duration="0"
+                                                         Storyboard.TargetName="PlaceholderImage"
+                                                         Storyboard.TargetProperty="Width"
                                                          From="1"
                                                          To="0" />
                                     </Storyboard>

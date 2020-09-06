@@ -88,6 +88,9 @@ namespace FluentMPC.ViewModels.Items
         private Color _albumColor;
 
         private bool _isLight;
+        /// <summary>
+        /// If the dominant color of the album is too light to show white text on top of, this boolean will be true.
+        /// </summary>
         public bool IsLight
         {
             get => _isLight;

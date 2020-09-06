@@ -164,7 +164,7 @@
                         ShadowOpacity="0.6"
                         Color="Black">
 
-                            <Grid Width="200" Height="200" CornerRadius="3" BorderThickness="2">
+                            <Grid Width="200" Height="200" CornerRadius="3">
                                 <controls:ImageEx PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
 	                                            Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"/>
                             </Grid>

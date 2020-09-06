@@ -19,7 +19,7 @@ namespace FluentMPC.ViewModels
     {
         public QueueViewModel()
         {
-            MPDConnectionService.SongChanged += MPDConnectionService_SongChanged;
+            MPDConnectionService.QueueChanged += MPDConnectionService_QueueChanged;
             MPDConnectionService.ConnectionChanged += MPDConnectionService_ConnectionChanged;
         }
 
@@ -29,13 +29,10 @@ namespace FluentMPC.ViewModels
                 Task.Run(async () => await LoadDataAsync());
         }
 
-        private async void MPDConnectionService_SongChanged(object sender, SongChangedEventArgs e)
+        private async void MPDConnectionService_QueueChanged(object sender, EventArgs e)
         {
-            // TODO handle queue updates with QueueModified Event
-            //await LoadDataAsync();
-
             // scrolling is handled in code-behind
-
+            await DispatcherHelper.ExecuteOnUIThreadAsync(async () => await LoadDataAsync());
         }
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();

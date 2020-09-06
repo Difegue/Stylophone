@@ -6,8 +6,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace MpcNET.Commands.Status
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Cancels idle command.
     /// https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.

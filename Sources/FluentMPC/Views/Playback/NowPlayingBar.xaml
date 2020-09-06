@@ -101,8 +101,8 @@
                     ShadowOpacity="0.6"
                     Color="Black">
 
-                    <Grid Width="70" Height="70" >
-                        <controls:ImageEx CornerRadius="3" PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"
+                    <Grid Width="70" Height="70" CornerRadius="3" >
+                        <controls:ImageEx  PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"
 	                                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" />
                     </Grid>
                    

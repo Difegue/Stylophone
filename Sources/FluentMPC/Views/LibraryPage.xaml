@@ -37,7 +37,7 @@
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="items:AlbumViewModel" >
 
-                    <StackPanel x:Name="itemThumbnail" Padding="12,0,12,12" 
+                    <StackPanel x:Name="itemThumbnail" Padding="12,0,12,12"
                                 HorizontalAlignment="Left">
                         <StackPanel.ContextFlyout>
                             
@@ -47,7 +47,7 @@
                                 <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}"/>
                             </MenuFlyout> 
                         </StackPanel.ContextFlyout>
-                        
+
                         <controls:DropShadowPanel
                         Width="180"
                         Height="180"
@@ -58,10 +58,10 @@
                         ShadowOpacity="0.6"
                         Color="Black">
 
-                            <Grid Width="180" Height="180"  BorderBrush="{ThemeResource ButtonRevealBorderBrush}">
-                                <controls:ImageEx CornerRadius="3" BorderThickness="2" BorderBrush="{ThemeResource ButtonRevealBorderBrush}" 
+                            <Grid Width="180" Height="180" CornerRadius="3" >
+                                <controls:ImageEx Style="{StaticResource NoAnimationImageEx}" 
 	                                            PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
-	                                            Source="{x:Bind AlbumArt, Mode=OneWay}" Stretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"/>
+	                                            Source="{x:Bind AlbumArt, Mode=OneWay}"  Stretch="UniformToFill" />
                             </Grid>
                         </controls:DropShadowPanel>
 
