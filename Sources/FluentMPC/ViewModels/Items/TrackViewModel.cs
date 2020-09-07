@@ -85,17 +85,6 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
-        private ICommand _removePlaylistCommand;
-        public ICommand RemoveFromPlaylistCommand => _removePlaylistCommand ?? (_removePlaylistCommand = new RelayCommand<IMpdFile>(RemoveTrackFromPlaylist));
-
-        private async void RemoveTrackFromPlaylist(IMpdFile file)
-        {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var response = await c.InternalResource.SendAsync(new DeleteIdCommand(file.Id));
-            }
-        }
-
         private ICommand _addToQueueCommand;
         public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IMpdFile>(AddToQueue));
 
