@@ -269,4 +269,10 @@ If you want to clear the album art cache, click this button.</value>
   <data name="Settings_RefreshDatabase.Content" xml:space="preserve">
     <value>Update Server Database</value>
   </data>
+  <data name="NewPlaylistCheckBox.Content" xml:space="preserve">
+    <value>Create New Playlist</value>
+  </data>
+  <data name="NewPlaylistTextBox.PlaceholderText" xml:space="preserve">
+    <value>Playlist Name</value>
+  </data>
 </root>

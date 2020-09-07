@@ -107,7 +107,7 @@
                         <Setter.Value>
                             <MenuFlyout Opening="MenuFlyout_Opening">
                                 <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem Icon="Remove" Text="Remove from Playlist" Command="{Binding RemoveFromPlaylistCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem Icon="Remove" Text="Remove from Playlist" Command="{x:Bind ViewModel.RemoveTrackFromPlaylistCommand}" CommandParameter="{Binding}" DataContext="{Binding}"/>
                                 <MenuFlyoutItem Text="View Album" Command="{Binding ViewAlbumCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
                                     <MenuFlyoutItem.Icon>
                                         <FontIcon Glyph="&#xE93C;" />

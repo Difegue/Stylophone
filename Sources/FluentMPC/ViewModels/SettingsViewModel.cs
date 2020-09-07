@@ -54,7 +54,7 @@ namespace FluentMPC.ViewModels
                 {
                     Task.Run(async () =>
                     {
-                        await Windows.Storage.ApplicationData.Current.LocalSettings.SaveAsync(nameof(ServerHost), value ?? "localhost");
+                        await ApplicationData.Current.LocalSettings.SaveAsync(nameof(ServerHost), value ?? "localhost");
                         await CheckServerAddressAsync();
                     });
                 }
@@ -73,7 +73,7 @@ namespace FluentMPC.ViewModels
                 {
                     Task.Run(async () =>
                     {
-                        await Windows.Storage.ApplicationData.Current.LocalSettings.SaveAsync(nameof(ServerPort), value);
+                        await ApplicationData.Current.LocalSettings.SaveAsync(nameof(ServerPort), value);
                         await CheckServerAddressAsync();
                     });   
                 }

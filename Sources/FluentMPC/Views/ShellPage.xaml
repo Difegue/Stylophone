@@ -41,7 +41,7 @@
                 <winui:NavigationViewItemSeparator/>
                 <winui:NavigationViewItem x:Name="playlistContainer" x:Uid="Shell_Playlists" Icon="MusicInfo" SelectsOnInvoked="False"/> <!-- This menuitem is filled in viewmodel-->
 
-                <winui:NavigationViewItem x:Uid="Shell_NewPlaylist" Icon="Add" SelectsOnInvoked="False" Tapped="Create_Playlist" />
+                <!-- <winui:NavigationViewItem x:Uid="Shell_NewPlaylist" Icon="Add" SelectsOnInvoked="False" Tapped="Create_Playlist" /> -->
             </winui:NavigationView.MenuItems>
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior

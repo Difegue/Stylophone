@@ -12,6 +12,7 @@ using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Types;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace FluentMPC.ViewModels
@@ -24,16 +25,36 @@ namespace FluentMPC.ViewModels
         public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
         private async void DeletePlaylist()
         {
-            // TODO
-            throw new NotImplementedException();
+            ContentDialog confirmDialog = new ContentDialog
+            {
+                Title = "Delete Playlist?",
+                PrimaryButtonText = "OK",
+                CloseButtonText = "Cancel"
+            };
 
-            /* using (var c = await MPDConnectionService.GetConnectionAsync())
-             {
-                 foreach (var f in Item.Files)
-                 {
-                     var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, f.Path));
-                 }
-             }*/
+            ContentDialogResult result = await confirmDialog.ShowAsync();
+            if (result != ContentDialogResult.Primary)
+                return;
+
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var res = await c.InternalResource.SendAsync(new RmCommand(Name));
+
+                    if (res.IsResponseValid)
+                    {
+                        NotificationService.ShowInAppNotification("Playlist removed!");
+                        NavigationService.GoBack();
+                    } 
+                    else
+                        NotificationService.ShowInAppNotification("Couldn't remove playlist: MPD response invalid.");
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Something went wrong while removing playlist : {e}", 0);
+            }
         }
 
         private ICommand _addToQueueCommand;
@@ -58,6 +79,30 @@ namespace FluentMPC.ViewModels
 
                 await c.InternalResource.SendAsync(new LoadCommand(Name));
                 await c.InternalResource.SendAsync(new PlayCommand(0));
+            }
+        }
+
+        private ICommand _removeTrackCommand;
+        public ICommand RemoveTrackFromPlaylistCommand => _removeTrackCommand ?? (_removeTrackCommand = new RelayCommand<TrackViewModel>(RemoveTrack));
+        private async void RemoveTrack(TrackViewModel track)
+        {
+            var trackPos = Source.IndexOf(track);
+
+            try
+            {
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var r = await c.InternalResource.SendAsync(new PlaylistDeleteCommand(Name, trackPos));
+
+                    if (r.IsResponseValid) // Reload playlist
+                        await LoadDataAsync(Name);
+                    else
+                        NotificationService.ShowInAppNotification($"Couldn't remove track: Invalid MPD Response.", 0);
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't remove track: {e}", 0);
             }
         }
 
@@ -147,10 +192,10 @@ namespace FluentMPC.ViewModels
                     Source.Add(new TrackViewModel(item));
                 }
 
-                Artists = findReq.Response.Content.
-                            Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
+                Artists = findReq.Response.Content.Count() > 0 ? findReq.Response.Content.
+                            Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}") : "";
 
-                var totalTime = Source.Select(t => t.File.Time).Aggregate((t1, t2) => t1 + t2);
+                var totalTime = Source.Count > 0 ? Source.Select(t => t.File.Time).Aggregate((t1, t2) => t1 + t2) : 0;
                 TimeSpan t = TimeSpan.FromSeconds(totalTime);
 
                 PlaylistInfo = $"{Source.Count} Tracks, Total Time: {MiscHelpers.ToReadableString(t)}";

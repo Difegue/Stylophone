@@ -21,7 +21,8 @@ namespace FluentMPC.Services
 
             await DispatcherHelper.ExecuteOnUIThreadAsync (async () => result = await dialog.ShowAsync());
 
-            return result == ContentDialogResult.Primary ? dialog.SelectedPlaylist : null;
+            // Return new playlist name if checked, selected playlist otherwise
+            return result == ContentDialogResult.Primary ? dialog.AddNewPlaylist ? dialog.PlaylistName : dialog.SelectedPlaylist : null;
         }
 
         private static bool shown = false;
