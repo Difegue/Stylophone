@@ -66,47 +66,22 @@ namespace FluentMPC.ViewModels.Items
         private ICommand _playCommand;
         public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new RelayCommand<IMpdFile>(PlayTrack));
 
-        private async void PlayTrack(IMpdFile file)
-        {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var response = await c.InternalResource.SendAsync(new PlayIdCommand(file.Id));
-            }
-        }
+        private async void PlayTrack(IMpdFile file) => await MPDConnectionService.SafelySendCommandAsync(new PlayIdCommand(file.Id));
 
         private ICommand _removeCommand;
         public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new RelayCommand<IMpdFile>(RemoveTrack));
 
-        private async void RemoveTrack(IMpdFile file)
-        {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var response = await c.InternalResource.SendAsync(new DeleteIdCommand(file.Id));
-            }
-        }
+        private async void RemoveTrack(IMpdFile file) => await MPDConnectionService.SafelySendCommandAsync(new DeleteIdCommand(file.Id));
 
         private ICommand _addToQueueCommand;
         public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IMpdFile>(AddToQueue));
 
         private async void AddToQueue(IMpdFile file)
         {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                try
-                {
-                    var response = await c.InternalResource.SendAsync(new AddIdCommand(file.Path));
+            var response = await MPDConnectionService.SafelySendCommandAsync(new AddIdCommand(file.Path));
 
-                    if (response.IsResponseValid)
-                        NotificationService.ShowInAppNotification($"Added to Queue!");
-                    else
-                        NotificationService.ShowInAppNotification($"Couldn't add track: Invalid MPD Response.", 0);
-                }
-                catch (Exception e)
-                {
-                    NotificationService.ShowInAppNotification($"Couldn't add track: {e}", 0);
-                }
-
-            }
+            if (response != null)
+                NotificationService.ShowInAppNotification($"Added to Queue!");
         }
 
         private ICommand _addToPlaylistCommand;
@@ -117,22 +92,10 @@ namespace FluentMPC.ViewModels.Items
             var playlistName = await DialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;
 
-            try
-            {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, file.Path));
+            var req = await MPDConnectionService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, file.Path));
 
-                    if (req.IsResponseValid)
-                        NotificationService.ShowInAppNotification($"Added to Playlist {playlistName}!");
-                    else
-                        NotificationService.ShowInAppNotification($"Couldn't add track: Invalid MPD Response.", 0);
-                }
-            }
-            catch (Exception e)
-            {
-                NotificationService.ShowInAppNotification($"Couldn't add track: {e}", 0);
-            }
+            if (req != null)
+                NotificationService.ShowInAppNotification($"Added to Playlist {playlistName}!");
         }
 
         private ICommand _viewAlbumCommand;
@@ -178,7 +141,7 @@ namespace FluentMPC.ViewModels.Items
                     var art = await AlbumArtHelpers.GetAlbumArtAsync(File, default, _currentUiDispatcher);
 
                     // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
-                    if ( art != null && albumArtWidth != -1)
+                    if (art != null && albumArtWidth != -1)
                     {
                         var color = await AlbumArtHelpers.GetDominantColor(art, _currentUiDispatcher);
                         DominantColor = color.ToWindowsColor();
@@ -187,7 +150,7 @@ namespace FluentMPC.ViewModels.Items
 
                     if (art != null)
                         AlbumArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth, _currentUiDispatcher);
-                    
+
                 });
         }
 

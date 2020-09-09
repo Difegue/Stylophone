@@ -90,5 +90,6 @@ namespace FluentMPC.Views
             var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
             PlaybackViewModel.MediaVolume += 5 * delta / 120;
         }
+
     }
 }

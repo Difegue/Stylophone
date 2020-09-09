@@ -35,7 +35,7 @@
         Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
             <winui:NavigationView.MenuItems>
                 <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Audio" helpers:NavHelper.NavigateTo="views:ServerQueuePage" />
-                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Contact2" helpers:NavHelper.NavigateTo="views:LibraryPage" />
+                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Library" helpers:NavHelper.NavigateTo="views:LibraryPage" />
                 <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="MapDrive" helpers:NavHelper.NavigateTo="views:FoldersPage" />
 
                 <winui:NavigationViewItemSeparator/>

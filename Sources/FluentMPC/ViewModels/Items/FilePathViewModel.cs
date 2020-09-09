@@ -62,18 +62,16 @@ namespace FluentMPC.ViewModels.Items
             try
             {
                 var newChildren = new List<FilePathViewModel>();
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var response = await c.InternalResource.SendAsync(new LsInfoCommand(Path));
 
-                    if (response.IsResponseValid)
-                        foreach (var item in response.Response.Content)
-                        {
-                            newChildren.Add(new FilePathViewModel(item));
-                        }
-                    else
-                        newChildren.Add(new FilePathViewModel("💥 Failed"));
-                }
+                var response = await MPDConnectionService.SafelySendCommandAsync(new LsInfoCommand(Path));
+
+                if (response != null)
+                    foreach (var item in response)
+                    {
+                        newChildren.Add(new FilePathViewModel(item));
+                    }
+                else
+                    newChildren.Add(new FilePathViewModel("💥 Failed"));
 
                 await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
                 {
@@ -118,17 +116,10 @@ namespace FluentMPC.ViewModels.Items
         private async void AddToQueue()
         {
             // AddCommand adds either the full directory or the song, depending on the path given.
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var req = await c.InternalResource.SendAsync(new AddCommand(Path));
+            var response = await MPDConnectionService.SafelySendCommandAsync(new AddCommand(Path));
 
-                if (!req.IsResponseValid)
-                {
-                    NotificationService.ShowInAppNotification($"Couldn't add file(s): Invalid MPD Response.", 0);
-                    return;
-                }
+            if (response != null)
                 NotificationService.ShowInAppNotification($"File(s) added to Queue!");
-            }
         }
 
         private ICommand _addToPlaylistCommand;
@@ -138,27 +129,11 @@ namespace FluentMPC.ViewModels.Items
             var playlistName = await DialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;
 
-            try
-            {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, Path));
+            var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, Path));
 
-                    if (!req.IsResponseValid)
-                    {
-                        NotificationService.ShowInAppNotification($"Couldn't add file(s): Invalid MPD Response.", 0);
-                        return;
-                    }
-
-                    NotificationService.ShowInAppNotification($"File(s) added to Playlist!");
-                }
-            }
-            catch (Exception e)
-            {
-                NotificationService.ShowInAppNotification($"Couldn't add file(s): {e}", 0);
-            }
+            if (response != null)
+                NotificationService.ShowInAppNotification($"File(s) added to Playlist!");
         }
-
 
         public FilePathViewModel(IMpdFilePath file)
         {

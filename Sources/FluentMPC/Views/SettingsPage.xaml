@@ -104,10 +104,10 @@
 
             <StackPanel Margin="{StaticResource XSmallTopMargin}" >
                 <StackPanel Orientation="Horizontal">
-                    <Image
-                        Width="40"
-                        Height="40"
-                        Source="ms-appx:///Assets/StoreLogo.png" />
+                    <Image Margin="0,-12"
+                        Width="64"
+                        Height="64"
+                        Source="ms-appx:///Assets/Square44x44Logo.png" />
                 
                     <StackPanel>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" />

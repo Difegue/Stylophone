@@ -49,7 +49,8 @@ namespace FluentMPC.ViewModels
         {
             get { return _serverHost; }
 
-            set {
+            set
+            {
                 if (value != _serverHost)
                 {
                     Task.Run(async () =>
@@ -68,14 +69,15 @@ namespace FluentMPC.ViewModels
         {
             get { return _serverPort; }
 
-            set {
+            set
+            {
                 if (value != _serverPort)
                 {
                     Task.Run(async () =>
                     {
                         await ApplicationData.Current.LocalSettings.SaveAsync(nameof(ServerPort), value);
                         await CheckServerAddressAsync();
-                    });   
+                    });
                 }
                 Set(ref _serverPort, value);
             }
@@ -87,7 +89,7 @@ namespace FluentMPC.ViewModels
         {
             get { return _isCheckingServer; }
 
-            set{ Set(ref _isCheckingServer, value);}
+            set { Set(ref _isCheckingServer, value); }
         }
 
         public bool IsServerValid => MPDConnectionService.IsConnected;
@@ -131,11 +133,12 @@ namespace FluentMPC.ViewModels
                                 var cacheFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("AlbumArt");
                                 await cacheFolder.DeleteAsync();
                                 NotificationService.ShowInAppNotification("Cache has been deleted!");
-                            } catch (Exception e)
+                            }
+                            catch (Exception e)
                             {
                                 NotificationService.ShowInAppNotification($"Something went wrong while deleting cache: {e}");
                             }
-                            
+
                         });
                 }
 
@@ -172,22 +175,10 @@ namespace FluentMPC.ViewModels
                             if (result != ContentDialogResult.Primary)
                                 return;
 
-                            try
-                            {
-                                using (var c = await MPDConnectionService.GetConnectionAsync())
-                                {
-                                    var res = await c.InternalResource.SendAsync(new MpcNET.Commands.Database.UpdateCommand());
+                            var res = await MPDConnectionService.SafelySendCommandAsync(new MpcNET.Commands.Database.UpdateCommand());
 
-                                    if (res.IsResponseValid)
-                                        NotificationService.ShowInAppNotification("Database update started.");
-                                    else
-                                        NotificationService.ShowInAppNotification("Couldn't update DB: MPD response invalid.");
-                                }
-                            } catch (Exception e)
-                            {
-                                NotificationService.ShowInAppNotification($"Something went wrong while updating DB : {e}", 0);
-                            }
-
+                            if (res != null)
+                                NotificationService.ShowInAppNotification("Database update started.");
                         });
                 }
 
@@ -238,32 +229,30 @@ namespace FluentMPC.ViewModels
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsCheckingServer = true);
 
             await MPDConnectionService.InitializeAsync();
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            {
                 OnPropertyChanged(nameof(IsServerValid));
                 IsCheckingServer = false;
-            } );
+            });
         }
         private async Task UpdateServerVersionAsync()
         {
             if (!MPDConnectionService.IsConnected) return;
 
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            var response = await MPDConnectionService.SafelySendCommandAsync(new StatsCommand());
+
+            if (response != null)
             {
-                var response = await c.InternalResource.SendAsync(new StatsCommand());
+                var db_update = int.Parse(response["db_update"]);
+                var lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
 
-                if (response.IsResponseValid)
-                {
-                    var stats = response.Response.Content;
-                    var db_update = int.Parse(stats["db_update"]);
-                    var lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
-
-                    // Build info string
-                    await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
-                    ServerInfo = $"MPD Protocol {c.InternalResource.Version}\n" +
-                                 $"{stats["songs"]} Songs, {stats["albums"]} Albums\n" +
-                                 $"Database last updated {lastUpdatedDb}");
-                }
+                // Build info string
+                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                ServerInfo = $"MPD Protocol {MPDConnectionService.Version}\n" +
+                             $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
+                             $"Database last updated {lastUpdatedDb}");
             }
+
         }
     }
 }

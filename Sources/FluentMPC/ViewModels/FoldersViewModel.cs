@@ -25,27 +25,27 @@ namespace FluentMPC.ViewModels
         }
 
         public ObservableCollection<FilePathViewModel> SourceData { get; } = new ObservableCollection<FilePathViewModel>();
+        public bool IsSourceEmpty => SourceData.Count == 0;
 
         public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<WinUI.TreeViewItemInvokedEventArgs>(OnItemInvoked));
 
         public FoldersViewModel()
         {
+            SourceData.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
         public async Task LoadDataAsync()
         {
             SourceData.Clear();
 
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var response = await c.InternalResource.SendAsync(new LsInfoCommand("/"));
+            var response = await MPDConnectionService.SafelySendCommandAsync(new LsInfoCommand("/"));
 
-                if (response.IsResponseValid)
-                    foreach (var item in response.Response.Content)
-                    {
-                        SourceData.Add(new FilePathViewModel(item));
-                    }
-            }
+            if (response != null)
+                foreach (var item in response)
+                {
+                    SourceData.Add(new FilePathViewModel(item));
+                }
+                
             OnPropertyChanged(nameof(SourceData));
         }
 

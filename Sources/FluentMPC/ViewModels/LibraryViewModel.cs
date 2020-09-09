@@ -70,22 +70,20 @@ namespace FluentMPC.ViewModels
         public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<AlbumViewModel>(OnItemClick));
 
         public LazyLoadingAlbumCollection Source { get; } = new LazyLoadingAlbumCollection();
+        public bool IsSourceEmpty => Source.Count == 0;
 
         public LibraryViewModel()
         {
+            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
         public async Task LoadDataAsync()
         {
             Source.Clear();
+            var response = await MPDConnectionService.SafelySendCommandAsync(new ListCommand(MpdTags.Album));
 
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var response = await c.InternalResource.SendAsync(new ListCommand(MpdTags.Album));
-
-                if (response.IsResponseValid)
-                    GroupAlbumsByName(response.Response.Content);
-            }
+            if (response != null)
+                GroupAlbumsByName(response);
         }
 
         public void GroupAlbumsByName(List<string> albums)
@@ -97,7 +95,7 @@ namespace FluentMPC.ViewModels
 
             foreach (var g in query)
             {
-                // For whenever grouping + lazy-loading becomes easy...
+                //TODO: For whenever grouping + lazy-loading becomes easy...
                 //GroupInfosList info = new GroupInfosList();
                 //info.Key = g.GroupName + " (" + g.Items.Count() + ")";
 

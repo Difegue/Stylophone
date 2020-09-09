@@ -182,12 +182,9 @@ namespace FluentMPC.ViewModels.Playback
                 // Set the volume
                 volumeTasks.Add(Task.Run(async () =>
                 {
-                    using (var c = await MPDConnectionService.GetConnectionAsync())
-                    {
-                        await c.InternalResource.SendAsync(new SetVolumeCommand((byte)value));
-                    }
+                    await MPDConnectionService.SafelySendCommandAsync(new SetVolumeCommand((byte)value), _currentUiDispatcher);
                     Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
-                },cts.Token));
+                }, cts.Token));
 
                 // Update the UI
                 if ((int)value == 0)
@@ -300,17 +297,19 @@ namespace FluentMPC.ViewModels.Playback
 
             // Update info to current track
             if (MPDConnectionService.IsConnected)
-                OnTrackChange(this, new SongChangedEventArgs { NewSongId = MPDConnectionService.CurrentStatus.SongId});
+                OnTrackChange(this, new SongChangedEventArgs { NewSongId = MPDConnectionService.CurrentStatus.SongId });
 
             UpdateUpNextAsync();
 
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
-            NavigationService.Navigated += (s,e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(HideTrackName)));
+            NavigationService.Navigated += (s, e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(HideTrackName)));
 
             // Start the timer if ready
             if (!_updateInformationTimer.IsEnabled)
                 _updateInformationTimer.Start();
         }
+
+        private bool _isOnMainDispatcher => _currentUiDispatcher == CoreApplication.MainView.CoreWindow.Dispatcher;
 
         private void CurrentOnLeavingBackground(object sender, LeavingBackgroundEventArgs leavingBackgroundEventArgs)
         {
@@ -360,9 +359,14 @@ namespace FluentMPC.ViewModels.Playback
         #region Track Control Methods
 
         /// <summary>
+        /// Clear the MPD queue.
+        /// </summary>
+        public async void ClearQueue() => await MPDConnectionService.SafelySendCommandAsync(new ClearCommand(), _currentUiDispatcher);
+
+        /// <summary>
         ///     Toggle if the current track/playlist should repeat
         /// </summary>
-        public async void ToggleRepeat()
+        public void ToggleRepeat()
         {
             // Cancel older shuffleTasks
             cts.Cancel();
@@ -388,11 +392,8 @@ namespace FluentMPC.ViewModels.Playback
             // Set the volume
             shuffleTasks.Add(Task.Run(async () =>
             {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    await c.InternalResource.SendAsync(new RepeatCommand(IsRepeatEnabled));
-                    await c.InternalResource.SendAsync(new SingleCommand(IsSingleEnabled));
-                }
+                await MPDConnectionService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled), _currentUiDispatcher);
+                await MPDConnectionService.SafelySendCommandAsync(new SingleCommand(IsSingleEnabled), _currentUiDispatcher);
                 Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
             }, cts.Token));
 
@@ -412,10 +413,7 @@ namespace FluentMPC.ViewModels.Playback
             // Set the volume
             shuffleTasks.Add(Task.Run(async () =>
             {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    await c.InternalResource.SendAsync(new RandomCommand(IsShuffleEnabled));
-                }
+                await MPDConnectionService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled), _currentUiDispatcher);
 
                 await DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, UpdateUpNextAsync);
                 Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
@@ -437,18 +435,12 @@ namespace FluentMPC.ViewModels.Playback
             else
             {
                 MediaVolume = _previousVolume; // Setting MediaVolume automatically resets _previousVolume to -1
-            } 
+            }
         }
 
         public void NavigateNowPlaying()
-        {   
-            NavigationService.Navigate(typeof(PlaybackView));
-        }
-
-        public void NavigateNowPlayingInfo()
         {
-            // TODO view album
-            //App.NavigateTo(typeof(XboxPlayingView), "track-info");
+            NavigationService.Navigate(typeof(PlaybackView));
         }
 
         #endregion Track Control Methods
@@ -459,35 +451,17 @@ namespace FluentMPC.ViewModels.Playback
         ///     Toggles the state between the track playing
         ///     and not playing
         /// </summary>
-        public async void ChangePlaybackState()
-        {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                await c.InternalResource.SendAsync(new PauseResumeCommand());
-            }
-        }
+        public async void ChangePlaybackState() => await MPDConnectionService.SafelySendCommandAsync(new PauseResumeCommand(), _currentUiDispatcher);
 
         /// <summary>
         ///     Go forward one track
         /// </summary>
-        public async void SkipNext()
-        {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                await c.InternalResource.SendAsync(new NextCommand());
-            }
-        }
+        public async void SkipNext() => await MPDConnectionService.SafelySendCommandAsync(new NextCommand(), _currentUiDispatcher);
 
         /// <summary>
         ///     Go backwards one track
         /// </summary>
-        public async void SkipPrevious()
-        {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                await c.InternalResource.SendAsync(new PreviousCommand());
-            }
-        }
+        public async void SkipPrevious() => await MPDConnectionService.SafelySendCommandAsync(new PreviousCommand(), _currentUiDispatcher);
 
         #endregion Track Playback State
 
@@ -506,14 +480,11 @@ namespace FluentMPC.ViewModels.Playback
 
             // Update TimeListened/Remaining manually according to the new slider position
             var remainingTime = MPDConnectionService.CurrentStatus.Duration.Subtract(TimeSpan.FromSeconds(CurrentTimeValue));
-            TimeListened = MiscHelpers.FormatTimeString(CurrentTimeValue*1000);
+            TimeListened = MiscHelpers.FormatTimeString(CurrentTimeValue * 1000);
             TimeRemaining = "-" + MiscHelpers.FormatTimeString(remainingTime.TotalMilliseconds);
 
             // Set the track position
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                await c.InternalResource.SendAsync(new SeekCurCommand(CurrentTimeValue));
-            }
+            await MPDConnectionService.SafelySendCommandAsync(new SeekCurCommand(CurrentTimeValue), _currentUiDispatcher);
 
             // Wait for MPD Status to catch up before we start auto-updating the slider again
             _ = Task.Run(() =>
@@ -525,22 +496,11 @@ namespace FluentMPC.ViewModels.Playback
         private async void UpdateUpNextAsync()
         {
             var nextSongId = MPDConnectionService.CurrentStatus.NextSongId;
+            var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId), _currentUiDispatcher);
 
-            try
+            if (response != null)
             {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var response = await c.InternalResource.SendAsync(new PlaylistIdCommand(nextSongId));
-
-                    if (response.IsResponseValid)
-                    {
-                        NextTrack = new TrackViewModel(response.Response.Content.First(), false, -1, _currentUiDispatcher);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                NotificationService.ShowInAppNotification($"Couldn't get next song in queue: {e}", 0);
+                NextTrack = new TrackViewModel(response.First(), false, -1, _currentUiDispatcher);
             }
 
         }
@@ -557,39 +517,38 @@ namespace FluentMPC.ViewModels.Playback
                 return;
 
             // Get song info from MPD
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            var response = await MPDConnectionService.SafelySendCommandAsync(new CurrentSongCommand(), _currentUiDispatcher);
+
+            // Run all this on the UI thread
+            await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                var response = await c.InternalResource.SendAsync(new CurrentSongCommand());
-
-                // Run all this on the UI thread
-                await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                if (response != null)
                 {
-                    if (response.IsResponseValid && response.Response.Content != null)
-                    {
-                        // Set the new current track, updating the UI with the correct Dispatcher
-                        CurrentTrack = new TrackViewModel(response.Response.Content, true, _artWidth, _currentUiDispatcher);
-                    }
-                    else
-                    {
-                        // TODO, No response 
-                    }
+                    // Set the new current track, updating the UI with the correct Dispatcher
+                    CurrentTrack = new TrackViewModel(response, true, _artWidth, _currentUiDispatcher);
+                }
+                else
+                {
+                    // TODO, No response 
+                }
 
-                    if (CurrentTrack?.File != null)
-                    {
-                        TimeRemaining = "-" + MiscHelpers.FormatTimeString(CurrentTrack.File.Time / 1000);
-                        TimeListened = "00:00";
-                        CurrentTimeValue = 0;
-                        MaxTimeValue = CurrentTrack.File.Time;
+                if (CurrentTrack?.File != null)
+                {
+                    TimeRemaining = "-" + MiscHelpers.FormatTimeString(CurrentTrack.File.Time / 1000);
+                    TimeListened = "00:00";
+                    CurrentTimeValue = 0;
+                    MaxTimeValue = CurrentTrack.File.Time;
 
-                        Singleton<LiveTileService>.Instance.UpdatePlayingSong(CurrentTrack);
-                        UpdateUpNextAsync();
+                    Singleton<LiveTileService>.Instance.UpdatePlayingSong(CurrentTrack);
+                    UpdateUpNextAsync();
 
-                    } else
-                    {
-                        // TODO no track playing
-                    }
-                });
-            }
+                }
+                else
+                {
+                    // TODO no track playing
+                }
+            });
+            
         }
 
         private async void OnStateChange(object sender, EventArgs eventArgs)
@@ -667,7 +626,8 @@ namespace FluentMPC.ViewModels.Playback
             // Track must exist
             if (CurrentTrack == null)
             {
-                NotificationService.ShowInAppNotification("No track is currently playing.");
+                if (_isOnMainDispatcher)
+                    NotificationService.ShowInAppNotification("No track is currently playing.");
                 return;
             }
 
@@ -681,7 +641,8 @@ namespace FluentMPC.ViewModels.Playback
             // Track must exist
             if (CurrentTrack == null)
             {
-                NotificationService.ShowInAppNotification("No track is currently playing.");
+                if (_isOnMainDispatcher)
+                    NotificationService.ShowInAppNotification("No track is currently playing.");
                 return;
             }
 

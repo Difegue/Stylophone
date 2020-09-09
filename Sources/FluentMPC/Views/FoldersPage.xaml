@@ -9,12 +9,13 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
-    xmlns:model="using:MpcNET.Types" xmlns:vm="using:FluentMPC.ViewModels.Items"
+    xmlns:model="using:MpcNET.Types" xmlns:vm="using:FluentMPC.ViewModels.Items" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     Style="{StaticResource PageStyle}"
     behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <DataTemplate x:Key="PathTemplate" x:DataType="vm:FilePathViewModel">
             <winui:TreeViewItem
                 AutomationProperties.Name="{x:Bind Name}" HasUnrealizedChildren="{x:Bind IsDirectory}"
@@ -38,8 +39,7 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid
-                x:Name="header">
+        <Grid x:Name="header">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -77,5 +77,16 @@
                 </ic:EventTriggerBehavior>
             </i:Interaction.Behaviors>
         </winui:TreeView>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
+                    Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <SymbolIcon Symbol="DisconnectDrive" RenderTransformOrigin="0.5,0.5" Height="86">
+                <SymbolIcon.RenderTransform>
+                    <CompositeTransform ScaleX="5" ScaleY="5"/>
+                </SymbolIcon.RenderTransform>
+            </SymbolIcon>
+            <TextBlock x:Uid="EmptyFoldersTitle" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
+            <TextBlock x:Uid="EmptyFoldersDesc" HorizontalAlignment="Center"></TextBlock>
+        </StackPanel>
     </Grid>
 </Page>

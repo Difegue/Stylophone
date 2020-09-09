@@ -25,7 +25,6 @@ namespace FluentMPC.Views
         {
             base.OnNavigatedTo(e);
 
-            // TODO add an event to refresh the queue
             if (MPDConnectionService.IsConnected)
                 await ViewModel.LoadDataAsync();
 

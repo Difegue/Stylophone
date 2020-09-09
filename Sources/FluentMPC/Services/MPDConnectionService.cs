@@ -15,6 +15,8 @@ using MpcNET.Commands.Queue;
 using Sundew.Base.Collections;
 using Windows.System.Threading;
 using Windows.UI.Xaml;
+using Windows.UI.Core;
+using Windows.ApplicationModel.Core;
 
 namespace FluentMPC.Services
 {
@@ -26,6 +28,7 @@ namespace FluentMPC.Services
         private static MpdStatus BOGUS_STATUS = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
 
         public static MpdStatus CurrentStatus { get; private set; } = BOGUS_STATUS;
+        public static string Version { get; private set; }
 
         private static bool _connected;
 
@@ -87,6 +90,7 @@ namespace FluentMPC.Services
                 );
 
                 // Connected, initialize basic data
+                Version = _statusConnection.Version;
                 await UpdatePlaylistsAsync();
                 InitializeStatusUpdater(_cancelIdle.Token);
                 IsConnected = true;
@@ -113,6 +117,34 @@ namespace FluentMPC.Services
             }
 
             return await ConnectionPool.GetObjectAsync(token);
+        }
+
+        /// <summary>
+        /// Send a command to the MPD server in an abstracted way. Shows notifications on screen if anything goes south.
+        /// </summary>
+        /// <typeparam name="T">Return type of the command</typeparam>
+        /// <param name="command">IMpcCommand to send</param>
+        /// <param name="dispatcher">CoreDispatcher, needed if you're executing commands in a state where the dispatcher can be a secondary one</param>
+        /// <returns>The command results, or default value.</returns>
+        public static async Task<T> SafelySendCommandAsync<T>(IMpcCommand<T> command, CoreDispatcher dispatcher = null)
+        {
+            try
+            {
+                using (var c = await GetConnectionAsync())
+                {
+                    var response = await c.InternalResource.SendAsync(command);
+                    if (!response.IsResponseValid) throw new Exception($"Invalid server response: {response}.");
+
+                    return response.Response.Content;
+                }
+            }
+            catch (Exception e)
+            {
+                if (dispatcher == null || dispatcher == CoreApplication.MainView.CoreWindow.Dispatcher) // Only invoke notificationservice on the main window
+                    NotificationService.ShowInAppNotification($"Sending {command.GetType().Name} failed: {e.Message}", 0);
+            }
+
+            return default(T);
         }
 
         private static async Task<MpcConnection> GetConnectionInternalAsync(CancellationToken token = default)

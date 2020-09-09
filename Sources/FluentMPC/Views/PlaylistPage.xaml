@@ -249,5 +249,16 @@
             </fluentMpc:AlternatingRowListView.Footer>
         </fluentMpc:AlternatingRowListView>
 
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
+                    Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <SymbolIcon Symbol="Preview" RenderTransformOrigin="0.5,0.5" Height="86">
+                <SymbolIcon.RenderTransform>
+                    <CompositeTransform ScaleX="5" ScaleY="5"/>
+                </SymbolIcon.RenderTransform>
+            </SymbolIcon>
+            <TextBlock x:Uid="EmptyPlaylistTitle" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}" Margin="{StaticResource SmallTopMargin}"/>
+            <TextBlock x:Uid="EmptyPlaylistDesc" HorizontalAlignment="Center"/>
+        </StackPanel>
+        
     </Grid>
 </Page>

@@ -472,7 +472,7 @@
                                 </MenuFlyoutItem.Icon>
                             </MenuFlyoutItem>
 
-                            <MenuFlyoutItem Text="Clear Queue" Icon="Delete"/>
+                            <MenuFlyoutItem Text="Clear Queue" Icon="Delete" Click="{x:Bind PlaybackViewModel.ClearQueue}"/>
 
                             <MenuFlyoutSeparator Opacity="0.4" />
 

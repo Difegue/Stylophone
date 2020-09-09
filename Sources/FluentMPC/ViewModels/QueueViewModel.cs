@@ -21,6 +21,8 @@ namespace FluentMPC.ViewModels
         {
             MPDConnectionService.QueueChanged += MPDConnectionService_QueueChanged;
             MPDConnectionService.ConnectionChanged += MPDConnectionService_ConnectionChanged;
+
+            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
         private void MPDConnectionService_ConnectionChanged(object sender, EventArgs e)
@@ -37,21 +39,20 @@ namespace FluentMPC.ViewModels
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
 
+        public bool IsSourceEmpty => Source.Count == 0;
+
         public async Task LoadDataAsync()
         {
             // TODO - Don't clear, update collection instead based on new data
             Source.Clear();
+            var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistInfoCommand());
 
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                var response = await c.InternalResource.SendAsync(new PlaylistInfoCommand());
+            if (response != null)
+                foreach (var item in response)
+                {
+                    Source.Add(new TrackViewModel(item, false));
+                }
 
-                if (response.IsResponseValid)
-                    foreach (var item in response.Response.Content)
-                    {
-                        Source.Add(new TrackViewModel(item, false));
-                    }
-            }
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(Source)));
         }
     }

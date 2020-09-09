@@ -275,4 +275,25 @@ If you want to clear the album art cache, click this button.</value>
   <data name="NewPlaylistTextBox.PlaceholderText" xml:space="preserve">
     <value>Playlist Name</value>
   </data>
+  <data name="EmptyFoldersDesc.Text" xml:space="preserve">
+    <value>Is your MPD server connected?</value>
+  </data>
+  <data name="EmptyFoldersTitle.Text" xml:space="preserve">
+    <value>No folders found on server.</value>
+  </data>
+  <data name="EmptyLibraryTitle.Text" xml:space="preserve">
+    <value>Ain't nothin' like an empty library.</value>
+  </data>
+  <data name="EmptyPlaylistDesc.Text" xml:space="preserve">
+    <value>Get some tracks in there!</value>
+  </data>
+  <data name="EmptyPlaylistTitle.Text" xml:space="preserve">
+    <value>I can't jam to this.</value>
+  </data>
+  <data name="EmptyQueueDesc.Text" xml:space="preserve">
+    <value>Why don't you add some music?</value>
+  </data>
+  <data name="EmptyQueueTitle.Text" xml:space="preserve">
+    <value>All is quiet now.</value>
+  </data>
 </root>

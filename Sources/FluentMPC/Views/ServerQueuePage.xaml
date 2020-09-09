@@ -104,5 +104,14 @@
                 </Style>
             </fluentMpc:AlternatingRowListView.ItemContainerStyle>
         </fluentMpc:AlternatingRowListView>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <SymbolIcon Symbol="More" RenderTransformOrigin="0.5,0.5" Height="86">
+                <SymbolIcon.RenderTransform>
+                    <CompositeTransform ScaleX="5" ScaleY="5"/>
+                </SymbolIcon.RenderTransform>
+            </SymbolIcon>
+            <TextBlock x:Uid="EmptyQueueTitle" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
+            <TextBlock x:Uid="EmptyQueueDesc" HorizontalAlignment="Center"></TextBlock>
+        </StackPanel>
     </Grid>
 </Page>

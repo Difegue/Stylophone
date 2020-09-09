@@ -21,6 +21,8 @@ namespace FluentMPC.ViewModels
     {
         public ObservableCollection<TrackViewModel> Source { get; private set; } = new ObservableCollection<TrackViewModel>();
 
+        public bool IsSourceEmpty => Source.Count == 0;
+
         private ICommand _deletePlaylistCommand;
         public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
         private async void DeletePlaylist()
@@ -36,49 +38,38 @@ namespace FluentMPC.ViewModels
             if (result != ContentDialogResult.Primary)
                 return;
 
-            try
-            {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var res = await c.InternalResource.SendAsync(new RmCommand(Name));
+            var res = await MPDConnectionService.SafelySendCommandAsync(new RmCommand(Name));
 
-                    if (res.IsResponseValid)
-                    {
-                        NotificationService.ShowInAppNotification("Playlist removed!");
-                        NavigationService.GoBack();
-                    } 
-                    else
-                        NotificationService.ShowInAppNotification("Couldn't remove playlist: MPD response invalid.");
-                }
-            }
-            catch (Exception e)
+            if (res != null)
             {
-                NotificationService.ShowInAppNotification($"Something went wrong while removing playlist : {e}", 0);
+                NotificationService.ShowInAppNotification("Playlist removed!");
+                NavigationService.GoBack();
             }
         }
 
         private ICommand _addToQueueCommand;
         public ICommand AddPlaylistCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
-        private async void AddToQueue()
-        {
-            using (var c = await MPDConnectionService.GetConnectionAsync())
-            {
-                await c.InternalResource.SendAsync(new LoadCommand(Name));
-            }
-        }
+        private async void AddToQueue() => await MPDConnectionService.SafelySendCommandAsync(new LoadCommand(Name));
 
         private ICommand _playCommand;
         public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
         private async void PlayAlbum()
         {
             // Clear queue, add playlist and play
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            try
             {
-                var req = await c.InternalResource.SendAsync(new ClearCommand());
-                if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
+                using (var c = await MPDConnectionService.GetConnectionAsync())
+                {
+                    var req = await c.InternalResource.SendAsync(new ClearCommand());
+                    if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
 
-                await c.InternalResource.SendAsync(new LoadCommand(Name));
-                await c.InternalResource.SendAsync(new PlayCommand(0));
+                    await c.InternalResource.SendAsync(new LoadCommand(Name));
+                    await c.InternalResource.SendAsync(new PlayCommand(0));
+                }
+            }
+            catch (Exception e)
+            {
+                NotificationService.ShowInAppNotification($"Couldn't play content: {e}", 0);
             }
         }
 
@@ -87,27 +78,15 @@ namespace FluentMPC.ViewModels
         private async void RemoveTrack(TrackViewModel track)
         {
             var trackPos = Source.IndexOf(track);
+            var r = await MPDConnectionService.SafelySendCommandAsync(new PlaylistDeleteCommand(Name, trackPos));
 
-            try
-            {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var r = await c.InternalResource.SendAsync(new PlaylistDeleteCommand(Name, trackPos));
-
-                    if (r.IsResponseValid) // Reload playlist
-                        await LoadDataAsync(Name);
-                    else
-                        NotificationService.ShowInAppNotification($"Couldn't remove track: Invalid MPD Response.", 0);
-                }
-            }
-            catch (Exception e)
-            {
-                NotificationService.ShowInAppNotification($"Couldn't remove track: {e}", 0);
-            }
+            if (r != null) // Reload playlist
+                await LoadDataAsync(Name);
         }
 
         public PlaylistViewModel()
         {
+            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
         public string Name
@@ -182,24 +161,22 @@ namespace FluentMPC.ViewModels
             Name = playlistName;
             Source.Clear();
 
-            using (var c = await MPDConnectionService.GetConnectionAsync())
+            var findReq = await MPDConnectionService.SafelySendCommandAsync(new ListPlaylistInfoCommand(playlistName));
+            if (findReq == null) return;
+
+            foreach (var item in findReq)
             {
-                var findReq = await c.InternalResource.SendAsync(new ListPlaylistInfoCommand(playlistName));
-                if (!findReq.IsResponseValid) return;
-
-                foreach (var item in findReq.Response.Content)
-                {
-                    Source.Add(new TrackViewModel(item));
-                }
-
-                Artists = findReq.Response.Content.Count() > 0 ? findReq.Response.Content.
-                            Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}") : "";
-
-                var totalTime = Source.Count > 0 ? Source.Select(t => t.File.Time).Aggregate((t1, t2) => t1 + t2) : 0;
-                TimeSpan t = TimeSpan.FromSeconds(totalTime);
-
-                PlaylistInfo = $"{Source.Count} Tracks, Total Time: {MiscHelpers.ToReadableString(t)}";
+                Source.Add(new TrackViewModel(item));
             }
+
+            Artists = findReq.Count() > 0 ? findReq.
+                        Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}") : "";
+
+            var totalTime = Source.Count > 0 ? Source.Select(t => t.File.Time).Aggregate((t1, t2) => t1 + t2) : 0;
+            TimeSpan t = TimeSpan.FromSeconds(totalTime);
+
+            PlaylistInfo = $"{Source.Count} Tracks, Total Time: {MiscHelpers.ToReadableString(t)}";
+
 
             await Task.Run(async () =>
             {
