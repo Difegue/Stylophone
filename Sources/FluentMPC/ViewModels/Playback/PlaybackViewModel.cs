@@ -297,9 +297,13 @@ namespace FluentMPC.ViewModels.Playback
 
             // Update info to current track
             if (MPDConnectionService.IsConnected)
+            {
                 OnTrackChange(this, new SongChangedEventArgs { NewSongId = MPDConnectionService.CurrentStatus.SongId });
+                CurrentTimeValue = MPDConnectionService.CurrentStatus.Elapsed.TotalSeconds;
 
-            UpdateUpNextAsync();
+                OnStateChange(this, null);
+                UpdateUpNextAsync();
+            }
 
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
             NavigationService.Navigated += (s, e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(HideTrackName)));
@@ -326,9 +330,8 @@ namespace FluentMPC.ViewModels.Playback
         /// </summary>
         private async void UpdateInformation(object sender, object e)
         {
-            // Only call the following if the player exists, is playing
-            // and the time is greater then 0.
-            if (MPDConnectionService.CurrentStatus.State != MpdState.Play || MPDConnectionService.CurrentStatus.Elapsed.Milliseconds <= 0)
+            // Only call the following if the player exists and the time is greater then 0.
+            if (MPDConnectionService.CurrentStatus.Elapsed.TotalMilliseconds <= 0)
                 return;
 
             if (CurrentTrack == null)

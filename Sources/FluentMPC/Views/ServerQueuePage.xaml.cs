@@ -73,11 +73,6 @@ namespace FluentMPC.Views
             trackVm.PlayTrackCommand.Execute(trackVm.File);
         }
 
-        private void HandleQueueReorder(UIElement sender, DropCompletedEventArgs args)
-        {
-            // TODO
-        }
-
         // Propagate DataContext of the ListViewItem to the MenuFlyout.
         // https://github.com/microsoft/microsoft-ui-xaml/issues/911
         private void MenuFlyout_Opening(object sender, object e)

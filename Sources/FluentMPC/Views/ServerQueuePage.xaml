@@ -70,13 +70,12 @@
         </DataTemplate>
     </Page.Resources>
     <Grid x:Name="ContentArea" >
-        <fluentMpc:AlternatingRowListView SelectionMode="Extended"
+        <fluentMpc:AlternatingRowListView SelectionMode="Single"
                       AllowDrop="True"
                       CanReorderItems="True"
                       ReorderMode="Enabled"
                       DoubleTapped="Play_Track"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-                      DropCompleted="HandleQueueReorder"
                       x:Name="QueueList"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"

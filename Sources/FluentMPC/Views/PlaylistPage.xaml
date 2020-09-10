@@ -90,8 +90,11 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <fluentMpc:AlternatingRowListView SelectionMode="Extended"
+        <fluentMpc:AlternatingRowListView SelectionMode="Single"
                       x:Name="QueueList"
+                      AllowDrop="True"
+                      CanReorderItems="True"
+                      ReorderMode="Enabled"
                       DoubleTapped="Queue_Track"
                       extensions:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"

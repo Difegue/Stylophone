@@ -17,6 +17,7 @@
     <Page.Resources>
         <fluentMpc:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
         <fluentMpc:DoubleTopThicknessConverter x:Key="DoubleTopThicknessConverter" />
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
 
@@ -87,7 +88,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <fluentMpc:AlternatingRowListView SelectionMode="Extended"
+        <fluentMpc:AlternatingRowListView SelectionMode="Single"
                       x:Name="QueueList"
                       DoubleTapped="Queue_Track"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
@@ -190,20 +191,23 @@
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
                             
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}"
+                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
                                     <TextBlock>Play</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}"
+                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
                                     <TextBlock>Add to Queue</TextBlock>
                                 </StackPanel>
                             </Button>
 
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}"
+                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="MusicInfo" />
                                     <TextBlock>Add to Playlist</TextBlock>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,6 +21,9 @@ namespace FluentMPC.ViewModels
     public class PlaylistViewModel : Observable
     {
         public ObservableCollection<TrackViewModel> Source { get; private set; } = new ObservableCollection<TrackViewModel>();
+
+        private NotifyCollectionChangedAction _previousAction;
+        private int _oldId;
 
         public bool IsSourceEmpty => Source.Count == 0;
 
@@ -86,7 +90,22 @@ namespace FluentMPC.ViewModels
 
         public PlaylistViewModel()
         {
-            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            Source.CollectionChanged += async (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
+                {
+                    // User reordered tracks, send matching command
+                    await MPDConnectionService.SafelySendCommandAsync(new PlaylistMoveCommand(Name, _oldId, e.NewStartingIndex));
+                    _previousAction = NotifyCollectionChangedAction.Move;
+                }
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    _previousAction = e.Action;
+                    _oldId = e.OldStartingIndex;
+                }
+
+                OnPropertyChanged(nameof(IsSourceEmpty));
+            };
         }
 
         public string Name

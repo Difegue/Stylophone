@@ -10,7 +10,6 @@
     d:DesignWidth="300"
     Unloaded="Page_Unloaded"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:converters="using:FluentMPC.Helpers">
 
     <Page.Resources>

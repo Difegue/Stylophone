@@ -109,6 +109,8 @@ namespace FluentMPC.ViewModels.Items
 
             try
             {
+                if (Files.Count == 0) throw new Exception("No tracks loaded yet.");
+
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
                     foreach (var f in Files)
@@ -126,7 +128,7 @@ namespace FluentMPC.ViewModels.Items
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't add album: {e}", 0);
+                NotificationService.ShowInAppNotification($"Couldn't add album: {e.Message}", 0);
             }
         }
 
@@ -136,6 +138,8 @@ namespace FluentMPC.ViewModels.Items
         {
             try
             {
+                if (Files.Count == 0) throw new Exception("No tracks loaded yet.");
+
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
                     foreach (var f in Files)
@@ -153,7 +157,7 @@ namespace FluentMPC.ViewModels.Items
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't add album: {e}", 0);
+                NotificationService.ShowInAppNotification($"Couldn't add album: {e.Message}", 0);
             }
         }
 
@@ -164,6 +168,8 @@ namespace FluentMPC.ViewModels.Items
             // Clear queue, add album and play
             try
             {
+                if (Files.Count == 0) throw new Exception("No tracks loaded yet.");
+
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
                     var req = await c.InternalResource.SendAsync(new ClearCommand());
@@ -179,7 +185,7 @@ namespace FluentMPC.ViewModels.Items
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't play album: {e}", 0);
+                NotificationService.ShowInAppNotification($"Couldn't play album: {e.Message}", 0);
             }
         }
 

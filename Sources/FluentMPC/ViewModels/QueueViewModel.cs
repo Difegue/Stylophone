@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -17,12 +18,30 @@ namespace FluentMPC.ViewModels
 {
     public class QueueViewModel : Observable
     {
+        private NotifyCollectionChangedAction _previousAction;
+        private int _oldId;
+
         public QueueViewModel()
         {
             MPDConnectionService.QueueChanged += MPDConnectionService_QueueChanged;
             MPDConnectionService.ConnectionChanged += MPDConnectionService_ConnectionChanged;
 
-            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            Source.CollectionChanged += async (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
+                {
+                    // User reordered tracks, send matching command
+                    await MPDConnectionService.SafelySendCommandAsync(new MoveIdCommand(_oldId, e.NewStartingIndex));
+                    _previousAction = NotifyCollectionChangedAction.Move;
+                }
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    _previousAction = e.Action;
+                    _oldId = e.OldItems.Count > 0 ? (e.OldItems[0] as TrackViewModel).File.Id : -1;
+                }
+
+                OnPropertyChanged(nameof(IsSourceEmpty));
+            };
         }
 
         private void MPDConnectionService_ConnectionChanged(object sender, EventArgs e)
