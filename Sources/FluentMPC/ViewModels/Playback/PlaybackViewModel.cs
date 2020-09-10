@@ -296,6 +296,19 @@ namespace FluentMPC.ViewModels.Playback
             _updateInformationTimer.Tick += UpdateInformation;
 
             // Update info to current track
+            MPDConnectionService.ConnectionChanged += OnConnectionChanged;
+            OnConnectionChanged(null, null);
+
+            Application.Current.LeavingBackground += CurrentOnLeavingBackground;
+            NavigationService.Navigated += (s, e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(HideTrackName)));
+
+            // Start the timer if ready
+            if (!_updateInformationTimer.IsEnabled)
+                _updateInformationTimer.Start();
+        }
+
+        private void OnConnectionChanged(object sender, EventArgs e)
+        {
             if (MPDConnectionService.IsConnected)
             {
                 OnTrackChange(this, new SongChangedEventArgs { NewSongId = MPDConnectionService.CurrentStatus.SongId });
@@ -304,13 +317,6 @@ namespace FluentMPC.ViewModels.Playback
                 OnStateChange(this, null);
                 UpdateUpNextAsync();
             }
-
-            Application.Current.LeavingBackground += CurrentOnLeavingBackground;
-            NavigationService.Navigated += (s, e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(HideTrackName)));
-
-            // Start the timer if ready
-            if (!_updateInformationTimer.IsEnabled)
-                _updateInformationTimer.Start();
         }
 
         private bool _isOnMainDispatcher => _currentUiDispatcher == CoreApplication.MainView.CoreWindow.Dispatcher;

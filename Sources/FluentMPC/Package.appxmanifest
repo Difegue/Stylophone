@@ -9,15 +9,15 @@
   IgnorableNamespaces="uap mp genTemplate">
 
   <Identity
-    Name="84D96F10-F002-4BE6-AD6A-B313AF4C682B"
-    Publisher="CN=Vincent"
-    Version="1.0.0.0" />
+    Name="13459Difegue.Stylophone"
+    Publisher="CN=B2F6FFCA-07C7-479C-AC33-2C75463C7DCE"
+    Version="0.9.1.0" />
 
-  <mp:PhoneIdentity PhoneProductId="84D96F10-F002-4BE6-AD6A-B313AF4C682B" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="6aab9ef0-77d1-4922-a9da-497e36a34491" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Stylophone</DisplayName>
-    <PublisherDisplayName>TVC-16</PublisherDisplayName>
+    <PublisherDisplayName>Difegue</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

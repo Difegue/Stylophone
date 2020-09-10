@@ -51,7 +51,7 @@
 
             <StackPanel Margin="{StaticResource XSmallTopMargin}">
 
-                <Button x:Uid="Settings_RefreshDatabase" IsEnabled="{x:Bind ViewModel.IsServerValid}" Command="{x:Bind ViewModel.RescanDbCommand}"/>
+                <Button x:Uid="Settings_RefreshDatabase" IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" Command="{x:Bind ViewModel.RescanDbCommand}"/>
 
                 <TextBlock
                     x:Uid="Settings_ClearAlbumCache"

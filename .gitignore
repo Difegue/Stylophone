@@ -30,3 +30,7 @@
 /Sources/FluentMPC.Tests.MSTest/obj
 *.pfx
 /Sources/FluentMPC/bin/x64/Debug
+/Sources/FluentMPC/Package.StoreAssociation.xml
+/Sources/FluentMPC/AppPackages
+/Sources/FluentMPC/bin
+/Sources/FluentMPC/BundleArtifacts

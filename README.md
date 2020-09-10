@@ -15,6 +15,8 @@ Heavy WIP for now.
 * Picture-in-picture mode  
 * Live tile  
 * Browse library by albums, or directly by folders  
+* All data is pulled from your MPD Server only  
+* Support for both albumart and readpicture commands for maximum compatibility with your cover art library
 
 ## Screenshots
 
@@ -24,3 +26,8 @@ Heavy WIP for now.
 ![Screen4](Screenshots/Screen4.jpg)
 ![Screen5](Screenshots/Screen5.jpg)
 ![Screen6](Screenshots/Screen6.jpg)
+
+## Privacy Policy
+
+Stylophone collects no data from your computer.  
+The Windows Store version can send anonymized error reports related to crashes of the application back to me.  
