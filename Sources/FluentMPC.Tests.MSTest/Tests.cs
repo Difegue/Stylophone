@@ -1,7 +1,7 @@
 ﻿using System;
 
 using FluentMPC.ViewModels;
-
+using FluentMPC.ViewModels.Playback;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FluentMPC.Tests.MSTest
@@ -38,7 +38,7 @@ namespace FluentMPC.Tests.MSTest
         public void TestNowPlayingViewModelCreation()
         {
             // This test is trivial. Add your own tests for the logic you add to the ViewModel.
-            var vm = new NowPlayingViewModel();
+            var vm = new PlaybackViewModel();
             Assert.IsNotNull(vm);
         }
 
@@ -47,7 +47,7 @@ namespace FluentMPC.Tests.MSTest
         public void TestPlaylistsViewModelCreation()
         {
             // This test is trivial. Add your own tests for the logic you add to the ViewModel.
-            var vm = new PlaylistsViewModel();
+            var vm = new PlaylistViewModel();
             Assert.IsNotNull(vm);
         }
 
