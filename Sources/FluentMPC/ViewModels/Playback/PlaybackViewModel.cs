@@ -499,13 +499,15 @@ namespace FluentMPC.ViewModels.Playback
         private async void UpdateUpNextAsync()
         {
             var nextSongId = MPDConnectionService.CurrentStatus.NextSongId;
-            var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId), _currentUiDispatcher);
-
-            if (response != null)
+            if (nextSongId != -1)
             {
-                NextTrack = new TrackViewModel(response.First(), false, -1, _currentUiDispatcher);
-            }
+                var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId), _currentUiDispatcher);
 
+                if (response != null)
+                {
+                    NextTrack = new TrackViewModel(response.First(), false, -1, _currentUiDispatcher);
+                }
+            }
         }
 
         /// <summary>
@@ -551,7 +553,7 @@ namespace FluentMPC.ViewModels.Playback
                     // TODO no track playing
                 }
             });
-            
+
         }
 
         private async void OnStateChange(object sender, EventArgs eventArgs)

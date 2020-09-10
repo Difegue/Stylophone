@@ -26,22 +26,22 @@ namespace FluentMPC.ViewModels
             MPDConnectionService.QueueChanged += MPDConnectionService_QueueChanged;
             MPDConnectionService.ConnectionChanged += MPDConnectionService_ConnectionChanged;
 
-            Source.CollectionChanged += async (s, e) =>
-            {
-                if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
-                {
-                    // User reordered tracks, send matching command
-                    await MPDConnectionService.SafelySendCommandAsync(new MoveIdCommand(_oldId, e.NewStartingIndex));
-                    _previousAction = NotifyCollectionChangedAction.Move;
-                }
-                if (e.Action == NotifyCollectionChangedAction.Remove)
-                {
-                    _previousAction = e.Action;
-                    _oldId = e.OldItems.Count > 0 ? (e.OldItems[0] as TrackViewModel).File.Id : -1;
-                }
+            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+        }
 
-                OnPropertyChanged(nameof(IsSourceEmpty));
-            };
+        private async void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
+            {
+                // User reordered tracks, send matching command
+                await MPDConnectionService.SafelySendCommandAsync(new MoveIdCommand(_oldId, e.NewStartingIndex));
+                _previousAction = NotifyCollectionChangedAction.Move;
+            }
+            if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                _previousAction = e.Action;
+                _oldId = e.OldItems.Count > 0 ? (e.OldItems[0] as TrackViewModel).File.Id : -1;
+            }
         }
 
         private void MPDConnectionService_ConnectionChanged(object sender, EventArgs e)
@@ -62,6 +62,8 @@ namespace FluentMPC.ViewModels
 
         public async Task LoadDataAsync()
         {
+            Source.CollectionChanged -= Source_CollectionChanged;
+
             // TODO - Don't clear, update collection instead based on new data
             Source.Clear();
             var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistInfoCommand());
@@ -73,6 +75,8 @@ namespace FluentMPC.ViewModels
                 }
 
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(Source)));
+
+            Source.CollectionChanged += Source_CollectionChanged;
         }
     }
 }

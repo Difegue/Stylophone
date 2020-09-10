@@ -192,14 +192,14 @@
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
                             
                             <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}"
-                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Converter={StaticResource BoolNegationConverter}}" Width="108">
+                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
                                     <TextBlock>Play</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}"
-                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Converter={StaticResource BoolNegationConverter}}" Width="108">
+                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
                                     <TextBlock>Add to Queue</TextBlock>
@@ -207,7 +207,7 @@
                             </Button>
 
                             <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}"
-                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Converter={StaticResource BoolNegationConverter}}" Width="108">
+                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="MusicInfo" />
                                     <TextBlock>Add to Playlist</TextBlock>

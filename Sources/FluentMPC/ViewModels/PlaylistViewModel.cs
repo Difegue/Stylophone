@@ -53,8 +53,15 @@ namespace FluentMPC.ViewModels
 
         private ICommand _addToQueueCommand;
         public ICommand AddPlaylistCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
-        private async void AddToQueue() => await MPDConnectionService.SafelySendCommandAsync(new LoadCommand(Name));
+        private async void AddToQueue()
+        {
+            var res = await MPDConnectionService.SafelySendCommandAsync(new LoadCommand(Name));
 
+            if (res != null)
+            {
+                NotificationService.ShowInAppNotification("Added to queue!");
+            }
+        }
         private ICommand _playCommand;
         public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
         private async void PlayAlbum()
@@ -90,22 +97,7 @@ namespace FluentMPC.ViewModels
 
         public PlaylistViewModel()
         {
-            Source.CollectionChanged += async (s, e) =>
-            {
-                if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
-                {
-                    // User reordered tracks, send matching command
-                    await MPDConnectionService.SafelySendCommandAsync(new PlaylistMoveCommand(Name, _oldId, e.NewStartingIndex));
-                    _previousAction = NotifyCollectionChangedAction.Move;
-                }
-                if (e.Action == NotifyCollectionChangedAction.Remove)
-                {
-                    _previousAction = e.Action;
-                    _oldId = e.OldStartingIndex;
-                }
-
-                OnPropertyChanged(nameof(IsSourceEmpty));
-            };
+            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
         public string Name
@@ -175,9 +167,11 @@ namespace FluentMPC.ViewModels
 
         private BitmapImage _playlistArt3;
 
+
         public async Task LoadDataAsync(string playlistName)
         {
             Name = playlistName;
+            Source.CollectionChanged -= Source_CollectionChanged;
             Source.Clear();
 
             var findReq = await MPDConnectionService.SafelySendCommandAsync(new ListPlaylistInfoCommand(playlistName));
@@ -187,6 +181,8 @@ namespace FluentMPC.ViewModels
             {
                 Source.Add(new TrackViewModel(item));
             }
+
+            Source.CollectionChanged += Source_CollectionChanged;
 
             Artists = findReq.Count() > 0 ? findReq.
                         Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}") : "";
@@ -228,6 +224,21 @@ namespace FluentMPC.ViewModels
 
                 await DispatcherHelper.ExecuteOnUIThreadAsync(() => ArtLoaded = true);
             });
+        }
+
+        private async void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
+            {
+                // User reordered tracks, send matching command
+                await MPDConnectionService.SafelySendCommandAsync(new PlaylistMoveCommand(Name, _oldId, e.NewStartingIndex));
+                _previousAction = NotifyCollectionChangedAction.Move;
+            }
+            if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                _previousAction = e.Action;
+                _oldId = e.OldStartingIndex;
+            }
         }
     }
 }

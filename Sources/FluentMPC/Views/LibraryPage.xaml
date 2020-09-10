@@ -42,9 +42,9 @@
                         <StackPanel.ContextFlyout>
                             
                             <MenuFlyout>
-                                <MenuFlyoutItem Icon="Play" Text="Play" Command="{Binding PlayAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{Binding AddAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem Icon="Play" Text="Play" Command="{Binding PlayAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{Binding AddAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
                             </MenuFlyout> 
                         </StackPanel.ContextFlyout>
 
