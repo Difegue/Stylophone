@@ -1,6 +1,7 @@
 ﻿using FluentMPC.Helpers;
 using FluentMPC.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
+using MpcNET;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
@@ -50,7 +51,7 @@ namespace FluentMPC.ViewModels.Items
         public bool IsDetailLoading
         {
             get => _detailLoading;
-            private set
+            internal set
             {
                 DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _detailLoading, value));
             }
@@ -190,7 +191,6 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
-
         public AlbumViewModel(string albumName)
         {
             Name = albumName;
@@ -199,26 +199,22 @@ namespace FluentMPC.ViewModels.Items
             IsDetailLoading = false;
         }
 
-        public async Task LoadAlbumDataAsync(CancellationToken token = default)
+        public async Task LoadAlbumDataAsync(MpcConnection c, CancellationToken token = default)
         {
             IsDetailLoading = true;
             try
             {
-                // We use stock GetConnection here so we can pass in a cancellation token.
-                using (var c = await MPDConnectionService.GetConnectionAsync(token))
-                {
-                    var findReq = await c.InternalResource.SendAsync(new FindCommand(MpdTags.Album, Name));
-                    if (!findReq.IsResponseValid)
-                        return;
+                var findReq = await c.SendAsync(new FindCommand(MpdTags.Album, Name));
+                if (!findReq.IsResponseValid)
+                    return;
 
-                    Files.AddRange(findReq.Response.Content);
-                    Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
-                }
+                Files.AddRange(findReq.Response.Content);
+                Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
 
                 // Fire off an async request to get the album art from MPD.
                 _ = Task.Run(async () =>
                   {
-                      if (Files.Count > 0)
+                      if (Files.Count > 0 && !token.IsCancellationRequested)
                       {
                           var art = await AlbumArtHelpers.GetAlbumArtAsync(Files[0], token);
 

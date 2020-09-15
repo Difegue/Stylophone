@@ -64,7 +64,10 @@ namespace FluentMPC.ViewModels
             {
                 _ = Task.Run(async () =>
                 {
-                    await album.LoadAlbumDataAsync();
+                    using (var c = await MPDConnectionService.GetConnectionAsync())
+                    {
+                        await album.LoadAlbumDataAsync(c.InternalResource);
+                    }
                     await DispatcherHelper.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 });
             }

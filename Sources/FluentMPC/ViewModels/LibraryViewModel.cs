@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Data;
 
 namespace FluentMPC.ViewModels
 {
-    public class LazyLoadingAlbumCollection: ObservableCollection<AlbumViewModel>, IList<AlbumViewModel>, ICollection<AlbumViewModel>, IReadOnlyList<AlbumViewModel>,
+    public class LazyLoadingAlbumCollection : ObservableCollection<AlbumViewModel>, IList<AlbumViewModel>, ICollection<AlbumViewModel>, IReadOnlyList<AlbumViewModel>,
         IReadOnlyCollection<AlbumViewModel>, IEnumerable<AlbumViewModel>, INotifyCollectionChanged, INotifyPropertyChanged, IItemsRangeInfo, IDisposable
     {
         private CancellationTokenSource cts;
@@ -47,18 +47,30 @@ namespace FluentMPC.ViewModels
                     return;
 
                 // Not cancelled yet, go on
-                // Load album data for the visible range of data
                 for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
                 {
-                    if (token.IsCancellationRequested)
-                        break;
-
                     var album = this[i];
-
-                    if (album.Files.Count == 0 && !album.IsDetailLoading)
-                        _ = Task.Run(async () => await album.LoadAlbumDataAsync(token));
+                    // Set all visible albums to loading for clearer UI (even if it's a lie!)
+                    if (album.Files.Count == 0)
+                        album.IsDetailLoading = true;
                 }
 
+                // Load album data for the visible range of data; We use only one connection for loading all albums to avoid overloading the connection pool.
+                // Albumart loads still use their own connections.
+                _ = Task.Run(async () =>
+                {
+                    using (var c = await MPDConnectionService.GetConnectionAsync(token))
+                        for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
+                        {
+                            var album = this[i];
+
+                            if (album.Files.Count == 0 && !token.IsCancellationRequested)
+                                await album.LoadAlbumDataAsync(c.InternalResource, token);
+                            else if (token.IsCancellationRequested)
+                                album.IsDetailLoading = false;
+                        }
+
+                });
             });
         }
 
