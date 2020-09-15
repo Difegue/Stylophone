@@ -110,8 +110,8 @@ namespace FluentMPC.Services
 
         public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync(CancellationToken token = default)
         {
-            // Don't allocate extra connections for album art, wait for one.
-            while (ConnectionPool.ObjectsInPoolCount == 0)
+            // Don't allocate extra connections for album art, wait for the pool to have enough connections available.
+            while (ConnectionPool.ObjectsInPoolCount < ConnectionPoolSize / 2)
             {
                 if (token.IsCancellationRequested)
                     return null;
