@@ -422,7 +422,7 @@ namespace FluentMPC.ViewModels.Playback
             // Set the volume
             shuffleTasks.Add(Task.Run(async () =>
             {
-                await MPDConnectionService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled), _currentUiDispatcher);
+                await MPDConnectionService.SafelySendCommandAsync(new RandomCommand(IsShuffleEnabled), _currentUiDispatcher);
 
                 await DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, UpdateUpNextAsync);
                 Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
