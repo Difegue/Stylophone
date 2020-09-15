@@ -214,7 +214,7 @@
 Hope you enjoy using the application!
 
 
-"David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)"</value>
+&lt;Italic&gt;David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)&lt;/Italic&gt;</value>
     <comment>First use prompt message body</comment>
   </data>
   <data name="FirstRunDialog.Title" xml:space="preserve">

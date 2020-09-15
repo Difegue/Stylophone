@@ -275,7 +275,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Style="{ThemeResource BaseTextBlockStyle}"
-                    Margin="0,2,0,0"
+                    Margin="{StaticResource XXSmallTopMargin}"
                     MinWidth="40"
                     Opacity="0.8"
                     Text="{x:Bind PlaybackViewModel.TimeListened, Mode=OneWay}" />
@@ -310,7 +310,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Style="{ThemeResource BaseTextBlockStyle}"
-                    Margin="0,2,0,0"
+                    Margin="{StaticResource XXSmallTopMargin}"
                     MinWidth="40"
                     Opacity="0.8"
                     Text="{x:Bind PlaybackViewModel.TimeRemaining, Mode=OneWay}" />
@@ -320,7 +320,7 @@
                 Grid.Column="1"
                 Width="Auto"
                 Height="5"
-                Margin="20,0,20,0"
+                Margin="{StaticResource MediumLeftRightMargin}"
                 HorizontalAlignment="Stretch" />
 
             <!--  Misc Buttons  -->
@@ -328,17 +328,17 @@
                 x:Name="MiscButtons"
                 Grid.Column="2"
                 Grid.RowSpan="1"
-                Margin="0,0,12,0"
+                Margin="{StaticResource SmallRightMargin}"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
 
                 <!--  Sound  -->
-                <StackPanel Margin="0,0,0,0"
+                <StackPanel 
                 x:Name="SoundPanel"
                 Visibility="Collapsed"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
-                    <Button x:Name="MuteButton" Width="40" Height="40" Margin="0,0,15,0"
+                    <Button x:Name="MuteButton" Width="40" Height="40" Margin="{StaticResource SmallRightMargin}"
                             Click="{x:Bind PlaybackViewModel.ToggleMute}" Style="{StaticResource CircleButtonStyle}">
                         <Button.Content>
                             <TextBlock
@@ -348,7 +348,7 @@
                             TextAlignment="Center" />
                         </Button.Content>
                     </Button>
-                    <Slider Width="105" Padding="0" Margin="0,0,15,0" VerticalAlignment="Center" Maximum="100" Minimum="0" Orientation="Horizontal"
+                    <Slider Width="105" Padding="0" Margin="{StaticResource SmallRightMargin}" VerticalAlignment="Center" Maximum="100" Minimum="0" Orientation="Horizontal"
                             Style="{StaticResource CircleSlider}" Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
                             BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
                             PointerWheelChanged="Volume_PointerWheelChanged" Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
@@ -359,7 +359,7 @@
                     x:Name="SoundFlyout"
                     Width="40"
                     Height="40"
-                    Margin="5,0"
+                    Margin="{StaticResource XSmallLeftMargin}"
                     Style="{StaticResource CircleButtonStyle}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Change Volume" />
@@ -380,7 +380,7 @@
                                 <Button
                                     Width="40"
                                     Height="40"
-                                    Margin="0,0,15,0"
+                                    Margin="{StaticResource SmallRightMargin}"
                                     Click="{x:Bind PlaybackViewModel.ToggleMute}"
                                     Style="{StaticResource CircleButtonStyle}">
                                     <Button.Content>
@@ -394,7 +394,7 @@
                                 <Slider
                                     Width="105"
                                     Padding="0"
-                                    Margin="0,4,0,0"
+                                    Margin="{StaticResource XXSmallTopMargin}"
                                     VerticalAlignment="Center"
                                     Maximum="100"
                                     Minimum="0"
@@ -404,7 +404,7 @@
                             BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
                                     Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                                 <TextBlock
-                                    Margin="15,-2,0,0"
+                                    Margin="14,-2,0,0"
                                     VerticalAlignment="Center"
                                     FontWeight="SemiBold"
                                     Text="{x:Bind PlaybackViewModel.MediaVolume, Mode=OneWay}" />
@@ -417,7 +417,7 @@
                 <Button
                     Width="40"
                     Height="40"
-                    Margin="5,0"
+                    Margin="{StaticResource XSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.SwitchToCompactView}"
                     Style="{StaticResource CircleButtonStyle}">
                     <ToolTipService.ToolTip>
@@ -437,7 +437,7 @@
                 x:Name="MoreButton"
                 Width="40"
                 Height="40"
-                Margin="5,0"
+                Margin="{StaticResource XSmallLeftMargin}"
                 Style="{StaticResource CircleButtonStyle}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="More Actions" />
