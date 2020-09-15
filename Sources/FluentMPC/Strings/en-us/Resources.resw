@@ -213,8 +213,7 @@
     <value>To get started, please visit the Settings page to key in your MPD server's URL and port.
 Hope you enjoy using the application!
 
-
-&lt;Italic&gt;David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)&lt;/Italic&gt;</value>
+</value>
     <comment>First use prompt message body</comment>
   </data>
   <data name="FirstRunDialog.Title" xml:space="preserve">
@@ -292,5 +291,8 @@ If you want to clear the album art cache, click this button.</value>
   </data>
   <data name="LibrarySearchFilter.PlaceholderText" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="FirstRun_ItalicBody.Text" xml:space="preserve">
+    <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
   </data>
 </root>

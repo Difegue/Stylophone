@@ -25,6 +25,7 @@
     <ScrollViewer>
         <StackPanel>
             <TextBlock x:Uid="FirstRun_Body" TextWrapping="WrapWholeWords" />
+            <TextBlock x:Uid="FirstRun_ItalicBody" FontStyle="Italic" TextWrapping="WrapWholeWords" />
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>
