@@ -84,6 +84,8 @@ namespace FluentMPC.Services
                         var c = await GetConnectionInternalAsync(t1);
                         return new PooledObjectWrapper<MpcConnection>(c)
                         {
+                            // Check our internal global IsConnected status
+                            OnValidateObject = (context) => IsConnected,
                             OnReleaseResources = (c) => c?.DisconnectAsync()
                         };
                     }
@@ -150,10 +152,6 @@ namespace FluentMPC.Services
         private static async Task<MpcConnection> GetConnectionInternalAsync(CancellationToken token = default)
         {
             var c = new MpcConnection(_mpdEndpoint);
-
-            if (token.IsCancellationRequested)
-                return c;
-
             await c.ConnectAsync(token);
             return c;
         }
@@ -221,8 +219,11 @@ namespace FluentMPC.Services
                 var oldstatus = CurrentStatus;
                 CurrentStatus = response.Response.Content;
 
-                if (oldstatus == BOGUS_STATUS) // Clean up the default null status if the idle command hasn't done it for us yet
+                if (oldstatus == BOGUS_STATUS) // Clean up the default null status if the idle command hasn't done it for us yet 
+                {
                     StatusChanged?.Invoke(Application.Current, new EventArgs());
+                    SongChanged?.Invoke(Application.Current, new SongChangedEventArgs { NewSongId = CurrentStatus.SongId });
+                }
             }
             else
                 IsConnected = false; //TODO handle reconnection attempts?

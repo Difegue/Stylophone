@@ -290,4 +290,7 @@ If you want to clear the album art cache, click this button.</value>
   <data name="EmptyQueueTitle.Text" xml:space="preserve">
     <value>All is quiet now.</value>
   </data>
+  <data name="LibrarySearchFilter.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>

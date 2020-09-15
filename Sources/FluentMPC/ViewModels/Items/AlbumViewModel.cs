@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.System.Threading;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -201,13 +202,14 @@ namespace FluentMPC.ViewModels.Items
         public async Task LoadAlbumDataAsync(CancellationToken token = default)
         {
             IsDetailLoading = true;
-
             try
             {
+                // We use stock GetConnection here so we can pass in a cancellation token.
                 using (var c = await MPDConnectionService.GetConnectionAsync(token))
                 {
                     var findReq = await c.InternalResource.SendAsync(new FindCommand(MpdTags.Album, Name));
-                    if (!findReq.IsResponseValid) return;
+                    if (!findReq.IsResponseValid)
+                        return;
 
                     Files.AddRange(findReq.Response.Content);
                     Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");

@@ -29,5 +29,16 @@ namespace FluentMPC.Views
         {
             ViewModel.ItemClickCommand.Execute(e.ClickedItem);
         }
+
+        private void OnFilterChanged(object sender, TextChangedEventArgs e)
+        {
+            var searchTerms = (sender as TextBox).Text;
+
+            if (searchTerms.Length < 3)
+                searchTerms = "";
+
+            ViewModel.FilterLibrary(searchTerms);
+        }
+
     }
 }

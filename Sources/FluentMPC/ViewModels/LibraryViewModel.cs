@@ -14,9 +14,9 @@ using FluentMPC.ViewModels.Items;
 using FluentMPC.Views;
 
 using Microsoft.Toolkit.Uwp.UI.Animations;
-using Microsoft.Toolkit.Uwp.UI.Converters;
 using MpcNET.Commands.Database;
 using MpcNET.Tags;
+using Sundew.Base.Collections;
 using Windows.UI.Xaml.Data;
 
 namespace FluentMPC.ViewModels
@@ -50,11 +50,15 @@ namespace FluentMPC.ViewModels
                 // Load album data for the visible range of data
                 for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
                 {
+                    if (token.IsCancellationRequested)
+                        break;
+
                     var album = this[i];
 
                     if (album.Files.Count == 0 && !album.IsDetailLoading)
                         _ = Task.Run(async () => await album.LoadAlbumDataAsync(token));
                 }
+
             });
         }
 
@@ -69,12 +73,15 @@ namespace FluentMPC.ViewModels
 
         public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<AlbumViewModel>(OnItemClick));
 
-        public LazyLoadingAlbumCollection Source { get; } = new LazyLoadingAlbumCollection();
-        public bool IsSourceEmpty => Source.Count == 0;
+        public LazyLoadingAlbumCollection FilteredSource { get; } = new LazyLoadingAlbumCollection();
+
+        public List<AlbumViewModel> Source { get; } = new List<AlbumViewModel>();
+
+        public bool IsSourceEmpty => FilteredSource.Count == 0;
 
         public LibraryViewModel()
         {
-            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            FilteredSource.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
         public async Task LoadDataAsync()
@@ -84,6 +91,22 @@ namespace FluentMPC.ViewModels
 
             if (response != null)
                 GroupAlbumsByName(response);
+
+            FilteredSource.AddRange(Source);
+        }
+
+        internal void FilterLibrary(string text)
+        {
+            if (text == "" && FilteredSource.Count < Source.Count)
+            {
+                FilteredSource.Clear();
+                FilteredSource.AddRange(Source);
+                return;
+            }
+
+            var filtered = Source.Where(album => album.Name.Contains(text, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            RemoveNonMatching(filtered);
+            AddBack(filtered);
         }
 
         public void GroupAlbumsByName(List<string> albums)
@@ -118,6 +141,31 @@ namespace FluentMPC.ViewModels
             {
                 NavigationService.Frame.SetListDataItemForNextConnectedAnimation(clickedItem);
                 NavigationService.Navigate<LibraryDetailPage>(clickedItem);
+            }
+        }
+
+        /* These functions go through the current list being displayed (contactsFiltered), and remove
+        any items not in the filtered collection (any items that don't belong), or add back any items
+        from the original allContacts list that are now supposed to be displayed (i.e. when backspace is hit). */
+
+        private void RemoveNonMatching(IEnumerable<AlbumViewModel> filteredData)
+        {
+            for (int i = FilteredSource.Count - 1; i >= 0; i--)
+            {
+                var item = FilteredSource[i];
+                // If album is not in the filtered argument list, remove it from the ListView's source.
+                if (!filteredData.Contains(item))
+                    FilteredSource.Remove(item);
+            }
+        }
+
+        private void AddBack(IEnumerable<AlbumViewModel> filteredData)
+        {
+            foreach (var item in filteredData)
+            {
+                // If item in filtered list is not currently in ListView's source collection, add it back in
+                if (!FilteredSource.Contains(item))
+                    FilteredSource.Add(item);
             }
         }
     }

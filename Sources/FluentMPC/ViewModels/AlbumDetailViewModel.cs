@@ -45,8 +45,6 @@ namespace FluentMPC.ViewModels
         {
             Item = album;
 
-            //TODO recheck in case loading failed or something
-
             if (album.AlbumArtLoaded)
             {
                 // Already loaded, create tracks now

@@ -20,6 +20,9 @@
     </Page.Resources>
     <Grid x:Name="ContentArea">
 
+        <TextBox x:Uid="LibrarySearchFilter" Width="200" Height="30" Margin="24,-42" HorizontalAlignment="Right" VerticalAlignment="Top"
+                 TextChanged="OnFilterChanged" />
+
         <GridView
             Padding="{StaticResource MediumLeftRightMargin}"
             animations:Connected.ListItemElementName="itemThumbnail"
@@ -27,7 +30,7 @@
             IsItemClickEnabled="True"
             ItemClick="AlbumClicked"
             extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-            ItemsSource="{x:Bind ViewModel.Source,Mode=OneWay}"
+            ItemsSource="{x:Bind ViewModel.FilteredSource,Mode=OneWay}"
             SelectionMode="None">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealBackgroundShowsAboveContentStyle}">
