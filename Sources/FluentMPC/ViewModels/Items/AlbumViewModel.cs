@@ -212,6 +212,7 @@ namespace FluentMPC.ViewModels.Items
                 Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
 
                 // Fire off an async request to get the album art from MPD.
+                // TODO: Move this to a singleton worker with only one connection.
                 _ = Task.Run(async () =>
                   {
                       if (Files.Count > 0 && !token.IsCancellationRequested)

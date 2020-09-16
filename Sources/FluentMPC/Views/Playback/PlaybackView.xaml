@@ -72,8 +72,9 @@
 
             <StackPanel x:Name="AlbumInfo" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0" >
                 <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
-                       Style="{ThemeResource SubheaderTextBlockStyle}"
-                       MaxLines="3"
+                       Style="{ThemeResource TitleTextBlockStyle}"
+                       FontSize="28"
+                       MaxLines="5"
                        TextWrapping="Wrap"
                        TextTrimming="CharacterEllipsis"
                        Margin="25,0,25,5"

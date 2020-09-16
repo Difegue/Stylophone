@@ -5,6 +5,7 @@ using FluentMPC.Views;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
+using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Status;
 using System;
@@ -366,6 +367,20 @@ namespace FluentMPC.ViewModels.Playback
         #endregion Timer Methods
 
         #region Track Control Methods
+
+        /// <summary>
+        /// Write the current queue to a playlist.
+        /// </summary>
+        public async void SaveQueue()
+        {
+            var playlistName = await DialogService.ShowAddToPlaylistDialog(false);
+            if (playlistName == null) return;
+
+            var req = await MPDConnectionService.SafelySendCommandAsync(new SaveCommand(playlistName), _currentUiDispatcher);
+
+            if (req != null)
+                NotificationService.ShowInAppNotification($"Added to Playlist {playlistName}!"); 
+        }
 
         /// <summary>
         /// Clear the MPD queue.

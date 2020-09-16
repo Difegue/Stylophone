@@ -472,6 +472,10 @@
                                 </MenuFlyoutItem.Icon>
                             </MenuFlyoutItem>
 
+                            <MenuFlyoutSeparator x:Name="SmallViewSeparator" Opacity="0.4" />
+
+                            <MenuFlyoutItem Text="Add Queue to Playlist" Icon="Save" Click="{x:Bind PlaybackViewModel.SaveQueue}"/>
+
                             <MenuFlyoutItem Text="Clear Queue" Icon="Delete" Click="{x:Bind PlaybackViewModel.ClearQueue}"/>
 
                             <MenuFlyoutSeparator Opacity="0.4" />
@@ -514,6 +518,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed"/>
                         <Setter Target="ShuffleButton.Visibility" Value="Visible" />
                         <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />
@@ -532,6 +537,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed"/>
                         <Setter Target="ShuffleButton.Visibility" Value="Visible" />
                         <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />

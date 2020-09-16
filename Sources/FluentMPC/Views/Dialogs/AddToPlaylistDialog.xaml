@@ -16,9 +16,9 @@
     </ContentDialog.Resources>
     <ScrollViewer>
         <StackPanel>
-            <ComboBox x:Uid="AddToPlaylistComboBox" ItemsSource="{x:Bind Playlists}" DisplayMemberPath="Name" SelectedValuePath="Name"
+            <ComboBox x:Uid="AddToPlaylistComboBox" ItemsSource="{x:Bind Playlists}" DisplayMemberPath="Name" SelectedValuePath="Name" Visibility="{x:Bind AllowExistingPlaylists, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                       SelectionChanged="Update_Selected" Width="270" IsEnabled="{x:Bind AddNewPlaylist, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-            <CheckBox x:Uid="NewPlaylistCheckBox" IsChecked="{x:Bind AddNewPlaylist, Mode=TwoWay}" Click="Update_Checkbox"/>
+            <CheckBox x:Uid="NewPlaylistCheckBox" IsChecked="{x:Bind AddNewPlaylist, Mode=TwoWay}" Click="Update_Checkbox" Visibility="{x:Bind AllowExistingPlaylists, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <TextBox x:Uid="NewPlaylistTextBox" Text="{x:Bind PlaylistName, Mode=TwoWay}" Visibility="{x:Bind AddNewPlaylist, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
         </StackPanel>
     </ScrollViewer>

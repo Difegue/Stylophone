@@ -14,8 +14,14 @@ namespace FluentMPC.Views
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AddToPlaylistDialog()
+        public AddToPlaylistDialog(bool allowExistingPlaylists)
         {
+            AllowExistingPlaylists = allowExistingPlaylists;
+
+            if (!allowExistingPlaylists)
+            {
+                AddNewPlaylist = true;
+            }
             RequestedTheme = (Window.Current.Content as FrameworkElement).RequestedTheme;
             Playlists = new ObservableCollection<MpdPlaylist>(MPDConnectionService.Playlists);
             InitializeComponent();
@@ -26,6 +32,7 @@ namespace FluentMPC.Views
         public string PlaylistName { get; internal set; }
 
         public bool AddNewPlaylist { get; internal set; }
+        public bool AllowExistingPlaylists { get; internal set; }
 
         private void Update_Selected(object sender, SelectionChangedEventArgs e)
         {

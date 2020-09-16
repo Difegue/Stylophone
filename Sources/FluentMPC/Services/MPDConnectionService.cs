@@ -24,7 +24,7 @@ namespace FluentMPC.Services
 
     public static class MPDConnectionService
     {
-        private const int ConnectionPoolSize = 10;
+        private const int ConnectionPoolSize = 5;
         private static MpdStatus BOGUS_STATUS = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
 
         public static MpdStatus CurrentStatus { get; private set; } = BOGUS_STATUS;
@@ -111,7 +111,7 @@ namespace FluentMPC.Services
         public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync(CancellationToken token = default)
         {
             // Don't allocate extra connections for album art, wait for the pool to have enough connections available.
-            while (ConnectionPool.ObjectsInPoolCount < ConnectionPoolSize / 2)
+            while (ConnectionPool.ObjectsInPoolCount < 1)
             {
                 if (token.IsCancellationRequested)
                     return null;
@@ -210,6 +210,8 @@ namespace FluentMPC.Services
 
         private async static Task UpdateStatusAsync(MpcConnection connection)
         {
+            System.Diagnostics.Debug.WriteLine($"{ConnectionPool.ObjectsInPoolCount} connections free in pool");
+
             if (_statusConnection == null) return;
          
             var response = await connection.SendAsync(new StatusCommand());

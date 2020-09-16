@@ -14,9 +14,14 @@ namespace FluentMPC.Services
     public static class DialogService
     {
 
-        public static async Task<string> ShowAddToPlaylistDialog()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="allowExistingPlaylists">If set to FALSE, the dialog will only allow you to create a new playlist.</param>
+        /// <returns></returns>
+        public static async Task<string> ShowAddToPlaylistDialog(bool allowExistingPlaylists = true)
         {
-            var dialog = new AddToPlaylistDialog();
+            var dialog = new AddToPlaylistDialog(allowExistingPlaylists);
             var result = ContentDialogResult.None;
 
             await DispatcherHelper.ExecuteOnUIThreadAsync (async () => result = await dialog.ShowAsync());
