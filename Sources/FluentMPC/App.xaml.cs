@@ -1,8 +1,9 @@
 ﻿using System;
-
+using FluentMPC.Helpers;
 using FluentMPC.Services;
 
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -31,6 +32,14 @@ namespace FluentMPC
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             Windows.ApplicationModel.Core.CoreApplication.EnablePrelaunch(true);
 
+            // Compact sizing
+            var isCompactEnabled = await ApplicationData.Current.LocalSettings.ReadAsync<bool>("IsCompactSizing");
+            if (isCompactEnabled)
+            {
+                Resources.MergedDictionaries.Add(
+                   new ResourceDictionary { Source = new Uri(@"ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml", UriKind.Absolute) });
+            }
+               
             var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
             viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;

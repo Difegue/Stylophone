@@ -12,6 +12,7 @@
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter x:Key="ReverseBoolToVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed" />
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
     </Page.Resources>
 
     <ScrollViewer Margin="{StaticResource MediumLeftRightMargin}">
@@ -97,6 +98,27 @@
                         </RadioButton.CommandParameter>
                     </RadioButton>
                 </StackPanel>
+
+                <TextBlock x:Uid="Settings_Sizing" Margin="{StaticResource XSmallTopMargin}" />
+
+                <TextBlock x:Uid="Settings_Sizing_Info" Style="{StaticResource CaptionTextBlockStyle}" />
+                <StackPanel Margin="{StaticResource XSmallTopMargin}">
+                    <RadioButton
+                        x:Uid="Settings_Sizing_Normal"
+                        CommandParameter="False"
+                        Command="{x:Bind ViewModel.SwitchSizingCommand}"
+                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}"
+                        FontSize="15"
+                        GroupName="AppSizing"/>
+                    <RadioButton
+                        x:Uid="Settings_Sizing_Compact"
+                        CommandParameter="True"
+                        Command="{x:Bind ViewModel.SwitchSizingCommand}"
+                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Mode=OneWay}"
+                        FontSize="15"
+                        GroupName="AppSizing"/>
+                </StackPanel>
+                
             </StackPanel>
 
           

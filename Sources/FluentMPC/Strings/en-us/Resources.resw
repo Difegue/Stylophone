@@ -295,4 +295,16 @@ If you want to clear the album art cache, click this button.</value>
   <data name="FirstRun_ItalicBody.Text" xml:space="preserve">
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
   </data>
+  <data name="Settings_Sizing.Text" xml:space="preserve">
+    <value>Choose UI Density</value>
+  </data>
+  <data name="Settings_Sizing_Compact.Content" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="Settings_Sizing_Info.Text" xml:space="preserve">
+    <value>This setting will apply after restarting the app.</value>
+  </data>
+  <data name="Settings_Sizing_Normal.Content" xml:space="preserve">
+    <value>Normal</value>
+  </data>
 </root>

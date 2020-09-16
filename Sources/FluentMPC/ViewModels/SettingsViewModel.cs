@@ -83,6 +83,26 @@ namespace FluentMPC.ViewModels
             }
         }
 
+        private bool _compactEnabled;
+
+        public bool IsCompactSizing
+        {
+            get { return _compactEnabled; }
+
+            set
+            {
+                if (value != _compactEnabled)
+                {
+                    Task.Run(async () =>
+                    {
+                        await ApplicationData.Current.LocalSettings.SaveAsync(nameof(IsCompactSizing), value);
+
+                    });
+                }
+                Set(ref _compactEnabled, value);
+            }
+        }
+
         private bool _isCheckingServer;
 
         public bool IsCheckingServer
@@ -114,6 +134,28 @@ namespace FluentMPC.ViewModels
                 }
 
                 return _switchThemeCommand;
+            }
+        }
+
+        private ICommand _switchSizingCommand;
+
+        public ICommand SwitchSizingCommand
+        {
+            get
+            {
+                if (_switchSizingCommand == null)
+                {
+                    _switchSizingCommand = new RelayCommand<string>(
+                         (param) =>
+                        {
+                            if (_hasInstanceBeenInitialized)
+                            {
+                                IsCompactSizing = bool.Parse(param);
+                            }
+                        });
+                }
+
+                return _switchSizingCommand;
             }
         }
 
@@ -199,6 +241,10 @@ namespace FluentMPC.ViewModels
                 MPDConnectionService.ConnectionChanged += async (s, e) => await UpdateServerVersionAsync();
 
                 // Initialize values directly to avoid calling CheckServerAddressAsync twice
+
+                _compactEnabled =
+                    await ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsCompactSizing));
+
                 _serverHost =
                     await ApplicationData.Current.LocalSettings.ReadAsync<string>(nameof(ServerHost));
 
