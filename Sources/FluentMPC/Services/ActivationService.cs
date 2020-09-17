@@ -69,7 +69,7 @@ namespace FluentMPC.Services
             await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
 
             await Singleton<SettingsViewModel>.Instance.EnsureInstanceInitializedAsync(); // This also initializes MPDConnectionService
-
+            AlbumArtService.Initialize();
         }
 
         private async Task HandleActivationAsync(object activationArgs)

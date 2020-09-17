@@ -108,19 +108,6 @@ namespace FluentMPC.Services
             return await ConnectionPool.GetObjectAsync(token);
         }
 
-        public static async Task<PooledObjectWrapper<MpcConnection>> GetAlbumArtConnectionAsync(CancellationToken token = default)
-        {
-            // Don't allocate extra connections for album art, wait for the pool to have enough connections available.
-            while (ConnectionPool.ObjectsInPoolCount < 1)
-            {
-                if (token.IsCancellationRequested)
-                    return null;
-                Thread.Sleep(500);
-            }
-
-            return await ConnectionPool.GetObjectAsync(token);
-        }
-
         /// <summary>
         /// Send a command to the MPD server in an abstracted way. Shows notifications on screen if anything goes south.
         /// </summary>

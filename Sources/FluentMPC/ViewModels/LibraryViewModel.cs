@@ -65,7 +65,7 @@ namespace FluentMPC.ViewModels
                             var album = this[i];
 
                             if (album.Files.Count == 0 && !token.IsCancellationRequested)
-                                await album.LoadAlbumDataAsync(c.InternalResource, token);
+                                await album.LoadAlbumDataAsync(c.InternalResource);
                             else if (token.IsCancellationRequested)
                                 album.IsDetailLoading = false;
                         }

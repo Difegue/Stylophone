@@ -138,19 +138,19 @@ namespace FluentMPC.ViewModels.Items
                 {
                     // For the now playing bar, the album art is rendered at 70px wide.
                     // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
-                    var art = await AlbumArtHelpers.GetAlbumArtAsync(File, default, _currentUiDispatcher);
-
-                    // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
-                    if (art != null && albumArtWidth != -1)
-                    {
-                        var color = await AlbumArtHelpers.GetDominantColor(art, _currentUiDispatcher);
-                        DominantColor = color.ToWindowsColor();
-                        IsLight = !(color.IsDark);
-                    }
+                    var art = await AlbumArtService.GetAlbumArtAsync(File, true, albumArtWidth, _currentUiDispatcher);
 
                     if (art != null)
-                        AlbumArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(art, albumArtWidth, _currentUiDispatcher);
+                    {
+                        // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
+                        if (albumArtWidth != -1)
+                        {
+                            DominantColor = art.DominantColor.ToWindowsColor();
+                            IsLight = !(art.DominantColor.IsDark);
+                        }
 
+                        AlbumArt = art.ArtBitmap;
+                    }
                 });
         }
 

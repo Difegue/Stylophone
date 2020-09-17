@@ -201,24 +201,21 @@ namespace FluentMPC.ViewModels
 
                 if (distinctAlbums.Count > 1)
                 {
-                    var albumart = await AlbumArtHelpers.GetAlbumArtAsync(distinctAlbums[0].File);
-                    if (albumart != null)
-                        PlaylistArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(albumart, 150);
+                    var art = await AlbumArtService.GetAlbumArtAsync(distinctAlbums[0].File, false, 150);
+                    PlaylistArt = art != null ? art.ArtBitmap : PlaylistArt;
                 }
 
                 if (distinctAlbums.Count > 2)
                 {
-                    var albumart = await AlbumArtHelpers.GetAlbumArtAsync(distinctAlbums[1].File);
-                    if (albumart != null)
-                        PlaylistArt2 = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(albumart, 150);
+                    var art = await AlbumArtService.GetAlbumArtAsync(distinctAlbums[1].File, false, 150);
+                    PlaylistArt2 = art != null ? art.ArtBitmap : PlaylistArt2;
                 }
                 else PlaylistArt2 = PlaylistArt;
 
                 if (distinctAlbums.Count > 3)
                 {
-                    var albumart = await AlbumArtHelpers.GetAlbumArtAsync(distinctAlbums[2].File);
-                    if (albumart != null)
-                        PlaylistArt3 = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(albumart, 150);
+                    var art = await AlbumArtService.GetAlbumArtAsync(distinctAlbums[2].File, false, 150);
+                    PlaylistArt3 = art != null ? art.ArtBitmap : PlaylistArt3;
                 }
                 else PlaylistArt3 = PlaylistArt2;
 

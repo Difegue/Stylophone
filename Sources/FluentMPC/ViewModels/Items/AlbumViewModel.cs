@@ -76,6 +76,18 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
+        internal void SetAlbumArt(AlbumArt art)
+        {
+            if (art != null)
+            {
+                AlbumArt = art.ArtBitmap;
+                IsLight = !art.DominantColor.IsDark;
+                DominantColor = art.DominantColor.ToWindowsColor();
+            }
+
+           AlbumArtLoaded = true;
+        }
+
         private BitmapImage _albumArt;
 
         public Color DominantColor
@@ -199,7 +211,7 @@ namespace FluentMPC.ViewModels.Items
             IsDetailLoading = false;
         }
 
-        public async Task LoadAlbumDataAsync(MpcConnection c, CancellationToken token = default)
+        public async Task LoadAlbumDataAsync(MpcConnection c)
         {
             IsDetailLoading = true;
             try
@@ -211,26 +223,17 @@ namespace FluentMPC.ViewModels.Items
                 Files.AddRange(findReq.Response.Content);
                 Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
 
-                // Fire off an async request to get the album art from MPD.
-                // TODO: Move this to a singleton worker with only one connection.
-                _ = Task.Run(async () =>
-                  {
-                      if (Files.Count > 0 && !token.IsCancellationRequested)
-                      {
-                          var art = await AlbumArtHelpers.GetAlbumArtAsync(Files[0], token);
-
-                          if (art != null)
-                          {
-                              AlbumArt = await AlbumArtHelpers.WriteableBitmapToBitmapImageAsync(art, 180);
-
-                              var color = await AlbumArtHelpers.GetDominantColor(art);
-                              IsLight = !color.IsDark;
-                              DominantColor = color.ToWindowsColor();
-                          }
-
-                          AlbumArtLoaded = true;
-                      }
-                  });
+                // If we've already generated album art, don't use the queue and directly grab it
+                if (await AlbumArtService.IsAlbumArtCachedAsync(Files[0]))
+                {
+                    var art = await AlbumArtService.GetAlbumArtAsync(Files[0], true, 180);
+                    SetAlbumArt(art);
+                }
+                else
+                {
+                    // Queue this VM in the AlbumArtService so its album art is eventually recovered from the server
+                    AlbumArtService.QueueAlbumArt(this);
+                }
             }
             finally
             {

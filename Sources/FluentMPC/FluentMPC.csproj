@@ -173,7 +173,7 @@
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
     <Compile Include="Behaviors\TreeViewCollapseBehavior.cs" />
     <Compile Include="Converters\DoubleTopThicknessConverter.cs" />
-    <Compile Include="Helpers\AlbumArtHelpers.cs" />
+    <Compile Include="Services\AlbumArtService.cs" />
     <Compile Include="Helpers\AlternatingRowListView.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
     <Compile Include="Converters\BoolToBrushConverter.cs" />
