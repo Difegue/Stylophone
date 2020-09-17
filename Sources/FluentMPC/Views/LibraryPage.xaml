@@ -65,6 +65,9 @@
                                 <controls:ImageEx Style="{StaticResource NoAnimationImageEx}" 
 	                                            PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
 	                                            Source="{x:Bind AlbumArt, Mode=OneWay}"  Stretch="UniformToFill" />
+                                <!-- Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back. -->
+                                <winui:ProgressBar Width="160" VerticalAlignment="Bottom" IsIndeterminate="True" Margin="{StaticResource SmallBottomMargin}"
+                                                   Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
                             </Grid>
                         </controls:DropShadowPanel>
 
