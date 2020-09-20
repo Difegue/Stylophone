@@ -7,6 +7,7 @@ using MpcNET.Commands.Database;
 using MpcNET.Types;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -49,21 +50,29 @@ namespace FluentMPC.Services
                         break;
 
                     if (_albumArtQueue.Count == 0)
+                    {
+                        Thread.Sleep(600);
                         continue;
+                    }
 
                     var vm = _albumArtQueue.Pop();
 
-                    if (vm.AlbumArtLoaded)
-                        continue;
-
-                    if (vm.Files.Count > 0)
+                    try
                     {
-                        var art = await GetAlbumArtAsync(vm.Files[0], true, 180);
-                        vm.SetAlbumArt(art);
-                    }
-                    Thread.Sleep(100);
-                }
+                        if (vm.AlbumArtLoaded)
+                            continue;
 
+                        if (vm.Files.Count > 0)
+                        {
+                            var art = await GetAlbumArtAsync(vm.Files[0], true, 180);
+                            vm.SetAlbumArt(art);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Exception while processing albumart queue: " + e);
+                    }
+                }
             });
         }
 
@@ -73,7 +82,7 @@ namespace FluentMPC.Services
         /// <param name="f">MpdFile to check for art</param>
         /// <returns>True if the art is cached, false otherwise.</returns>
         public static async Task<bool> IsAlbumArtCachedAsync(IMpdFile f)
-        {   
+        {
             StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
             return (await pictureFolder.FileExistsAsync(GetFileIdentifier(f)));
         }
@@ -94,7 +103,7 @@ namespace FluentMPC.Services
         /// <param name="albumArtWidth">Width of the final BitmapImage</param>
         /// <param name="dispatcher">Dispatcher to use for the UI-bound options. Defaults to MainWindow.CoreWindow.Dispatcher.</param>
         /// <returns>An AlbumArt object containing bitmap and color. Returns null if there was no albumart on the MPD server.</returns>
-        public async static Task<AlbumArt> GetAlbumArtAsync(IMpdFile f, bool calculateDominantColor, int albumArtWidth, CoreDispatcher dispatcher = null )
+        public async static Task<AlbumArt> GetAlbumArtAsync(IMpdFile f, bool calculateDominantColor, int albumArtWidth, CoreDispatcher dispatcher = null)
         {
             if (dispatcher == null)
                 dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
@@ -147,8 +156,8 @@ namespace FluentMPC.Services
                     if (c == null) // We got cancelled
                         return null;
 
-                    int totalBinarySize = 9999;
-                    int currentSize = 0;
+                    long totalBinarySize = 9999;
+                    long currentSize = 0;
 
                     do
                     {
@@ -182,8 +191,9 @@ namespace FluentMPC.Services
                         return null;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine("Exception caught while getting albumart: " + e);
                 return null;
             }
 

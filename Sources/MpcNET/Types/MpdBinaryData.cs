@@ -15,7 +15,7 @@ namespace MpcNET.Types
         /// <param name="size">The total size of the binary data requested</param>
         /// <param name="binary">The size of the data contained in this response</param>
         /// <param name="data">The data itself.</param>
-        public MpdBinaryData(int size, int binary, byte[] data)
+        public MpdBinaryData(long size, long binary, byte[] data)
         {
             this.Size = size;
             this.Binary = binary;
@@ -25,11 +25,11 @@ namespace MpcNET.Types
         /// <summary>
         /// Gets the total size of the binary data requeste 
         /// </summary>
-        public int Size { get; }
+        public long Size { get; }
         /// <summary>
         /// Gets the size of the data contained in this response
         /// </summary>
-        public int Binary { get; }
+        public long Binary { get; }
         /// <summary>
         /// Gets the data contained in this response
         /// </summary>

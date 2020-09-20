@@ -10,14 +10,14 @@ namespace MpcNET.Commands.Database
     public class AlbumArtCommand : IMpcCommand<MpdBinaryData>
     {
         private readonly string path;
-        private readonly int binaryOffset;
+        private readonly long binaryOffset;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlbumArtCommand"/> class.
         /// </summary>
         /// <param name="path">The URI.</param>
         /// <param name="offset">Binary data offset if needed</param>
-        public AlbumArtCommand(string path, int offset = 0)
+        public AlbumArtCommand(string path, long offset = 0)
         {
             this.path = path;
             this.binaryOffset = offset;
@@ -43,8 +43,8 @@ namespace MpcNET.Commands.Database
             if (response.ResponseValues.Count == 0)
                 return null;
 
-            var totalSize = int.Parse(response.ResponseValues.Where(kvp => kvp.Key == "size").Select(kvp => kvp.Value).First()); 
-            var payloadSize = int.Parse(response.ResponseValues.Where(kvp => kvp.Key == "binary").Select(kvp => kvp.Value).First());
+            var totalSize = long.Parse(response.ResponseValues.Where(kvp => kvp.Key == "size").Select(kvp => kvp.Value).First()); 
+            var payloadSize = long.Parse(response.ResponseValues.Where(kvp => kvp.Key == "binary").Select(kvp => kvp.Value).First());
 
             return new MpdBinaryData(totalSize, payloadSize, response.BinaryData);
         }
