@@ -70,6 +70,7 @@ namespace FluentMPC.Services
 
             await Singleton<SettingsViewModel>.Instance.EnsureInstanceInitializedAsync(); // This also initializes MPDConnectionService
             AlbumArtService.Initialize();
+            SystemMediaControlsService.Initialize();
         }
 
         private async Task HandleActivationAsync(object activationArgs)

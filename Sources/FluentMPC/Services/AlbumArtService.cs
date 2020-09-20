@@ -2,14 +2,12 @@
 using FluentMPC.Helpers;
 using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
-using MpcNET;
 using MpcNET.Commands.Database;
 using MpcNET.Types;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -70,7 +68,7 @@ namespace FluentMPC.Services
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debug.WriteLine("Exception while processing albumart queue: " + e);
+                        Debug.WriteLine("Exception while processing albumart queue: " + e);
                     }
                 }
             });
@@ -169,6 +167,7 @@ namespace FluentMPC.Services
                         currentSize += response.Binary;
                         data.AddRange(response.Data);
                         foundUsableArt = true;
+                        Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
                     } while (currentSize < totalBinarySize);
 
                     // Fallback to readpicture if albumart didn't work
@@ -182,6 +181,7 @@ namespace FluentMPC.Services
                             currentSize += response.Binary;
                             data.AddRange(response.Data);
                             foundUsableArt = true;
+                            Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
                         } while (currentSize < totalBinarySize);
 
                     // Create the BitmapImage on the UI Thread.

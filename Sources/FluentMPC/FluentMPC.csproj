@@ -190,6 +190,7 @@
     <Compile Include="Activation\DefaultActivationHandler.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\SystemMediaControlsService.cs" />
     <Compile Include="Services\LiveTileService.cs" />
     <Compile Include="Services\LiveTileService.Structure.cs" />
     <Compile Include="Services\NavigationService.cs" />
