@@ -124,7 +124,7 @@ namespace FluentMPC.Services
                RandomAccessStreamReference.CreateFromUri(new Uri(artUri));
 
             // Update the system media transport controls.
-            updater.Update();
+            updater?.Update();
         }
 
         private static void UpdateTimeline(TimeSpan current, TimeSpan length)
