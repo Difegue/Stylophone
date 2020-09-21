@@ -167,7 +167,7 @@ namespace FluentMPC.Services
                         currentSize += response.Binary;
                         data.AddRange(response.Data);
                         foundUsableArt = true;
-                        Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
+                        //Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
                     } while (currentSize < totalBinarySize);
 
                     // Fallback to readpicture if albumart didn't work
@@ -181,7 +181,7 @@ namespace FluentMPC.Services
                             currentSize += response.Binary;
                             data.AddRange(response.Data);
                             foundUsableArt = true;
-                            Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
+                            //Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
                         } while (currentSize < totalBinarySize);
 
                     // Create the BitmapImage on the UI Thread.

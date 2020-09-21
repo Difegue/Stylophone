@@ -565,8 +565,12 @@ namespace FluentMPC.ViewModels.Playback
                     CurrentTimeValue = 0;
                     MaxTimeValue = CurrentTrack.File.Time;
 
-                    Singleton<LiveTileService>.Instance.UpdatePlayingSong(CurrentTrack);
-                    SystemMediaControlsService.UpdateMetadata(CurrentTrack);
+                    Task.Run(() =>
+                    {
+                        Singleton<LiveTileService>.Instance.UpdatePlayingSong(CurrentTrack);
+                        SystemMediaControlsService.UpdateMetadata(CurrentTrack);
+                    });
+                    
                     UpdateUpNextAsync();
 
                 }

@@ -33,6 +33,8 @@ namespace FluentMPC.Services
             _smtc.IsPauseEnabled = true;
             _smtc.IsNextEnabled = true;
             _smtc.IsPreviousEnabled = true;
+            _smtc.IsChannelUpEnabled = true;
+            _smtc.IsChannelDownEnabled = true;
 
             _smtc.ButtonPressed += SystemControls_ButtonPressed;
             _smtc.IsEnabled = MPDConnectionService.IsConnected;
@@ -59,6 +61,12 @@ namespace FluentMPC.Services
                     break;
                 case SystemMediaTransportControlsButton.Previous:
                     await MPDConnectionService.SafelySendCommandAsync(new PreviousCommand());
+                    break;
+                case SystemMediaTransportControlsButton.ChannelDown:
+                    await MPDConnectionService.SafelySendCommandAsync(new SetVolumeCommand((byte)(MPDConnectionService.CurrentStatus.Volume - 5)));
+                    break;
+                case SystemMediaTransportControlsButton.ChannelUp:
+                    await MPDConnectionService.SafelySendCommandAsync(new SetVolumeCommand((byte)(MPDConnectionService.CurrentStatus.Volume + 5)));
                     break;
                 default:
                     break;

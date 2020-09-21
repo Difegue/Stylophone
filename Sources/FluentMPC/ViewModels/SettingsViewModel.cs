@@ -289,8 +289,13 @@ namespace FluentMPC.ViewModels
 
             if (response != null)
             {
-                var db_update = int.Parse(response["db_update"]);
-                var lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
+                var lastUpdatedDb = DateTime.MinValue;
+
+                if (response.ContainsKey("db_update"))
+                {
+                    var db_update = int.Parse(response["db_update"]);
+                    lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
+                }
 
                 // Build info string
                 await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
