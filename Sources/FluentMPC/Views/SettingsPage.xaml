@@ -21,7 +21,7 @@
 
             <TextBlock x:Uid="Settings_Server" Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-            <StackPanel Margin="{StaticResource SmallTopMargin}" HorizontalAlignment="Left" Width="300" >
+            <StackPanel Margin="{StaticResource SmallTopMargin}" HorizontalAlignment="Left" Width="350" >
 
                 <TextBox x:Uid="Settings_ServerHost" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}"/>
 

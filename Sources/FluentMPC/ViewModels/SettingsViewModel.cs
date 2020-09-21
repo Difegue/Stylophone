@@ -233,12 +233,14 @@ namespace FluentMPC.ViewModels
         }
 
         private bool _hasInstanceBeenInitialized = false;
+        private int _previousUpdatingDb = 0;
 
         public async Task EnsureInstanceInitializedAsync()
         {
             if (!_hasInstanceBeenInitialized)
             {
                 MPDConnectionService.ConnectionChanged += async (s, e) => await UpdateServerVersionAsync();
+                MPDConnectionService.StatusChanged += async (s, e) => await CheckUpdatingDbAsync();
 
                 // Initialize values directly to avoid calling CheckServerAddressAsync twice
 
@@ -256,6 +258,18 @@ namespace FluentMPC.ViewModels
 
                 _hasInstanceBeenInitialized = true;
             }
+        }
+
+        private async Task CheckUpdatingDbAsync()
+        {
+            var updatingDb = MPDConnectionService.CurrentStatus.UpdatingDb;
+            if (_previousUpdatingDb > 0 && _previousUpdatingDb != updatingDb && updatingDb == 0)
+            {
+                // A DB update job has concluded, refresh library
+                await CheckServerAddressAsync();
+                await UpdateServerVersionAsync();
+            }
+            _previousUpdatingDb = updatingDb;
         }
 
         private string GetVersionDescription()

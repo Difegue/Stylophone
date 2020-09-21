@@ -150,6 +150,10 @@ namespace FluentMPC.ViewModels.Items
         public ICommand AddAlbumCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
         private async void AddToQueue()
         {
+            // Temporarily disable ConnectionService Queue updates, as rapid-firing "add" commands will force the Queue to refresh a ton of times.
+            // TODO: check command lists to avoid this issue
+            MPDConnectionService.DisableQueueEvents = true;
+
             try
             {
                 if (Files.Count == 0) throw new Exception("No tracks loaded yet.");
@@ -165,6 +169,11 @@ namespace FluentMPC.ViewModels.Items
                             NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.", 0);
                             break;
                         }
+
+                        // Reenable queue events for the last file so that the update is processed cleanly by the client
+                        if (Files.IndexOf(f) == Files.Count - 2)
+                            MPDConnectionService.DisableQueueEvents = false;
+
                     }
                     NotificationService.ShowInAppNotification($"Album added to Queue!");
                 }
@@ -172,6 +181,7 @@ namespace FluentMPC.ViewModels.Items
             catch (Exception e)
             {
                 NotificationService.ShowInAppNotification($"Couldn't add album: {e.Message}", 0);
+                MPDConnectionService.DisableQueueEvents = false;
             }
         }
 
@@ -179,6 +189,10 @@ namespace FluentMPC.ViewModels.Items
         public ICommand PlayAlbumCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
         private async void PlayAlbum()
         {
+            // Temporarily disable ConnectionService Queue updates, as rapid-firing "add" commands will force the Queue to refresh a ton of times.
+            // TODO: check command lists to avoid this issue
+            MPDConnectionService.DisableQueueEvents = true;
+
             // Clear queue, add album and play
             try
             {
@@ -201,6 +215,7 @@ namespace FluentMPC.ViewModels.Items
             {
                 NotificationService.ShowInAppNotification($"Couldn't play album: {e.Message}", 0);
             }
+            MPDConnectionService.DisableQueueEvents = false;
         }
 
         public AlbumViewModel(string albumName)

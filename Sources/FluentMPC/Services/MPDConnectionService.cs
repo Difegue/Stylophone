@@ -30,6 +30,8 @@ namespace FluentMPC.Services
         public static MpdStatus CurrentStatus { get; private set; } = BOGUS_STATUS;
         public static string Version { get; private set; }
 
+        public static bool DisableQueueEvents { get; set; }
+
         private static bool _connected;
 
         public static bool IsConnected
@@ -169,7 +171,7 @@ namespace FluentMPC.Services
 
         private static async Task HandleIdleResponseAsync(string subsystems)
         {
-            if (subsystems.Contains("playlist"))
+            if (subsystems.Contains("playlist") && !DisableQueueEvents)
             {
                 // Queue has changed
                 QueueChanged?.Invoke(Application.Current, new EventArgs());
@@ -200,22 +202,28 @@ namespace FluentMPC.Services
             System.Diagnostics.Debug.WriteLine($"{ConnectionPool.ObjectsInPoolCount} connections free in pool");
 
             if (_statusConnection == null) return;
-         
-            var response = await connection.SendAsync(new StatusCommand());
 
-            if (response != null && response.IsResponseValid)
+            try
             {
-                var oldstatus = CurrentStatus;
-                CurrentStatus = response.Response.Content;
+                var response = await connection.SendAsync(new StatusCommand());
 
-                if (oldstatus == BOGUS_STATUS) // Clean up the default null status if the idle command hasn't done it for us yet 
+                if (response != null && response.IsResponseValid)
                 {
-                    StatusChanged?.Invoke(Application.Current, new EventArgs());
-                    SongChanged?.Invoke(Application.Current, new SongChangedEventArgs { NewSongId = CurrentStatus.SongId });
+                    var oldstatus = CurrentStatus;
+                    CurrentStatus = response.Response.Content;
+
+                    if (oldstatus == BOGUS_STATUS) // Clean up the default null status if the idle command hasn't done it for us yet 
+                    {
+                        StatusChanged?.Invoke(Application.Current, new EventArgs());
+                        SongChanged?.Invoke(Application.Current, new SongChangedEventArgs { NewSongId = CurrentStatus.SongId });
+                    }
                 }
+                else
+                    IsConnected = false; //TODO handle reconnection attempts?
+            } catch (Exception e)
+            {
+                IsConnected = false;
             }
-            else
-                IsConnected = false; //TODO handle reconnection attempts?
         }
 
         private async static Task UpdatePlaylistsAsync()
