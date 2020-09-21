@@ -19,8 +19,6 @@ namespace FluentMPC.Services
 {
     public static class SystemMediaControlsService
     {
-
-        private static MediaPlayer _mediaPlayer;
         private static SystemMediaTransportControls _smtc;
 
         public static void Initialize()
@@ -98,6 +96,8 @@ namespace FluentMPC.Services
         {
             // Get the updater.
             SystemMediaTransportControlsDisplayUpdater updater = _smtc.DisplayUpdater;
+
+            if (updater == null) return;
 
             // Music metadata.
             updater.Type = MediaPlaybackType.Music;
