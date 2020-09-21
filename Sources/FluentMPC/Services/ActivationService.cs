@@ -70,7 +70,6 @@ namespace FluentMPC.Services
 
             await Singleton<SettingsViewModel>.Instance.EnsureInstanceInitializedAsync(); // This also initializes MPDConnectionService
             AlbumArtService.Initialize();
-            SystemMediaControlsService.Initialize();
         }
 
         private async Task HandleActivationAsync(object activationArgs)
@@ -97,6 +96,7 @@ namespace FluentMPC.Services
         {
             await ThemeSelectorService.SetRequestedThemeAsync();
             await DialogService.ShowFirstRunDialogIfAppropriateAsync();
+            SystemMediaControlsService.Initialize();
         }
 
         private IEnumerable<ActivationHandler> GetActivationHandlers()

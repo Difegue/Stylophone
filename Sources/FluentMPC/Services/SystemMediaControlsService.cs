@@ -25,9 +25,9 @@ namespace FluentMPC.Services
 
         public static void Initialize()
         {
-            _mediaPlayer = new MediaPlayer();
-            _smtc = _mediaPlayer.SystemMediaTransportControls;
-            _mediaPlayer.CommandManager.IsEnabled = false;
+            //_mediaPlayer = new MediaPlayer();
+            _smtc = SystemMediaTransportControls.GetForCurrentView();
+           // _mediaPlayer.CommandManager.IsEnabled = false;
 
             _smtc.IsPlayEnabled = true;
             _smtc.IsPauseEnabled = true;
@@ -43,8 +43,6 @@ namespace FluentMPC.Services
             MPDConnectionService.ConnectionChanged += (s, e) => _smtc.IsEnabled = MPDConnectionService.IsConnected;
             MPDConnectionService.StatusChanged += (s,e) => UpdateState(MPDConnectionService.CurrentStatus);
         }
-
-        
 
         private static async void SystemControls_ButtonPressed(SystemMediaTransportControls sender, SystemMediaTransportControlsButtonPressedEventArgs args)
         {
