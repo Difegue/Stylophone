@@ -85,6 +85,7 @@
                         <Setter Target="propertiesGroup1.Width" Value="400" />
                         <Setter Target="title.Style" Value="{ThemeResource SubheaderTextBlockStyle}"/>
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}"/>
+                        <Setter Target="Header.Margin" Value="0,0,0,0"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -126,7 +127,7 @@
                 <controls:ScrollHeader Mode="Sticky">
                     <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 -->
 
-                    <RelativePanel RequestedTheme="Dark" Padding="24,46,24,36" x:Name="Header" >
+                    <RelativePanel RequestedTheme="Dark" Padding="24,46,24,36" x:Name="Header" Margin="{StaticResource MediumTopMargin}">
 
                         <Border RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignLeftWithPanel="True"

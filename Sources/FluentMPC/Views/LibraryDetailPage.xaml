@@ -83,6 +83,7 @@
                         <Setter Target="propertiesGroup1.Width" Value="400" />
                         <Setter Target="title.Style" Value="{ThemeResource SubheaderTextBlockStyle}"/>
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}"/>
+                        <Setter Target="Header.Margin" Value="0,0,0,0"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -113,10 +114,10 @@
             </fluentMpc:AlternatingRowListView.ItemContainerStyle>
             
             <fluentMpc:AlternatingRowListView.Header>
-                <controls:ScrollHeader Mode="Sticky">
+                <controls:ScrollHeader Mode="Sticky" >
                     <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 -->
 
-                    <RelativePanel RequestedTheme="Dark" Padding="24,46,24,36" x:Name="Header">
+                    <RelativePanel RequestedTheme="Dark" Padding="24,46,24,36" Margin="{StaticResource MediumTopMargin}" x:Name="Header">
 
                         <Border RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignLeftWithPanel="True"
