@@ -25,7 +25,7 @@ namespace FluentMPC.Services
     public static class MPDConnectionService
     {
         private const int ConnectionPoolSize = 5;
-        private static MpdStatus BOGUS_STATUS = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "");
+        private static MpdStatus BOGUS_STATUS = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "", "");
 
         public static MpdStatus CurrentStatus { get; private set; } = BOGUS_STATUS;
         public static string Version { get; private set; }
