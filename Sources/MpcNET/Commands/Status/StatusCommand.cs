@@ -36,6 +36,7 @@ namespace MpcNET.Commands.Status
         private const string DurationText = "duration";
         private const string MixrampDbText = "mixrampdb";
         private const string UpdatingDbText = "updating_db";
+        private const string PartitionText = "partition";
 
         /// <summary>
         /// Serializes the command.
@@ -75,6 +76,7 @@ namespace MpcNET.Commands.Status
             TimeSpan duration;
             double mixrampDb = -1;
             int updatingDb = -1;
+            string partition = string.Empty;
             string error = string.Empty;
             foreach (var keyValuePair in response.ResponseValues)
             {
@@ -143,6 +145,9 @@ namespace MpcNET.Commands.Status
                     case UpdatingDbText:
                         int.TryParse(value, out updatingDb);
                         break;
+                    case PartitionText:
+                        partition = value;
+                        break;
                     default:
                         Debug.WriteLine($"Unprocessed status: {keyValuePair.Key} - {keyValuePair.Value}");
                         break;
@@ -170,6 +175,7 @@ namespace MpcNET.Commands.Status
                 audioBits,
                 audioChannels,
                 updatingDb,
+                partition,
                 error);
         }
 

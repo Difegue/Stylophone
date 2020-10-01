@@ -94,37 +94,44 @@ namespace FluentMPC.Services
 
         public static async void UpdateMetadata(TrackViewModel track)
         {
-            // Get the updater.
-            SystemMediaTransportControlsDisplayUpdater updater = _smtc.DisplayUpdater;
-
-            if (updater == null) return;
-
-            // Music metadata.
-            updater.Type = MediaPlaybackType.Music;
-            updater.MusicProperties.Artist = track.File.Artist;
-            updater.MusicProperties.Title = track.File.Title;
-            updater.MusicProperties.AlbumTitle = track.File.Album;
-
-            // Set the album art thumbnail.
-            var uniqueIdentifier = track.File.HasAlbum ? track.File.Album : track.File.HasTitle ? track.File.Title : track.File.Path;
-            uniqueIdentifier = MiscHelpers.EscapeFilename(uniqueIdentifier);
-
-            // Use the cached albumart if it exists
-            var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";
-
-            StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
-
-            if (!await pictureFolder.FileExistsAsync(uniqueIdentifier))
+            try
             {
-                artUri = "ms-appx:///Assets/AlbumPlaceholder.png";
+                // Get the updater.
+                SystemMediaTransportControlsDisplayUpdater updater = _smtc.DisplayUpdater;
+
+                if (updater == null) return;
+
+                // Music metadata.
+                updater.Type = MediaPlaybackType.Music;
+                updater.MusicProperties.Artist = track.File.Artist;
+                updater.MusicProperties.Title = track.File.Title;
+                updater.MusicProperties.AlbumTitle = track.File.Album;
+
+                // Set the album art thumbnail.
+                var uniqueIdentifier = track.File.HasAlbum ? track.File.Album : track.File.HasTitle ? track.File.Title : track.File.Path;
+                uniqueIdentifier = MiscHelpers.EscapeFilename(uniqueIdentifier);
+
+                // Use the cached albumart if it exists
+                var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";
+
+                StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
+
+                if (!await pictureFolder.FileExistsAsync(uniqueIdentifier))
+                {
+                    artUri = "ms-appx:///Assets/AlbumPlaceholder.png";
+                }
+
+                // RandomAccessStreamReference is defined in Windows.Storage.Streams
+                updater.Thumbnail =
+                   RandomAccessStreamReference.CreateFromUri(new Uri(artUri));
+
+                // Update the system media transport controls.
+                updater?.Update();
             }
-
-            // RandomAccessStreamReference is defined in Windows.Storage.Streams
-            updater.Thumbnail =
-               RandomAccessStreamReference.CreateFromUri(new Uri(artUri));
-
-            // Update the system media transport controls.
-            updater?.Update();
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Error while updating SMTC: " + e);
+            }
         }
 
         private static void UpdateTimeline(TimeSpan current, TimeSpan length)

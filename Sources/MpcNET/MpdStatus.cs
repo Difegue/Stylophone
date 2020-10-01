@@ -37,6 +37,7 @@ namespace MpcNET
         /// <param name="audioBits">The audio bits.</param>
         /// <param name="audioChannels">The audio channels.</param>
         /// <param name="updatingDb">The updating database.</param>
+        /// <param name="partition">The partition name.</param>
         /// <param name="error">The error.</param>
         public MpdStatus(
             int volume,
@@ -59,29 +60,31 @@ namespace MpcNET
             int audioBits,
             int audioChannels,
             int updatingDb,
+            string partition,
             string error)
         {
-            this.Volume = volume;
-            this.Repeat = repeat;
-            this.Random = random;
-            this.Consume = consume;
-            this.Single = single;
-            this.Playlist = playlist;
-            this.PlaylistLength = playlistLength;
-            this.XFade = xFade;
-            this.State = state;
-            this.Song = song;
-            this.SongId = songId;
-            this.NextSong = nextSong;
-            this.NextSongId = nextSongId;
-            this.Elapsed = elapsed;
-            this.Duration = duration;
-            this.Bitrate = bitrate;
-            this.AudioSampleRate = audioSampleRate;
-            this.AudioBits = audioBits;
-            this.AudioChannels = audioChannels;
-            this.UpdatingDb = updatingDb;
-            this.Error = error;
+            Volume = volume;
+            Repeat = repeat;
+            Random = random;
+            Consume = consume;
+            Single = single;
+            Playlist = playlist;
+            PlaylistLength = playlistLength;
+            XFade = xFade;
+            State = state;
+            Song = song;
+            SongId = songId;
+            NextSong = nextSong;
+            NextSongId = nextSongId;
+            Elapsed = elapsed;
+            Duration = duration;
+            Bitrate = bitrate;
+            AudioSampleRate = audioSampleRate;
+            AudioBits = audioBits;
+            AudioChannels = audioChannels;
+            UpdatingDb = updatingDb;
+            Partition = partition;
+            Error = error;
         }
 
         /// <summary>
@@ -185,6 +188,12 @@ namespace MpcNET
         public int UpdatingDb { get; }
 
         /// <summary>
+        /// Gets the name of the current partition
+        /// </summary>
+        public string Partition { get; }
+
+
+        /// <summary>
         /// Gets the error message, if there is an error.
         /// </summary>
         public string Error { get; }
@@ -197,13 +206,14 @@ namespace MpcNET
         {
             var builder = new StringBuilder();
 
-            AppendInt(builder, "volume", this.Volume);
-            AppendBool(builder, "repeat", this.Repeat);
-            AppendBool(builder, "random", this.Random);
-            AppendInt(builder, "playlist", this.Playlist);
-            AppendInt(builder, "playlistlength", this.PlaylistLength);
-            AppendInt(builder, "xfade", this.XFade);
-            switch (this.State)
+            builder.AppendLine($"partition: {Partition}");
+            AppendInt(builder, "volume", Volume);
+            AppendBool(builder, "repeat", Repeat);
+            AppendBool(builder, "random", Random);
+            AppendInt(builder, "playlist", Playlist);
+            AppendInt(builder, "playlistlength", PlaylistLength);
+            AppendInt(builder, "xfade", XFade);
+            switch (State)
             {
                 case MpdState.Play:
                     builder.AppendLine("state: play");
@@ -216,34 +226,34 @@ namespace MpcNET
                     break;
             }
 
-            AppendInt(builder, "song", this.Song);
-            AppendInt(builder, "songid", this.SongId);
-            if (this.Elapsed > TimeSpan.Zero || this.Duration > TimeSpan.Zero)
+            AppendInt(builder, "song", Song);
+            AppendInt(builder, "songid", SongId);
+            if (Elapsed > TimeSpan.Zero || Duration > TimeSpan.Zero)
             {
                 builder.Append("time: ");
-                builder.Append(this.Elapsed);
+                builder.Append(Elapsed);
                 builder.Append(":");
-                builder.Append(this.Duration);
+                builder.Append(Duration);
                 builder.AppendLine();
             }
 
-            AppendInt(builder, "bitrate", this.Bitrate);
-            if ((this.AudioSampleRate >= 0) || (this.AudioBits >= 0) || (this.AudioChannels >= 0))
+            AppendInt(builder, "bitrate", Bitrate);
+            if ((AudioSampleRate >= 0) || (AudioBits >= 0) || (AudioChannels >= 0))
             {
                 builder.Append("audio: ");
-                builder.Append(this.AudioSampleRate);
+                builder.Append(AudioSampleRate);
                 builder.Append(":");
-                builder.Append(this.AudioBits);
+                builder.Append(AudioBits);
                 builder.Append(":");
-                builder.Append(this.AudioChannels);
+                builder.Append(AudioChannels);
                 builder.AppendLine();
             }
 
-            AppendInt(builder, "updating_db", this.UpdatingDb);
-            if (this.Error != null)
+            AppendInt(builder, "updating_db", UpdatingDb);
+            if (Error != null)
             {
                 builder.Append("error: ");
-                builder.AppendLine(this.Error);
+                builder.AppendLine(Error);
             }
 
             return builder.ToString();
