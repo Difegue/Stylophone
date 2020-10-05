@@ -33,7 +33,7 @@ namespace MpcNET.Test
             TestOutput.WriteLine("TagTypesTest Result:");
             TestOutput.WriteLine(response);
 
-            Assert.IsTrue(response.Response.Content.Count().Equals(22));
+            Assert.IsTrue(response.Response.Content.Count().Equals(25));
         }
 
         [TestMethod]
@@ -47,9 +47,7 @@ namespace MpcNET.Test
             // Different answer from MPD on Windows and on Linux.
             // Check some of the handlers.
             Assert.IsTrue(response.Response.Content.Any(handler => handler.Equals("http://")));
-            Assert.IsTrue(response.Response.Content.Any(handler => handler.Equals("https://")));
             Assert.IsTrue(response.Response.Content.Any(handler => handler.Equals("nfs://")));
-           // Assert.IsTrue(response.Response.Content.Any(handler => handler.Equals("rtp://")));
         }
 
         [TestMethod]
