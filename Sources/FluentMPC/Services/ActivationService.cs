@@ -67,9 +67,6 @@ namespace FluentMPC.Services
             await Singleton<BackgroundTaskService>.Instance.RegisterBackgroundTasksAsync().ConfigureAwait(false);
             await Singleton<LiveTileService>.Instance.EnableQueueAsync().ConfigureAwait(false);
             await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
-
-            await Singleton<SettingsViewModel>.Instance.EnsureInstanceInitializedAsync(); // This also initializes MPDConnectionService
-            AlbumArtService.Initialize();
         }
 
         private async Task HandleActivationAsync(object activationArgs)
@@ -96,6 +93,9 @@ namespace FluentMPC.Services
         {
             await ThemeSelectorService.SetRequestedThemeAsync();
             await DialogService.ShowFirstRunDialogIfAppropriateAsync();
+
+            await Singleton<SettingsViewModel>.Instance.EnsureInstanceInitializedAsync(); // This also initializes MPDConnectionService
+            AlbumArtService.Initialize();
             SystemMediaControlsService.Initialize();
         }
 

@@ -25,9 +25,6 @@ namespace FluentMPC.Views
         {
             base.OnNavigatedTo(e);
 
-            if (MPDConnectionService.IsConnected)
-                await ViewModel.LoadDataAsync();
-
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
             MPDConnectionService.SongChanged += MPDConnectionService_SongChanged;

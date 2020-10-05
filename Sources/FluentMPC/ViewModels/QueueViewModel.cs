@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -13,6 +14,7 @@ using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Queue;
 using MpcNET.Types;
+using Sundew.Base.Collections;
 
 namespace FluentMPC.ViewModels
 {
@@ -50,10 +52,10 @@ namespace FluentMPC.ViewModels
                 Task.Run(async () => await LoadDataAsync());
         }
 
-        private async void MPDConnectionService_QueueChanged(object sender, EventArgs e)
+        private void MPDConnectionService_QueueChanged(object sender, EventArgs e)
         {
             // scrolling is handled in code-behind
-            await DispatcherHelper.ExecuteOnUIThreadAsync(async () => await LoadDataAsync());
+            Task.Run(async () => await LoadDataAsync());
         }
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
@@ -64,17 +66,20 @@ namespace FluentMPC.ViewModels
         {
             Source.CollectionChanged -= Source_CollectionChanged;
 
-            // TODO - Don't clear, update collection instead based on new data
-            Source.Clear();
+            var tracks = new List<TrackViewModel>();
             var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistInfoCommand());
 
             if (response != null)
                 foreach (var item in response)
                 {
-                    Source.Add(new TrackViewModel(item, false));
+                    tracks.Add(new TrackViewModel(item, false));
                 }
 
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(Source)));
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
+                // TODO - Don't clear, update collection instead based on new data
+                Source.Clear();
+                Source.AddRange(tracks);
+            });
 
             Source.CollectionChanged += Source_CollectionChanged;
         }

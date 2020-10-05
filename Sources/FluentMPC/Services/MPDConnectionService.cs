@@ -131,8 +131,15 @@ namespace FluentMPC.Services
             }
             catch (Exception e)
             {
-                if (dispatcher == null || dispatcher == CoreApplication.MainView.CoreWindow.Dispatcher) // Only invoke notificationservice on the main window
-                    NotificationService.ShowInAppNotification($"Sending {command.GetType().Name} failed: {e.Message}", 0);
+                try
+                {
+                    if (dispatcher == null || dispatcher == CoreApplication.MainView.CoreWindow.Dispatcher) // Only invoke notificationservice on the main window
+                        NotificationService.ShowInAppNotification($"Sending {command.GetType().Name} failed: {e.Message}", 0);
+                } catch 
+                {
+                    // TODO: Dispatcher mismatch, we just swallow the exception for now.
+                    System.Diagnostics.Debugger.Break();
+                }
             }
 
             return default(T);

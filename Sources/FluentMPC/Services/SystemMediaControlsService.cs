@@ -20,13 +20,13 @@ namespace FluentMPC.Services
     public static class SystemMediaControlsService
     {
         private static SystemMediaTransportControls _smtc;
-        private static bool IsInitialized = false;
+        private static bool _isInitialized = false;
 
         public static void Initialize()
         {
-            if (!IsInitialized)
+            if (!_isInitialized)
             {
-                IsInitialized = true;
+                _isInitialized = true;
                 _smtc = SystemMediaTransportControls.GetForCurrentView();
 
                 _smtc.IsPlayEnabled = true;
