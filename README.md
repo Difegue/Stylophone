@@ -18,6 +18,16 @@ Based on [MpcNET](https://github.com/petrkr/MpcNET), the original .NET Client Li
 * All data is pulled from your MPD Server only  
 * Support for both albumart and readpicture commands for maximum compatibility with your cover art library
 
+## Usage with a locally hosted MPD server
+
+If your MPD server is locally hosted, you're probably running into the issue where UWP apps can't access `localhost`.  
+(See https://stackoverflow.com/questions/33259763/uwp-enable-local-network-loopback/33263253#33263253 for a summary.)
+There is a workaround you can use with checknetisolation which should work:  
+
+```
+checknetisolation loopbackexempt -a -n="13459Difegue.Stylophone_zd7bwy3j4yjfy"
+```  
+
 ## Screenshots
 
 ![Screen1](Screenshots/Screen1.png)
