@@ -86,7 +86,7 @@ namespace MpcNET
 
             if (characterBuffer == null)
             {
-                characterBuffer = new char[1];
+                characterBuffer = new char[4];
             }
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -114,9 +114,14 @@ namespace MpcNET
                 }
                 else
                 {
-                    if (decoder.GetChars(byteBuffer, bufferOffset++, 1, characterBuffer, 0) == 1)
+                    var decodedChars = decoder.GetChars(byteBuffer, bufferOffset++, 1, characterBuffer, 0);
+                    if (decodedChars == 1)
                     {
                         stringBuilder.Append(characterBuffer[0]);
+                    } 
+                    else
+                    {
+                        stringBuilder.Append(characterBuffer, 0, decodedChars);
                     }
 
                     if (bufferOffset == bufferEnd && !PopulateBufferIfNeeded(1))
