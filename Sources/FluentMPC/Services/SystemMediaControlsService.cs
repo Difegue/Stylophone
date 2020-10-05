@@ -20,26 +20,29 @@ namespace FluentMPC.Services
     public static class SystemMediaControlsService
     {
         private static SystemMediaTransportControls _smtc;
+        private static bool IsInitialized = false;
 
         public static void Initialize()
         {
-            //_mediaPlayer = new MediaPlayer();
-            _smtc = SystemMediaTransportControls.GetForCurrentView();
-           // _mediaPlayer.CommandManager.IsEnabled = false;
+            if (!IsInitialized)
+            {
+                IsInitialized = true;
+                _smtc = SystemMediaTransportControls.GetForCurrentView();
 
-            _smtc.IsPlayEnabled = true;
-            _smtc.IsPauseEnabled = true;
-            _smtc.IsNextEnabled = true;
-            _smtc.IsPreviousEnabled = true;
-            _smtc.IsChannelUpEnabled = true;
-            _smtc.IsChannelDownEnabled = true;
+                _smtc.IsPlayEnabled = true;
+                _smtc.IsPauseEnabled = true;
+                _smtc.IsNextEnabled = true;
+                _smtc.IsPreviousEnabled = true;
+                _smtc.IsChannelUpEnabled = true;
+                _smtc.IsChannelDownEnabled = true;
 
-            _smtc.ButtonPressed += SystemControls_ButtonPressed;
-            _smtc.IsEnabled = MPDConnectionService.IsConnected;
+                _smtc.ButtonPressed += SystemControls_ButtonPressed;
+                _smtc.IsEnabled = MPDConnectionService.IsConnected;
 
-            // Hook up to the MPDConnectionService for status updates.
-            MPDConnectionService.ConnectionChanged += (s, e) => _smtc.IsEnabled = MPDConnectionService.IsConnected;
-            MPDConnectionService.StatusChanged += (s,e) => UpdateState(MPDConnectionService.CurrentStatus);
+                // Hook up to the MPDConnectionService for status updates.
+                MPDConnectionService.ConnectionChanged += (s, e) => _smtc.IsEnabled = MPDConnectionService.IsConnected;
+                MPDConnectionService.StatusChanged += (s, e) => UpdateState(MPDConnectionService.CurrentStatus);
+            }
         }
 
         private static async void SystemControls_ButtonPressed(SystemMediaTransportControls sender, SystemMediaTransportControlsButtonPressedEventArgs args)
