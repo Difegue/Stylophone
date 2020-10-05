@@ -19,5 +19,7 @@ namespace MpcNET.Message
         public IMpdResponse<T> Response { get; }
 
         public bool IsResponseValid => false;
+
+        public override string ToString() => Response.Result.ErrorMessage;
     }
 }

@@ -23,6 +23,7 @@ namespace MpcNET.Message
             if (this.Exception != null)
             {
                 this.Status = "EXCEPTION";
+                this.ErrorMessage = Exception.ToString();
             }
 
             if (!string.IsNullOrEmpty(this.endLine))
@@ -60,7 +61,7 @@ namespace MpcNET.Message
 
             if (match.Groups.Count != 5)
             {
-                this.ErrorMessage = "Unexpected response from server.";
+                this.ErrorMessage = $"Unexpected response from server: {MpdError}";
             }
             else
             {
