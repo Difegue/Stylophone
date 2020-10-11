@@ -60,12 +60,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-        
-    # Install the .NET Core workload
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
 
     # Add MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
@@ -107,7 +101,7 @@ jobs:
     # Remove the pfx
     - name: Remove the pfx
       working-directory: ./Sources
-      run: Remove-Item -path $env:Uap_Project_Directory\$env:Signing_Certificate
+      run: Remove-Item -path $env:Uap_Project_Directory\GitHubActionsWorkflow.pfx 
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
     - name: Upload build artifacts
