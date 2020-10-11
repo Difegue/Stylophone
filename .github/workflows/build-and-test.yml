@@ -88,7 +88,8 @@ jobs:
         $certificatePath = Join-Path -Path $env:Uap_Project_Directory -ChildPath GitHubActionsWorkflow.pfx
         [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
         dir
-
+        cd FluentMPC && dir 
+        
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
       working-directory: ./Sources
