@@ -3,11 +3,6 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-# This workflow will build, test, sign and package a WPF or Windows Forms desktop application
-# built on .NET Core.
-# To learn how to migrate your existing application to .NET Core,
-# refer to https://docs.microsoft.com/en-us/dotnet/desktop-wpf/migration/convert-project-from-net-framework
-#
 # To configure this workflow:
 #
 # 1. Configure environment variables
@@ -36,7 +31,7 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name: .NET Core Desktop
+name: Build and Test Stylophone
 
 on:
   push:
@@ -56,7 +51,7 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Solution_Name: MpcNET                                     # Replace with your solution name, i.e. MyWpfApp.sln.
+      Solution_Name: MpcNET                                     
       Test_Project_Path: FluentMPC.Tests.MSTest\FluentMPC.Tests.MSTest.csproj
       Uap_Project_Path: FluentMPC\FluentMPC.csproj
       Uap_Project_Directory: FluentMPC
@@ -71,15 +66,15 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
 
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: cd Sources && dotnet test
-
     # Restore the application 
     - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      run: cd Sources && msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
+
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
