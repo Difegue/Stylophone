@@ -7,9 +7,7 @@
     x:Uid="AddToPlaylistDialog"
     d:DesignHeight="345"
     d:DesignWidth="550"
-    mc:Ignorable="d"
-    PrimaryButtonText="Add"
-    CloseButtonText="Cancel">
+    mc:Ignorable="d">
     <ContentDialog.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolNegationConverter x:Key="BoolNegationConverter" />

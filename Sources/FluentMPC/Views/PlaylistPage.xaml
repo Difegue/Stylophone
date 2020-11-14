@@ -86,13 +86,15 @@
                         <Setter Target="title.Style" Value="{ThemeResource SubheaderTextBlockStyle}"/>
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}"/>
                         <Setter Target="Header.Margin" Value="0,0,0,0"/>
+                        <Setter Target="Header.Padding" Value="24,46,24,36" />
+                        <Setter Target="QueueList.Margin" Value="0,0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <fluentMpc:AlternatingRowListView SelectionMode="Single"
-                      x:Name="QueueList"
+        <fluentMpc:AlternatingRowListView SelectionMode="Single" 
+                      x:Name="QueueList" Margin="0,-96"
                       AllowDrop="True"
                       CanReorderItems="True"
                       ReorderMode="Enabled"
@@ -127,13 +129,13 @@
                 <controls:ScrollHeader Mode="Sticky">
                     <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 -->
 
-                    <RelativePanel RequestedTheme="Dark" Padding="24,46,24,36" x:Name="Header" Margin="{StaticResource MediumTopMargin}">
+                    <RelativePanel RequestedTheme="Dark" Padding="24,128,24,36" x:Name="Header">
 
                         <Border RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True" 
                             RelativePanel.AlignRightWithPanel="True"
-                            Margin="-24,-46,-24,-24"
+                            Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1">
                             <Border.Background>
                                 <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.6" FallbackColor="{ThemeResource SystemAccentColorDark1}"
@@ -223,23 +225,23 @@
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
 
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.PlayPlaylistCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.PlayPlaylistCommand}" Width="108" HorizontalAlignment="Stretch">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
                                     <TextBlock x:Uid="PlayTextBlock"/>
                                 </StackPanel>
                             </Button>
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddPlaylistCommand}" Width="108">
+                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddPlaylistCommand}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
-                                    <TextBlock x:Uid="AddToQueueTextBlock"/>
+                                    <TextBlock x:Uid="AddToQueueTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
 
                             <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.RemovePlaylistCommand}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Delete" />
-                                    <TextBlock x:Uid="DeletePlaylistTextBlock"/>
+                                    <TextBlock x:Uid="DeletePlaylistTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>

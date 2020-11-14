@@ -81,7 +81,7 @@ namespace FluentMPC.ViewModels.Items
             var response = await MPDConnectionService.SafelySendCommandAsync(new AddIdCommand(file.Path));
 
             if (response != null)
-                NotificationService.ShowInAppNotification($"Added to Queue!");
+                NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
         }
 
         private ICommand _addToPlaylistCommand;
@@ -99,7 +99,7 @@ namespace FluentMPC.ViewModels.Items
             var req = await MPDConnectionService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, file.Path));
 
             if (req != null)
-                NotificationService.ShowInAppNotification($"Added to Playlist {playlistName}!");
+                NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
 
             MPDConnectionService.DisableQueueEvents = false;
         }
@@ -113,7 +113,7 @@ namespace FluentMPC.ViewModels.Items
             {
                 if (!file.HasAlbum)
                 {
-                    NotificationService.ShowInAppNotification($"Track has no associated album.", 0);
+                    NotificationService.ShowInAppNotification("NoAlbumErrorText".GetLocalized(), 0);
                     return;
                 }
 
@@ -123,7 +123,7 @@ namespace FluentMPC.ViewModels.Items
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't get album: {e}", 0);
+                NotificationService.ShowInAppNotification(string.Format("GenericErrorText".GetLocalized(), e), 0);
             }
         }
 

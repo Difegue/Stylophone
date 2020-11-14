@@ -124,7 +124,7 @@
           
             <TextBlock x:Uid="Settings_About" Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-            <StackPanel Margin="{StaticResource XSmallTopMargin}" >
+            <StackPanel Margin="{StaticResource SmallTopMargin}" >
                 <StackPanel Orientation="Horizontal">
                     <Image Margin="0,-12"
                         Width="64"

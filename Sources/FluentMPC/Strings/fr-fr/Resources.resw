@@ -126,15 +126,15 @@
     <comment>Application description</comment>
   </data>
   <data name="Shell_NowPlaying.Content" xml:space="preserve">
-    <value>Queue</value>
+    <value>File d'attente</value>
     <comment>Navigation view item name for NowPlaying</comment>
   </data>
   <data name="Shell_Library.Content" xml:space="preserve">
-    <value>Library</value>
+    <value>Bibliothèque</value>
     <comment>Navigation view item name for Library</comment>
   </data>
   <data name="Playlists_NoSelection.Text" xml:space="preserve">
-    <value>Select an item from the list.</value>
+    <value>Choisissez un élement dans la liste.</value>
     <comment>No selection text for Playlists</comment>
   </data>
   <data name="Playlists.MasterHeader" xml:space="preserve">
@@ -146,11 +146,11 @@
     <comment>Navigation view item name for Playlists</comment>
   </data>
   <data name="FoldersTitle.Text" xml:space="preserve">
-    <value>Folders</value>
+    <value>Dossiers</value>
     <comment>Title for FoldersPage</comment>
   </data>
   <data name="Shell_Folders.Content" xml:space="preserve">
-    <value>Folders</value>
+    <value>Dossiers</value>
     <comment>Navigation view item name for Folders</comment>
   </data>
   <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
@@ -158,31 +158,31 @@
     <comment>File name is null or empty to save file in settings storage extensions</comment>
   </data>
   <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Choose Theme</value>
+    <value>Theme</value>
     <comment>Choose theme text for Settings</comment>
   </data>
   <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>Sombre</value>
     <comment>Dark theme text for Settings</comment>
   </data>
   <data name="Settings_Theme_Default.Content" xml:space="preserve">
-    <value>Windows default</value>
+    <value>Theme de Windows</value>
     <comment>Windows default theme text for Settings</comment>
   </data>
   <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Light</value>
+    <value>Clair</value>
     <comment>Light theme text for Settings</comment>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
-    <value>About this application</value>
+    <value>A propos de cette application</value>
     <comment>About this application title for Settings</comment>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
-    <value>MPD Client for the Universal Windows Platform, based on MpcNET. </value>
+    <value>Client MPD pour UWP, utilisant MpcNET.</value>
     <comment>About this application description for Settings</comment>
   </data>
   <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Source Code, License and Privacy Statement</value>
+    <value>Code Source, License et Vie Privée</value>
     <comment>Privacy Statement link content for Settings</comment>
   </data>
   <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>Here is your Privacy Statement url for Settings</comment>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
-    <value>Personalization</value>
+    <value>Personnalisation</value>
     <comment>Personalization text for Settings</comment>
   </data>
   <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
@@ -210,14 +210,12 @@
     <comment>The page is not subscribed to the Released event.</comment>
   </data>
   <data name="FirstRun_Body.Text" xml:space="preserve">
-    <value>To get started, please visit the Settings page to key in your MPD server's URL and port.
-Hope you enjoy using the application!
-
-</value>
+    <value>Pour commencer, entrez l'URL et le port de votre serveur MPD dans les Paramètres.
+J'espère que vous apprécierez l'application !</value>
     <comment>First use prompt message body</comment>
   </data>
   <data name="FirstRunDialog.Title" xml:space="preserve">
-    <value>Welcome to Stylophone!</value>
+    <value>Merci d'avoir installé Stylophone!</value>
     <comment>First use prompt message title</comment>
   </data>
   <data name="FirstRunDialog.PrimaryButtonText" xml:space="preserve">
@@ -225,227 +223,227 @@ Hope you enjoy using the application!
     <comment>First use prompt message primary button text</comment>
   </data>
   <data name="Shell_NewPlaylist.Content" xml:space="preserve">
-    <value>Add Playlist</value>
+    <value>Ajouter une Playlist</value>
   </data>
   <data name="Settings_Server.Text" xml:space="preserve">
-    <value>MPD Server</value>
+    <value>Serveur MPD</value>
     <comment>Server text for Settings</comment>
   </data>
   <data name="Settings_ServerHost.Header" xml:space="preserve">
-    <value>Hostname</value>
+    <value>Hôte</value>
   </data>
   <data name="Settings_ServerPort.Header" xml:space="preserve">
     <value>Port</value>
   </data>
   <data name="AddToPlaylistComboBox.Header" xml:space="preserve">
-    <value>Add track(s) to the following Playlist:</value>
+    <value>Ajouter à la Playlist suivante:</value>
   </data>
   <data name="AddToPlaylistComboBox.PlaceholderText" xml:space="preserve">
-    <value>Select a Playlist</value>
+    <value>Choisissez une Playlist</value>
   </data>
   <data name="AddToPlaylistDialog.Title" xml:space="preserve">
-    <value>Add to Playlist</value>
+    <value>Ajouter à une Playlist</value>
   </data>
   <data name="NoServerError.Text" xml:space="preserve">
-    <value>Couldn't find an MPD server at this address!</value>
+    <value>Impossible de trouver un serveur MPD à cette adresse !</value>
   </data>
   <data name="Settings_CacheButton.Content" xml:space="preserve">
-    <value>Clear Cache</value>
+    <value>Vider le cache</value>
   </data>
   <data name="Settings_ClearAlbumCache.Text" xml:space="preserve">
-    <value>Stylophone stores album art locally to avoid overloading your MPD Server. 
-If you want to clear the album art cache, click this button.</value>
+    <value>Stylophone stocke les pochettes d'album sur votre ordinateur pour éviter de surcharger votre serveur MPD.
+Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
   </data>
   <data name="Settings_Database.Text" xml:space="preserve">
-    <value>Database and Album Art</value>
+    <value>Base de données et Pochettes d'albums</value>
   </data>
   <data name="Settings_RefreshDatabase.Content" xml:space="preserve">
-    <value>Update Server Database</value>
+    <value>Mettre à jour la base de données du serveur</value>
   </data>
   <data name="NewPlaylistCheckBox.Content" xml:space="preserve">
-    <value>Create New Playlist</value>
+    <value>Créer une nouvelle Playlist</value>
   </data>
   <data name="NewPlaylistTextBox.PlaceholderText" xml:space="preserve">
-    <value>Playlist Name</value>
+    <value>Nom de la Playlist</value>
   </data>
   <data name="EmptyFoldersDesc.Text" xml:space="preserve">
-    <value>Is your MPD server connected?</value>
+    <value>Votre serveur MPD est-il disponible ?</value>
   </data>
   <data name="EmptyFoldersTitle.Text" xml:space="preserve">
-    <value>No folders found on server.</value>
+    <value>Aucun dossier trouvé sur le serveur.</value>
   </data>
   <data name="EmptyLibraryTitle.Text" xml:space="preserve">
-    <value>Ain't nothin' like an empty library.</value>
+    <value>Aussi vide que la bibliothèque d'Alexandrie.</value>
   </data>
   <data name="EmptyPlaylistDesc.Text" xml:space="preserve">
-    <value>Get some tracks in there!</value>
+    <value>Ajoutez quelques morceaux !</value>
   </data>
   <data name="EmptyPlaylistTitle.Text" xml:space="preserve">
-    <value>I can't jam to this.</value>
+    <value>Cette Playlist est bien vide.</value>
   </data>
   <data name="EmptyQueueDesc.Text" xml:space="preserve">
-    <value>Why don't you add some music?</value>
+    <value>Pourquoi ne pas mettre un peu de musique ?</value>
   </data>
   <data name="EmptyQueueTitle.Text" xml:space="preserve">
-    <value>All is quiet now.</value>
+    <value>Personne ne fait de bruit...</value>
   </data>
   <data name="LibrarySearchFilter.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Rechercher</value>
   </data>
   <data name="FirstRun_ItalicBody.Text" xml:space="preserve">
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
   </data>
   <data name="Settings_Sizing.Text" xml:space="preserve">
-    <value>Choose UI Density</value>
+    <value>Densité de l'interface</value>
   </data>
   <data name="Settings_Sizing_Compact.Content" xml:space="preserve">
     <value>Compact</value>
   </data>
   <data name="Settings_Sizing_Info.Text" xml:space="preserve">
-    <value>This setting will apply after restarting the app.</value>
+    <value>Ce paramètre sera appliqué au redémarrage de l'application.</value>
   </data>
   <data name="Settings_Sizing_Normal.Content" xml:space="preserve">
     <value>Normal</value>
   </data>
   <data name="AddQueueToPlaylistFlyoutItem.Text" xml:space="preserve">
-    <value>Add Queue to Playlist</value>
+    <value>Ajouter la file d'attente à une Playlist</value>
   </data>
   <data name="AddToPlaylistFlyoutItem.Text" xml:space="preserve">
-    <value>Add to Playlist</value>
+    <value>Ajouter à une Playlist</value>
   </data>
   <data name="AddToPlaylistTextBlock.Text" xml:space="preserve">
-    <value>Add to Playlist</value>
+    <value>Ajouter à une Playlist</value>
   </data>
   <data name="AddToQueueFlyoutItem.Text" xml:space="preserve">
-    <value>Add to Queue</value>
+    <value>Ajouter à la file d'attente</value>
   </data>
   <data name="AddToQueueTextBlock.Text" xml:space="preserve">
-    <value>Add to Queue</value>
+    <value>Ajouter à la file d'attente</value>
   </data>
   <data name="ClearQueueFlyoutItem.Text" xml:space="preserve">
-    <value>Clear Queue</value>
+    <value>Vider la file d'attente</value>
   </data>
   <data name="CompactOverlayButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Compact Overlay Mode</value>
+    <value>Mode Compact</value>
   </data>
   <data name="DeletePlaylistTextBlock.Text" xml:space="preserve">
-    <value>Delete Playlist</value>
+    <value>Supprimer la Playlist</value>
   </data>
   <data name="FoldersRoot.Text" xml:space="preserve">
-    <value>MPD Filesystem</value>
+    <value>Serveur MPD</value>
   </data>
   <data name="MoreButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>More Actions</value>
+    <value>Autres actions</value>
   </data>
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Next Track</value>
+    <value>Piste suivante</value>
   </data>
   <data name="PlayButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Play/Pause</value>
+    <value>Lire/Pause</value>
   </data>
   <data name="PlayFlyoutItem.Text" xml:space="preserve">
-    <value>Play</value>
+    <value>Lire</value>
   </data>
   <data name="PlayTextBlock.Text" xml:space="preserve">
-    <value>Play</value>
+    <value>Lire</value>
   </data>
   <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Previous Track</value>
+    <value>Piste précédente</value>
   </data>
   <data name="RemoveFromPlaylistFlyoutItem.Text" xml:space="preserve">
-    <value>Remove from Playlist</value>
+    <value>Supprimer de la Playlist</value>
   </data>
   <data name="RemoveFromQueueFlyoutItem.Text" xml:space="preserve">
-    <value>Remove from Queue</value>
+    <value>Supprimer de la file d'attente</value>
   </data>
   <data name="RepeatButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Toggle Repeat</value>
+    <value>Activer/Désactiver la répétition</value>
   </data>
   <data name="RepeatFlyoutItem.Text" xml:space="preserve">
-    <value>Toggle Repeat</value>
+    <value>Activer/Désactiver la répétition</value>
   </data>
   <data name="ShuffleButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Toggle Shuffle</value>
+    <value>Activer/Désactiver le Random</value>
   </data>
   <data name="ShuffleFlyoutItem.Text" xml:space="preserve">
-    <value>Toggle Shuffle</value>
+    <value>Activer/Désactiver le Random</value>
   </data>
   <data name="SoundFlyoutButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Change Volume</value>
+    <value>Changer le volume</value>
   </data>
   <data name="TreeView_CollapseAllButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Close all open folders</value>
+    <value>Fermer tous les dossiers ouverts</value>
   </data>
   <data name="UpNextTextBlock.Text" xml:space="preserve">
-    <value>Up Next:</value>
+    <value>À suivre:</value>
   </data>
   <data name="ViewAlbumFlyoutItem.Text" xml:space="preserve">
-    <value>View Album</value>
+    <value>Voir l'album</value>
   </data>
   <data name="AddedToPlaylistText" xml:space="preserve">
-    <value>Added to Playlist {0}!</value>
+    <value>Ajouté à la Playlist {0}.</value>
   </data>
   <data name="AddedToQueueText" xml:space="preserve">
-    <value>Added to Queue!</value>
+    <value>Ajouté à la file d'attente.</value>
   </data>
   <data name="AddToPlaylistDialog.CloseButtonText" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </data>
   <data name="AddToPlaylistDialog.PrimaryButtonText" xml:space="preserve">
-    <value>Add</value>
+    <value>Ajouter</value>
   </data>
   <data name="CacheDeletedText" xml:space="preserve">
-    <value>Album art cache has been deleted.</value>
+    <value>Le cache de pochettes a été vidé.</value>
   </data>
   <data name="CancelButtonText" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </data>
   <data name="CantClearError" xml:space="preserve">
-    <value>Couldn't clear queue!</value>
+    <value>Impossible de vider la file d'attente.</value>
   </data>
   <data name="DatabaseAlreadyUpdatingText" xml:space="preserve">
-    <value>The database is already being updated.</value>
+    <value>La base de données MPD est déjà en cours de rafraîchissement.</value>
   </data>
   <data name="DatabaseUpdateStartedText" xml:space="preserve">
-    <value>Database update started.</value>
+    <value>Démarrage de la mise à jour de la base de données MPD.</value>
   </data>
   <data name="DeletePlaylistContentDialog" xml:space="preserve">
-    <value>Delete Playlist?</value>
+    <value>Supprimer cette Playlist ?</value>
   </data>
   <data name="ErrorAddingAlbum" xml:space="preserve">
-    <value>Couldn't add Album: {0}</value>
+    <value>Impossible d'ajouter l'album: {0}</value>
   </data>
   <data name="ErrorPlayingText" xml:space="preserve">
-    <value>Couldn't play content: {0}</value>
+    <value>Impossible de lire le contenu: {0}</value>
   </data>
   <data name="GenericErrorText" xml:space="preserve">
-    <value>Error: {0}</value>
+    <value>Erreur: {0}</value>
   </data>
   <data name="InvalidMPDResponseError" xml:space="preserve">
-    <value>Invalid MPD Response.</value>
+    <value>Réponse du serveur MPD invalide.</value>
   </data>
   <data name="NoAlbumErrorText" xml:space="preserve">
-    <value>Track has no matching album.</value>
+    <value>Ce morceau n'a pas d'album correspondant.</value>
   </data>
   <data name="NoTrackPlayingText" xml:space="preserve">
-    <value>No Track is currently playing.</value>
+    <value>Aucun morceau n'est en train de jouer actuellement.</value>
   </data>
   <data name="NoTracksLoaded" xml:space="preserve">
-    <value>No tracks loaded yet.</value>
+    <value>Aucun morceau n'a été chargé.</value>
   </data>
   <data name="NowPlayingText" xml:space="preserve">
-    <value>Now Playing {0}</value>
+    <value>En train de lire: {0}</value>
   </data>
   <data name="OKButtonText" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="PlaylistRemovedText" xml:space="preserve">
-    <value>Playlist has been removed.</value>
+    <value>La Playlist a été supprimée.</value>
   </data>
   <data name="UpdateDbDialogText" xml:space="preserve">
-    <value>This operation might take the server some time to complete.</value>
+    <value>Cette opération peut prendre un certain temps.</value>
   </data>
   <data name="UpdateDbDialogTitle" xml:space="preserve">
-    <value>Update the Server Database?</value>
+    <value>Mettre à jour la base de données MPD ?</value>
   </data>
 </root>

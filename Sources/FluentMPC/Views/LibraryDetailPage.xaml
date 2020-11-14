@@ -84,13 +84,15 @@
                         <Setter Target="title.Style" Value="{ThemeResource SubheaderTextBlockStyle}"/>
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}"/>
                         <Setter Target="Header.Margin" Value="0,0,0,0"/>
+                        <Setter Target="Header.Padding" Value="24,46,24,36" />
+                        <Setter Target="QueueList.Margin" Value="0,0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <fluentMpc:AlternatingRowListView SelectionMode="Single"
-                      x:Name="QueueList"
+                      x:Name="QueueList" Margin="0,-96"
                       DoubleTapped="Queue_Track"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                       extensions:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
@@ -117,13 +119,13 @@
                 <controls:ScrollHeader Mode="Sticky" >
                     <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 -->
 
-                    <RelativePanel RequestedTheme="Dark" Padding="24,46,24,36" Margin="{StaticResource MediumTopMargin}" x:Name="Header">
+                    <RelativePanel RequestedTheme="Dark" Padding="24,128,24,36" x:Name="Header">
 
                         <Border RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True" 
                             RelativePanel.AlignRightWithPanel="True"
-                            Margin="-24,-46,-24,-24"
+                            Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1">
                             <Border.Background>
                                 <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"
@@ -135,7 +137,7 @@
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True" 
                             RelativePanel.AlignRightWithPanel="True"
-                            Margin="-24,-46,-24,-24"
+                            Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1"
                             Opacity="0.3"
                             Visibility="{x:Bind ViewModel.Item.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -191,19 +193,19 @@
                         
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
-                            
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}"
+
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}" HorizontalAlignment="Stretch"
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
                                     <TextBlock x:Uid="PlayTextBlock"/>
                                 </StackPanel>
                             </Button>
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}"
+                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}" 
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
-                                    <TextBlock x:Uid="AddToQueueTextBlock"/>
+                                    <TextBlock x:Uid="AddToQueueTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
 
@@ -211,7 +213,7 @@
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="MusicInfo" />
-                                    <TextBlock x:Uid="AddToPlaylistTextBlock"/>
+                                    <TextBlock x:Uid="AddToPlaylistTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
