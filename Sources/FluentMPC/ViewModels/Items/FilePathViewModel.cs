@@ -97,16 +97,16 @@ namespace FluentMPC.ViewModels.Items
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
                     var req = await c.InternalResource.SendAsync(new ClearCommand());
-                    if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
+                    if (!req.IsResponseValid) throw new Exception("CantClearError".GetLocalized());
 
                     req = await c.InternalResource.SendAsync(new AddCommand(Path));
                     req = await c.InternalResource.SendAsync(new PlayCommand(0));
-                    NotificationService.ShowInAppNotification($"Now Playing {Path}");
+                    NotificationService.ShowInAppNotification(string.Format("NowPlayingText".GetLocalized(), Path));
                 }
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't play content: {e}", 0);
+                NotificationService.ShowInAppNotification(string.Format("ErrorPlayingText".GetLocalized(), e), 0);
             }
         }
 
@@ -119,7 +119,7 @@ namespace FluentMPC.ViewModels.Items
             var response = await MPDConnectionService.SafelySendCommandAsync(new AddCommand(Path));
 
             if (response != null)
-                NotificationService.ShowInAppNotification($"File(s) added to Queue!");
+                NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
         }
 
         private ICommand _addToPlaylistCommand;
@@ -132,7 +132,7 @@ namespace FluentMPC.ViewModels.Items
             var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, Path));
 
             if (response != null)
-                NotificationService.ShowInAppNotification($"File(s) added to Playlist!");
+                NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
         }
 
         public FilePathViewModel(IMpdFilePath file)

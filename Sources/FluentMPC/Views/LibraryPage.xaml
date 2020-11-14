@@ -45,9 +45,9 @@
                         <StackPanel.ContextFlyout>
                             
                             <MenuFlyout>
-                                <MenuFlyoutItem Icon="Play" Text="Play" Command="{Binding PlayAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{Binding AddAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{Binding PlayAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
                             </MenuFlyout> 
                         </StackPanel.ContextFlyout>
 

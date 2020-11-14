@@ -33,9 +33,9 @@ namespace FluentMPC.ViewModels
         {
             ContentDialog confirmDialog = new ContentDialog
             {
-                Title = "Delete Playlist?",
-                PrimaryButtonText = "OK",
-                CloseButtonText = "Cancel"
+                Title = "DeletePlaylistContentDialog".GetLocalized(),
+                PrimaryButtonText = "OKButtonText".GetLocalized(),
+                CloseButtonText = "CancelButtonText".GetLocalized()
             };
 
             ContentDialogResult result = await confirmDialog.ShowAsync();
@@ -46,7 +46,7 @@ namespace FluentMPC.ViewModels
 
             if (res != null)
             {
-                NotificationService.ShowInAppNotification("Playlist removed!");
+                NotificationService.ShowInAppNotification("PlaylistRemovedText".GetLocalized());
                 NavigationService.GoBack();
             }
         }
@@ -58,13 +58,11 @@ namespace FluentMPC.ViewModels
             var res = await MPDConnectionService.SafelySendCommandAsync(new LoadCommand(Name));
 
             if (res != null)
-            {
-                NotificationService.ShowInAppNotification("Added to queue!");
-            }
+                NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
         }
         private ICommand _playCommand;
-        public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
-        private async void PlayAlbum()
+        public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayPlaylist));
+        private async void PlayPlaylist()
         {
             // Clear queue, add playlist and play
             try
@@ -77,10 +75,13 @@ namespace FluentMPC.ViewModels
                     await c.InternalResource.SendAsync(new LoadCommand(Name));
                     await c.InternalResource.SendAsync(new PlayCommand(0));
                 }
+
+                // Auto-navigate to the queue
+                NavigationService.Navigate(typeof(Views.ServerQueuePage));
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't play content: {e}", 0);
+                NotificationService.ShowInAppNotification(string.Format("ErrorPlayingText".GetLocalized(), e), 0);
             }
         }
 

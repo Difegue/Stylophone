@@ -12,22 +12,11 @@ namespace FluentMPC.Services
 {
     internal partial class LiveTileService : ActivationHandler<LaunchActivatedEventArgs>
     {
-        private const string QueueEnabledKey = "LiveTileNotificationQueueEnabled";
-
-        public async Task EnableQueueAsync()
-        {
-            var queueEnabled = await ApplicationData.Current.LocalSettings.ReadAsync<bool>(QueueEnabledKey);
-            if (!queueEnabled)
-            {
-                TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
-                await ApplicationData.Current.LocalSettings.SaveAsync(QueueEnabledKey, true);
-            }
-        }
-
         public void UpdateTile(TileNotification notification)
         {
             try
             {
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);
             }
             catch (Exception)

@@ -106,9 +106,11 @@ namespace FluentMPC.Services
 
                 // Music metadata.
                 updater.Type = MediaPlaybackType.Music;
-                updater.MusicProperties.Artist = track.File.Artist;
-                updater.MusicProperties.Title = track.File.Title;
-                updater.MusicProperties.AlbumTitle = track.File.Album;
+
+                // SMTC doesn't like null values, so fallback to empty strings.
+                updater.MusicProperties.Artist = track.File.Artist ?? "";
+                updater.MusicProperties.Title = track.File.Title ?? "";
+                updater.MusicProperties.AlbumTitle = track.File.Album ?? "";
 
                 // Set the album art thumbnail.
                 var uniqueIdentifier = track.File.HasAlbum ? track.File.Album : track.File.HasTitle ? track.File.Title : track.File.Path;

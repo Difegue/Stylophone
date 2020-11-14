@@ -88,11 +88,11 @@
                     <Setter Property="ContextFlyout">
                         <Setter.Value>
                             <MenuFlyout Opening="MenuFlyout_Opening">
-                                <MenuFlyoutItem Icon="Play" Text="Play" Command="{Binding PlayTrackCommand}" CommandParameter="{Binding File}" DataContext="{Binding}" />
-                                <MenuFlyoutItem Icon="Delete" Text="Remove" Command="{Binding RemoveFromQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{Binding PlayTrackCommand}" CommandParameter="{Binding File}" DataContext="{Binding}" />
+                                <MenuFlyoutItem x:Uid="RemoveFromQueueFlyoutItem" Icon="Delete" Command="{Binding RemoveFromQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
                                 <MenuFlyoutSeparator/>
-                                <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem Text="View Album" Command="{Binding ViewAlbumCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
+                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem x:Uid="ViewAlbumFlyoutItem" Command="{Binding ViewAlbumCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
                                     <MenuFlyoutItem.Icon>
                                         <FontIcon Glyph="&#xE93C;" />
                                     </MenuFlyoutItem.Icon>

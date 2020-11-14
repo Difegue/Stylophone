@@ -379,7 +379,7 @@ namespace FluentMPC.ViewModels.Playback
             var req = await MPDConnectionService.SafelySendCommandAsync(new SaveCommand(playlistName), _currentUiDispatcher);
 
             if (req != null)
-                NotificationService.ShowInAppNotification($"Added to Playlist {playlistName}!"); 
+                NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName)); 
         }
 
         /// <summary>
@@ -658,7 +658,7 @@ namespace FluentMPC.ViewModels.Playback
             if (CurrentTrack == null)
             {
                 if (_isOnMainDispatcher)
-                    NotificationService.ShowInAppNotification("No track is currently playing.");
+                    NotificationService.ShowInAppNotification("NoTrackPlayingText".GetLocalized());
                 return;
             }
 
@@ -673,7 +673,7 @@ namespace FluentMPC.ViewModels.Playback
             if (CurrentTrack == null)
             {
                 if (_isOnMainDispatcher)
-                    NotificationService.ShowInAppNotification("No track is currently playing.");
+                    NotificationService.ShowInAppNotification("NoTrackPlayingText".GetLocalized());
                 return;
             }
 
@@ -726,7 +726,7 @@ namespace FluentMPC.ViewModels.Playback
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification("An error occurred while trying to switch to compact mode. More information:\n" + e.Message, 0);
+                NotificationService.ShowInAppNotification(string.Format("GenericErrorText".GetLocalized(), e), 0);
             }
         }
 

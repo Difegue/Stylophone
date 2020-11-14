@@ -65,7 +65,6 @@ namespace FluentMPC.Services
         private async Task InitializeAsync()
         {
             await Singleton<BackgroundTaskService>.Instance.RegisterBackgroundTasksAsync().ConfigureAwait(false);
-            await Singleton<LiveTileService>.Instance.EnableQueueAsync().ConfigureAwait(false);
             await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
         }
 

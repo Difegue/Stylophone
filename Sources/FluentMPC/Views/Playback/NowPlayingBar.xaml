@@ -155,16 +155,14 @@
                 <!--  Shuffle  -->
                 <Button
                     x:Name="ShuffleButton"
+                    x:Uid="ShuffleButton"
                     Visibility="Collapsed"
                     Width="40"
                     Height="40"
-                    Margin="5,0"
+                    Margin="4,0"
                     Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
                     Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Toggle Shuffle" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
@@ -176,14 +174,12 @@
 
                 <!--  Back  -->
                 <Button
+                    x:Uid="PreviousButton"
                     Width="40"
                     Height="40"
-                    Margin="5,0"
+                    Margin="4,0"
                     Click="{x:Bind PlaybackViewModel.SkipPrevious}"
                     Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Previous Track" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
@@ -197,13 +193,11 @@
                 <Button
                     Width="50"
                     Height="50"
-                    Margin="5,0"
+                    Margin="4,0"
+                    x:Uid="PlayButton"
                     Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
                     BorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
                     Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Play/Pause" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
@@ -217,12 +211,10 @@
                 <Button
                     Width="40"
                     Height="40"
-                    Margin="5,0"
+                    Margin="4,0"
+                    x:Uid="NextButton"
                     Click="{x:Bind PlaybackViewModel.SkipNext}"
                     Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Next Track" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
@@ -235,16 +227,14 @@
                 <!--  Repeat  -->
                 <Button
                     x:Name="RepeatButton"
+                    x:Uid="RepeatButton"
                     Visibility="Collapsed"
                     Width="40"
                     Height="40"
-                    Margin="5,0"
+                    Margin="4,0"
                     Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
                     Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Toggle Repeat" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
@@ -357,13 +347,11 @@
                 <!-- Compact Sound -->
                 <Button
                     x:Name="SoundFlyout"
+                    x:Uid="SoundFlyoutButton"
                     Width="40"
                     Height="40"
                     Margin="{StaticResource XSmallLeftMargin}"
                     Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Change Volume" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
@@ -415,14 +403,12 @@
 
                 <!--  Compact Overlay  -->
                 <Button
+                    x:Uid="CompactOverlayButton"
                     Width="40"
                     Height="40"
                     Margin="{StaticResource XSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.SwitchToCompactView}"
                     Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Compact Overlay Mode" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                             FontFamily="Segoe MDL2 Assets"
@@ -435,13 +421,11 @@
                 <!--  More  -->
                 <Button
                 x:Name="MoreButton"
+                x:Uid="MoreButton"
                 Width="40"
                 Height="40"
                 Margin="{StaticResource XSmallLeftMargin}"
                 Style="{StaticResource CircleButtonStyle}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="More Actions" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock
                         FontFamily="Segoe MDL2 Assets"
@@ -454,7 +438,7 @@
 
                             <MenuFlyoutItem
                             x:Name="ShuffleMenu"
-                            Text="Toggle Shuffle"
+                            x:Uid="ShuffleFlyoutItem"
                             Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                             Click="{x:Bind PlaybackViewModel.ToggleShuffle}">
                                 <MenuFlyoutItem.Icon>
@@ -464,7 +448,7 @@
 
                             <MenuFlyoutItem
                             x:Name="RepeatMenu"
-                            Text="Toggle Repeat"
+                            x:Uid="RepeatFlyoutItem"
                             Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                             Click="{x:Bind PlaybackViewModel.ToggleRepeat}">
                                 <MenuFlyoutItem.Icon>
@@ -474,9 +458,9 @@
 
                             <MenuFlyoutSeparator x:Name="SmallViewSeparator" Opacity="0.4" />
 
-                            <MenuFlyoutItem Text="Add Queue to Playlist" Icon="Save" Click="{x:Bind PlaybackViewModel.SaveQueue}"/>
+                            <MenuFlyoutItem x:Uid="AddQueueToPlaylistFlyoutItem" Icon="Save" Click="{x:Bind PlaybackViewModel.SaveQueue}"/>
 
-                            <MenuFlyoutItem Text="Clear Queue" Icon="Delete" Click="{x:Bind PlaybackViewModel.ClearQueue}"/>
+                            <MenuFlyoutItem x:Uid="ClearQueueFlyoutItem" Icon="Delete" Click="{x:Bind PlaybackViewModel.ClearQueue}"/>
 
                             <MenuFlyoutSeparator Opacity="0.4" />
 
@@ -488,7 +472,7 @@
                             </MenuFlyoutItem> -->
 
                             <!--  Add to playlist  -->
-                            <MenuFlyoutItem Text="Add track to playlist" Command="{x:Bind PlaybackViewModel.AddToPlaylistCommand}">
+                            <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Command="{x:Bind PlaybackViewModel.AddToPlaylistCommand}">
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE142;" />
                                 </MenuFlyoutItem.Icon>
@@ -496,8 +480,8 @@
 
                             <!-- Go to Album --> 
                             <MenuFlyoutItem
-                                Command="{x:Bind PlaybackViewModel.ShowAlbumCommand}"
-                                Text="View Album" >
+                                x:Uid="ViewAlbumFlyoutItem"
+                                Command="{x:Bind PlaybackViewModel.ShowAlbumCommand}">
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE93C;" />
                                 </MenuFlyoutItem.Icon>

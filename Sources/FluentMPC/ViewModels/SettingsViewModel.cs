@@ -174,11 +174,11 @@ namespace FluentMPC.ViewModels
                             {
                                 var cacheFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("AlbumArt");
                                 await cacheFolder.DeleteAsync();
-                                NotificationService.ShowInAppNotification("Cache has been deleted!");
+                                NotificationService.ShowInAppNotification("CacheDeletedText".GetLocalized());
                             }
                             catch (Exception e)
                             {
-                                NotificationService.ShowInAppNotification($"Something went wrong while deleting cache: {e}");
+                                NotificationService.ShowInAppNotification(string.Format("GenericErrorText".GetLocalized(), e), 0);
                             }
 
                         });
@@ -201,16 +201,16 @@ namespace FluentMPC.ViewModels
                         {
                             if (MPDConnectionService.CurrentStatus.UpdatingDb > 0)
                             {
-                                NotificationService.ShowInAppNotification("The database is already being updated.");
+                                NotificationService.ShowInAppNotification("DatabaseAlreadyUpdatingText".GetLocalized());
                                 return;
                             }
 
                             ContentDialog confirmDialog = new ContentDialog
                             {
-                                Title = "Update the Server Database?",
-                                Content = "This operation might take the server some time to complete.",
-                                PrimaryButtonText = "Refresh",
-                                CloseButtonText = "Cancel"
+                                Title = "UpdateDbDialogTitle".GetLocalized(),
+                                Content = "UpdateDbDialogText".GetLocalized(),
+                                PrimaryButtonText = "OKButtonText".GetLocalized(),
+                                CloseButtonText = "CancelButtonText".GetLocalized()
                             };
 
                             ContentDialogResult result = await confirmDialog.ShowAsync();
@@ -220,7 +220,7 @@ namespace FluentMPC.ViewModels
                             var res = await MPDConnectionService.SafelySendCommandAsync(new MpcNET.Commands.Database.UpdateCommand());
 
                             if (res != null)
-                                NotificationService.ShowInAppNotification("Database update started.");
+                                NotificationService.ShowInAppNotification("DatabaseUpdateStartedText".GetLocalized());
                         });
                 }
 

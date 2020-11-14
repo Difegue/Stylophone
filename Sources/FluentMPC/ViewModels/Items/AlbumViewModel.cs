@@ -123,7 +123,7 @@ namespace FluentMPC.ViewModels.Items
 
             try
             {
-                if (Files.Count == 0) throw new Exception("No tracks loaded yet.");
+                if (Files.Count == 0) throw new Exception("NoTracksLoaded".GetLocalized());
 
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
@@ -133,16 +133,17 @@ namespace FluentMPC.ViewModels.Items
 
                         if (!req.IsResponseValid)
                         {
-                            NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.", 0);
+                            var errorMsg = string.Format("ErrorAddingAlbum".GetLocalized(), "InvalidMPDResponseError".GetLocalized());
+                            NotificationService.ShowInAppNotification(errorMsg, 0);
                             break;
                         }
                     }
-                    NotificationService.ShowInAppNotification($"Album added to Playlist!");
+                    NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
                 }
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't add album: {e.Message}", 0);
+                NotificationService.ShowInAppNotification(string.Format("ErrorAddingAlbum".GetLocalized(), e.Message), 0);
             }
         }
 
@@ -156,7 +157,7 @@ namespace FluentMPC.ViewModels.Items
 
             try
             {
-                if (Files.Count == 0) throw new Exception("No tracks loaded yet.");
+                if (Files.Count == 0) throw new Exception("NoTracksLoaded".GetLocalized());
 
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
@@ -166,7 +167,8 @@ namespace FluentMPC.ViewModels.Items
 
                         if (!req.IsResponseValid)
                         {
-                            NotificationService.ShowInAppNotification($"Couldn't add Album: Invalid MPD Response.", 0);
+                            var errorMsg = string.Format("ErrorAddingAlbum".GetLocalized(), "InvalidMPDResponseError".GetLocalized());
+                            NotificationService.ShowInAppNotification(errorMsg, 0);
                             break;
                         }
 
@@ -175,12 +177,12 @@ namespace FluentMPC.ViewModels.Items
                             MPDConnectionService.DisableQueueEvents = false;
 
                     }
-                    NotificationService.ShowInAppNotification($"Album added to Queue!");
+                    NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
                 }
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't add album: {e.Message}", 0);
+                NotificationService.ShowInAppNotification(string.Format("ErrorAddingAlbum".GetLocalized(), e.Message), 0);
                 MPDConnectionService.DisableQueueEvents = false;
             }
         }
@@ -196,12 +198,12 @@ namespace FluentMPC.ViewModels.Items
             // Clear queue, add album and play
             try
             {
-                if (Files.Count == 0) throw new Exception("No tracks loaded yet.");
+                if (Files.Count == 0) throw new Exception("NoTracksLoaded".GetLocalized());
 
                 using (var c = await MPDConnectionService.GetConnectionAsync())
                 {
                     var req = await c.InternalResource.SendAsync(new ClearCommand());
-                    if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
+                    if (!req.IsResponseValid) throw new Exception("CantClearError".GetLocalized());
 
                     foreach (var f in Files)
                     {
@@ -209,11 +211,14 @@ namespace FluentMPC.ViewModels.Items
                     }
                     req = await c.InternalResource.SendAsync(new PlayCommand(0));
                 }
-                NotificationService.ShowInAppNotification($"Now Playing {Name}");
+                NotificationService.ShowInAppNotification(string.Format("NowPlayingText".GetLocalized(), Name));
+
+                // Auto-navigate to the queue
+                NavigationService.Navigate(typeof(Views.ServerQueuePage));
             }
             catch (Exception e)
             {
-                NotificationService.ShowInAppNotification($"Couldn't play album: {e.Message}", 0);
+                NotificationService.ShowInAppNotification(string.Format("ErrorPlayingText".GetLocalized(), e.Message), 0);
             }
             MPDConnectionService.DisableQueueEvents = false;
         }
