@@ -225,20 +225,20 @@
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
 
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.PlayPlaylistCommand}" Width="108" HorizontalAlignment="Stretch">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.PlayPlaylistCommand}" Width="108" VerticalAlignment="Stretch">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
-                                    <TextBlock x:Uid="PlayTextBlock"/>
+                                    <TextBlock x:Uid="PlayTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddPlaylistCommand}" Width="108">
+                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddPlaylistCommand}" Width="108" VerticalAlignment="Stretch">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
                                     <TextBlock x:Uid="AddToQueueTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.RemovePlaylistCommand}" Width="108">
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.RemovePlaylistCommand}" Width="108" VerticalAlignment="Stretch">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Delete" />
                                     <TextBlock x:Uid="DeletePlaylistTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>

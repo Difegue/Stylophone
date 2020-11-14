@@ -190,18 +190,20 @@
 
                         <TextBlock x:Name="info"  RelativePanel.RightOf="itemHero" RelativePanel.Below="artist" Margin="{StaticResource SmallTopMargin}"
                                    Style="{ThemeResource BaseTextBlockStyle}" FontSize="16" Text="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}" />
+
+
                         
                         <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
 
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}" HorizontalAlignment="Stretch"
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}" VerticalAlignment="Stretch"
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
-                                    <TextBlock x:Uid="PlayTextBlock"/>
+                                    <TextBlock x:Uid="PlayTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}" 
+                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}" VerticalAlignment="Stretch"
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
@@ -209,7 +211,7 @@
                                 </StackPanel>
                             </Button>
 
-                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}"
+                            <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}" VerticalAlignment="Stretch"
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="MusicInfo" />
