@@ -307,4 +307,79 @@ If you want to clear the album art cache, click this button.</value>
   <data name="Settings_Sizing_Normal.Content" xml:space="preserve">
     <value>Normal</value>
   </data>
+  <data name="AddQueueToPlaylistFlyoutItem.Text" xml:space="preserve">
+    <value>Add Queue to Playlist</value>
+  </data>
+  <data name="AddToPlaylistFlyoutItem.Text" xml:space="preserve">
+    <value>Add to Playlist</value>
+  </data>
+  <data name="AddToPlaylistTextBlock.Text" xml:space="preserve">
+    <value>Add to Playlist</value>
+  </data>
+  <data name="AddToQueueFlyoutItem.Text" xml:space="preserve">
+    <value>Add to Queue</value>
+  </data>
+  <data name="AddToQueueTextBlock.Text" xml:space="preserve">
+    <value>Add to Queue</value>
+  </data>
+  <data name="ClearQueueFlyoutItem.Text" xml:space="preserve">
+    <value>Clear Queue</value>
+  </data>
+  <data name="CompactOverlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Compact Overlay Mode</value>
+  </data>
+  <data name="DeletePlaylistTextBlock.Text" xml:space="preserve">
+    <value>Delete Playlist</value>
+  </data>
+  <data name="FoldersRoot.Text" xml:space="preserve">
+    <value>MPD Filesystem</value>
+  </data>
+  <data name="MoreButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>More Actions</value>
+  </data>
+  <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Next Track</value>
+  </data>
+  <data name="PlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play/Pause</value>
+  </data>
+  <data name="PlayFlyoutItem.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PlayTextBlock.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Previous Track</value>
+  </data>
+  <data name="RemoveFromPlaylistFlyoutItem.Text" xml:space="preserve">
+    <value>Remove from Playlist</value>
+  </data>
+  <data name="RemoveFromQueueFlyoutItem.Text" xml:space="preserve">
+    <value>Remove from Queue</value>
+  </data>
+  <data name="RepeatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Toggle Repeat</value>
+  </data>
+  <data name="RepeatFlyoutItem.Text" xml:space="preserve">
+    <value>Toggle Repeat</value>
+  </data>
+  <data name="ShuffleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Toggle Shuffle</value>
+  </data>
+  <data name="ShuffleFlyoutItem.Text" xml:space="preserve">
+    <value>Toggle Shuffle</value>
+  </data>
+  <data name="SoundFlyoutButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change Volume</value>
+  </data>
+  <data name="TreeView_CollapseAllButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Close all open folders</value>
+  </data>
+  <data name="UpNextTextBlock.Text" xml:space="preserve">
+    <value>Up Next:</value>
+  </data>
+  <data name="ViewAlbumFlyoutItem.Text" xml:space="preserve">
+    <value>View Album</value>
+  </data>
 </root>

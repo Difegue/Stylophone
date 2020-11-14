@@ -107,13 +107,11 @@
                         Margin="0,0,0,20"
                         VerticalAlignment="Center">
                 <Button Margin="5,0"
+                        x:Uid="ShuffleButton"
                         Style="{StaticResource CircleButtonStyle}"
                         Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                         Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
                         Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Toggle Shuffle" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock Text="&#xE8B1;"
                                    FontSize="18"
@@ -124,12 +122,10 @@
 
                 <!-- Back -->
                 <Button Margin="5,0"
+                        x:Uid="PreviousButton"
                         Style="{StaticResource CircleButtonStyle}"
                         Click="{x:Bind PlaybackViewModel.SkipPrevious}"
                         Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Previous Track" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock Text="&#xE892;"
                                    FontSize="18"
@@ -140,12 +136,10 @@
 
                 <!-- Play / Pause -->
                 <Button Margin="5,0"
+                        x:Uid="PlayButton"
                         Style="{StaticResource CircleButtonStyle}"
                         Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
                         Width="52" Height="52">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Play/Pause" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock Text="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
                                    FontSize="26"
@@ -156,12 +150,10 @@
 
                 <!-- Next -->
                 <Button Margin="5,0"
+                        x:Uid="NextButton"
                         Style="{StaticResource CircleButtonStyle}"
                         Click="{x:Bind PlaybackViewModel.SkipNext}"
                         Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Next Track" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock Text="&#xE893;"
                                    FontSize="18"
@@ -172,13 +164,11 @@
 
                 <!-- Repeat -->
                 <Button Margin="5,0"
+                        x:Uid="RepeatButton"
                         Style="{StaticResource CircleButtonStyle}"
                         Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                         Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
                         Width="40" Height="40">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Toggle Repeat" />
-                    </ToolTipService.ToolTip>
                     <Button.Content>
                         <TextBlock Text="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
                                    FontSize="18"

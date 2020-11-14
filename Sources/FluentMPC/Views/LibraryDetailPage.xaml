@@ -105,8 +105,8 @@
                     <Setter Property="ContextFlyout">
                         <Setter.Value>
                             <MenuFlyout Opening="MenuFlyout_Opening">
-                                <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
                             </MenuFlyout>
                         </Setter.Value>
                     </Setter>
@@ -196,14 +196,14 @@
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel>
                                     <SymbolIcon Symbol="Play" />
-                                    <TextBlock>Play</TextBlock>
+                                    <TextBlock x:Uid="PlayTextBlock"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}"
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
-                                    <TextBlock>Add to Queue</TextBlock>
+                                    <TextBlock x:Uid="AddToQueueTextBlock"/>
                                 </StackPanel>
                             </Button>
 
@@ -211,7 +211,7 @@
                                     IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                                 <StackPanel >
                                     <SymbolIcon Symbol="MusicInfo" />
-                                    <TextBlock>Add to Playlist</TextBlock>
+                                    <TextBlock x:Uid="AddToPlaylistTextBlock"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>

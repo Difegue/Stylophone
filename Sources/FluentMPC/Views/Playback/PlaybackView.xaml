@@ -102,7 +102,7 @@
         <StackPanel Orientation="Horizontal" Margin="25,0,25,10" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                     Visibility="{x:Bind PlaybackViewModel.HasNextTrack, Converter={StaticResource BoolToVisibilityConverter}}">
 
-            <TextBlock Text="Up Next:" x:Name="UpNext"
+            <TextBlock x:Name="UpNext" x:Uid="UpNextTextBlock"
                        Style="{ThemeResource BaseTextBlockStyle}"
                        Opacity="0.6" />
             

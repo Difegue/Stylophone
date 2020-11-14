@@ -24,9 +24,9 @@
                 
                 <winui:TreeViewItem.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Icon="Play" Text="Play" Command="{x:Bind PlayCommand}" />
-                        <MenuFlyoutItem Icon="Add" Text="Add to Queue" Command="{x:Bind AddToQueueCommand}"/>
-                        <MenuFlyoutItem Icon="MusicInfo" Text="Add to Playlist" Command="{x:Bind AddToPlaylistCommand}"/>
+                        <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{x:Bind PlayCommand}" />
+                        <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{x:Bind AddToQueueCommand}"/>
+                        <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{x:Bind AddToPlaylistCommand}"/>
                     </MenuFlyout>
                 </winui:TreeViewItem.ContextFlyout>
             </winui:TreeViewItem>
@@ -46,7 +46,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock
                     Grid.Column="1"
-                    Text="MPD Filesystem"
+                    x:Uid="FoldersRoot"
                     Margin="{StaticResource SmallLeftMargin}"
                     Style="{StaticResource ListTitleStyle}"
                     VerticalAlignment="Center" />
@@ -59,7 +59,6 @@
                     VerticalAlignment="Stretch"
                     VerticalContentAlignment="Center"
                     FontFamily="Segoe MDL2 Assets"
-                    ToolTipService.ToolTip="Close all open folders"
                     Command="{Binding ElementName=collapseBehavior, Path=CollapseAllCommand}"
                     Background="Transparent" />
         </Grid>
