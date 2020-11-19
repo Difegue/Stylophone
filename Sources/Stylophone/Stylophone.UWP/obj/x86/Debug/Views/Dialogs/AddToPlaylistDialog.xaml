@@ -1,0 +1,24 @@
+﻿<ContentDialog x:ConnectionId='1'
+    x:Class="Stylophone.Views.AddToPlaylistDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    x:Uid="AddToPlaylistDialog"
+    d:DesignHeight="345"
+    d:DesignWidth="550"
+    mc:Ignorable="d">
+    <ContentDialog.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
+    </ContentDialog.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <ComboBox x:ConnectionId='2' x:Uid="AddToPlaylistComboBox"                                  DisplayMemberPath="Name" SelectedValuePath="Name"                                                                                                                
+                                                         Width="270"                                                                                                   />
+            <CheckBox x:ConnectionId='3' x:Uid="NewPlaylistCheckBox"                                                                                                                                                                                         />
+            <TextBox x:ConnectionId='4' x:Uid="NewPlaylistTextBox"                                                                                                                                                   />
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>
+

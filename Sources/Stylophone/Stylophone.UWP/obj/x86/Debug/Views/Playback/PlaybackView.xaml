@@ -1,0 +1,150 @@
+﻿<Page x:ConnectionId='1'
+    x:Class="Stylophone.Views.PlaybackView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    mc:Ignorable="d"
+    d:DesignHeight="430"
+    d:DesignWidth="300"
+                            
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:behaviors="using:Stylophone.Behaviors"
+    behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
+    xmlns:converters="using:Stylophone.Helpers" xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters">
+
+    <Page.Resources>
+        <converters:SliderValueConverter x:Key="SliderValueConverter" />
+        <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <converters:BoolToBrushConverter
+            x:Key="BoolToBrushConverter"
+            FalseColor="SystemControlDisabledTransparentBrush"
+            TrueColor="ButtonRevealBackgroundPointerOver" />
+
+    </Page.Resources>
+
+
+    <RelativePanel>
+
+        <!--  Track Background  -->
+        <Border RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True" 
+                RelativePanel.AlignRightWithPanel="True"
+                Canvas.ZIndex="-1"
+                Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}">
+
+        </Border>
+        <controls:ImageEx x:ConnectionId='2'  HorizontalAlignment="Center" Canvas.ZIndex="-2"  Stretch="UniformToFill" 
+                                                                                                 />
+
+        <Grid RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True" 
+                RelativePanel.AlignRightWithPanel="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".6*" />
+                <ColumnDefinition Width=".4*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".7*" />
+                <RowDefinition Height=".3*"/>
+            </Grid.RowDefinitions>
+
+            <controls:DropShadowPanel x:ConnectionId='6'
+                        x:Name="AlbumArt"
+                        Grid.Row="0" Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        BlurRadius="10"
+                        OffsetX="4"
+                        OffsetY="4"
+                        ShadowOpacity="0.6"
+                        Margin="24,72,24,0"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        Color="Black">
+
+                <Grid CornerRadius="3">
+                    <controls:ImageEx x:ConnectionId='11'                                                                        PlaceholderStretch="Uniform" PlaceholderSource="/Assets/AlbumPlaceholder.png" Style="{StaticResource NoAnimationImageEx}" />
+                </Grid>
+                </controls:DropShadowPanel>
+
+            <StackPanel x:ConnectionId='7' x:Name="AlbumInfo" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0" >
+                <TextBlock x:ConnectionId='8'                                                                 
+                       Style="{ThemeResource TitleTextBlockStyle}"
+                       FontSize="28"
+                       MaxLines="5"
+                       TextWrapping="Wrap"
+                       TextTrimming="CharacterEllipsis"
+                       Margin="25,0,25,5"
+                       FontWeight="Bold" />
+
+                <TextBlock x:ConnectionId='9'                                                                         x:Name="AlbumArtist"
+                       Style="{ThemeResource BaseTextBlockStyle}"
+                       Margin="25,0,25,10"
+                       Opacity="0.6"
+                       MaxLines="3"
+                       TextTrimming="CharacterEllipsis"
+                       FontWeight="Bold" />
+
+                <TextBlock x:ConnectionId='10'                                                                        x:Name="AlbumName"
+                       Style="{ThemeResource SubtitleTextBlockStyle}"
+                       Margin="25,0,25,10"
+                       Opacity="0.6"
+                       MaxLines="3"
+                       TextWrapping="Wrap"
+                       TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+
+        </Grid>
+
+        <StackPanel x:ConnectionId='3' Orientation="Horizontal" Margin="25,0,25,10" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True"
+                                                                                                                              >
+
+            <TextBlock x:ConnectionId='4' x:Name="UpNext" x:Uid="UpNextTextBlock"
+                       Style="{ThemeResource BaseTextBlockStyle}"
+                       Opacity="0.6" />
+            
+            <TextBlock x:ConnectionId='5'                                                               x:Name="UpNextTitle"
+                       Style="{ThemeResource BaseTextBlockStyle}"
+                       Margin="{StaticResource XSmallLeftMargin}"
+                       Opacity="0.6"
+                       TextWrapping="NoWrap"
+                       TextTrimming="CharacterEllipsis" />
+
+        </StackPanel>
+        
+        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+
+                <VisualState x:ConnectionId='12' x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="830" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.(Grid.Column)" Value="0" />
+                        <Setter Target="AlbumArt.(Grid.Row)" Value="0" />
+                        <Setter Target="AlbumArt.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="AlbumArt.(Grid.ColumnSpan)" Value="1" />
+                        <Setter Target="AlbumArt.Margin" Value="36,72,36,36" />
+
+                        <Setter Target="AlbumInfo.(Grid.Column)" Value="1" />
+                        <Setter Target="AlbumInfo.(Grid.Row)" Value="0" />
+                        <Setter Target="AlbumInfo.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="AlbumInfo.(Grid.ColumnSpan)" Value="1" />
+                        <Setter Target="AlbumInfo.Margin" Value="0,72,0,36" />
+                        <Setter Target="AlbumInfo.VerticalAlignment" Value="Center" />
+
+                        <Setter Target="AlbumName.Style" Value="{ThemeResource TitleTextBlockStyle}" />
+                        <Setter Target="AlbumArtist.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="UpNext.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="UpNextTitle.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </RelativePanel>
+</Page>
+

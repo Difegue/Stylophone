@@ -1,0 +1,239 @@
+﻿<Page x:ConnectionId='1'
+    x:Class="Stylophone.Views.LibraryDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+    xmlns:Stylophone="using:Stylophone.Helpers"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:behaviors="using:Stylophone.Behaviors" xmlns:items="using:Stylophone.ViewModels.Items"
+    Style="{StaticResource PageStyle}"
+    behaviors:NavigationViewHeaderBehavior.HeaderMode="Minimal"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
+        <Stylophone:DoubleTopThicknessConverter x:Key="DoubleTopThicknessConverter" />
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
+
+        <DataTemplate x:Key="TrackListViewTemplate"                                  >
+            <Grid x:ConnectionId='3'>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="24"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:ConnectionId='7' Grid.Column="0"                                                            
+                    VerticalAlignment="Center" MaxLines="1" TextTrimming="CharacterEllipsis" Style="{ThemeResource BaseTextBlockStyle}"/>
+                </Grid>
+
+                <TextBlock x:ConnectionId='4' Grid.Column="1"
+                                               
+                    VerticalAlignment="Center"
+                                                                 
+                    MaxLines="1"
+                    TextTrimming="CharacterEllipsis"
+                    Style="{ThemeResource BodyTextBlockStyle}"
+                    Margin="12,0,0,0"/>
+
+                <TextBlock x:ConnectionId='5' Grid.Column="2"
+                                              
+                    VerticalAlignment="Center"
+                                                                
+                    MaxLines="1"
+                    TextTrimming="CharacterEllipsis"
+                    Style="{ThemeResource BodyTextBlockStyle}"
+                    Margin="12,0,0,0"/>
+                <TextBlock x:ConnectionId='6' Grid.Column="3"
+                                                                                                             
+                                                                                                                               
+                    VerticalAlignment="Center"
+                    MaxLines="1"
+                    TextTrimming="CharacterEllipsis"
+                    Style="{ThemeResource BodyTextBlockStyle}"
+                    Margin="12,0,0,0"/>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid x:ConnectionId='8' x:Name="ContentArea">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!--641 is the default CompactModeThresholdWidth in NavigationView -->
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="propertiesGroup1.(RelativePanel.RightOf)" Value="itemHero" />
+                        <Setter Target="propertiesGroup1.(RelativePanel.Below)" Value="info" />
+                        <Setter Target="propertiesGroup1.Width" Value="400" />
+                        <Setter Target="title.Style" Value="{ThemeResource SubheaderTextBlockStyle}"/>
+                        <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}"/>
+                        <Setter Target="Header.Margin" Value="0,0,0,0"/>
+                        <Setter Target="Header.Padding" Value="24,46,24,36" />
+                        <Setter Target="QueueList.Margin" Value="0,0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Stylophone:AlternatingRowListView x:ConnectionId='9' SelectionMode="Single"
+                      x:Name="QueueList" Margin="0,-96"
+                                                
+                      extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                      extensions:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
+                      OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
+                      EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                      ItemTemplate="{StaticResource TrackListViewTemplate}"
+                                                             >
+            <Stylophone:AlternatingRowListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
+                    <Setter Property="ContextFlyout">
+                        <Setter.Value>
+                            <MenuFlyout x:ConnectionId='11'                             >
+                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
+                            </MenuFlyout>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Stylophone:AlternatingRowListView.ItemContainerStyle>
+            
+            <Stylophone:AlternatingRowListView.Header>
+                <controls:ScrollHeader Mode="Sticky" >
+                    <!-- https://github.com/windows-toolkit/WindowsCommunityToolkit/issues/3415 -->
+
+                    <RelativePanel x:ConnectionId='12' RequestedTheme="Dark" Padding="24,128,24,36" x:Name="Header">
+
+                        <Border RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True" 
+                            RelativePanel.AlignRightWithPanel="True"
+                            Margin="-24,-78,-24,-24"
+                            Canvas.ZIndex="-1">
+                            <Border.Background>
+                                <AcrylicBrush x:ConnectionId='24' BackgroundSource="Backdrop" TintOpacity="0.8"                                                                   
+                                                                                                            ></AcrylicBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <Border x:ConnectionId='13' RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True" 
+                            RelativePanel.AlignRightWithPanel="True"
+                            Margin="-24,-78,-24,-24"
+                            Canvas.ZIndex="-1"
+                            Opacity="0.3"
+                                                                                                                                           >
+                            <Border.Background>
+                                <SolidColorBrush Color="Black"></SolidColorBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <Border RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True" 
+                            RelativePanel.AlignRightWithPanel="True"
+                            Margin="-24"
+                            Canvas.ZIndex="-2">
+                            <Border.Background>
+                                <ImageBrush x:ConnectionId='23'                                                             Stretch="UniformToFill"></ImageBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <controls:DropShadowPanel x:ConnectionId='14' x:Name="itemHero"
+                        Width="200" 
+                        Height="200"
+                        RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True"
+                        Margin="{StaticResource SmallRightMargin}"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        BlurRadius="10"
+                        OffsetY="2"
+                        ShadowOpacity="0.6"
+                        Color="Black">
+
+                            <Grid Width="200" Height="200" CornerRadius="3">
+                                <controls:ImageEx x:ConnectionId='22' PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
+	                                                                                                   Stretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"/>
+                            </Grid>
+                        </controls:DropShadowPanel>
+
+                        <TextBlock x:ConnectionId='15'
+                        x:Name="title"
+                        Margin="{StaticResource XXSmallTopMargin}"
+                        RelativePanel.AlignTopWithPanel="True"
+                        RelativePanel.RightOf="itemHero"
+                        Style="{ThemeResource TitleTextBlockStyle}"
+                        MaxLines="2" TextTrimming="CharacterEllipsis"
+                                                                                          
+                                                                         />
+
+                        <TextBlock x:ConnectionId='16' x:Name="artist" RelativePanel.RightOf="itemHero" RelativePanel.Below="title" MaxLines="2" TextTrimming="CharacterEllipsis"
+                                                                                                   
+                               Style="{StaticResource SubtitleTextBlockStyle}"                                                    />
+
+                        <TextBlock x:ConnectionId='17' x:Name="info"  RelativePanel.RightOf="itemHero" RelativePanel.Below="artist" Margin="{StaticResource SmallTopMargin}"
+                                   Style="{ThemeResource BaseTextBlockStyle}" FontSize="16"                                                     />
+
+
+                        
+                        <StackPanel x:ConnectionId='18' x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
+                                RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
+
+                            <Button x:ConnectionId='19' Style="{StaticResource ButtonRevealStyle}"                                                    VerticalAlignment="Stretch"
+                                                                                                                                                       Width="108">
+                                <StackPanel>
+                                    <SymbolIcon Symbol="Play" />
+                                    <TextBlock x:Uid="PlayTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:ConnectionId='20' x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}"                                                   VerticalAlignment="Stretch"
+                                                                                                                                                       Width="108">
+                                <StackPanel >
+                                    <SymbolIcon Symbol="Add" />
+                                    <TextBlock x:Uid="AddToQueueTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:ConnectionId='21' Style="{StaticResource ButtonRevealStyle}"                                                        VerticalAlignment="Stretch"
+                                                                                                                                                       Width="108">
+                                <StackPanel >
+                                    <SymbolIcon Symbol="MusicInfo" />
+                                    <TextBlock x:Uid="AddToPlaylistTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                    </RelativePanel>
+                </controls:ScrollHeader>
+            </Stylophone:AlternatingRowListView.Header>
+
+            <Stylophone:AlternatingRowListView.Footer>
+                <Grid Height="12"/>
+            </Stylophone:AlternatingRowListView.Footer>
+            
+        </Stylophone:AlternatingRowListView>
+
+
+        <winui:ProgressRing x:ConnectionId='10' Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                                            />
+
+    </Grid>
+</Page>
+

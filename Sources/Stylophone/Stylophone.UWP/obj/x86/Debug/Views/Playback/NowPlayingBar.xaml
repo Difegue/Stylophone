@@ -1,0 +1,543 @@
+﻿<UserControl x:ConnectionId='1'
+    x:Class="Stylophone.Views.NowPlayingBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:converters="using:Stylophone.Helpers"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="80"
+                     
+                         
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:SliderValueConverter x:Key="SliderValueConverter" />
+
+        <converters:BoolToBrushConverter
+            x:Key="BoolToBrushConverter"
+            FalseColor="SystemControlDisabledTransparentBrush"
+            TrueColor="ButtonRevealBackgroundPointerOver" />
+
+        <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <!--  Content  -->
+    <Grid x:ConnectionId='2'
+        x:Name="RootGrid"
+        RequestedTheme="Dark"
+        Height="81"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+        <!--  Split the content into two main sections  -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Track Background  -->
+        <controls:ImageEx x:ConnectionId='3'
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Canvas.ZIndex="5"
+            Opacity="1"
+                                                                                  
+            Stretch="UniformToFill" />
+
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Canvas.ZIndex="6" >
+            <Border.Background>
+                <AcrylicBrush x:ConnectionId='45' BackgroundSource="Backdrop" TintOpacity="0.8"                                                                                   
+                                                                                                            ></AcrylicBrush>
+            </Border.Background>
+        </Border>
+
+        <Border x:ConnectionId='4'
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Canvas.ZIndex="6"
+            Opacity="0.3"
+                                                                                                                                           >
+            <Border.Background>
+                <SolidColorBrush Color="Black"></SolidColorBrush>
+            </Border.Background>
+        </Border>
+
+        <Button x:ConnectionId='5'
+            Grid.Column="0"
+            x:Name="AlbumView"
+            Width="160"
+            Height="80"
+            Padding="0"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            CornerRadius="3,0,0,3"
+            Background="Transparent"
+            BorderThickness="1"
+            Canvas.ZIndex="10"
+                                                                                                                                    
+                                                                 
+            Style="{ThemeResource ButtonRevealStyle}">
+            <Grid>
+
+                <!--  Track Image and Navigate to now playing  -->
+                <controls:DropShadowPanel x:ConnectionId='40'
+                    x:Name="AlbumArt"
+                    Visibility="Collapsed"
+                    Margin="6,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    BlurRadius="10"
+                    OffsetY="2"
+                    ShadowOpacity="0.6"
+                    Color="Black">
+
+                    <Grid Width="70" Height="70" CornerRadius="3" >
+                        <controls:ImageEx x:ConnectionId='44'  PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"
+	                                                                                                                   Stretch="UniformToFill" />
+                    </Grid>
+                   
+                    
+                </controls:DropShadowPanel>
+
+                <!--  Track title and user  -->
+                <StackPanel x:ConnectionId='41' x:Name="TrackTitle" Margin="12,0,0,2" VerticalAlignment="Center">
+                    <TextBlock x:ConnectionId='42'
+                        MaxHeight="50"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                                                                                        
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="Wrap" />
+
+                    <TextBlock x:ConnectionId='43'
+                        Margin="0,2,0,0"
+                        FontSize="12"
+                        Opacity="0.8"
+                                                                                               
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
+                </StackPanel>
+            </Grid>
+        </Button>
+
+        <!--  Hold the rest of the content  -->
+        <Grid x:ConnectionId='6'
+            x:Name="MainContent"
+            Grid.Column="1"
+            Canvas.ZIndex="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--  Buttons  -->
+            <StackPanel
+                Grid.Column="0"
+                Grid.Row="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="{StaticResource XXSmallTopMargin}"
+                Orientation="Horizontal">
+                <!--  Shuffle  -->
+                <Button x:ConnectionId='33'
+                    x:Name="ShuffleButton"
+                    x:Uid="ShuffleButton"
+                    Visibility="Collapsed"
+                    Width="40"
+                    Height="40"
+                    Margin="4,0"
+                                                                                                                                          
+                                                                    
+                    Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE8B1;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Back  -->
+                <Button x:ConnectionId='34'
+                    x:Uid="PreviousButton"
+                    Width="40"
+                    Height="40"
+                    Margin="4,0"
+                                                                   
+                    Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE892;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Play / Pause  -->
+                <Button x:ConnectionId='35'
+                    Width="50"
+                    Height="50"
+                    Margin="4,0"
+                    x:Uid="PlayButton"
+                                                                          
+                    BorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                    Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock x:ConnectionId='39'
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="26"
+                                                                                            
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Next  -->
+                <Button x:ConnectionId='36'
+                    Width="40"
+                    Height="40"
+                    Margin="4,0"
+                    x:Uid="NextButton"
+                                                               
+                    Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE893;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  Repeat  -->
+                <Button x:ConnectionId='37'
+                    x:Name="RepeatButton"
+                    x:Uid="RepeatButton"
+                    Visibility="Collapsed"
+                    Width="40"
+                    Height="40"
+                    Margin="4,0"
+                                                                                                                                         
+                                                                   
+                    Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock x:ConnectionId='38'
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                                                                                     
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <!--  Slider  -->
+            <Grid x:ConnectionId='7'
+                x:Name="PlaybackSlider"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Grid.Row="1"
+                Margin="20,-12,20,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock x:ConnectionId='29'
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Margin="{StaticResource XXSmallTopMargin}"
+                    MinWidth="40"
+                    Opacity="0.8"
+                                                                                />
+
+                <Slider x:ConnectionId='30'
+                    x:Name="ProgressBar"
+                    Grid.Column="1"
+                    Margin="15,9,15,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Stretch"
+                    Style="{StaticResource CircleSlider}" Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
+                            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
+                                                                                  
+                    ManipulationMode="All"
+                                                                                           
+                                                                                         
+                    ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
+                                                                                     />
+
+                <ProgressBar x:ConnectionId='31'
+                    x:Name="LoadingBar"
+                    Grid.Column="1"
+                    Margin="15,2,15,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
+                    IsIndeterminate="True" />
+
+                <TextBlock x:ConnectionId='32'
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Margin="{StaticResource XXSmallTopMargin}"
+                    MinWidth="40"
+                    Opacity="0.8"
+                                                                                 />
+            </Grid>
+
+            <Border
+                Grid.Column="1"
+                Width="Auto"
+                Height="5"
+                Margin="{StaticResource MediumLeftRightMargin}"
+                HorizontalAlignment="Stretch" />
+
+            <!--  Misc Buttons  -->
+            <StackPanel x:ConnectionId='8'
+                x:Name="MiscButtons"
+                Grid.Column="2"
+                Grid.RowSpan="1"
+                Margin="{StaticResource SmallRightMargin}"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+
+                <!--  Sound  -->
+                <StackPanel x:ConnectionId='9' 
+                x:Name="SoundPanel"
+                Visibility="Collapsed"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                    <Button x:ConnectionId='26' x:Name="MuteButton" Width="40" Height="40" Margin="{StaticResource SmallRightMargin}"
+                                                                          Style="{StaticResource CircleButtonStyle}">
+                        <Button.Content>
+                            <TextBlock x:ConnectionId='28'
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                                                                                     
+                            TextAlignment="Center" />
+                        </Button.Content>
+                    </Button>
+                    <Slider x:ConnectionId='27' Width="105" Padding="0" Margin="{StaticResource SmallRightMargin}" VerticalAlignment="Center" Maximum="100" Minimum="0" Orientation="Horizontal"
+                            Style="{StaticResource CircleSlider}" Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
+                            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
+                                                                                                                                         />
+                </StackPanel>
+                
+                <!-- Compact Sound -->
+                <Button x:ConnectionId='10'
+                    x:Name="SoundFlyout"
+                    x:Uid="SoundFlyoutButton"
+                    Width="40"
+                    Height="40"
+                    Margin="{StaticResource XSmallLeftMargin}"
+                    Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock x:ConnectionId='21'
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                                                                                     
+                            TextAlignment="Center" />
+                    </Button.Content>
+                    <Button.Flyout >
+                        <Flyout Placement="Top">
+                            <StackPanel
+                                Width="245"
+                                Padding="20,10"
+                                Orientation="Horizontal">
+                                <Button x:ConnectionId='22'
+                                    Width="40"
+                                    Height="40"
+                                    Margin="{StaticResource SmallRightMargin}"
+                                                                                 
+                                    Style="{StaticResource CircleButtonStyle}">
+                                    <Button.Content>
+                                        <TextBlock x:ConnectionId='25'
+                                            FontFamily="Segoe MDL2 Assets"
+                                            FontSize="18"
+                                                                                                     
+                                            TextAlignment="Center" />
+                                    </Button.Content>
+                                </Button>
+                                <Slider x:ConnectionId='23'
+                                    Width="105"
+                                    Padding="0"
+                                    Margin="{StaticResource XXSmallTopMargin}"
+                                    VerticalAlignment="Center"
+                                    Maximum="100"
+                                    Minimum="0"
+                                    Orientation="Horizontal"
+                                                                                    
+                                    Style="{StaticResource CircleSlider}" Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
+                            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}" Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush }"
+                                                                                                />
+                                <TextBlock x:ConnectionId='24'
+                                    Margin="14,-2,0,0"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                                                                               />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+
+                <!--  Compact Overlay  -->
+                <Button x:ConnectionId='11'
+                    x:Uid="CompactOverlayButton"
+                    Width="40"
+                    Height="40"
+                    Margin="{StaticResource XSmallLeftMargin}"
+                                                                          
+                    Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Text="&#xE8B9;"
+                            TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+
+                <!--  More  -->
+                <Button x:ConnectionId='12'
+                x:Name="MoreButton"
+                x:Uid="MoreButton"
+                Width="40"
+                Height="40"
+                Margin="{StaticResource XSmallLeftMargin}"
+                Style="{StaticResource CircleButtonStyle}">
+                    <Button.Content>
+                        <TextBlock
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="18"
+                        Text="&#xE712;"
+                        TextAlignment="Center" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout Placement="Top">
+
+                            <MenuFlyoutItem x:ConnectionId='13'
+                            x:Name="ShuffleMenu"
+                            x:Uid="ShuffleFlyoutItem"
+                                                                                                                                                  
+                                                                            >
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE8B1;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <MenuFlyoutItem x:ConnectionId='14'
+                            x:Name="RepeatMenu"
+                            x:Uid="RepeatFlyoutItem"
+                                                                                                                                                 
+                                                                           >
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon x:ConnectionId='20'                                                            />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <MenuFlyoutSeparator x:ConnectionId='15' x:Name="SmallViewSeparator" Opacity="0.4" />
+
+                            <MenuFlyoutItem x:ConnectionId='16' x:Uid="AddQueueToPlaylistFlyoutItem" Icon="Save"                                             />
+
+                            <MenuFlyoutItem x:ConnectionId='17' x:Uid="ClearQueueFlyoutItem" Icon="Delete"                                              />
+
+                            <MenuFlyoutSeparator Opacity="0.4" />
+
+                            <!--<MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist">
+                                TODO view artist 
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE8D4;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem> -->
+
+                            <!--  Add to playlist  -->
+                            <MenuFlyoutItem x:ConnectionId='18' x:Uid="AddToPlaylistFlyoutItem"                                                          >
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE142;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <!-- Go to Album --> 
+                            <MenuFlyoutItem x:ConnectionId='19'
+                                x:Uid="ViewAlbumFlyoutItem"
+                                                                                     >
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE93C;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+                
+            </StackPanel>
+        </Grid>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+
+                <VisualState x:ConnectionId='46' x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="630" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed"/>
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2"/>
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1"/>
+
+                        <Setter Target="AlbumView.Width" Value="220" />
+                    </VisualState.Setters>
+                </VisualState>
+                
+                <VisualState x:ConnectionId='47' x:Name="Large">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed"/>
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2"/>
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1"/>
+                        
+                        <Setter Target="AlbumView.Width" Value="320"/>
+                        <Setter Target="SoundFlyout.Visibility" Value="Collapsed" />
+                        <Setter Target="SoundPanel.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>
+

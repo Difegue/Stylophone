@@ -1,0 +1,1 @@
+E:\Projects\MpcNET2\Sources\Stylophone\Stylophone.UWP\Stylophone.UWP.csproj;x86

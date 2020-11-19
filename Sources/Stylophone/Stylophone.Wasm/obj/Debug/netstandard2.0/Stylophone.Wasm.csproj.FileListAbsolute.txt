@@ -1,0 +1,4 @@
+E:\Projects\MpcNET2\Sources\Stylophone\Stylophone.Wasm\obj\Debug\netstandard2.0\Stylophone.Wasm.csprojAssemblyReference.cache
+E:\Projects\MpcNET2\Sources\Stylophone\Stylophone.Wasm\obj\Debug\netstandard2.0\Stylophone.Wasm.AssemblyInfoInputs.cache
+E:\Projects\MpcNET2\Sources\Stylophone\Stylophone.Wasm\obj\Debug\netstandard2.0\Stylophone.Wasm.AssemblyInfo.cs
+E:\Projects\MpcNET2\Sources\Stylophone\Stylophone.Wasm\obj\Debug\netstandard2.0\Stylophone.Wasm.csproj.CoreCompileInputs.cache

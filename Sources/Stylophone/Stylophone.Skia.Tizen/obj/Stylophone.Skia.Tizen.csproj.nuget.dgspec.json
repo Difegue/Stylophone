@@ -1,0 +1,90 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Tizen\\Stylophone.Skia.Tizen.csproj": {}
+  },
+  "projects": {
+    "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Tizen\\Stylophone.Skia.Tizen.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Tizen\\Stylophone.Skia.Tizen.csproj",
+        "projectName": "Stylophone.Skia.Tizen",
+        "projectPath": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Tizen\\Stylophone.Skia.Tizen.csproj",
+        "packagesPath": "C:\\Users\\Vincent\\.nuget\\packages\\",
+        "outputPath": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Tizen\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "E:\\Projects\\MpcNET2\\Sources\\NuGet.Config",
+          "C:\\Users\\Vincent\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "tizen50"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "tizen50": {
+            "targetAlias": "tizen50",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "tizen50": {
+          "targetAlias": "tizen50",
+          "dependencies": {
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[1.1.1, )"
+            },
+            "Microsoft.Extensions.Logging.Filter": {
+              "target": "Package",
+              "version": "[1.1.1, )"
+            },
+            "SkiaSharp.Views": {
+              "target": "Package",
+              "version": "[2.80.2, )"
+            },
+            "Tizen.NET": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0.14995, )",
+              "autoReferenced": true
+            },
+            "Uno.UI.RemoteControl": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
+            "Uno.UI.Skia.Tizen": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

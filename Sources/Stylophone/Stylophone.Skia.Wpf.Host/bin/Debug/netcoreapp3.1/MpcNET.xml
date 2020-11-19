@@ -1,0 +1,2721 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MpcNET</name>
+    </assembly>
+    <members>
+        <member name="T:MpcNET.Commands.Database.AlbumArtCommand">
+            <summary>
+            Gets the album art for the given song.
+            https://www.musicpd.org/doc/html/protocol.html#the-music-database
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.AlbumArtCommand.#ctor(System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.AlbumArtCommand"/> class.
+            </summary>
+            <param name="path">The URI.</param>
+            <param name="offset">Binary data offset if needed</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.AlbumArtCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Database.AlbumArtCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Database.FindCommand">
+            <summary>
+            Finds songs in the database that is exactly "searchText".
+            https://www.musicpd.org/doc/protocol/database.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.FindCommand.#ctor(MpcNET.Tags.ITag,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.FindCommand"/> class.
+            </summary>
+            <param name="tag">The tag.</param>
+            <param name="searchText">The search text.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.FindCommand.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{MpcNET.Tags.ITag,System.String}})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.FindCommand"/> class.
+            </summary>
+            <param name="filters">List of key/value filters</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.FindCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Database.FindCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Database.ListAllCommand">
+            <summary>
+            Lists all songs and directories.
+            https://www.musicpd.org/doc/protocol/database.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ListAllCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ListAllCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Database.ListCommand">
+            <summary>
+            Lists the specified tag.
+            https://www.musicpd.org/doc/protocol/database.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ListCommand.#ctor(MpcNET.Tags.ITag)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.ListCommand"/> class.
+            </summary>
+            <param name="tag">The tag.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ListCommand.#ctor(MpcNET.Tags.ITag,MpcNET.Tags.ITag,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.ListCommand"/> class.
+            </summary>
+            <param name="tag">The tag.</param>
+            <param name="filterTag">The filter tag.</param>
+            <param name="filterValue">Filter value.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ListCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ListCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Database.LsInfoCommand">
+            <summary>
+            Lists the contents of the directory URI. The response contains records starting with file, directory or playlist, each followed by metadata 
+            https://www.musicpd.org/doc/protocol/database.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.LsInfoCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.LsInfoCommand"/> class.
+            </summary>
+            <param name="uri">The uri.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.LsInfoCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Database.LsInfoCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Database.ReadPictureCommand">
+            <summary>
+            Gets the album art for the given song, using ID3 metadata.
+            https://www.musicpd.org/doc/html/protocol.html#the-music-database
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ReadPictureCommand.#ctor(System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.ReadPictureCommand"/> class.
+            </summary>
+            <param name="path">The URI.</param>
+            <param name="offset">Binary data offset if needed</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ReadPictureCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Database.ReadPictureCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Database.UpdateCommand">
+            <summary>
+            Updates the specified URI.
+            https://www.musicpd.org/doc/protocol/database.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.UpdateCommand.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.UpdateCommand"/> class.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Database.UpdateCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Database.UpdateCommand"/> class.
+            </summary>
+            <param name="uri">The URI.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Database.UpdateCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Database.UpdateCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Output.DisableOutputCommand">
+            <summary>
+            Turns an output off.
+            https://www.musicpd.org/doc/protocol/output_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Output.DisableOutputCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Output.DisableOutputCommand"/> class.
+            </summary>
+            <param name="outputId">The output identifier.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Output.DisableOutputCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Output.DisableOutputCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Output.EnableOutputCommand">
+            <summary>
+            Turns an output on.
+            https://www.musicpd.org/doc/protocol/output_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Output.EnableOutputCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Output.EnableOutputCommand"/> class.
+            </summary>
+            <param name="outputId">The output identifier.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Output.EnableOutputCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Output.EnableOutputCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Output.OutputsCommand">
+            <summary>
+            Shows information about all outputs.
+            https://www.musicpd.org/doc/protocol/output_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Output.OutputsCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Output.OutputsCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Output.ToggleOutputCommand">
+            <summary>
+            Turns an output on or off, depending on the current state.
+            https://www.musicpd.org/doc/protocol/output_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Output.ToggleOutputCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Output.ToggleOutputCommand"/> class.
+            </summary>
+            <param name="outputId">The output identifier.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Output.ToggleOutputCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Output.ToggleOutputCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.NextCommand">
+            <summary>
+            Command to go to next song.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.NextCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.NextCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.PauseResumeCommand">
+            <summary>
+            Command to pause or resume.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.PauseResumeCommand" /> class.
+            </summary>
+            <param name="pause">if set to <c>true</c> [pause].</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.PauseResumeCommand"/> class.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PauseResumeCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.PlayCommand">
+            <summary>
+            Command to start playback.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PlayCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.PlayCommand" /> class.
+            </summary>
+            <param name="position">The position.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PlayCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PlayCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.PlayIdCommand">
+            <summary>
+            Command to start playback.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PlayIdCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.PlayIdCommand"/> class.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PlayIdCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PlayIdCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.PreviousCommand">
+            <summary>
+            Command to goto previous song.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PreviousCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.PreviousCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.RandomCommand">
+            <summary>
+            Command to set random state.
+            https://www.musicpd.org/doc/html/protocol.html#playback-options
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RandomCommand.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.RandomCommand" /> class.
+            </summary>
+            <param name="random">if set to <c>true</c> [random].</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RandomCommand.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.RandomCommand"/> class.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RandomCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RandomCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.RepeatCommand">
+            <summary>
+            Command to set repeat state.
+            https://www.musicpd.org/doc/html/protocol.html#status_commands
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RepeatCommand.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.RepeatCommand" /> class.
+            </summary>
+            <param name="repeat">if set to <c>true</c> [repeat].</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RepeatCommand.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.RepeatCommand"/> class.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RepeatCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.RepeatCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.SeekCurCommand">
+            <summary>
+            Seeks to the position TIME (in seconds; fractions allowed) within the current song. 
+            https://www.musicpd.org/doc/html/protocol.html#status_commands
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SeekCurCommand.#ctor(System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.SeekCurCommand"/> class.
+            </summary>
+            <param name="time">The time.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SeekCurCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SeekCurCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.SetVolumeCommand">
+            <summary>
+            Command to set volume.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SetVolumeCommand.#ctor(System.Byte)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.SetVolumeCommand"/> class.
+            </summary>
+            <param name="volume">The volume.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SetVolumeCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SetVolumeCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.SingleCommand">
+            <summary>
+            Command to set single state. 
+            When single is activated, playback is stopped after current song, or song is repeated if the ‘repeat’ mode is enabled.
+            https://www.musicpd.org/doc/html/protocol.html#status_commands
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SingleCommand.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.SingleCommand" /> class.
+            </summary>
+            <param name="single">if set to <c>true</c> [single].</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SingleCommand.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playback.SingleCommand"/> class.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SingleCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.SingleCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playback.StopCommand">
+            <summary>
+            Command to stop playback.
+            https://www.musicpd.org/doc/protocol/playback_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.StopCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playback.StopCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.ListPlaylistCommand">
+            <summary>
+            Lists the songs in the playlist.
+            https://www.musicpd.org/doc/protocol/playlist_files.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.ListPlaylistCommand"/> class.
+            </summary>
+            <param name="playlistName">Name of the playlist.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.ListPlaylistInfoCommand">
+            <summary>
+            Lists the songs with metadata in the playlist.
+            https://www.musicpd.org/doc/protocol/playlist_files.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistInfoCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.ListPlaylistInfoCommand"/> class.
+            </summary>
+            <param name="playlistName">Name of the playlist.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistInfoCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistInfoCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.ListPlaylistsCommand">
+            <summary>
+            Prints a list of the playlist directory.
+            https://www.musicpd.org/doc/protocol/playlist_files.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistsCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.ListPlaylistsCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.LoadCommand">
+            <summary>
+            Loads the playlist into the current queue.
+            https://www.musicpd.org/doc/protocol/playlist_files.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.LoadCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.LoadCommand"/> class.
+            </summary>
+            <param name="playlistName">Name of the playlist.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.LoadCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.LoadCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.PlaylistAddCommand">
+            <summary>
+            Adds URI to the playlist NAME.m3u. NAME.m3u will be created if it does not exist.
+            https://www.musicpd.org/doc/html/protocol.html#command-load
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistAddCommand.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.PlaylistAddCommand"/> class.
+            </summary>
+            <param name="playlistName">The playlistn name.</param>
+            <param name="uri">The path to add.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistAddCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistAddCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.PlaylistDeleteCommand">
+            <summary>
+            Deletes SONGPOS from the playlist NAME.m3u.
+            https://www.musicpd.org/doc/html/protocol.html#stored-playlists
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistDeleteCommand.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.PlaylistDeleteCommand"/> class.
+            </summary>
+            <param name="playlistName">The playlist name.</param>
+            <param name="songpos">Position of the song to remove</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistDeleteCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistDeleteCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.PlaylistMoveCommand">
+            <summary>
+            Moves the song at position FROM in the playlist NAME.m3u to the position TO.
+            https://www.musicpd.org/doc/html/protocol.html#stored-playlists
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistMoveCommand.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.PlaylistMoveCommand"/> class.
+            </summary>
+            <param name="playlistName">The playlist name.</param>
+            <param name="from">Position of the song to move</param>
+            <param name="to">New position of the song</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistMoveCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.PlaylistMoveCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.RmCommand">
+            <summary>
+            Removes the playlist NAME.m3u from the playlist directory.
+            https://www.musicpd.org/doc/html/protocol.html#stored-playlists
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.RmCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.RmCommand"/> class.
+            </summary>
+            <param name="playlistName">Name of the playlist.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.RmCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.RmCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Playlist.SaveCommand">
+            <summary>
+            Saves the queue to NAME.m3u in the playlist directory.
+            https://www.musicpd.org/doc/html/protocol.html#stored-playlists
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.SaveCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Playlist.SaveCommand"/> class.
+            </summary>
+            <param name="playlistName">Name of the playlist.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.SaveCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Playlist.SaveCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.AddCommand">
+            <summary>
+            Adds the file URI to the playlist (directories add recursively). URI can also be a single file.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.AddCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Queue.AddCommand"/> class.
+            </summary>
+            <param name="uri">The URI.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.AddCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.AddCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.AddIdCommand">
+            <summary>
+            Adds a song to the playlist (non-recursive) and returns the song id.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.AddIdCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Queue.AddIdCommand"/> class.
+            </summary>
+            <param name="uri">The URI.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.AddIdCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.AddIdCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.ClearCommand">
+            <summary>
+            Clears the current playlist.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.ClearCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.ClearCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.DeleteCommand">
+            <summary>
+            Deletes a song from the playlist.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.DeleteCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Queue.DeleteCommand"/> class.
+            </summary>
+            <param name="position">The position.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.DeleteCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.DeleteCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.DeleteIdCommand">
+            <summary>
+            Deletes the song SONGID from the playlist.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.DeleteIdCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Queue.DeleteIdCommand"/> class.
+            </summary>
+            <param name="songId">The song identifier.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.DeleteIdCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.DeleteIdCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.MoveIdCommand">
+            <summary>
+            Moves the song with FROM (songid) to TO (playlist index) in the playlist.
+            If TO is negative, it is relative to the current song in the playlist (if there is one)
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.MoveIdCommand.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Queue.MoveIdCommand"/> class.
+            </summary>
+            <param name="from">From (songid)</param>
+            <param name="to">To (playlist index)</param>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.MoveIdCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.MoveIdCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.PlaylistCommand">
+            <summary>
+            Displays the current playlist.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlaylistCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlaylistCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.PlaylistIdCommand">
+            <summary>
+            Displays song ID in the playlist.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlaylistIdCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Queue.PlaylistIdCommand"/> class.
+            </summary>
+            <param name="songId">The song identifier.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlaylistIdCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlaylistIdCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.PlaylistInfoCommand">
+            <summary>
+            Displays a list of all songs in the playlist.
+            https://www.musicpd.org/doc/protocol/queue.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlaylistInfoCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlaylistInfoCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Queue.PlChangesCommand">
+            <summary>
+            Displays changed songs currently in the playlist since VERSION. 
+            https://www.musicpd.org/doc/html/protocol.html#the-queue.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlChangesCommand.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Queue.PlChangesCommand"/> class.
+            </summary>
+            <param name="version">Version to compare to the current playlist.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlChangesCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Queue.PlChangesCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Reflection.CommandsCommand">
+            <summary>
+            Shows which commands the current user has access to.
+            config : This command is only permitted to "local" clients (connected via UNIX domain socket).
+            https://www.musicpd.org/doc/protocol/reflection_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.CommandsCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.CommandsCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Reflection.DecodersCommand">
+            <summary>
+            Print a list of decoder plugins, followed by their supported suffixes and MIME types.
+            https://www.musicpd.org/doc/protocol/reflection_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.DecodersCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.DecodersCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Reflection.TagTypesCommand">
+            <summary>
+            Shows a list of available song metadata.
+            https://www.musicpd.org/doc/protocol/reflection_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.TagTypesCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.TagTypesCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Reflection.UrlHandlersCommand">
+            <summary>
+            Gets a list of available URL handlers.
+            https://www.musicpd.org/doc/protocol/reflection_commands.html.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.UrlHandlersCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Reflection.UrlHandlersCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Status.CurrentSongCommand">
+            <summary>
+            Gets the current song.
+            https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Status.CurrentSongCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Status.CurrentSongCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Status.IdleCommand">
+            <summary>
+            Idles mpd until something happens.
+            https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Status.IdleCommand.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Commands.Status.IdleCommand"/> class.
+            </summary>
+            <param name="subSystem">The sub system.</param>
+        </member>
+        <member name="M:MpcNET.Commands.Status.IdleCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Status.IdleCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Status.NoIdleCommand">
+            <summary>
+            Cancels idle command.
+            https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Status.NoIdleCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Status.NoIdleCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Status.StatsCommand">
+            <summary>
+            Get stats from the daemon.
+            https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Status.StatsCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Status.StatsCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Commands.Status.StatusCommand">
+            <summary>
+            Gets the status.
+            https://www.musicpd.org/doc/protocol/command_reference.html#status_commands.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Commands.Status.StatusCommand.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>
+            The serialize command.
+            </returns>
+        </member>
+        <member name="M:MpcNET.Commands.Status.StatusCommand.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>
+            The deserialized response.
+            </returns>
+        </member>
+        <member name="F:MpcNET.Constants.Encoding">
+            <summary>
+            Encoding used when reading server responses.
+            </summary>
+        </member>
+        <member name="T:MpcNET.Exceptions.CommandNullException">
+            <summary>
+            Thrown by <see cref="T:MpcNET.MpcConnection"/> when the command is null.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="T:MpcNET.Exceptions.EmptyResponseException">
+            <summary>
+            Exception throw when an empty response is received.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="M:MpcNET.Exceptions.EmptyResponseException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Exceptions.EmptyResponseException"/> class.
+            </summary>
+            <param name="command">The command.</param>
+        </member>
+        <member name="T:MpcNET.Exceptions.MpcConnectException">
+            <summary>
+            Exception thrown when there are problems with the <see cref="T:MpcNET.MpcConnection"/>.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="M:MpcNET.Exceptions.MpcConnectException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Exceptions.MpcConnectException"/> class.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:MpcNET.Exceptions.MpcException">
+            <summary>
+            Base class for all exceptions.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="M:MpcNET.Exceptions.MpcException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Exceptions.MpcException" /> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="T:MpcNET.IMpcCommand`1">
+            <summary>
+            Interface for implementing a MPD command.
+            </summary>
+            <typeparam name="TValue">The type of the value.</typeparam>
+        </member>
+        <member name="M:MpcNET.IMpcCommand`1.Serialize">
+            <summary>
+            Serializes the command.
+            </summary>
+            <returns>The serialize command.</returns>
+        </member>
+        <member name="M:MpcNET.IMpcCommand`1.Deserialize(MpcNET.SerializedResponse)">
+            <summary>
+            Deserializes the specified response text pairs.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>The deserialized response.</returns>
+        </member>
+        <member name="T:MpcNET.IMpcConnection">
+            <summary>
+            Interface for implementing an MPD connection.
+            </summary>
+            <seealso cref="T:System.IDisposable" />
+        </member>
+        <member name="P:MpcNET.IMpcConnection.Version">
+            <summary>
+            Gets the version.
+            </summary>
+        </member>
+        <member name="M:MpcNET.IMpcConnection.ConnectAsync(System.Threading.CancellationToken)">
+            <summary>
+            Connects asynchronously.
+            </summary>
+            <returns>The connect task.</returns>
+        </member>
+        <member name="M:MpcNET.IMpcConnection.DisconnectAsync">
+            <summary>
+            Disconnects asynchronously.
+            </summary>
+            <returns>The disconnect task.</returns>
+        </member>
+        <member name="M:MpcNET.IMpcConnection.SendAsync``1(MpcNET.IMpcCommand{``0})">
+            <summary>
+            Sends the command asynchronously.
+            </summary>
+            <typeparam name="TResponse">The response type.</typeparam>
+            <param name="mpcCommand">The command selector.</param>
+            <returns>
+            The send task.
+            </returns>
+        </member>
+        <member name="T:MpcNET.Message.ErrorMpdResponse`1">
+            <summary>
+            Implementation of <see cref="T:MpcNET.Message.IMpdResponse`1"/> in case of an error.
+            </summary>
+            <typeparam name="TContent">The content type.</typeparam>
+            <seealso cref="T:MpcNET.Message.IMpdResponse`1" />
+        </member>
+        <member name="M:MpcNET.Message.ErrorMpdResponse`1.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Message.ErrorMpdResponse`1"/> class.
+            </summary>
+            <param name="exception">The exception.</param>
+        </member>
+        <member name="P:MpcNET.Message.ErrorMpdResponse`1.Result">
+            <summary>
+            Gets the state.
+            </summary>
+            <value>
+            The state.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.ErrorMpdResponse`1.Content">
+            <summary>
+            Gets the content.
+            </summary>
+            <value>
+            The content.
+            </value>
+        </member>
+        <member name="T:MpcNET.Message.IMpdMessage`1">
+            <summary>
+            Interface for implementing MPD message.
+            </summary>
+            <typeparam name="TContent">The type of the content.</typeparam>
+        </member>
+        <member name="P:MpcNET.Message.IMpdMessage`1.Request">
+            <summary>
+            Gets the request.
+            </summary>
+            <value>
+            The request.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.IMpdMessage`1.Response">
+            <summary>
+            Gets the response.
+            </summary>
+            <value>
+            The response.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.IMpdMessage`1.IsResponseValid">
+            <summary>
+            Gets a value indicating whether this instance is response valid.
+            </summary>
+            <value>
+            <c>true</c> if this instance is response valid; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:MpcNET.Message.IMpdRequest`1">
+            <summary>
+            Interface for implementing a MPD request.
+            </summary>
+            <typeparam name="TContent">The response content.</typeparam>
+        </member>
+        <member name="P:MpcNET.Message.IMpdRequest`1.Command">
+            <summary>
+            Gets the command.
+            </summary>
+            <value>
+            The command.
+            </value>
+        </member>
+        <member name="T:MpcNET.Message.IMpdResponse`1">
+            <summary>
+            Represents response to a <see cref="T:MpcNET.IMpcCommand`1"/>.
+            </summary>
+            <typeparam name="TContent">The type of the content.</typeparam>
+        </member>
+        <member name="P:MpcNET.Message.IMpdResponse`1.Result">
+            <summary>
+            Gets the state.
+            </summary>
+            <value>
+            The state.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.IMpdResponse`1.Content">
+            <summary>
+            Gets the content.
+            </summary>
+            <value>
+            The content.
+            </value>
+        </member>
+        <member name="T:MpcNET.Message.IMpdResponseResult">
+            <summary>
+            Interface for implementing a MPD response result.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Message.IMpdResponseResult.Status">
+            <summary>
+            Gets the status.
+            </summary>
+            <value>
+            The status.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.IMpdResponseResult.ErrorMessage">
+            <summary>
+            Gets the error message.
+            </summary>
+            <value>
+            The error message.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.IMpdResponseResult.MpdError">
+            <summary>
+            Gets the MPD error.
+            </summary>
+            <value>
+            The MPD error.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.IMpdResponseResult.Error">
+            <summary>
+            Gets a value indicating whether an error occured.
+            </summary>
+            <value>
+              <c>true</c> if error; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.IMpdResponseResult.Connected">
+            <summary>
+            Gets a value indicating whether this <see cref="T:MpcNET.Message.IMpdResponseResult"/> is connected.
+            </summary>
+            <value>
+              <c>true</c> if connected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:MpcNET.Message.MpdRequest`1">
+            <summary>
+            MPD request containing the command.
+            </summary>
+            <typeparam name="TContent">The content of the reponse.</typeparam>
+            <seealso cref="T:MpcNET.Message.IMpdRequest`1" />
+        </member>
+        <member name="M:MpcNET.Message.MpdRequest`1.#ctor(MpcNET.IMpcCommand{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Message.MpdRequest`1"/> class.
+            </summary>
+            <param name="command">The command.</param>
+        </member>
+        <member name="P:MpcNET.Message.MpdRequest`1.Command">
+            <summary>
+            Gets the command.
+            </summary>
+            <value>
+            The command.
+            </value>
+        </member>
+        <member name="T:MpcNET.Message.MpdResponse`1">
+            <summary>
+            Represents a response to a <see cref="T:MpcNET.IMpcCommand`1"/>.
+            </summary>
+            <typeparam name="TContent">The content type.</typeparam>
+            <seealso cref="T:MpcNET.Message.IMpdResponse`1" />
+        </member>
+        <member name="M:MpcNET.Message.MpdResponse`1.#ctor(System.String,`0,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Message.MpdResponse`1"/> class.
+            </summary>
+            <param name="endLine">The end line.</param>
+            <param name="content">The content.</param>
+            <param name="connected">if set to <c>true</c> [connected].</param>
+        </member>
+        <member name="P:MpcNET.Message.MpdResponse`1.Result">
+            <summary>
+            Gets the state.
+            </summary>
+            <value>
+            The state.
+            </value>
+        </member>
+        <member name="P:MpcNET.Message.MpdResponse`1.Content">
+            <summary>
+            Gets the content.
+            </summary>
+            <value>
+            The content.
+            </value>
+        </member>
+        <member name="T:MpcNET.MpcConnection">
+            <summary>
+            Keeps the connection to the MPD server and handels the most basic structure of the MPD protocol.
+            class.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpcConnection.#ctor(System.Net.IPEndPoint)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.MpcConnection" /> class.
+            </summary>
+            <param name="server">The server.</param>
+        </member>
+        <member name="P:MpcNET.MpcConnection.Version">
+            <summary>
+            Gets the version.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpcConnection.IsConnected">
+            <summary>
+            Is this connection active?
+            </summary>
+        </member>
+        <member name="E:MpcNET.MpcConnection.Disconnected">
+            <summary>
+            Event emitted when the connection is cut.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpcConnection.ConnectAsync(System.Threading.CancellationToken)">
+            <summary>
+            Connects asynchronously.
+            </summary>
+            <returns>The connect task.</returns>
+        </member>
+        <member name="M:MpcNET.MpcConnection.DisconnectAsync">
+            <summary>
+            Disconnects asynchronously.
+            </summary>
+            <returns>The disconnect task.</returns>
+        </member>
+        <member name="M:MpcNET.MpcConnection.SendAsync``1(MpcNET.IMpcCommand{``0})">
+            <summary>
+            Sends the command asynchronously.
+            </summary>
+            <typeparam name="TResponse">The response type.</typeparam>
+            <param name="mpcCommand">The MPC command.</param>
+            <returns>
+            The send task.
+            </returns>
+        </member>
+        <member name="M:MpcNET.MpcConnection.System#IDisposable#Dispose">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+        </member>
+        <member name="T:MpcNET.MpdDirectoryListing">
+            <summary>
+            The MpdDirectoryListing class contains the response of a MPD server to a list command.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpdDirectoryListing.#ctor(System.Collections.Generic.List{MpcNET.Types.IMpdFile},System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.MpdDirectoryListing" /> class.
+            </summary>
+            <param name="file">The file.</param>
+            <param name="directory">The directory.</param>
+            <param name="playlist">The playlist.</param>
+        </member>
+        <member name="P:MpcNET.MpdDirectoryListing.FileListList">
+            <summary>
+            Gets the list of files in the directory.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdDirectoryListing.DirectoryList">
+            <summary>
+            Gets the list of subdirectories in the directory.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdDirectoryListing.PlaylistList">
+            <summary>
+            Gets the list of playlists in the directory.
+            </summary>
+        </member>
+        <member name="T:MpcNET.MpdResponseReader">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MpcNET.MpdResponseReader.NextData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:MpcNET.MpdResponseReader.binaryEnd">
+            <summary>
+            Length of the binary part of the response.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpdResponseReader.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <param name="source"></param>
+            <param name="encoding"></param>
+        </member>
+        <member name="M:MpcNET.MpdResponseReader.ReportNextData">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MpcNET.MpdResponseReader.ReadString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MpcNET.MpdResponseReader.ReadBinaryData(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MpcNET.MpdResponseReader.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MpcNET.MpdState">
+            <summary>
+            The possible states of the MPD.
+            </summary>
+        </member>
+        <member name="F:MpcNET.MpdState.Unknown">
+            <summary>
+            The state of the MPD could not be translated into this enumeration.
+            </summary>
+        </member>
+        <member name="F:MpcNET.MpdState.Play">
+            <summary>
+            The MPD is playing a track.
+            </summary>
+        </member>
+        <member name="F:MpcNET.MpdState.Stop">
+            <summary>
+            The MPD is not playing a track.
+            </summary>
+        </member>
+        <member name="F:MpcNET.MpdState.Pause">
+            <summary>
+            The playback of the MPD is currently paused.
+            </summary>
+        </member>
+        <member name="T:MpcNET.MpdStatistics">
+            <summary>
+            The MpdStatistics class contains statistics of the MPD file database.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpdStatistics.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.MpdStatistics"/> class.
+            </summary>
+            <param name="artists">The number of artists in the MPD database.</param>
+            <param name="albums">The number of albums in the MPD database.</param>
+            <param name="songs">The number of songs in the MPD database.</param>
+            <param name="uptime">The time the MPD server is running in seconds.</param>
+            <param name="playtime">The number of seconds the MPD played so far.</param>
+            <param name="dbPlaytime">The total playtime of all songs in the MPD database.</param>
+            <param name="dbUpdate">The timestamp of the last MPD database update.</param>
+        </member>
+        <member name="P:MpcNET.MpdStatistics.Artists">
+            <summary>
+            Gets the number of artists in the MPD database.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatistics.Albums">
+            <summary>
+            Gets the number of albums in the MPD database.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatistics.Songs">
+            <summary>
+            Gets the number of songs in the MPD database.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatistics.Uptime">
+            <summary>
+            Gets the time the MPD server is running in seconds.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatistics.Playtime">
+            <summary>
+            Gets the number of seconds the MPD played so far.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatistics.DbPlaytime">
+            <summary>
+            Gets the total playtime of all songs in the MPD database.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatistics.DbUpdate">
+            <summary>
+            Gets the timestamp of the last MPD database update.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpdStatistics.ToString">
+            <summary>
+            Returns a string representation of the object mainly for debugging purpuse.
+            </summary>
+            <returns>A string representation of the object.</returns>
+        </member>
+        <member name="T:MpcNET.MpdStatus">
+            <summary>
+            The MpdStatus class contains all values describing the current status of the MPD.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpdStatus.#ctor(System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Int32,System.Int32,MpcNET.MpdState,System.Int32,System.Int32,System.Int32,System.Int32,System.TimeSpan,System.TimeSpan,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.MpdStatus" /> class.
+            </summary>
+            <param name="volume">The volume.</param>
+            <param name="repeat">if set to <c>true</c> [repeat].</param>
+            <param name="random">if set to <c>true</c> [random].</param>
+            <param name="consume">if set to <c>true</c> [consume].</param>
+            <param name="single">if set to <c>true</c> [single].</param>
+            <param name="playlist">The playlist.</param>
+            <param name="playlistLength">Length of the playlist.</param>
+            <param name="xFade">The x fade.</param>
+            <param name="state">The state.</param>
+            <param name="song">The song.</param>
+            <param name="songId">The song identifier.</param>
+            <param name="nextSong">The next song.</param>
+            <param name="nextSongId">The next song identifier.</param>
+            <param name="elapsed">The elapsed.</param>
+            <param name="duration">The duration.</param>
+            <param name="bitrate">The bitrate.</param>
+            <param name="audioSampleRate">The audio sample rate.</param>
+            <param name="audioBits">The audio bits.</param>
+            <param name="audioChannels">The audio channels.</param>
+            <param name="updatingDb">The updating database.</param>
+            <param name="partition">The partition name.</param>
+            <param name="error">The error.</param>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Volume">
+            <summary>
+            Gets the current volume of the output.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Repeat">
+            <summary>
+            Gets a value indicating whether the playlist is repeated after finish.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Random">
+            <summary>
+            Gets a value indicating whether the playlist is played in random order.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Consume">
+            <summary>
+            Gets a value indicating whether the playlist is consumed.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Single">
+            <summary>
+            Gets a value indicating whether the playlist only plays a song once when random is enabled.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Playlist">
+            <summary>
+            Gets the version number of the playlist.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.PlaylistLength">
+            <summary>
+            Gets the length of the playlist.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.XFade">
+            <summary>
+            Gets the number of seconds crossfaded between song changes.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.State">
+            <summary>
+            Gets the state of the MPD.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Song">
+            <summary>
+            Gets the index of the currently played song in the playlist.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.SongId">
+            <summary>
+            Gets the id of the song currently played.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.NextSong">
+            <summary>
+            Gets the next song.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.NextSongId">
+            <summary>
+            Gets the next song identifier.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Elapsed">
+            <summary>
+            Gets the number of seconds already played of the current song.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Duration">
+            <summary>
+            Gets the length of the current song in seconds.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Bitrate">
+            <summary>
+            Gets the bitrate of the current song.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.AudioSampleRate">
+            <summary>
+            Gets the audio sample rate of the current song.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.AudioBits">
+            <summary>
+            Gets the audio bits of the current song.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.AudioChannels">
+            <summary>
+            Gets the number of audio channels of the current song.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.UpdatingDb">
+            <summary>
+            Gets the number of the update on the MPD database currently running.
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Partition">
+            <summary>
+            Gets the name of the current partition
+            </summary>
+        </member>
+        <member name="P:MpcNET.MpdStatus.Error">
+            <summary>
+            Gets the error message, if there is an error.
+            </summary>
+        </member>
+        <member name="M:MpcNET.MpdStatus.ToString">
+            <summary>
+            Returns a string representation of the object maily for debugging purpuses.
+            </summary>
+            <returns>A string representation of the object.</returns>
+        </member>
+        <member name="T:MpcNET.SerializedResponse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MpcNET.SerializedResponse.ResponseValues">
+            <summary>
+            Response values.
+            </summary>
+        </member>
+        <member name="P:MpcNET.SerializedResponse.BinaryData">
+            <summary>
+            Binary Data that can be present in the response.
+            </summary>
+        </member>
+        <member name="T:MpcNET.Tags.FindTags">
+            <summary>
+            https://www.musicpd.org/doc/protocol/database.html : find {TYPE} {WHAT} [...] [window START:END].
+            </summary>
+        </member>
+        <member name="P:MpcNET.Tags.FindTags.Any">
+            <summary>
+            Gets the any tag.
+            </summary>
+            <value>
+            Any.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.FindTags.File">
+            <summary>
+            Gets the file tag.
+            </summary>
+            <value>
+            The file.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.FindTags.Base">
+            <summary>
+            Gets the base tag.
+            </summary>
+            <value>
+            The base.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.FindTags.ModifiedSince">
+            <summary>
+            Gets the modified since tag.
+            </summary>
+            <value>
+            The modified since.
+            </value>
+        </member>
+        <member name="T:MpcNET.Tags.ITag">
+            <summary>
+            Interface for representing a tag.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Tags.ITag.Value">
+            <summary>
+            Gets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="T:MpcNET.Tags.MpdTags">
+            <summary>
+            https://www.musicpd.org/doc/protocol/tags.html.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Artist">
+            <summary>
+            Gets the artist.
+            </summary>
+            <value>
+            The artist.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.ArtistSort">
+            <summary>
+            Gets the artist sort.
+            </summary>
+            <value>
+            The artist sort.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Album">
+            <summary>
+            Gets the album.
+            </summary>
+            <value>
+            The album.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.AlbumSort">
+            <summary>
+            Gets the album sort.
+            </summary>
+            <value>
+            The album sort.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.AlbumArtist">
+            <summary>
+            Gets the album artist.
+            </summary>
+            <value>
+            The album artist.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.AlbumArtistSort">
+            <summary>
+            Gets the album artist sort.
+            </summary>
+            <value>
+            The album artist sort.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Title">
+            <summary>
+            Gets the title.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Track">
+            <summary>
+            Gets the track.
+            </summary>
+            <value>
+            The track.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Genre">
+            <summary>
+            Gets the genre.
+            </summary>
+            <value>
+            The genre.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Date">
+            <summary>
+            Gets the date.
+            </summary>
+            <value>
+            The date.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Composer">
+            <summary>
+            Gets the composer.
+            </summary>
+            <value>
+            The composer.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Performer">
+            <summary>
+            Gets the performer.
+            </summary>
+            <value>
+            The performer.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Comment">
+            <summary>
+            Gets the comment.
+            </summary>
+            <value>
+            The comment.
+            </value>
+        </member>
+        <member name="P:MpcNET.Tags.MpdTags.Disc">
+            <summary>
+            Gets the disc.
+            </summary>
+            <value>
+            The disc.
+            </value>
+        </member>
+        <member name="T:MpcNET.Types.IMpdFile">
+            <summary>
+            Interface for representing MPD files.
+            </summary>
+            <seealso cref="T:MpcNET.Types.IMpdFilePath" />
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Time">
+            <summary>
+            Gets the time.
+            </summary>
+            <value>
+            The time.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Album">
+            <summary>
+            Gets the album.
+            </summary>
+            <value>
+            The album.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Artist">
+            <summary>
+            Gets the artist.
+            </summary>
+            <value>
+            The artist.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Title">
+            <summary>
+            Gets the title.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Track">
+            <summary>
+            Gets the track.
+            </summary>
+            <value>
+            The track.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Genre">
+            <summary>
+            Gets the genre.
+            </summary>
+            <value>
+            The genre.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Date">
+            <summary>
+            Gets the date.
+            </summary>
+            <value>
+            The date.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Composer">
+            <summary>
+            Gets the composer.
+            </summary>
+            <value>
+            The composer.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Performer">
+            <summary>
+            Gets the performer.
+            </summary>
+            <value>
+            The performer.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Comment">
+            <summary>
+            Gets the comment.
+            </summary>
+            <value>
+            The comment.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Disc">
+            <summary>
+            Gets the disc.
+            </summary>
+            <value>
+            The disc.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Position">
+            <summary>
+            Gets the position.
+            </summary>
+            <value>
+            The position.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.Id">
+            <summary>
+            Gets the identifier.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.UnknownMetadata">
+            <summary>
+            Gets the unknown metadata.
+            </summary>
+            <value>
+            The unknown metadata.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasTime">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Time"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasAlbum">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Album"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasArtist">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Artist"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasTitle">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Title"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasTrack">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Track"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasName">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFilePath.Name"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasGenre">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Genre"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasDate">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Date"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasComposer">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Composer"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasPerformer">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Performer"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasComment">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Comment"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasDisc">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Disc"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasPos">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Position"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFile.HasId">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.IMpdFile.Id"/> property set.
+            </summary>
+        </member>
+        <member name="T:MpcNET.Types.IMpdFilePath">
+            <summary>
+            Interface for representing a MPD file path.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFilePath.Path">
+            <summary>
+            Gets the path.
+            </summary>
+            <value>
+            The path.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.IMpdFilePath.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="T:MpcNET.Types.MpdBinaryData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MpcNET.Types.MpdBinaryData.#ctor(System.Int64,System.Int64,System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Types.MpdBinaryData"/> class.
+            </summary>
+            <param name="size">The total size of the binary data requested</param>
+            <param name="binary">The size of the data contained in this response</param>
+            <param name="data">The data itself.</param>
+        </member>
+        <member name="P:MpcNET.Types.MpdBinaryData.Size">
+            <summary>
+            Gets the total size of the binary data requeste 
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdBinaryData.Binary">
+            <summary>
+            Gets the size of the data contained in this response
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdBinaryData.Data">
+            <summary>
+            Gets the data contained in this response
+            </summary>
+        </member>
+        <member name="T:MpcNET.Types.MpdDecoderPlugin">
+            <summary>
+            Represents a MPD decoder plugin.
+            </summary>
+        </member>
+        <member name="F:MpcNET.Types.MpdDecoderPlugin.Empty">
+            <summary>
+            The empty plugiun.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Types.MpdDecoderPlugin.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Types.MpdDecoderPlugin"/> class.
+            </summary>
+            <param name="name">The name.</param>
+        </member>
+        <member name="P:MpcNET.Types.MpdDecoderPlugin.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdDecoderPlugin.Suffixes">
+            <summary>
+            Gets the suffixes.
+            </summary>
+            <value>
+            The suffixes.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdDecoderPlugin.MediaTypes">
+            <summary>
+            Gets the media types.
+            </summary>
+            <value>
+            The media types.
+            </value>
+        </member>
+        <member name="T:MpcNET.Types.MpdDirectory">
+            <summary>
+            Represents a MPD directory.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Types.MpdDirectory.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Types.MpdDirectory"/> class.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:MpcNET.Types.MpdDirectory.Path">
+            <summary>
+            Gets the path.
+            </summary>
+            <value>
+            The path.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdDirectory.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdDirectory.Files">
+            <summary>
+            Gets the files.
+            </summary>
+            <value>
+            The files.
+            </value>
+        </member>
+        <member name="T:MpcNET.Types.MpdFile">
+            <summary>
+            The MpdFile class contains all meta data for a file of the MPD.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasTime">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Time"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasAlbum">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Album"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasArtist">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Artist"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasTitle">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Title"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasTrack">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Track"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasName">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Name"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasGenre">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Genre"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasDate">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Date"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasComposer">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Composer"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasPerformer">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Performer"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasComment">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Comment"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasDisc">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Disc"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasPos">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Position"/> property set.
+            </summary>
+        </member>
+        <member name="P:MpcNET.Types.MpdFile.HasId">
+            <summary>
+            Gets a value indicating whether the MpdFile has the <see cref="P:MpcNET.Types.MpdFile.Id"/> property set.
+            </summary>
+        </member>
+        <member name="T:MpcNET.Types.MpdOutput">
+            <summary>
+            Represents a MPD output.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Types.MpdOutput.#ctor(System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Types.MpdOutput"/> class.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="name">The name.</param>
+            <param name="plugin">The plugin name.</param>
+            <param name="enabled">if set to <c>true</c> [enabled].</param>
+        </member>
+        <member name="P:MpcNET.Types.MpdOutput.Id">
+            <summary>
+            Gets the identifier.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdOutput.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdOutput.Plugin">
+            <summary>
+            Gets the plugin name.
+            </summary>
+            <value>
+            The plugin name.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdOutput.IsEnabled">
+            <summary>
+            Gets a value indicating whether this instance is enabled.
+            </summary>
+            <value>
+            <c>true</c> if this instance is enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:MpcNET.Types.MpdPlaylist">
+            <summary>
+            Represents a MPD playlist.
+            </summary>
+        </member>
+        <member name="M:MpcNET.Types.MpdPlaylist.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MpcNET.Types.MpdPlaylist"/> class.
+            </summary>
+            <param name="name">The name.</param>
+        </member>
+        <member name="P:MpcNET.Types.MpdPlaylist.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:MpcNET.Types.MpdPlaylist.LastModified">
+            <summary>
+            Gets the last modified.
+            </summary>
+            <value>
+            The last modified.
+            </value>
+        </member>
+        <member name="M:MpcNET.Types.MpdPlaylist.Equals(System.Object)">
+            <summary>
+            Equals implementation.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MpcNET.Types.MpdPlaylist.GetHashCode">
+            <summary>
+            HashCode implementation.
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

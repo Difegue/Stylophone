@@ -1,0 +1,91 @@
+﻿<Page
+    x:Class="Stylophone.Views.FoldersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:behaviors="using:Stylophone.Behaviors"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:model="using:MpcNET.Types" xmlns:vm="using:Stylophone.ViewModels.Items" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    Style="{StaticResource PageStyle}"
+    behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <DataTemplate x:Key="PathTemplate" x:DataType="vm:FilePathViewModel">
+            <winui:TreeViewItem
+                 HasUnrealizedChildren="{x:Bind IsDirectory}"
+                ItemsSource="{x:Bind Children, Mode=OneWay}" IsExpanded="False" DoubleTapped="TreeViewItem_DoubleTapped">
+                <TextBlock Text="{x:Bind Name}" Margin="{StaticResource XXSmallTopRightBottomMargin}" />
+                
+                <winui:TreeViewItem.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{x:Bind PlayCommand}" />
+                        <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{x:Bind AddToQueueCommand}"/>
+                        <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{x:Bind AddToPlaylistCommand}"/>
+                    </MenuFlyout>
+                </winui:TreeViewItem.ContextFlyout>
+            </winui:TreeViewItem>
+        </DataTemplate>
+    </Page.Resources>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid x:Name="header">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                    Grid.Column="1"
+                    x:Uid="FoldersRoot"
+                    Margin="{StaticResource SmallLeftMargin}"
+                    Style="{StaticResource ListTitleStyle}"
+                    VerticalAlignment="Center" />
+            <Button
+                    Grid.Column="0"
+                    x:Uid="TreeView_CollapseAllButton"
+                    Content="&#xF165;"
+                    FontSize="14"
+                    Padding="{StaticResource SmallLeftRightMargin}"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center"
+                    FontFamily="Segoe MDL2 Assets"
+                    Command="{Binding ElementName=collapseBehavior, Path=CollapseAllCommand}"
+                    Background="Transparent" />
+        </Grid>
+        <winui:TreeView
+                x:Name="treeView"
+                Grid.Row="1"
+                SelectionMode="Single"
+                Expanding="treeView_Expanding"
+                ItemsSource="{x:Bind ViewModel.SourceData}"
+                ItemTemplate="{StaticResource PathTemplate}">
+            <i:Interaction.Behaviors>
+                <behaviors:TreeViewCollapseBehavior x:Name="collapseBehavior" />
+                <ic:EventTriggerBehavior EventName="ItemInvoked">
+                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+                </ic:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+        </winui:TreeView>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
+                    Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <SymbolIcon Symbol="DisconnectDrive" RenderTransformOrigin="0.5,0.5" Height="86">
+                <SymbolIcon.RenderTransform>
+                    <CompositeTransform ScaleX="5" ScaleY="5"/>
+                </SymbolIcon.RenderTransform>
+            </SymbolIcon>
+            <TextBlock x:Uid="EmptyFoldersTitle" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
+            <TextBlock x:Uid="EmptyFoldersDesc" HorizontalAlignment="Center"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Page>

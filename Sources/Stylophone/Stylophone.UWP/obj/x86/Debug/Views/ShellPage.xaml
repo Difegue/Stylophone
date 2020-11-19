@@ -1,0 +1,74 @@
+﻿<Page x:ConnectionId='1'
+    x:Class="Stylophone.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:behaviors="using:Stylophone.Behaviors"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:helpers="using:Stylophone.Helpers"
+    xmlns:views="using:Stylophone.Views"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d">
+
+    <i:Interaction.Behaviors>
+        <ic:EventTriggerBehavior EventName="Loaded">
+            <ic:InvokeCommandAction x:ConnectionId='2'                                            />
+        </ic:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <winui:NavigationView x:ConnectionId='3' Grid.Row="0"
+        x:Name="navigationView"
+        IsBackButtonVisible="Visible"
+        PaneTitle="Stylophone"
+                                                                     
+                                                               
+        IsSettingsVisible="True"
+        ExpandedModeThresholdWidth="900"
+        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+            <winui:NavigationView.MenuItems>
+                <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Audio" helpers:NavHelper.NavigateTo="views:ServerQueuePage" />
+                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Library" helpers:NavHelper.NavigateTo="views:LibraryPage" />
+                <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="MapDrive" helpers:NavHelper.NavigateTo="views:FoldersPage" />
+
+                <winui:NavigationViewItemSeparator/>
+                <winui:NavigationViewItem x:ConnectionId='4' x:Name="playlistContainer" x:Uid="Shell_Playlists" Icon="MusicInfo" SelectsOnInvoked="False"/> <!-- This menuitem is filled in viewmodel-->
+
+                <!-- <winui:NavigationViewItem x:Uid="Shell_NewPlaylist" Icon="Add" SelectsOnInvoked="False" Tapped="Create_Playlist" /> -->
+            </winui:NavigationView.MenuItems>
+            <i:Interaction.Behaviors>
+                <behaviors:NavigationViewHeaderBehavior x:ConnectionId='5'
+                                                                                >
+                    <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock
+                                Text="{Binding}"
+                                Style="{ThemeResource TitleTextBlockStyle}"
+                                Margin="{StaticResource SmallLeftRightMargin}" />
+                            </Grid>
+                        </DataTemplate>
+                    </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+                </behaviors:NavigationViewHeaderBehavior>
+                <ic:EventTriggerBehavior EventName="ItemInvoked">
+                    <ic:InvokeCommandAction x:ConnectionId='6'                                                 />
+                </ic:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+            <Grid>
+                <Frame x:ConnectionId='8' x:Name="shellFrame"                                                     />
+                <controls:InAppNotification x:ConnectionId='9' x:Name="notificationHolder" />
+            </Grid>
+        </winui:NavigationView>
+        
+        <views:NowPlayingBar Grid.Row="1" />
+    </Grid>
+    
+</Page>
+

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)uno.sourcegenerationtasks\3.0.0-dev.18\build\netstandard1.0\Uno.SourceGenerationTasks.targets" Condition="Exists('$(NuGetPackageRoot)uno.sourcegenerationtasks\3.0.0-dev.18\build\netstandard1.0\Uno.SourceGenerationTasks.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.core.build\2.0.0\build\Uno.Core.Build.targets" Condition="Exists('$(NuGetPackageRoot)uno.core.build\2.0.0\build\Uno.Core.Build.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui\3.3.0\buildTransitive\netstandard2.0\Uno.UI.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui\3.3.0\buildTransitive\netstandard2.0\Uno.UI.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui.runtime.skia.wpf\3.3.0\buildTransitive\Uno.UI.Runtime.Skia.Wpf.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui.runtime.skia.wpf\3.3.0\buildTransitive\Uno.UI.Runtime.Skia.Wpf.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui.skia.wpf\3.3.0\build\Uno.UI.Skia.Wpf.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui.skia.wpf\3.3.0\build\Uno.UI.Skia.Wpf.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui.remotecontrol\3.3.0\buildTransitive\Uno.UI.RemoteControl.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui.remotecontrol\3.3.0\buildTransitive\Uno.UI.RemoteControl.targets')" />
+  </ImportGroup>
+</Project>

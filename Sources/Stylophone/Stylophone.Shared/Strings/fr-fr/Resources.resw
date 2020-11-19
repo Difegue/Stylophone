@@ -1,0 +1,449 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>Stylophone</value>
+    <comment>Application display name</comment>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Stylophone</value>
+    <comment>Application description</comment>
+  </data>
+  <data name="Shell_NowPlaying.Content" xml:space="preserve">
+    <value>File d'attente</value>
+    <comment>Navigation view item name for NowPlaying</comment>
+  </data>
+  <data name="Shell_Library.Content" xml:space="preserve">
+    <value>Bibliothèque</value>
+    <comment>Navigation view item name for Library</comment>
+  </data>
+  <data name="Playlists_NoSelection.Text" xml:space="preserve">
+    <value>Choisissez un élement dans la liste.</value>
+    <comment>No selection text for Playlists</comment>
+  </data>
+  <data name="Playlists.MasterHeader" xml:space="preserve">
+    <value>Playlists</value>
+    <comment>Title for PlaylistsPage</comment>
+  </data>
+  <data name="Shell_Playlists.Content" xml:space="preserve">
+    <value>Playlists</value>
+    <comment>Navigation view item name for Playlists</comment>
+  </data>
+  <data name="FoldersTitle.Text" xml:space="preserve">
+    <value>Dossiers</value>
+    <comment>Title for FoldersPage</comment>
+  </data>
+  <data name="Shell_Folders.Content" xml:space="preserve">
+    <value>Dossiers</value>
+    <comment>Navigation view item name for Folders</comment>
+  </data>
+  <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
+    <value>File name is null or empty. Specify a valid file name</value>
+    <comment>File name is null or empty to save file in settings storage extensions</comment>
+  </data>
+  <data name="Settings_Theme.Text" xml:space="preserve">
+    <value>Thème</value>
+    <comment>Choose theme text for Settings</comment>
+  </data>
+  <data name="Settings_Theme_Dark.Content" xml:space="preserve">
+    <value>Sombre</value>
+    <comment>Dark theme text for Settings</comment>
+  </data>
+  <data name="Settings_Theme_Default.Content" xml:space="preserve">
+    <value>Thème de Windows</value>
+    <comment>Windows default theme text for Settings</comment>
+  </data>
+  <data name="Settings_Theme_Light.Content" xml:space="preserve">
+    <value>Clair</value>
+    <comment>Light theme text for Settings</comment>
+  </data>
+  <data name="Settings_About.Text" xml:space="preserve">
+    <value>A propos de cette application</value>
+    <comment>About this application title for Settings</comment>
+  </data>
+  <data name="Settings_AboutDescription.Text" xml:space="preserve">
+    <value>Client MPD pour UWP, utilisant MpcNET.</value>
+    <comment>About this application description for Settings</comment>
+  </data>
+  <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">
+    <value>Code Source, License et Vie Privée</value>
+    <comment>Privacy Statement link content for Settings</comment>
+  </data>
+  <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
+    <value>https://github.com/Difegue/Stylophone</value>
+    <comment>Here is your Privacy Statement url for Settings</comment>
+  </data>
+  <data name="Settings_Personalization.Text" xml:space="preserve">
+    <value>Personnalisation</value>
+    <comment>Personalization text for Settings</comment>
+  </data>
+  <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
+    <value>value must be an Enum!</value>
+    <comment>Value must be an Enum in enum to boolean converter</comment>
+  </data>
+  <data name="ExceptionEnumToBooleanConverterParameterMustBeAnEnumName" xml:space="preserve">
+    <value>parameter must be an Enum name!</value>
+    <comment>Parameter must be an Enum name in enum to boolean converter</comment>
+  </data>
+  <data name="ExceptionViewLifeTimeControlViewDisposal" xml:space="preserve">
+    <value>This view is being disposed.</value>
+    <comment>View disposed</comment>
+  </data>
+  <data name="ExceptionViewLifeTimeControlMissingReleasedSubscription" xml:space="preserve">
+    <value>All pages opened in a new window must subscribe to the Released Event.</value>
+    <comment>The page is not subscribed to the Released event.</comment>
+  </data>
+  <data name="FirstRun_Body.Text" xml:space="preserve">
+    <value>Pour commencer, entrez l'URL et le port de votre serveur MPD dans les Paramètres.
+J'espère que vous apprécierez l'application !</value>
+    <comment>First use prompt message body</comment>
+  </data>
+  <data name="FirstRunDialog.Title" xml:space="preserve">
+    <value>Merci d'avoir installé Stylophone!</value>
+    <comment>First use prompt message title</comment>
+  </data>
+  <data name="FirstRunDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Ok</value>
+    <comment>First use prompt message primary button text</comment>
+  </data>
+  <data name="Shell_NewPlaylist.Content" xml:space="preserve">
+    <value>Ajouter une Playlist</value>
+  </data>
+  <data name="Settings_Server.Text" xml:space="preserve">
+    <value>Serveur MPD</value>
+    <comment>Server text for Settings</comment>
+  </data>
+  <data name="Settings_ServerHost.Header" xml:space="preserve">
+    <value>Hôte</value>
+  </data>
+  <data name="Settings_ServerPort.Header" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="AddToPlaylistComboBox.Header" xml:space="preserve">
+    <value>Ajouter à la Playlist suivante:</value>
+  </data>
+  <data name="AddToPlaylistComboBox.PlaceholderText" xml:space="preserve">
+    <value>Choisissez une Playlist</value>
+  </data>
+  <data name="AddToPlaylistDialog.Title" xml:space="preserve">
+    <value>Ajouter à une Playlist</value>
+  </data>
+  <data name="NoServerError.Text" xml:space="preserve">
+    <value>Impossible de trouver un serveur MPD à cette adresse !</value>
+  </data>
+  <data name="Settings_CacheButton.Content" xml:space="preserve">
+    <value>Vider le cache</value>
+  </data>
+  <data name="Settings_ClearAlbumCache.Text" xml:space="preserve">
+    <value>Stylophone stocke les pochettes d'album sur votre ordinateur pour éviter de surcharger votre serveur MPD.
+Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
+  </data>
+  <data name="Settings_Database.Text" xml:space="preserve">
+    <value>Base de données et Pochettes d'albums</value>
+  </data>
+  <data name="Settings_RefreshDatabase.Content" xml:space="preserve">
+    <value>Mettre à jour la base de données du serveur</value>
+  </data>
+  <data name="NewPlaylistCheckBox.Content" xml:space="preserve">
+    <value>Créer une nouvelle Playlist</value>
+  </data>
+  <data name="NewPlaylistTextBox.PlaceholderText" xml:space="preserve">
+    <value>Nom de la Playlist</value>
+  </data>
+  <data name="EmptyFoldersDesc.Text" xml:space="preserve">
+    <value>Votre serveur MPD est-il disponible ?</value>
+  </data>
+  <data name="EmptyFoldersTitle.Text" xml:space="preserve">
+    <value>Aucun dossier trouvé sur le serveur.</value>
+  </data>
+  <data name="EmptyLibraryTitle.Text" xml:space="preserve">
+    <value>Aussi vide que la bibliothèque d'Alexandrie.</value>
+  </data>
+  <data name="EmptyPlaylistDesc.Text" xml:space="preserve">
+    <value>Ajoutez quelques morceaux !</value>
+  </data>
+  <data name="EmptyPlaylistTitle.Text" xml:space="preserve">
+    <value>Cette Playlist est bien vide.</value>
+  </data>
+  <data name="EmptyQueueDesc.Text" xml:space="preserve">
+    <value>Pourquoi ne pas mettre un peu de musique ?</value>
+  </data>
+  <data name="EmptyQueueTitle.Text" xml:space="preserve">
+    <value>Personne ne fait de bruit...</value>
+  </data>
+  <data name="LibrarySearchFilter.PlaceholderText" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="FirstRun_ItalicBody.Text" xml:space="preserve">
+    <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
+  </data>
+  <data name="Settings_Sizing.Text" xml:space="preserve">
+    <value>Densité de l'interface</value>
+  </data>
+  <data name="Settings_Sizing_Compact.Content" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="Settings_Sizing_Info.Text" xml:space="preserve">
+    <value>Ce paramètre sera appliqué au redémarrage de l'application.</value>
+  </data>
+  <data name="Settings_Sizing_Normal.Content" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="AddQueueToPlaylistFlyoutItem.Text" xml:space="preserve">
+    <value>Ajouter la file d'attente à une Playlist</value>
+  </data>
+  <data name="AddToPlaylistFlyoutItem.Text" xml:space="preserve">
+    <value>Ajouter à une Playlist</value>
+  </data>
+  <data name="AddToPlaylistTextBlock.Text" xml:space="preserve">
+    <value>Ajouter à une Playlist</value>
+  </data>
+  <data name="AddToQueueFlyoutItem.Text" xml:space="preserve">
+    <value>Ajouter à la file d'attente</value>
+  </data>
+  <data name="AddToQueueTextBlock.Text" xml:space="preserve">
+    <value>Ajouter à la file d'attente</value>
+  </data>
+  <data name="ClearQueueFlyoutItem.Text" xml:space="preserve">
+    <value>Vider la file d'attente</value>
+  </data>
+  <data name="CompactOverlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Mode Compact</value>
+  </data>
+  <data name="DeletePlaylistTextBlock.Text" xml:space="preserve">
+    <value>Supprimer la Playlist</value>
+  </data>
+  <data name="FoldersRoot.Text" xml:space="preserve">
+    <value>Serveur MPD</value>
+  </data>
+  <data name="MoreButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Autres actions</value>
+  </data>
+  <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Piste suivante</value>
+  </data>
+  <data name="PlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Lire/Pause</value>
+  </data>
+  <data name="PlayFlyoutItem.Text" xml:space="preserve">
+    <value>Lire</value>
+  </data>
+  <data name="PlayTextBlock.Text" xml:space="preserve">
+    <value>Lire</value>
+  </data>
+  <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Piste précédente</value>
+  </data>
+  <data name="RemoveFromPlaylistFlyoutItem.Text" xml:space="preserve">
+    <value>Supprimer de la Playlist</value>
+  </data>
+  <data name="RemoveFromQueueFlyoutItem.Text" xml:space="preserve">
+    <value>Supprimer de la file d'attente</value>
+  </data>
+  <data name="RepeatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Activer/Désactiver la répétition</value>
+  </data>
+  <data name="RepeatFlyoutItem.Text" xml:space="preserve">
+    <value>Activer/Désactiver la répétition</value>
+  </data>
+  <data name="ShuffleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Activer/Désactiver le Random</value>
+  </data>
+  <data name="ShuffleFlyoutItem.Text" xml:space="preserve">
+    <value>Activer/Désactiver le Random</value>
+  </data>
+  <data name="SoundFlyoutButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Changer le volume</value>
+  </data>
+  <data name="TreeView_CollapseAllButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Fermer tous les dossiers ouverts</value>
+  </data>
+  <data name="UpNextTextBlock.Text" xml:space="preserve">
+    <value>À suivre:</value>
+  </data>
+  <data name="ViewAlbumFlyoutItem.Text" xml:space="preserve">
+    <value>Voir l'album</value>
+  </data>
+  <data name="AddedToPlaylistText" xml:space="preserve">
+    <value>Ajouté à la Playlist {0}.</value>
+  </data>
+  <data name="AddedToQueueText" xml:space="preserve">
+    <value>Ajouté à la file d'attente.</value>
+  </data>
+  <data name="AddToPlaylistDialog.CloseButtonText" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="AddToPlaylistDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="CacheDeletedText" xml:space="preserve">
+    <value>Le cache de pochettes a été vidé.</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="CantClearError" xml:space="preserve">
+    <value>Impossible de vider la file d'attente.</value>
+  </data>
+  <data name="DatabaseAlreadyUpdatingText" xml:space="preserve">
+    <value>La base de données MPD est déjà en cours de rafraîchissement.</value>
+  </data>
+  <data name="DatabaseUpdateStartedText" xml:space="preserve">
+    <value>Démarrage de la mise à jour de la base de données MPD.</value>
+  </data>
+  <data name="DeletePlaylistContentDialog" xml:space="preserve">
+    <value>Supprimer cette Playlist ?</value>
+  </data>
+  <data name="ErrorAddingAlbum" xml:space="preserve">
+    <value>Impossible d'ajouter l'album: {0}</value>
+  </data>
+  <data name="ErrorPlayingText" xml:space="preserve">
+    <value>Impossible de lire le contenu: {0}</value>
+  </data>
+  <data name="GenericErrorText" xml:space="preserve">
+    <value>Erreur: {0}</value>
+  </data>
+  <data name="InvalidMPDResponseError" xml:space="preserve">
+    <value>Réponse du serveur MPD invalide.</value>
+  </data>
+  <data name="NoAlbumErrorText" xml:space="preserve">
+    <value>Ce morceau n'a pas d'album correspondant.</value>
+  </data>
+  <data name="NoTrackPlayingText" xml:space="preserve">
+    <value>Aucun morceau n'est en train de jouer actuellement.</value>
+  </data>
+  <data name="NoTracksLoaded" xml:space="preserve">
+    <value>Aucun morceau n'a été chargé.</value>
+  </data>
+  <data name="NowPlayingText" xml:space="preserve">
+    <value>En train de lire: {0}</value>
+  </data>
+  <data name="OKButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="PlaylistRemovedText" xml:space="preserve">
+    <value>La Playlist a été supprimée.</value>
+  </data>
+  <data name="UpdateDbDialogText" xml:space="preserve">
+    <value>Cette opération peut prendre un certain temps.</value>
+  </data>
+  <data name="UpdateDbDialogTitle" xml:space="preserve">
+    <value>Mettre à jour la base de données MPD ?</value>
+  </data>
+</root>

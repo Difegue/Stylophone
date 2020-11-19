@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>6279c845-92f8-4333-ab99-3d213163593c</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Stylophone.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Activation\ActivationHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Activation\DefaultActivationHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)BackgroundTasks\BackgroundTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BackgroundTasks\LiveTileUpdateTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\NavigationViewHeaderBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\NavigationViewHeaderMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\TreeViewCollapseBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DoubleTopThicknessConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SecondsToTimeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SliderValueConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\AlternatingRowListView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\MiscHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\NavHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Observable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ResourceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SettingsStorageExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Singleton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\TaskExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ActivationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\AlbumArtService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\BackgroundTaskService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DialogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LiveTileService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LiveTileService.Structure.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MPDConnectionService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NotificationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SystemMediaControlsService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ThemeSelectorService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AlbumDetailViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FoldersViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Items\AlbumViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Items\FilePathViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Items\TrackViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LibraryViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Playback\PlaybackViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PlaylistViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QueueViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ShellViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Dialogs\AddToPlaylistDialog.xaml.cs">
+      <DependentUpon>AddToPlaylistDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Dialogs\FirstRunDialog.xaml.cs">
+      <DependentUpon>FirstRunDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\FoldersPage.xaml.cs">
+      <DependentUpon>FoldersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\LibraryDetailPage.xaml.cs">
+      <DependentUpon>LibraryDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\LibraryPage.xaml.cs">
+      <DependentUpon>LibraryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Playback\NowPlayingBar.xaml.cs">
+      <DependentUpon>NowPlayingBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Playback\OverlayView.xaml.cs">
+      <DependentUpon>OverlayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Playback\PlaybackView.xaml.cs">
+      <DependentUpon>PlaybackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PlaylistPage.xaml.cs">
+      <DependentUpon>PlaylistPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ServerQueuePage.xaml.cs">
+      <DependentUpon>ServerQueuePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ShellPage.xaml.cs">
+      <DependentUpon>ShellPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\TextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\_Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\_FontSizes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\_Thickness.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Dialogs\AddToPlaylistDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Dialogs\FirstRunDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\FoldersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\LibraryDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\LibraryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Playback\NowPlayingBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Playback\OverlayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Playback\PlaybackView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\PlaylistPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\ServerQueuePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\ShellPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory).editorconfig" />
+    <None Include="$(MSBuildThisFileDirectory)Assets\SharedAssets.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en-us\Resources.resw" />
+    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en\Resources.resw" />
+    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\fr-fr\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\AlbumPlaceholder.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-100.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-150.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-400.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-100.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-150.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-400.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-100.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-150.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-400.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-32.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-100.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-150.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-400.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-400.png" />
+  </ItemGroup>
+</Project>

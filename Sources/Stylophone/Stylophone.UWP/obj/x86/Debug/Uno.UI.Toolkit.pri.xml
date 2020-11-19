@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PriInfo>
+	<ResourceMap name="Uno.UI.Toolkit" version="1.0" primary="true">
+		<Qualifiers/>
+		<ResourceMapSubtree name="Files">
+			<ResourceMapSubtree name="Uno.UI.Toolkit">
+				<NamedResource name="Uno.UI.Toolkit.xr.xml" uri="ms-resource://Uno.UI.Toolkit/Files/Uno.UI.Toolkit/Uno.UI.Toolkit.xr.xml">
+					<Candidate type="Path">
+						<Value>Uno.UI.Toolkit\Uno.UI.Toolkit.xr.xml</Value>
+					</Candidate>
+				</NamedResource>
+				<ResourceMapSubtree name="Themes">
+					<NamedResource name="Generic.xbf" uri="ms-resource://Uno.UI.Toolkit/Files/Uno.UI.Toolkit/Themes/Generic.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+				</ResourceMapSubtree>
+			</ResourceMapSubtree>
+		</ResourceMapSubtree>
+	</ResourceMap>
+</PriInfo>

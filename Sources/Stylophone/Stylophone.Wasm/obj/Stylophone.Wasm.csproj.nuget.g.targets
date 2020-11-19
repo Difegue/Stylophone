@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)uno.wasm.bootstrap.devserver\1.3.4\build\Uno.Wasm.Bootstrap.DevServer.targets" Condition="Exists('$(NuGetPackageRoot)uno.wasm.bootstrap.devserver\1.3.4\build\Uno.Wasm.Bootstrap.DevServer.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.wasm.bootstrap\1.3.4\build\Uno.Wasm.Bootstrap.targets" Condition="Exists('$(NuGetPackageRoot)uno.wasm.bootstrap\1.3.4\build\Uno.Wasm.Bootstrap.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.sourcegenerationtasks\3.0.0-dev.18\build\netstandard1.0\Uno.SourceGenerationTasks.targets" Condition="Exists('$(NuGetPackageRoot)uno.sourcegenerationtasks\3.0.0-dev.18\build\netstandard1.0\Uno.SourceGenerationTasks.targets')" />
+    <Import Project="C:\Program Files\dotnet\sdk\NuGetFallbackFolder\netstandard.library\2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('C:\Program Files\dotnet\sdk\NuGetFallbackFolder\netstandard.library\2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.core.build\2.0.0\build\Uno.Core.Build.targets" Condition="Exists('$(NuGetPackageRoot)uno.core.build\2.0.0\build\Uno.Core.Build.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui\3.3.0\buildTransitive\netstandard2.0\Uno.UI.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui\3.3.0\buildTransitive\netstandard2.0\Uno.UI.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui.runtime.webassembly\3.3.0\buildTransitive\Uno.UI.Runtime.WebAssembly.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui.runtime.webassembly\3.3.0\buildTransitive\Uno.UI.Runtime.WebAssembly.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui.webassembly\3.3.0\build\Uno.UI.WebAssembly.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui.webassembly\3.3.0\build\Uno.UI.WebAssembly.targets')" />
+    <Import Project="$(NuGetPackageRoot)uno.ui.remotecontrol\3.3.0\buildTransitive\Uno.UI.RemoteControl.targets" Condition="Exists('$(NuGetPackageRoot)uno.ui.remotecontrol\3.3.0\buildTransitive\Uno.UI.RemoteControl.targets')" />
+  </ImportGroup>
+</Project>

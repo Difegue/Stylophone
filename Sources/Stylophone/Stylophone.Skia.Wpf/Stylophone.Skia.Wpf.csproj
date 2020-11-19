@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Note that for WebAssembly version 1.1.1 of the console logger required -->
+    <PackageReference Include="CodeProject.ObjectPool" Version="4.0.2" />
+    <PackageReference Include="ksemenenko.ColorThief" Version="1.1.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Xaml" Version="4.0.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp" Version="6.1.0-build.191.gc988bdd4ff" />
+    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.Notifications" Version="6.1.0-build.191.gc988bdd4ff" />
+    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Animations" Version="6.1.0-build.191.gc988bdd4ff" />
+    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Controls" Version="6.1.0-build.191.gc988bdd4ff" />
+    <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.2-uno.79" />
+    <PackageReference Include="Uno.UI.Skia.Wpf" Version="3.3.0" />
+    <PackageReference Include="Uno.UI.RemoteControl" Version="3.3.0" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="WriteableBitmapEx" Version="1.6.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Include="..\Stylophone.Shared\**\*.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MpcNET\MpcNET.csproj" />
+  </ItemGroup>
+  <Import Project="..\Stylophone.Shared\Stylophone.Shared.projitems" Label="Shared" />
+</Project>

@@ -1,0 +1,275 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf.Host\\Stylophone.Skia.Wpf.Host.csproj": {}
+  },
+  "projects": {
+    "E:\\Projects\\MpcNET2\\Sources\\MpcNET\\MpcNET.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Projects\\MpcNET2\\Sources\\MpcNET\\MpcNET.csproj",
+        "projectName": "MpcNET",
+        "projectPath": "E:\\Projects\\MpcNET2\\Sources\\MpcNET\\MpcNET.csproj",
+        "packagesPath": "C:\\Users\\Vincent\\.nuget\\packages\\",
+        "outputPath": "E:\\Projects\\MpcNET2\\Sources\\MpcNET\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "E:\\Projects\\MpcNET2\\Sources\\NuGet.Config",
+          "C:\\Users\\Vincent\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            },
+            "Sundew.Base": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            },
+            "System.ValueTuple": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf.Host\\Stylophone.Skia.Wpf.Host.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf.Host\\Stylophone.Skia.Wpf.Host.csproj",
+        "projectName": "Stylophone.Skia.Wpf.Host",
+        "projectPath": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf.Host\\Stylophone.Skia.Wpf.Host.csproj",
+        "packagesPath": "C:\\Users\\Vincent\\.nuget\\packages\\",
+        "outputPath": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf.Host\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "E:\\Projects\\MpcNET2\\Sources\\NuGet.Config",
+          "C:\\Users\\Vincent\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.WPF\\Stylophone.Skia.WPF.csproj": {
+                "projectPath": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.WPF\\Stylophone.Skia.WPF.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Uno.UI.RemoteControl": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
+            "Uno.UI.Skia.Wpf": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WPF": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf\\Stylophone.Skia.Wpf.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf\\Stylophone.Skia.Wpf.csproj",
+        "projectName": "Stylophone.Skia.Wpf",
+        "projectPath": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf\\Stylophone.Skia.Wpf.csproj",
+        "packagesPath": "C:\\Users\\Vincent\\.nuget\\packages\\",
+        "outputPath": "E:\\Projects\\MpcNET2\\Sources\\Stylophone\\Stylophone.Skia.Wpf\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "E:\\Projects\\MpcNET2\\Sources\\NuGet.Config",
+          "C:\\Users\\Vincent\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "E:\\Projects\\MpcNET2\\Sources\\MpcNET\\MpcNET.csproj": {
+                "projectPath": "E:\\Projects\\MpcNET2\\Sources\\MpcNET\\MpcNET.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "CodeProject.ObjectPool": {
+              "target": "Package",
+              "version": "[4.0.2, )"
+            },
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[1.1.1, )"
+            },
+            "Microsoft.Extensions.Logging.Filter": {
+              "target": "Package",
+              "version": "[1.1.1, )"
+            },
+            "Microsoft.Xaml": {
+              "target": "Package",
+              "version": "[4.0.0.1, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Uno.Microsoft.Toolkit.Uwp": {
+              "target": "Package",
+              "version": "[6.1.0-build.191.gc988bdd4ff, )"
+            },
+            "Uno.Microsoft.Toolkit.Uwp.Notifications": {
+              "target": "Package",
+              "version": "[6.1.0-build.191.gc988bdd4ff, )"
+            },
+            "Uno.Microsoft.Toolkit.Uwp.UI.Animations": {
+              "target": "Package",
+              "version": "[6.1.0-build.191.gc988bdd4ff, )"
+            },
+            "Uno.Microsoft.Toolkit.Uwp.UI.Controls": {
+              "target": "Package",
+              "version": "[6.1.0-build.191.gc988bdd4ff, )"
+            },
+            "Uno.Microsoft.Xaml.Behaviors.Uwp.Managed": {
+              "target": "Package",
+              "version": "[2.0.2-uno.79, )"
+            },
+            "Uno.UI.RemoteControl": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
+            "Uno.UI.Skia.Wpf": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
+            "WriteableBitmapEx": {
+              "target": "Package",
+              "version": "[1.6.7, )"
+            },
+            "ksemenenko.ColorThief": {
+              "target": "Package",
+              "version": "[1.1.1.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
