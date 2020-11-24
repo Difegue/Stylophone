@@ -19,7 +19,7 @@ using Windows.System.Threading;
 using Windows.UI;
 
 
-#if UWP
+#if UWP||WASM
 using Imaging = Windows.UI.Xaml.Media.Imaging;
 #else
 using Imaging = System.Windows.Media.Imaging;

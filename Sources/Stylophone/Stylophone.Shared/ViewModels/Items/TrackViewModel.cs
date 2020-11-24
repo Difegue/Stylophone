@@ -15,7 +15,7 @@ using Stylophone.Views;
 using Windows.UI;
 using MpcNET.Commands.Queue;
 
-#if UWP
+#if UWP||WASM
 using Imaging = Windows.UI.Xaml.Media.Imaging;
 #else
 using Imaging = System.Windows.Media.Imaging;

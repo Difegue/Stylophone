@@ -15,7 +15,7 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
 
-#if UWP
+#if UWP||WASM
 using Imaging = Windows.UI.Xaml.Media.Imaging;
 #else
 using Imaging = System.Windows.Media.Imaging;
@@ -276,9 +276,11 @@ namespace Stylophone.Services
                     var readStream = await file.OpenReadAsync();
 
                     Imaging.WriteableBitmap image = null;
+#if UWP
                     await dispatcher.AwaitableRunAsync(async () => image = Imaging.BitmapFactory.FromStream(readStream.AsStream()));
 
                     readStream.Dispose();
+#endif
                     return image;
                 }
 
@@ -293,6 +295,7 @@ namespace Stylophone.Services
         private async static Task<Imaging.WriteableBitmap> ImageFromBytes(byte[] bytes, CoreDispatcher dispatcher)
         {
             Imaging.WriteableBitmap image = null;
+#if UWP
             using (var stream = new MemoryStream(bytes))
             {
                 await dispatcher.AwaitableRunAsync(async () =>
@@ -306,6 +309,7 @@ namespace Stylophone.Services
                     }
                 });
             }
+#endif
             return image;
         }
 

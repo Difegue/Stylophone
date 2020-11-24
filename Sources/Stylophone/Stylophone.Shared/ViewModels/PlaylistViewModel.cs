@@ -15,7 +15,7 @@ using MpcNET.Commands.Queue;
 using MpcNET.Types;
 using Windows.UI.Xaml.Controls;
 
-#if UWP
+#if UWP||WASM
 using Imaging = Windows.UI.Xaml.Media.Imaging;
 #else
 using Imaging = System.Windows.Media.Imaging;
