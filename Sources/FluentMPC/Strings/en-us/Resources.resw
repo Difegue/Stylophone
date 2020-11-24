@@ -448,4 +448,7 @@ If you want to clear the album art cache, click this button.</value>
   <data name="UpdateDbDialogTitle" xml:space="preserve">
     <value>Update the Server Database?</value>
   </data>
+  <data name="LoadingTreeItem" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
 </root>

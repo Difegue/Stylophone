@@ -105,6 +105,11 @@ namespace FluentMPC.Services
             }
         }
 
+        /// <summary>
+        /// Get a raw MPD Connection. Please use <see cref="SafelySendCommandAsync{T}(IMpcCommand{T}, CoreDispatcher)"/> instead when possible.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public static async Task<PooledObjectWrapper<MpcConnection>> GetConnectionAsync(CancellationToken token = default)
         {
             return await ConnectionPool.GetObjectAsync(token);

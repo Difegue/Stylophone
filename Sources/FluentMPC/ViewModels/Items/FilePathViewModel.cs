@@ -22,6 +22,8 @@ using System.Collections.ObjectModel;
 using Sundew.Base.Collections;
 using System.Linq;
 using MpcNET.Commands.Queue;
+using MpcNET.Commands.Reflection;
+using MpcNET;
 
 namespace FluentMPC.ViewModels.Items
 {
@@ -91,22 +93,12 @@ namespace FluentMPC.ViewModels.Items
 
         private async void PlayPath()
         {
-            // Clear queue, add album and play
-            try
-            {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var req = await c.InternalResource.SendAsync(new ClearCommand());
-                    if (!req.IsResponseValid) throw new Exception("CantClearError".GetLocalized());
+            // Clear queue, add path and play
+            var commandList = new CommandList(new IMpcCommand<object>[] { new ClearCommand(), new AddCommand(Path), new PlayCommand(0) });
 
-                    req = await c.InternalResource.SendAsync(new AddCommand(Path));
-                    req = await c.InternalResource.SendAsync(new PlayCommand(0));
-                    NotificationService.ShowInAppNotification(string.Format("NowPlayingText".GetLocalized(), Path));
-                }
-            }
-            catch (Exception e)
+            if (await MPDConnectionService.SafelySendCommandAsync(commandList) != null)
             {
-                NotificationService.ShowInAppNotification(string.Format("ErrorPlayingText".GetLocalized(), e), 0);
+                NotificationService.ShowInAppNotification(string.Format("NowPlayingText".GetLocalized(), Path));
             }
         }
 
@@ -129,10 +121,16 @@ namespace FluentMPC.ViewModels.Items
             var playlistName = await DialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;
 
+            // Adding a file to a playlist somehow triggers the server's "playlist" event, which is normally used for the queue...
+            // We disable queue events temporarily in order to avoid UI jitter by a refreshed queue.
+            MPDConnectionService.DisableQueueEvents = true;
+
             var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, Path));
 
             if (response != null)
                 NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
+
+            MPDConnectionService.DisableQueueEvents = false;
         }
 
         public FilePathViewModel(IMpdFilePath file)
@@ -147,8 +145,7 @@ namespace FluentMPC.ViewModels.Items
                 _childPaths = new ObservableCollection<FilePathViewModel>();
 
                 // Add a bogus child that'll be replaced when the list is loaded
-                //TODO - put string in resource
-                _childPaths.Add(new FilePathViewModel("Loading..."));
+                _childPaths.Add(new FilePathViewModel("LoadingTreeItem".GetLocalized()));
             }
 
         }

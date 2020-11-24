@@ -139,7 +139,6 @@ namespace FluentMPC.ViewModels
             if (e.SourcePageType == typeof(LibraryDetailPage) || e.SourcePageType == typeof(PlaylistPage) || e.SourcePageType == typeof(PlaybackView))
             {
                 // Special margin to extend frame to the titlebar
-                // TODO:depending on viewstate, handle color of back and hambaga buttons and change margin 
                 FrameMargin = new Thickness(0, -32, 0, 0);
             }
             else
@@ -182,9 +181,9 @@ namespace FluentMPC.ViewModels
                     NavHelper.SetNavigateTo(navigationViewItem, typeof(PlaylistPage));
                     _playlistContainer.MenuItems.Add(navigationViewItem);
                 }
-            } catch (Exception)
+            } catch (Exception e)
             {
-                // TODO
+                NotificationService.ShowInAppNotification($"Updating Playlist Navigation failed: {e.Message}", 0);
             }
         }
 

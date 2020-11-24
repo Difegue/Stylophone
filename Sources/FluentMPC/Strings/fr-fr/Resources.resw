@@ -446,4 +446,7 @@ Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
   <data name="UpdateDbDialogTitle" xml:space="preserve">
     <value>Mettre à jour la base de données MPD ?</value>
   </data>
+  <data name="LoadingTreeItem" xml:space="preserve">
+    <value>Chargement...</value>
+  </data>
 </root>
