@@ -720,7 +720,7 @@ namespace FluentMPC.ViewModels.Playback
 
                 // Make the overlay small
                 var compactOptions = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
-                compactOptions.CustomSize = new Size(300, 430);
+                compactOptions.CustomSize = new Size(340, 364);
 
                 // Display as compact overlay
                 await ApplicationViewSwitcher.TryShowAsViewModeAsync(compactViewId, ApplicationViewMode.CompactOverlay,
