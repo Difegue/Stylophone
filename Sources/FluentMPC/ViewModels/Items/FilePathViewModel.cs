@@ -58,7 +58,7 @@ namespace FluentMPC.ViewModels.Items
         private bool _isLoadingChildren;
         public async Task LoadChildrenAsync()
         {
-            if (_isLoadingChildren || IsDirectory == false || _childPaths == null || Path == null) return;
+            if (IsLoaded || _isLoadingChildren || IsDirectory == false || _childPaths == null || Path == null) return;
 
             _isLoadingChildren = true;
             try
@@ -77,8 +77,8 @@ namespace FluentMPC.ViewModels.Items
 
                 await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
                 {
-                    _childPaths.Clear();
                     _childPaths.AddRange(newChildren);
+                    _childPaths.RemoveAt(0); // Remove the placeholder after adding the new items, otherwise the treeitem can close back up
                     IsLoaded = true;
                 });
             }
@@ -153,6 +153,7 @@ namespace FluentMPC.ViewModels.Items
         public FilePathViewModel(string name)
         {
             Name = name;
+            _childPaths = new ObservableCollection<FilePathViewModel>();
         }
 
     }

@@ -79,7 +79,7 @@
 
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Background>
-                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.4"
+                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.4" 
                               TintColor="{StaticResource SystemAccentColorDark3}"
                               FallbackColor="{StaticResource SystemAccentColor}">
 

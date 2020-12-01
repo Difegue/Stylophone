@@ -6,21 +6,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     xmlns:behaviors="using:FluentMPC.Behaviors"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
-    xmlns:model="using:MpcNET.Types" xmlns:vm="using:FluentMPC.ViewModels.Items" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:vm="using:FluentMPC.ViewModels.Items" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     Style="{StaticResource PageStyle}"
-    behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <DataTemplate x:Key="PathTemplate" x:DataType="vm:FilePathViewModel">
             <winui:TreeViewItem
-                AutomationProperties.Name="{x:Bind Name}" HasUnrealizedChildren="{x:Bind IsDirectory}"
-                ItemsSource="{x:Bind Children, Mode=OneWay}" IsExpanded="False" DoubleTapped="TreeViewItem_DoubleTapped">
-                <TextBlock Text="{x:Bind Name}" Margin="{StaticResource XXSmallTopRightBottomMargin}" />
+                HasUnrealizedChildren="{x:Bind IsDirectory, Mode=OneTime}" IsExpanded="False" 
+                ItemsSource="{x:Bind Children, Mode=OneWay}" DoubleTapped="TreeViewItem_DoubleTapped">
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="{StaticResource XXSmallTopRightBottomMargin}" />
                 
                 <winui:TreeViewItem.ContextFlyout>
                     <MenuFlyout>
@@ -62,21 +59,23 @@
                     Command="{Binding ElementName=collapseBehavior, Path=CollapseAllCommand}"
                     Background="Transparent" />
         </Grid>
-        <winui:TreeView
-                x:Name="treeView"
-                Grid.Row="1"
-                SelectionMode="Single"
-                Expanding="treeView_Expanding"
-                ItemsSource="{x:Bind ViewModel.SourceData}"
-                ItemTemplate="{StaticResource PathTemplate}">
-            <i:Interaction.Behaviors>
-                <behaviors:TreeViewCollapseBehavior x:Name="collapseBehavior" />
-                <ic:EventTriggerBehavior EventName="ItemInvoked">
-                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
-                </ic:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
-        </winui:TreeView>
 
+        <!-- The WinUI TreeView is super bad at virtualization and I don't get it? Since it's all C++ I won't even bother
+             Cramming it into a ScrollViewer disables virtualization, solving most problems in one swoop.
+        -->
+        <ScrollViewer Grid.Row="1">
+            <winui:TreeView
+                    x:Name="treeView"
+                    SelectionMode="Single"
+                    Expanding="treeView_Expanding"
+                    ItemsSource="{x:Bind ViewModel.SourceData, Mode=OneWay}"
+                    ItemTemplate="{StaticResource PathTemplate}">
+                <i:Interaction.Behaviors>
+                    <behaviors:TreeViewCollapseBehavior x:Name="collapseBehavior" />
+                </i:Interaction.Behaviors>
+            </winui:TreeView>
+        </ScrollViewer>
+        
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
                     Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <SymbolIcon Symbol="DisconnectDrive" RenderTransformOrigin="0.5,0.5" Height="86">

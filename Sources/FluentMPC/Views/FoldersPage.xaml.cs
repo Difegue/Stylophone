@@ -27,10 +27,16 @@ namespace FluentMPC.Views
 
         private void treeView_Expanding(Microsoft.UI.Xaml.Controls.TreeView sender, Microsoft.UI.Xaml.Controls.TreeViewExpandingEventArgs args)
         {
-            var vm = (args.Node.Content as FilePathViewModel);
+            var vm = (args.Item as FilePathViewModel);
 
             if (!vm.IsLoaded)
-                Task.Run(async () => await vm.LoadChildrenAsync());
+            {
+                Task.Run(async () =>
+                {
+                    await vm.LoadChildrenAsync();
+                    args.Node.HasUnrealizedChildren = false;
+                });
+            }       
         }
 
         private void TreeViewItem_DoubleTapped(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
