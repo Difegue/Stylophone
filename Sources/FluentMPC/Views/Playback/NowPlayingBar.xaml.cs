@@ -18,7 +18,7 @@ namespace FluentMPC.Views
 {
     public sealed partial class NowPlayingBar
     {
-        public PlaybackViewModel PlaybackViewModel { get; } = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, 70);
+        public PlaybackViewModel PlaybackViewModel { get; } = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, VisualizationType.NowPlayingBar);
 
         public NowPlayingBar() => InitializeComponent();
 

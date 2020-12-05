@@ -19,7 +19,7 @@ namespace FluentMPC.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, 720);
+            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, VisualizationType.FullScreenPlayback);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

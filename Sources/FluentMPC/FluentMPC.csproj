@@ -202,6 +202,7 @@
     <Compile Include="ViewModels\AlbumDetailViewModel.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\Items\AlbumViewModel.cs" />
+    <Compile Include="ViewModels\Playback\VisualizationType.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\Playback\PlaybackViewModel.cs" />
     <Compile Include="ViewModels\Items\TrackViewModel.cs" />
