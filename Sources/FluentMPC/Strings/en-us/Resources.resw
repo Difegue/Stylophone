@@ -158,7 +158,7 @@
     <comment>File name is null or empty to save file in settings storage extensions</comment>
   </data>
   <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Choose Theme</value>
+    <value>Theme</value>
     <comment>Choose theme text for Settings</comment>
   </data>
   <data name="Settings_Theme_Dark.Content" xml:space="preserve">
@@ -296,7 +296,7 @@ If you want to clear the album art cache, click this button.</value>
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
   </data>
   <data name="Settings_Sizing.Text" xml:space="preserve">
-    <value>Choose UI Density</value>
+    <value>UI Density</value>
   </data>
   <data name="Settings_Sizing_Compact.Content" xml:space="preserve">
     <value>Compact</value>
@@ -447,5 +447,8 @@ If you want to clear the album art cache, click this button.</value>
   </data>
   <data name="UpdateDbDialogTitle" xml:space="preserve">
     <value>Update the Server Database?</value>
+  </data>
+  <data name="LoadingTreeItem" xml:space="preserve">
+    <value>Loading...</value>
   </data>
 </root>

@@ -15,19 +15,8 @@ namespace FluentMPC.ViewModels
 {
     public class FoldersViewModel : Observable
     {
-        private ICommand _itemInvokedCommand;
-        private object _selectedItem;
-
-        public object SelectedItem
-        {
-            get => _selectedItem;
-            set => Set(ref _selectedItem, value);
-        }
-
         public ObservableCollection<FilePathViewModel> SourceData { get; } = new ObservableCollection<FilePathViewModel>();
         public bool IsSourceEmpty => SourceData.Count == 0;
-
-        public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<WinUI.TreeViewItemInvokedEventArgs>(OnItemInvoked));
 
         public FoldersViewModel()
         {
@@ -49,7 +38,5 @@ namespace FluentMPC.ViewModels
             OnPropertyChanged(nameof(SourceData));
         }
 
-        private void OnItemInvoked(WinUI.TreeViewItemInvokedEventArgs args)
-            => SelectedItem = args.InvokedItem;
     }
 }

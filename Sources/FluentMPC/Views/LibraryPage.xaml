@@ -59,7 +59,7 @@
                         BlurRadius="10"
                         OffsetY="2"
                         ShadowOpacity="0.6"
-                        Color="Black">
+                        Color="{ThemeResource SystemBaseLowColor}">
 
                             <Grid Width="180" Height="180" CornerRadius="3" >
                                 <controls:ImageEx Style="{StaticResource NoAnimationImageEx}" 

@@ -6,8 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     mc:Ignorable="d"
-    d:DesignHeight="430"
-    d:DesignWidth="300"
+    d:DesignHeight="340"
+    d:DesignWidth="364"
     Unloaded="Page_Unloaded"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:converters="using:FluentMPC.Helpers">
@@ -25,6 +25,52 @@
     <Grid Background="{ThemeResource SystemControlAcrylicElementBrush}"
           RequestedTheme="Dark">
 
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="260" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="compactShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="compactRepeatButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="180" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="compactSliderTimes.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="260" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="compactSliderTimes.Visibility" Value="Visible" />
+                        <Setter Target="compactTrackName.Visibility" Value="Visible" />
+                        <Setter Target="compactTrackArtist.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="300" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="compactSliderTimes.Visibility" Value="Visible" />
+                        <Setter Target="compactTrackName.Visibility" Value="Visible" />
+                        <Setter Target="compactTrackArtist.Visibility" Value="Visible" />
+                        <Setter Target="compactTrackName.FontSize" Value="26" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        
         <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
                           PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill"
                           HorizontalAlignment="Center"
@@ -33,17 +79,19 @@
 
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="#00000000" />
-                    <GradientStop Offset="0.7" Color="#DD000000" />
-                </LinearGradientBrush>
+                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.4" 
+                              TintColor="{StaticResource SystemAccentColorDark3}"
+                              FallbackColor="{StaticResource SystemAccentColor}">
+
+            </AcrylicBrush>
             </Border.Background>
         </Border>
+        
 
         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal">
             <Button Style="{StaticResource CircleButtonStyle}"
                     Margin="20,20,0,0"
-                    Background="{ThemeResource SystemControlChromeMediumLowAcrylicElementMediumBrush}"
+                    Background="{ThemeResource ButtonRevealBackgroundPointerOver}"
                     Click="{x:Bind NavigateToMainView}"
                     Width="40" Height="40">
                 <Button.Content>
@@ -57,14 +105,18 @@
 
         <StackPanel VerticalAlignment="Bottom">
             <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
-                       MaxLines="3"
-                       FontSize="26"
+                       x:Name="compactTrackName"
+                       Visibility="Collapsed"
+                       MaxLines="2"
+                       FontSize="18"
                        TextWrapping="Wrap"
                        TextTrimming="CharacterEllipsis"
                        Margin="25,0,25,5"
                        FontWeight="Bold" />
 
             <TextBlock Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}"
+                       x:Name="compactTrackArtist"
+                       Visibility="Collapsed"
                        FontSize="14"
                        Margin="25,0,25,10"
                        Opacity="0.6"
@@ -72,7 +124,7 @@
                        FontWeight="Bold" />
 
             <!-- Slider Times -->
-            <Grid>
+            <Grid x:Name="compactSliderTimes" Visibility="Collapsed">
                 <TextBlock Grid.Column="0"
                            HorizontalAlignment="Left"
                            FontWeight="SemiBold"
@@ -107,6 +159,8 @@
                         Margin="0,0,0,20"
                         VerticalAlignment="Center">
                 <Button Margin="5,0"
+                        x:Name="compactShuffleButton"
+                        Visibility="Collapsed"
                         x:Uid="ShuffleButton"
                         Style="{StaticResource CircleButtonStyle}"
                         Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
@@ -165,6 +219,8 @@
                 <!-- Repeat -->
                 <Button Margin="5,0"
                         x:Uid="RepeatButton"
+                        x:Name="compactRepeatButton"
+                        Visibility="Collapsed"
                         Style="{StaticResource CircleButtonStyle}"
                         Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                         Click="{x:Bind PlaybackViewModel.ToggleRepeat}"

@@ -27,11 +27,13 @@ namespace FluentMPC.ViewModels.Playback
     public class PlaybackViewModel : Observable
     {
         private readonly CoreDispatcher _currentUiDispatcher;
-        private readonly int _artWidth;
+        private readonly VisualizationType _hostType;
+
+        private CancellationTokenSource _albumArtCancellationSource = new CancellationTokenSource();
 
         #region Getters and Setters
 
-        public bool HideTrackName => NavigationService.Frame.CurrentSourcePageType != typeof(PlaybackView);
+        public bool ShowTrackName => NavigationService.Frame.CurrentSourcePageType != typeof(PlaybackView);
 
         /// <summary>
         /// The current playing track
@@ -281,13 +283,13 @@ namespace FluentMPC.ViewModels.Playback
 
         #region Constructors
 
-        public PlaybackViewModel() : this(CoreApplication.MainView.Dispatcher)
+        public PlaybackViewModel() : this(CoreApplication.MainView.Dispatcher, VisualizationType.None)
         { }
 
-        public PlaybackViewModel(CoreDispatcher uiDispatcher, int albumArtWidth = -1)
+        public PlaybackViewModel(CoreDispatcher uiDispatcher, VisualizationType hostType)
         {
             _currentUiDispatcher = uiDispatcher;
-            _artWidth = albumArtWidth;
+           _hostType = hostType;
 
             // Bind the methods that we need
             MPDConnectionService.StatusChanged += OnStateChange;
@@ -301,7 +303,7 @@ namespace FluentMPC.ViewModels.Playback
             OnConnectionChanged(null, null);
 
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
-            NavigationService.Navigated += (s, e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(HideTrackName)));
+            NavigationService.Navigated += (s, e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(ShowTrackName)));
 
             // Start the timer if ready
             if (!_updateInformationTimer.IsEnabled)
@@ -376,10 +378,16 @@ namespace FluentMPC.ViewModels.Playback
             var playlistName = await DialogService.ShowAddToPlaylistDialog(false);
             if (playlistName == null) return;
 
+            // Adding a file to a playlist somehow triggers the server's "playlist" event, which is normally used for the queue...
+            // We disable queue events temporarily in order to avoid UI jitter by a refreshed queue.
+            MPDConnectionService.DisableQueueEvents = true;
+
             var req = await MPDConnectionService.SafelySendCommandAsync(new SaveCommand(playlistName), _currentUiDispatcher);
 
             if (req != null)
-                NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName)); 
+                NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
+
+            MPDConnectionService.DisableQueueEvents = false;
         }
 
         /// <summary>
@@ -475,17 +483,27 @@ namespace FluentMPC.ViewModels.Playback
         ///     Toggles the state between the track playing
         ///     and not playing
         /// </summary>
-        public async void ChangePlaybackState() => await MPDConnectionService.SafelySendCommandAsync(new PauseResumeCommand(), _currentUiDispatcher);
+        public void ChangePlaybackState() => _ = MPDConnectionService.SafelySendCommandAsync(new PauseResumeCommand(), _currentUiDispatcher);
 
         /// <summary>
         ///     Go forward one track
-        /// </summary>
-        public async void SkipNext() => await MPDConnectionService.SafelySendCommandAsync(new NextCommand(), _currentUiDispatcher);
+        /// </summary> 
+        public void SkipNext()
+        {
+            // Immediately cancel album art loading if it's in progress to free up MPD server resources
+            _albumArtCancellationSource.Cancel();
+            _ = MPDConnectionService.SafelySendCommandAsync(new NextCommand(), _currentUiDispatcher);
+        }
 
         /// <summary>
         ///     Go backwards one track
         /// </summary>
-        public async void SkipPrevious() => await MPDConnectionService.SafelySendCommandAsync(new PreviousCommand(), _currentUiDispatcher);
+        public void SkipPrevious()
+        {
+            // Immediately cancel album art loading if it's in progress to free up MPD server resources
+            _albumArtCancellationSource.Cancel();
+            _ = MPDConnectionService.SafelySendCommandAsync(new PreviousCommand(), _currentUiDispatcher);
+        }
 
         #endregion Track Playback State
 
@@ -526,7 +544,7 @@ namespace FluentMPC.ViewModels.Playback
 
                 if (response != null)
                 {
-                    NextTrack = new TrackViewModel(response.First(), false, -1, _currentUiDispatcher);
+                    NextTrack = new TrackViewModel(response.First(), false, dispatcher:_currentUiDispatcher);
                 }
             }
         }
@@ -545,13 +563,25 @@ namespace FluentMPC.ViewModels.Playback
             // Get song info from MPD
             var response = await MPDConnectionService.SafelySendCommandAsync(new CurrentSongCommand(), _currentUiDispatcher);
 
+            // Cancel previous track art load
+            _albumArtCancellationSource.Cancel();
+            _albumArtCancellationSource = new CancellationTokenSource();
+
             // Run all this on the UI thread
             await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 if (response != null)
                 {
+                    // Disable album art loading if this PlaybackViewModel doesn't belong to a view that shows it.
+                    // This boolean doesn't do much for now, see below TODO
+                    var loadAlbumArt = _hostType.IsOneOf(VisualizationType.FullScreenPlayback, VisualizationType.OverlayPlayback, VisualizationType.NowPlayingBar);
+
+                    // TODO: To avoid concurrent art loading, also disable it in NowPlaying when fullscreen is enabled.
+                    // This breaks dominantcolor loading in its current state...
+                    // || (_hostType == VisualizationType.NowPlayingBar && ShowTrackName);
+
                     // Set the new current track, updating the UI with the correct Dispatcher
-                    CurrentTrack = new TrackViewModel(response, true, _artWidth, _currentUiDispatcher);
+                    CurrentTrack = new TrackViewModel(response, loadAlbumArt, _hostType, _currentUiDispatcher, _albumArtCancellationSource.Token);
                 }
                 else
                 {
@@ -714,7 +744,7 @@ namespace FluentMPC.ViewModels.Playback
 
                 // Make the overlay small
                 var compactOptions = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
-                compactOptions.CustomSize = new Size(300, 430);
+                compactOptions.CustomSize = new Size(340, 364);
 
                 // Display as compact overlay
                 await ApplicationViewSwitcher.TryShowAsViewModeAsync(compactViewId, ApplicationViewMode.CompactOverlay,

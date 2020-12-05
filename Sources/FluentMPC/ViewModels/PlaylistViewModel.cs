@@ -9,9 +9,11 @@ using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
+using MpcNET.Commands.Reflection;
 using MpcNET.Types;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
@@ -65,23 +67,12 @@ namespace FluentMPC.ViewModels
         private async void PlayPlaylist()
         {
             // Clear queue, add playlist and play
-            try
+            var commandList = new CommandList(new IMpcCommand<object>[] { new ClearCommand() , new LoadCommand(Name), new PlayCommand(0) });
+
+            if (await MPDConnectionService.SafelySendCommandAsync(commandList) != null)
             {
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var req = await c.InternalResource.SendAsync(new ClearCommand());
-                    if (!req.IsResponseValid) throw new Exception($"Couldn't clear queue!");
-
-                    await c.InternalResource.SendAsync(new LoadCommand(Name));
-                    await c.InternalResource.SendAsync(new PlayCommand(0));
-                }
-
                 // Auto-navigate to the queue
                 NavigationService.Navigate(typeof(Views.ServerQueuePage));
-            }
-            catch (Exception e)
-            {
-                NotificationService.ShowInAppNotification(string.Format("ErrorPlayingText".GetLocalized(), e), 0);
             }
         }
 

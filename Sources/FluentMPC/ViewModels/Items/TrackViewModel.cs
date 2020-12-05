@@ -15,6 +15,8 @@ using Windows.UI.Core;
 using FluentMPC.Views;
 using Windows.UI;
 using MpcNET.Commands.Queue;
+using System.Threading;
+using FluentMPC.ViewModels.Playback;
 
 namespace FluentMPC.ViewModels.Items
 {
@@ -89,12 +91,12 @@ namespace FluentMPC.ViewModels.Items
 
         private async void AddToPlaylist(IMpdFile file)
         {
+            var playlistName = await DialogService.ShowAddToPlaylistDialog();
+            if (playlistName == null) return;
+
             // Adding a file to a playlist somehow triggers the server's "playlist" event, which is normally used for the queue...
             // We disable queue events temporarily in order to avoid UI jitter by a refreshed queue.
             MPDConnectionService.DisableQueueEvents = true;
-
-            var playlistName = await DialogService.ShowAddToPlaylistDialog();
-            if (playlistName == null) return;
 
             var req = await MPDConnectionService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, file.Path));
 
@@ -127,7 +129,7 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
-        public TrackViewModel(IMpdFile file, bool getAlbumArt = false, int albumArtWidth = -1, CoreDispatcher dispatcher = null)
+        public TrackViewModel(IMpdFile file, bool getAlbumArt = false, VisualizationType hostType = VisualizationType.None, CoreDispatcher dispatcher = null, CancellationToken albumArtCancellationToken = default)
         {
             MPDConnectionService.SongChanged += (s, e) => UpdatePlayingStatus();
 
@@ -142,14 +144,15 @@ namespace FluentMPC.ViewModels.Items
             if (getAlbumArt)
                 Task.Run(async () =>
                 {
-                    // For the now playing bar, the album art is rendered at 70px wide.
-                    // Kinda hackish propagating the width all the way from PlaybackViewModel to here...
-                    var art = await AlbumArtService.GetAlbumArtAsync(File, true, albumArtWidth, _currentUiDispatcher);
+                    // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
+                    var calculateDominantColor = hostType.IsOneOf(VisualizationType.NowPlayingBar, VisualizationType.FullScreenPlayback);
+
+                    // Use the int value of the VisualizationType to know how large the decoded bitmap has to be.
+                    var art = await AlbumArtService.GetAlbumArtAsync(File, calculateDominantColor, (int)hostType, _currentUiDispatcher, albumArtCancellationToken);
 
                     if (art != null)
                     {
-                        // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
-                        if (albumArtWidth != -1)
+                        if (calculateDominantColor)
                         {
                             DominantColor = art.DominantColor.ToWindowsColor();
                             IsLight = !(art.DominantColor.IsDark);

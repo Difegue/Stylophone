@@ -84,7 +84,7 @@
             Background="Transparent"
             BorderThickness="1"
             Canvas.ZIndex="10"
-            Visibility="{x:Bind PlaybackViewModel.HideTrackName, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+            Visibility="{x:Bind PlaybackViewModel.ShowTrackName, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
             Click="{x:Bind PlaybackViewModel.NavigateNowPlaying}"
             Style="{ThemeResource ButtonRevealStyle}">
             <Grid>

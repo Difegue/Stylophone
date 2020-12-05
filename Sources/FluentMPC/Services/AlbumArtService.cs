@@ -101,14 +101,14 @@ namespace FluentMPC.Services
         /// <param name="albumArtWidth">Width of the final BitmapImage</param>
         /// <param name="dispatcher">Dispatcher to use for the UI-bound options. Defaults to MainWindow.CoreWindow.Dispatcher.</param>
         /// <returns>An AlbumArt object containing bitmap and color. Returns null if there was no albumart on the MPD server.</returns>
-        public async static Task<AlbumArt> GetAlbumArtAsync(IMpdFile f, bool calculateDominantColor, int albumArtWidth, CoreDispatcher dispatcher = null)
+        public async static Task<AlbumArt> GetAlbumArtAsync(IMpdFile f, bool calculateDominantColor, int albumArtWidth, CoreDispatcher dispatcher = null, CancellationToken token = default)
         {
             if (dispatcher == null)
                 dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
 
             var result = new AlbumArt();
 
-            var bitmap = await GetAlbumBitmap(f, dispatcher);
+            var bitmap = await GetAlbumBitmap(f, dispatcher, token);
             if (bitmap != null)
             {
                 result.ArtBitmap = await WriteableBitmapToBitmapImageAsync(bitmap, albumArtWidth, dispatcher);
@@ -140,10 +140,8 @@ namespace FluentMPC.Services
             var fileName = GetFileIdentifier(f);
 
             // Try loading from art cache first
-            result = await LoadImageFromFile(fileName, dispatcher);
-
-            if (result != null)
-                return result;
+            if (await IsAlbumArtCachedAsync(f))
+                return await LoadImageFromFile(fileName, dispatcher);
 
             // Get albumart from MPD
             List<byte> data = new List<byte>();
@@ -170,7 +168,7 @@ namespace FluentMPC.Services
                         data.AddRange(response.Data);
                         foundUsableArt = true;
                         Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
-                    } while (currentSize < totalBinarySize);
+                    } while (currentSize < totalBinarySize && !token.IsCancellationRequested);
 
                     // Fallback to readpicture if albumart didn't work
                     if (!foundUsableArt) do
@@ -186,7 +184,10 @@ namespace FluentMPC.Services
                             data.AddRange(response.Data);
                             foundUsableArt = true;
                             Debug.WriteLine($"Downloading albumart: {currentSize}/{totalBinarySize}");
-                        } while (currentSize < totalBinarySize);
+                        } while (currentSize < totalBinarySize && !token.IsCancellationRequested);
+
+                    if (token.IsCancellationRequested)
+                        return null;
 
                     // Create the BitmapImage on the UI Thread.
                     if (foundUsableArt)
@@ -259,19 +260,14 @@ namespace FluentMPC.Services
             {
                 StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
 
-                if (await pictureFolder.FileExistsAsync(fileName))
-                {
-                    var file = await pictureFolder.GetFileAsync(fileName);
-                    var readStream = await file.OpenReadAsync();
+                var file = await pictureFolder.GetFileAsync(fileName);
+                var readStream = await file.OpenReadAsync();
 
-                    WriteableBitmap image = null;
-                    await dispatcher.AwaitableRunAsync(async () => image = await BitmapFactory.FromStream(readStream));
+                WriteableBitmap image = null;
+                await dispatcher.AwaitableRunAsync(async () => image = await BitmapFactory.FromStream(readStream));
 
-                    readStream.Dispose();
-                    return image;
-                }
-
-                return null;
+                readStream.Dispose();
+                return image;
             }
             catch (Exception)
             {

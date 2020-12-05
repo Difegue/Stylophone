@@ -6,6 +6,7 @@ using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
+using MpcNET.Commands.Reflection;
 using MpcNET.Tags;
 using MpcNET.Types;
 using Sundew.Base.Collections;
@@ -119,108 +120,76 @@ namespace FluentMPC.ViewModels.Items
         private async void AddToPlaylist()
         {
             var playlistName = await DialogService.ShowAddToPlaylistDialog();
-            if (playlistName == null) return;
+            if (playlistName == null || Files.Count == 0) return;
 
-            try
+            // Adding a file to a playlist somehow triggers the server's "playlist" event, which is normally used for the queue...
+            // We disable queue events temporarily in order to avoid UI jitter by a refreshed queue.
+            MPDConnectionService.DisableQueueEvents = true;
+
+            var commandList = new CommandList();
+
+            foreach (var f in Files)
             {
-                if (Files.Count == 0) throw new Exception("NoTracksLoaded".GetLocalized());
-
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    foreach (var f in Files)
-                    {
-                        var req = await c.InternalResource.SendAsync(new PlaylistAddCommand(playlistName, f.Path));
-
-                        if (!req.IsResponseValid)
-                        {
-                            var errorMsg = string.Format("ErrorAddingAlbum".GetLocalized(), "InvalidMPDResponseError".GetLocalized());
-                            NotificationService.ShowInAppNotification(errorMsg, 0);
-                            break;
-                        }
-                    }
-                    NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
-                }
+                commandList.Add(new PlaylistAddCommand(playlistName, f.Path));
             }
-            catch (Exception e)
+
+            if (await MPDConnectionService.SafelySendCommandAsync(commandList) != null)
             {
-                NotificationService.ShowInAppNotification(string.Format("ErrorAddingAlbum".GetLocalized(), e.Message), 0);
+                NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
             }
+
+            MPDConnectionService.DisableQueueEvents = false;
         }
 
         private ICommand _addToQueueCommand;
         public ICommand AddAlbumCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
         private async void AddToQueue()
         {
-            // Temporarily disable ConnectionService Queue updates, as rapid-firing "add" commands will force the Queue to refresh a ton of times.
-            // TODO: check command lists to avoid this issue
-            MPDConnectionService.DisableQueueEvents = true;
+            var commandList = new CommandList();
 
-            try
+            if (Files.Count == 0)
             {
-                if (Files.Count == 0) throw new Exception("NoTracksLoaded".GetLocalized());
-
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    foreach (var f in Files)
-                    {
-                        var req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
-
-                        if (!req.IsResponseValid)
-                        {
-                            var errorMsg = string.Format("ErrorAddingAlbum".GetLocalized(), "InvalidMPDResponseError".GetLocalized());
-                            NotificationService.ShowInAppNotification(errorMsg, 0);
-                            break;
-                        }
-
-                        // Reenable queue events for the last file so that the update is processed cleanly by the client
-                        if (Files.IndexOf(f) == Files.Count - 2)
-                            MPDConnectionService.DisableQueueEvents = false;
-
-                    }
-                    NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
-                }
+                NotificationService.ShowInAppNotification(string.Format("ErrorAddingAlbum".GetLocalized(), "NoTracksLoaded".GetLocalized()), 0);
+                return;
             }
-            catch (Exception e)
+
+            foreach (var f in Files)
             {
-                NotificationService.ShowInAppNotification(string.Format("ErrorAddingAlbum".GetLocalized(), e.Message), 0);
-                MPDConnectionService.DisableQueueEvents = false;
+                commandList.Add(new AddCommand(f.Path));
             }
+
+            if (await MPDConnectionService.SafelySendCommandAsync(commandList) != null)
+                NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
         }
 
         private ICommand _playCommand;
         public ICommand PlayAlbumCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
         private async void PlayAlbum()
         {
-            // Temporarily disable ConnectionService Queue updates, as rapid-firing "add" commands will force the Queue to refresh a ton of times.
-            // TODO: check command lists to avoid this issue
-            MPDConnectionService.DisableQueueEvents = true;
+            if (Files.Count == 0)
+            {
+                NotificationService.ShowInAppNotification(string.Format("ErrorPlayingText".GetLocalized(), "NoTracksLoaded".GetLocalized()), 0);
+                return;
+            }
+
+            var commandList = new CommandList();
 
             // Clear queue, add album and play
-            try
+            commandList.Add(new ClearCommand());
+
+            foreach (var f in Files)
             {
-                if (Files.Count == 0) throw new Exception("NoTracksLoaded".GetLocalized());
+                commandList.Add(new AddCommand(f.Path));
+            }
 
-                using (var c = await MPDConnectionService.GetConnectionAsync())
-                {
-                    var req = await c.InternalResource.SendAsync(new ClearCommand());
-                    if (!req.IsResponseValid) throw new Exception("CantClearError".GetLocalized());
+            commandList.Add(new PlayCommand(0));
 
-                    foreach (var f in Files)
-                    {
-                        req = await c.InternalResource.SendAsync(new AddCommand(f.Path));
-                    }
-                    req = await c.InternalResource.SendAsync(new PlayCommand(0));
-                }
-                NotificationService.ShowInAppNotification(string.Format("NowPlayingText".GetLocalized(), Name));
-
+            if (await MPDConnectionService.SafelySendCommandAsync(commandList) != null)
+            {
                 // Auto-navigate to the queue
                 NavigationService.Navigate(typeof(Views.ServerQueuePage));
+                NotificationService.ShowInAppNotification(string.Format("NowPlayingText".GetLocalized(), Name));
             }
-            catch (Exception e)
-            {
-                NotificationService.ShowInAppNotification(string.Format("ErrorPlayingText".GetLocalized(), e.Message), 0);
-            }
-            MPDConnectionService.DisableQueueEvents = false;
         }
 
         public AlbumViewModel(string albumName)
