@@ -177,7 +177,7 @@ namespace FluentMPC.Services
                             if (!albumReq.IsResponseValid) break;
 
                             var response = albumReq.Response.Content;
-                            if (response.Binary == 0) break; // MPD isn't giving us any more data, let's roll with what we have.
+                            if (response == null || response.Binary == 0) break; // MPD isn't giving us any more data, let's roll with what we have.
 
                             totalBinarySize = response.Size;
                             currentSize += response.Binary;
