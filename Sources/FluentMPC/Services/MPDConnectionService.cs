@@ -81,9 +81,9 @@ namespace FluentMPC.Services
                 _statusConnection = await GetConnectionInternalAsync();
 
                 ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
-                    async (t1, t2) =>
+                    async (token) =>
                     {
-                        var c = await GetConnectionInternalAsync(t1);
+                        var c = await GetConnectionInternalAsync(token);
                         return new PooledObjectWrapper<MpcConnection>(c)
                         {
                             // Check our internal global IsConnected status

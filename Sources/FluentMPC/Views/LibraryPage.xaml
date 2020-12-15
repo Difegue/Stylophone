@@ -57,9 +57,9 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         BlurRadius="10"
-                        OffsetY="2"
+                        OffsetY="1"
                         ShadowOpacity="0.6"
-                        Color="{ThemeResource SystemBaseLowColor}">
+                        Color="{ThemeResource SystemBaseHighColor}">
 
                             <Grid Width="180" Height="180" CornerRadius="3" >
                                 <controls:ImageEx Style="{StaticResource NoAnimationImageEx}" 
