@@ -305,7 +305,15 @@ namespace MpcNET.Types
 
                             break;
                         default:
-                            unknownMetadata.Add(line.Key, line.Value);
+                            // If a similar key has already been added to unknown metadata, add a ' to this second one so it can still be passed through.
+                            // (It certainly won't be used though)
+                            var key = line.Key;
+                            while (unknownMetadata.ContainsKey(key))
+                            {
+                                key = key + "'";
+                            }
+                            unknownMetadata.Add(key, line.Value);
+
                             break;
                     }
                 }

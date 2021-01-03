@@ -35,7 +35,15 @@ namespace MpcNET.Commands.Status
 
             foreach (var pair in response.ResponseValues)
             {
-                result.Add(pair.Key, pair.Value);
+                // If a similar key has already been added to the result dictionary, add a ' to this second one so it can still be passed through.
+                // (It probably won't be used though...)
+                var key = pair.Key;
+                while (result.ContainsKey(key))
+                {
+                    key = key + "'";
+                }
+
+                result.Add(key, pair.Value);
             }
             return result;
         }
