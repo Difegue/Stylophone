@@ -51,7 +51,7 @@ namespace FluentMPC.ViewModels
         private void MPDConnectionService_ConnectionChanged(object sender, EventArgs e)
         {
             if (MPDConnectionService.IsConnected)
-                Task.Run(async () => await LoadDataAsync());
+                Task.Run(async () => await LoadInitialDataAsync());
         }
 
         private async void MPDConnectionService_QueueChanged(object sender, EventArgs e)
@@ -99,7 +99,7 @@ namespace FluentMPC.ViewModels
 
         public bool IsSourceEmpty => Source.Count == 0;
 
-        public async Task LoadDataAsync()
+        public async Task LoadInitialDataAsync()
         {
             Source.CollectionChanged -= Source_CollectionChanged;
 
@@ -113,7 +113,6 @@ namespace FluentMPC.ViewModels
                 }
 
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
-                // TODO - Don't clear, update collection instead based on new data
                 Source.Clear();
                 Source.AddRange(tracks);
             });
