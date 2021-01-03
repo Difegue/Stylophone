@@ -13,6 +13,7 @@ using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Queue;
+using MpcNET.Commands.Status;
 using MpcNET.Types;
 using Sundew.Base.Collections;
 
@@ -22,6 +23,7 @@ namespace FluentMPC.ViewModels
     {
         private NotifyCollectionChangedAction _previousAction;
         private int _oldId;
+        private int _playlistVersion;
 
         public QueueViewModel()
         {
@@ -52,10 +54,45 @@ namespace FluentMPC.ViewModels
                 Task.Run(async () => await LoadDataAsync());
         }
 
-        private void MPDConnectionService_QueueChanged(object sender, EventArgs e)
+        private async void MPDConnectionService_QueueChanged(object sender, EventArgs e)
         {
-            // scrolling is handled in code-behind
-            Task.Run(async () => await LoadDataAsync());
+            // Ask for a new status ourselves as the shared ConnectionService one might not be up to date yet
+            var status = await MPDConnectionService.SafelySendCommandAsync(new StatusCommand());
+            var newVersion = status.Playlist;
+
+            // Update the queue only if playlist versions differ
+            if (newVersion != _playlistVersion)
+            {
+                _ = Task.Run(async () => {
+
+                    var response = await MPDConnectionService.SafelySendCommandAsync(new PlChangesCommand(_playlistVersion));
+
+                    if (response != null)
+                    {
+                        Source.CollectionChanged -= Source_CollectionChanged;
+                        await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
+
+                            // PlChanges gives the full list of files starting from the change, so we delete all existing tracks from the source after that change, and swap the new ones in.
+                            var initialPosition = response.First().Position;
+
+                            while (Source.Count != initialPosition)
+                            {
+                                Source.RemoveAt(initialPosition);
+                            }
+
+                            foreach (var item in response)
+                            {
+                                Source.Add(new TrackViewModel(item, false));
+                            }
+
+                        });
+                        Source.CollectionChanged += Source_CollectionChanged;
+
+                        // Update internal playlist version
+                        _playlistVersion = newVersion;
+                    }
+                });
+            }
         }
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
@@ -80,6 +117,10 @@ namespace FluentMPC.ViewModels
                 Source.Clear();
                 Source.AddRange(tracks);
             });
+
+            // Set our internal playlist version
+            var status = await MPDConnectionService.SafelySendCommandAsync(new StatusCommand());
+            _playlistVersion = status.Playlist;
 
             Source.CollectionChanged += Source_CollectionChanged;
         }
