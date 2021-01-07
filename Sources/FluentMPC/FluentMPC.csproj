@@ -426,7 +426,7 @@
   <ItemGroup>
     <T4ParameterValues Include="BuildConfiguration">
       <Value>$(Configuration)</Value>
-      <Visible>false</Visible>    
+      <Visible>false</Visible>
     </T4ParameterValues>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TextTemplating\Microsoft.TextTemplating.targets" />

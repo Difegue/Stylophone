@@ -12,7 +12,9 @@ using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
+using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
+using MpcNET.Commands.Reflection;
 using MpcNET.Commands.Status;
 using MpcNET.Types;
 using Sundew.Base.Collections;
@@ -25,6 +27,92 @@ namespace FluentMPC.ViewModels
         private int _oldId;
         private int _playlistVersion;
 
+        private bool IsSingleTrackSelected(object list)
+        {
+            // Cast the received __ComObject
+            var selectedTracks = (IList<object>)list;
+
+            return (selectedTracks?.Count == 1);
+        }
+
+        private ICommand _playCommand;
+        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new RelayCommand<IList<object>>(PlayTrack, IsSingleTrackSelected));
+
+        private async void PlayTrack(object list)
+        {
+            // Cast the received __ComObject
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var trackVM = selectedTracks.First() as TrackViewModel;
+                await MPDConnectionService.SafelySendCommandAsync(new PlayIdCommand(trackVM.File.Id));
+            }
+        }
+
+        private ICommand _viewAlbumCommand;
+        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
+
+        private void ViewAlbum(object list)
+        {
+            // Cast the received __ComObject
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var trackVM = selectedTracks.First() as TrackViewModel;
+                trackVM.ViewAlbumCommand.Execute(trackVM.File);
+            }
+        }
+
+        private ICommand _removeCommand;
+        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new RelayCommand<IList<object>>(RemoveTrack));
+
+        private async void RemoveTrack(object list)
+        {
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var commandList = new CommandList();
+
+                foreach (var f in selectedTracks)
+                {
+                    var trackVM = f as TrackViewModel;
+                    commandList.Add(new DeleteIdCommand(trackVM.File.Id));
+                }
+
+                await MPDConnectionService.SafelySendCommandAsync(commandList);
+            }
+        }
+
+        private ICommand _addToPlaylistCommand;
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
+
+        private async void AddToPlaylist(object list)
+        {
+            var playlistName = await DialogService.ShowAddToPlaylistDialog();
+            if (playlistName == null) return;
+
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var commandList = new CommandList();
+
+                foreach (var f in selectedTracks)
+                {
+                    var trackVM = f as TrackViewModel;
+                    commandList.Add(new PlaylistAddCommand(playlistName, trackVM.File.Path));
+                }
+
+                var req = await MPDConnectionService.SafelySendCommandAsync(commandList);
+
+                if (req != null)
+                    NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
+            }
+        }
+
         public QueueViewModel()
         {
             MPDConnectionService.QueueChanged += MPDConnectionService_QueueChanged;
@@ -33,11 +121,16 @@ namespace FluentMPC.ViewModels
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
+        /// <summary>
+        /// This method is only fired if the source is changed outside of MPD Events.
+        /// So basically, only for reordering right now!
+        /// When reordering multiple items, the ListView sends events in a remove->add->remove->add fashion.
+        /// </summary>
         private async void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
             {
-                // User reordered tracks, send matching command
+                // One Remove->Add Pair means one MoveIdCommand
                 await MPDConnectionService.SafelySendCommandAsync(new MoveIdCommand(_oldId, e.NewStartingIndex));
                 _previousAction = NotifyCollectionChangedAction.Move;
             }
@@ -101,8 +194,6 @@ namespace FluentMPC.ViewModels
 
         public async Task LoadInitialDataAsync()
         {
-            Source.CollectionChanged -= Source_CollectionChanged;
-
             var tracks = new List<TrackViewModel>();
             var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistInfoCommand());
 

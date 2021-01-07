@@ -7,7 +7,7 @@
     xmlns:fluentMpc="using:FluentMPC.Helpers"
     xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
-    xmlns:items="using:FluentMPC.ViewModels.Items"
+    xmlns:items="using:FluentMPC.ViewModels.Items" 
     Style="{StaticResource PageStyle}"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
@@ -70,39 +70,63 @@
         </DataTemplate>
     </Page.Resources>
     <Grid x:Name="ContentArea" >
-        <fluentMpc:AlternatingRowListView SelectionMode="Single"
+        <fluentMpc:AlternatingRowListView SelectionMode="Extended"
                       AllowDrop="True"
+                      CanDragItems="True"
                       CanReorderItems="True"
                       ReorderMode="Enabled"
+                      DragItemsStarting="QueueList_DragItemsStarting"
+                      DragItemsCompleted="QueueList_DragItemsCompleted"
                       DoubleTapped="Play_Track"
+                      RightTapped="Select_Item"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                       x:Name="QueueList"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource QueueTemplate}"
-                      ItemsSource="{x:Bind ViewModel.Source}">
+                      ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
+            <fluentMpc:AlternatingRowListView.ContextFlyout>
+                <MenuFlyout>
+                    <!-- Play Track -->
+                    <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play"
+                                    Command="{x:Bind ViewModel.PlayTrackCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}" >
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Enter" />
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <!-- View Track Album -->
+                    <MenuFlyoutItem x:Uid="ViewAlbumFlyoutItem"
+                                    Command="{x:Bind ViewModel.ViewAlbumCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE93C;" />
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutSeparator/>
+                    <!-- Remove Track -->
+                    <MenuFlyoutItem x:Uid="RemoveFromQueueFlyoutItem" Icon="Delete"
+                                    Command="{x:Bind ViewModel.RemoveFromQueueCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Delete" />
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <!-- Add Track to Playlist -->
+                    <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Text="Add to Playlist"
+                                    Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"/>
+                    
+                </MenuFlyout>
+            </fluentMpc:AlternatingRowListView.ContextFlyout>
             <fluentMpc:AlternatingRowListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
-                    <Setter Property="ContextFlyout">
-                        <Setter.Value>
-                            <MenuFlyout Opening="MenuFlyout_Opening">
-                                <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{Binding PlayTrackCommand}" CommandParameter="{Binding File}" DataContext="{Binding}" />
-                                <MenuFlyoutItem x:Uid="RemoveFromQueueFlyoutItem" Icon="Delete" Command="{Binding RemoveFromQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutSeparator/>
-                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Text="Add to Playlist" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem x:Uid="ViewAlbumFlyoutItem" Command="{Binding ViewAlbumCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xE93C;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                            </MenuFlyout>
-                        </Setter.Value>
-                    </Setter>
                 </Style>
             </fluentMpc:AlternatingRowListView.ItemContainerStyle>
         </fluentMpc:AlternatingRowListView>
+        
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <SymbolIcon Symbol="More" RenderTransformOrigin="0.5,0.5" Height="86">
                 <SymbolIcon.RenderTransform>
@@ -112,5 +136,6 @@
             <TextBlock x:Uid="EmptyQueueTitle" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
             <TextBlock x:Uid="EmptyQueueDesc" HorizontalAlignment="Center"></TextBlock>
         </StackPanel>
+        
     </Grid>
 </Page>
