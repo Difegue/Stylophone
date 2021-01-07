@@ -94,16 +94,10 @@ namespace FluentMPC.ViewModels.Items
             var playlistName = await DialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;
 
-            // Adding a file to a playlist somehow triggers the server's "playlist" event, which is normally used for the queue...
-            // We disable queue events temporarily in order to avoid UI jitter by a refreshed queue.
-            MPDConnectionService.DisableQueueEvents = true;
-
             var req = await MPDConnectionService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, file.Path));
 
             if (req != null)
                 NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
-
-            MPDConnectionService.DisableQueueEvents = false;
         }
 
         private ICommand _viewAlbumCommand;
