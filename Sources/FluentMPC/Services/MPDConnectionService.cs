@@ -42,6 +42,13 @@ namespace FluentMPC.Services
             {
                 _connected = value;
                 ConnectionChanged?.Invoke(Application.Current, new EventArgs());
+
+                // If IsConnected = false, the RetryAttempter will call TryConnect() every five seconds.
+                _connectionRetryAttempter?.Cancel();
+                if (!value)
+                {
+                    _connectionRetryAttempter = ThreadPoolTimer.CreatePeriodicTimer(async (source) => await TryConnecting(), TimeSpan.FromSeconds(5));
+                }
             }
         }
 
@@ -59,6 +66,7 @@ namespace FluentMPC.Services
         private static IPEndPoint _mpdEndpoint;
 
         private static ThreadPoolTimer _statusUpdater;
+        private static ThreadPoolTimer _connectionRetryAttempter;
         private static CancellationTokenSource _cancelIdle;
 
         public static async Task InitializeAsync()
@@ -72,7 +80,13 @@ namespace FluentMPC.Services
 
             _idleConnection = null;
             _statusConnection = null;
-            IsConnected = false;
+            _connected = false;
+
+            await TryConnecting();
+        }
+
+        public static async Task TryConnecting()
+        {
             try
             {
                 IPAddress.TryParse(Singleton<SettingsViewModel>.Instance.ServerHost, out var ipAddress);
@@ -175,7 +189,7 @@ namespace FluentMPC.Services
                     if (idleChanges.IsResponseValid)
                         await HandleIdleResponseAsync(idleChanges.Response.Content);
                     else
-                        IsConnected = false; //TODO handle reconnection attempts?
+                        IsConnected = false;
                }
 
             });
@@ -231,8 +245,9 @@ namespace FluentMPC.Services
                     }
                 }
                 else
-                    IsConnected = false; //TODO handle reconnection attempts?
-            } catch (Exception e)
+                    IsConnected = false; 
+            }
+            catch
             {
                 IsConnected = false;
             }
@@ -251,7 +266,7 @@ namespace FluentMPC.Services
                 PlaylistsChanged?.Invoke(Application.Current, new EventArgs());
             }
             else
-                IsConnected = false; //TODO handle reconnection attempts?*/
+                IsConnected = false; 
         }
 
         /// <summary>

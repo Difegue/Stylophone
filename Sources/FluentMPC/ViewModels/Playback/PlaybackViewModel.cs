@@ -27,7 +27,6 @@ namespace FluentMPC.ViewModels.Playback
     public class PlaybackViewModel : Observable
     {
         private readonly CoreDispatcher _currentUiDispatcher;
-        private readonly VisualizationType _hostType;
 
         private CancellationTokenSource _albumArtCancellationSource = new CancellationTokenSource();
 
@@ -65,6 +64,24 @@ namespace FluentMPC.ViewModels.Playback
         private TrackViewModel _nextTrack;
 
         public bool HasNextTrack => NextTrack != null;
+
+        private VisualizationType _hostType;
+        public VisualizationType HostType
+        {
+            get => _hostType;
+            set {
+                Set(ref _hostType, value);
+
+                Task.Run(async () =>
+                {
+                    _albumArtCancellationSource.Cancel();
+                    _albumArtCancellationSource = new CancellationTokenSource();
+
+                    // Reload CurrentTrack to take into account the new VisualizationType
+                    CurrentTrack = new TrackViewModel(CurrentTrack.File, true, HostType, _currentUiDispatcher, _albumArtCancellationSource.Token);
+                });
+            }
+        }
 
         /// <summary>
         ///     The amount of time spent listening to the track
@@ -289,7 +306,7 @@ namespace FluentMPC.ViewModels.Playback
         public PlaybackViewModel(CoreDispatcher uiDispatcher, VisualizationType hostType)
         {
             _currentUiDispatcher = uiDispatcher;
-           _hostType = hostType;
+            _hostType = hostType;
 
             // Bind the methods that we need
             MPDConnectionService.StatusChanged += OnStateChange;
@@ -345,6 +362,9 @@ namespace FluentMPC.ViewModels.Playback
 
             if (CurrentTrack == null)
                 return;
+
+            if (!HasNextTrack)
+                UpdateUpNextAsync();
 
             await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -466,7 +486,7 @@ namespace FluentMPC.ViewModels.Playback
 
         public void NavigateNowPlaying()
         {
-            NavigationService.Navigate(typeof(PlaybackView));
+            NavigationService.Navigate(typeof(PlaybackView), this);
         }
 
         #endregion Track Control Methods
@@ -566,16 +586,8 @@ namespace FluentMPC.ViewModels.Playback
             {
                 if (response != null)
                 {
-                    // Disable album art loading if this PlaybackViewModel doesn't belong to a view that shows it.
-                    // This boolean doesn't do much for now, see below TODO
-                    var loadAlbumArt = _hostType.IsOneOf(VisualizationType.FullScreenPlayback, VisualizationType.OverlayPlayback, VisualizationType.NowPlayingBar);
-
-                    // TODO: To avoid concurrent art loading, also disable it in NowPlaying when fullscreen is enabled.
-                    // This breaks dominantcolor loading in its current state...
-                    // || (_hostType == VisualizationType.NowPlayingBar && ShowTrackName);
-
                     // Set the new current track, updating the UI with the correct Dispatcher
-                    CurrentTrack = new TrackViewModel(response, loadAlbumArt, _hostType, _currentUiDispatcher, _albumArtCancellationSource.Token);
+                    CurrentTrack = new TrackViewModel(response, true, HostType, _currentUiDispatcher, _albumArtCancellationSource.Token);
                 }
                 else
                 {
