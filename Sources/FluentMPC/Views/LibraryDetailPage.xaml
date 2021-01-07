@@ -91,27 +91,36 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <fluentMpc:AlternatingRowListView SelectionMode="Single"
-                      x:Name="QueueList" Margin="0,-96"
+        <fluentMpc:AlternatingRowListView x:Name="QueueList"
+                      SelectionMode="Extended"
+                      Margin="0,-96"
                       DoubleTapped="Queue_Track"
+                      RightTapped="Select_Item"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                       extensions:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
                       ItemsSource="{x:Bind ViewModel.Source}">
+            <fluentMpc:AlternatingRowListView.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add"
+                                    Command="{x:Bind ViewModel.AddToQueueCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Enter" />
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo"
+                                    Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"/>
+                </MenuFlyout>
+            </fluentMpc:AlternatingRowListView.ContextFlyout>
+            
             <fluentMpc:AlternatingRowListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
-                    <Setter Property="ContextFlyout">
-                        <Setter.Value>
-                            <MenuFlyout Opening="MenuFlyout_Opening">
-                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                            </MenuFlyout>
-                        </Setter.Value>
-                    </Setter>
                 </Style>
             </fluentMpc:AlternatingRowListView.ItemContainerStyle>
             

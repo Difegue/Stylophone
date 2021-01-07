@@ -70,7 +70,8 @@
         </DataTemplate>
     </Page.Resources>
     <Grid x:Name="ContentArea" >
-        <fluentMpc:AlternatingRowListView SelectionMode="Extended"
+        <fluentMpc:AlternatingRowListView x:Name="QueueList"
+                      SelectionMode="Extended"
                       AllowDrop="True"
                       CanDragItems="True"
                       CanReorderItems="True"
@@ -80,7 +81,6 @@
                       DoubleTapped="Play_Track"
                       RightTapped="Select_Item"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-                      x:Name="QueueList"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource QueueTemplate}"

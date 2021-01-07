@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -29,6 +30,16 @@ namespace FluentMPC.ViewModels
 
         public bool IsSourceEmpty => Source.Count == 0;
 
+        #region Commands
+
+        private bool IsSingleTrackSelected(object list)
+        {
+            // Cast the received __ComObject
+            var selectedTracks = (IList<object>)list;
+
+            return (selectedTracks?.Count == 1);
+        }
+
         private ICommand _deletePlaylistCommand;
         public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
         private async void DeletePlaylist()
@@ -53,9 +64,9 @@ namespace FluentMPC.ViewModels
             }
         }
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddPlaylistCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
-        private async void AddToQueue()
+        private ICommand _loadPlaylistCommand;
+        public ICommand LoadPlaylistCommand => _loadPlaylistCommand ?? (_loadPlaylistCommand = new RelayCommand(LoadPlaylist));
+        private async void LoadPlaylist()
         {
             var res = await MPDConnectionService.SafelySendCommandAsync(new LoadCommand(Name));
 
@@ -76,16 +87,72 @@ namespace FluentMPC.ViewModels
             }
         }
 
-        private ICommand _removeTrackCommand;
-        public ICommand RemoveTrackFromPlaylistCommand => _removeTrackCommand ?? (_removeTrackCommand = new RelayCommand<TrackViewModel>(RemoveTrack));
-        private async void RemoveTrack(TrackViewModel track)
-        {
-            var trackPos = Source.IndexOf(track);
-            var r = await MPDConnectionService.SafelySendCommandAsync(new PlaylistDeleteCommand(Name, trackPos));
+        private ICommand _addToQueueCommand;
+        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
 
-            if (r != null) // Reload playlist
-                await LoadDataAsync(Name);
+        private async void QueueTrack(object list)
+        {
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var commandList = new CommandList();
+
+                foreach (var f in selectedTracks)
+                {
+                    var trackVM = f as TrackViewModel;
+                    commandList.Add(new AddIdCommand(trackVM.File.Path));
+                }
+
+                var r = await MPDConnectionService.SafelySendCommandAsync(commandList);
+                if (r != null) 
+                    NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
+            }
         }
+
+        private ICommand _viewAlbumCommand;
+        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
+
+        private void ViewAlbum(object list)
+        {
+            // Cast the received __ComObject
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var trackVM = selectedTracks.First() as TrackViewModel;
+                trackVM.ViewAlbumCommand.Execute(trackVM.File);
+            }
+        }
+
+        private ICommand _removeTrackCommand;
+        public ICommand RemoveTrackFromPlaylistCommand => _removeTrackCommand ?? (_removeTrackCommand = new RelayCommand<IList<object>> (RemoveTrack));
+
+        private async void RemoveTrack(object list)
+        {
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var commandList = new CommandList();
+
+                // We can't batch PlaylistDeleteCommands cleanly, since they're index-based and logically, said indexes will shift as we remove stuff from the playlist.
+                // To simulate this behavior, we copy our Source list and incrementally remove the affected tracks from it to get the valid indexes as we move down the commandList.
+                IList<TrackViewModel> copy = Source.ToList();
+
+                foreach (var f in selectedTracks)
+                {
+                    var trackVM = f as TrackViewModel;
+                    commandList.Add(new PlaylistDeleteCommand(Name, copy.IndexOf(trackVM)));
+                    copy.Remove(trackVM);
+                }
+
+                var r = await MPDConnectionService.SafelySendCommandAsync(commandList);
+                if (r != null) // Reload playlist
+                    await LoadDataAsync(Name);
+            }
+        }
+        #endregion
 
         public PlaylistViewModel()
         {
