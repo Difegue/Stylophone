@@ -166,7 +166,8 @@ namespace FluentMPC.ViewModels
                         await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
 
                             // PlChanges gives the full list of files starting from the change, so we delete all existing tracks from the source after that change, and swap the new ones in.
-                            var initialPosition = response.First().Position;
+                            // If the response is empty, that means the last file in the source was removed.
+                            var initialPosition = response.Count() == 0 ? Source.Count-1 : response.First().Position;
 
                             while (Source.Count != initialPosition)
                             {

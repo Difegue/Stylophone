@@ -7,6 +7,7 @@
 namespace MpcNET.Types
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The MpdFile class contains all meta data for a file of the MPD.
@@ -181,6 +182,11 @@ namespace MpcNET.Types
         /// Gets a value indicating whether the MpdFile has the <see cref="Id"/> property set.
         /// </summary>
         public bool HasId => this.Id != NoId;
+
+        public override string ToString()
+        {
+            return Title ?? Name ?? Path.Split('/').Last();
+        }
 
         internal static MpdFile Create(string path, int pos)
         {

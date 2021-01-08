@@ -449,4 +449,13 @@ Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
   <data name="LoadingTreeItem" xml:space="preserve">
     <value>Chargement...</value>
   </data>
+  <data name="Shell_Search.PlaceholderText" xml:space="preserve">
+    <value>Rechercher un morceau...</value>
+  </data>
+  <data name="NoTracksFound" xml:space="preserve">
+    <value>Pas de morceaux trouvés sur le serveur.</value>
+  </data>
+  <data name="GoToDetailSearch" xml:space="preserve">
+    <value>Rechercher "{0}" sur le serveur...</value>
+  </data>
 </root>

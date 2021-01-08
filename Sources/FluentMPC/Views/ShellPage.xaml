@@ -11,7 +11,34 @@
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:mpcnet="using:MpcNET.Types"
     mc:Ignorable="d">
+
+    <Page.Resources>
+
+        <DataTemplate x:Key="StringItemTemplate" x:DataType="x:String">
+            <StackPanel Orientation="Vertical" Height="46" >
+                <TextBlock Text="{x:Bind}" Margin="{StaticResource XSmallTopMargin}" FontStyle="Italic" />
+                <MenuFlyoutSeparator Margin="-12,8,0,0" Width="2000"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MpdFileItemTemplate" x:DataType="mpcnet:IMpdFile" >
+
+            <StackPanel Orientation="Vertical" Height="46" >
+                <TextBlock Text="{x:Bind Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="{StaticResource XXSmallTopMargin}"
+                           ToolTipService.ToolTip="{x:Bind Title}"
+                           Style="{StaticResource BaseTextBlockStyle}" />
+                <TextBlock Text="{x:Bind Album}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Style="{StaticResource CaptionTextBlockStyle}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <views:MyDataTemplateSelector x:Key="MyDataTemplateSelector"
+            Normal="{StaticResource StringItemTemplate}"
+            MpdFile="{StaticResource MpdFileItemTemplate}"/>
+
+    </Page.Resources>
+
 
     <i:Interaction.Behaviors>
         <ic:EventTriggerBehavior EventName="Loaded">
@@ -40,9 +67,16 @@
 
                 <winui:NavigationViewItemSeparator/>
                 <winui:NavigationViewItem x:Name="playlistContainer" x:Uid="Shell_Playlists" Icon="MusicInfo" SelectsOnInvoked="False"/> <!-- This menuitem is filled in viewmodel-->
-
-                <!-- <winui:NavigationViewItem x:Uid="Shell_NewPlaylist" Icon="Add" SelectsOnInvoked="False" Tapped="Create_Playlist" /> -->
             </winui:NavigationView.MenuItems>
+            
+            <winui:NavigationView.AutoSuggestBox>
+                <AutoSuggestBox x:Uid="Shell_Search" QueryIcon="Find" AutomationProperties.Name="Search"
+                                UpdateTextOnSelect="False"
+                                GotFocus="OpenSuggestionsPanel"
+                                ItemTemplateSelector = "{StaticResource MyDataTemplateSelector}">
+                </AutoSuggestBox>
+            </winui:NavigationView.AutoSuggestBox>
+
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior
                 DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}">

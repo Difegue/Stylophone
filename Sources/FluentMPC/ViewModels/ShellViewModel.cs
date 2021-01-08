@@ -9,6 +9,10 @@ using FluentMPC.Services;
 using FluentMPC.Views;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+using MpcNET.Commands.Database;
+using MpcNET.Commands.Queue;
+using MpcNET.Tags;
+using MpcNET.Types;
 using Windows.System;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
@@ -71,6 +75,9 @@ namespace FluentMPC.ViewModels
             NavigationService.NavigationFailed += Frame_NavigationFailed;
             NavigationService.Navigated += Frame_Navigated;
             _navigationView.BackRequested += OnBackRequested;
+
+            _navigationView.AutoSuggestBox.TextChanged += UpdateSearchSuggestions;
+            _navigationView.AutoSuggestBox.QuerySubmitted += HandleSearchRequest;
 
             NotificationService.InAppNotificationRequested += Show_InAppNotification;
 
@@ -186,6 +193,54 @@ namespace FluentMPC.ViewModels
                 NotificationService.ShowInAppNotification($"Updating Playlist Navigation failed: {e.Message}", 0);
             }
         }
+
+        private async void UpdateSearchSuggestions(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput)
+                return;
+
+            var suitableItems = new List<object>();
+
+            if (sender.Text.Trim().Length > 0)
+                suitableItems.Add(string.Format("GoToDetailSearch".GetLocalized(), sender.Text));
+
+            if (sender.Text.Length > 2)
+            {
+                // Clear out suggestions before filling them up again, as it takes a bit of time.
+                sender.ItemsSource = suitableItems;
+                var response = await MPDConnectionService.SafelySendCommandAsync(new SearchCommand(FindTags.Title, sender.Text));
+
+                if (response != null)
+                {
+                    foreach (var f in response)
+                    {
+                        suitableItems.Add(f);
+                    }
+                }
+            }
+
+            sender.ItemsSource = suitableItems;
+        }
+
+        private async void HandleSearchRequest(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (args.ChosenSuggestion != null && args.ChosenSuggestion is IMpdFile)
+            {
+                var response = await MPDConnectionService.SafelySendCommandAsync(new AddCommand((args.ChosenSuggestion as IMpdFile).Path));
+
+                if (response != null)
+                    NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
+
+                //sender.Text = "";
+                //sender.ItemsSource = new List<object>();
+            }
+            else
+            {
+                // Use args.QueryText to determine what to do.
+                // Navigate to detailed search page
+            }
+        }
+
 
         private static KeyboardAccelerator BuildKeyboardAccelerator(VirtualKey key, VirtualKeyModifiers? modifiers = null)
         {
