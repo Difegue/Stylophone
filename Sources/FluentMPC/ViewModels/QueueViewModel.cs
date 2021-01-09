@@ -81,6 +81,8 @@ namespace FluentMPC.ViewModels
                     var trackVM = f as TrackViewModel;
                     commandList.Add(new DeleteIdCommand(trackVM.File.Id));
                 }
+                // The delete command is fired twice -- Make sure the deleted tracks are unselected to avoid sending a second DeleteIdCommand.
+                selectedTracks.Clear();
 
                 await MPDConnectionService.SafelySendCommandAsync(commandList);
             }
