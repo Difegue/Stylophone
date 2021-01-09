@@ -165,18 +165,27 @@ namespace FluentMPC.ViewModels
                         Source.CollectionChanged -= Source_CollectionChanged;
                         await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
 
-                            // PlChanges gives the full list of files starting from the change, so we delete all existing tracks from the source after that change, and swap the new ones in.
-                            // If the response is empty, that means the last file in the source was removed.
-                            var initialPosition = response.Count() == 0 ? Source.Count-1 : response.First().Position;
-
-                            while (Source.Count != initialPosition)
+                            // If the queue was cleared, PlaylistLength is 0.
+                            if (status.PlaylistLength == 0)
                             {
-                                Source.RemoveAt(initialPosition);
+                                Source.Clear();
                             }
-
-                            foreach (var item in response)
+                            else
                             {
-                                Source.Add(new TrackViewModel(item, false));
+                                // PlChanges gives the full list of files starting from the change, so we delete all existing tracks from the source after that change, and swap the new ones in.
+                                // If the response is empty, that means the last file in the source was removed.
+                                var initialPosition = response.Count() == 0 ? Source.Count - 1 : response.First().Position;
+
+
+                                while (Source.Count != initialPosition)
+                                {
+                                    Source.RemoveAt(initialPosition);
+                                }
+
+                                foreach (var item in response)
+                                {
+                                    Source.Add(new TrackViewModel(item, false));
+                                }
                             }
 
                         });
