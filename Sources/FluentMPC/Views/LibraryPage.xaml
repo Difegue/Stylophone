@@ -35,23 +35,14 @@
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealBackgroundShowsAboveContentStyle}">
                     <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Margin" Value="12,0,12,64" />
+                    <Setter Property="CornerRadius" Value="3" />
                 </Style>
             </GridView.ItemContainerStyle>
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="items:AlbumViewModel" >
 
-                    <StackPanel x:Name="itemThumbnail" Padding="12,0,12,12"
-                                HorizontalAlignment="Left">
-                        <StackPanel.ContextFlyout>
-                            
-                            <MenuFlyout>
-                                <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{Binding PlayAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-                            </MenuFlyout> 
-                        </StackPanel.ContextFlyout>
-
-                        <controls:DropShadowPanel
+                    <controls:DropShadowPanel x:Name="itemThumbnail"
                         Width="180"
                         Height="180"
                         HorizontalAlignment="Left"
@@ -59,30 +50,48 @@
                         BlurRadius="10"
                         OffsetY="1"
                         ShadowOpacity="0.6"
-                        Color="Black">
+                        Color="Black" >
 
-                            <Grid Width="180" Height="180" CornerRadius="3" >
-                                <controls:ImageEx Style="{StaticResource NoAnimationImageEx}" 
+                        <controls:DropShadowPanel.ContextFlyout>
+
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{Binding PlayAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                            </MenuFlyout>
+                        </controls:DropShadowPanel.ContextFlyout>
+
+                        <Canvas Width="180" Height="180">
+                            <Grid CornerRadius="3" Width="180" Height="180">
+                            <controls:ImageEx Style="{StaticResource NoAnimationImageEx}" 
 	                                            PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
 	                                            Source="{x:Bind AlbumArt, Mode=OneWay}"  Stretch="UniformToFill" />
-                                <!-- Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back. -->
-                                <winui:ProgressBar Width="160" VerticalAlignment="Bottom" IsIndeterminate="True" Margin="{StaticResource SmallBottomMargin}"
+                            <!-- Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back. -->
+                            <winui:ProgressBar Width="160" VerticalAlignment="Bottom" IsIndeterminate="True" Margin="{StaticResource SmallBottomMargin}"
                                                    Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
                             </Grid>
-                        </controls:DropShadowPanel>
-
-                        <TextBlock
+                            <StackPanel HorizontalAlignment="Left">
+                                <StackPanel.RenderTransform>
+                                    <CompositeTransform TranslateY="184"/>
+                                </StackPanel.RenderTransform>
+                                <TextBlock
                                 Margin="{StaticResource XXSmallTopMargin}"
                                 Style="{ThemeResource BaseTextBlockStyle}"
                                 Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
                                 Text="{x:Bind Name, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}" />
-                        <winui:ProgressBar Margin="{StaticResource XXSmallTopMargin}" IsIndeterminate="True" Visibility="{x:Bind IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                        <TextBlock
+                                <winui:ProgressBar Margin="{StaticResource XXSmallTopMargin}" IsIndeterminate="True" Visibility="{x:Bind IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <TextBlock
                                 Margin="{StaticResource XXSmallTopMargin}"
                                 Style="{ThemeResource CaptionTextBlockStyle}"
                                 Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
                                 Text="{x:Bind Artist, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Artist, Mode=OneWay}"/>
-                    </StackPanel>
+                            </StackPanel>
+
+                        </Canvas>
+                    </controls:DropShadowPanel>
+                    <!--
+                    
+                    -->
                     
 
                 </DataTemplate>
