@@ -203,7 +203,11 @@ namespace FluentMPC.ViewModels.Items
                 if (!findReq.IsResponseValid)
                     return;
 
-                Files.AddRange(findReq.Response.Content);
+                // If files were already added, don't re-add them.
+                // This can occasionally happen if the server is a bit overloaded when we look at an album, since AlbumDetailViewModel can call this method a second time.
+                if (Files.Count == 0)
+                    Files.AddRange(findReq.Response.Content);
+
                 Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
 
                 // If we've already generated album art, don't use the queue and directly grab it

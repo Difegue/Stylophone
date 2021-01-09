@@ -135,7 +135,7 @@ namespace MpcNET.Commands.Database
             return MpdFile.CreateList(response.ResponseValues);
         }
 
-        private string escape(string value) => string.Format("\\\"{0}\\\"", value.Replace("\\", "\\\\").Replace("\"", "\\\""));
+        private string escape(string value) => string.Format("\\\"{0}\\\"", value.Replace("\\", "\\\\\\").Replace("'", "\\\\'").Replace("\"", "\\\\\\\""));
     }
     // TODO: rescan
 }

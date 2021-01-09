@@ -137,7 +137,7 @@
                             Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1">
                             <Border.Background>
-                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"
+                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.2" TintLuminosityOpacity="0.7" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"
                                               TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"></AcrylicBrush>
                             </Border.Background>
                         </Border>
@@ -159,7 +159,7 @@
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True" 
                             RelativePanel.AlignRightWithPanel="True"
-                            Margin="-24"
+                            Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-2">
                             <Border.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>

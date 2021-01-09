@@ -166,7 +166,7 @@
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True" 
                             RelativePanel.AlignRightWithPanel="True"
-                            Margin="-24"
+                            Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-2">
                             <Border.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
