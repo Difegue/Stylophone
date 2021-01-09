@@ -59,7 +59,7 @@
         SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
         IsSettingsVisible="True"
         ExpandedModeThresholdWidth="900"
-        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <winui:NavigationView.MenuItems>
                 <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Audio" helpers:NavHelper.NavigateTo="views:ServerQueuePage" />
                 <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Library" helpers:NavHelper.NavigateTo="views:LibraryPage" />
