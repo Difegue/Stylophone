@@ -159,6 +159,15 @@ namespace FluentMPC.ViewModels
                 return;
             }
 
+            // Create a transient navigationviewitem to show a custom header value.
+            if (e.SourcePageType == typeof(SearchResultsPage))
+            {
+                var item = new WinUI.NavigationViewItem();
+                item.Content = string.Format("SearchResultsFor".GetLocalized(), e.Parameter as string);
+                Selected = item;
+                return;
+            }
+
             Selected = _navigationView.MenuItems
                             .OfType<WinUI.NavigationViewItem>()
                             .FirstOrDefault(menuItem => IsMenuItemForPageType(menuItem, e.SourcePageType));
@@ -230,14 +239,11 @@ namespace FluentMPC.ViewModels
 
                 if (response != null)
                     NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
-
-                //sender.Text = "";
-                //sender.ItemsSource = new List<object>();
             }
             else
             {
-                // Use args.QueryText to determine what to do.
                 // Navigate to detailed search page
+                NavigationService.Navigate(typeof(SearchResultsPage), args.QueryText);
             }
         }
 

@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentMPC.Helpers;
-using FluentMPC.Services;
 using FluentMPC.ViewModels;
-using MpcNET.Commands.Database;
-using MpcNET.Commands.Playlist;
-using MpcNET.Commands.Queue;
-using MpcNET.Tags;
 using MpcNET.Types;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -45,5 +39,6 @@ namespace FluentMPC.Views
             if (((List<object>)box.ItemsSource)?.Count > 0)
                 box.IsSuggestionListOpen = true;
         }
+
     }
 }

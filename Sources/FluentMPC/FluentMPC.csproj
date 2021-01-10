@@ -205,6 +205,7 @@
     <Compile Include="Services\MPDConnectionService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="ViewModels\SearchResultsViewModel.cs" />
     <Compile Include="ViewModels\FoldersViewModel.cs" />
     <Compile Include="ViewModels\Items\FilePathViewModel.cs" />
     <Compile Include="ViewModels\AlbumDetailViewModel.cs" />
@@ -225,6 +226,9 @@
     </Compile>
     <Compile Include="Views\FoldersPage.xaml.cs">
       <DependentUpon>FoldersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResultsPage.xaml.cs">
+      <DependentUpon>SearchResultsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LibraryDetailPage.xaml.cs">
       <DependentUpon>LibraryDetailPage.xaml</DependentUpon>
@@ -290,6 +294,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\FoldersPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SearchResultsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

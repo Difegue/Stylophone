@@ -104,6 +104,7 @@
                       ItemsSource="{x:Bind ViewModel.Source}">
             <fluentMpc:AlternatingRowListView.ContextFlyout>
                 <MenuFlyout>
+                    <!-- Add to Queue -->
                     <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add"
                                     Command="{x:Bind ViewModel.AddToQueueCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
@@ -111,6 +112,7 @@
                             <KeyboardAccelerator Key="Enter" />
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
+                    <!-- Add to Playlist -->
                     <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo"
                                     Command="{x:Bind ViewModel.AddToPlayListCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"/>
