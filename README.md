@@ -52,9 +52,9 @@ You can easily contribute translations to Stylophone! To help translate, follow 
 
 ## Screenshots
 
-![Screen1](Screenshots/Screen1.png)
-![Screen2](Screenshots/Screen2.png)
-![Screen3](Screenshots/Screen3.png)
+![Screen1](Screenshots/Screen1.jpg)
+![Screen2](Screenshots/Screen2.jpg)
+![Screen3](Screenshots/Screen3.jpg)
 ![Screen4](Screenshots/Screen4.jpg)
 ![Screen5](Screenshots/Screen5.jpg)
 ![Screen6](Screenshots/Screen6.jpg)
