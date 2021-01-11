@@ -451,4 +451,28 @@ If you want to clear the album art cache, click this button.</value>
   <data name="LoadingTreeItem" xml:space="preserve">
     <value>Loading...</value>
   </data>
+  <data name="Shell_Search.PlaceholderText" xml:space="preserve">
+    <value>Search Tracks...</value>
+  </data>
+  <data name="NoTracksFound" xml:space="preserve">
+    <value>No Tracks found on Server.</value>
+  </data>
+  <data name="GoToDetailSearch" xml:space="preserve">
+    <value>Search for "{0}" on the server...</value>
+  </data>
+  <data name="SearchAlbumsToggle.Content" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="SearchArtistsToggle.Content" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="SearchResultsFor" xml:space="preserve">
+    <value>Search Results for "{0}"</value>
+  </data>
+  <data name="SearchTracksToggle.Content" xml:space="preserve">
+    <value>Tracks</value>
+  </data>
+  <data name="SearchNoResultsTitle.Text" xml:space="preserve">
+    <value>No Results have been found...</value>
+  </data>
 </root>

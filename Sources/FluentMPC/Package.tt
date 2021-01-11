@@ -1,4 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?> 
+﻿<#@ template hostspecific="true" language="C#" #>
+<#@ output extension=".appxmanifest" #>
+<#@ parameter type="System.String" name="BuildConfiguration" #>
+<#  
+    string version = "1.5.0.0";
+    
+    // Get configuration name at Build time
+    string configName = Host.ResolveParameterValue("-", "-", "BuildConfiguration");
+    if (string.IsNullOrWhiteSpace(configName))
+    {
+        // Default to Debug at Design Time.
+		configName = "Debug";
+    }
+#>
+<?xml version="1.0" encoding="utf-8"?> 
     
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -9,15 +23,40 @@
   xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
   IgnorableNamespaces="uap mp genTemplate uap3">
 
-<Identity 
+<# 
+    if (configName == "Debug") 
+    {
+#><Identity 
     Name="StylophoneDebug"
     Publisher="CN=B2F6FFCA-07C7-479C-AC33-2C75463C7DCE"
-    Version="1.5.0.0" />
+    Version="<#=version#>" />
+<#
+    }
+    else
+    {
+#><Identity
+    Name="13459Difegue.Stylophone"
+    Publisher="CN=B2F6FFCA-07C7-479C-AC33-2C75463C7DCE"
+    Version="<#=version#>" />
+<#
+    }
+#>
 
   <mp:PhoneIdentity PhoneProductId="6aab9ef0-77d1-4922-a9da-497e36a34491" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Stylophone (Dev)</DisplayName>
+<# 
+    if (configName == "Debug") 
+    {
+#>    <DisplayName>Stylophone (Dev)</DisplayName>
+<#
+    }
+    else
+    {
+#>    <DisplayName>Stylophone</DisplayName>
+<#
+    }
+#>
     <PublisherDisplayName>Difegue</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -35,7 +74,18 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="FluentMPC.App">
       <uap:VisualElements
-        DisplayName="Stylophone (Dev)"
+<# 
+    if (configName == "Debug") 
+    {
+#>        DisplayName="Stylophone (Dev)"
+<#
+    }
+    else
+    {
+#>        DisplayName="ms-resource:AppDisplayName"
+<#
+    }
+#>
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="ms-resource:AppDescription"

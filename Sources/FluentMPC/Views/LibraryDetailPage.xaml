@@ -91,27 +91,38 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <fluentMpc:AlternatingRowListView SelectionMode="Single"
-                      x:Name="QueueList" Margin="0,-96"
+        <fluentMpc:AlternatingRowListView x:Name="QueueList"
+                      SelectionMode="Extended"
+                      Margin="0,-96"
                       DoubleTapped="Queue_Track"
+                      RightTapped="Select_Item"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                       extensions:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
                       ItemsSource="{x:Bind ViewModel.Source}">
+            <fluentMpc:AlternatingRowListView.ContextFlyout>
+                <MenuFlyout>
+                    <!-- Add to Queue -->
+                    <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add"
+                                    Command="{x:Bind ViewModel.AddToQueueCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Enter" />
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <!-- Add to Playlist -->
+                    <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo"
+                                    Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"/>
+                </MenuFlyout>
+            </fluentMpc:AlternatingRowListView.ContextFlyout>
+            
             <fluentMpc:AlternatingRowListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
-                    <Setter Property="ContextFlyout">
-                        <Setter.Value>
-                            <MenuFlyout Opening="MenuFlyout_Opening">
-                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                            </MenuFlyout>
-                        </Setter.Value>
-                    </Setter>
                 </Style>
             </fluentMpc:AlternatingRowListView.ItemContainerStyle>
             
@@ -128,7 +139,7 @@
                             Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1">
                             <Border.Background>
-                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"
+                                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.2" TintLuminosityOpacity="0.7" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"
                                               TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"></AcrylicBrush>
                             </Border.Background>
                         </Border>
@@ -150,7 +161,7 @@
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True" 
                             RelativePanel.AlignRightWithPanel="True"
-                            Margin="-24"
+                            Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-2">
                             <Border.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>

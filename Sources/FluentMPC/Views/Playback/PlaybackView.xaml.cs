@@ -19,18 +19,21 @@ namespace FluentMPC.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, VisualizationType.FullScreenPlayback);
+            PlaybackViewModel = (PlaybackViewModel)e.Parameter;
+            PlaybackViewModel.HostType = VisualizationType.FullScreenPlayback;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            PlaybackViewModel?.Dispose();
+            if (PlaybackViewModel != null)
+                PlaybackViewModel.HostType = VisualizationType.NowPlayingBar;
             PlaybackViewModel = null;
         }
 
         private void Page_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            PlaybackViewModel?.Dispose();
+            if (PlaybackViewModel != null)
+                PlaybackViewModel.HostType = VisualizationType.NowPlayingBar;
             PlaybackViewModel = null;
         }
     }

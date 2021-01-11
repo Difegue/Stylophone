@@ -449,4 +449,28 @@ Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
   <data name="LoadingTreeItem" xml:space="preserve">
     <value>Chargement...</value>
   </data>
+  <data name="Shell_Search.PlaceholderText" xml:space="preserve">
+    <value>Rechercher un morceau...</value>
+  </data>
+  <data name="NoTracksFound" xml:space="preserve">
+    <value>Pas de morceaux trouvés sur le serveur.</value>
+  </data>
+  <data name="GoToDetailSearch" xml:space="preserve">
+    <value>Rechercher "{0}" sur le serveur...</value>
+  </data>
+  <data name="SearchAlbumsToggle.Content" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="SearchArtistsToggle.Content" xml:space="preserve">
+    <value>Artistes</value>
+  </data>
+  <data name="SearchResultsFor" xml:space="preserve">
+    <value>Résultats de la recherche pour "{0}"</value>
+  </data>
+  <data name="SearchTracksToggle.Content" xml:space="preserve">
+    <value>Pistes</value>
+  </data>
+  <data name="SearchNoResultsTitle.Text" xml:space="preserve">
+    <value>Aucun résultat trouvé...</value>
+  </data>
 </root>

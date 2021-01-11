@@ -122,10 +122,6 @@ namespace FluentMPC.ViewModels.Items
             var playlistName = await DialogService.ShowAddToPlaylistDialog();
             if (playlistName == null || Files.Count == 0) return;
 
-            // Adding a file to a playlist somehow triggers the server's "playlist" event, which is normally used for the queue...
-            // We disable queue events temporarily in order to avoid UI jitter by a refreshed queue.
-            MPDConnectionService.DisableQueueEvents = true;
-
             var commandList = new CommandList();
 
             foreach (var f in Files)
@@ -137,8 +133,6 @@ namespace FluentMPC.ViewModels.Items
             {
                 NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
             }
-
-            MPDConnectionService.DisableQueueEvents = false;
         }
 
         private ICommand _addToQueueCommand;
@@ -209,7 +203,11 @@ namespace FluentMPC.ViewModels.Items
                 if (!findReq.IsResponseValid)
                     return;
 
-                Files.AddRange(findReq.Response.Content);
+                // If files were already added, don't re-add them.
+                // This can occasionally happen if the server is a bit overloaded when we look at an album, since AlbumDetailViewModel can call this method a second time.
+                if (Files.Count == 0)
+                    Files.AddRange(findReq.Response.Content);
+
                 Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
 
                 // If we've already generated album art, don't use the queue and directly grab it

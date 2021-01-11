@@ -126,10 +126,10 @@
 
             <StackPanel Margin="{StaticResource SmallTopMargin}" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Margin="0,-12"
+                    <Image Margin="12,0"
                         Width="64"
                         Height="64"
-                        Source="ms-appx:///Assets/Square44x44Logo.png" />
+                        Source="ms-appx:///Assets/Square44x44Logo.altform-unplated_targetsize-256.png" />
                 
                     <StackPanel>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" />

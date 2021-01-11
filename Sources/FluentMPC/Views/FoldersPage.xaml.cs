@@ -43,7 +43,7 @@ namespace FluentMPC.Views
         {
             var treeViewItem = sender as Microsoft.UI.Xaml.Controls.TreeViewItem;
             var fileVm = treeViewItem.DataContext as FilePathViewModel;
-            fileVm.PlayCommand.Execute(null);
+            fileVm.AddToQueueCommand.Execute(null);
         }
     }
 }

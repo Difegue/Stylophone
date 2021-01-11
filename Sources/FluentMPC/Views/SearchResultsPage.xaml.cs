@@ -10,31 +10,21 @@ using Windows.UI.Xaml.Navigation;
 
 namespace FluentMPC.Views
 {
-    public sealed partial class LibraryDetailPage : Page
+    public sealed partial class SearchResultsPage : Page
     {
-        public AlbumDetailViewModel ViewModel { get; } = new AlbumDetailViewModel();
+        public SearchResultsViewModel ViewModel { get; } = new SearchResultsViewModel();
 
-        public LibraryDetailPage()
+        public SearchResultsPage()
         {
             InitializeComponent();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.RegisterElementForConnectedAnimation("animationKeyLibrary", itemHero);
-            if (e.Parameter is AlbumViewModel album)
+            if (e.Parameter is string searchText)
             {
-                await ViewModel.InitializeAsync(album);
-            }
-        }
-
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-            base.OnNavigatingFrom(e);
-            if (e.NavigationMode == NavigationMode.Back)
-            {
-                NavigationService.Frame.SetListDataItemForNextConnectedAnimation(ViewModel.Item);
+                ViewModel.InitializeAsync(searchText);
             }
         }
 

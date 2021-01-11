@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels;
 using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
-using MpcNET.Types;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -70,29 +70,18 @@ namespace FluentMPC.Views
             trackVm.PlayTrackCommand.Execute(trackVm.File);
         }
 
-        // Propagate DataContext of the ListViewItem to the MenuFlyout.
-        // https://github.com/microsoft/microsoft-ui-xaml/issues/911
-        private void MenuFlyout_Opening(object sender, object e)
+        private void Select_Item(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) => MiscHelpers.SelectItemOnFlyoutRightClick<TrackViewModel>(QueueList, e);
+
+        private void QueueList_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
-            var menuFlyout = (MenuFlyout)sender;
-            var dataContext = menuFlyout.Target?.DataContext ?? (menuFlyout.Target as ContentControl)?.Content;
-            if (dataContext != null)
-            {
-                foreach (var item in menuFlyout.Items)
-                {
-                    var menuFlyoutItem = item as MenuFlyoutItem;
+            // We disable queue events temporarily in order to avoid interference while reordering items.
+            // Since the ListView is updating the source already when moving items, we don't need to listen to queue events.
+            MPDConnectionService.DisableQueueEvents = true;
+        }
 
-                    if (menuFlyoutItem != null)
-                    {
-                        menuFlyoutItem.DataContext = dataContext;
-                    }
-                }
-            }
-            else
-            {
-                menuFlyout.Hide();
-            }
-
+        private void QueueList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+        {
+            MPDConnectionService.DisableQueueEvents = false;
         }
     }
 }

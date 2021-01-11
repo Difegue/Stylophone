@@ -7,6 +7,7 @@
 namespace MpcNET.Types
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The MpdFile class contains all meta data for a file of the MPD.
@@ -182,6 +183,11 @@ namespace MpcNET.Types
         /// </summary>
         public bool HasId => this.Id != NoId;
 
+        public override string ToString()
+        {
+            return Title ?? Name ?? Path.Split('/').Last();
+        }
+
         internal static MpdFile Create(string path, int pos)
         {
             return new MpdFile(path, pos: pos);
@@ -305,7 +311,15 @@ namespace MpcNET.Types
 
                             break;
                         default:
-                            unknownMetadata.Add(line.Key, line.Value);
+                            // If a similar key has already been added to unknown metadata, add a ' to this second one so it can still be passed through.
+                            // (It certainly won't be used though)
+                            var key = line.Key;
+                            while (unknownMetadata.ContainsKey(key))
+                            {
+                                key = key + "'";
+                            }
+                            unknownMetadata.Add(key, line.Value);
+
                             break;
                     }
                 }

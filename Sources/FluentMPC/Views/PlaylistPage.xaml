@@ -93,35 +93,54 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <fluentMpc:AlternatingRowListView SelectionMode="Single" 
-                      x:Name="QueueList" Margin="0,-96"
+        <fluentMpc:AlternatingRowListView x:Name="QueueList"
+                      SelectionMode="Extended" 
+                      Margin="0,-96"
                       AllowDrop="True"
                       CanReorderItems="True"
                       ReorderMode="Enabled"
                       DoubleTapped="Queue_Track"
+                      RightTapped="Select_Item"
                       extensions:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
                       extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
                       ItemsSource="{x:Bind ViewModel.Source}">
+            <fluentMpc:AlternatingRowListView.ContextFlyout>
+                <MenuFlyout>
+                    <!-- View Track Album -->
+                    <MenuFlyoutItem x:Uid="ViewAlbumFlyoutItem"
+                                    Command="{x:Bind ViewModel.ViewAlbumCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE93C;" />
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutSeparator/>
+                    <!-- Add to Queue -->
+                    <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add"
+                                    Command="{x:Bind ViewModel.AddToQueueCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Enter" />
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <!-- Remove from Playlist -->
+                    <MenuFlyoutItem x:Uid="RemoveFromPlaylistFlyoutItem" Icon="Remove"
+                                    Command="{x:Bind ViewModel.RemoveTrackFromPlaylistCommand}"
+                                    CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Delete" />
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                </MenuFlyout>
+            </fluentMpc:AlternatingRowListView.ContextFlyout>
+            
             <fluentMpc:AlternatingRowListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
-                    <Setter Property="ContextFlyout">
-                        <Setter.Value>
-                            <MenuFlyout Opening="MenuFlyout_Opening">
-                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddToQueueCommand}" CommandParameter="{Binding File}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem x:Uid="RemoveFromPlaylistFlyoutItem"  Icon="Remove" Command="{x:Bind ViewModel.RemoveTrackFromPlaylistCommand}" CommandParameter="{Binding}" DataContext="{Binding}"/>
-                                <MenuFlyoutItem x:Uid="ViewAlbumFlyoutItem" Command="{Binding ViewAlbumCommand}" CommandParameter="{Binding File}" DataContext="{Binding}">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xE93C;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                            </MenuFlyout>
-                        </Setter.Value>
-                    </Setter>
                 </Style>
             </fluentMpc:AlternatingRowListView.ItemContainerStyle>
 
@@ -147,7 +166,7 @@
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True" 
                             RelativePanel.AlignRightWithPanel="True"
-                            Margin="-24"
+                            Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-2">
                             <Border.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
@@ -231,7 +250,7 @@
                                     <TextBlock x:Uid="PlayTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.AddPlaylistCommand}" Width="108" VerticalAlignment="Stretch">
+                            <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.LoadPlaylistCommand}" Width="108" VerticalAlignment="Stretch">
                                 <StackPanel >
                                     <SymbolIcon Symbol="Add" />
                                     <TextBlock x:Uid="AddToQueueTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>

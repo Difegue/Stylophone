@@ -11,6 +11,8 @@ using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
+using MpcNET.Commands.Queue;
+using MpcNET.Commands.Reflection;
 using MpcNET.Types;
 
 namespace FluentMPC.ViewModels
@@ -36,6 +38,57 @@ namespace FluentMPC.ViewModels
         private string _info;
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
+
+        private ICommand _addToQueueCommand;
+        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
+
+        private async void QueueTrack(object list)
+        {
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var commandList = new CommandList();
+
+                foreach (var f in selectedTracks)
+                {
+                    var trackVM = f as TrackViewModel;
+                    commandList.Add(new AddIdCommand(trackVM.File.Path));
+                }
+
+                var r = await MPDConnectionService.SafelySendCommandAsync(commandList);
+                if (r != null)
+                    NotificationService.ShowInAppNotification("AddedToQueueText".GetLocalized());
+            }
+        }
+
+        private ICommand _addToPlaylistCommand;
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
+
+        private async void AddToPlaylist(object list)
+        {
+            var playlistName = await DialogService.ShowAddToPlaylistDialog();
+            if (playlistName == null) return;
+
+            var selectedTracks = (IList<object>)list;
+
+            if (selectedTracks?.Count > 0)
+            {
+                var commandList = new CommandList();
+
+                foreach (var f in selectedTracks)
+                {
+                    var trackVM = f as TrackViewModel;
+                    commandList.Add(new PlaylistAddCommand(playlistName, trackVM.File.Path));
+                }
+
+                var req = await MPDConnectionService.SafelySendCommandAsync(commandList);
+
+                if (req != null)
+                    NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
+            }
+        }
+
 
         public AlbumDetailViewModel()
         {
