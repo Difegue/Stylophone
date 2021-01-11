@@ -6,7 +6,8 @@
     <!-- https://github.com/microsoft/microsoft-ui-xaml/pull/3898 -->
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FFF3F3F3" />
+            <!-- Not the WinUI default, but pure white looks better. -->
+            <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FFFFFFFF" /> 
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FF202020" />
