@@ -59,6 +59,7 @@
         SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
         IsSettingsVisible="True"
         ExpandedModeThresholdWidth="900"
+        Loaded="ApplyShadowToSideBar"
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <winui:NavigationView.MenuItems>
                 <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Audio" helpers:NavHelper.NavigateTo="views:ServerQueuePage" />
@@ -82,12 +83,27 @@
                 DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}">
                     <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <TextBlock
-                                Text="{Binding}"
-                                Style="{ThemeResource TitleTextBlockStyle}"
-                                Margin="{StaticResource SmallLeftRightMargin}" />
+                            <UserControl>
+                            <Grid x:Name="Header">
+                                
+                                <TextBlock Text="{Binding}" Style="{ThemeResource TitleTextBlockStyle}" Margin="{StaticResource SmallLeftRightMargin}" />
+
+                                <!-- We've removed the default NavigationViewHeaderMargin in code, so we reestablish here if we're not in Minimal mode. -->
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup>
+                                        <VisualState x:Name="Normal">
+                                            <VisualState.StateTriggers>
+                                                <AdaptiveTrigger MinWindowWidth="640" />
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Target="Header.Margin" Value="{StaticResource NavigationViewHeaderMargin}" />
+                                                <Setter Target="Header.Padding" Value="0,0,0,8"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
                             </Grid>
+                            </UserControl>
                         </DataTemplate>
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
@@ -96,7 +112,11 @@
                 </ic:EventTriggerBehavior>
             </i:Interaction.Behaviors>
             <Grid>
-                <Frame x:Name="shellFrame" Margin="{x:Bind ViewModel.FrameMargin, Mode=OneWay}"/>
+                <Frame x:Name="shellFrame" Margin="{x:Bind ViewModel.FrameMargin, Mode=OneWay}">
+                    <Frame.Shadow>
+                        <ThemeShadow x:Name="ContentShadow" />
+                    </Frame.Shadow>
+                </Frame>
                 <controls:InAppNotification x:Name="notificationHolder" />
             </Grid>
         </winui:NavigationView>
