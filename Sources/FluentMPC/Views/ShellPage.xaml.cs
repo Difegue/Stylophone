@@ -52,7 +52,7 @@ namespace FluentMPC.Views
                 // Get the pane's grid, which receives all our shadows
                 var paneContentGrid = rootGrid.FindName("PaneContentGrid") as Grid;
 
-                // Shadow emitters for the header. The header has grids for both left and top padding, so we need to make shadow for both of them.
+                // Shadow emitters for the header. The header has grids for both its content and top padding, so we need to shadow up both of them.
                 var headerContent = rootGrid.FindName("HeaderContent") as ContentControl;
                 var headerTopContent = rootGrid.FindName("ContentTopPadding") as Grid;
                 var headerShadow = new ThemeShadow();
@@ -67,6 +67,9 @@ namespace FluentMPC.Views
                 headerTopShadow.Receivers.Add(paneContentGrid);
                 ContentShadow.Receivers.Add(paneContentGrid);
 
+                //NowPlayingShadow.Receivers.Add(paneContentGrid);
+                NowPlayingShadow.Receivers.Add(navigationView);
+
                 headerContent.Shadow = headerShadow;
                 headerContent.Translation += new Vector3(0, 0, 32);
 
@@ -74,6 +77,7 @@ namespace FluentMPC.Views
                 headerTopContent.Translation += new Vector3(0, 0, 32);
 
                 shellFrame.Translation += new Vector3(0, 0, 32);
+                nowPlayingBar.Translation += new Vector3(0, 0, 64);
             }
         }
     }

@@ -120,8 +120,12 @@
                 <controls:InAppNotification x:Name="notificationHolder" />
             </Grid>
         </winui:NavigationView>
-        
-        <views:NowPlayingBar Grid.Row="1" />
+
+        <views:NowPlayingBar x:Name="nowPlayingBar" Grid.Row="1" >
+            <views:NowPlayingBar.Shadow>
+                <ThemeShadow x:Name="NowPlayingShadow" />
+            </views:NowPlayingBar.Shadow>
+        </views:NowPlayingBar>
     </Grid>
     
 </Page>
