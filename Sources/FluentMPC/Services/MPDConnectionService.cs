@@ -143,7 +143,15 @@ namespace FluentMPC.Services
                 using (var c = await GetConnectionAsync())
                 {
                     var response = await c.InternalResource.SendAsync(command);
-                    if (!response.IsResponseValid) throw new Exception($"Invalid server response: {response}.");
+                    if (!response.IsResponseValid)
+                    {
+                        // If we have an MpdError string, only show that as the error to avoid extra noise
+                        var mpdError = response.Response?.Result?.MpdError;
+                        if (mpdError != null)
+                            throw new Exception(mpdError);
+                        else
+                            throw new Exception($"Invalid server response: {response}.");
+                    }
 
                     return response.Response.Content;
                 }
