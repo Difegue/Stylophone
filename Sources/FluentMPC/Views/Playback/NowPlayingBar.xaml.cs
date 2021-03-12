@@ -13,6 +13,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using FluentMPC.Services;
+using Microsoft.Toolkit.Uwp;
 
 namespace FluentMPC.Views
 {
@@ -45,7 +46,7 @@ namespace FluentMPC.Views
 
         private void UpdateBars()
         {
-            DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            DispatcherService.DispatcherQueue.EnqueueAsync(() =>
             {
                 if (!MPDConnectionService.IsConnected)
                 {
@@ -70,7 +71,7 @@ namespace FluentMPC.Views
 
         private async Task PlaybackSession_PlaybackStateChangedAsync(object sender, EventArgs eventArgs)
         {
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            await DispatcherService.DispatcherQueue.EnqueueAsync(() =>
             {
                 switch (MPDConnectionService.CurrentStatus.State)
                 {

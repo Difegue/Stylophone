@@ -1,23 +1,13 @@
-﻿using ColorThiefDotNet;
-using FluentMPC.Helpers;
+﻿using FluentMPC.Helpers;
 using FluentMPC.Services;
-using Microsoft.Toolkit.Uwp.Helpers;
-using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Types;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.Storage.Streams;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
-using Color = Windows.UI.Color;
-using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Sundew.Base.Collections;
 using System.Linq;
@@ -75,7 +65,7 @@ namespace FluentMPC.ViewModels.Items
                 else
                     newChildren.Add(new FilePathViewModel("💥 Failed"));
 
-                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                await DispatcherService.ExecuteOnUIThreadAsync(() =>
                 {
                     _childPaths.AddRange(newChildren);
                     _childPaths.RemoveAt(0); // Remove the placeholder after adding the new items, otherwise the treeitem can close back up

@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 
 using FluentMPC.Views;
-
+using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.Helpers;
 
 using Windows.ApplicationModel.Core;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 
@@ -24,7 +25,7 @@ namespace FluentMPC.Services
             var dialog = new AddToPlaylistDialog(allowExistingPlaylists);
             var result = ContentDialogResult.None;
 
-            await DispatcherHelper.ExecuteOnUIThreadAsync (async () => result = await dialog.ShowAsync());
+            await DispatcherService.ExecuteOnUIThreadAsync(async () => result = await dialog.ShowAsync());
 
             // Return new playlist name if checked, selected playlist otherwise
             return result == ContentDialogResult.Primary ? dialog.AddNewPlaylist ? dialog.PlaylistName : dialog.SelectedPlaylist : null;
@@ -36,7 +37,7 @@ namespace FluentMPC.Services
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                 CoreDispatcherPriority.Normal, async () =>
                 {
-                    if (SystemInformation.IsFirstRun && !shown)
+                    if (SystemInformation.Instance.IsFirstRun && !shown)
                     {
                         shown = true;
                         var dialog = new FirstRunDialog();

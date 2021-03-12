@@ -71,8 +71,7 @@
         </VisualStateManager.VisualStateGroups>
 
         
-        <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
-                          PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill"
+        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
                           Stretch="UniformToFill" />

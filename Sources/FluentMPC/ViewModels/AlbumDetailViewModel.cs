@@ -8,12 +8,14 @@ using System.Windows.Input;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
+using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
 using MpcNET.Types;
+using Windows.System;
 
 namespace FluentMPC.ViewModels
 {
@@ -32,7 +34,7 @@ namespace FluentMPC.ViewModels
             get => _info;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _info, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _info, value));
             }
         }
         private string _info;
@@ -94,7 +96,7 @@ namespace FluentMPC.ViewModels
         {
         }
 
-        public async Task InitializeAsync(AlbumViewModel album)
+        public void Initialize(AlbumViewModel album)
         {
             Item = album;
 
@@ -110,7 +112,7 @@ namespace FluentMPC.ViewModels
                 album.PropertyChanged += async (s, e) =>
                 {
                     if (album.Files.Count > 0 && Source.Count == 0)
-                        await DispatcherHelper.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
+                        await DispatcherService.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 };
             }
             else // AlbumVM hasn't been loaded at all, load it ourselves
@@ -121,7 +123,7 @@ namespace FluentMPC.ViewModels
                     {
                         await album.LoadAlbumDataAsync(c.InternalResource);
                     }
-                    await DispatcherHelper.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
+                    await DispatcherService.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 });
             }
 

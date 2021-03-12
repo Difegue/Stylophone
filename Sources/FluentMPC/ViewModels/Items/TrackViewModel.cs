@@ -30,7 +30,7 @@ namespace FluentMPC.ViewModels.Items
 
         public bool IsPlaying => MPDConnectionService.CurrentStatus.SongId == File.Id;
 
-        internal void UpdatePlayingStatus() => DispatcherHelper.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
+        internal void UpdatePlayingStatus() => DispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
 
         public BitmapImage AlbumArt
         {
@@ -60,7 +60,7 @@ namespace FluentMPC.ViewModels.Items
             get => _isLight;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _isLight, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _isLight, value));
             }
         }
 
@@ -136,8 +136,17 @@ namespace FluentMPC.ViewModels.Items
 
             // Fire off an async request to get the album art from MPD.
             if (getAlbumArt)
+            {
+
                 Task.Run(async () =>
                 {
+                    await _currentUiDispatcher.AwaitableRunAsync(() =>
+                    {
+                        var placeholder = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
+                        placeholder.DecodePixelWidth = (int)hostType;
+                        AlbumArt = placeholder;
+                    });
+
                     // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
                     var calculateDominantColor = hostType.IsOneOf(VisualizationType.NowPlayingBar, VisualizationType.FullScreenPlayback);
 
@@ -155,6 +164,7 @@ namespace FluentMPC.ViewModels.Items
                         AlbumArt = art.ArtBitmap;
                     }
                 });
+            }
         }
 
     }

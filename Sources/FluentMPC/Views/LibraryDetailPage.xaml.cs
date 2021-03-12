@@ -19,13 +19,13 @@ namespace FluentMPC.Views
             InitializeComponent();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             this.RegisterElementForConnectedAnimation("animationKeyLibrary", itemHero);
             if (e.Parameter is AlbumViewModel album)
             {
-                await ViewModel.InitializeAsync(album);
+               ViewModel.Initialize(album);
             }
         }
 

@@ -72,7 +72,7 @@ namespace FluentMPC.ViewModels.Playback
             set {
                 Set(ref _hostType, value);
 
-                Task.Run(async () =>
+                Task.Run(() =>
                 {
                     _albumArtCancellationSource.Cancel();
                     _albumArtCancellationSource = new CancellationTokenSource();
@@ -727,7 +727,7 @@ namespace FluentMPC.ViewModels.Playback
                 var compactViewId = -1;
                 var currentViewId = -1;
 
-                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                await DispatcherService.ExecuteOnUIThreadAsync(() =>
                 {
                     // Get the Id back
                     currentViewId = ApplicationView.GetForCurrentView().Id;

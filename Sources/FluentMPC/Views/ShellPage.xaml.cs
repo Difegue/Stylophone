@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using FluentMPC.Services;
 using FluentMPC.ViewModels;
 using MpcNET.Types;
 using Windows.UI.Xaml;
@@ -29,6 +30,9 @@ namespace FluentMPC.Views
 
         public ShellPage()
         {
+            // First View, use that to initialize our cached DispatcherQueue
+            DispatcherService.Initialize();
+
             InitializeComponent();
             DataContext = ViewModel;
             ViewModel.Initialize(shellFrame, navigationView, playlistContainer, notificationHolder, KeyboardAccelerators);

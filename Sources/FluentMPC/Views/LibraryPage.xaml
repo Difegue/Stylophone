@@ -9,7 +9,7 @@
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     xmlns:items="using:FluentMPC.ViewModels.Items"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
-    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     Style="{StaticResource PageStyle}"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
@@ -29,7 +29,7 @@
             animations:Connected.ListItemKey="animationKeyLibrary"
             IsItemClickEnabled="True"
             ItemClick="AlbumClicked"
-            extensions:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+            ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
             ItemsSource="{x:Bind ViewModel.FilteredSource,Mode=OneWay}"
             SelectionMode="None">
             <GridView.ItemContainerStyle>
@@ -63,9 +63,7 @@
 
                         <Canvas Width="180" Height="180">
                             <Grid CornerRadius="3" Width="180" Height="180">
-                            <controls:ImageEx Style="{StaticResource NoAnimationImageEx}" 
-	                                            PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
-	                                            Source="{x:Bind AlbumArt, Mode=OneWay}"  Stretch="UniformToFill" />
+                            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{x:Bind AlbumArt, Mode=OneWay}"  Stretch="UniformToFill" />
                             <!-- Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back. -->
                             <winui:ProgressBar Width="160" VerticalAlignment="Bottom" IsIndeterminate="True" Margin="{StaticResource SmallBottomMargin}"
                                                    Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>

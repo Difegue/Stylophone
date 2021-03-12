@@ -157,6 +157,10 @@ namespace FluentMPC.ViewModels
         public PlaylistViewModel()
         {
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+
+            PlaylistArt = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
+            PlaylistArt2 = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
+            PlaylistArt3 = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
         }
 
         public string Name
@@ -171,7 +175,7 @@ namespace FluentMPC.ViewModels
             get => _artists;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _artists, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _artists, value));
             }
         }
         private string _artists;
@@ -181,7 +185,7 @@ namespace FluentMPC.ViewModels
             get => _info;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _info, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _info, value));
             }
         }
         private string _info;
@@ -198,7 +202,7 @@ namespace FluentMPC.ViewModels
             get => _playlistArt;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt, value));
             }
         }
 
@@ -209,7 +213,7 @@ namespace FluentMPC.ViewModels
             get => _playlistArt2;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt2, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt2, value));
             }
         }
 
@@ -220,7 +224,7 @@ namespace FluentMPC.ViewModels
             get => _playlistArt3;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt3, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _playlistArt3, value));
             }
         }
 
@@ -278,7 +282,7 @@ namespace FluentMPC.ViewModels
                 }
                 else PlaylistArt3 = PlaylistArt2;
 
-                await DispatcherHelper.ExecuteOnUIThreadAsync(() => ArtLoaded = true);
+                await DispatcherService.ExecuteOnUIThreadAsync(() => ArtLoaded = true);
             });
         }
 

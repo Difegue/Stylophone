@@ -24,22 +24,22 @@ namespace FluentMPC.ViewModels.Items
 {
     public class AlbumViewModel : Observable
     {
-        public String Name
+        public string Name
         {
             get => _name;
             set => Set(ref _name, value);
         }
-        private String _name;
+        private string _name;
 
-        public String Artist
+        public string Artist
         {
             get => _artist;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _artist, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _artist, value));
             }
         }
-        private String _artist;
+        private string _artist;
 
         public IList<IMpdFile> Files
         {
@@ -54,7 +54,7 @@ namespace FluentMPC.ViewModels.Items
             get => _detailLoading;
             internal set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _detailLoading, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _detailLoading, value));
             }
         }
 
@@ -64,7 +64,7 @@ namespace FluentMPC.ViewModels.Items
             get => _artLoaded;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _artLoaded, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _artLoaded, value));
             }
         }
 
@@ -73,7 +73,7 @@ namespace FluentMPC.ViewModels.Items
             get => _albumArt;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _albumArt, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _albumArt, value));
             }
         }
 
@@ -96,7 +96,7 @@ namespace FluentMPC.ViewModels.Items
             get => _albumColor;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _albumColor, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _albumColor, value));
             }
         }
 
@@ -111,7 +111,7 @@ namespace FluentMPC.ViewModels.Items
             get => _isLight;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _isLight, value));
+                DispatcherService.ExecuteOnUIThreadAsync(() => Set(ref _isLight, value));
             }
         }
 
@@ -192,6 +192,8 @@ namespace FluentMPC.ViewModels.Items
             DominantColor = Colors.Black;
             Files = new List<IMpdFile>();
             IsDetailLoading = false;
+
+            AlbumArt = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
         }
 
         public async Task LoadAlbumDataAsync(MpcConnection c)

@@ -36,7 +36,7 @@
                 Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}">
 
         </Border>
-        <controls:ImageEx  HorizontalAlignment="Center" Canvas.ZIndex="-2"  Stretch="UniformToFill" 
+        <Image HorizontalAlignment="Center" Canvas.ZIndex="-2" Stretch="UniformToFill" 
                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"/>
 
         <Grid RelativePanel.AlignTopWithPanel="True"
@@ -66,7 +66,7 @@
                         Color="Black">
 
                 <Grid CornerRadius="3">
-                    <controls:ImageEx Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" PlaceholderStretch="Uniform" PlaceholderSource="/Assets/AlbumPlaceholder.png" Style="{StaticResource NoAnimationImageEx}" />
+                    <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"/>
                 </Grid>
                 </controls:DropShadowPanel>
 

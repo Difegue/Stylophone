@@ -8,6 +8,7 @@ using System.Windows.Input;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
+using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
@@ -16,6 +17,7 @@ using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
 using MpcNET.Tags;
 using MpcNET.Types;
+using Windows.System;
 
 namespace FluentMPC.ViewModels
 {
@@ -180,13 +182,13 @@ namespace FluentMPC.ViewModels
             _searchTracks = true;
         }
 
-        public async Task InitializeAsync(string searchQuery)
+        public void Initialize(string searchQuery)
         {
             QueryText = searchQuery;
             UpdateSource();
         }
 
-        private async void UpdateSource()
+        private void UpdateSource()
         {
             IsSearchInProgress = true;
             Source.Clear();
@@ -197,7 +199,7 @@ namespace FluentMPC.ViewModels
                 if (SearchAlbums)  await DoSearchAsync(FindTags.Album);
                 if (SearchArtists) await DoSearchAsync(FindTags.Artist);
 
-                await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsSearchInProgress = false);
+                await DispatcherService.ExecuteOnUIThreadAsync(() => IsSearchInProgress = false);
             });
         }
 
@@ -207,7 +209,7 @@ namespace FluentMPC.ViewModels
 
             if (response != null)
             {
-                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                await DispatcherService.ExecuteOnUIThreadAsync(() =>
                 {
                     foreach (var f in response)
                     {
