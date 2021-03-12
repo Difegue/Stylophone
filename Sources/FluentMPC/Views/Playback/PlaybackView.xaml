@@ -34,8 +34,8 @@
                 RelativePanel.AlignRightWithPanel="True"
                 Canvas.ZIndex="-1"
                 Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}">
-
         </Border>
+        
         <Image HorizontalAlignment="Center" Canvas.ZIndex="-2" Stretch="UniformToFill" 
                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"/>
 
@@ -94,6 +94,7 @@
                        Opacity="0.6"
                        MaxLines="3"
                        TextWrapping="Wrap"
+                           FontWeight="SemiLight"
                        TextTrimming="CharacterEllipsis" />
             </StackPanel>
 

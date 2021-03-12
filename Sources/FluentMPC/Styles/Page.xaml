@@ -4,11 +4,7 @@
     xmlns:muxm="using:Microsoft.UI.Xaml.Media" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls">
 
     <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Default">
-            <!-- The "Default" theme dictionary is used unless a specific
-                                 light, dark, or high contrast dictionary is provided. These
-                                 resources should be tested with both the light and dark themes,
-                                 and specific light or dark resources provided as needed. -->
+        <ResourceDictionary x:Key="Light">
             <muxm:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
                                    BackgroundSource="Backdrop"
                                    TintOpacity="0.6" TintColor="{StaticResource SystemChromeMediumColor}" />
@@ -16,6 +12,22 @@
             <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
                           BackgroundSource="HostBackdrop"
                           TintColor="{StaticResource SystemChromeMediumColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumLowColor}" />
+
+            <AcrylicBrush x:Key="SystemControlAcrylicElementMediumHighBrush" BackgroundSource="Backdrop" TintColor="{StaticResource SystemChromeAltHighColor}"
+                          TintOpacity="0.4" FallbackColor="{StaticResource SystemChromeMediumColor}" />
+
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <muxm:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
+                                   BackgroundSource="Backdrop"
+                                   TintOpacity="0.6" TintColor="{StaticResource SystemChromeMediumColor}" />
+
+            <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
+                          BackgroundSource="HostBackdrop"
+                          TintColor="{StaticResource SystemChromeMediumColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumLowColor}" />
+
+            <AcrylicBrush x:Key="SystemControlAcrylicElementMediumHighBrush" BackgroundSource="Backdrop" TintColor="{StaticResource SystemChromeAltHighColor}"
+                          TintOpacity="0.7" FallbackColor="{StaticResource SystemChromeMediumColor}" />
 
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
@@ -297,89 +309,6 @@
                                             Style="{StaticResource SliderThumbStyle}" />
                             </Grid>
                         </Grid>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- ImageEx style removing the animation on placeholders and setting their width to 0 once the main image is loaded. -->
-    <Style x:Key="NoAnimationImageEx" TargetType="controls:ImageEx">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="controls:ImageEx">
-                    <Grid Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
-                          >
-                        <Image Name="PlaceholderImage"
-                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                               VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                               Opacity="1.0"
-                               Source="{TemplateBinding PlaceholderSource}"
-                               Stretch="{TemplateBinding PlaceholderStretch}" />
-                        <Image Name="Image"
-                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                               VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                               NineGrid="{TemplateBinding NineGrid}"
-                               Opacity="0.0"
-                               Stretch="{TemplateBinding Stretch}" />
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Failed">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Image"
-                                                                       Storyboard.TargetProperty="Opacity">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="0" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderImage"
-                                                                       Storyboard.TargetProperty="Opacity">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="1" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Loading">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Image"
-                                                                       Storyboard.TargetProperty="Opacity">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="0" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderImage"
-                                                                       Storyboard.TargetProperty="Opacity">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="1" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Loaded">
-                                    <Storyboard>
-                                        <DoubleAnimation AutoReverse="False"
-                                                         BeginTime="0"
-                                                         Duration="0"
-                                                         Storyboard.TargetName="Image"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         From="0"
-                                                         To="1" />
-                                        <DoubleAnimation AutoReverse="False"
-                                                         BeginTime="0"
-                                                         Duration="0"
-                                                         Storyboard.TargetName="PlaceholderImage"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         From="1"
-                                                         To="0" />
-                                        <DoubleAnimation AutoReverse="False"
-                                                         BeginTime="0"
-                                                         Duration="0"
-                                                         Storyboard.TargetName="PlaceholderImage"
-                                                         Storyboard.TargetProperty="Width"
-                                                         From="1"
-                                                         To="0" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Unloaded" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

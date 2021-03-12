@@ -7,6 +7,8 @@ using Microsoft.Toolkit.Uwp.UI.Animations;
 
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace FluentMPC.Views
 {
@@ -17,6 +19,12 @@ namespace FluentMPC.Views
         public LibraryDetailPage()
         {
             InitializeComponent();
+
+            var headerShadow = new ThemeShadow();
+            headerShadow.Receivers.Add(QueueList);
+            
+            QueueList.Header.Shadow = headerShadow;
+            QueueList.Header.Translation += new Vector3(0, 0, 32);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

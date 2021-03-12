@@ -14,12 +14,13 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using FluentMPC.Services;
 using Microsoft.Toolkit.Uwp;
+using Windows.System;
 
 namespace FluentMPC.Views
 {
     public sealed partial class NowPlayingBar
     {
-        public PlaybackViewModel PlaybackViewModel { get; } = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, VisualizationType.NowPlayingBar);
+        public PlaybackViewModel PlaybackViewModel { get; } = new PlaybackViewModel(DispatcherQueue.GetForCurrentThread(), VisualizationType.NowPlayingBar);
 
         public NowPlayingBar() => InitializeComponent();
 

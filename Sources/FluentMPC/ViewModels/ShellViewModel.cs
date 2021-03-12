@@ -88,7 +88,7 @@ namespace FluentMPC.ViewModels
 
         private void Show_InAppNotification(object sender, InAppNotificationRequestedEventArgs e)
         {
-            _notificationHolder.Show(e.NotificationText, e.NotificationTime);
+            DispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(e.NotificationText, e.NotificationTime));
         }
 
         private async void OnLoaded()

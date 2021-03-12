@@ -1,9 +1,11 @@
 ﻿using FluentMPC.Services;
 using FluentMPC.ViewModels.Playback;
+using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -26,7 +28,7 @@ namespace FluentMPC.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            PlaybackViewModel = new PlaybackViewModel(CoreWindow.GetForCurrentThread().Dispatcher, VisualizationType.OverlayPlayback);
+            PlaybackViewModel = new PlaybackViewModel(DispatcherQueue.GetForCurrentThread(), VisualizationType.OverlayPlayback);
             _mainAppViewId = (int)e.Parameter;
 
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
@@ -38,7 +40,7 @@ namespace FluentMPC.Views
         {
             var currentViewId = -1;
 
-            await DispatcherHelper.AwaitableRunAsync(CoreWindow.GetForCurrentThread().Dispatcher,() =>
+            await DispatcherQueue.GetForCurrentThread().EnqueueAsync(() =>
             { 
                 currentViewId = ApplicationView.GetForCurrentView().Id;
             });

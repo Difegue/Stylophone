@@ -50,6 +50,7 @@ namespace FluentMPC.ViewModels
                 PrimaryButtonText = "OKButtonText".GetLocalized(),
                 CloseButtonText = "CancelButtonText".GetLocalized()
             };
+            confirmDialog.RequestedTheme = ThemeSelectorService.Theme;
 
             ContentDialogResult result = await confirmDialog.ShowAsync();
             if (result != ContentDialogResult.Primary)

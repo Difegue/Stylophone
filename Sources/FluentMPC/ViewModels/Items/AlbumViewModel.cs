@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.System.Threading;
 using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace FluentMPC.ViewModels.Items
@@ -189,7 +190,7 @@ namespace FluentMPC.ViewModels.Items
         public AlbumViewModel(string albumName)
         {
             Name = albumName;
-            DominantColor = Colors.Black;
+            DominantColor = (Color)Application.Current.Resources["SystemAccentColor"];
             Files = new List<IMpdFile>();
             IsDetailLoading = false;
 
