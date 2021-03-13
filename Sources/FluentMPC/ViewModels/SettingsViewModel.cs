@@ -212,6 +212,7 @@ namespace FluentMPC.ViewModels
                                 PrimaryButtonText = "OKButtonText".GetLocalized(),
                                 CloseButtonText = "CancelButtonText".GetLocalized()
                             };
+                            confirmDialog.RequestedTheme = ThemeSelectorService.Theme;
 
                             ContentDialogResult result = await confirmDialog.ShowAsync();
                             if (result != ContentDialogResult.Primary)
@@ -286,10 +287,10 @@ namespace FluentMPC.ViewModels
         {
             if (IsCheckingServer) return;
 
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsCheckingServer = true);
+            await DispatcherService.ExecuteOnUIThreadAsync(() => IsCheckingServer = true);
 
             await MPDConnectionService.InitializeAsync();
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            await DispatcherService.ExecuteOnUIThreadAsync(() =>
             {
                 OnPropertyChanged(nameof(IsServerValid));
                 IsCheckingServer = false;
@@ -312,7 +313,7 @@ namespace FluentMPC.ViewModels
                 }
 
                 // Build info string
-                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                await DispatcherService.ExecuteOnUIThreadAsync(() =>
                 ServerInfo = $"MPD Protocol {MPDConnectionService.Version}\n" +
                              $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
                              $"Database last updated {lastUpdatedDb}");

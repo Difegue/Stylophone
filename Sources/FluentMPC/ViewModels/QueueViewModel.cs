@@ -165,7 +165,7 @@ namespace FluentMPC.ViewModels
                     if (response != null)
                     {
                         Source.CollectionChanged -= Source_CollectionChanged;
-                        await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
+                        await DispatcherService.ExecuteOnUIThreadAsync(() => {
 
                             // If the queue was cleared, PlaylistLength is 0.
                             if (status.PlaylistLength == 0)
@@ -215,7 +215,7 @@ namespace FluentMPC.ViewModels
                     tracks.Add(new TrackViewModel(item, false));
                 }
 
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() => {
+            await DispatcherService.ExecuteOnUIThreadAsync(() => {
                 Source.Clear();
                 Source.AddRange(tracks);
             });

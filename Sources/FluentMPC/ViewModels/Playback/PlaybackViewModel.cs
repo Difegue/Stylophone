@@ -2,6 +2,7 @@
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
 using FluentMPC.Views;
+using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
@@ -17,6 +18,7 @@ using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -26,7 +28,7 @@ namespace FluentMPC.ViewModels.Playback
 {
     public class PlaybackViewModel : Observable
     {
-        private readonly CoreDispatcher _currentUiDispatcher;
+        private readonly DispatcherQueue _currentDispatcherQueue;
 
         private CancellationTokenSource _albumArtCancellationSource = new CancellationTokenSource();
 
@@ -69,17 +71,16 @@ namespace FluentMPC.ViewModels.Playback
         public VisualizationType HostType
         {
             get => _hostType;
-            set {
+            set
+            {
                 Set(ref _hostType, value);
 
-                Task.Run(async () =>
-                {
-                    _albumArtCancellationSource.Cancel();
-                    _albumArtCancellationSource = new CancellationTokenSource();
 
-                    // Reload CurrentTrack to take into account the new VisualizationType
-                    CurrentTrack = new TrackViewModel(CurrentTrack.File, true, HostType, _currentUiDispatcher, _albumArtCancellationSource.Token);
-                });
+                _albumArtCancellationSource.Cancel();
+                _albumArtCancellationSource = new CancellationTokenSource();
+
+                // Reload CurrentTrack to take into account the new VisualizationType
+                CurrentTrack = new TrackViewModel(CurrentTrack.File, true, HostType, _currentDispatcherQueue, _albumArtCancellationSource.Token);
             }
         }
 
@@ -202,7 +203,7 @@ namespace FluentMPC.ViewModels.Playback
                 // Set the volume
                 volumeTasks.Add(Task.Run(async () =>
                 {
-                    await MPDConnectionService.SafelySendCommandAsync(new SetVolumeCommand((byte)value), _currentUiDispatcher);
+                    await MPDConnectionService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
                     Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
                 }, cts.Token));
 
@@ -300,12 +301,12 @@ namespace FluentMPC.ViewModels.Playback
 
         #region Constructors
 
-        public PlaybackViewModel() : this(CoreApplication.MainView.Dispatcher, VisualizationType.None)
+        public PlaybackViewModel() : this(DispatcherService.DispatcherQueue, VisualizationType.None)
         { }
 
-        public PlaybackViewModel(CoreDispatcher uiDispatcher, VisualizationType hostType)
+        public PlaybackViewModel(DispatcherQueue uiDispatcher, VisualizationType hostType)
         {
-            _currentUiDispatcher = uiDispatcher;
+            _currentDispatcherQueue = uiDispatcher;
             _hostType = hostType;
 
             // Bind the methods that we need
@@ -320,7 +321,7 @@ namespace FluentMPC.ViewModels.Playback
             OnConnectionChanged(null, null);
 
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
-            NavigationService.Navigated += (s, e) => DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => OnPropertyChanged(nameof(ShowTrackName)));
+            NavigationService.Navigated += (s, e) => _currentDispatcherQueue.EnqueueAsync(() => OnPropertyChanged(nameof(ShowTrackName)));
 
             // Start the timer if ready
             if (!_updateInformationTimer.IsEnabled)
@@ -339,7 +340,7 @@ namespace FluentMPC.ViewModels.Playback
             }
         }
 
-        private bool _isOnMainDispatcher => _currentUiDispatcher == CoreApplication.MainView.CoreWindow.Dispatcher;
+        private bool _isOnMainDispatcher => _currentDispatcherQueue == DispatcherService.DispatcherQueue;
 
         private void CurrentOnLeavingBackground(object sender, LeavingBackgroundEventArgs leavingBackgroundEventArgs)
         {
@@ -366,7 +367,7 @@ namespace FluentMPC.ViewModels.Playback
             if (!HasNextTrack)
                 UpdateUpNextAsync();
 
-            await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await _currentDispatcherQueue.EnqueueAsync(() =>
             {
                 // Set the current time value - if the user isn't scrobbling the slider
                 if (!_isUserMovingSlider)
@@ -398,7 +399,7 @@ namespace FluentMPC.ViewModels.Playback
             var playlistName = await DialogService.ShowAddToPlaylistDialog(false);
             if (playlistName == null) return;
 
-            var req = await MPDConnectionService.SafelySendCommandAsync(new SaveCommand(playlistName), _currentUiDispatcher);
+            var req = await MPDConnectionService.SafelySendCommandAsync(new SaveCommand(playlistName));
 
             if (req != null)
                 NotificationService.ShowInAppNotification(string.Format("AddedToPlaylistText".GetLocalized(), playlistName));
@@ -407,7 +408,7 @@ namespace FluentMPC.ViewModels.Playback
         /// <summary>
         /// Clear the MPD queue.
         /// </summary>
-        public async void ClearQueue() => await MPDConnectionService.SafelySendCommandAsync(new ClearCommand(), _currentUiDispatcher);
+        public async void ClearQueue() => await MPDConnectionService.SafelySendCommandAsync(new ClearCommand());
 
         /// <summary>
         ///     Toggle if the current track/playlist should repeat
@@ -438,8 +439,8 @@ namespace FluentMPC.ViewModels.Playback
             // Set the volume
             shuffleTasks.Add(Task.Run(async () =>
             {
-                await MPDConnectionService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled), _currentUiDispatcher);
-                await MPDConnectionService.SafelySendCommandAsync(new SingleCommand(IsSingleEnabled), _currentUiDispatcher);
+                await MPDConnectionService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled));
+                await MPDConnectionService.SafelySendCommandAsync(new SingleCommand(IsSingleEnabled));
                 Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
             }, cts.Token));
 
@@ -459,9 +460,9 @@ namespace FluentMPC.ViewModels.Playback
             // Set the volume
             shuffleTasks.Add(Task.Run(async () =>
             {
-                await MPDConnectionService.SafelySendCommandAsync(new RandomCommand(IsShuffleEnabled), _currentUiDispatcher);
+                await MPDConnectionService.SafelySendCommandAsync(new RandomCommand(IsShuffleEnabled));
 
-                await DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, UpdateUpNextAsync);
+                await _currentDispatcherQueue.EnqueueAsync(UpdateUpNextAsync);
                 Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
             }, cts.Token));
         }
@@ -497,7 +498,7 @@ namespace FluentMPC.ViewModels.Playback
         ///     Toggles the state between the track playing
         ///     and not playing
         /// </summary>
-        public void ChangePlaybackState() => _ = MPDConnectionService.SafelySendCommandAsync(new PauseResumeCommand(), _currentUiDispatcher);
+        public void ChangePlaybackState() => _ = MPDConnectionService.SafelySendCommandAsync(new PauseResumeCommand());
 
         /// <summary>
         ///     Go forward one track
@@ -506,7 +507,7 @@ namespace FluentMPC.ViewModels.Playback
         {
             // Immediately cancel album art loading if it's in progress to free up MPD server resources
             _albumArtCancellationSource.Cancel();
-            _ = MPDConnectionService.SafelySendCommandAsync(new NextCommand(), _currentUiDispatcher);
+            _ = MPDConnectionService.SafelySendCommandAsync(new NextCommand());
         }
 
         /// <summary>
@@ -516,7 +517,7 @@ namespace FluentMPC.ViewModels.Playback
         {
             // Immediately cancel album art loading if it's in progress to free up MPD server resources
             _albumArtCancellationSource.Cancel();
-            _ = MPDConnectionService.SafelySendCommandAsync(new PreviousCommand(), _currentUiDispatcher);
+            _ = MPDConnectionService.SafelySendCommandAsync(new PreviousCommand());
         }
 
         #endregion Track Playback State
@@ -540,7 +541,7 @@ namespace FluentMPC.ViewModels.Playback
             TimeRemaining = "-" + MiscHelpers.FormatTimeString(remainingTime.TotalMilliseconds);
 
             // Set the track position
-            await MPDConnectionService.SafelySendCommandAsync(new SeekCurCommand(CurrentTimeValue), _currentUiDispatcher);
+            await MPDConnectionService.SafelySendCommandAsync(new SeekCurCommand(CurrentTimeValue));
 
             // Wait for MPD Status to catch up before we start auto-updating the slider again
             _ = Task.Run(() =>
@@ -554,11 +555,11 @@ namespace FluentMPC.ViewModels.Playback
             var nextSongId = MPDConnectionService.CurrentStatus.NextSongId;
             if (nextSongId != -1)
             {
-                var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId), _currentUiDispatcher);
+                var response = await MPDConnectionService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId));
 
                 if (response != null)
                 {
-                    NextTrack = new TrackViewModel(response.First(), false, dispatcher:_currentUiDispatcher);
+                    NextTrack = new TrackViewModel(response.First(), false, dispatcherQueue: _currentDispatcherQueue);
                 }
             }
         }
@@ -575,19 +576,19 @@ namespace FluentMPC.ViewModels.Playback
                 return;
 
             // Get song info from MPD
-            var response = await MPDConnectionService.SafelySendCommandAsync(new CurrentSongCommand(), _currentUiDispatcher);
+            var response = await MPDConnectionService.SafelySendCommandAsync(new CurrentSongCommand());
 
             // Cancel previous track art load
             _albumArtCancellationSource.Cancel();
             _albumArtCancellationSource = new CancellationTokenSource();
 
             // Run all this on the UI thread
-            await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await _currentDispatcherQueue.EnqueueAsync(() =>
             {
                 if (response != null)
                 {
                     // Set the new current track, updating the UI with the correct Dispatcher
-                    CurrentTrack = new TrackViewModel(response, true, HostType, _currentUiDispatcher, _albumArtCancellationSource.Token);
+                    CurrentTrack = new TrackViewModel(response, true, HostType, _currentDispatcherQueue, _albumArtCancellationSource.Token);
                 }
                 else
                 {
@@ -606,7 +607,7 @@ namespace FluentMPC.ViewModels.Playback
                         Singleton<LiveTileService>.Instance.UpdatePlayingSong(CurrentTrack);
                         SystemMediaControlsService.UpdateMetadata(CurrentTrack);
                     });
-                    
+
                     UpdateUpNextAsync();
 
                 }
@@ -620,7 +621,7 @@ namespace FluentMPC.ViewModels.Playback
 
         private async void OnStateChange(object sender, EventArgs eventArgs)
         {
-            await _currentUiDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            await _currentDispatcherQueue.EnqueueAsync(() =>
             {
                 // Remove completed requests
                 volumeTasks.RemoveAll(t => t.IsCompleted);
@@ -727,14 +728,14 @@ namespace FluentMPC.ViewModels.Playback
                 var compactViewId = -1;
                 var currentViewId = -1;
 
-                await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                await DispatcherService.ExecuteOnUIThreadAsync(() =>
                 {
                     // Get the Id back
                     currentViewId = ApplicationView.GetForCurrentView().Id;
                 });
 
                 // Create a new window within the view
-                await DispatcherHelper.ExecuteOnUIThreadAsync(compactView, () =>
+                await compactView.DispatcherQueue.EnqueueAsync(() =>
                 {
                     // Create a new frame and navigate it to the overlay view
                     var overlayFrame = new Frame();

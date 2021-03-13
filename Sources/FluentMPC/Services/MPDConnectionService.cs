@@ -134,16 +134,23 @@ namespace FluentMPC.Services
         /// </summary>
         /// <typeparam name="T">Return type of the command</typeparam>
         /// <param name="command">IMpcCommand to send</param>
-        /// <param name="dispatcher">CoreDispatcher, needed if you're executing commands in a state where the dispatcher can be a secondary one</param>
         /// <returns>The command results, or default value.</returns>
-        public static async Task<T> SafelySendCommandAsync<T>(IMpcCommand<T> command, CoreDispatcher dispatcher = null)
+        public static async Task<T> SafelySendCommandAsync<T>(IMpcCommand<T> command)
         {
             try
             {
                 using (var c = await GetConnectionAsync())
                 {
                     var response = await c.InternalResource.SendAsync(command);
-                    if (!response.IsResponseValid) throw new Exception($"Invalid server response: {response}.");
+                    if (!response.IsResponseValid)
+                    {
+                        // If we have an MpdError string, only show that as the error to avoid extra noise
+                        var mpdError = response.Response?.Result?.MpdError;
+                        if (mpdError != null)
+                            throw new Exception(mpdError);
+                        else
+                            throw new Exception($"Invalid server response: {response}.");
+                    }
 
                     return response.Response.Content;
                 }
@@ -152,7 +159,6 @@ namespace FluentMPC.Services
             {
                 try
                 {
-                    if (dispatcher == null || dispatcher == CoreApplication.MainView.CoreWindow.Dispatcher) // Only invoke notificationservice on the main window
                         NotificationService.ShowInAppNotification($"Sending {command.GetType().Name} failed: {e.Message}", 0);
                 } catch 
                 {

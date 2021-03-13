@@ -26,7 +26,7 @@
                 <TextBox x:Uid="Settings_ServerHost" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}"/>
 
                 <controls:NumberBox x:Uid="Settings_ServerPort" SpinButtonPlacementMode="Compact" Margin="{StaticResource XSmallTopMargin}"
-                                    Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}"/>
+                                    Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}" Minimum="1" Maximum="65536"/>
 
                 <ProgressBar Margin="{StaticResource XSmallTopMargin}" IsIndeterminate="True"
                              Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>

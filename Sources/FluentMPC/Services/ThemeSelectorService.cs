@@ -5,7 +5,9 @@ using FluentMPC.Helpers;
 
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
 namespace FluentMPC.Services
@@ -38,6 +40,30 @@ namespace FluentMPC.Services
                     if (Window.Current.Content is FrameworkElement frameworkElement)
                     {
                         frameworkElement.RequestedTheme = Theme;
+
+                        // https://stackoverflow.com/questions/48201278/uwp-changing-titlebar-buttonforegroundcolor-with-themeresource
+                        Color color;
+                        var appTheme = Application.Current.RequestedTheme;
+
+                        switch (Theme)
+                        {
+                            case ElementTheme.Default:
+                                color = ((Color)Application.Current.Resources["SystemBaseHighColor"]);
+                                break;
+                            case ElementTheme.Light:
+                                if (appTheme == ApplicationTheme.Light) { color = ((Color)Application.Current.Resources["SystemBaseHighColor"]); }
+                                else { color = ((Color)Application.Current.Resources["SystemAltHighColor"]); }
+                                break;
+                            case ElementTheme.Dark:
+                                if (appTheme == ApplicationTheme.Light) { color = ((Color)Application.Current.Resources["SystemAltHighColor"]); }
+                                else { color = ((Color)Application.Current.Resources["SystemBaseHighColor"]); }
+                                break;
+                            default:
+                                break;
+                        }
+
+                        ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                        titleBar.ButtonForegroundColor = color;
                     }
                 });
             }

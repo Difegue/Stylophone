@@ -24,7 +24,7 @@ namespace FluentMPC.Views
             base.OnNavigatedTo(e);
             if (e.Parameter is string searchText)
             {
-                ViewModel.InitializeAsync(searchText);
+                ViewModel.Initialize(searchText);
             }
         }
 

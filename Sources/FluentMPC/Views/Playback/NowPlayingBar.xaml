@@ -38,7 +38,7 @@
         </Grid.ColumnDefinitions>
 
         <!--  Track Background  -->
-        <controls:ImageEx
+        <Image
             Grid.ColumnSpan="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
@@ -102,8 +102,7 @@
                     Color="Black">
 
                     <Grid Width="70" Height="70" CornerRadius="3" >
-                        <controls:ImageEx  PlaceholderSource="/Assets/AlbumPlaceholder.png" PlaceholderStretch="UniformToFill" Style="{StaticResource NoAnimationImageEx}"
-	                                            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" />
+                        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" />
                     </Grid>
                    
                     

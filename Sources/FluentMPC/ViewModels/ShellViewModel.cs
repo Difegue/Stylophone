@@ -81,14 +81,14 @@ namespace FluentMPC.ViewModels
 
             NotificationService.InAppNotificationRequested += Show_InAppNotification;
 
-            DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
+            DispatcherService.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
             MPDConnectionService.PlaylistsChanged += (s,e) =>
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
+                 DispatcherService.ExecuteOnUIThreadAsync(() => UpdatePlaylistNavigation());
         }
 
         private void Show_InAppNotification(object sender, InAppNotificationRequestedEventArgs e)
         {
-            _notificationHolder.Show(e.NotificationText, e.NotificationTime);
+            DispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(e.NotificationText, e.NotificationTime));
         }
 
         private async void OnLoaded()

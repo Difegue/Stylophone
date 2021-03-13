@@ -17,12 +17,14 @@ using Windows.UI;
 using MpcNET.Commands.Queue;
 using System.Threading;
 using FluentMPC.ViewModels.Playback;
+using Windows.System;
+using Microsoft.Toolkit.Uwp;
 
 namespace FluentMPC.ViewModels.Items
 {
     public class TrackViewModel : Observable
     {
-        private readonly CoreDispatcher _currentUiDispatcher;
+        private readonly DispatcherQueue _currentDispatcherQueue;
 
         public IMpdFile File { get; }
 
@@ -30,14 +32,14 @@ namespace FluentMPC.ViewModels.Items
 
         public bool IsPlaying => MPDConnectionService.CurrentStatus.SongId == File.Id;
 
-        internal void UpdatePlayingStatus() => DispatcherHelper.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
+        internal void UpdatePlayingStatus() => DispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
 
         public BitmapImage AlbumArt
         {
             get => _albumArt;
             private set
             {
-                DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => Set(ref _albumArt, value));
+                _currentDispatcherQueue.EnqueueAsync(() => Set(ref _albumArt, value));
             }
         }
 
@@ -48,7 +50,7 @@ namespace FluentMPC.ViewModels.Items
             get => _albumColor;
             private set
             {
-                DispatcherHelper.AwaitableRunAsync(_currentUiDispatcher, () => Set(ref _albumColor, value));
+                _currentDispatcherQueue.EnqueueAsync(() => Set(ref _albumColor, value));
             }
         }
 
@@ -60,7 +62,7 @@ namespace FluentMPC.ViewModels.Items
             get => _isLight;
             private set
             {
-                DispatcherHelper.ExecuteOnUIThreadAsync(() => Set(ref _isLight, value));
+                _currentDispatcherQueue.EnqueueAsync(() => Set(ref _isLight, value));
             }
         }
 
@@ -123,26 +125,35 @@ namespace FluentMPC.ViewModels.Items
             }
         }
 
-        public TrackViewModel(IMpdFile file, bool getAlbumArt = false, VisualizationType hostType = VisualizationType.None, CoreDispatcher dispatcher = null, CancellationToken albumArtCancellationToken = default)
+        public TrackViewModel(IMpdFile file, bool getAlbumArt = false, VisualizationType hostType = VisualizationType.None, DispatcherQueue dispatcherQueue = null, CancellationToken albumArtCancellationToken = default)
         {
             MPDConnectionService.SongChanged += (s, e) => UpdatePlayingStatus();
 
             // Use specific UI dispatcher if given
             // (Used for the compact view scenario, which rolls its own dispatcher..)
-            _currentUiDispatcher = dispatcher ?? Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
+            _currentDispatcherQueue = dispatcherQueue ?? DispatcherService.DispatcherQueue;
 
             File = file;
             DominantColor = Colors.Black;
 
             // Fire off an async request to get the album art from MPD.
             if (getAlbumArt)
+            {
+
                 Task.Run(async () =>
                 {
+                    await _currentDispatcherQueue.EnqueueAsync(() =>
+                    {
+                        var placeholder = new BitmapImage(new Uri("ms-appx:///Assets/AlbumPlaceholder.png"));
+                        placeholder.DecodePixelWidth = (int)hostType;
+                        AlbumArt = placeholder;
+                    });
+
                     // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
                     var calculateDominantColor = hostType.IsOneOf(VisualizationType.NowPlayingBar, VisualizationType.FullScreenPlayback);
 
                     // Use the int value of the VisualizationType to know how large the decoded bitmap has to be.
-                    var art = await AlbumArtService.GetAlbumArtAsync(File, calculateDominantColor, (int)hostType, _currentUiDispatcher, albumArtCancellationToken);
+                    var art = await AlbumArtService.GetAlbumArtAsync(File, calculateDominantColor, (int)hostType, _currentDispatcherQueue, albumArtCancellationToken);
 
                     if (art != null)
                     {
@@ -155,6 +166,7 @@ namespace FluentMPC.ViewModels.Items
                         AlbumArt = art.ArtBitmap;
                     }
                 });
+            }
         }
 
     }
