@@ -163,7 +163,7 @@
                                                         Opacity="1"
                                                         RenderTransformOrigin="0.5,0.5"
                                                         Stroke="{TemplateBinding BorderBrush}"
-                                                        StrokeThickness="3">
+                                                        StrokeThickness="4">
                                                 <Ellipse.RenderTransform>
                                                     <ScaleTransform
                                                                 x:Name="scaleTrans"
@@ -175,8 +175,8 @@
                                                         <VisualState x:Name="Normal" />
                                                         <VisualState x:Name="PointerOver">
                                                             <Storyboard>
-                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="thumb" Storyboard.TargetProperty="Fill">
-                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorLight3}" />
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="thumb" Storyboard.TargetProperty="StrokeThickness">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="3" />
                                                                 </ObjectAnimationUsingKeyFrames>
                                                             </Storyboard>
                                                         </VisualState>
@@ -191,10 +191,7 @@
                                                                     <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1.1" />
                                                                 </DoubleAnimationUsingKeyFrames>
                                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="thumb" Storyboard.TargetProperty="Fill">
-                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White" />
-                                                                </ObjectAnimationUsingKeyFrames>
-                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="thumb" Storyboard.TargetProperty="Stroke">
-                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White" />
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{TemplateBinding Foreground}" />
                                                                 </ObjectAnimationUsingKeyFrames>
                                                             </Storyboard>
                                                         </VisualState>
