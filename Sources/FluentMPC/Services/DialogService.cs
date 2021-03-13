@@ -23,9 +23,7 @@ namespace FluentMPC.Services
         public static async Task<string> ShowAddToPlaylistDialog(bool allowExistingPlaylists = true)
         {
             var dialog = new AddToPlaylistDialog(allowExistingPlaylists);
-            var result = ContentDialogResult.None;
-
-            await DispatcherService.ExecuteOnUIThreadAsync(async () => result = await dialog.ShowAsync());
+            var result = await DispatcherService.DispatcherQueue.EnqueueAsync(async () => await dialog.ShowAsync());
 
             // Return new playlist name if checked, selected playlist otherwise
             return result == ContentDialogResult.Primary ? dialog.AddNewPlaylist ? dialog.PlaylistName : dialog.SelectedPlaylist : null;

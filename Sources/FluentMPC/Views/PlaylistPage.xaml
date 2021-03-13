@@ -85,7 +85,7 @@
                         <Setter Target="propertiesGroup1.(RelativePanel.RightOf)" Value="itemHero" />
                         <Setter Target="propertiesGroup1.(RelativePanel.Below)" Value="info" />
                         <Setter Target="propertiesGroup1.Width" Value="400" />
-                        <Setter Target="title.Style" Value="{ThemeResource SubheaderTextBlockStyle}"/>
+                        <Setter Target="title.FontSize" Value="32"/>
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}"/>
                         <Setter Target="Header.Margin" Value="0,0,0,0"/>
                         <Setter Target="Header.Padding" Value="24,46,24,36" />
@@ -223,7 +223,6 @@
 
                     <TextBlock
                         x:Name="title"
-                        Margin="{StaticResource XXSmallTopMargin}"
                         RelativePanel.AlignTopWithPanel="True"
                         RelativePanel.RightOf="itemHero"
                         Style="{ThemeResource TitleTextBlockStyle}"
