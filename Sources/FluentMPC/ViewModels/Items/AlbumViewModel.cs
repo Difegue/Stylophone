@@ -9,14 +9,11 @@ using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
 using MpcNET.Tags;
 using MpcNET.Types;
-using Sundew.Base.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.System.Threading;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
@@ -42,12 +39,12 @@ namespace FluentMPC.ViewModels.Items
         }
         private string _artist;
 
-        public IList<IMpdFile> Files
+        public List<IMpdFile> Files
         {
             get => _files;
             set => Set(ref _files, value);
         }
-        private IList<IMpdFile> _files;
+        private List<IMpdFile> _files;
 
         private bool _detailLoading;
         public bool IsDetailLoading

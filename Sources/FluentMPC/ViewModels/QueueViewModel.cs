@@ -3,21 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels.Items;
-using Microsoft.Toolkit.Uwp.Helpers;
-using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
 using MpcNET.Commands.Status;
-using MpcNET.Types;
-using Sundew.Base.Collections;
 
 namespace FluentMPC.ViewModels
 {
@@ -200,7 +195,7 @@ namespace FluentMPC.ViewModels
             }
         }
 
-        public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
+        public RangedObservableCollection<TrackViewModel> Source { get; } = new RangedObservableCollection<TrackViewModel>();
 
         public bool IsSourceEmpty => Source.Count == 0;
 

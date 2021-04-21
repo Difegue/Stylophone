@@ -64,7 +64,6 @@ namespace FluentMPC.Services
 
         private async Task InitializeAsync()
         {
-            await Singleton<BackgroundTaskService>.Instance.RegisterBackgroundTasksAsync().ConfigureAwait(false);
             await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
         }
 
@@ -100,7 +99,6 @@ namespace FluentMPC.Services
 
         private IEnumerable<ActivationHandler> GetActivationHandlers()
         {
-            yield return Singleton<BackgroundTaskService>.Instance;
             yield return Singleton<LiveTileService>.Instance;
             yield return Singleton<NotificationService>.Instance;
         }

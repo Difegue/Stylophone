@@ -4,15 +4,13 @@ using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Types;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
-using Sundew.Base.Collections;
 using System.Linq;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
+using System.Collections.ObjectModel;
 using MpcNET;
 
 namespace FluentMPC.ViewModels.Items
@@ -38,8 +36,8 @@ namespace FluentMPC.ViewModels.Items
         public bool IsDirectory { get; set; }
         public bool IsLoaded { get; set; }
 
-        private ObservableCollection<FilePathViewModel> _childPaths;
-        public ObservableCollection<FilePathViewModel> Children
+        private RangedObservableCollection<FilePathViewModel> _childPaths;
+        public RangedObservableCollection<FilePathViewModel> Children
         {
             get => _childPaths;
             set => Set(ref _childPaths, value);
@@ -126,7 +124,7 @@ namespace FluentMPC.ViewModels.Items
             if (file is MpdDirectory)
             {
                 IsDirectory = true;
-                _childPaths = new ObservableCollection<FilePathViewModel>();
+                _childPaths = new RangedObservableCollection<FilePathViewModel>();
 
                 // Add a bogus child that'll be replaced when the list is loaded
                 _childPaths.Add(new FilePathViewModel("LoadingTreeItem".GetLocalized()));
@@ -137,7 +135,7 @@ namespace FluentMPC.ViewModels.Items
         public FilePathViewModel(string name)
         {
             Name = name;
-            _childPaths = new ObservableCollection<FilePathViewModel>();
+            _childPaths = new RangedObservableCollection<FilePathViewModel>();
         }
 
     }

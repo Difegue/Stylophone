@@ -11,12 +11,9 @@ using MpcNET;
 using MpcNET.Types;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Status;
-using MpcNET.Commands.Queue;
-using Sundew.Base.Collections;
 using Windows.System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Core;
-using Windows.ApplicationModel.Core;
 
 namespace FluentMPC.Services
 {
@@ -52,7 +49,7 @@ namespace FluentMPC.Services
             }
         }
 
-        public static IList<MpdPlaylist> Playlists { get; private set; } = new List<MpdPlaylist>();
+        public static List<MpdPlaylist> Playlists { get; private set; } = new List<MpdPlaylist>();
         public static ObjectPool<PooledObjectWrapper<MpcConnection>> ConnectionPool;
 
         public static event EventHandler<SongChangedEventArgs> SongChanged;

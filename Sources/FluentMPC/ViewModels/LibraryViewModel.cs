@@ -16,12 +16,11 @@ using FluentMPC.Views;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using MpcNET.Commands.Database;
 using MpcNET.Tags;
-using Sundew.Base.Collections;
 using Windows.UI.Xaml.Data;
 
 namespace FluentMPC.ViewModels
 {
-    public class LazyLoadingAlbumCollection : ObservableCollection<AlbumViewModel>, IList<AlbumViewModel>, ICollection<AlbumViewModel>, IReadOnlyList<AlbumViewModel>,
+    public class LazyLoadingAlbumCollection : RangedObservableCollection<AlbumViewModel>, IList<AlbumViewModel>, ICollection<AlbumViewModel>, IReadOnlyList<AlbumViewModel>,
         IReadOnlyCollection<AlbumViewModel>, IEnumerable<AlbumViewModel>, INotifyCollectionChanged, INotifyPropertyChanged, IItemsRangeInfo, IDisposable
     {
         private CancellationTokenSource cts;

@@ -166,6 +166,9 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
     </PackageReference>
+    <PackageReference Include="RangedObservableCollection">
+      <Version>1.0.1</Version>
+    </PackageReference>
     <PackageReference Include="System.Drawing.Common">
       <Version>5.0.2</Version>
     </PackageReference>

@@ -17,7 +17,7 @@ namespace MpcNET
     using System.Threading.Tasks;
     using MpcNET.Exceptions;
     using MpcNET.Message;
-    using Sundew.Base.ControlFlow;
+    using Polly;
 
     /// <summary>
     /// Keeps the connection to the MPD server and handels the most basic structure of the MPD protocol.
@@ -31,6 +31,9 @@ namespace MpcNET
         private TcpClient tcpClient;
         private NetworkStream networkStream;
 
+        private Policy retryPolicyWithReconnect;
+        private Exception lastException;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MpcConnection" /> class.
         /// </summary>
@@ -39,6 +42,15 @@ namespace MpcNET
         {
             ClearConnectionFields();
             this.server = server ?? throw new ArgumentNullException("Server IPEndPoint not set.", nameof(server));
+
+
+            retryPolicyWithReconnect = Policy
+                .Handle<Exception>()
+                .Retry(3, async (exception, retryCount, context) =>
+                {
+                    lastException = exception;
+                    await ReconnectAsync(true);
+                });
         }
 
         /// <summary>
@@ -108,11 +120,10 @@ namespace MpcNET
             IReadOnlyList<string> response = new List<string>();
             byte[] rawResponse = null;
 
-            var sendAttempter = new Attempter(3);
             var commandText = mpcCommand.Serialize();
-            while (sendAttempter.Attempt())
-            {
-                try
+
+            await retryPolicyWithReconnect.Execute(
+                async () =>
                 {
                     using (var writer = new StreamWriter(networkStream, Encoding, 512, true) { NewLine = "\n" })
                     {
@@ -124,28 +135,14 @@ namespace MpcNET
                     if (response.Any())
                     {
                         lastException = null;
-                        break;
+                        return;
                     }
 
                     throw new EmptyResponseException(commandText);
-                }
-                catch (Exception exception)
-                {
-                    lastException = exception;
-                    await ReconnectAsync(true);
-                }
-            }
+                });
 
             if (lastException != null)
             {
-                try
-                {
-                    await DisconnectAsync(false);
-                }
-                catch (Exception)
-                {
-                }
-
                 return new ErrorMpdMessage<TResponse>(mpcCommand, new ErrorMpdResponse<TResponse>(lastException));
             }
 
@@ -184,32 +181,31 @@ namespace MpcNET
 
         private async Task ReconnectAsync(bool isReconnect, CancellationToken token = default)
         {
-            var connectAttempter = new Attempter(3);
-            while (connectAttempter.Attempt())
-            {
-                token.ThrowIfCancellationRequested();
-
-                await DisconnectAsync(false);
-
-                tcpClient = new TcpClient();
-                using (token.Register(() => tcpClient.Close()))
+            await Policy
+                .Handle<Exception>()
+                .Retry(3).Execute(async () =>
                 {
-                    try
-                    {
-                        token.ThrowIfCancellationRequested();
-                        await tcpClient.ConnectAsync(server.Address, server.Port).ConfigureAwait(false);
-                    }
-                    catch (ObjectDisposedException) when (token.IsCancellationRequested)
-                    {
-                        token.ThrowIfCancellationRequested();
-                    }
-                }
+                    await DisconnectAsync(false);
+                    token.ThrowIfCancellationRequested();
 
-                if (tcpClient.Connected)
-                {
-                    break;
-                }
-            }
+                    tcpClient = new TcpClient();
+                    using (token.Register(() => tcpClient.Close()))
+                    {
+                        try
+                        {
+                            await tcpClient.ConnectAsync(server.Address, server.Port).ConfigureAwait(false);
+                        }
+                        catch (ObjectDisposedException) when (token.IsCancellationRequested)
+                        {
+                            token.ThrowIfCancellationRequested();
+                        }
+                    }
+
+                    if (tcpClient.Connected)
+                    {
+                        return;
+                    }
+                });
 
             networkStream = tcpClient.GetStream();
             using (var reader = new StreamReader(networkStream, Encoding, true, 512, true))
@@ -217,7 +213,7 @@ namespace MpcNET
                 var firstLine = await reader.ReadLineAsync();
                 if (firstLine != null && !firstLine.StartsWith(Constants.FirstLinePrefix))
                 {
-                    await DisconnectAsync(false);
+                    await DisconnectAsync();
                     throw new MpcConnectException("Response of mpd does not start with \"" + Constants.FirstLinePrefix + "\".");
                 }
 
@@ -287,7 +283,9 @@ namespace MpcNET
 
             ClearConnectionFields();
 
-            Disconnected?.Invoke(this, new EventArgs());
+            if (isExplicitDisconnect)
+                Disconnected?.Invoke(this, new EventArgs());
+
             return Task.CompletedTask;
         }
 
