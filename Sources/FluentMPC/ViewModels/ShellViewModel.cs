@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 
 using FluentMPC.Helpers;
-using FluentMPC.Views;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Stylophone.Common.ViewModels;
 using Windows.System;
 using Stylophone.Common.Interfaces;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
 
 using WinUI = Microsoft.UI.Xaml.Controls;
-using Stylophone.Localization.Strings;
 using Stylophone.Common.Services;
 using FluentMPC.Services;
+using Windows.Foundation;
+using MpcNET.Commands.Playback;
 
 namespace FluentMPC.ViewModels
 {
@@ -25,6 +23,7 @@ namespace FluentMPC.ViewModels
         private IList<KeyboardAccelerator> _keyboardAccelerators;
         private KeyboardAccelerator _altLeftKeyboardAccelerator;
         private KeyboardAccelerator _backKeyboardAccelerator;
+        private KeyboardAccelerator _spaceKeyboardAccelerator;
         
         private WinUI.NavigationView _navigationView;
         private WinUI.NavigationViewItem _playlistContainer;
@@ -50,10 +49,9 @@ namespace FluentMPC.ViewModels
             _navigationView.AutoSuggestBox.TextChanged += UpdateSearchSuggestions;
             _navigationView.AutoSuggestBox.QuerySubmitted += HandleSearchRequest;
 
-            _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
-            _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack);
-
-            // TODO: Space play/pause goes here
+            _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, GoBack, VirtualKeyModifiers.Menu);
+            _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack, GoBack);
+            _spaceKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Space, PauseOrPlay);
         }
 
         private void UpdateNavigationViewSelection(object sender, CoreNavigationEventArgs e)
@@ -110,6 +108,7 @@ namespace FluentMPC.ViewModels
             // More info on tracking issue https://github.com/Microsoft/microsoft-ui-xaml/issues/8
             _keyboardAccelerators.Add(_altLeftKeyboardAccelerator);
             _keyboardAccelerators.Add(_backKeyboardAccelerator);
+            _keyboardAccelerators.Add(_spaceKeyboardAccelerator);
         }
 
         protected override void OnItemInvoked(object args)
@@ -164,7 +163,7 @@ namespace FluentMPC.ViewModels
             await HandleSearchRequestAsync(sender.Text, args.ChosenSuggestion);
         }
 
-        private KeyboardAccelerator BuildKeyboardAccelerator(VirtualKey key, VirtualKeyModifiers? modifiers = null)
+        private KeyboardAccelerator BuildKeyboardAccelerator(VirtualKey key, TypedEventHandler<KeyboardAccelerator, KeyboardAcceleratorInvokedEventArgs> onInvoked, VirtualKeyModifiers? modifiers = null)
         {
             var keyboardAccelerator = new KeyboardAccelerator() { Key = key };
             if (modifiers.HasValue)
@@ -172,14 +171,20 @@ namespace FluentMPC.ViewModels
                 keyboardAccelerator.Modifiers = modifiers.Value;
             }
 
-            keyboardAccelerator.Invoked += OnKeyboardAcceleratorInvoked;
+            keyboardAccelerator.Invoked += onInvoked;
             return keyboardAccelerator;
         }
 
-        private void OnKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        private void GoBack(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
             var result = _navigationService.GoBack();
             args.Handled = result;
+        }
+
+        private async void PauseOrPlay(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        {
+            await _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+            args.Handled = true;
         }
     }
 }

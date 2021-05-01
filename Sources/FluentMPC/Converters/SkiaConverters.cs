@@ -1,10 +1,7 @@
 ﻿using SkiaSharp;
-using Stylophone.Common.Helpers;
 using System;
 using SkiaSharp.Views.UWP;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 
 namespace FluentMPC.Helpers
 {
