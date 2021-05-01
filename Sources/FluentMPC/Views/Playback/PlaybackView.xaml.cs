@@ -1,9 +1,5 @@
-﻿using FluentMPC.Services;
-using FluentMPC.ViewModels.Playback;
-using Microsoft.Toolkit.Uwp.Helpers;
-using System;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
+﻿using FluentMPC.ViewModels;
+using Stylophone.Common.Helpers;
 using Windows.UI.Xaml.Navigation;
 
 namespace FluentMPC.Views

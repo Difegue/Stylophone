@@ -26,15 +26,13 @@ namespace FluentMPC.Views
 
     public sealed partial class ShellPage : Page
     {
-        public ShellViewModel ViewModel { get; } = new ShellViewModel();
+
+        public ShellViewModel ViewModel => (ShellViewModel)DataContext;
 
         public ShellPage()
         {
-            // First View, use that to initialize our cached DispatcherQueue
-            DispatcherService.Initialize();
-
             InitializeComponent();
-            DataContext = ViewModel;
+            DataContext = ((App)Application.Current).Services.GetService(typeof(ShellViewModel));
             ViewModel.Initialize(shellFrame, navigationView, playlistContainer, notificationHolder, KeyboardAccelerators);
         }
 
@@ -56,31 +54,12 @@ namespace FluentMPC.Views
                 // Get the pane's grid, which receives all our shadows
                 var paneContentGrid = rootGrid.FindName("PaneContentGrid") as Grid;
 
-                // Shadow emitters for the header. The header has grids for both its content and top padding, so we need to shadow up both of them.
-                var headerContent = rootGrid.FindName("HeaderContent") as ContentControl;
-                var headerTopContent = rootGrid.FindName("ContentTopPadding") as Grid;
-                var headerShadow = new ThemeShadow();
-                var headerTopShadow = new ThemeShadow();
-
-                // Remove default HeaderContent margin so the shadow can be cast correctly.
-                // You can set NavigationViewHeaderMargin again in your own content to match.
-                headerContent.Margin = new Thickness(0);
-
                 // Set receivers
-                headerShadow.Receivers.Add(paneContentGrid);
-                headerTopShadow.Receivers.Add(paneContentGrid);
                 ContentShadow.Receivers.Add(paneContentGrid);
-
                 //NowPlayingShadow.Receivers.Add(paneContentGrid);
                 NowPlayingShadow.Receivers.Add(navigationView);
 
-                headerContent.Shadow = headerShadow;
-                headerContent.Translation += new Vector3(0, 0, 32);
-
-                headerTopContent.Shadow = headerTopShadow;
-                headerTopContent.Translation += new Vector3(0, 0, 32);
-
-                shellFrame.Translation += new Vector3(0, 0, 32);
+                contentContainer.Translation += new Vector3(0, 0, 32);
                 nowPlayingBar.Translation += new Vector3(0, 0, 64);
             }
         }

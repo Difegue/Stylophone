@@ -1,24 +1,27 @@
-﻿using System;
-using FluentMPC.Helpers;
-using FluentMPC.Services;
-using FluentMPC.ViewModels;
-using FluentMPC.ViewModels.Items;
+﻿using FluentMPC.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Media;
-using System.Numerics;
+using Stylophone.Common.ViewModels;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using Stylophone.Common.Interfaces;
 
 namespace FluentMPC.Views
 {
     public sealed partial class LibraryDetailPage : Page
     {
-        public AlbumDetailViewModel ViewModel { get; } = new AlbumDetailViewModel();
+        public AlbumDetailViewModel ViewModel => (AlbumDetailViewModel)DataContext;
+
+        private INavigationService _navigationService;
 
         public LibraryDetailPage()
         {
             InitializeComponent();
+            DataContext = Ioc.Default.GetRequiredService<AlbumDetailViewModel>();
+
+            // TODO hacky
+            _navigationService = Ioc.Default.GetRequiredService<INavigationService>();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -36,7 +39,7 @@ namespace FluentMPC.Views
             base.OnNavigatingFrom(e);
             if (e.NavigationMode == NavigationMode.Back)
             {
-                NavigationService.Frame.SetListDataItemForNextConnectedAnimation(ViewModel.Item);
+                _navigationService.SetListDataItemForNextConnectedAnimation(ViewModel.Item);
             }
         }
 
@@ -47,6 +50,6 @@ namespace FluentMPC.Views
             trackVm.AddToQueueCommand.Execute(trackVm.File);
         }
 
-        private void Select_Item(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) => MiscHelpers.SelectItemOnFlyoutRightClick<TrackViewModel>(QueueList, e);
+        private void Select_Item(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) => UWPHelpers.SelectItemOnFlyoutRightClick<TrackViewModel>(QueueList, e);
     }
 }

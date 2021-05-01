@@ -4,17 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:behaviors="using:FluentMPC.Behaviors"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     xmlns:helpers="using:FluentMPC.Helpers"
     xmlns:views="using:FluentMPC.Views"
+    xmlns:viewmodels="using:FluentMPC.ViewModels"
+    xmlns:stylophone="using:Stylophone.Common.ViewModels"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:mpcnet="using:MpcNET.Types"
+    xmlns:mpcnet="using:MpcNET.Types" xmlns:converters="using:FluentMPC.Converters"
+    xmlns:strings="using:Stylophone.Localization.Strings"
     mc:Ignorable="d">
 
     <Page.Resources>
+
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
         <DataTemplate x:Key="StringItemTemplate" x:DataType="x:String">
             <StackPanel Orientation="Vertical" Height="46" >
@@ -51,25 +55,26 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
+        
         <winui:NavigationView Grid.Row="0"
         x:Name="navigationView"
         IsBackButtonVisible="Visible"
         PaneTitle="Stylophone"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
-        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
         IsSettingsVisible="True"
         ExpandedModeThresholdWidth="900"
         Loaded="ApplyShadowToSideBar"
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <winui:NavigationView.MenuItems>
-                <winui:NavigationViewItem x:Uid="Shell_NowPlaying" Icon="Audio" helpers:NavHelper.NavigateTo="views:ServerQueuePage" />
-                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Library" helpers:NavHelper.NavigateTo="views:LibraryPage" />
-                <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="MapDrive" helpers:NavHelper.NavigateTo="views:FoldersPage" />
+                <winui:NavigationViewItem Content="{x:Bind strings:Resources.QueueHeader}" Icon="Audio" helpers:NavHelper.NavigateTo="stylophone:QueueViewModel" />
+                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Library" helpers:NavHelper.NavigateTo="viewmodels:LibraryViewModel" />
+                <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="MapDrive" helpers:NavHelper.NavigateTo="stylophone:FoldersViewModel" />
 
                 <winui:NavigationViewItemSeparator/>
-                <winui:NavigationViewItem x:Name="playlistContainer" x:Uid="Shell_Playlists" Icon="MusicInfo" SelectsOnInvoked="False"/> <!-- This menuitem is filled in viewmodel-->
+                <winui:NavigationViewItem x:Name="playlistContainer" x:Uid="Shell_Playlists" Icon="MusicInfo" SelectsOnInvoked="False"/>
+                <!-- This menuitem is filled in viewmodel-->
             </winui:NavigationView.MenuItems>
-            
+
             <winui:NavigationView.AutoSuggestBox>
                 <AutoSuggestBox x:Uid="Shell_Search" QueryIcon="Find" AutomationProperties.Name="Search"
                                 UpdateTextOnSelect="False"
@@ -79,45 +84,33 @@
             </winui:NavigationView.AutoSuggestBox>
 
             <i:Interaction.Behaviors>
-                <behaviors:NavigationViewHeaderBehavior
-                DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}">
-                    <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-                        <DataTemplate>
-                            <UserControl>
-                            <Grid x:Name="Header">
-                                
-                                <TextBlock Text="{Binding}" Style="{ThemeResource TitleTextBlockStyle}" Margin="{StaticResource SmallLeftRightMargin}" />
-
-                                <!-- We've removed the default NavigationViewHeaderMargin in code, so we reestablish here if we're not in Minimal mode. -->
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup>
-                                        <VisualState x:Name="Normal">
-                                            <VisualState.StateTriggers>
-                                                <AdaptiveTrigger MinWindowWidth="640" />
-                                            </VisualState.StateTriggers>
-                                            <VisualState.Setters>
-                                                <Setter Target="Header.Margin" Value="{StaticResource NavigationViewHeaderMargin}" />
-                                                <Setter Target="Header.Padding" Value="0,0,0,8"/>
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                            </Grid>
-                            </UserControl>
-                        </DataTemplate>
-                    </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-                </behaviors:NavigationViewHeaderBehavior>
                 <ic:EventTriggerBehavior EventName="ItemInvoked">
-                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.NavigateCommand}" />
                 </ic:EventTriggerBehavior>
             </i:Interaction.Behaviors>
-            <Grid>
-                <Frame x:Name="shellFrame" Margin="{x:Bind ViewModel.FrameMargin, Mode=OneWay}">
-                    <Frame.Shadow>
-                        <ThemeShadow x:Name="ContentShadow" />
-                    </Frame.Shadow>
-                </Frame>
-                <controls:InAppNotification x:Name="notificationHolder" />
+
+            <Grid Margin="0,-32,0,0" x:Name="contentContainer">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.Shadow>
+                    <ThemeShadow x:Name="ContentShadow" />
+                </Grid.Shadow>
+
+                <!-- Custom Header so we can hide the entire pane for fullscreen views -->
+                <Grid x:Name="Header" Grid.Row="0" Margin="80,0,0,0" Padding="0,32,0,8" Visibility="{x:Bind ViewModel.HeaderText, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}">
+                    <TextBlock Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}" Style="{ThemeResource TitleTextBlockStyle}" Margin="{StaticResource SmallLeftRightMargin}" />
+                </Grid>
+
+                <!-- Content -->
+                <Frame x:Name="shellFrame" Grid.Row="1"/>
+
+                <!-- InAppNotifications go here -->
+                <controls:InAppNotification x:Name="notificationHolder" Grid.Row="1"/>
+                
             </Grid>
         </winui:NavigationView>
 
@@ -126,6 +119,19 @@
                 <ThemeShadow x:Name="NowPlayingShadow" />
             </views:NowPlayingBar.Shadow>
         </views:NowPlayingBar>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="640" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Header.Margin" Value="{StaticResource NavigationViewHeaderMargin}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
-    
+
 </Page>

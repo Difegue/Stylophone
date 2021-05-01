@@ -7,6 +7,10 @@ using FluentMPC.Activation;
 using FluentMPC.Helpers;
 using FluentMPC.Services;
 using FluentMPC.ViewModels;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using Stylophone.Common.Interfaces;
+using Stylophone.Common.Services;
+using Stylophone.Common.ViewModels;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -64,22 +68,16 @@ namespace FluentMPC.Services
 
         private async Task InitializeAsync()
         {
-            await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
+            var theme = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ElementTheme));
+            Enum.TryParse(theme, out Theme elementTheme);
+            await Ioc.Default.GetRequiredService<IInteropService>().SetThemeAsync(elementTheme);
         }
 
         private async Task HandleActivationAsync(object activationArgs)
         {
-            var activationHandler = GetActivationHandlers()
-                                                .FirstOrDefault(h => h.CanHandle(activationArgs));
-
-            if (activationHandler != null)
-            {
-                await activationHandler.HandleAsync(activationArgs);
-            }
-
             if (IsInteractive(activationArgs))
             {
-                var defaultHandler = new DefaultActivationHandler(_defaultNavItem);
+                var defaultHandler = new DefaultActivationHandler(_defaultNavItem, Ioc.Default.GetRequiredService<INavigationService>());
                 if (defaultHandler.CanHandle(activationArgs))
                 {
                     await defaultHandler.HandleAsync(activationArgs);
@@ -89,18 +87,14 @@ namespace FluentMPC.Services
 
         private async Task StartupAsync()
         {
-            await ThemeSelectorService.SetRequestedThemeAsync();
-            await DialogService.ShowFirstRunDialogIfAppropriateAsync();
+            await Ioc.Default.GetRequiredService<IDialogService>().ShowFirstRunDialogIfAppropriateAsync();
 
-            await Singleton<SettingsViewModel>.Instance.EnsureInstanceInitializedAsync(); // This also initializes MPDConnectionService
-            AlbumArtService.Initialize();
-            SystemMediaControlsService.Initialize();
-        }
+            var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
+            var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort));
 
-        private IEnumerable<ActivationHandler> GetActivationHandlers()
-        {
-            yield return Singleton<LiveTileService>.Instance;
-            yield return Singleton<NotificationService>.Instance;
+            await Ioc.Default.GetRequiredService<MPDConnectionService>().InitializeAsync(host, port);
+            Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
+            Ioc.Default.GetRequiredService<SystemMediaControlsService>().Initialize();
         }
 
         private bool IsInteractive(object args)

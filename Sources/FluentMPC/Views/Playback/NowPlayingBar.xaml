@@ -13,6 +13,8 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <converters:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
+        <converters:SKColorToUWPConverter x:Key="SKColorToUWPConverter" />
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
 
         <converters:BoolToBrushConverter
@@ -44,7 +46,7 @@
             VerticalAlignment="Center"
             Canvas.ZIndex="5"
             Opacity="1"
-            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
+            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
             Stretch="UniformToFill" />
 
         <Border
@@ -54,8 +56,8 @@
             VerticalAlignment="Stretch"
             Canvas.ZIndex="6" >
             <Border.Background>
-                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" FallbackColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay}"
-                              TintColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay}"></AcrylicBrush>
+                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.8" FallbackColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                              TintColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"></AcrylicBrush>
             </Border.Background>
         </Border>
 
@@ -102,7 +104,7 @@
                     Color="Black">
 
                     <Grid Width="70" Height="70" CornerRadius="3" >
-                        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" />
+                        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
                     </Grid>
                    
                     
@@ -406,7 +408,7 @@
                     Width="40"
                     Height="40"
                     Margin="{StaticResource XSmallLeftMargin}"
-                    Click="{x:Bind PlaybackViewModel.SwitchToCompactView}"
+                    Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
                     Style="{StaticResource CircleButtonStyle}">
                     <Button.Content>
                         <TextBlock

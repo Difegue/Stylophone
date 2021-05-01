@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stylophone.Common.Helpers;
+using System;
 using Windows.UI.Xaml.Data;
 
 namespace FluentMPC.Helpers
@@ -10,7 +11,7 @@ namespace FluentMPC.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return MiscHelpers.FormatTimeString(System.Convert.ToDouble(value) * 1000);
+            return Miscellaneous.FormatTimeString(System.Convert.ToDouble(value) * 1000);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

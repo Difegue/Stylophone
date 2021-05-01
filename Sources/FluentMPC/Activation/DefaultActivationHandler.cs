@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentMPC.Services;
-
+using Stylophone.Common.Interfaces;
 using Windows.ApplicationModel.Activation;
 
 namespace FluentMPC.Activation
@@ -10,9 +10,12 @@ namespace FluentMPC.Activation
     {
         private readonly Type _navElement;
 
-        public DefaultActivationHandler(Type navElement)
+        private INavigationService _navigationService;
+
+        public DefaultActivationHandler(Type navElement, INavigationService navigationService)
         {
             _navElement = navElement;
+            _navigationService = navigationService;
         }
 
         protected override async Task HandleInternalAsync(IActivatedEventArgs args)
@@ -25,14 +28,14 @@ namespace FluentMPC.Activation
                 arguments = launchArgs.Arguments;
             }
 
-            NavigationService.Navigate(_navElement, arguments);
+            _navigationService.Navigate(_navElement, arguments);
             await Task.CompletedTask;
         }
 
         protected override bool CanHandleInternal(IActivatedEventArgs args)
         {
             // None of the ActivationHandlers has handled the app activation
-            return NavigationService.Frame.Content == null && _navElement != null;
+            return ((NavigationService)_navigationService).Frame.Content == null && _navElement != null;
         }
     }
 }

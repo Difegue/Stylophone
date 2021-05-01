@@ -7,24 +7,24 @@
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
-    xmlns:fluentMpc="using:FluentMPC.Helpers"
+    xmlns:stylophone="using:FluentMPC.Helpers"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:behaviors="using:FluentMPC.Behaviors"
     xmlns:toolkitbehaviors="using:Microsoft.Toolkit.Uwp.UI.Behaviors"
-    xmlns:items="using:FluentMPC.ViewModels.Items"
+    xmlns:vm="using:Stylophone.Common.ViewModels"
     Style="{StaticResource PageStyle}"
-    behaviors:NavigationViewHeaderBehavior.HeaderMode="Minimal"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <fluentMpc:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
-        <fluentMpc:DoubleTopThicknessConverter x:Key="DoubleTopThicknessConverter" />
+        <stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
+        <stylophone:DoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
+        <stylophone:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
+        <stylophone:SKColorToUWPConverter x:Key="SKColorToUWPConverter" />
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
 
-        <DataTemplate x:Key="TrackListViewTemplate" x:DataType="items:TrackViewModel">
+        <DataTemplate x:Key="TrackListViewTemplate" x:DataType="vm:TrackViewModel">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -94,18 +94,18 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <fluentMpc:AlternatingRowListView x:Name="QueueList"
+        <stylophone:AlternatingRowListView x:Name="QueueList"
                       SelectionMode="Extended"
                       Margin="0,-96"
                       DoubleTapped="Queue_Track"
                       RightTapped="Select_Item"
                       ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-                      ui:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
+                      ui:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
-                      EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                      EvenRowBackground="Transparent"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
                       ItemsSource="{x:Bind ViewModel.Source}">
-            <fluentMpc:AlternatingRowListView.ContextFlyout>
+            <stylophone:AlternatingRowListView.ContextFlyout>
                 <MenuFlyout>
                     <!-- Add to Queue -->
                     <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add"
@@ -120,19 +120,19 @@
                                     Command="{x:Bind ViewModel.AddToPlayListCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"/>
                 </MenuFlyout>
-            </fluentMpc:AlternatingRowListView.ContextFlyout>
+            </stylophone:AlternatingRowListView.ContextFlyout>
             
-            <fluentMpc:AlternatingRowListView.ItemContainerStyle>
+            <stylophone:AlternatingRowListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
                 </Style>
-            </fluentMpc:AlternatingRowListView.ItemContainerStyle>
+            </stylophone:AlternatingRowListView.ItemContainerStyle>
 
             <interactivity:Interaction.Behaviors>
                 <toolkitbehaviors:StickyHeaderBehavior />
             </interactivity:Interaction.Behaviors>
-            <fluentMpc:AlternatingRowListView.Header>
+            <stylophone:AlternatingRowListView.Header>
 
                 <RelativePanel RequestedTheme="Dark" Padding="24,128,24,36" x:Name="Header">
 
@@ -143,8 +143,8 @@
                             Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1">
                         <Border.Background>
-                            <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.2" TintLuminosityOpacity="0.7" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"
-                                              TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay}"></AcrylicBrush>
+                            <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.2" TintLuminosityOpacity="0.7" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                                              TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"></AcrylicBrush>
                         </Border.Background>
                     </Border>
 
@@ -168,7 +168,7 @@
                             Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-2">
                         <Border.Background>
-                            <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill"></ImageBrush>
+                            <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill"></ImageBrush>
                         </Border.Background>
                     </Border>
 
@@ -184,7 +184,8 @@
                         Color="Black">
 
                         <Grid Width="200" Height="200" CornerRadius="3">
-                            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay}" Stretch="UniformToFill" />
+                            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" 
+                                   Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" />
                         </Grid>
                     </controls:DropShadowPanel>
 
@@ -232,13 +233,13 @@
                     </StackPanel>
 
                 </RelativePanel>
-            </fluentMpc:AlternatingRowListView.Header>
+            </stylophone:AlternatingRowListView.Header>
 
-            <fluentMpc:AlternatingRowListView.Footer>
+            <stylophone:AlternatingRowListView.Footer>
                 <Grid Height="12"/>
-            </fluentMpc:AlternatingRowListView.Footer>
+            </stylophone:AlternatingRowListView.Footer>
             
-        </fluentMpc:AlternatingRowListView>
+        </stylophone:AlternatingRowListView>
 
 
         <winui:ProgressRing Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"

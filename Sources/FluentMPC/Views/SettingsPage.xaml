@@ -6,10 +6,12 @@
     xmlns:helper="using:FluentMPC.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
-    xmlns:xaml="using:Windows.UI.Xaml" xmlns:controls="using:Microsoft.UI.Xaml.Controls" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:stylophone="using:Stylophone.Common.Interfaces"
     mc:Ignorable="d">
     <Page.Resources>
-        <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
+        <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="stylophone:Theme" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter x:Key="ReverseBoolToVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed" />
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
@@ -74,7 +76,7 @@
                         FontSize="15"
                         GroupName="AppTheme">
                         <RadioButton.CommandParameter>
-                            <xaml:ElementTheme>Light</xaml:ElementTheme>
+                            <stylophone:Theme>Light</stylophone:Theme>
                         </RadioButton.CommandParameter>
                     </RadioButton>
                     <RadioButton
@@ -84,7 +86,7 @@
                         FontSize="15"
                         GroupName="AppTheme">
                         <RadioButton.CommandParameter>
-                            <xaml:ElementTheme>Dark</xaml:ElementTheme>
+                            <stylophone:Theme>Dark</stylophone:Theme>
                         </RadioButton.CommandParameter>
                     </RadioButton>
                     <RadioButton
@@ -94,7 +96,7 @@
                         FontSize="15"
                         GroupName="AppTheme">
                         <RadioButton.CommandParameter>
-                            <xaml:ElementTheme>Default</xaml:ElementTheme>
+                            <stylophone:Theme>Default</stylophone:Theme>
                         </RadioButton.CommandParameter>
                     </RadioButton>
                 </StackPanel>

@@ -31,6 +31,7 @@ namespace FluentMPC.Helpers
         {
             base.PrepareContainerForItemOverride(element, item);
             var listViewItem = element as ListViewItem;
+
             if (listViewItem != null)
             {
                 var index = IndexFromContainer(element);

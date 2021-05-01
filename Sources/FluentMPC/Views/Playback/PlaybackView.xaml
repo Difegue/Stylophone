@@ -9,11 +9,10 @@
     d:DesignWidth="300"
     Unloaded="Page_Unloaded"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:behaviors="using:FluentMPC.Behaviors"
-    behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
     xmlns:converters="using:FluentMPC.Helpers" xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters">
 
     <Page.Resources>
+        <converters:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
         <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
@@ -37,7 +36,7 @@
         </Border>
         
         <Image HorizontalAlignment="Center" Canvas.ZIndex="-2" Stretch="UniformToFill" 
-                           Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"/>
+                           Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"/>
 
         <Grid RelativePanel.AlignTopWithPanel="True"
                 RelativePanel.AlignLeftWithPanel="True"
@@ -66,7 +65,7 @@
                         Color="Black">
 
                 <Grid CornerRadius="3">
-                    <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"/>
+                    <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"/>
                 </Grid>
                 </controls:DropShadowPanel>
 

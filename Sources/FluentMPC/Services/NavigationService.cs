@@ -1,47 +1,63 @@
-﻿using System;
-
+﻿using FluentMPC.ViewModels;
+using FluentMPC.Views;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Uwp.UI.Animations;
+using Stylophone.Common.Interfaces;
+using Stylophone.Common.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace FluentMPC.Services
 {
-    public static class NavigationService
+    public class NavigationService : NavigationServiceBase
     {
-        public static event NavigatedEventHandler Navigated;
-
-        public static event NavigationFailedEventHandler NavigationFailed;
-
-        private static Frame _frame;
-        private static object _lastParamUsed;
-
-        public static Frame Frame
+        private Dictionary<Type, Type> _viewModelToPageDictionary = new Dictionary<Type, Type>()
         {
-            get
+            { typeof(QueueViewModel), typeof(ServerQueuePage) },
+            { typeof(SettingsViewModel), typeof(SettingsPage) },
+            { typeof(AlbumDetailViewModel), typeof(LibraryDetailPage) },
+            { typeof(PlaybackViewModelBase), typeof(PlaybackView) },
+            { typeof(SearchResultsViewModel), typeof(SearchResultsPage) },
+            // Technically unused, since handled directly by the NavigationView atm
+            { typeof(FoldersViewModel), typeof(FoldersPage) },
+            { typeof(PlaylistViewModel), typeof(PlaylistPage) },
+            { typeof(LibraryViewModel), typeof(LibraryPage) }
+        };
+
+        public NavigationService()
+        {
+
+        }
+
+        public override bool CanGoBack => Frame.CanGoBack;
+
+        public override Type CurrentPageViewModelType => _viewModelToPageDictionary.Keys.Where(
+            k => _viewModelToPageDictionary[k] == Frame.CurrentSourcePageType).FirstOrDefault();
+
+        private object _lastParamUsed;
+        public override void NavigateImplementation(Type viewmodelType, object parameter = null)
+        {
+            // Get the matching page and navigate to it
+            var pageType = _viewModelToPageDictionary.GetValueOrDefault(viewmodelType);
+
+            // Don't open the same page multiple times
+            if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
             {
-                if (_frame == null)
+                var navigationResult = Frame.Navigate(pageType, parameter);
+                if (navigationResult)
                 {
-                    _frame = Window.Current.Content as Frame;
-                    RegisterFrameEvents();
+                    _lastParamUsed = parameter;
                 }
-
-                return _frame;
-            }
-
-            set
-            {
-                UnregisterFrameEvents();
-                _frame = value;
-                RegisterFrameEvents();
             }
         }
 
-        public static bool CanGoBack => Frame.CanGoBack;
+        public override void SetListDataItemForNextConnectedAnimation(object item) => Frame.SetListDataItemForNextConnectedAnimation(item);
 
-        public static bool CanGoForward => Frame.CanGoForward;
-
-        public static bool GoBack()
+        public override bool GoBackImplementation()
         {
             if (CanGoBack)
             {
@@ -52,51 +68,24 @@ namespace FluentMPC.Services
             return false;
         }
 
-        public static void GoForward() => Frame.GoForward();
-
-        public static bool Navigate(Type pageType, object parameter = null, NavigationTransitionInfo infoOverride = null)
+        private Frame _frame;
+        public Frame Frame
         {
-            // Don't open the same page multiple times
-            if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
+            get
             {
-                var navigationResult = Frame.Navigate(pageType, parameter, infoOverride);
-                if (navigationResult)
+                if (_frame == null)
                 {
-                    _lastParamUsed = parameter;
+                    _frame = Window.Current.Content as Frame;
                 }
 
-                return navigationResult;
+                return _frame;
             }
-            else
+
+            set
             {
-                return false;
+                _frame = value;
             }
         }
 
-        public static bool Navigate<T>(object parameter = null, NavigationTransitionInfo infoOverride = null)
-            where T : Page
-            => Navigate(typeof(T), parameter, infoOverride);
-
-        private static void RegisterFrameEvents()
-        {
-            if (_frame != null)
-            {
-                _frame.Navigated += Frame_Navigated;
-                _frame.NavigationFailed += Frame_NavigationFailed;
-            }
-        }
-
-        private static void UnregisterFrameEvents()
-        {
-            if (_frame != null)
-            {
-                _frame.Navigated -= Frame_Navigated;
-                _frame.NavigationFailed -= Frame_NavigationFailed;
-            }
-        }
-
-        private static void Frame_NavigationFailed(object sender, NavigationFailedEventArgs e) => NavigationFailed?.Invoke(sender, e);
-
-        private static void Frame_Navigated(object sender, NavigationEventArgs e) => Navigated?.Invoke(sender, e);
     }
 }

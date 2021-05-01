@@ -1,5 +1,6 @@
 ﻿using FluentMPC.Services;
 using MpcNET.Types;
+using Stylophone.Common.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,7 +15,7 @@ namespace FluentMPC.Views
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AddToPlaylistDialog(bool allowExistingPlaylists)
+        public AddToPlaylistDialog(MPDConnectionService mpdService, bool allowExistingPlaylists)
         {
             AllowExistingPlaylists = allowExistingPlaylists;
 
@@ -23,7 +24,7 @@ namespace FluentMPC.Views
                 AddNewPlaylist = true;
             }
             RequestedTheme = (Window.Current.Content as FrameworkElement).RequestedTheme;
-            Playlists = new ObservableCollection<MpdPlaylist>(MPDConnectionService.Playlists);
+            Playlists = new ObservableCollection<MpdPlaylist>(mpdService.Playlists);
             InitializeComponent();
         }
 

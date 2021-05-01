@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-
-using FluentMPC.Activation;
 using FluentMPC.Helpers;
-using FluentMPC.ViewModels.Items;
 using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
-using Windows.ApplicationModel.Activation;
+using Stylophone.Common.Helpers;
+using Stylophone.Common.Services;
+using Stylophone.Common.ViewModels;
 using Windows.Media;
-using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.UI.Notifications;
 
 namespace FluentMPC.Services
 {
-    public static class SystemMediaControlsService
+    public class SystemMediaControlsService
     {
-        private static SystemMediaTransportControls _smtc;
-        private static bool _isInitialized = false;
+        private SystemMediaTransportControls _smtc;
+        private MPDConnectionService _mpdService;
 
-        public static void Initialize()
+        public SystemMediaControlsService(MPDConnectionService mpdService)
         {
-            if (!_isInitialized)
-            {
-                _isInitialized = true;
+            _mpdService = mpdService;
+        }
+
+        public void Initialize()
+        {
+
                 _smtc = SystemMediaTransportControls.GetForCurrentView();
 
                 _smtc.IsPlayEnabled = true;
@@ -37,42 +36,41 @@ namespace FluentMPC.Services
                 _smtc.IsChannelDownEnabled = true;
 
                 _smtc.ButtonPressed += SystemControls_ButtonPressed;
-                _smtc.IsEnabled = MPDConnectionService.IsConnected;
+                _smtc.IsEnabled = _mpdService.IsConnected;
 
                 // Hook up to the MPDConnectionService for status updates.
-                MPDConnectionService.ConnectionChanged += (s, e) => _smtc.IsEnabled = MPDConnectionService.IsConnected;
-                MPDConnectionService.StatusChanged += (s, e) => UpdateState(MPDConnectionService.CurrentStatus);
-            }
+                _mpdService.ConnectionChanged += (s, e) => _smtc.IsEnabled = _mpdService.IsConnected;
+                _mpdService.StatusChanged += (s, e) => UpdateState(_mpdService.CurrentStatus);
         }
 
-        private static async void SystemControls_ButtonPressed(SystemMediaTransportControls sender, SystemMediaTransportControlsButtonPressedEventArgs args)
+        private async void SystemControls_ButtonPressed(SystemMediaTransportControls sender, SystemMediaTransportControlsButtonPressedEventArgs args)
         {
             switch (args.Button)
             {
                 case SystemMediaTransportControlsButton.Play:
-                    await MPDConnectionService.SafelySendCommandAsync(new PauseResumeCommand());
+                    await _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
                     break;
                 case SystemMediaTransportControlsButton.Pause:
-                    await MPDConnectionService.SafelySendCommandAsync(new PauseResumeCommand());
+                    await _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
                     break;
                 case SystemMediaTransportControlsButton.Next:
-                    await MPDConnectionService.SafelySendCommandAsync(new NextCommand());
+                    await _mpdService.SafelySendCommandAsync(new NextCommand());
                     break;
                 case SystemMediaTransportControlsButton.Previous:
-                    await MPDConnectionService.SafelySendCommandAsync(new PreviousCommand());
+                    await _mpdService.SafelySendCommandAsync(new PreviousCommand());
                     break;
                 case SystemMediaTransportControlsButton.ChannelDown:
-                    await MPDConnectionService.SafelySendCommandAsync(new SetVolumeCommand((byte)(MPDConnectionService.CurrentStatus.Volume - 5)));
+                    await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)(_mpdService.CurrentStatus.Volume - 5)));
                     break;
                 case SystemMediaTransportControlsButton.ChannelUp:
-                    await MPDConnectionService.SafelySendCommandAsync(new SetVolumeCommand((byte)(MPDConnectionService.CurrentStatus.Volume + 5)));
+                    await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)(_mpdService.CurrentStatus.Volume + 5)));
                     break;
                 default:
                     break;
             }
         }
 
-        private static void UpdateState(MpdStatus status)
+        private void UpdateState(MpdStatus status)
         {
             switch (status.State)
             {
@@ -95,7 +93,7 @@ namespace FluentMPC.Services
             UpdateTimeline(status.Elapsed, status.Duration);
         }
 
-        public static async void UpdateMetadata(TrackViewModel track)
+        public async Task UpdateMetadataAsync(TrackViewModel track)
         {
             try
             {
@@ -114,7 +112,7 @@ namespace FluentMPC.Services
 
                 // Set the album art thumbnail.
                 var uniqueIdentifier = track.File.HasAlbum ? track.File.Album : track.File.HasTitle ? track.File.Title : track.File.Path;
-                uniqueIdentifier = MiscHelpers.EscapeFilename(uniqueIdentifier);
+                uniqueIdentifier = Miscellaneous.EscapeFilename(uniqueIdentifier);
 
                 // Use the cached albumart if it exists
                 var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";
@@ -139,7 +137,7 @@ namespace FluentMPC.Services
             }
         }
 
-        private static void UpdateTimeline(TimeSpan current, TimeSpan length)
+        private void UpdateTimeline(TimeSpan current, TimeSpan length)
         {
             // Create our timeline properties object 
             var timelineProperties = new SystemMediaTransportControlsTimelineProperties();

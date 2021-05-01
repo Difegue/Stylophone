@@ -136,11 +136,8 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CodeProject.ObjectPool">
-      <Version>5.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="ksemenenko.ColorThief">
-      <Version>1.1.1.4</Version>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection">
+      <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
@@ -166,14 +163,8 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
     </PackageReference>
-    <PackageReference Include="RangedObservableCollection">
-      <Version>1.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Drawing.Common">
-      <Version>5.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="WriteableBitmapEx">
-      <Version>1.6.7</Version>
+    <PackageReference Include="SkiaSharp.Views">
+      <Version>2.80.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -181,45 +172,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activation\ActivationHandler.cs" />
-    <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
-    <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
     <Compile Include="Behaviors\TreeViewCollapseBehavior.cs" />
-    <Compile Include="Converters\DoubleTopThicknessConverter.cs" />
-    <Compile Include="Services\AlbumArtService.cs" />
+    <Compile Include="Converters\DoubleToThicknessConverter.cs" />
+    <Compile Include="Converters\SkiaConverters.cs" />
+    <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Helpers\AlternatingRowListView.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
     <Compile Include="Converters\BoolToBrushConverter.cs" />
     <Compile Include="Converters\EnumToBooleanConverter.cs" />
-    <Compile Include="Helpers\MiscHelpers.cs" />
+    <Compile Include="Helpers\UWPHelpers.cs" />
     <Compile Include="Helpers\NavHelper.cs" />
-    <Compile Include="Helpers\Observable.cs" />
-    <Compile Include="Helpers\RelayCommand.cs" />
-    <Compile Include="Helpers\SettingsStorageExtensions.cs" />
-    <Compile Include="Helpers\Singleton.cs" />
     <Compile Include="Converters\SliderValueConverter.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
+    <Compile Include="Services\ApplicationStorageService.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\DispatcherService.cs" />
     <Compile Include="Services\SystemMediaControlsService.cs" />
-    <Compile Include="Services\LiveTileService.cs" />
-    <Compile Include="Services\LiveTileService.Structure.cs" />
+    <Compile Include="Helpers\LiveTileHelper.cs" />
     <Compile Include="Services\NavigationService.cs" />
-    <Compile Include="Services\MPDConnectionService.cs" />
-    <Compile Include="Services\ThemeSelectorService.cs" />
+    <Compile Include="Services\InteropService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="ViewModels\SearchResultsViewModel.cs" />
-    <Compile Include="ViewModels\FoldersViewModel.cs" />
-    <Compile Include="ViewModels\Items\FilePathViewModel.cs" />
-    <Compile Include="ViewModels\AlbumDetailViewModel.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
-    <Compile Include="ViewModels\Items\AlbumViewModel.cs" />
-    <Compile Include="ViewModels\Playback\VisualizationType.cs" />
-    <Compile Include="ViewModels\QueueViewModel.cs" />
-    <Compile Include="ViewModels\Playback\PlaybackViewModel.cs" />
-    <Compile Include="ViewModels\Items\TrackViewModel.cs" />
-    <Compile Include="ViewModels\PlaylistViewModel.cs" />
-    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\PlaybackViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Dialogs\AddToPlaylistDialog.xaml.cs">
       <DependentUpon>AddToPlaylistDialog.xaml</DependentUpon>
@@ -342,9 +317,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ResourceExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Assets\AlbumPlaceholder.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
@@ -425,6 +397,14 @@
     <ProjectReference Include="..\MpcNET\MpcNET.csproj">
       <Project>{8994c820-7ba9-4bb8-b9ea-c608b07c4a11}</Project>
       <Name>MpcNET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stylophone.Common\Stylophone.Common.csproj">
+      <Project>{83b15d0e-c82f-4438-8290-0dfc23a6498f}</Project>
+      <Name>Stylophone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stylophone.Localization\Stylophone.Localization.csproj">
+      <Project>{3dedf3ef-8dd2-4e20-b057-21df5e342230}</Project>
+      <Name>Stylophone.Localization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

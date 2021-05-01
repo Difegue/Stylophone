@@ -7,7 +7,7 @@
     xmlns:fluentMpc="using:FluentMPC.Helpers"
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
-    xmlns:items="using:FluentMPC.ViewModels.Items" 
+    xmlns:vm="using:Stylophone.Common.ViewModels" 
     Style="{StaticResource PageStyle}"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
@@ -16,7 +16,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
         <!-- DataTemplate used: -->
-        <DataTemplate x:Key="QueueTemplate" x:DataType="items:TrackViewModel">
+        <DataTemplate x:Key="QueueTemplate" x:DataType="vm:TrackViewModel">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -33,7 +33,7 @@
                     <TextBlock Grid.Column="0" Text="{x:Bind Name}" ToolTipService.ToolTip="{x:Bind Name}"
                     VerticalAlignment="Center" MaxLines="1" TextTrimming="CharacterEllipsis" Style="{ThemeResource BaseTextBlockStyle}"/>
 
-                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xF463;" Grid.Column="1" Margin="-12,0,0,0"
+                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xF61F;" Grid.Column="1" Margin="-12,0,0,0"
                               FontSize="24" Foreground="{ThemeResource SystemAccentColor}" VerticalAlignment="Center"
                                 Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
@@ -82,7 +82,7 @@
                       RightTapped="Select_Item"
                       ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
-                      EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                      EvenRowBackground="Transparent"
                       ItemTemplate="{StaticResource QueueTemplate}"
                       ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
             <fluentMpc:AlternatingRowListView.ContextFlyout>

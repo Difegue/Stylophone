@@ -1,41 +1,42 @@
-﻿using Microsoft.Toolkit.Uwp.Helpers;
-using Microsoft.Toolkit.Uwp.UI.Animations;
-using Microsoft.Toolkit.Uwp.UI.Controls;
-using FluentMPC.ViewModels.Playback;
+﻿using FluentMPC.ViewModels;
 using System;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
-using Windows.Media.Playback;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-using FluentMPC.Services;
-using Microsoft.Toolkit.Uwp;
-using Windows.System;
+using Stylophone.Common.Helpers;
+using Stylophone.Common.Services;
+using Stylophone.Common.Interfaces;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 
 namespace FluentMPC.Views
 {
     public sealed partial class NowPlayingBar
     {
-        public PlaybackViewModel PlaybackViewModel { get; } = new PlaybackViewModel(DispatcherQueue.GetForCurrentThread(), VisualizationType.NowPlayingBar);
+        public PlaybackViewModel PlaybackViewModel => (PlaybackViewModel)DataContext;
 
-        public NowPlayingBar() => InitializeComponent();
+        private MPDConnectionService _mpdService;
+        private IDispatcherService _dispatcherService;
 
+        public NowPlayingBar()
+        {
+            InitializeComponent();
+            DataContext = Ioc.Default.GetRequiredService<PlaybackViewModel>();
+        }
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            MPDConnectionService.StatusChanged += PlaybackSession_PlaybackStateChanged;
-            MPDConnectionService.ConnectionChanged += MPDConnectionService_ConnectionLost;
+            //TODO hacky
+            _mpdService = Ioc.Default.GetRequiredService<MPDConnectionService>();
+            _dispatcherService = Ioc.Default.GetRequiredService<IDispatcherService>();
+
+            _mpdService.StatusChanged += PlaybackSession_PlaybackStateChanged;
+            _mpdService.ConnectionChanged += MPDConnectionService_ConnectionLost;
 
             UpdateBars();
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            MPDConnectionService.StatusChanged -= PlaybackSession_PlaybackStateChanged;
-            MPDConnectionService.ConnectionChanged -= MPDConnectionService_ConnectionLost;
+            _mpdService.StatusChanged -= PlaybackSession_PlaybackStateChanged;
+            _mpdService.ConnectionChanged -= MPDConnectionService_ConnectionLost;
         }
 
         /// <summary>
@@ -47,9 +48,9 @@ namespace FluentMPC.Views
 
         private void UpdateBars()
         {
-            DispatcherService.DispatcherQueue.EnqueueAsync(() =>
+            _dispatcherService.ExecuteOnUIThreadAsync(() =>
             {
-                if (!MPDConnectionService.IsConnected)
+                if (!_mpdService.IsConnected)
                 {
                     LoadingBar.Visibility = Visibility.Visible;
                     ProgressBar.Visibility = Visibility.Collapsed;
@@ -67,14 +68,14 @@ namespace FluentMPC.Views
         /// </summary>
         private void PlaybackSession_PlaybackStateChanged(object sender, EventArgs eventArgs)
         {
-            Task.Run(() => PlaybackSession_PlaybackStateChangedAsync(sender, eventArgs));
+            Task.Run(() => PlaybackSession_PlaybackStateChangedAsync(sender, eventArgs)).ConfigureAwait(false);
         }
 
         private async Task PlaybackSession_PlaybackStateChangedAsync(object sender, EventArgs eventArgs)
         {
-            await DispatcherService.DispatcherQueue.EnqueueAsync(() =>
+            await _dispatcherService.ExecuteOnUIThreadAsync(() =>
             {
-                switch (MPDConnectionService.CurrentStatus.State)
+                switch (_mpdService.CurrentStatus.State)
                 {
                     case MpcNET.MpdState.Stop:
                     case MpcNET.MpdState.Play:

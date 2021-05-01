@@ -8,19 +8,19 @@
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:fluentMpc="using:FluentMPC.Helpers"
-    xmlns:items="using:FluentMPC.ViewModels.Items"
+    xmlns:vm="using:Stylophone.Common.ViewModels"
     Style="{StaticResource PageStyle}"
 
     mc:Ignorable="d">
 
     <Page.Resources>
         <fluentMpc:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
-        <fluentMpc:DoubleTopThicknessConverter x:Key="DoubleTopThicknessConverter" />
+        <fluentMpc:DoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
 
-        <DataTemplate x:Key="TrackListViewTemplate" x:DataType="items:TrackViewModel">
+        <DataTemplate x:Key="TrackListViewTemplate" x:DataType="vm:TrackViewModel">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -84,9 +84,9 @@
                       DoubleTapped="Queue_Track"
                       RightTapped="Select_Item"
                       ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-                      ui:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
+                      ui:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
-                      EvenRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                      EvenRowBackground="Transparent"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
                       ItemsSource="{x:Bind ViewModel.Source}">
             <fluentMpc:AlternatingRowListView.ContextFlyout>
@@ -131,7 +131,7 @@
         <winui:ProgressRing Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"
                             IsActive="{x:Bind ViewModel.IsSearchInProgress, Mode=OneWay}" />
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleTopThicknessConverter}}"
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
                     Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <SymbolIcon Symbol="Zoom" RenderTransformOrigin="0.5,0.5" Height="86">
                 <SymbolIcon.RenderTransform>

@@ -1,10 +1,6 @@
-﻿using System;
-using FluentMPC.Helpers;
-using FluentMPC.Services;
-using FluentMPC.ViewModels;
-using FluentMPC.ViewModels.Items;
-using Microsoft.Toolkit.Uwp.UI.Animations;
-
+﻿using FluentMPC.Helpers;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -12,11 +8,12 @@ namespace FluentMPC.Views
 {
     public sealed partial class SearchResultsPage : Page
     {
-        public SearchResultsViewModel ViewModel { get; } = new SearchResultsViewModel();
+        public SearchResultsViewModel ViewModel => (SearchResultsViewModel)DataContext;
 
         public SearchResultsPage()
         {
             InitializeComponent();
+            DataContext = Ioc.Default.GetRequiredService<SearchResultsViewModel>();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -35,6 +32,6 @@ namespace FluentMPC.Views
             trackVm.AddToQueueCommand.Execute(trackVm.File);
         }
 
-        private void Select_Item(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) => MiscHelpers.SelectItemOnFlyoutRightClick<TrackViewModel>(QueueList, e);
+        private void Select_Item(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) => UWPHelpers.SelectItemOnFlyoutRightClick<TrackViewModel>(QueueList, e);
     }
 }

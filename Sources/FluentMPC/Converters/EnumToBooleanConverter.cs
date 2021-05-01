@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stylophone.Localization.Strings;
+using System;
 
 using Windows.UI.Xaml.Data;
 
@@ -14,7 +15,7 @@ namespace FluentMPC.Helpers
             {
                 if (!Enum.IsDefined(EnumType, value))
                 {
-                    throw new ArgumentException("ExceptionEnumToBooleanConverterValueMustBeAnEnum".GetLocalized());
+                    throw new ArgumentException(Resources.ExceptionEnumToBooleanConverterValueMustBeAnEnum);
                 }
 
                 var enumValue = Enum.Parse(EnumType, enumString);
@@ -22,7 +23,7 @@ namespace FluentMPC.Helpers
                 return enumValue.Equals(value);
             }
 
-            throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName".GetLocalized());
+            throw new ArgumentException(Resources.ExceptionEnumToBooleanConverterParameterMustBeAnEnumName);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -32,7 +33,7 @@ namespace FluentMPC.Helpers
                 return Enum.Parse(EnumType, enumString);
             }
 
-            throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName".GetLocalized());
+            throw new ArgumentException(Resources.ExceptionEnumToBooleanConverterParameterMustBeAnEnumName);
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 
-using FluentMPC.Helpers;
-
+using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Xaml.Interactivity;
 
 using WinUI = Microsoft.UI.Xaml.Controls;

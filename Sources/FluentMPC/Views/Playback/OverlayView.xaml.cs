@@ -1,25 +1,25 @@
-﻿using FluentMPC.Services;
-using FluentMPC.ViewModels.Playback;
+﻿using FluentMPC.ViewModels;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Microsoft.Toolkit.Uwp;
-using Microsoft.Toolkit.Uwp.Helpers;
+using Stylophone.Common.Helpers;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.System;
-using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
+using Windows.UI.WindowManagement;
 using Windows.UI.Xaml.Navigation;
 
 namespace FluentMPC.Views
 {
     /// <summary>
-    /// Compact Overlay view. Mostly borrowed from SoundByte.
+    /// Compact Overlay view. Simplified variant using only AppWindow.
     /// </summary>
     public sealed partial class OverlayView
     {
-        public PlaybackViewModel PlaybackViewModel { get; private set; }
-        private int _mainAppViewId;
+        public PlaybackViewModel PlaybackViewModel => (PlaybackViewModel)DataContext;
+
+        public AppWindow HostAppWindow { get; set; }
 
         public OverlayView()
         {
@@ -28,40 +28,25 @@ namespace FluentMPC.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            PlaybackViewModel = new PlaybackViewModel(DispatcherQueue.GetForCurrentThread(), VisualizationType.OverlayPlayback);
-            _mainAppViewId = (int)e.Parameter;
-
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-
+            DataContext = Ioc.Default.GetRequiredService<PlaybackViewModel>();
+            PlaybackViewModel.HostType = VisualizationType.OverlayPlayback;
         }
 
-        private async void NavigateToMainView()
+        private async Task NavigateToMainView()
         {
-            var currentViewId = -1;
-
-            await DispatcherQueue.GetForCurrentThread().EnqueueAsync(() =>
-            { 
-                currentViewId = ApplicationView.GetForCurrentView().Id;
-            });
-
-            await ApplicationViewSwitcher.TryShowAsViewModeAsync(_mainAppViewId, ApplicationViewMode.Default);
-
-            // Switch to this window
-            await ApplicationViewSwitcher.SwitchAsync(_mainAppViewId, currentViewId,
-                ApplicationViewSwitchingOptions.ConsolidateViews);
+            await HostAppWindow.CloseAsync();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             PlaybackViewModel?.Dispose();
-            PlaybackViewModel = null;
+            DataContext = null;
         }
 
         private void Page_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             PlaybackViewModel?.Dispose();
-            PlaybackViewModel = null;
+            DataContext = null;
         }
     }
 }

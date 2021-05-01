@@ -1,38 +1,29 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using FluentMPC.Activation;
 using Microsoft.Toolkit.Uwp.Notifications;
+using Stylophone.Common.Interfaces;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Notifications;
-using Windows.UI.Xaml;
 
 namespace FluentMPC.Services
 {
-    public class InAppNotificationRequestedEventArgs : EventArgs { public string NotificationText { get; set; } public int NotificationTime { get; set; } }
-
-    internal partial class NotificationService : ActivationHandler<ToastNotificationActivatedEventArgs>
+    public class NotificationService : NotificationServiceBase
     {
-        public static event EventHandler<InAppNotificationRequestedEventArgs> InAppNotificationRequested;
+        private IDispatcherService _dispatcherService;
 
-        public static void ShowInAppNotification(string notification, int time = 1500)
+        public NotificationService(IDispatcherService dispatcherService)
         {
-            InAppNotificationRequested?.Invoke(Application.Current, new InAppNotificationRequestedEventArgs { NotificationText = notification, NotificationTime = time });
+            _dispatcherService = dispatcherService;
         }
 
-        public void ShowToastNotification(ToastNotification toastNotification)
+        public override void ShowInAppNotification(string notification, bool autoHide)
         {
-            try
-            {
-                ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
-            }
-            catch (Exception)
-            {
-                // TODO WTS: Adding ToastNotification can fail in rare conditions, please handle exceptions as appropriate to your scenario.
-            }
+            //TODO: check for compact mode
+            InvokeInAppNotificationRequested(new InAppNotificationRequestedEventArgs { NotificationText = notification, NotificationTime = autoHide ? 1500 : 0});
         }
 
-        public void ShowBasicToastNotification(string title, string description)
+        public override void ShowBasicToastNotification(string title, string description)
         {
             // Create the toast content
             var content = new ToastContent()
@@ -86,11 +77,17 @@ namespace FluentMPC.Services
             ShowToastNotification(toast);
         }
 
-        protected override async Task HandleInternalAsync(ToastNotificationActivatedEventArgs args)
+        public void ShowToastNotification(ToastNotification toastNotification)
         {
-            //// Handle activation from toast notification
-            //// More details at https://docs.microsoft.com/windows/uwp/design/shell/tiles-and-notifications/send-local-toast
-            await Task.CompletedTask;
+            try
+            {
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
+            }
+            catch (Exception)
+            {
+                // TODO WTS: Adding ToastNotification can fail in rare conditions, please handle exceptions as appropriate to your scenario.
+            }
         }
+
     }
 }

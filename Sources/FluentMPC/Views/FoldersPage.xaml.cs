@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentMPC.ViewModels;
-using FluentMPC.ViewModels.Items;
+﻿using System.Threading.Tasks;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using Stylophone.Common.Interfaces;
+using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -12,11 +12,12 @@ namespace FluentMPC.Views
     // For other samples, get the XAML Controls Gallery app http://aka.ms/XamlControlsGallery
     public sealed partial class FoldersPage : Page
     {
-        public FoldersViewModel ViewModel { get; } = new FoldersViewModel();
+        public FoldersViewModel ViewModel => (FoldersViewModel)DataContext;
 
         public FoldersPage()
         {
             InitializeComponent();
+            DataContext = Ioc.Default.GetRequiredService<FoldersViewModel>();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -33,9 +34,9 @@ namespace FluentMPC.Views
             {
                 Task.Run(async () =>
                 {
-                    await vm.LoadChildrenAsync();
-                    args.Node.HasUnrealizedChildren = false;
-                });
+                await vm.LoadChildrenAsync();
+                await Ioc.Default.GetRequiredService<IDispatcherService>().ExecuteOnUIThreadAsync(() => args.Node.HasUnrealizedChildren = false);
+                }).ConfigureAwait(false);
             }       
         }
 

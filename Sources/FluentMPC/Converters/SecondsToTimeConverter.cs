@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stylophone.Common.Helpers;
+using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
@@ -16,7 +17,7 @@ namespace FluentMPC.Helpers
             var intVal = value as int?;
 
             if (intVal.HasValue)
-                return MiscHelpers.FormatTimeString(intVal.Value * 1000);
+                return Miscellaneous.FormatTimeString(intVal.Value * 1000);
 
             return "??:??";
         }

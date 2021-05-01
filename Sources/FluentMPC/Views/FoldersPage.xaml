@@ -7,7 +7,8 @@
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     xmlns:behaviors="using:FluentMPC.Behaviors"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
-    xmlns:vm="using:FluentMPC.ViewModels.Items" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:vm="using:Stylophone.Common.ViewModels"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
 

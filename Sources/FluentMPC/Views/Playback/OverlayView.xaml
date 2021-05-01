@@ -6,13 +6,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     mc:Ignorable="d"
-    d:DesignHeight="340"
-    d:DesignWidth="364"
+    d:DesignHeight="364"
+    d:DesignWidth="340"
     Unloaded="Page_Unloaded"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:converters="using:FluentMPC.Helpers">
 
     <Page.Resources>
+        <converters:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
 
         <converters:BoolToBrushConverter
@@ -70,15 +71,15 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        
-        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay}"
+
+        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
                           Stretch="UniformToFill" />
 
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Background>
-                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.4" 
+                <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.2" 
                               TintColor="{StaticResource SystemAccentColorDark3}"
                               FallbackColor="{StaticResource SystemAccentColor}">
 

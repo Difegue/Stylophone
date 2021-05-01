@@ -7,13 +7,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    xmlns:items="using:FluentMPC.ViewModels.Items"
+    xmlns:vm="using:Stylophone.Common.ViewModels"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:stylophone="using:FluentMPC.Helpers"
     Style="{StaticResource PageStyle}"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
     <Page.Resources>
+        <stylophone:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
@@ -24,7 +26,7 @@
                  TextChanged="OnFilterChanged" />
 
         <GridView
-            Padding="{StaticResource MediumLeftRightMargin}"
+            Padding="24,4,8,0"
             animations:Connected.ListItemElementName="itemThumbnail"
             animations:Connected.ListItemKey="animationKeyLibrary"
             IsItemClickEnabled="True"
@@ -40,7 +42,7 @@
                 </Style>
             </GridView.ItemContainerStyle>
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="items:AlbumViewModel" >
+                <DataTemplate x:DataType="vm:AlbumViewModel" >
 
                     <controls:DropShadowPanel x:Name="itemThumbnail"
                         Width="180"
@@ -63,9 +65,10 @@
 
                         <Canvas Width="180" Height="180">
                             <Grid CornerRadius="3" Width="180" Height="180">
-                            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{x:Bind AlbumArt, Mode=OneWay}"  Stretch="UniformToFill" />
-                            <!-- Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back. -->
-                            <winui:ProgressBar Width="160" VerticalAlignment="Bottom" IsIndeterminate="True" Margin="{StaticResource SmallBottomMargin}"
+                                <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:///Assets/AlbumPlaceholder.png" Stretch="UniformToFill" />
+                                <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{x:Bind AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+                                <!-- Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back. -->
+                                <winui:ProgressBar Width="160" VerticalAlignment="Bottom" IsIndeterminate="True" Margin="{StaticResource SmallBottomMargin}"
                                                    Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
                             </Grid>
                             <StackPanel HorizontalAlignment="Left">
@@ -87,10 +90,6 @@
 
                         </Canvas>
                     </controls:DropShadowPanel>
-                    <!--
-                    
-                    -->
-                    
 
                 </DataTemplate>
             </GridView.ItemTemplate>

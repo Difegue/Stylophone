@@ -125,10 +125,6 @@
     <value>Stylophone</value>
     <comment>Application description</comment>
   </data>
-  <data name="Shell_NowPlaying.Content" xml:space="preserve">
-    <value>Queue</value>
-    <comment>Navigation view item name for NowPlaying</comment>
-  </data>
   <data name="Shell_Library.Content" xml:space="preserve">
     <value>Library</value>
     <comment>Navigation view item name for Library</comment>
