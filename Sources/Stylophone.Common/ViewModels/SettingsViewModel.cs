@@ -108,6 +108,20 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        private bool _disableAnalytics;
+        public bool DisableAnalytics
+        {
+            get { return _disableAnalytics; }
+            set
+            {
+                if (value != _disableAnalytics)
+                {
+                    _applicationStorageService.SetValue(nameof(DisableAnalytics), value);
+                }
+                Set(ref _disableAnalytics, value);
+            }
+        }
+
         private bool _isCheckingServer;
         public bool IsCheckingServer
         {
@@ -187,6 +201,7 @@ namespace Stylophone.Common.ViewModels
                 _compactEnabled = _applicationStorageService.GetValue<bool>(nameof(IsCompactSizing));
                 _serverHost = _applicationStorageService.GetValue<string>(nameof(ServerHost));
                 _serverPort = _applicationStorageService.GetValue<int>(nameof(ServerPort));
+                _disableAnalytics = _applicationStorageService.GetValue<bool>(nameof(DisableAnalytics));
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);
 
                 await UpdateServerVersionAsync();

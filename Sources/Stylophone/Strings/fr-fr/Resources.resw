@@ -153,42 +153,6 @@
     <value>File name is null or empty. Specify a valid file name</value>
     <comment>File name is null or empty to save file in settings storage extensions</comment>
   </data>
-  <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Thème</value>
-    <comment>Choose theme text for Settings</comment>
-  </data>
-  <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Sombre</value>
-    <comment>Dark theme text for Settings</comment>
-  </data>
-  <data name="Settings_Theme_Default.Content" xml:space="preserve">
-    <value>Thème de Windows</value>
-    <comment>Windows default theme text for Settings</comment>
-  </data>
-  <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Clair</value>
-    <comment>Light theme text for Settings</comment>
-  </data>
-  <data name="Settings_About.Text" xml:space="preserve">
-    <value>A propos de cette application</value>
-    <comment>About this application title for Settings</comment>
-  </data>
-  <data name="Settings_AboutDescription.Text" xml:space="preserve">
-    <value>Client MPD pour UWP, utilisant MpcNET.</value>
-    <comment>About this application description for Settings</comment>
-  </data>
-  <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Code Source, License et Vie Privée</value>
-    <comment>Privacy Statement link content for Settings</comment>
-  </data>
-  <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://github.com/Difegue/Stylophone</value>
-    <comment>Here is your Privacy Statement url for Settings</comment>
-  </data>
-  <data name="Settings_Personalization.Text" xml:space="preserve">
-    <value>Personnalisation</value>
-    <comment>Personalization text for Settings</comment>
-  </data>
   <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
     <value>value must be an Enum!</value>
     <comment>Value must be an Enum in enum to boolean converter</comment>
@@ -221,16 +185,6 @@ J'espère que vous apprécierez l'application !</value>
   <data name="Shell_NewPlaylist.Content" xml:space="preserve">
     <value>Ajouter une Playlist</value>
   </data>
-  <data name="Settings_Server.Text" xml:space="preserve">
-    <value>Serveur MPD</value>
-    <comment>Server text for Settings</comment>
-  </data>
-  <data name="Settings_ServerHost.Header" xml:space="preserve">
-    <value>Hôte</value>
-  </data>
-  <data name="Settings_ServerPort.Header" xml:space="preserve">
-    <value>Port</value>
-  </data>
   <data name="AddToPlaylistComboBox.Header" xml:space="preserve">
     <value>Ajouter à la Playlist suivante:</value>
   </data>
@@ -242,19 +196,6 @@ J'espère que vous apprécierez l'application !</value>
   </data>
   <data name="NoServerError.Text" xml:space="preserve">
     <value>Impossible de trouver un serveur MPD à cette adresse !</value>
-  </data>
-  <data name="Settings_CacheButton.Content" xml:space="preserve">
-    <value>Vider le cache</value>
-  </data>
-  <data name="Settings_ClearAlbumCache.Text" xml:space="preserve">
-    <value>Stylophone stocke les pochettes d'album sur votre ordinateur pour éviter de surcharger votre serveur MPD.
-Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
-  </data>
-  <data name="Settings_Database.Text" xml:space="preserve">
-    <value>Base de données et Pochettes d'albums</value>
-  </data>
-  <data name="Settings_RefreshDatabase.Content" xml:space="preserve">
-    <value>Mettre à jour la base de données du serveur</value>
   </data>
   <data name="NewPlaylistCheckBox.Content" xml:space="preserve">
     <value>Créer une nouvelle Playlist</value>
@@ -288,18 +229,6 @@ Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
   </data>
   <data name="FirstRun_ItalicBody.Text" xml:space="preserve">
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
-  </data>
-  <data name="Settings_Sizing.Text" xml:space="preserve">
-    <value>Densité de l'interface</value>
-  </data>
-  <data name="Settings_Sizing_Compact.Content" xml:space="preserve">
-    <value>Compact</value>
-  </data>
-  <data name="Settings_Sizing_Info.Text" xml:space="preserve">
-    <value>Ce paramètre sera appliqué au redémarrage de l'application.</value>
-  </data>
-  <data name="Settings_Sizing_Normal.Content" xml:space="preserve">
-    <value>Normal</value>
   </data>
   <data name="AddQueueToPlaylistFlyoutItem.Text" xml:space="preserve">
     <value>Ajouter la file d'attente à une Playlist</value>

@@ -10,6 +10,9 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace Stylophone
 {
@@ -24,9 +27,11 @@ namespace Stylophone
 
         public App()
         {
+
             // Initialize IoC
             Services = ConfigureServices();
             Ioc.Default.ConfigureServices(Services);
+
 
             InitializeComponent();
 
@@ -54,7 +59,16 @@ namespace Stylophone
                 Resources.MergedDictionaries.Add(
                    new ResourceDictionary { Source = new Uri(@"ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml", UriKind.Absolute) });
             }
-               
+
+            // Analytics
+            var disableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.DisableAnalytics));
+            if (!disableAnalytics)
+            {
+                // Initialize AppCenter
+                AppCenter.Start("f2193544-6a38-42f6-92bd-69964bc3a0e8",
+                    typeof(Analytics), typeof(Crashes));
+            }
+
             var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
             viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;

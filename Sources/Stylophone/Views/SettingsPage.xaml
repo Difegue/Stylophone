@@ -8,7 +8,7 @@
     Style="{StaticResource PageStyle}"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
-    xmlns:stylophone="using:Stylophone.Common.Interfaces"
+    xmlns:stylophone="using:Stylophone.Common.Interfaces" xmlns:strings="using:Stylophone.Localization.Strings"
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="stylophone:Theme" />
@@ -18,16 +18,15 @@
     </Page.Resources>
 
     <ScrollViewer Margin="{StaticResource MediumLeftMargin}">
-        <StackPanel
-            x:Name="ContentArea">
+        <StackPanel x:Name="ContentArea">
 
-            <TextBlock x:Uid="Settings_Server" Style="{ThemeResource SubtitleTextBlockStyle}" />
+            <TextBlock Text="{x:Bind strings:Resources.SettingsServer}" Style="{ThemeResource SubtitleTextBlockStyle}" />
 
             <StackPanel Margin="{StaticResource SmallTopMargin}" HorizontalAlignment="Left" Width="350" >
 
-                <TextBox x:Uid="Settings_ServerHost" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}"/>
+                <TextBox PlaceholderText="{x:Bind strings:Resources.SettingsServerHost}" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}"/>
 
-                <controls:NumberBox x:Uid="Settings_ServerPort" SpinButtonPlacementMode="Compact" Margin="{StaticResource XSmallTopMargin}"
+                <controls:NumberBox PlaceholderText="{x:Bind strings:Resources.SettingsServerPort}" SpinButtonPlacementMode="Compact" Margin="{StaticResource XSmallTopMargin}"
                                     Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}" Minimum="1" Maximum="65536"/>
 
                 <ProgressBar Margin="{StaticResource XSmallTopMargin}" IsIndeterminate="True"
@@ -50,27 +49,27 @@
 
             </StackPanel>
 
-            <TextBlock x:Uid="Settings_Database" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}"/>
+            <TextBlock Text="{x:Bind strings:Resources.SettingsDatabase}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}"/>
 
             <StackPanel Margin="{StaticResource XSmallTopMargin}">
 
-                <Button x:Uid="Settings_RefreshDatabase" IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" Command="{x:Bind ViewModel.RescanDbCommand}"/>
+                <Button Content="{x:Bind strings:Resources.SettingsUpdateDatabase}" IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" Command="{x:Bind ViewModel.RescanDbCommand}"/>
 
                 <TextBlock
-                    x:Uid="Settings_ClearAlbumCache"
+                    Text="{x:Bind strings:Resources.SettingsClearCacheDescription}"
                     Margin="{StaticResource SmallTopMargin}" Style="{ThemeResource BodyTextBlockStyle}" />
 
-                <Button x:Uid="Settings_CacheButton" Margin="{StaticResource XSmallTopMargin}" Command="{x:Bind ViewModel.ClearCacheCommand}"/>
+                <Button Content="{x:Bind strings:Resources.SettingsClearCache}" Margin="{StaticResource XSmallTopMargin}" Command="{x:Bind ViewModel.ClearCacheCommand}"/>
                 
             </StackPanel>
 
-            <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
+            <TextBlock Text="{x:Bind strings:Resources.SettingsCustomization}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
-                <TextBlock x:Uid="Settings_Theme" />
+                <TextBlock Text="{x:Bind strings:Resources.SettingsTheme}" />
 
                 <StackPanel Margin="{StaticResource XSmallTopMargin}">
                     <RadioButton
-                        x:Uid="Settings_Theme_Light"
+                        Content="{x:Bind strings:Resources.SettingsThemeLight}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
                         IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
                         FontSize="15"
@@ -80,7 +79,7 @@
                         </RadioButton.CommandParameter>
                     </RadioButton>
                     <RadioButton
-                        x:Uid="Settings_Theme_Dark"
+                        Content="{x:Bind strings:Resources.SettingsThemeDark}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
                         IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
                         FontSize="15"
@@ -90,7 +89,7 @@
                         </RadioButton.CommandParameter>
                     </RadioButton>
                     <RadioButton
-                        x:Uid="Settings_Theme_Default"
+                        Content="{x:Bind strings:Resources.SettingsThemeDefault}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
                         IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
                         FontSize="15"
@@ -101,19 +100,19 @@
                     </RadioButton>
                 </StackPanel>
 
-                <TextBlock x:Uid="Settings_Sizing" Margin="{StaticResource XSmallTopMargin}" />
+                <TextBlock Text="{x:Bind strings:Resources.SettingsUIDensity}" Margin="{StaticResource XSmallTopMargin}" />
 
-                <TextBlock x:Uid="Settings_Sizing_Info" Style="{StaticResource CaptionTextBlockStyle}" />
+                <TextBlock Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" Style="{StaticResource CaptionTextBlockStyle}" />
                 <StackPanel Margin="{StaticResource XSmallTopMargin}">
                     <RadioButton
-                        x:Uid="Settings_Sizing_Normal"
+                        Content="{x:Bind strings:Resources.SettingsUIDensityNormal}"
                         CommandParameter="False"
                         Command="{x:Bind ViewModel.SwitchSizingCommand}"
                         IsChecked="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}"
                         FontSize="15"
                         GroupName="AppSizing"/>
                     <RadioButton
-                        x:Uid="Settings_Sizing_Compact"
+                        Content="{x:Bind strings:Resources.SettingsUIDensityCompact}"
                         CommandParameter="True"
                         Command="{x:Bind ViewModel.SwitchSizingCommand}"
                         IsChecked="{x:Bind ViewModel.IsCompactSizing, Mode=OneWay}"
@@ -123,8 +122,12 @@
                 
             </StackPanel>
 
-          
-            <TextBlock x:Uid="Settings_About" Style="{ThemeResource SubtitleTextBlockStyle}" />
+            <TextBlock Text="{x:Bind strings:Resources.SettingsAnalytics}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource SmallBottomMargin}"  />
+
+            <ToggleSwitch Header="{x:Bind strings:Resources.SettingsAnalyticsText}" IsOn="{x:Bind ViewModel.DisableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}" />
+            <TextBlock Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" Style="{StaticResource CaptionTextBlockStyle}" />
+            
+            <TextBlock Text="{x:Bind strings:Resources.SettingsAbout}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
 
             <StackPanel Margin="{StaticResource SmallTopMargin}" >
                 <StackPanel Orientation="Horizontal">
@@ -136,13 +139,14 @@
                     <StackPanel>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" />
                         <TextBlock
-                        x:Uid="Settings_AboutDescription"
+                        Text="{x:Bind strings:Resources.SettingsAboutText}"
                         Margin="{StaticResource XSmallTopMargin}"
                         Style="{ThemeResource BodyTextBlockStyle}" />
                     </StackPanel>
                 </StackPanel>
 
-                <HyperlinkButton x:Uid="Settings_PrivacyTermsLink" Margin="{StaticResource XSmallTopMargin}" />
+                <HyperlinkButton Content="{x:Bind strings:Resources.SettingsGithub}"
+                                 NavigateUri="{x:Bind strings:Resources.SettingsGithubLink}" Margin="{StaticResource XSmallTopMargin}" />
             </StackPanel>
         </StackPanel>
     </ScrollViewer>    

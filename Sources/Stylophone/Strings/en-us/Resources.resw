@@ -153,42 +153,6 @@
     <value>File name is null or empty. Specify a valid file name</value>
     <comment>File name is null or empty to save file in settings storage extensions</comment>
   </data>
-  <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Theme</value>
-    <comment>Choose theme text for Settings</comment>
-  </data>
-  <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Dark</value>
-    <comment>Dark theme text for Settings</comment>
-  </data>
-  <data name="Settings_Theme_Default.Content" xml:space="preserve">
-    <value>Windows default</value>
-    <comment>Windows default theme text for Settings</comment>
-  </data>
-  <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Light</value>
-    <comment>Light theme text for Settings</comment>
-  </data>
-  <data name="Settings_About.Text" xml:space="preserve">
-    <value>About this application</value>
-    <comment>About this application title for Settings</comment>
-  </data>
-  <data name="Settings_AboutDescription.Text" xml:space="preserve">
-    <value>MPD Client for the Universal Windows Platform, based on MpcNET. </value>
-    <comment>About this application description for Settings</comment>
-  </data>
-  <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Source Code, License and Privacy Statement</value>
-    <comment>Privacy Statement link content for Settings</comment>
-  </data>
-  <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://github.com/Difegue/Stylophone</value>
-    <comment>Here is your Privacy Statement url for Settings</comment>
-  </data>
-  <data name="Settings_Personalization.Text" xml:space="preserve">
-    <value>Personalization</value>
-    <comment>Personalization text for Settings</comment>
-  </data>
   <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
     <value>value must be an Enum!</value>
     <comment>Value must be an Enum in enum to boolean converter</comment>
@@ -223,16 +187,6 @@ Hope you enjoy using the application!
   <data name="Shell_NewPlaylist.Content" xml:space="preserve">
     <value>Add Playlist</value>
   </data>
-  <data name="Settings_Server.Text" xml:space="preserve">
-    <value>MPD Server</value>
-    <comment>Server text for Settings</comment>
-  </data>
-  <data name="Settings_ServerHost.Header" xml:space="preserve">
-    <value>Hostname</value>
-  </data>
-  <data name="Settings_ServerPort.Header" xml:space="preserve">
-    <value>Port</value>
-  </data>
   <data name="AddToPlaylistComboBox.Header" xml:space="preserve">
     <value>Add track(s) to the following Playlist:</value>
   </data>
@@ -244,19 +198,6 @@ Hope you enjoy using the application!
   </data>
   <data name="NoServerError.Text" xml:space="preserve">
     <value>Couldn't find an MPD server at this address!</value>
-  </data>
-  <data name="Settings_CacheButton.Content" xml:space="preserve">
-    <value>Clear Cache</value>
-  </data>
-  <data name="Settings_ClearAlbumCache.Text" xml:space="preserve">
-    <value>Stylophone stores album art locally to avoid overloading your MPD Server. 
-If you want to clear the album art cache, click this button.</value>
-  </data>
-  <data name="Settings_Database.Text" xml:space="preserve">
-    <value>Database and Album Art</value>
-  </data>
-  <data name="Settings_RefreshDatabase.Content" xml:space="preserve">
-    <value>Update Server Database</value>
   </data>
   <data name="NewPlaylistCheckBox.Content" xml:space="preserve">
     <value>Create New Playlist</value>
@@ -290,18 +231,6 @@ If you want to clear the album art cache, click this button.</value>
   </data>
   <data name="FirstRun_ItalicBody.Text" xml:space="preserve">
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
-  </data>
-  <data name="Settings_Sizing.Text" xml:space="preserve">
-    <value>UI Density</value>
-  </data>
-  <data name="Settings_Sizing_Compact.Content" xml:space="preserve">
-    <value>Compact</value>
-  </data>
-  <data name="Settings_Sizing_Info.Text" xml:space="preserve">
-    <value>This setting will apply after restarting the app.</value>
-  </data>
-  <data name="Settings_Sizing_Normal.Content" xml:space="preserve">
-    <value>Normal</value>
   </data>
   <data name="AddQueueToPlaylistFlyoutItem.Text" xml:space="preserve">
     <value>Add Queue to Playlist</value>

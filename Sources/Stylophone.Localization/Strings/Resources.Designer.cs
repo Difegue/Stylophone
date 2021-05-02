@@ -349,11 +349,210 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à About this application.
+        /// </summary>
+        public static string SettingsAbout {
+            get {
+                return ResourceManager.GetString("SettingsAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à MPD Client for the Universal Windows Platform, based on MpcNET..
+        /// </summary>
+        public static string SettingsAboutText {
+            get {
+                return ResourceManager.GetString("SettingsAboutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analytics.
+        /// </summary>
+        public static string SettingsAnalytics {
+            get {
+                return ResourceManager.GetString("SettingsAnalytics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Allow Stylophone to send crash and analytics reports.
+        /// </summary>
+        public static string SettingsAnalyticsText {
+            get {
+                return ResourceManager.GetString("SettingsAnalyticsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à This setting will apply after restarting the app..
+        /// </summary>
+        public static string SettingsApplyOnRestart {
+            get {
+                return ResourceManager.GetString("SettingsApplyOnRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Clear Cache.
+        /// </summary>
+        public static string SettingsClearCache {
+            get {
+                return ResourceManager.GetString("SettingsClearCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stylophone stores album art locally to avoid overloading your MPD Server.
+        ///If you want to clear the album art cache, click this button..
+        /// </summary>
+        public static string SettingsClearCacheDescription {
+            get {
+                return ResourceManager.GetString("SettingsClearCacheDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Personalization.
+        /// </summary>
+        public static string SettingsCustomization {
+            get {
+                return ResourceManager.GetString("SettingsCustomization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Database and Album Art.
+        /// </summary>
+        public static string SettingsDatabase {
+            get {
+                return ResourceManager.GetString("SettingsDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Source Code, License and Privacy Statement.
+        /// </summary>
+        public static string SettingsGithub {
+            get {
+                return ResourceManager.GetString("SettingsGithub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à https://github.com/Difegue/Stylophone.
+        /// </summary>
+        public static string SettingsGithubLink {
+            get {
+                return ResourceManager.GetString("SettingsGithubLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Settings.
         /// </summary>
         public static string SettingsHeader {
             get {
                 return ResourceManager.GetString("SettingsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à MPD Server.
+        /// </summary>
+        public static string SettingsServer {
+            get {
+                return ResourceManager.GetString("SettingsServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Hostname.
+        /// </summary>
+        public static string SettingsServerHost {
+            get {
+                return ResourceManager.GetString("SettingsServerHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Port.
+        /// </summary>
+        public static string SettingsServerPort {
+            get {
+                return ResourceManager.GetString("SettingsServerPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Theme.
+        /// </summary>
+        public static string SettingsTheme {
+            get {
+                return ResourceManager.GetString("SettingsTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Dark.
+        /// </summary>
+        public static string SettingsThemeDark {
+            get {
+                return ResourceManager.GetString("SettingsThemeDark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Windows default.
+        /// </summary>
+        public static string SettingsThemeDefault {
+            get {
+                return ResourceManager.GetString("SettingsThemeDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Light.
+        /// </summary>
+        public static string SettingsThemeLight {
+            get {
+                return ResourceManager.GetString("SettingsThemeLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à UI Density.
+        /// </summary>
+        public static string SettingsUIDensity {
+            get {
+                return ResourceManager.GetString("SettingsUIDensity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Compact.
+        /// </summary>
+        public static string SettingsUIDensityCompact {
+            get {
+                return ResourceManager.GetString("SettingsUIDensityCompact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Normal.
+        /// </summary>
+        public static string SettingsUIDensityNormal {
+            get {
+                return ResourceManager.GetString("SettingsUIDensityNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Update Server Database.
+        /// </summary>
+        public static string SettingsUpdateDatabase {
+            get {
+                return ResourceManager.GetString("SettingsUpdateDatabase", resourceCulture);
             }
         }
         

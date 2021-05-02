@@ -232,4 +232,71 @@
   <data name="PlaylistRemovedText" xml:space="preserve">
     <value>The Playlist has been removed.</value>
   </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>About this application</value>
+  </data>
+  <data name="SettingsAboutText" xml:space="preserve">
+    <value>MPD Client for the Universal Windows Platform, based on MpcNET.</value>
+  </data>
+  <data name="SettingsAnalytics" xml:space="preserve">
+    <value>Analytics</value>
+  </data>
+  <data name="SettingsAnalyticsText" xml:space="preserve">
+    <value>Allow Stylophone to send crash and analytics reports</value>
+  </data>
+  <data name="SettingsApplyOnRestart" xml:space="preserve">
+    <value>This setting will apply after restarting the app.</value>
+  </data>
+  <data name="SettingsClearCache" xml:space="preserve">
+    <value>Clear Cache</value>
+  </data>
+  <data name="SettingsClearCacheDescription" xml:space="preserve">
+    <value>Stylophone stores album art locally to avoid overloading your MPD Server.
+If you want to clear the album art cache, click this button.</value>
+  </data>
+  <data name="SettingsCustomization" xml:space="preserve">
+    <value>Personalization</value>
+  </data>
+  <data name="SettingsDatabase" xml:space="preserve">
+    <value>Database and Album Art</value>
+  </data>
+  <data name="SettingsGithub" xml:space="preserve">
+    <value>Source Code, License and Privacy Statement</value>
+  </data>
+  <data name="SettingsGithubLink" xml:space="preserve">
+    <value>https://github.com/Difegue/Stylophone</value>
+  </data>
+  <data name="SettingsServer" xml:space="preserve">
+    <value>MPD Server</value>
+  </data>
+  <data name="SettingsServerHost" xml:space="preserve">
+    <value>Hostname</value>
+  </data>
+  <data name="SettingsServerPort" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="SettingsTheme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="SettingsThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="SettingsThemeDefault" xml:space="preserve">
+    <value>Windows default</value>
+  </data>
+  <data name="SettingsThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="SettingsUIDensity" xml:space="preserve">
+    <value>UI Density</value>
+  </data>
+  <data name="SettingsUIDensityCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="SettingsUIDensityNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="SettingsUpdateDatabase" xml:space="preserve">
+    <value>Update Server Database</value>
+  </data>
 </root>

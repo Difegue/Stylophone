@@ -232,4 +232,71 @@
   <data name="PlaylistRemovedText" xml:space="preserve">
     <value>La Playlist a été supprimée.</value>
   </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>A propos de cette application</value>
+  </data>
+  <data name="SettingsAboutText" xml:space="preserve">
+    <value>Client MPD pour UWP, utilisant MpcNET.</value>
+  </data>
+  <data name="SettingsAnalytics" xml:space="preserve">
+    <value>Télémétrie</value>
+  </data>
+  <data name="SettingsAnalyticsText" xml:space="preserve">
+    <value>Autoriser Stylophone à envoyer des rapports d'analyse et de crash</value>
+  </data>
+  <data name="SettingsApplyOnRestart" xml:space="preserve">
+    <value>Ce paramètre sera appliqué au redémarrage de l'application.</value>
+  </data>
+  <data name="SettingsClearCache" xml:space="preserve">
+    <value>Vider le cache</value>
+  </data>
+  <data name="SettingsClearCacheDescription" xml:space="preserve">
+    <value>Stylophone stocke les pochettes d'album sur votre ordinateur pour éviter de surcharger votre serveur MPD.
+Pour nettoyer ce cache de pochettes, cliquez sur ce bouton.</value>
+  </data>
+  <data name="SettingsCustomization" xml:space="preserve">
+    <value>Personnalisation</value>
+  </data>
+  <data name="SettingsDatabase" xml:space="preserve">
+    <value>Base de données et Pochettes d'albums</value>
+  </data>
+  <data name="SettingsGithub" xml:space="preserve">
+    <value>Code Source, License et Vie Privée</value>
+  </data>
+  <data name="SettingsGithubLink" xml:space="preserve">
+    <value>https://github.com/Difegue/Stylophone</value>
+  </data>
+  <data name="SettingsServer" xml:space="preserve">
+    <value>Serveur MPD</value>
+  </data>
+  <data name="SettingsServerHost" xml:space="preserve">
+    <value>Hôte</value>
+  </data>
+  <data name="SettingsServerPort" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="SettingsTheme" xml:space="preserve">
+    <value>Thème</value>
+  </data>
+  <data name="SettingsThemeDark" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="SettingsThemeDefault" xml:space="preserve">
+    <value>Thème de Windows</value>
+  </data>
+  <data name="SettingsThemeLight" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="SettingsUIDensity" xml:space="preserve">
+    <value>Densité de l'interface</value>
+  </data>
+  <data name="SettingsUIDensityCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="SettingsUIDensityNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="SettingsUpdateDatabase" xml:space="preserve">
+    <value>Mettre à jour la base de données du serveur</value>
+  </data>
 </root>
