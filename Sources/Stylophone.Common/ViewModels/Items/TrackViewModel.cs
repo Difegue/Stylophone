@@ -80,7 +80,7 @@ namespace Stylophone.Common.ViewModels
 
         public bool IsPlaying => _mpdService.CurrentStatus.SongId == File.Id;
 
-        internal void UpdatePlayingStatus() => _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
+        public void UpdatePlayingStatus() => _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
 
         private SKImage _albumArt;
         public SKImage AlbumArt

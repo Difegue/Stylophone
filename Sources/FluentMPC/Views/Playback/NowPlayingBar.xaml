@@ -8,8 +8,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="80"
-    Loaded="OnLoaded"
-    Unloaded="OnUnloaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -23,6 +21,7 @@
             TrueColor="ButtonRevealBackgroundPointerOver" />
 
         <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters1:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
     </UserControl.Resources>
 
     <!--  Content  -->
@@ -87,6 +86,7 @@
             BorderThickness="1"
             Canvas.ZIndex="10"
             Visibility="{x:Bind PlaybackViewModel.ShowTrackName, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+            IsEnabled="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay}"
             Click="{x:Bind PlaybackViewModel.NavigateNowPlaying}"
             Style="{ThemeResource ButtonRevealStyle}">
             <Grid>
@@ -104,6 +104,7 @@
                     Color="Black">
 
                     <Grid Width="70" Height="70" CornerRadius="3" >
+                        <Image Source="ms-appx:///Assets/AlbumPlaceholder.png" Stretch="UniformToFill" />
                         <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
                     </Grid>
                    
@@ -285,7 +286,8 @@
                     ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
                     PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
                     ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
-                    Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}" />
+                    Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}"
+                    Visibility="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                 <ProgressBar
                     x:Name="LoadingBar"
@@ -294,6 +296,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
+                    Visibility="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"
                     IsIndeterminate="True" />
 
                 <TextBlock

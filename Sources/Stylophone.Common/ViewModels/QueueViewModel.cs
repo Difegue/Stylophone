@@ -156,6 +156,8 @@ namespace Stylophone.Common.ViewModels
         {
             if (_mpdService.IsConnected)
                 Task.Run(async () => await LoadInitialDataAsync());
+            else
+                _dispatcherService.ExecuteOnUIThreadAsync(() => Source.Clear());
         }
 
         private async void MPDConnectionService_QueueChanged(object sender, EventArgs e)

@@ -49,7 +49,7 @@ namespace MpcNET
         /// <summary>
         /// Is this connection active?
         /// </summary>
-        public bool IsConnected => tcpClient.Connected;
+        public bool IsConnected => tcpClient?.Connected ?? false;
 
         /// <summary>
         /// Event emitted when the connection is cut.
@@ -109,15 +109,19 @@ namespace MpcNET
             var commandText = mpcCommand.Serialize();
 
             // Send the command, retrying three times in case of an exception
-            var result = await Policy
+            var result = Policy
                 .Handle<Exception>()
-                .RetryAsync(3)
-                .ExecuteAndCaptureAsync(async () =>
+                .Retry(3, onRetry: (exception, retryCount) =>
+                {
+                    // Add logic to be executed before each retry, such as logging
+                    ReconnectAsync(true).Wait();
+                })
+                .ExecuteAndCapture(() =>
                 {
                     using (var writer = new StreamWriter(networkStream, Encoding, 512, true) { NewLine = "\n" })
                     {
-                        await writer.WriteLineAsync(commandText);
-                        await writer.FlushAsync();
+                        writer.WriteLineAsync(commandText).Wait();
+                        writer.FlushAsync().Wait();
                     }
 
                     (rawResponse, response) = ReadResponse(commandText);
@@ -131,7 +135,14 @@ namespace MpcNET
 
             if (result.FinalException != null)
             {
-                await DisconnectAsync(false);
+                try
+                {
+                    await DisconnectAsync(false);
+                }
+                catch 
+                { 
+                }
+                
                 return new ErrorMpdMessage<TResponse>(mpcCommand, new ErrorMpdResponse<TResponse>(result.FinalException));
             }
 
@@ -176,7 +187,7 @@ namespace MpcNET
                 .ExecuteAndCaptureAsync(async (t) =>
                 {
                     var client = new TcpClient();
-                    using (token.Register(() => client.Close()))
+                    using (t.Register(() => client.Close()))
                     {
                         try
                         {
@@ -184,7 +195,7 @@ namespace MpcNET
                         }
                         catch (ObjectDisposedException) when (t.IsCancellationRequested)
                         {
-                            token.ThrowIfCancellationRequested();
+                            t.ThrowIfCancellationRequested();
                         }
                     }
 
@@ -218,6 +229,7 @@ namespace MpcNET
             {
                 // We couldn't reconnect
                 Disconnected?.Invoke(this, new EventArgs());
+                throw new MpcConnectException(connectResult.FinalException?.Message);
             }            
         }
 

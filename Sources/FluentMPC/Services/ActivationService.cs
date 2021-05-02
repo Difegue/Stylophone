@@ -92,7 +92,10 @@ namespace FluentMPC.Services
             var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
             var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort));
 
-            await Ioc.Default.GetRequiredService<MPDConnectionService>().InitializeAsync(host, port);
+            var mpdService = Ioc.Default.GetRequiredService<MPDConnectionService>();
+            mpdService.SetServerInfo(host, port);
+            await mpdService.InitializeAsync(true);
+
             Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
             Ioc.Default.GetRequiredService<SystemMediaControlsService>().Initialize();
         }

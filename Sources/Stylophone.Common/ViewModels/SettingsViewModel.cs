@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -71,11 +72,8 @@ namespace Stylophone.Common.ViewModels
             {
                 if (value != _serverHost)
                 {
-                    Task.Run(async () =>
-                    {
-                        _applicationStorageService.SetValue(nameof(ServerHost), value ?? "localhost");
-                        await CheckServerAddressAsync();
-                    });
+                    _applicationStorageService.SetValue(nameof(ServerHost), value ?? "localhost");
+                    TriggerServerConnection(value, ServerPort);
                 }
                 Set(ref _serverHost, value);
             }
@@ -89,11 +87,8 @@ namespace Stylophone.Common.ViewModels
             {
                 if (value != _serverPort)
                 {
-                    Task.Run(async () =>
-                    {
-                        _applicationStorageService.SetValue(nameof(ServerPort), value);
-                        await CheckServerAddressAsync();
-                    });
+                    _applicationStorageService.SetValue(nameof(ServerPort), value);
+                    TriggerServerConnection(ServerHost, value);
                 }
                 Set(ref _serverPort, value);
             }
@@ -207,7 +202,6 @@ namespace Stylophone.Common.ViewModels
             if (_previousUpdatingDb > 0 && _previousUpdatingDb != updatingDb && updatingDb == 0)
             {
                 // A DB update job has concluded, refresh library
-                await CheckServerAddressAsync();
                 await UpdateServerVersionAsync();
             }
             _previousUpdatingDb = updatingDb;
@@ -221,17 +215,20 @@ namespace Stylophone.Common.ViewModels
             return $"{appName} - {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
         }
 
-        private async Task CheckServerAddressAsync()
+        private void TriggerServerConnection(string host, int port)
         {
-            if (IsCheckingServer) return;
-
             IsCheckingServer = true;
-            await _mpdService.InitializeAsync(ServerHost, ServerPort);
-            OnPropertyChanged(nameof(IsServerValid));
-            IsCheckingServer = false;
+            _mpdService.SetServerInfo(host, port);
+
+            Task.Run(async () => await _mpdService.InitializeAsync());
         }
+
         private async Task UpdateServerVersionAsync()
         {
+            IsCheckingServer = _mpdService.IsConnecting;
+
+            await _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsServerValid)));
+
             if (!_mpdService.IsConnected) return;
 
             var response = await _mpdService.SafelySendCommandAsync(new StatsCommand());

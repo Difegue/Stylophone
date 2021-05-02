@@ -98,7 +98,7 @@ namespace FluentMPC.Services
             try
             {
                 // Get the updater.
-                SystemMediaTransportControlsDisplayUpdater updater = _smtc.DisplayUpdater;
+                SystemMediaTransportControlsDisplayUpdater updater = _smtc?.DisplayUpdater;
 
                 if (updater == null) return;
 

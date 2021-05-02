@@ -47,6 +47,7 @@ namespace Stylophone.Common.ViewModels
 
             // Default to NowPlayingBar
             _hostType = VisualizationType.NowPlayingBar;
+            _trackInfoAvailable = false;
 
             // Bind the methods that we need
             _mpdService.StatusChanged += OnStateChange;
@@ -61,19 +62,30 @@ namespace Stylophone.Common.ViewModels
 
             // Update info to current track
             _mpdService.ConnectionChanged += OnConnectionChanged;
-            OnConnectionChanged(null, null);
+
+            if (_mpdService.IsConnected)
+                Task.Run(() => InitializeAsync());
         }
 
         private void OnConnectionChanged(object sender, EventArgs e)
         {
             if (_mpdService.IsConnected)
             {
-                OnTrackChange(this, new SongChangedEventArgs { NewSongId = _mpdService.CurrentStatus.SongId });
-                CurrentTimeValue = _mpdService.CurrentStatus.Elapsed.TotalSeconds;
-
-                OnStateChange(this, null);
-                UpdateUpNextAsync(_mpdService.CurrentStatus);
+                Task.Run(() => InitializeAsync());
+            } 
+            else
+            {
+                IsTrackInfoAvailable = false;
             }
+        }
+
+        private async Task InitializeAsync()
+        {
+            OnTrackChange(this, new SongChangedEventArgs { NewSongId = _mpdService.CurrentStatus.SongId });
+            CurrentTimeValue = _mpdService.CurrentStatus.Elapsed.TotalSeconds;
+
+            OnStateChange(this, null);
+            await UpdateUpNextAsync(_mpdService.CurrentStatus);
         }
 
 
@@ -102,16 +114,21 @@ namespace Stylophone.Common.ViewModels
                 OnPropertyChanged(nameof(HasNextTrack));
             }
         }
+        public bool HasNextTrack => NextTrack != null;
 
         private bool _showTrackName;
-
         public bool ShowTrackName
         {
             get => _showTrackName;
             set => Set(ref _showTrackName, value);
         }
 
-        public bool HasNextTrack => NextTrack != null;
+        private bool _trackInfoAvailable;
+        public bool IsTrackInfoAvailable
+        {
+            get => _trackInfoAvailable;
+            set => Set(ref _trackInfoAvailable, value);
+        }
 
         private VisualizationType _hostType;
         public VisualizationType HostType
@@ -534,13 +551,14 @@ namespace Stylophone.Common.ViewModels
 
             if (response != null)
             {
+                IsTrackInfoAvailable = true;
                 // Set the new current track
                 CurrentTrack = _trackVmFactory.GetTrackViewModel(response);
             }
             else
             {
                 // No response 
-                _notificationService.ShowInAppNotification(Resources.NoTrackPlayingText);
+                IsTrackInfoAvailable = false;
             }
 
             if (CurrentTrack?.File != null)
@@ -564,9 +582,8 @@ namespace Stylophone.Common.ViewModels
             else
             {
                 // No track playing
-                _notificationService.ShowInAppNotification(Resources.NoTrackPlayingText);
+                IsTrackInfoAvailable = false;
             }
-
         }
 
         private async void OnStateChange(object sender, EventArgs eventArgs)
@@ -605,18 +622,22 @@ namespace Stylophone.Common.ViewModels
                 switch (status.State)
                 {
                     case MpdState.Play:
+                        IsTrackInfoAvailable = true;
                         PlayButtonContent = "\uE769";
                         break;
 
                     case MpdState.Stop:
+                        IsTrackInfoAvailable = true;
                         PlayButtonContent = "\uE768";
                         break;
 
                     case MpdState.Pause:
+                        IsTrackInfoAvailable = true;
                         PlayButtonContent = "\uE768";
                         break;
 
                     default:
+                        IsTrackInfoAvailable = false;
                         PlayButtonContent = "\uE768";
                         break;
                 }

@@ -51,7 +51,10 @@ namespace FluentMPC.Views
                 // Scroll to the newly playing song
                 var playing = ViewModel.Source.Where(t => t.File.Id == e.NewSongId && t.File.Id != manualSongId).FirstOrDefault();
                 if (playing != null)
+                {
+                    playing.UpdatePlayingStatus();
                     QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
+                }
             });
         }
 
@@ -62,15 +65,18 @@ namespace FluentMPC.Views
                 if (QueueList.Items.Count == 0)
                     return;
 
-                var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
+                var playing = ViewModel.Source.Where(t => t.IsPlaying && t.File.Id != manualSongId).FirstOrDefault();
                 if (playing != null)
+                {
+                    playing.UpdatePlayingStatus();
                     QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
+                }
             }
         }
 
         private void Play_Track(object sender, RoutedEventArgs e)
         {
-            var listView = sender as Helpers.AlternatingRowListView;
+            var listView = sender as AlternatingRowListView;
             var trackVm = listView.SelectedItem as TrackViewModel;
             // Set this ID as manually played by the user to prevent unnecessary autoscrolling.
             // Kind of a duct tape fix for now

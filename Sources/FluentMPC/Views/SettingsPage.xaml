@@ -36,8 +36,8 @@
                 <StackPanel Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"
                             Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
-                        <SymbolIcon Symbol="Clear" Foreground="Red"></SymbolIcon>
-                        <TextBlock x:Uid="NoServerError"/>
+                        <SymbolIcon Symbol="Clear" Foreground="Red" VerticalAlignment="Top"></SymbolIcon>
+                        <TextBlock x:Uid="NoServerError" TextWrapping="WrapWholeWords" Width="325"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"

@@ -32,27 +32,8 @@ namespace Stylophone.Common.Services
         // TODO: Needs a lock for thread safety
         public bool DisableQueueEvents { get; set; }
 
-        private bool _connected;
-        public bool IsConnected
-        {
-            get { return _connected; }
-
-            set
-            {
-                _connected = value;
-                ConnectionChanged?.Invoke(this, new EventArgs());
-
-                // If IsConnected = false, the RetryAttempter will call TryConnect() every five seconds.
-                _connectionRetryAttempter?.Stop();
-                _connectionRetryAttempter?.Dispose();
-                if (!value)
-                {
-                    _connectionRetryAttempter = new System.Timers.Timer(5000);
-                    _connectionRetryAttempter.Elapsed += async (s, e) => await TryConnecting();
-                    _connectionRetryAttempter.Start();
-                }
-            }
-        }
+        public bool IsConnecting { get; private set; }
+        public bool IsConnected { get; private set; }
 
         public List<MpdPlaylist> Playlists { get; private set; } = new List<MpdPlaylist>();
         public ObjectPool<PooledObjectWrapper<MpcConnection>> ConnectionPool;
@@ -70,15 +51,59 @@ namespace Stylophone.Common.Services
         private System.Timers.Timer _statusUpdater;
         private System.Timers.Timer _connectionRetryAttempter;
         private CancellationTokenSource _cancelIdle;
+        private CancellationTokenSource _cancelConnect;
 
         private string _host;
         private int _port;
 
-        public async Task InitializeAsync(string host, int port)
+        public void SetServerInfo(string host, int port)
+        {
+            _host = host;
+            _port = port;
+        }
+
+        public async Task InitializeAsync(bool withRetry = false)
+        {
+            IsConnecting = true;
+
+            if (IsConnected)
+            {
+                IsConnected = false;
+                ConnectionChanged?.Invoke(this, new EventArgs());
+            }
+
+            ClearResources();
+
+            try
+            {
+                await TryConnecting(_cancelConnect.Token);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error while connecting: {e.Message}");
+
+                if (withRetry && !_cancelConnect.IsCancellationRequested)
+                {
+                    // The RetryAttempter will call TryConnect() in five seconds.
+                    _connectionRetryAttempter = new System.Timers.Timer(5000);
+                    _connectionRetryAttempter.AutoReset = false;
+                    _connectionRetryAttempter.Elapsed += async (s, e2) => await InitializeAsync(true);
+                    _connectionRetryAttempter.Start();
+                }
+            }
+
+            IsConnecting = false;
+            ConnectionChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void ClearResources()
         {
             _idleConnection?.SendAsync(new NoIdleCommand());
             _idleConnection?.DisconnectAsync();
             _statusConnection?.DisconnectAsync();
+
+            _connectionRetryAttempter?.Stop();
+            _connectionRetryAttempter?.Dispose();
 
             _statusUpdater?.Stop();
             _statusUpdater?.Dispose();
@@ -86,51 +111,45 @@ namespace Stylophone.Common.Services
             _cancelIdle?.Cancel();
             _cancelIdle = new CancellationTokenSource();
 
+            _cancelConnect?.Cancel();
+            _cancelConnect = new CancellationTokenSource();
+
+            ConnectionPool?.Clear();
+
             _idleConnection = null;
             _statusConnection = null;
-            _connected = false;
-
-            _host = host;
-            _port = port;
-
-            await TryConnecting();
         }
 
-        public async Task TryConnecting()
+        private async Task TryConnecting(CancellationToken token)
         {
-            if (!IPAddress.TryParse(_host, out var ipAddress))
-                return;
+            if (token.IsCancellationRequested) return;
+            if (!IPAddress.TryParse(_host, out var ipAddress)) return;
 
-            try
-            {
-                _mpdEndpoint = new IPEndPoint(ipAddress, _port);
-                _idleConnection = await GetConnectionInternalAsync();
-                _statusConnection = await GetConnectionInternalAsync();
+            _mpdEndpoint = new IPEndPoint(ipAddress, _port);
 
-                ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
-                    async (token) =>
+            _idleConnection = await GetConnectionInternalAsync(token);
+            _statusConnection = await GetConnectionInternalAsync(token);
+
+            ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
+                async (poolToken) =>
+                {
+                    var c = await GetConnectionInternalAsync(poolToken);
+                    return new PooledObjectWrapper<MpcConnection>(c)
                     {
-                        var c = await GetConnectionInternalAsync(token);
-                        return new PooledObjectWrapper<MpcConnection>(c)
-                        {
-                            // Check our internal global IsConnected status
-                            OnValidateObject = (context) => IsConnected,
-                            OnReleaseResources = (conn) => conn?.DisconnectAsync()
-                        };
-                    }
-                );
+                        // Check our internal global IsConnected status
+                        OnValidateObject = (context) => IsConnected && !token.IsCancellationRequested,
+                        OnReleaseResources = (conn) => conn?.DisconnectAsync()
+                    };
+                }
+            );
 
-                // Connected, initialize basic data
-                Version = _statusConnection.Version;
-                await UpdatePlaylistsAsync();
-                InitializeStatusUpdater(_cancelIdle.Token);
-                IsConnected = true;
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error while connecting: {e.Message}");
-                IsConnected = false;
-            }
+            // Connected, initialize basic data
+            Version = _statusConnection.Version;
+            await UpdatePlaylistsAsync();
+            InitializeStatusUpdater(_cancelIdle.Token);
+
+            ConnectionChanged?.Invoke(this, new EventArgs());
+            IsConnected = true;
         }
 
         /// <summary>
@@ -206,12 +225,12 @@ namespace Stylophone.Common.Services
                         if (idleChanges.IsResponseValid)
                             await HandleIdleResponseAsync(idleChanges.Response.Content);
                         else
-                            IsConnected = false;
+                            throw new Exception(idleChanges.Response?.Content);
                     }
                     catch (Exception e)
                     {
                         System.Diagnostics.Debug.WriteLine($"Error in Idle connection thread: {e.Message}");
-                        IsConnected = false;
+                        await InitializeAsync(true);
                     }
                 }
 
@@ -270,11 +289,11 @@ namespace Stylophone.Common.Services
                     }
                 }
                 else
-                    IsConnected = false;
+                    throw new Exception();
             }
             catch
             {
-                IsConnected = false;
+                await InitializeAsync(true);
             }
             _isUpdatingStatus = false;
         }
@@ -292,7 +311,7 @@ namespace Stylophone.Common.Services
                 PlaylistsChanged?.Invoke(this, new EventArgs());
             }
             else
-                IsConnected = false;
+                await InitializeAsync(true);
         }
     }
 }
