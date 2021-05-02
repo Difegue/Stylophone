@@ -14,11 +14,11 @@
 /Sources/MpcNET.Test/obj
 /Sources/MpcNET.Test/MpcNET.Test.csproj.DotSettings
 
-/Sources/FluentMPC/bin
-/Sources/FluentMPC/obj
-/Sources/FluentMPC/Package.StoreAssociation.xml
-/Sources/FluentMPC/AppPackages
-/Sources/FluentMPC/BundleArtifacts
+/Sources/Stylophone/bin
+/Sources/Stylophone/obj
+/Sources/Stylophone/Package.StoreAssociation.xml
+/Sources/Stylophone/AppPackages
+/Sources/Stylophone/BundleArtifacts
 
 /Sources/Stylophone.Common/bin
 /Sources/Stylophone.Common/obj
