@@ -80,7 +80,8 @@ namespace MpcNET
         /// <returns>The disconnect task.</returns>
         public Task DisconnectAsync()
         {
-            return DisconnectAsync(true);
+            Disconnect(true);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace MpcNET
         {
             if (tcpClient == null)
             {
-                await ReconnectAsync(true);
+                await ReconnectAsync(true).ConfigureAwait(false);
             }
 
             if (mpcCommand == null)
@@ -108,42 +109,45 @@ namespace MpcNET
 
             var commandText = mpcCommand.Serialize();
 
+            Exception finalException = null;
+
             // Send the command, retrying three times in case of an exception
-            var result = Policy
-                .Handle<Exception>()
-                .Retry(3, onRetry: (exception, retryCount) =>
-                {
-                    // Add logic to be executed before each retry, such as logging
-                    ReconnectAsync(true).Wait();
-                })
-                .ExecuteAndCapture(() =>
+            for (var i=0; i < 3; i++)
+            {
+                try
                 {
                     using (var writer = new StreamWriter(networkStream, Encoding, 512, true) { NewLine = "\n" })
                     {
-                        writer.WriteLineAsync(commandText).Wait();
-                        writer.FlushAsync().Wait();
+                        await writer.WriteLineAsync(commandText);
+                        await writer.FlushAsync();
                     }
 
                     (rawResponse, response) = ReadResponse(commandText);
                     if (response.Any())
                     {
-                        return;
+                        finalException = null;
+                        break;
                     }
 
                     throw new EmptyResponseException(commandText);
-                });
+                } catch (Exception e)
+                {
+                    finalException = e;
+                    await ReconnectAsync(true).ConfigureAwait(false);
+                }
+            }
 
-            if (result.FinalException != null)
+            if (finalException != null)
             {
                 try
                 {
-                    await DisconnectAsync(false);
+                    Disconnect(false);
                 }
-                catch 
-                { 
+                catch
+                {
                 }
-                
-                return new ErrorMpdMessage<TResponse>(mpcCommand, new ErrorMpdResponse<TResponse>(result.FinalException));
+
+                return new ErrorMpdMessage<TResponse>(mpcCommand, new ErrorMpdResponse<TResponse>(finalException));
             }
 
             return new MpdMessage<TResponse>(mpcCommand, true, response, rawResponse);
@@ -152,9 +156,9 @@ namespace MpcNET
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
-        void IDisposable.Dispose()
+        public void Dispose()
         {
-            DisconnectAsync().Wait();
+            Disconnect(true);
         }
 
         private async Task<bool> PingAsync()
@@ -183,7 +187,7 @@ namespace MpcNET
         {
             var connectResult = await Policy
                 .Handle<Exception>()
-                .RetryAsync(isReconnect ? 1 : 3)
+                .RetryAsync(isReconnect ? 0 : 3)
                 .ExecuteAndCaptureAsync(async (t) =>
                 {
                     var client = new TcpClient();
@@ -205,11 +209,11 @@ namespace MpcNET
                     }
 
                     return null;
-                }, token, true);
+                }, token, true).ConfigureAwait(false);
 
             if (connectResult.Outcome == OutcomeType.Successful && connectResult.Result != null)
             {
-                await DisconnectAsync(false);
+                Disconnect(false);
                 tcpClient = connectResult.Result;
 
                 networkStream = tcpClient.GetStream();
@@ -224,16 +228,16 @@ namespace MpcNET
 
                     Version = firstLine?.Substring(Constants.FirstLinePrefix.Length);
                 }
-            } 
+            }
             else
             {
                 // We couldn't reconnect
                 Disconnected?.Invoke(this, new EventArgs());
                 throw new MpcConnectException(connectResult.FinalException?.Message);
-            }            
+            }
         }
 
-        private Tuple<byte[],IReadOnlyList<string>> ReadResponse(string commandText)
+        private Tuple<byte[], IReadOnlyList<string>> ReadResponse(string commandText)
         {
             var response = new List<string>();
             byte[] binaryResponse = null;
@@ -286,19 +290,17 @@ namespace MpcNET
             return new Tuple<byte[], IReadOnlyList<string>>(binaryResponse, response);
         }
 
-        private Task DisconnectAsync(bool isExplicitDisconnect)
+        private void Disconnect(bool isExplicitDisconnect)
         {
             if (tcpClient == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             ClearConnectionFields();
 
             if (isExplicitDisconnect)
                 Disconnected?.Invoke(this, new EventArgs());
-
-            return Task.CompletedTask;
         }
 
         private void ClearConnectionFields()

@@ -51,7 +51,7 @@
 
             <TextBlock Text="{x:Bind strings:Resources.SettingsDatabase}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}"/>
 
-            <StackPanel Margin="{StaticResource XSmallTopMargin}">
+            <StackPanel Margin="{StaticResource SmallTopMargin}">
 
                 <Button Content="{x:Bind strings:Resources.SettingsUpdateDatabase}" IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" Command="{x:Bind ViewModel.RescanDbCommand}"/>
 
@@ -64,7 +64,7 @@
             </StackPanel>
 
             <TextBlock Text="{x:Bind strings:Resources.SettingsCustomization}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
-            <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
+            <StackPanel Margin="{StaticResource SmallTopMargin}">
                 <TextBlock Text="{x:Bind strings:Resources.SettingsTheme}" />
 
                 <StackPanel Margin="{StaticResource XSmallTopMargin}">
@@ -122,11 +122,13 @@
                 
             </StackPanel>
 
-            <TextBlock Text="{x:Bind strings:Resources.SettingsAnalytics}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource SmallBottomMargin}"  />
+            <TextBlock Text="{x:Bind strings:Resources.SettingsAnalytics}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}"  />
 
-            <ToggleSwitch Header="{x:Bind strings:Resources.SettingsAnalyticsText}" IsOn="{x:Bind ViewModel.DisableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}" />
-            <TextBlock Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" Style="{StaticResource CaptionTextBlockStyle}" />
-            
+            <StackPanel Margin="{StaticResource SmallTopMargin}">
+                <ToggleSwitch Header="{x:Bind strings:Resources.SettingsAnalyticsText}" IsOn="{x:Bind ViewModel.DisableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}" />
+                <TextBlock Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" Style="{StaticResource CaptionTextBlockStyle}" />
+            </StackPanel>
+
             <TextBlock Text="{x:Bind strings:Resources.SettingsAbout}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
 
             <StackPanel Margin="{StaticResource SmallTopMargin}" >

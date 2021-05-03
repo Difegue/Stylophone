@@ -9,6 +9,7 @@ using MpcNET.Types;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
+using MpcNET.Commands.Output;
 
 namespace Stylophone.Common.Services
 {
@@ -138,7 +139,7 @@ namespace Stylophone.Common.Services
                     {
                         // Check our internal global IsConnected status
                         OnValidateObject = (context) => IsConnected && !token.IsCancellationRequested,
-                        OnReleaseResources = (conn) => conn?.DisconnectAsync()
+                        OnReleaseResources = (conn) => conn?.Dispose()
                     };
                 }
             );
@@ -275,6 +276,8 @@ namespace Stylophone.Common.Services
             _isUpdatingStatus = true;
             try
             {
+                var response2 = await connection.SendAsync(new OutputsCommand());
+
                 var response = await connection.SendAsync(new StatusCommand());
 
                 if (response != null && response.IsResponseValid)
