@@ -30,3 +30,9 @@
 /.vs
 *.user
 *.pfx
+/Sources/Stylophone.Mobile/Stylophone.Mobile/bin/Debug/netstandard2.0
+/Sources/Stylophone.Mobile/Stylophone.Mobile/obj
+/Sources/Stylophone.Mobile/Stylophone.Mobile.Android/bin/Debug
+/Sources/Stylophone.Mobile/Stylophone.Mobile.Android/obj
+/Sources/Stylophone.Mobile/Stylophone.Mobile.iOS/bin/iPhoneSimulator/Debug
+/Sources/Stylophone.Mobile/Stylophone.Mobile.iOS/obj

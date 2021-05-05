@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:strings="clr-namespace:Stylophone.Localization.Strings;assembly=Stylophone.Localization"
+             xmlns:stylophone="clr-namespace:Stylophone.Common.ViewModels;assembly=Stylophone.Common"
+             xmlns:theme="clr-namespace:Stylophone.Common.Interfaces;assembly=Stylophone.Common"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="Stylophone.Mobile.Views.SettingsPage"
+             x:DataType="stylophone:SettingsViewModel"
+             Title="{x:Static strings:Resources.SettingsHeader}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <xct:EnumToBoolConverter x:Key="EnumToBooleanConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <TableView HasUnevenRows="True" Intent="Settings">
+        <TableSection Title="{x:Static strings:Resources.SettingsServer}">
+            <EntryCell Label="{x:Static strings:Resources.SettingsServerHost}" Text="{Binding ServerHost, Mode=TwoWay}" />
+            <EntryCell Label="{x:Static strings:Resources.SettingsServerPort}" Text="{Binding ServerPort, Mode=TwoWay}" Keyboard="Numeric" />
+
+            <ViewCell>
+                <StackLayout Orientation="Horizontal">
+
+                    <ActivityIndicator IsRunning="{Binding IsCheckingServer}" />
+
+                    <StackLayout Orientation="Horizontal" IsVisible="{Binding IsCheckingServer, Converter={StaticResource InvertedBoolConverter}}">
+                        <Label Text="✔" IsVisible="{Binding IsServerValid}"/>
+                        <Label Text="❌" IsVisible="{Binding IsServerValid, Converter={StaticResource InvertedBoolConverter}}"/>
+
+                        <Label Text="{Binding ServerInfo}" IsVisible="{Binding IsServerValid}"/>
+                        <Label Text="blabla server invalid" IsVisible="{Binding IsServerValid, Converter={StaticResource InvertedBoolConverter}}"/>
+                    </StackLayout>
+                </StackLayout>
+            </ViewCell>
+        </TableSection>
+
+        <TableSection Title="{x:Static strings:Resources.SettingsDatabase}">
+            <ViewCell>
+                <Button Text="{x:Static strings:Resources.SettingsUpdateDatabase}" Command="{Binding RescanDbCommand}" Margin="24,0"/>
+            </ViewCell>
+
+            <ViewCell>
+                <StackLayout Orientation="Vertical" Margin="24,0">
+                    <Label Text="{x:Static strings:Resources.SettingsClearCacheDescription}"/>
+                    <Button Text="{x:Static strings:Resources.SettingsClearCache}" Command="{Binding ClearCacheCommand}"/>
+                </StackLayout>
+            </ViewCell>
+        </TableSection>
+
+        <TableSection Title="{x:Static strings:Resources.SettingsTheme}">
+
+            <ViewCell>
+                <StackLayout Orientation="Vertical" Margin="20,0">
+                    <RadioButton x:Name="LightTheme"
+                        Content="{x:Static strings:Resources.SettingsThemeLight}"
+                        IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static theme:Theme.Light}, Mode=OneWay}"
+                        CheckedChanged="SetTheme"/>
+
+                    <RadioButton x:Name="DarkTheme"
+                        Content="{x:Static strings:Resources.SettingsThemeDark}"
+                        IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static theme:Theme.Dark}, Mode=OneWay}"
+                        CheckedChanged="SetTheme"/>
+
+                    <RadioButton x:Name="DefaultTheme"
+                        Content="{x:Static strings:Resources.SettingsThemeDefault}"
+                        IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static theme:Theme.Default}, Mode=OneWay}"
+                        CheckedChanged="SetTheme"/>
+
+                </StackLayout>
+            </ViewCell>
+
+        </TableSection>
+
+        <TableSection Title="{x:Static strings:Resources.SettingsAnalytics}">
+            <SwitchCell Text="{x:Static strings:Resources.SettingsAnalyticsText}" On="{Binding DisableAnalytics, Converter={StaticResource InvertedBoolConverter}, Mode=TwoWay}"/>
+        </TableSection>
+
+        <TableSection Title="{x:Static strings:Resources.SettingsAbout}">
+            <ViewCell>
+                <StackLayout Orientation="Vertical" Margin="20,0,20,12">
+                    <Label Text="{Binding VersionDescription}"/>
+                    <Label Text="{x:Static strings:Resources.SettingsAboutText}"/>
+
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{x:Static strings:Resources.SettingsGithub}" TextColor="Blue" TextDecorations="Underline">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OpenUrl"/>
+                                    </Span.GestureRecognizers>
+                                </Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </ViewCell>
+
+        </TableSection>
+
+    </TableView>
+
+</ContentPage>
