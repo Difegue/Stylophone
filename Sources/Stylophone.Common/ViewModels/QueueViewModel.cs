@@ -235,7 +235,9 @@ namespace Stylophone.Common.ViewModels
 
             // Set our internal playlist version
             var status = await _mpdService.SafelySendCommandAsync(new StatusCommand());
-            _playlistVersion = status.Playlist;
+
+            if ( status != null )
+                _playlistVersion = status.Playlist;
 
             Source.CollectionChanged += Source_CollectionChanged;
         }

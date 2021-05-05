@@ -27,7 +27,6 @@ namespace Stylophone
 
         public App()
         {
-
             // Initialize IoC
             Services = ConfigureServices();
             Ioc.Default.ConfigureServices(Services);

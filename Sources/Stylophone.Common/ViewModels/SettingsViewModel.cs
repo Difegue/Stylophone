@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using MpcNET.Commands.Output;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -21,7 +23,7 @@ namespace Stylophone.Common.ViewModels
         private IInteropService _interop;
         private MPDConnectionService _mpdService;
 
-        public SettingsViewModel(MPDConnectionService mpdService, IApplicationStorageService appStorage, INotificationService notificationService, IDispatcherService dispatcherService, IDialogService dialogService, IInteropService interop):
+        public SettingsViewModel(MPDConnectionService mpdService, IApplicationStorageService appStorage, INotificationService notificationService, IDispatcherService dispatcherService, IDialogService dialogService, IInteropService interop) :
             base(dispatcherService)
         {
             _mpdService = mpdService;
@@ -126,10 +128,17 @@ namespace Stylophone.Common.ViewModels
         public bool IsCheckingServer
         {
             get { return _isCheckingServer; }
-            set => Set(ref _isCheckingServer, value); 
+            set => Set(ref _isCheckingServer, value);
         }
 
         public bool IsServerValid => _mpdService.IsConnected;
+
+        private bool _httpdAvailable;
+        public bool IsStreamingAvailable
+        {
+            get { return _httpdAvailable; }
+            set => Set(ref _httpdAvailable, value);
+        }
 
         private ICommand _switchThemeCommand;
         public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new AsyncRelayCommand<Theme>(SwitchThemeAsync));
@@ -262,8 +271,17 @@ namespace Stylophone.Common.ViewModels
                 ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
                              $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
                              $"Database last updated {lastUpdatedDb}";
-            }
 
+                var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
+
+                if (outputs != null)
+                {
+                    var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
+                    ServerInfo += $"\nOutputs available: {outputString}";
+
+                    IsStreamingAvailable = outputs.Select(o => o.Plugin).Contains("httpd");
+                }
+            }
         }
     }
 }
