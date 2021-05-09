@@ -1,6 +1,5 @@
 ﻿using Stylophone.Services;
 using Stylophone.Views;
-using Microsoft.Toolkit.Uwp;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
@@ -13,19 +12,20 @@ using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
+using MvvmCross.Navigation;
 
 namespace Stylophone.ViewModels
 {
     public class PlaybackViewModel : PlaybackViewModelBase
     {
-        public PlaybackViewModel(IDialogService dialogService, INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
+        public PlaybackViewModel(IDialogService dialogService, IMvxNavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
             base(dialogService,navigationService,notificationService,dispatcherService,interop,mpdService,trackVmFactory)
         {
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
 
-            ((NavigationService)_navigationService).Navigated += (s, e) =>
+            (_navigationService).AfterNavigate += (s, e) =>
                 _dispatcherService.ExecuteOnUIThreadAsync(() => {
-                    ShowTrackName = _navigationService.CurrentPageViewModelType != typeof(PlaybackViewModelBase);
+                    ShowTrackName = e.ViewModel.GetType() != typeof(PlaybackViewModelBase);
                 });
         }
 
@@ -33,6 +33,11 @@ namespace Stylophone.ViewModels
         {
             // Refresh all
             UpdateInformation(sender, null);
+        }
+
+        public void NavigateNowPlaying()
+        {
+            _navigationService.Navigate(this);
         }
 
         public override void Dispose()

@@ -1,28 +1,18 @@
 ﻿using Stylophone.Helpers;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+using MvvmCross.ViewModels;
+using MvvmCross.Platforms.Uap.Views;
 
 namespace Stylophone.Views
 {
-    public sealed partial class SearchResultsPage : Page
+    [MvxViewFor(typeof(SearchResultsViewModel))]
+    public sealed partial class SearchResultsPage : MvxWindowsPage
     {
-        public SearchResultsViewModel ViewModel => (SearchResultsViewModel)DataContext;
+        public SearchResultsViewModel Vm => (SearchResultsViewModel)ViewModel;
 
         public SearchResultsPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<SearchResultsViewModel>();
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            if (e.Parameter is string searchText)
-            {
-                ViewModel.Initialize(searchText);
-            }
         }
 
         private void Queue_Track(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)

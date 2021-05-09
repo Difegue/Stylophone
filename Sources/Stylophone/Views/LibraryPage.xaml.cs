@@ -1,31 +1,31 @@
 ﻿using Stylophone.ViewModels;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using MvvmCross;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using MvvmCross.Platforms.Uap.Views;
+using MvvmCross.ViewModels;
 
 namespace Stylophone.Views
 {
-    public sealed partial class LibraryPage : Page
+    [MvxViewFor(typeof(LibraryViewModel))]
+    public sealed partial class LibraryPage : MvxWindowsPage
     {
-        public LibraryViewModel ViewModel => (LibraryViewModel)DataContext;
+        public LibraryViewModel Vm => (LibraryViewModel)ViewModel;
 
         public LibraryPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<LibraryViewModel>();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnViewModelSet()
         {
-            base.OnNavigatedTo(e);
-
-            if (ViewModel.Source.Count == 0)
-                await ViewModel.LoadDataAsync();
+            if (Vm.Source.Count == 0)
+                await Vm.LoadDataAsync();
         }
 
         private void AlbumClicked(object sender, ItemClickEventArgs e)
         {
-            ViewModel.ItemClickCommand.Execute(e.ClickedItem);
+            Vm.ItemClickCommand.Execute(e.ClickedItem);
         }
 
         private void OnFilterChanged(object sender, TextChangedEventArgs e)
@@ -35,7 +35,7 @@ namespace Stylophone.Views
             if (searchTerms.Length < 3)
                 searchTerms = "";
 
-            ViewModel.FilterLibrary(searchTerms);
+            Vm.FilterLibrary(searchTerms);
         }
 
     }

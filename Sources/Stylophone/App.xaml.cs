@@ -1,8 +1,6 @@
 ﻿using System;
 using Stylophone.Services;
 using Stylophone.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
@@ -13,129 +11,106 @@ using Windows.UI.Xaml;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using MvvmCross.Platforms.Uap.Views;
+using MvvmCross.Platforms.Uap.Core;
+using MvvmCross;
+using MvvmCross.Platforms.Uap.Presenters;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Stylophone
 {
-    public sealed partial class App : Application
+
+    public abstract class StylophoneApp : MvxApplication<StylophoneSetup, Common.App>
     {
-        private Lazy<ActivationService> _activationService;
+    }
 
-        private ActivationService ActivationService
+    public class StylophoneSetup: MvxWindowsSetup<Common.App>
+    {
+        protected override void InitializeFirstChance()
         {
-            get { return _activationService.Value; }
-        }
+            base.InitializeFirstChance();
 
-        public App()
-        {
-            // Initialize IoC
-            Services = ConfigureServices();
-            Ioc.Default.ConfigureServices(Services);
-
-
-            InitializeComponent();
-
-            // Deferred execution until used. Check https://msdn.microsoft.com/library/dd642331(v=vs.110).aspx for further info on Lazy<T> class.
-            _activationService = new Lazy<ActivationService>(CreateActivationService);
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
-        /// </summary>
-        public IServiceProvider Services { get; }
-
-        protected override async void OnLaunched(LaunchActivatedEventArgs args)
-        {
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             Windows.ApplicationModel.Core.CoreApplication.EnablePrelaunch(true);
-
-            // https://docs.microsoft.com/en-us/windows/uwp/design/devices/designing-for-tv#custom-visual-state-trigger-for-xbox
-            ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
-
-            // Compact sizing
-            var isCompactEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsCompactSizing));
-            if (isCompactEnabled)
-            {
-                Resources.MergedDictionaries.Add(
-                   new ResourceDictionary { Source = new Uri(@"ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml", UriKind.Absolute) });
-            }
-
-            // Analytics
-            var disableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.DisableAnalytics));
-            if (!disableAnalytics)
-            {
-                // Initialize AppCenter
-                AppCenter.Start("f2193544-6a38-42f6-92bd-69964bc3a0e8",
-                    typeof(Analytics), typeof(Crashes));
-            }
 
             var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
             viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            viewTitleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
-            viewTitleBar.ButtonInactiveForegroundColor = (Color)Resources["SystemBaseHighColor"];
+            viewTitleBar.ButtonForegroundColor = (Color)Application.Current.Resources["SystemBaseHighColor"];
+            viewTitleBar.ButtonInactiveForegroundColor = (Color)Application.Current.Resources["SystemBaseHighColor"];
 
-            if (!args.PrelaunchActivated)
-            {
-                await ActivationService.ActivateAsync(args);
-            }
-        }
+            // https://docs.microsoft.com/en-us/windows/uwp/design/devices/designing-for-tv#custom-visual-state-trigger-for-xbox
+            ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 
-        protected override async void OnActivated(IActivatedEventArgs args)
-        {
-            await ActivationService.ActivateAsync(args);
-        }
+            // Platform-specific Services
+            Mvx.IoCProvider.RegisterSingleton<IDispatcherService>(new DispatcherService());
+            Mvx.IoCProvider.RegisterSingleton<IApplicationStorageService>(new ApplicationStorageService());
+            Mvx.IoCProvider.RegisterSingleton<IDialogService>(() => Mvx.IoCProvider.IoCConstruct<DialogService>());
+            Mvx.IoCProvider.RegisterSingleton<INotificationService>(() => Mvx.IoCProvider.IoCConstruct<NotificationService>());
+            Mvx.IoCProvider.RegisterSingleton(() => Mvx.IoCProvider.IoCConstruct<SystemMediaControlsService>());
+            Mvx.IoCProvider.RegisterSingleton<IInteropService>(() => Mvx.IoCProvider.IoCConstruct<InteropService>());
 
-        private ActivationService CreateActivationService()
-        {
-            return new ActivationService(this, typeof(QueueViewModel), new Lazy<UIElement>(CreateShell));
-        }
-
-        private UIElement CreateShell()
-        {
-            return new Views.ShellPage();
-        }
-
-        protected override async void OnBackgroundActivated(BackgroundActivatedEventArgs args)
-        {
-            await ActivationService.ActivateAsync(args);
-        }
-
-        /// <summary>
-        /// Configures the services for the application.
-        /// </summary>
-        private static IServiceProvider ConfigureServices()
-        {
-            var services = new ServiceCollection();
-
-            // Services
-            services.AddSingleton<IDispatcherService, DispatcherService>();
-            services.AddSingleton<IApplicationStorageService, ApplicationStorageService>();
-            services.AddSingleton<MPDConnectionService>();
-            services.AddSingleton<AlbumArtService>();
-            services.AddSingleton<IDialogService, DialogService>();
-            services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<INotificationService, NotificationService>();
-            services.AddSingleton<SystemMediaControlsService>();
-            services.AddSingleton<IInteropService, InteropService>();
+            // Platform-specific Viewmodels
+            Mvx.IoCProvider.RegisterSingleton(() => Mvx.IoCProvider.IoCConstruct<LibraryViewModel>());
 
             // Viewmodel Factories
-            services.AddSingleton<AlbumViewModelFactory>();
-            services.AddSingleton<TrackViewModelFactory>();
-            services.AddSingleton<FilePathViewModelFactory>();
+            Mvx.IoCProvider.RegisterSingleton(() => Mvx.IoCProvider.IoCConstruct<AlbumViewModelFactory>());
+            Mvx.IoCProvider.RegisterSingleton(() => Mvx.IoCProvider.IoCConstruct<TrackViewModelFactory>());
+            Mvx.IoCProvider.RegisterSingleton(() => Mvx.IoCProvider.IoCConstruct<FilePathViewModelFactory>());
+        }
 
-            // Viewmodels
-            services.AddSingleton<ShellViewModel>();
-            services.AddSingleton<SettingsViewModel>();
-            services.AddSingleton<LibraryViewModel>();
-            services.AddSingleton<AlbumDetailViewModel>();
-            services.AddSingleton<FoldersViewModel>();
-            services.AddSingleton<PlaylistViewModel>();
-            services.AddSingleton<QueueViewModel>();
-            services.AddSingleton<SearchResultsViewModel>();
+        protected override IMvxWindowsViewPresenter CreateViewPresenter(IMvxWindowsFrame rootFrame)
+        {
+            var presenter = new StylophoneViewPresenter(rootFrame);
+            //presenter.AddPresentationHintHandler<ShellFrameHint>(hint => SetShellFrame(hint));
+            return presenter;
+        }
 
-            services.AddTransient<PlaybackViewModel>();
+        public override IEnumerable<Assembly> GetViewModelAssemblies()
+        {
+            var list = new List<Assembly>();
+            list.AddRange(base.GetViewModelAssemblies());
+            list.Add(typeof(ShellViewModel).GetTypeInfo().Assembly);
 
-            return services.BuildServiceProvider();
+            return list;
+        }
+
+        protected override async void InitializeLastChance()
+        {
+            base.InitializeLastChance();
+
+            // Compact sizing
+            var isCompactEnabled = Mvx.IoCProvider.Resolve<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsCompactSizing));
+            if (isCompactEnabled)
+            {
+                Application.Current.Resources.MergedDictionaries.Add(
+                   new ResourceDictionary { Source = new Uri(@"ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml", UriKind.Absolute) });
+            }
+
+            // Analytics
+            var disableAnalytics = Mvx.IoCProvider.Resolve<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.DisableAnalytics));
+            if (!disableAnalytics)
+            {
+                // Initialize AppCenter
+                //AppCenter.Start("f2193544-6a38-42f6-92bd-69964bc3a0e8", typeof(Analytics), typeof(Crashes));
+            }
+
+            var theme = Mvx.IoCProvider.Resolve<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ElementTheme));
+            Enum.TryParse(theme, out Theme elementTheme);
+            await Mvx.IoCProvider.Resolve<IInteropService>().SetThemeAsync(elementTheme);
+
+            Mvx.IoCProvider.Resolve<AlbumArtService>().Initialize();
+        }
+    }
+
+
+    public sealed partial class App
+    {
+        public App()
+        {
+            InitializeComponent();
+
         }
     }
 }

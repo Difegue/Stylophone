@@ -4,34 +4,33 @@ using Microsoft.Toolkit.Uwp.UI.Animations;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Stylophone.Common.ViewModels;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using MvvmCross;
 using Stylophone.Common.Interfaces;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+using MvvmCross.Platforms.Uap.Views;
 
 namespace Stylophone.Views
 {
-    public sealed partial class LibraryDetailPage : Page
+    [MvxViewFor(typeof(AlbumDetailViewModel))]
+    public sealed partial class LibraryDetailPage : MvxWindowsPage
     {
-        public AlbumDetailViewModel ViewModel => (AlbumDetailViewModel)DataContext;
+        public AlbumDetailViewModel Vm => (AlbumDetailViewModel)ViewModel;
 
-        private INavigationService _navigationService;
+        private IMvxNavigationService _navigationService;
 
         public LibraryDetailPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<AlbumDetailViewModel>();
 
             // TODO hacky
-            _navigationService = Ioc.Default.GetRequiredService<INavigationService>();
+            _navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.RegisterElementForConnectedAnimation("animationKeyLibrary", itemHero);
-            if (e.Parameter is AlbumViewModel album)
-            {
-               ViewModel.Initialize(album);
-            }
+            ((Page)this).RegisterElementForConnectedAnimation("animationKeyLibrary", itemHero);
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -39,7 +38,7 @@ namespace Stylophone.Views
             base.OnNavigatingFrom(e);
             if (e.NavigationMode == NavigationMode.Back)
             {
-                _navigationService.SetListDataItemForNextConnectedAnimation(ViewModel.Item);
+                //_navigationService.SetListDataItemForNextConnectedAnimation(ViewModel.Item);
             }
         }
 

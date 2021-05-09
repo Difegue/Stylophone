@@ -5,8 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using MvvmCross.Commands;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
@@ -40,7 +39,7 @@ namespace Stylophone.Common.ViewModels
             _mpdService.QueueChanged += MPDConnectionService_QueueChanged;
             _mpdService.ConnectionChanged += MPDConnectionService_ConnectionChanged;
 
-            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            Source.CollectionChanged += (s, e) => RaisePropertyChanged(nameof(IsSourceEmpty));
         }
 
         public static new string GetHeader() => Resources.QueueHeader;
@@ -53,7 +52,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _playCommand;
-        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new RelayCommand<IList<object>>(PlayTrack, IsSingleTrackSelected));
+        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new MvxCommand<IList<object>>(PlayTrack, IsSingleTrackSelected));
 
         private async void PlayTrack(object list)
         {
@@ -68,7 +67,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _viewAlbumCommand;
-        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
+        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new MvxCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
 
         private void ViewAlbum(object list)
         {
@@ -83,7 +82,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _removeCommand;
-        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new RelayCommand<IList<object>>(RemoveTrack));
+        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new MvxCommand<IList<object>>(RemoveTrack));
 
         private async void RemoveTrack(object list)
         {
@@ -106,7 +105,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new MvxCommand<IList<object>>(AddToPlaylist));
 
         private async void AddToPlaylist(object list)
         {

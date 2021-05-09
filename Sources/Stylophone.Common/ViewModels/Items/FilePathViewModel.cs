@@ -12,8 +12,9 @@ using System.Collections.ObjectModel;
 using MpcNET;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
-using Microsoft.Toolkit.Mvvm.Input;
+using MvvmCross.Commands;
 using Stylophone.Localization.Strings;
+using MvvmCross.Navigation;
 
 namespace Stylophone.Common.ViewModels
 {
@@ -21,16 +22,14 @@ namespace Stylophone.Common.ViewModels
     {
         public INotificationService NotificationService;
         public IDispatcherService DispatcherService;
-        public INavigationService NavigationService;
         public IDialogService DialogService;
         public AlbumArtService AlbumArtService;
         public MPDConnectionService MPDService;
 
-        public FilePathViewModelFactory(INotificationService notificationService, IDispatcherService dispatcherService, INavigationService navigationService, IDialogService dialogService, AlbumArtService albumArtService, MPDConnectionService mpdService)
+        public FilePathViewModelFactory(INotificationService notificationService, IDispatcherService dispatcherService, IDialogService dialogService, AlbumArtService albumArtService, MPDConnectionService mpdService)
         {
             DispatcherService = dispatcherService;
             NotificationService = notificationService;
-            NavigationService = navigationService;
             DialogService = dialogService;
             AlbumArtService = albumArtService;
             MPDService = mpdService;
@@ -136,7 +135,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _playCommand;
-        public ICommand PlayCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayPath));
+        public ICommand PlayCommand => _playCommand ?? (_playCommand = new MvxCommand(PlayPath));
 
         private async void PlayPath()
         {
@@ -150,7 +149,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
+        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new MvxCommand(AddToQueue));
 
         private async void AddToQueue()
         {
@@ -162,7 +161,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
+        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new MvxCommand(AddToPlaylist));
         private async void AddToPlaylist()
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();

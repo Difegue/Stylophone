@@ -4,8 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using MvvmCross.Commands;
 using MpcNET.Commands.Output;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
@@ -141,7 +140,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _switchThemeCommand;
-        public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new AsyncRelayCommand<Theme>(SwitchThemeAsync));
+        public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new MvxAsyncCommand<Theme>(SwitchThemeAsync));
 
         private async Task SwitchThemeAsync(Theme param)
         {
@@ -153,7 +152,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _switchSizingCommand;
-        public ICommand SwitchSizingCommand => _switchSizingCommand ?? (_switchSizingCommand = new RelayCommand<string>(SwitchSizing));
+        public ICommand SwitchSizingCommand => _switchSizingCommand ?? (_switchSizingCommand = new MvxCommand<string>(SwitchSizing));
 
         private void SwitchSizing(string param)
         {
@@ -164,7 +163,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _clearCacheCommand;
-        public ICommand ClearCacheCommand => _clearCacheCommand ?? (_clearCacheCommand = new AsyncRelayCommand(ClearCacheAsync));
+        public ICommand ClearCacheCommand => _clearCacheCommand ?? (_clearCacheCommand = new MvxAsyncCommand(ClearCacheAsync));
 
         private async Task ClearCacheAsync()
         {
@@ -180,7 +179,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _rescanDbCommand;
-        public ICommand RescanDbCommand => _rescanDbCommand ?? (_rescanDbCommand = new AsyncRelayCommand(RescanDbAsync));
+        public ICommand RescanDbCommand => _rescanDbCommand ?? (_rescanDbCommand = new MvxAsyncCommand(RescanDbAsync));
 
         private async Task RescanDbAsync()
         {
@@ -251,7 +250,7 @@ namespace Stylophone.Common.ViewModels
         {
             IsCheckingServer = _mpdService.IsConnecting;
 
-            await _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsServerValid)));
+            await _dispatcherService.ExecuteOnUIThreadAsync(() => RaisePropertyChanged(nameof(IsServerValid)));
 
             if (!_mpdService.IsConnected) return;
 

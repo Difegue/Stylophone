@@ -1,4 +1,4 @@
-﻿<Page
+﻿<mvx:MvxWindowsPage
     x:Class="Stylophone.Views.LibraryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -13,13 +13,14 @@
     xmlns:stylophone="using:Stylophone.Helpers"
     Style="{StaticResource PageStyle}"
     NavigationCacheMode="Required"
+    xmlns:mvx="using:MvvmCross.Platforms.Uap.Views"
     mc:Ignorable="d">
-    <Page.Resources>
+    <mvx:MvxWindowsPage.Resources>
         <stylophone:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
-    </Page.Resources>
+    </mvx:MvxWindowsPage.Resources>
     <Grid x:Name="ContentArea">
 
         <TextBox x:Uid="LibrarySearchFilter" Width="200" Height="30" Margin="24,-42" HorizontalAlignment="Right" VerticalAlignment="Top"
@@ -32,7 +33,7 @@
             IsItemClickEnabled="True"
             ItemClick="AlbumClicked"
             ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-            ItemsSource="{x:Bind ViewModel.FilteredSource,Mode=OneWay}"
+            ItemsSource="{x:Bind Vm.FilteredSource,Mode=OneWay}"
             SelectionMode="None">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealBackgroundShowsAboveContentStyle}">
@@ -96,7 +97,7 @@
         </GridView>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
-                    Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    Visibility="{x:Bind Vm.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <SymbolIcon Symbol="DisconnectDrive" RenderTransformOrigin="0.5,0.5" Height="86">
                 <SymbolIcon.RenderTransform>
                     <CompositeTransform ScaleX="5" ScaleY="5"/>
@@ -106,4 +107,4 @@
             <TextBlock x:Uid="EmptyFoldersDesc" HorizontalAlignment="Center"></TextBlock>
         </StackPanel>
     </Grid>
-</Page>
+</mvx:MvxWindowsPage>

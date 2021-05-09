@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 
-using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Xaml.Interactivity;
-
+using MvvmCross.Commands;
 using WinUI = Microsoft.UI.Xaml.Controls;
 
 namespace Stylophone.Behaviors
@@ -14,7 +13,7 @@ namespace Stylophone.Behaviors
 
         public TreeViewCollapseBehavior()
         {
-            CollapseAllCommand = new RelayCommand(() => CollapseNodes(AssociatedObject.RootNodes));
+            CollapseAllCommand = new MvxCommand(() => CollapseNodes(AssociatedObject.RootNodes));
         }
 
         private void CollapseNodes(IList<WinUI.TreeViewNode> nodes)

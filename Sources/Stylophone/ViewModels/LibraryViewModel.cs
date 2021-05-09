@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Navigation;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
@@ -83,7 +84,7 @@ namespace Stylophone.ViewModels
         private LazyLoadingAlbumCollection _source;
         public override RangedObservableCollection<AlbumViewModel> FilteredSource => _source;
 
-        public LibraryViewModel(INavigationService navigationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, AlbumViewModelFactory albumViewModelFactory) :
+        public LibraryViewModel(IMvxNavigationService navigationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, AlbumViewModelFactory albumViewModelFactory) :
             base(navigationService, dispatcherService, mpdService, albumViewModelFactory)
         {
             _source = new LazyLoadingAlbumCollection(mpdService);

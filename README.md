@@ -8,6 +8,8 @@ Based on [MpcNET](https://github.com/petrkr/MpcNET), the original .NET Client Li
 
 <a href='//www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/en-us/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="142" height="52"/></a>
 
+[Buy a sticker if you want!](https://ko-fi.com/s/9fcf421b6e)  
+
 ## Features
 
 * Full playback control  

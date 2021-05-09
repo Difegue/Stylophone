@@ -5,12 +5,14 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Queue;
 using MpcNET.Tags;
 using MpcNET.Types;
+using MvvmCross;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.Navigation.EventArguments;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
@@ -19,11 +21,11 @@ namespace Stylophone.Common.ViewModels
 {
     public abstract class ShellViewModelBase : ViewModelBase
     {
-        protected INavigationService _navigationService;
+        protected IMvxNavigationService _navigationService;
         protected INotificationService _notificationService;
         protected MPDConnectionService _mpdService;
 
-        public ShellViewModelBase(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService):
+        public ShellViewModelBase(IMvxNavigationService navigationService, INotificationService notificationService, IDialogService dialogService, IDispatcherService dispatcherService, MPDConnectionService mpdService):
             base(dispatcherService)
         {
             _navigationService = navigationService;
@@ -33,18 +35,23 @@ namespace Stylophone.Common.ViewModels
             // First View, use that to initialize our DispatcherService
             _dispatcherService.Initialize();
 
+            Task.Run(async () =>
+            {
+                await dialogService.ShowFirstRunDialogIfAppropriateAsync();
+
+                var host = Mvx.IoCProvider.Resolve<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
+                var port = Mvx.IoCProvider.Resolve<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort));
+
+                mpdService.SetServerInfo(host, port);
+                await mpdService.InitializeAsync(true);
+            });
+
             ((NotificationServiceBase)_notificationService).InAppNotificationRequested += ShowInAppNotification;
-            ((NavigationServiceBase)_navigationService).Navigated += OnFrameNavigated;
 
-            TryUpdatePlaylists();
+            _navigationService.AfterClose += OnFrameNavigated;
+            _navigationService.AfterNavigate += OnFrameNavigated;
+
             _mpdService.PlaylistsChanged += (s, e) => TryUpdatePlaylists();
-        }
-
-        private bool _isBackEnabled;
-        public bool IsBackEnabled
-        {
-            get { return _isBackEnabled; }
-            set { Set(ref _isBackEnabled, value); }
         }
 
         private string _shellHeader;
@@ -55,21 +62,21 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _loadedCommand;
-        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new RelayCommand(OnLoaded));
+        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new MvxCommand(OnLoaded));
 
         private ICommand _navigateCommand;
-        public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new RelayCommand<object>(OnItemInvoked));
+        public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new MvxCommand<object>(OnItemInvoked));
 
         protected abstract void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e);
         protected abstract void OnLoaded();
         protected abstract void OnItemInvoked(object item);
         protected abstract void UpdatePlaylistNavigation();
 
-        private void OnFrameNavigated(object sender, CoreNavigationEventArgs e)
+        private void OnFrameNavigated(object sender, IMvxNavigateEventArgs e)
         {
-            IsBackEnabled = _navigationService.CanGoBack;
+            if (e.ViewModel is ShellViewModelBase) return;
 
-            var viewModelType = e.NavigationTarget;
+            var viewModelType = e.ViewModel.GetType();
 
             // Use some reflection magic to get the static Header text for this ViewModel
             var headerMethod = viewModelType.GetMethod(nameof(ViewModelBase.GetHeader), BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
@@ -109,7 +116,7 @@ namespace Stylophone.Common.ViewModels
             else
             {
                 // Navigate to detailed search page
-                _navigationService.Navigate<SearchResultsViewModel>(text);
+                await _navigationService.Navigate<SearchResultsViewModel,string>(text);
                 HeaderText = string.Format(Resources.SearchResultsFor, text);
             }
         }

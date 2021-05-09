@@ -9,10 +9,11 @@ using MpcNET.Commands.Queue;
 using System.Threading;
 using Stylophone.Common.Services;
 using SkiaSharp;
-using Microsoft.Toolkit.Mvvm.Input;
 using Stylophone.Common.Interfaces;
 using Stylophone.Localization.Strings;
 using Stylophone.Common.Helpers;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
 
 namespace Stylophone.Common.ViewModels
 {
@@ -21,14 +22,14 @@ namespace Stylophone.Common.ViewModels
     {
         public IDispatcherService DispatcherService;
         public INotificationService NotificationService;
-        public INavigationService NavigationService;
+        public IMvxNavigationService NavigationService;
         public IDialogService DialogService;
         public IInteropService InteropService;
         public AlbumArtService AlbumArtService;
         public AlbumViewModelFactory AlbumViewModelFactory;
         public MPDConnectionService MPDService;
 
-        public TrackViewModelFactory(IDispatcherService dispatcherService, INotificationService notificationService, INavigationService navigationService, IDialogService dialogService, IInteropService interop, AlbumArtService albumArtService, AlbumViewModelFactory albumFactory, MPDConnectionService mpdService)
+        public TrackViewModelFactory(IDispatcherService dispatcherService, INotificationService notificationService, IMvxNavigationService navigationService, IDialogService dialogService, IInteropService interop, AlbumArtService albumArtService, AlbumViewModelFactory albumFactory, MPDConnectionService mpdService)
         {
             DispatcherService = dispatcherService;
             NotificationService = notificationService;
@@ -51,7 +52,7 @@ namespace Stylophone.Common.ViewModels
     public class TrackViewModel : ViewModelBase
     {
         private INotificationService _notificationService;
-        private INavigationService _navigationService;
+        private IMvxNavigationService _navigationService;
         private IDialogService _dialogService;
         private IInteropService _interop;
         private AlbumArtService _albumArtService;
@@ -80,7 +81,7 @@ namespace Stylophone.Common.ViewModels
 
         public bool IsPlaying => _mpdService.CurrentStatus.SongId == File.Id;
 
-        public void UpdatePlayingStatus() => _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
+        public void UpdatePlayingStatus() => _dispatcherService.ExecuteOnUIThreadAsync(() => RaisePropertyChanged(nameof(IsPlaying)));
 
         private SKImage _albumArt;
         public SKImage AlbumArt
@@ -105,17 +106,17 @@ namespace Stylophone.Common.ViewModels
 
 
         private ICommand _playCommand;
-        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new RelayCommand<IMpdFile>(PlayTrack));
+        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new MvxCommand<IMpdFile>(PlayTrack));
 
         private async void PlayTrack(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new PlayIdCommand(file.Id));
 
         private ICommand _removeCommand;
-        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new RelayCommand<IMpdFile>(RemoveTrack));
+        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new MvxCommand<IMpdFile>(RemoveTrack));
 
         private async void RemoveTrack(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new DeleteIdCommand(file.Id));
 
         private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IMpdFile>(AddToQueue));
+        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new MvxCommand<IMpdFile>(AddToQueue));
 
         private async void AddToQueue(IMpdFile file)
         {
@@ -126,7 +127,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IMpdFile>(AddToPlaylist));
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new MvxCommand<IMpdFile>(AddToPlaylist));
 
         private async void AddToPlaylist(IMpdFile file)
         {
@@ -140,7 +141,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _viewAlbumCommand;
-        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IMpdFile>(GoToMatchingAlbum));
+        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new MvxCommand<IMpdFile>(GoToMatchingAlbum));
 
         /// <summary>
         /// Fires off an async request to get the album art from MPD.
@@ -180,7 +181,7 @@ namespace Stylophone.Common.ViewModels
 
                 // Build an AlbumViewModel from the album name and navigate to it
                 var album = _albumVmFactory.GetAlbumViewModel(file.Album);
-                _navigationService.Navigate<AlbumDetailViewModel>(album);
+                _navigationService.Navigate<AlbumDetailViewModel, AlbumViewModel>(album);
             }
             catch (Exception e)
             {

@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using MvvmCross.ViewModels;
 using Stylophone.Common.Interfaces;
 using Stylophone.Localization.Strings;
 using System;
@@ -12,7 +12,7 @@ namespace Stylophone.Common.ViewModels
     /// <summary>
     /// Root class for all viewmodels.
     /// </summary>
-    public abstract class ViewModelBase : ObservableObject
+    public abstract class ViewModelBase : MvxViewModel
     {
         protected IDispatcherService _dispatcherService;
 

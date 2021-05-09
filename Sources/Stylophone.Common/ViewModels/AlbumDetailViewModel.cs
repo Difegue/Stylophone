@@ -4,12 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
 using MpcNET.Types;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using Stylophone.Common.Helpers;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -17,7 +17,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class AlbumDetailViewModel : ViewModelBase
+    public class AlbumDetailViewModel : ViewModelBase, IMvxViewModel<AlbumViewModel>
     {
 
         private IDialogService _dialogService;
@@ -51,7 +51,7 @@ namespace Stylophone.Common.ViewModels
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
 
         private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
+        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new MvxCommand<IList<object>>(QueueTrack));
 
         private async void QueueTrack(object list)
         {
@@ -74,7 +74,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new MvxCommand<IList<object>>(AddToPlaylist));
 
         private async void AddToPlaylist(object list)
         {
@@ -100,7 +100,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        public void Initialize(AlbumViewModel album)
+        public void Prepare(AlbumViewModel album)
         {
             Source.Clear();
             Item = album;
@@ -146,5 +146,6 @@ namespace Stylophone.Common.ViewModels
 
             PlaylistInfo = $"{Source.Count} Tracks, Total Time: {t.ToReadableString()}";
         }
+
     }
 }

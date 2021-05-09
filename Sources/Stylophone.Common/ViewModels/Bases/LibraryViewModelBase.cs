@@ -7,10 +7,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using MpcNET.Commands.Database;
 using MpcNET.Tags;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using Stylophone.Common.Helpers;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -20,13 +20,13 @@ namespace Stylophone.Common.ViewModels
 {
     public abstract class LibraryViewModelBase : ViewModelBase
     {
-        private INavigationService _navigationService;
+        private IMvxNavigationService _navigationService;
         private MPDConnectionService _mpdService;
         private AlbumViewModelFactory _albumVmFactory;
 
         public abstract RangedObservableCollection<AlbumViewModel> FilteredSource { get; }
 
-        public LibraryViewModelBase(INavigationService navigationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, AlbumViewModelFactory albumViewModelFactory):
+        public LibraryViewModelBase(IMvxNavigationService navigationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, AlbumViewModelFactory albumViewModelFactory):
             base(dispatcherService)
         {
             _navigationService = navigationService;
@@ -37,15 +37,15 @@ namespace Stylophone.Common.ViewModels
         public static new string GetHeader() => Resources.LibraryHeader;
 
         private ICommand _itemClickCommand;
-        public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<AlbumViewModel>(OnItemClick));
+        public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new MvxCommand<AlbumViewModel>(OnItemClick));
 
         public List<AlbumViewModel> Source { get; } = new List<AlbumViewModel>();
         public bool IsSourceEmpty => FilteredSource.Count == 0;
 
         public async Task LoadDataAsync()
         {
-            FilteredSource.CollectionChanged -= (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
-            FilteredSource.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            FilteredSource.CollectionChanged -= (s, e) => RaisePropertyChanged(nameof(IsSourceEmpty));
+            FilteredSource.CollectionChanged += (s, e) => RaisePropertyChanged(nameof(IsSourceEmpty));
 
             Source.Clear();
             var response = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.Album));
@@ -100,8 +100,8 @@ namespace Stylophone.Common.ViewModels
         {
             if (clickedItem != null)
             {
-                _navigationService.SetListDataItemForNextConnectedAnimation(clickedItem);
-                _navigationService.Navigate<AlbumDetailViewModel>(clickedItem);
+                //_navigationService.SetListDataItemForNextConnectedAnimation(clickedItem);
+                _navigationService.Navigate<AlbumDetailViewModel, AlbumViewModel>(clickedItem);
             }
         }
 

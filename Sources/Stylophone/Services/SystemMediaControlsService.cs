@@ -26,6 +26,8 @@ namespace Stylophone.Services
         public void Initialize()
         {
 
+            if (_smtc == null)
+            {
                 _smtc = SystemMediaTransportControls.GetForCurrentView();
 
                 _smtc.IsPlayEnabled = true;
@@ -41,6 +43,7 @@ namespace Stylophone.Services
                 // Hook up to the MPDConnectionService for status updates.
                 _mpdService.ConnectionChanged += (s, e) => _smtc.IsEnabled = _mpdService.IsConnected;
                 _mpdService.StatusChanged += (s, e) => UpdateState(_mpdService.CurrentStatus);
+            }
         }
 
         private async void SystemControls_ButtonPressed(SystemMediaTransportControls sender, SystemMediaTransportControlsButtonPressedEventArgs args)

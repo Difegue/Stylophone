@@ -3,8 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using MvvmCross.Commands;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
@@ -13,10 +12,11 @@ using MpcNET.Tags;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
+using MvvmCross.ViewModels;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class SearchResultsViewModel : ViewModelBase
+    public class SearchResultsViewModel : ViewModelBase, IMvxViewModel<string>
     {
 
         private INotificationService _notificationService;
@@ -33,7 +33,7 @@ namespace Stylophone.Common.ViewModels
             _trackVmFactory = trackViewModelFactory;
             _mpdService = mpdService;
 
-            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            Source.CollectionChanged += (s, e) => RaisePropertyChanged(nameof(IsSourceEmpty));
             _searchTracks = true;
         }
 
@@ -50,7 +50,7 @@ namespace Stylophone.Common.ViewModels
             get { return _isSearching; }
             set {
                 Set(ref _isSearching, value); 
-                OnPropertyChanged(nameof(IsSourceEmpty)); 
+                RaisePropertyChanged(nameof(IsSourceEmpty)); 
             }
         }
 
@@ -123,7 +123,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
+        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new MvxCommand<IList<object>>(QueueTrack));
 
         private async void QueueTrack(object list)
         {
@@ -146,7 +146,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new MvxCommand<IList<object>>(AddToPlaylist));
 
         private async void AddToPlaylist(object list)
         {
@@ -173,7 +173,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _viewAlbumCommand;
-        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
+        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new MvxCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
 
         private void ViewAlbum(object list)
         {
@@ -188,7 +188,7 @@ namespace Stylophone.Common.ViewModels
         }
         #endregion
 
-        public void Initialize(string searchQuery)
+        public void Prepare(string searchQuery)
         {
             QueryText = searchQuery;
             UpdateSource();
@@ -224,5 +224,6 @@ namespace Stylophone.Common.ViewModels
                 });
             }
         }
+
     }
 }

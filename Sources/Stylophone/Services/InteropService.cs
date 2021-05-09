@@ -12,6 +12,7 @@ using SkiaSharp;
 using Stylophone.Common.ViewModels;
 using System.IO;
 using Windows.ApplicationModel;
+using Stylophone.ViewModels;
 
 namespace Stylophone.Services
 {
@@ -24,6 +25,8 @@ namespace Stylophone.Services
         {
             _smtcService = smtcService;
         }
+
+        public Type GetInitialViewModelType() => typeof(ShellViewModel);
 
         public async Task SetThemeAsync(Theme theme)
         {
@@ -50,6 +53,7 @@ namespace Stylophone.Services
 
         public async Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack)
         {
+            _smtcService.Initialize();
             await _smtcService.UpdateMetadataAsync(currentTrack);
             await LiveTileHelper.UpdatePlayingSongAsync(currentTrack);
         }

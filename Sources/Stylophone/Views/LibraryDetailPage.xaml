@@ -1,4 +1,4 @@
-﻿<Page
+﻿<mvx:MvxWindowsPage
     x:Class="Stylophone.Views.LibraryDetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -13,9 +13,10 @@
     xmlns:toolkitbehaviors="using:Microsoft.Toolkit.Uwp.UI.Behaviors"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     Style="{StaticResource PageStyle}"
+    xmlns:mvx="using:MvvmCross.Platforms.Uap.Views"
     mc:Ignorable="d">
 
-    <Page.Resources>
+    <mvx:MvxWindowsPage.Resources>
         <stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
         <stylophone:DoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
         <stylophone:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
@@ -69,7 +70,7 @@
                     Margin="12,0,0,0"/>
             </Grid>
         </DataTemplate>
-    </Page.Resources>
+    </mvx:MvxWindowsPage.Resources>
 
     <Grid x:Name="ContentArea">
 
@@ -104,12 +105,12 @@
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="Transparent"
                       ItemTemplate="{StaticResource TrackListViewTemplate}"
-                      ItemsSource="{x:Bind ViewModel.Source}">
+                      ItemsSource="{x:Bind Vm.Source}">
             <stylophone:AlternatingRowListView.ContextFlyout>
                 <MenuFlyout>
                     <!-- Add to Queue -->
                     <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add"
-                                    Command="{x:Bind ViewModel.AddToQueueCommand}"
+                                    Command="{x:Bind Vm.AddToQueueCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Key="Enter" />
@@ -117,7 +118,7 @@
                     </MenuFlyoutItem>
                     <!-- Add to Playlist -->
                     <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo"
-                                    Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                                    Command="{x:Bind Vm.AddToPlayListCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"/>
                 </MenuFlyout>
             </stylophone:AlternatingRowListView.ContextFlyout>
@@ -143,8 +144,8 @@
                             Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1">
                         <Border.Background>
-                            <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.2" TintLuminosityOpacity="0.7" FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
-                                              TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"></AcrylicBrush>
+                            <AcrylicBrush BackgroundSource="Backdrop" TintOpacity="0.2" TintLuminosityOpacity="0.7" FallbackColor="{x:Bind Vm.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                                              TintColor="{x:Bind Vm.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"></AcrylicBrush>
                         </Border.Background>
                     </Border>
 
@@ -155,7 +156,7 @@
                             Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-1"
                             Opacity="0.3"
-                            Visibility="{x:Bind ViewModel.Item.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                            Visibility="{x:Bind Vm.Item.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Border.Background>
                             <SolidColorBrush Color="Black"></SolidColorBrush>
                         </Border.Background>
@@ -168,7 +169,7 @@
                             Margin="-24,-78,-24,-24"
                             Canvas.ZIndex="-2">
                         <Border.Background>
-                            <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill"></ImageBrush>
+                            <ImageBrush ImageSource="{x:Bind Vm.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill"></ImageBrush>
                         </Border.Background>
                     </Border>
 
@@ -185,7 +186,7 @@
 
                         <Grid Width="200" Height="200" CornerRadius="3">
                             <Image HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" 
-                                   Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" />
+                                   Source="{x:Bind Vm.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" />
                         </Grid>
                     </controls:DropShadowPanel>
 
@@ -195,36 +196,36 @@
                         RelativePanel.RightOf="itemHero"
                         Style="{StaticResource TitleTextBlockStyle}"
                         MaxLines="2" TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind ViewModel.Item.Name, Mode=OneWay}"
-                        Text="{x:Bind ViewModel.Item.Name, Mode=OneWay}" />
+                        ToolTipService.ToolTip="{x:Bind Vm.Item.Name, Mode=OneWay}"
+                        Text="{x:Bind Vm.Item.Name, Mode=OneWay}" />
 
                     <TextBlock x:Name="artist" RelativePanel.RightOf="itemHero" RelativePanel.Below="title" MaxLines="2" TextTrimming="CharacterEllipsis"
-                               ToolTipService.ToolTip="{x:Bind ViewModel.Item.Artist, Mode=OneWay}"
-                               Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind ViewModel.Item.Artist, Mode=OneWay}" />
+                               ToolTipService.ToolTip="{x:Bind Vm.Item.Artist, Mode=OneWay}"
+                               Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind Vm.Item.Artist, Mode=OneWay}" />
 
                     <TextBlock x:Name="info"  RelativePanel.RightOf="itemHero" RelativePanel.Below="artist" Margin="{StaticResource SmallTopMargin}"
-                                   Style="{ThemeResource BaseTextBlockStyle}" FontSize="16" Text="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}" />
+                                   Style="{ThemeResource BaseTextBlockStyle}" FontSize="16" Text="{x:Bind Vm.PlaylistInfo, Mode=OneWay}" />
 
                     <StackPanel x:Name="propertiesGroup1" Margin="{StaticResource SmallTopMargin}"
                                 RelativePanel.Below="itemHero" Orientation="Horizontal" Spacing="10">
 
-                        <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.PlayAlbumCommand}" VerticalAlignment="Stretch"
-                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
+                        <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind Vm.Item.PlayAlbumCommand}" VerticalAlignment="Stretch"
+                                    IsEnabled="{x:Bind Vm.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                             <StackPanel>
                                 <SymbolIcon Symbol="Play" />
                                 <TextBlock x:Uid="PlayTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddAlbumCommand}" VerticalAlignment="Stretch"
-                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
+                        <Button x:Name="AddToQButton" Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind Vm.Item.AddAlbumCommand}" VerticalAlignment="Stretch"
+                                    IsEnabled="{x:Bind Vm.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                             <StackPanel >
                                 <SymbolIcon Symbol="Add" />
                                 <TextBlock x:Uid="AddToQueueTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}" VerticalAlignment="Stretch"
-                                    IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
+                        <Button Style="{StaticResource ButtonRevealStyle}" Command="{x:Bind Vm.Item.AddToPlaylistCommand}" VerticalAlignment="Stretch"
+                                    IsEnabled="{x:Bind Vm.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Width="108">
                             <StackPanel >
                                 <SymbolIcon Symbol="MusicInfo" />
                                 <TextBlock x:Uid="AddToPlaylistTextBlock" TextWrapping="Wrap" TextAlignment="Center"/>
@@ -243,7 +244,7 @@
 
 
         <winui:ProgressRing Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"
-                            IsActive="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay}" />
+                            IsActive="{x:Bind Vm.Item.IsDetailLoading, Mode=OneWay}" />
 
     </Grid>
-</Page>
+</mvx:MvxWindowsPage>

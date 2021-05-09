@@ -19,5 +19,6 @@ namespace Stylophone.Common.Interfaces
         Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack);
         Version GetAppVersion();
         Task SetThemeAsync(Theme param);
+        Type GetInitialViewModelType();
     }
 }

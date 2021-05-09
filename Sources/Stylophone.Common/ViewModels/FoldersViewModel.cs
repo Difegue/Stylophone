@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using MpcNET.Commands.Database;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -19,7 +18,7 @@ namespace Stylophone.Common.ViewModels
             _mpdService = mpdService;
             _fileVmFactory = fileVmFactory;
 
-            SourceData.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            SourceData.CollectionChanged += (s, e) => RaisePropertyChanged(nameof(IsSourceEmpty));
         }
 
         public static new string GetHeader() => Resources.FoldersHeader;
@@ -39,7 +38,7 @@ namespace Stylophone.Common.ViewModels
                     SourceData.Add(_fileVmFactory.GetFilePathViewModel(item));
                 }
                 
-            OnPropertyChanged(nameof(SourceData));
+            await RaisePropertyChanged(nameof(SourceData));
         }
 
     }

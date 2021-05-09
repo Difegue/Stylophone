@@ -1,18 +1,21 @@
 ﻿using System.Linq;
 using Stylophone.Helpers;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using MvvmCross;
+using MvvmCross.ViewModels;
+using MvvmCross.Platforms.Uap.Views;
 
 namespace Stylophone.Views
 {
-    public sealed partial class ServerQueuePage : Page
+    [MvxViewFor(typeof(QueueViewModel))]
+    public sealed partial class ServerQueuePage : MvxWindowsPage
     {
-        public QueueViewModel ViewModel => (QueueViewModel)DataContext;
+        public QueueViewModel Vm => (QueueViewModel)ViewModel;
 
         private MPDConnectionService _mpdService;
         private IDispatcherService _dispatcherService;
@@ -20,23 +23,19 @@ namespace Stylophone.Views
         public ServerQueuePage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<QueueViewModel>();
 
             //TODO hacky
-            _mpdService = Ioc.Default.GetRequiredService<MPDConnectionService>();
-            _dispatcherService = Ioc.Default.GetRequiredService<IDispatcherService>();
+            _mpdService = Mvx.IoCProvider.Resolve<MPDConnectionService>();
+            _dispatcherService = Mvx.IoCProvider.Resolve<IDispatcherService>();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnViewModelSet()
         {
-            base.OnNavigatedTo(e);
-
-            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
-
+            Vm.PropertyChanged += ViewModel_PropertyChanged;
             _mpdService.SongChanged += MPDConnectionService_SongChanged;
 
             // Scroll to currently playing song
-            var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
+            var playing = Vm.Source.Where(t => t.IsPlaying).FirstOrDefault();
             if (playing != null)
                 QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
         }
@@ -49,7 +48,7 @@ namespace Stylophone.Views
             _dispatcherService.ExecuteOnUIThreadAsync(() =>
             {
                 // Scroll to the newly playing song
-                var playing = ViewModel.Source.Where(t => t.File.Id == e.NewSongId && t.File.Id != manualSongId).FirstOrDefault();
+                var playing = Vm?.Source.Where(t => t.File.Id == e.NewSongId && t.File.Id != manualSongId).FirstOrDefault();
                 if (playing != null)
                 {
                     playing.UpdatePlayingStatus();
@@ -60,12 +59,12 @@ namespace Stylophone.Views
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ViewModel.Source))
+            if (e.PropertyName == nameof(Vm.Source))
             {
                 if (QueueList.Items.Count == 0)
                     return;
 
-                var playing = ViewModel.Source.Where(t => t.IsPlaying && t.File.Id != manualSongId).FirstOrDefault();
+                var playing = Vm?.Source.Where(t => t.IsPlaying && t.File.Id != manualSongId).FirstOrDefault();
                 if (playing != null)
                 {
                     playing.UpdatePlayingStatus();

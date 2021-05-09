@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Stylophone.Services;
 using Stylophone.ViewModels;
 using MpcNET.Types;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using MvvmCross;
+using MvvmCross.Platforms.Uap.Views;
+using MvvmCross.ViewModels;
 
 namespace Stylophone.Views
 {
@@ -24,16 +26,19 @@ namespace Stylophone.Views
         }
     }
 
-    public sealed partial class ShellPage : Page
+    [MvxViewFor(typeof(ShellViewModel))]
+    public sealed partial class ShellPage : MvxWindowsPage
     {
-
-        public ShellViewModel ViewModel => (ShellViewModel)DataContext;
+        public ShellViewModel Vm => (ShellViewModel)ViewModel;
 
         public ShellPage()
         {
             InitializeComponent();
-            DataContext = ((App)Application.Current).Services.GetService(typeof(ShellViewModel));
-            ViewModel.Initialize(shellFrame, navigationView, playlistContainer, notificationHolder, KeyboardAccelerators);
+        }
+
+        protected override void OnViewModelSet()
+        {
+            Vm.Initialize(shellFrame, navigationView, playlistContainer, notificationHolder, KeyboardAccelerators);
         }
 
         private void OpenSuggestionsPanel(object sender, RoutedEventArgs args)

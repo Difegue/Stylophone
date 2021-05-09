@@ -1,5 +1,4 @@
 ﻿using Stylophone.ViewModels;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Microsoft.Toolkit.Uwp;
 using Stylophone.Common.Helpers;
 using System;
@@ -9,6 +8,7 @@ using Windows.System;
 using Windows.UI.ViewManagement;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml.Navigation;
+using MvvmCross;
 
 namespace Stylophone.Views
 {
@@ -28,7 +28,7 @@ namespace Stylophone.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            DataContext = Ioc.Default.GetRequiredService<PlaybackViewModel>();
+            DataContext = Mvx.IoCProvider.IoCConstruct<PlaybackViewModel>();
             PlaybackViewModel.HostType = VisualizationType.OverlayPlayback;
         }
 

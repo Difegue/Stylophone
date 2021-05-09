@@ -1,4 +1,4 @@
-﻿<Page
+﻿<mvx:MvxWindowsPage
     x:Class="Stylophone.Views.ServerQueuePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,8 +10,9 @@
     xmlns:vm="using:Stylophone.Common.ViewModels" 
     Style="{StaticResource PageStyle}"
     NavigationCacheMode="Required"
+    xmlns:mvx="using:MvvmCross.Platforms.Uap.Views"
     mc:Ignorable="d">
-    <Page.Resources>
+    <mvx:MvxWindowsPage.Resources>
         <Stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
@@ -68,7 +69,7 @@
                     Margin="12,0,0,0"/>
             </Grid>
         </DataTemplate>
-    </Page.Resources>
+    </mvx:MvxWindowsPage.Resources>
     <Grid x:Name="ContentArea" >
         <Stylophone:AlternatingRowListView x:Name="QueueList"
                       SelectionMode="Extended"
@@ -84,12 +85,12 @@
                       OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
                       EvenRowBackground="Transparent"
                       ItemTemplate="{StaticResource QueueTemplate}"
-                      ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
+                      ItemsSource="{x:Bind Vm.Source, Mode=OneWay}">
             <Stylophone:AlternatingRowListView.ContextFlyout>
                 <MenuFlyout>
                     <!-- Play Track -->
                     <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play"
-                                    Command="{x:Bind ViewModel.PlayTrackCommand}"
+                                    Command="{x:Bind Vm.PlayTrackCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}" >
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Key="Enter" />
@@ -97,7 +98,7 @@
                     </MenuFlyoutItem>
                     <!-- View Track Album -->
                     <MenuFlyoutItem x:Uid="ViewAlbumFlyoutItem"
-                                    Command="{x:Bind ViewModel.ViewAlbumCommand}"
+                                    Command="{x:Bind Vm.ViewAlbumCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
                         <MenuFlyoutItem.Icon>
                             <FontIcon Glyph="&#xE93C;" />
@@ -106,7 +107,7 @@
                     <MenuFlyoutSeparator/>
                     <!-- Remove Track -->
                     <MenuFlyoutItem x:Uid="RemoveFromQueueFlyoutItem" Icon="Delete"
-                                    Command="{x:Bind ViewModel.RemoveFromQueueCommand}"
+                                    Command="{x:Bind Vm.RemoveFromQueueCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Key="Delete" />
@@ -114,7 +115,7 @@
                     </MenuFlyoutItem>
                     <!-- Add Track to Playlist -->
                     <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Text="Add to Playlist"
-                                    Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                                    Command="{x:Bind Vm.AddToPlayListCommand}"
                                     CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"/>
                     
                 </MenuFlyout>
@@ -127,7 +128,7 @@
             </Stylophone:AlternatingRowListView.ItemContainerStyle>
         </Stylophone:AlternatingRowListView>
         
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind Vm.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <SymbolIcon Symbol="More" RenderTransformOrigin="0.5,0.5" Height="86">
                 <SymbolIcon.RenderTransform>
                     <CompositeTransform ScaleX="5" ScaleY="5"/>
@@ -138,4 +139,4 @@
         </StackPanel>
         
     </Grid>
-</Page>
+</mvx:MvxWindowsPage>

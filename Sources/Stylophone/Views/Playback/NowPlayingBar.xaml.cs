@@ -1,11 +1,5 @@
-﻿using Stylophone.ViewModels;
-using System;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
-using Stylophone.Common.Helpers;
-using Stylophone.Common.Services;
-using Stylophone.Common.Interfaces;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+﻿using MvvmCross;
+using Stylophone.ViewModels;
 
 namespace Stylophone.Views
 {
@@ -16,7 +10,7 @@ namespace Stylophone.Views
         public NowPlayingBar()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<PlaybackViewModel>();
+            DataContext = Mvx.IoCProvider.IoCConstruct<PlaybackViewModel>();
         }
 
         private void Volume_PointerWheelChanged(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)

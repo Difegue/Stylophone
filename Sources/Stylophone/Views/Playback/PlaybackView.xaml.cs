@@ -1,36 +1,39 @@
 ﻿using Stylophone.ViewModels;
 using Stylophone.Common.Helpers;
 using Windows.UI.Xaml.Navigation;
+using MvvmCross.Platforms.Uap.Views;
+using MvvmCross.ViewModels;
 
 namespace Stylophone.Views
 {
-    public sealed partial class PlaybackView
+    [MvxViewFor(typeof(PlaybackViewModel))]
+    public sealed partial class PlaybackView : MvxWindowsPage
     {
-        public PlaybackViewModel PlaybackViewModel { get; private set; }
+        public PlaybackViewModel Vm => (PlaybackViewModel)ViewModel;
 
         public PlaybackView()
         {
             InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnViewModelSet()
         {
-            PlaybackViewModel = (PlaybackViewModel)e.Parameter;
-            PlaybackViewModel.HostType = VisualizationType.FullScreenPlayback;
+            if (Vm != null)
+                Vm.HostType = VisualizationType.FullScreenPlayback;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            if (PlaybackViewModel != null)
-                PlaybackViewModel.HostType = VisualizationType.NowPlayingBar;
-            PlaybackViewModel = null;
+            if (Vm != null)
+                Vm.HostType = VisualizationType.NowPlayingBar;
+            ViewModel = null;
         }
 
         private void Page_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (PlaybackViewModel != null)
-                PlaybackViewModel.HostType = VisualizationType.NowPlayingBar;
-            PlaybackViewModel = null;
+            if (Vm != null)
+                Vm.HostType = VisualizationType.NowPlayingBar;
+            ViewModel = null;
         }
     }
 }

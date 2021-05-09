@@ -1,26 +1,22 @@
-﻿using System;
-using Stylophone.Helpers;
-using Stylophone.ViewModels;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
-using Stylophone.Common.ViewModels;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+﻿using Stylophone.Common.ViewModels;
+using MvvmCross.ViewModels;
+using MvvmCross.Platforms.Uap.Views;
 
 namespace Stylophone.Views
 {
-    public sealed partial class SettingsPage : Page
+    [MvxViewFor(typeof(SettingsViewModel))]
+    public sealed partial class SettingsPage : MvxWindowsPage
     {
-        public SettingsViewModel ViewModel => (SettingsViewModel)DataContext;
+        public SettingsViewModel Vm => (SettingsViewModel)ViewModel;
 
         public SettingsPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<SettingsViewModel>();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnViewModelSet()
         {
-            await ViewModel.EnsureInstanceInitializedAsync();
+            await Vm.EnsureInstanceInitializedAsync();
         }
     }
 }

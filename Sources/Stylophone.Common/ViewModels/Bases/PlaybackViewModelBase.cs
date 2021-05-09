@@ -1,10 +1,10 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-using MpcNET;
+﻿using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Status;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using Stylophone.Common.Helpers;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -27,14 +27,14 @@ namespace Stylophone.Common.ViewModels
         private List<Task> shuffleTasks = new List<Task>();
 
         private IDialogService _dialogService;
-        protected INavigationService _navigationService;
+        protected IMvxNavigationService _navigationService;
         protected INotificationService _notificationService;
         private IInteropService _interop;
         private MPDConnectionService _mpdService;
         private TrackViewModelFactory _trackVmFactory;
 
 
-        public PlaybackViewModelBase(IDialogService dialogService, INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
+        public PlaybackViewModelBase(IDialogService dialogService, IMvxNavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
             base(dispatcherService)
         {
             _dialogService = dialogService;
@@ -111,7 +111,7 @@ namespace Stylophone.Common.ViewModels
             private set
             {
                 Set(ref _nextTrack, value);
-                OnPropertyChanged(nameof(HasNextTrack));
+                RaisePropertyChanged(nameof(HasNextTrack));
             }
         }
         public bool HasNextTrack => NextTrack != null;
@@ -453,11 +453,6 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        public void NavigateNowPlaying()
-        {
-            _navigationService.Navigate<PlaybackViewModelBase>(this);
-        }
-
         #endregion Track Control Methods
 
         #region Track Playback State
@@ -600,7 +595,7 @@ namespace Stylophone.Common.ViewModels
                 if (volumeTasks.Count == 0)
                 {
                     _internalVolume = status.Volume;
-                    OnPropertyChanged(nameof(MediaVolume));
+                    RaisePropertyChanged(nameof(MediaVolume));
                 }
 
                 // Ditto for shuffle/repeat/single
@@ -615,8 +610,8 @@ namespace Stylophone.Common.ViewModels
                     else
                         RepeatIcon = "\uE8EE";
 
-                    OnPropertyChanged(nameof(IsRepeatEnabled));
-                    OnPropertyChanged(nameof(IsShuffleEnabled));
+                    RaisePropertyChanged(nameof(IsRepeatEnabled));
+                    RaisePropertyChanged(nameof(IsShuffleEnabled));
                 }
 
                 switch (status.State)
@@ -659,7 +654,7 @@ namespace Stylophone.Common.ViewModels
         #region Commands
 
         private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<EventArgs>(AddToPlaylist));
+        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new MvxCommand<EventArgs>(AddToPlaylist));
         private void AddToPlaylist(EventArgs obj)
         {
             // Track must exist
@@ -672,7 +667,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _showAlbumCommand;
-        public ICommand ShowAlbumCommand => _showAlbumCommand ?? (_showAlbumCommand = new RelayCommand<EventArgs>(ShowAlbum));
+        public ICommand ShowAlbumCommand => _showAlbumCommand ?? (_showAlbumCommand = new MvxCommand<EventArgs>(ShowAlbum));
         private void ShowAlbum(EventArgs obj)
         {
             // Track must exist
@@ -686,13 +681,12 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _compactViewCommand;
-        public ICommand SwitchToCompactViewCommand => _compactViewCommand ?? (_compactViewCommand = new AsyncRelayCommand<EventArgs>(SwitchToCompactViewAsync));
+        public ICommand SwitchToCompactViewCommand => _compactViewCommand ?? (_compactViewCommand = new MvxAsyncCommand<EventArgs>(SwitchToCompactViewAsync));
 
         /// <summary>
         ///     Switch to compact overlay mode
         /// </summary>
         public abstract Task SwitchToCompactViewAsync(EventArgs obj);
-        
 
         #endregion Method Bindings
     }

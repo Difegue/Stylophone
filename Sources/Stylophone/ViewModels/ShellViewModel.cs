@@ -12,9 +12,13 @@ using Windows.UI.Xaml.Input;
 
 using WinUI = Microsoft.UI.Xaml.Controls;
 using Stylophone.Common.Services;
-using Stylophone.Services;
 using Windows.Foundation;
 using MpcNET.Commands.Playback;
+using MvvmCross.Navigation.EventArguments;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+using MvvmCross;
+using Stylophone.Services;
 
 namespace Stylophone.ViewModels
 {
@@ -29,21 +33,23 @@ namespace Stylophone.ViewModels
         private WinUI.NavigationViewItem _playlistContainer;
         private InAppNotification _notificationHolder;
 
-        public ShellViewModel(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService):
-            base(navigationService, notificationService, dispatcherService, mpdService)
+        private Frame _contentFrame;
+
+        public ShellViewModel(IMvxNavigationService navigationService, INotificationService notificationService, IDialogService dialogService, IDispatcherService dispatcherService, MPDConnectionService mpdService):
+            base(navigationService, notificationService, dialogService, dispatcherService, mpdService)
         {
         }
 
-        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, InAppNotification notificationHolder, IList<KeyboardAccelerator> keyboardAccelerators)
+        public void Initialize(Frame shellFrame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, InAppNotification notificationHolder, IList<KeyboardAccelerator> keyboardAccelerators)
         {
+            _contentFrame = shellFrame;
             _navigationView = navigationView;
             _playlistContainer = playlistContainer;
             _notificationHolder = notificationHolder;
             _keyboardAccelerators = keyboardAccelerators;
 
-            var concreteNavService = (NavigationService)_navigationService;
-            concreteNavService.Frame = frame;
-            concreteNavService.Navigated += UpdateNavigationViewSelection;
+            _navigationService.AfterClose += UpdateNavigationViewSelection;
+            _navigationService.AfterNavigate += UpdateNavigationViewSelection;
 
             _navigationView.BackRequested += OnBackRequested;
             _navigationView.AutoSuggestBox.TextChanged += UpdateSearchSuggestions;
@@ -54,15 +60,19 @@ namespace Stylophone.ViewModels
             _spaceKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Space, PauseOrPlay);
         }
 
-        private void UpdateNavigationViewSelection(object sender, CoreNavigationEventArgs e)
+        internal Frame GetShellFrame() => _contentFrame;
+
+        private void UpdateNavigationViewSelection(object sender, IMvxNavigateEventArgs e)
         {
-            if (e.NavigationTarget == typeof(SettingsViewModel))
+            if (e.ViewModel is ShellViewModel) return;
+
+            if (e.ViewModel is SettingsViewModel)
             {
                 _navigationView.SelectedItem = _navigationView.SettingsItem as WinUI.NavigationViewItem;
                 return;
             }
 
-            if (e.NavigationTarget == typeof(PlaylistViewModel))
+            if (e.ViewModel is PlaylistViewModel)
             {
                 _navigationView.SelectedItem = _playlistContainer;
                 return;
@@ -70,7 +80,7 @@ namespace Stylophone.ViewModels
 
             _navigationView.SelectedItem = _navigationView.MenuItems
                            .OfType<WinUI.NavigationViewItem>()
-                           .FirstOrDefault(menuItem => IsMenuItemForPageType(menuItem, e.NavigationTarget));
+                           .FirstOrDefault(menuItem => IsMenuItemForPageType(menuItem, e.ViewModel.GetType()));
         }
 
         private bool IsMenuItemForPageType(WinUI.NavigationViewItem menuItem, Type sourcePageType)
@@ -140,11 +150,14 @@ namespace Stylophone.ViewModels
                 _navigationService.Navigate(pageType, item.Content);
             else
                 _navigationService.Navigate(pageType);
+
+            //IsBackEnabled = await _navigationService.CanNavigate("..");
         }
 
         private void OnBackRequested(WinUI.NavigationView sender, WinUI.NavigationViewBackRequestedEventArgs args)
         {
-            _navigationService.GoBack();
+            // Close the currently shown VM
+            _navigationService.Close(_contentFrame.DataContext as IMvxViewModel);
         }
 
         private async void UpdateSearchSuggestions(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -175,10 +188,10 @@ namespace Stylophone.ViewModels
             return keyboardAccelerator;
         }
 
-        private void GoBack(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        private async void GoBack(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            var result = _navigationService.GoBack();
-            args.Handled = result;
+            var result = _navigationService.Close(_contentFrame.DataContext as IMvxViewModel);
+            args.Handled = await result;
         }
 
         private async void PauseOrPlay(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)

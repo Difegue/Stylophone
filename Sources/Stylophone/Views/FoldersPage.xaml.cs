@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using MvvmCross;
+using MvvmCross.Platforms.Uap.Views;
+using MvvmCross.ViewModels;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml.Controls;
@@ -7,23 +9,19 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Stylophone.Views
 {
-    // For more info about the TreeView Control see
-    // https://docs.microsoft.com/windows/uwp/design/controls-and-patterns/tree-view
-    // For other samples, get the XAML Controls Gallery app http://aka.ms/XamlControlsGallery
-    public sealed partial class FoldersPage : Page
+    [MvxViewFor(typeof(FoldersViewModel))]
+    public sealed partial class FoldersPage : MvxWindowsPage
     {
-        public FoldersViewModel ViewModel => (FoldersViewModel)DataContext;
+        public FoldersViewModel Vm => (FoldersViewModel)ViewModel;
 
         public FoldersPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<FoldersViewModel>();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnViewModelSet()
         {
-            base.OnNavigatedTo(e);
-            await ViewModel.LoadDataAsync();
+            await Vm.LoadDataAsync();
         }
 
         private void treeView_Expanding(Microsoft.UI.Xaml.Controls.TreeView sender, Microsoft.UI.Xaml.Controls.TreeViewExpandingEventArgs args)
@@ -35,7 +33,7 @@ namespace Stylophone.Views
                 Task.Run(async () =>
                 {
                 await vm.LoadChildrenAsync();
-                await Ioc.Default.GetRequiredService<IDispatcherService>().ExecuteOnUIThreadAsync(() => args.Node.HasUnrealizedChildren = false);
+                await Mvx.IoCProvider.Resolve<IDispatcherService>().ExecuteOnUIThreadAsync(() => args.Node.HasUnrealizedChildren = false);
                 }).ConfigureAwait(false);
             }       
         }

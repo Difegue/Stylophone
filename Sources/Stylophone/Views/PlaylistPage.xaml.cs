@@ -1,25 +1,21 @@
 ﻿using Stylophone.Helpers;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using MvvmCross;
+using MvvmCross.ViewModels;
+using MvvmCross.Platforms.Uap.Views;
 
 namespace Stylophone.Views
 {
-    public sealed partial class PlaylistPage : Page
+    [MvxViewFor(typeof(PlaylistViewModel))]
+    public sealed partial class PlaylistPage : MvxWindowsPage
     {
-        public PlaylistViewModel ViewModel => (PlaylistViewModel)DataContext;
+        public PlaylistViewModel Vm => (PlaylistViewModel)ViewModel;
 
         public PlaylistPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<PlaylistViewModel>();
-        }
-
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            await ViewModel.LoadDataAsync(e.Parameter as string);
         }
 
         private void Queue_Track(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
