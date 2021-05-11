@@ -183,8 +183,11 @@ namespace Stylophone.ViewModels
 
         private async void PauseOrPlay(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            await _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
-            args.Handled = true;
+            if (!_navigationView.AutoSuggestBox.IsSuggestionListOpen)
+            {
+                await _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+                args.Handled = true;
+            }
         }
     }
 }

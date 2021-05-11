@@ -34,7 +34,7 @@
                     VerticalAlignment="Center" MaxLines="1" TextTrimming="CharacterEllipsis" Style="{ThemeResource BaseTextBlockStyle}"/>
 
                     <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xF61F;" Grid.Column="1" Margin="-4,0,0,0"
-                              FontSize="24" Foreground="{ThemeResource SystemAccentColorDark1}" VerticalAlignment="Center"
+                              FontSize="24" Foreground="{ThemeResource SystemAccentColorDark2}" VerticalAlignment="Center"
                                 Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
                 

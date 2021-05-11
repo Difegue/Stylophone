@@ -68,9 +68,7 @@ namespace Stylophone.Services
 
         private async Task InitializeAsync()
         {
-            var theme = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ElementTheme));
-            Enum.TryParse(theme, out Theme elementTheme);
-            await Ioc.Default.GetRequiredService<IInteropService>().SetThemeAsync(elementTheme);
+            
         }
 
         private async Task HandleActivationAsync(object activationArgs)
@@ -87,6 +85,10 @@ namespace Stylophone.Services
 
         private async Task StartupAsync()
         {
+            var theme = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ElementTheme));
+            Enum.TryParse(theme, out Theme elementTheme);
+            await Ioc.Default.GetRequiredService<IInteropService>().SetThemeAsync(elementTheme);
+
             await Ioc.Default.GetRequiredService<IDialogService>().ShowFirstRunDialogIfAppropriateAsync();
 
             var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));

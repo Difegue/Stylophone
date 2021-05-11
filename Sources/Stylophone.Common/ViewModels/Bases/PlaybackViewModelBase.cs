@@ -327,10 +327,6 @@ namespace Stylophone.Common.ViewModels
             if (CurrentTrack == null)
                 return;
 
-            // Track mismatch between status and what's displayed, proc a refresh
-            if (_mpdService.CurrentStatus.SongId != CurrentTrack?.File?.Id)
-                OnTrackChange(this, new SongChangedEventArgs { NewSongId = _mpdService.CurrentStatus.SongId });
-
             if (!HasNextTrack)
                 await UpdateUpNextAsync(_mpdService.CurrentStatus);
 

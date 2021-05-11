@@ -255,7 +255,7 @@ namespace Stylophone.Common.Services
             if (subsystems.Contains("player") || subsystems.Contains("mixer") || subsystems.Contains("output") || subsystems.Contains("options"))
             {
                 // Status have changed in a significant way
-                await UpdateStatusAsync(_idleConnection);
+                await UpdateStatusAsync(_idleConnection, true);
                 StatusChanged?.Invoke(this, new EventArgs());
 
                 if (subsystems.Contains("player"))
@@ -267,17 +267,17 @@ namespace Stylophone.Common.Services
         }
 
         private bool _isUpdatingStatus = false;
-        private async Task UpdateStatusAsync(MpcConnection connection)
+        private async Task UpdateStatusAsync(MpcConnection connection, bool forceUpdate = false)
         {
             System.Diagnostics.Debug.WriteLine($"{ConnectionPool.ObjectsInPoolCount} connections in pool - {CurrentStatus}");
 
-            if (_statusConnection == null || _isUpdatingStatus) return;
+            if (_statusConnection == null) return;
+
+            if (_isUpdatingStatus && !forceUpdate) return;
 
             _isUpdatingStatus = true;
             try
             {
-                var response2 = await connection.SendAsync(new OutputsCommand());
-
                 var response = await connection.SendAsync(new StatusCommand());
 
                 if (response != null && response.IsResponseValid)
