@@ -142,7 +142,10 @@ namespace Stylophone.Common.ViewModels
                 _albumArtCancellationSource = new CancellationTokenSource();
 
                 // (Re)Load CurrentTrack to take into account the new VisualizationType
-                CurrentTrack?.GetAlbumArtAsync(HostType, _albumArtCancellationSource.Token);
+                _albumArtCancellationSource.Cancel();
+                _albumArtCancellationSource = new CancellationTokenSource();
+                
+                Task.Run(async () => await CurrentTrack?.GetAlbumArtAsync(HostType, _albumArtCancellationSource.Token));
             }
         }
 
