@@ -70,6 +70,7 @@ namespace Stylophone.Common.ViewModels
             IsBackEnabled = _navigationService.CanGoBack;
 
             var viewModelType = e.NavigationTarget;
+            if (viewModelType == null) return;
 
             // Use some reflection magic to get the static Header text for this ViewModel
             var headerMethod = viewModelType.GetMethod(nameof(ViewModelBase.GetHeader), BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);

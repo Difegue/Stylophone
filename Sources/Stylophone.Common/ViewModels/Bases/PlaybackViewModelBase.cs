@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Playback;
@@ -33,7 +34,6 @@ namespace Stylophone.Common.ViewModels
         private MPDConnectionService _mpdService;
         private TrackViewModelFactory _trackVmFactory;
 
-
         public PlaybackViewModelBase(IDialogService dialogService, INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
             base(dispatcherService)
         {
@@ -48,6 +48,11 @@ namespace Stylophone.Common.ViewModels
             // Default to NowPlayingBar
             _hostType = VisualizationType.NowPlayingBar;
             _trackInfoAvailable = false;
+
+            // Initialize icons
+            _volumeIcon = _interop.GetIcon(PlaybackIcon.VolumeFull);
+            _repeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
+            _playButtonContent = _interop.GetIcon(PlaybackIcon.Play);
 
             // Bind the methods that we need
             _mpdService.StatusChanged += OnStateChange;
@@ -189,7 +194,7 @@ namespace Stylophone.Common.ViewModels
             private set => Set(ref _maxTimeValue, value);
         }
 
-        private string _volumeIcon = "\uE767";
+        private string _volumeIcon;
         /// <summary>
         ///     The current text for the volume icon
         /// </summary>
@@ -199,7 +204,7 @@ namespace Stylophone.Common.ViewModels
             private set => Set(ref _volumeIcon, value);
         }
 
-        private string _repeatIcon = "\uE8EE";
+        private string _repeatIcon;
         /// <summary>
         ///     The current text for the repeat icon
         /// </summary>
@@ -209,7 +214,7 @@ namespace Stylophone.Common.ViewModels
             private set => Set(ref _repeatIcon, value);
         }
 
-        private string _playButtonContent = "\uE769";
+        private string _playButtonContent;
         /// <summary>
         ///     The content on the play_pause button
         /// </summary>
@@ -247,23 +252,23 @@ namespace Stylophone.Common.ViewModels
                 // Update the UI
                 if ((int)value == 0)
                 {
-                    VolumeIcon = "\uE74F";
+                    VolumeIcon = _interop.GetIcon(PlaybackIcon.VolumeMute);
                 }
                 else if (value < 25)
                 {
-                    VolumeIcon = "\uE992";
+                    VolumeIcon = _interop.GetIcon(PlaybackIcon.Volume25);
                 }
                 else if (value < 50)
                 {
-                    VolumeIcon = "\uE993";
+                    VolumeIcon = _interop.GetIcon(PlaybackIcon.Volume50);
                 }
                 else if (value < 75)
                 {
-                    VolumeIcon = "\uE994";
+                    VolumeIcon = _interop.GetIcon(PlaybackIcon.Volume75);
                 }
                 else
                 {
-                    VolumeIcon = "\uE767";
+                    VolumeIcon = _interop.GetIcon(PlaybackIcon.VolumeFull);
                 }
 
             }
@@ -302,9 +307,9 @@ namespace Stylophone.Common.ViewModels
 
                 // Update UI icon
                 if (value)
-                    RepeatIcon = "\uE8ED";
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
                 else
-                    RepeatIcon = "\uE8EE";
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
             }
         }
 
@@ -362,21 +367,12 @@ namespace Stylophone.Common.ViewModels
         /// <summary>
         /// Write the current queue to a playlist.
         /// </summary>
-        public async void SaveQueue()
-        {
-            var playlistName = await _dialogService.ShowAddToPlaylistDialog(false);
-            if (playlistName == null) return;
-
-            var req = await _mpdService.SafelySendCommandAsync(new SaveCommand(playlistName));
-
-            if (req != null)
-                _notificationService.ShowInAppNotification(string.Format(Resources.AddedToPlaylistText, playlistName));
-        }
+        public void SaveQueue() => Ioc.Default.GetService<QueueViewModel>().SaveQueueCommand.Execute(this);
 
         /// <summary>
         /// Clear the MPD queue.
         /// </summary>
-        public async void ClearQueue() => await _mpdService.SafelySendCommandAsync(new ClearCommand());
+        public void ClearQueue() => Ioc.Default.GetService<QueueViewModel>().ClearQueueCommand.Execute(this);
 
         /// <summary>
         ///     Toggle if the current track/playlist should repeat
@@ -610,9 +606,9 @@ namespace Stylophone.Common.ViewModels
                     _isSingleEnabled = status.Single;
 
                     if (_isSingleEnabled)
-                        RepeatIcon = "\uE8ED";
+                        RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
                     else
-                        RepeatIcon = "\uE8EE";
+                        RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
 
                     OnPropertyChanged(nameof(IsRepeatEnabled));
                     OnPropertyChanged(nameof(IsShuffleEnabled));
@@ -622,22 +618,22 @@ namespace Stylophone.Common.ViewModels
                 {
                     case MpdState.Play:
                         IsTrackInfoAvailable = true;
-                        PlayButtonContent = "\uE769";
+                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Pause);
                         break;
 
                     case MpdState.Stop:
                         IsTrackInfoAvailable = true;
-                        PlayButtonContent = "\uE768";
+                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
                         break;
 
                     case MpdState.Pause:
                         IsTrackInfoAvailable = true;
-                        PlayButtonContent = "\uE768";
+                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
                         break;
 
                     default:
                         IsTrackInfoAvailable = false;
-                        PlayButtonContent = "\uE768";
+                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
                         break;
                 }
             });

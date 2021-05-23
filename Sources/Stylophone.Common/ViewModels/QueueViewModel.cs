@@ -22,14 +22,13 @@ namespace Stylophone.Common.ViewModels
     {
         private NotifyCollectionChangedAction _previousAction;
         private int _oldId;
-        private int _playlistVersion;
 
         private IDialogService _dialogService;
         private INotificationService _notificationService;
         private MPDConnectionService _mpdService;
         private TrackViewModelFactory _trackVmFactory;
 
-        public QueueViewModel(IDialogService dialogService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, TrackViewModelFactory trackViewModelFactory):
+        public QueueViewModel(IDialogService dialogService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, TrackViewModelFactory trackViewModelFactory) :
             base(dispatcherService)
         {
             _dialogService = dialogService;
@@ -53,9 +52,9 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _playCommand;
-        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new RelayCommand<IList<object>>(PlayTrack, IsSingleTrackSelected));
+        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new AsyncRelayCommand<IList<object>>(PlayTrackAsync, IsSingleTrackSelected));
 
-        private async void PlayTrack(object list)
+        private async Task PlayTrackAsync(object list)
         {
             // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
@@ -83,9 +82,9 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _removeCommand;
-        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new RelayCommand<IList<object>>(RemoveTrack));
+        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new AsyncRelayCommand<IList<object>>(RemoveTrackAsync));
 
-        private async void RemoveTrack(object list)
+        private async Task RemoveTrackAsync(object list)
         {
             var selectedTracks = (IList<object>)list;
 
@@ -106,9 +105,9 @@ namespace Stylophone.Common.ViewModels
         }
 
         private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
+        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new AsyncRelayCommand<IList<object>>(AddToPlaylist));
 
-        private async void AddToPlaylist(object list)
+        private async Task AddToPlaylist(object list)
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;
@@ -130,6 +129,34 @@ namespace Stylophone.Common.ViewModels
                 if (req != null)
                     _notificationService.ShowInAppNotification(string.Format(Resources.AddedToPlaylistText, playlistName));
             }
+        }
+
+        private ICommand _saveQueueCommand;
+        /// <summary>
+        /// Write the current queue to a playlist.
+        /// </summary>
+        public ICommand SaveQueueCommand => _saveQueueCommand ?? (_saveQueueCommand = new AsyncRelayCommand(SaveQueueAsync));
+
+        private async Task SaveQueueAsync()
+        {
+            var playlistName = await _dialogService.ShowAddToPlaylistDialog(false);
+            if (playlistName == null) return;
+
+            var req = await _mpdService.SafelySendCommandAsync(new SaveCommand(playlistName));
+
+            if (req != null)
+                _notificationService.ShowInAppNotification(string.Format(Resources.AddedToPlaylistText, playlistName));
+        }
+
+        private ICommand _clearQueueCommand;
+        /// <summary>
+        /// Clear the MPD queue.
+        /// </summary>
+        public ICommand ClearQueueCommand => _clearQueueCommand ?? (_clearQueueCommand = new AsyncRelayCommand(ClearQueueAsync));
+
+        private async Task ClearQueueAsync()
+        {
+            await _mpdService.SafelySendCommandAsync(new ClearCommand());
         }
 
         /// <summary>
@@ -164,49 +191,52 @@ namespace Stylophone.Common.ViewModels
         {
             // Ask for a new status ourselves as the shared ConnectionService one might not be up to date yet
             var status = await _mpdService.SafelySendCommandAsync(new StatusCommand());
-            var newVersion = status.Playlist;
+            var newVersion = status?.Playlist;
 
             // Update the queue only if playlist versions differ
-            if (newVersion != _playlistVersion)
+            if (newVersion != null && newVersion != PlaylistVersion)
             {
-                _ = Task.Run(async () => {
+                _ = Task.Run(async () =>
+                {
 
-                    var response = await _mpdService.SafelySendCommandAsync(new PlChangesCommand(_playlistVersion));
+                    var response = await _mpdService.SafelySendCommandAsync(new PlChangesCommand(PlaylistVersion));
 
                     if (response != null)
                     {
                         Source.CollectionChanged -= Source_CollectionChanged;
-                        await _dispatcherService.ExecuteOnUIThreadAsync(() => {
 
-                            // If the queue was cleared, PlaylistLength is 0.
-                            if (status.PlaylistLength == 0)
+                        // If the queue was cleared, PlaylistLength is 0.
+                        if (status.PlaylistLength == 0)
+                        {
+                            await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.Clear());
+                        }
+                        else
+                        {
+                            // PlChanges gives the full list of files starting from the change, so we delete all existing tracks from the source after that change, and swap the new ones in.
+                            // If the response is empty, that means the last file in the source was removed.
+                            var initialPosition = response.Count() == 0 ? Source.Count - 1 : response.First().Position;
+
+                            while (Source.Count != initialPosition)
                             {
-                                Source.Clear();
-                            }
-                            else
-                            {
-                                // PlChanges gives the full list of files starting from the change, so we delete all existing tracks from the source after that change, and swap the new ones in.
-                                // If the response is empty, that means the last file in the source was removed.
-                                var initialPosition = response.Count() == 0 ? Source.Count - 1 : response.First().Position;
-
-
-                                while (Source.Count != initialPosition)
-                                {
-                                    Source.RemoveAt(initialPosition);
-                                }
-
-                                foreach (var item in response)
-                                {
-                                    var trackVm = _trackVmFactory.GetTrackViewModel(item);
-                                    Source.Add(trackVm);
-                                }
+                                await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.RemoveAt(initialPosition));
+                                //var toRemove = Source.Skip(initialPosition - 1).Take(Source.Count - initialPosition);
+                                //await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.RemoveRange(toRemove));
                             }
 
-                        });
+                            var toAdd = new List<TrackViewModel>();
+                            foreach (var item in response)
+                            {
+                                var trackVm = _trackVmFactory.GetTrackViewModel(item);
+                                toAdd.Add(trackVm);
+                            }
+
+                            await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.AddRange(toAdd));
+                        }
+
                         Source.CollectionChanged += Source_CollectionChanged;
 
                         // Update internal playlist version
-                        _playlistVersion = newVersion;
+                        PlaylistVersion = newVersion.Value;
                     }
                 });
             }
@@ -215,6 +245,13 @@ namespace Stylophone.Common.ViewModels
         public RangedObservableCollection<TrackViewModel> Source { get; } = new RangedObservableCollection<TrackViewModel>();
 
         public bool IsSourceEmpty => Source.Count == 0;
+
+        private int _playlistVersion;
+        public int PlaylistVersion
+        {
+            get => _playlistVersion;
+            private set => Set(ref _playlistVersion, value);
+        }
 
         public async Task LoadInitialDataAsync()
         {
@@ -228,7 +265,8 @@ namespace Stylophone.Common.ViewModels
                     tracks.Add(trackVm);
                 }
 
-            await _dispatcherService.ExecuteOnUIThreadAsync(() => {
+            await _dispatcherService.ExecuteOnUIThreadAsync(() =>
+            {
                 Source.Clear();
                 Source.AddRange(tracks);
             });
@@ -236,8 +274,8 @@ namespace Stylophone.Common.ViewModels
             // Set our internal playlist version
             var status = await _mpdService.SafelySendCommandAsync(new StatusCommand());
 
-            if ( status != null )
-                _playlistVersion = status.Playlist;
+            if (status != null)
+                PlaylistVersion = status.Playlist;
 
             Source.CollectionChanged += Source_CollectionChanged;
         }

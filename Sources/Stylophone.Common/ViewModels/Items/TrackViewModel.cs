@@ -150,8 +150,8 @@ namespace Stylophone.Common.ViewModels
         {
             AlbumArt = await _interop.GetPlaceholderImageAsync();
 
-            // This is RAM-intensive as it has to convert the image, so we only do it if needed (aka now playing bar and full playback only)
-            var calculateDominantColor = hostType.IsOneOf(VisualizationType.NowPlayingBar, VisualizationType.FullScreenPlayback);
+            // This is RAM-intensive as it has to convert the image, so we only do it if needed 
+            var calculateDominantColor = hostType.IsOneOf(VisualizationType.NowPlayingBar, VisualizationType.OverlayPlayback, VisualizationType.FullScreenPlayback);
 
             // Use the int value of the VisualizationType to know how large the decoded bitmap has to be.
             var art = await _albumArtService.GetAlbumArtAsync(File, calculateDominantColor, (int)hostType, albumArtCancellationToken);

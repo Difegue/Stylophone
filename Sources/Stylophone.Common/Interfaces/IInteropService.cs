@@ -12,6 +12,19 @@ namespace Stylophone.Common.Interfaces
         Dark = 2
     }
 
+    public enum PlaybackIcon
+    {
+        Play,  //"\uE768";
+        Pause, //"\uE769";
+        Repeat, //"\uE8EE";
+        RepeatSingle, //"\uE8ED";
+        VolumeMute, //"\uE74F";
+        Volume25, //"\uE992";
+        Volume50, //"\uE993";
+        Volume75, // "\uE994";
+        VolumeFull //"\uE767";
+    }
+
     public interface IInteropService
     {
         SKColor GetAccentColor();
@@ -19,5 +32,7 @@ namespace Stylophone.Common.Interfaces
         Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack);
         Version GetAppVersion();
         Task SetThemeAsync(Theme param);
+
+        string GetIcon(PlaybackIcon volumeFull);
     }
 }
