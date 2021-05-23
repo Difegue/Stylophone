@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activation\ActivationHandler.cs" />
+    <Compile Include="Behaviors\ListViewBehavior.cs" />
     <Compile Include="Behaviors\TreeViewCollapseBehavior.cs" />
     <Compile Include="Converters\DoubleToThicknessConverter.cs" />
     <Compile Include="Converters\SkiaConverters.cs" />
