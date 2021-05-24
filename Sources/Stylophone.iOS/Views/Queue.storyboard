@@ -116,6 +116,7 @@
                                         <constraint firstAttribute="trailing" secondItem="Y6f-Mx-aYX" secondAttribute="trailing" constant="16" id="OEU-rZ-APc"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
                                 <connections>
                                     <outlet property="AlbumTitle" destination="M4B-X8-WSP" id="UYZ-mX-HAa"/>
                                     <outlet property="Artist" destination="amp-B2-2g4" id="XR5-ga-zqz"/>

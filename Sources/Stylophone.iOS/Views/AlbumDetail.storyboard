@@ -36,13 +36,17 @@
                                                     <constraint firstAttribute="width" constant="196" id="hic-LR-LFW"/>
                                                 </constraints>
                                             </imageView>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="kVT-2L-49m">
+                                                <rect key="frame" x="40" y="84" width="37" height="37"/>
+                                                <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </activityIndicatorView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="753" text="A quite lengthy album name" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Log-9b-hFE">
                                                 <rect key="frame" x="244" y="78" width="764" height="86"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="31"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="753" text="Artist 1, Artist 2, Artist 3, Artist 4, Artist 5, Artist 6....." lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rkW-qh-zOp">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="753" text="....." lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rkW-qh-zOp">
                                                 <rect key="frame" x="244" y="172" width="764" height="23"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                                 <nil key="textColor"/>
@@ -54,7 +58,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="rqD-ya-Cv7"/>
                                                 </constraints>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" text="1337 Tracks, Total Time: 365 days, 24 hours, 7 minutes, 21 seconds" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IeP-xT-9BP">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" text="......" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IeP-xT-9BP">
                                                 <rect key="frame" x="244" y="212" width="764" height="16"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 <nil key="textColor"/>
@@ -101,6 +105,7 @@
                                             </button>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="kVT-2L-49m" firstAttribute="leading" secondItem="THl-lR-HjL" secondAttribute="leading" constant="8" id="0F9-0V-izG"/>
                                             <constraint firstAttribute="bottom" secondItem="THl-lR-HjL" secondAttribute="bottom" constant="24" id="1hV-tV-yjy"/>
                                             <constraint firstAttribute="trailing" secondItem="IeP-xT-9BP" secondAttribute="trailing" constant="16" id="7RD-dm-Co6"/>
                                             <constraint firstItem="THl-lR-HjL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="7BL-7I-F9f" secondAttribute="leading" constant="16" id="7UY-qM-Tyi"/>
@@ -110,6 +115,7 @@
                                             <constraint firstItem="a01-rU-PtU" firstAttribute="leading" secondItem="THl-lR-HjL" secondAttribute="trailing" constant="8" symbolic="YES" id="Lwk-aW-F5Y"/>
                                             <constraint firstItem="cHs-Ds-hxp" firstAttribute="top" secondItem="IeP-xT-9BP" secondAttribute="bottom" constant="12" id="Mna-nu-nS8"/>
                                             <constraint firstItem="THl-lR-HjL" firstAttribute="top" secondItem="7BL-7I-F9f" secondAttribute="top" constant="76" id="NJ7-oY-a2c"/>
+                                            <constraint firstItem="kVT-2L-49m" firstAttribute="top" secondItem="THl-lR-HjL" secondAttribute="top" constant="8" id="TWb-Ae-TXT"/>
                                             <constraint firstAttribute="bottom" secondItem="Wv5-1W-agw" secondAttribute="bottom" constant="24" id="VWG-nN-0La"/>
                                             <constraint firstItem="rkW-qh-zOp" firstAttribute="leading" secondItem="THl-lR-HjL" secondAttribute="trailing" constant="16" id="VtX-rZ-6PY"/>
                                             <constraint firstAttribute="trailing" secondItem="rkW-qh-zOp" secondAttribute="trailing" constant="16" id="WuO-hr-v7J"/>
@@ -143,37 +149,17 @@
                             </constraints>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="CUs-gg-W4g" userLabel="Empty View Footer">
-                            <rect key="frame" x="0.0" y="393.00000034679067" width="1024" height="389"/>
+                            <rect key="frame" x="0.0" y="393.00000034679067" width="1024" height="227"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speaker.slash" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="6AU-qq-ahb">
-                                    <rect key="frame" x="464" y="115" width="96" height="96"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="98" id="dXQ-su-5S7"/>
-                                        <constraint firstAttribute="width" constant="96" id="iP1-16-KPd"/>
-                                    </constraints>
-                                </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There's no music here right now." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mlK-CO-ri2">
-                                    <rect key="frame" x="379.5" y="227.5" width="265" height="20.5"/>
-                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="76s-nw-4CY">
-                                    <rect key="frame" x="491.5" y="256" width="41.5" height="20.5"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="tNK-Ba-DJ1">
+                                    <rect key="frame" x="493.5" y="95" width="37" height="37"/>
+                                </activityIndicatorView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstItem="6AU-qq-ahb" firstAttribute="centerX" secondItem="CUs-gg-W4g" secondAttribute="centerX" id="2Bb-35-P49"/>
-                                <constraint firstItem="76s-nw-4CY" firstAttribute="top" secondItem="mlK-CO-ri2" secondAttribute="bottom" constant="8" symbolic="YES" id="H1S-5e-J2E"/>
-                                <constraint firstItem="6AU-qq-ahb" firstAttribute="centerY" secondItem="CUs-gg-W4g" secondAttribute="centerY" constant="-32" id="VxR-nJ-r2l"/>
-                                <constraint firstItem="mlK-CO-ri2" firstAttribute="centerX" secondItem="CUs-gg-W4g" secondAttribute="centerX" id="lww-wX-CTW"/>
-                                <constraint firstItem="mlK-CO-ri2" firstAttribute="top" secondItem="6AU-qq-ahb" secondAttribute="bottom" constant="16" id="qkA-Qz-xqZ"/>
-                                <constraint firstItem="76s-nw-4CY" firstAttribute="centerX" secondItem="CUs-gg-W4g" secondAttribute="centerX" id="tzD-Ee-mwh"/>
+                                <constraint firstItem="tNK-Ba-DJ1" firstAttribute="centerX" secondItem="CUs-gg-W4g" secondAttribute="centerX" id="NHv-uJ-Bq6"/>
+                                <constraint firstItem="tNK-Ba-DJ1" firstAttribute="centerY" secondItem="CUs-gg-W4g" secondAttribute="centerY" id="ivE-Y1-LIw"/>
                             </constraints>
                         </view>
                         <prototypes>
@@ -236,6 +222,7 @@
                                         <constraint firstItem="lTd-FG-4BZ" firstAttribute="top" secondItem="BZK-7V-8aH" secondAttribute="top" id="lft-VP-rV7"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
                                 <connections>
                                     <outlet property="Artist" destination="SFr-lr-2a6" id="rLu-XF-7NP"/>
                                     <outlet property="Duration" destination="P7H-EX-er5" id="mQB-Hw-Xso"/>
@@ -252,6 +239,7 @@
                     <connections>
                         <outlet property="AddToQueueButton" destination="cHs-Ds-hxp" id="k1K-d4-MSg"/>
                         <outlet property="AlbumArt" destination="THl-lR-HjL" id="Fy6-MD-w5a"/>
+                        <outlet property="AlbumArtLoadingIndicator" destination="kVT-2L-49m" id="Wq0-O8-bOm"/>
                         <outlet property="AlbumArtists" destination="rkW-qh-zOp" id="OOA-wv-7KH"/>
                         <outlet property="AlbumTitle" destination="Log-9b-hFE" id="GWq-9M-V3g"/>
                         <outlet property="AlbumTrackInfo" destination="IeP-xT-9BP" id="ekQ-op-Mm3"/>
@@ -271,7 +259,6 @@
         <image name="music.note.list" catalog="system" width="128" height="115"/>
         <image name="play.fill" catalog="system" width="116" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
-        <image name="speaker.slash" catalog="system" width="124" height="128"/>
         <image name="waveform" catalog="system" width="128" height="128"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>

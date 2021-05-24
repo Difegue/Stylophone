@@ -63,7 +63,6 @@ namespace Stylophone.iOS
         {
             // If the navigation occurred through the back button instead of the sidebar,
             // The NavigationService doesn't intervene and can't call the Navigated event.
-
             // We call it manually here instead.
             var navService = Ioc.Default.GetRequiredService<INavigationService>() as NavigationService;
             navService.Navigate(navService.CurrentPageViewModelType);

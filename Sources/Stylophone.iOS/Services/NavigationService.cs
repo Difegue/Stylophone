@@ -29,19 +29,6 @@ namespace Stylophone.iOS.Services
 
         }
 
-        internal void InitializeHeaderBinding(ShellViewModel shellViewModel)
-        {
-            shellViewModel.PropertyChanged += (s, e) =>
-            {
-                // Handle HeaderText
-                if (e.PropertyName == nameof(shellViewModel.HeaderText))
-                {
-                    var headerText = shellViewModel.HeaderText;
-                    _navController.VisibleViewController.Title = headerText;
-                }
-            };
-        }
-
         public override bool CanGoBack => NavigationController.ViewControllers?.Count() > 1;
 
         public override Type CurrentPageViewModelType => _viewModelToStoryboardDictionary.Keys.Where(

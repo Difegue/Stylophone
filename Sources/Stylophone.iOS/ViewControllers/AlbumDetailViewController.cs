@@ -25,24 +25,37 @@ namespace Stylophone.iOS.ViewControllers
 		public PropertyBinder<AlbumDetailViewModel> Binder => new(ViewModel);
 
 		private PropertyBinder<AlbumViewModel> _albumBinder;
+		private UIBarButtonItem _settingsBtn;
 
 		public override void AwakeFromNib()
 		{
 			base.AwakeFromNib();
 			NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
-
-			var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
-
-			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, true);
+			
+			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, true, OnScroll);
 			TableView.DataSource = trackDataSource;
 			TableView.Delegate = trackDataSource;
 
 			Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
-				valueTransformer: negateBoolTransformer);
+				valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 			Binder.Bind<string>(AlbumTrackInfo, "text", nameof(ViewModel.PlaylistInfo));
 		}
 
-		void IPreparableViewController.Prepare(object parameter)
+        private void OnScroll(UIScrollView scrollView)
+        {
+            if (scrollView.ContentOffset.Y > 192)
+            {
+				Title = ViewModel?.Item.Name;
+				NavigationItem.RightBarButtonItem = _settingsBtn;
+			}	
+			else
+            {
+				Title = "";
+				NavigationItem.RightBarButtonItem = null;
+			}
+		}
+
+        void IPreparableViewController.Prepare(object parameter)
         {
 			TableView.ScrollRectToVisible(new CGRect(0, 0, 1, 1), false);
 
@@ -59,6 +72,8 @@ namespace Stylophone.iOS.ViewControllers
 
 			_albumBinder.Bind<string>(AlbumTitle, "text", nameof(album.Name));
 			_albumBinder.Bind<string>(AlbumArtists, "text", nameof(album.Artist));
+			_albumBinder.Bind<bool>(AlbumArtLoadingIndicator, "animating", nameof(album.AlbumArtLoaded),
+				valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 
 			_albumBinder.BindButton(PlayButton, "dfd", album.PlayAlbumCommand);
 			PlayButton.Layer.CornerRadius = 8;
@@ -66,6 +81,8 @@ namespace Stylophone.iOS.ViewControllers
 			AddToQueueButton.Layer.CornerRadius = 8;
 			_albumBinder.BindButton(PlaylistButton, "dfd", album.AddToPlaylistCommand);
 			PlaylistButton.Layer.CornerRadius = 8;
+
+			_settingsBtn = CreateSettingsButton();
 
 			// Add radius to AlbumArt
 			AlbumArt.Layer.CornerRadius = 8;
@@ -102,6 +119,16 @@ namespace Stylophone.iOS.ViewControllers
 			var playlistAction = Binder.GetCommandAction(Strings.AppDescription, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
 
 			return UIMenu.Create(new[] { queueAction, playlistAction });
+		}
+
+		private UIBarButtonItem CreateSettingsButton()
+		{
+			var playAlbumAction = Binder.GetCommandAction(Strings.AddedToPlaylistText, "sdcard", ViewModel.Item.PlayAlbumCommand);
+			var addAlbumAction = Binder.GetCommandAction(Strings.CantClearError, "trash", ViewModel.Item.AddAlbumCommand);
+			var addToPlaylistAction = Binder.GetCommandAction(Strings.CantClearError, "trash", ViewModel.Item.AddToPlaylistCommand);
+
+			var barButtonMenu = UIMenu.Create(new[] { playAlbumAction, addAlbumAction, addToPlaylistAction });
+			return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
 		}
 	}
 }

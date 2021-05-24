@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Foundation;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
@@ -89,7 +90,7 @@ namespace Stylophone.iOS.ViewControllers
             // Add base sidebar items
             var sectionIdentifier = new NSString("base");
             _dataSource.ApplySnapshot(GetNavigationSnapshot(), sectionIdentifier, false);
-
+            
             // Initialize VM
             _viewModel = Ioc.Default.GetService<ShellViewModel>();
             _viewModel.Initialize(_collectionView, _dataSource);

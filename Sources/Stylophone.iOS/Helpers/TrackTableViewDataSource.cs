@@ -19,6 +19,7 @@ namespace Stylophone.iOS.ViewControllers
     {
         private UITableView _tableView;
         private Func<NSIndexPath, UIMenu> _menuFactory;
+        private Action<UIScrollView> _scrollHandler;
         private ObservableCollection<TrackViewModel> _sourceCollection;
 
         public TrackTableViewDataSource(IntPtr handle) : base(handle)
@@ -26,11 +27,12 @@ namespace Stylophone.iOS.ViewControllers
         }
 
         public TrackTableViewDataSource(UITableView tableView, ObservableCollection<TrackViewModel> source,
-            Func<NSIndexPath, UIMenu> contextMenuFactory, bool canSelectRows = false)
+            Func<NSIndexPath, UIMenu> contextMenuFactory, bool canSelectRows = false, Action<UIScrollView> scrollHandler = null)
         {
             _tableView = tableView;
             _sourceCollection = source;
             _menuFactory = contextMenuFactory;
+            _scrollHandler = scrollHandler;
 
             _sourceCollection.CollectionChanged += UpdateUITableView;
             _tableView.AllowsMultipleSelection = canSelectRows;
@@ -97,6 +99,11 @@ namespace Stylophone.iOS.ViewControllers
         #endregion
 
         #region Delegate
+
+        public override void Scrolled(UIScrollView scrollView)
+        {
+            _scrollHandler?.Invoke(scrollView);
+        }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {

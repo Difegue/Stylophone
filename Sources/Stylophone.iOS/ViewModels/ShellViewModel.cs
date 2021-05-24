@@ -19,7 +19,7 @@ namespace Stylophone.iOS.ViewModels
     {
       
         private UICollectionViewDiffableDataSource<NSString, NavigationSidebarItem> _sidebarDataSource;
-        //private InAppNotification _notificationHolder;
+        private UICollectionView _collectionView;
 
         public ShellViewModel(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService):
             base(navigationService, notificationService, dispatcherService, mpdService)
@@ -29,9 +29,23 @@ namespace Stylophone.iOS.ViewModels
         internal void Initialize(UICollectionView collectionView, UICollectionViewDiffableDataSource<NSString, NavigationSidebarItem> sidebarDataSource)
         {
             _sidebarDataSource = sidebarDataSource;
+            _collectionView = collectionView;
 
             var concreteNavService = _navigationService as NavigationService;
-            concreteNavService.InitializeHeaderBinding(this);
+            concreteNavService.Navigated += UpdateNavigationViewSelection;
+        }
+
+        private void UpdateNavigationViewSelection(object sender, CoreNavigationEventArgs e)
+        {
+            var selectedItem = _collectionView.GetIndexPathsForSelectedItems().FirstOrDefault();
+            if (selectedItem != null)
+                _collectionView.DeselectItem(selectedItem, true);
+
+            var navItems = _sidebarDataSource.Snapshot.GetItemIdentifiersInSection(new NSString("base"));
+            var navItem = navItems.Where(item => item.Target == e.NavigationTarget).FirstOrDefault();
+
+            if (navItem != null)
+                _collectionView.SelectItem(_sidebarDataSource.GetIndexPath(navItem), true, UICollectionViewScrollPosition.None);
         }
 
         protected override void UpdatePlaylistNavigation()

@@ -25,6 +25,7 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.AwakeFromNib();
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
+            Title = SettingsViewModel.GetHeader();
 
             // Init
             await ViewModel.EnsureInstanceInitializedAsync();

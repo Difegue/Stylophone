@@ -22,6 +22,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UILabel AlbumArtists { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView AlbumArtLoadingIndicator { get; set; }
+
+		[Outlet]
 		UIKit.UILabel AlbumTitle { get; set; }
 
 		[Outlet]
@@ -84,6 +87,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (EmptyView != null) {
 				EmptyView.Dispose ();
 				EmptyView = null;
+			}
+
+			if (AlbumArtLoadingIndicator != null) {
+				AlbumArtLoadingIndicator.Dispose ();
+				AlbumArtLoadingIndicator = null;
 			}
 		}
 	}
