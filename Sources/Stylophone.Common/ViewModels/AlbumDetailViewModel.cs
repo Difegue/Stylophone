@@ -32,6 +32,8 @@ namespace Stylophone.Common.ViewModels
             _notificationService = notificationService;
             _mpdService = mpdService;
             _trackVmFactory = trackVmFactory;
+
+            Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
         private AlbumViewModel _item;
@@ -49,6 +51,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
+        public bool IsSourceEmpty => Source.Count == 0;
 
         private ICommand _addToQueueCommand;
         public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));

@@ -87,11 +87,16 @@ namespace Stylophone.iOS.ViewControllers
             configureDataSource();
 
             // Add base sidebar items
-            _dataSource.ApplySnapshot(GetNavigationSnapshot(), new NSString("base"), false);
+            var sectionIdentifier = new NSString("base");
+            _dataSource.ApplySnapshot(GetNavigationSnapshot(), sectionIdentifier, false);
 
             // Initialize VM
             _viewModel = Ioc.Default.GetService<ShellViewModel>();
             _viewModel.Initialize(_collectionView, _dataSource);
+
+            // Navigate to the queue
+            var queueItem = _dataSource.Snapshot.GetItemIdentifiersInSection(sectionIdentifier)[1];
+            _viewModel.NavigateCommand.Execute(queueItem);
         }
 
         private void OpenSettings(object sender, EventArgs e)

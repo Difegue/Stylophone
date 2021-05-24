@@ -20,6 +20,7 @@ namespace Stylophone.iOS.ViewControllers
 
         private PropertyBinder<TrackViewModel> _propertyBinder;
         private UIContextMenuInteraction _contextMenuInteraction;
+        private TrackViewModel _trackViewModel;
 
         internal void Configure(int row, TrackViewModel trackViewModel)
         {
@@ -27,20 +28,36 @@ namespace Stylophone.iOS.ViewControllers
             BackgroundColor = (row % 2 == 0) ? UIColor.SystemGray6Color : UIColor.Clear;
 
             // Bind trackData
+            _trackViewModel = trackViewModel;
             _propertyBinder?.Dispose();
             _propertyBinder = new PropertyBinder<TrackViewModel>(trackViewModel);
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
 
-            Title.Text = trackViewModel.Name;
-            Artist.Text = trackViewModel.File.Artist;
+            if (trackViewModel != null)
+            {
+                Title.Text = trackViewModel.Name;
+                Artist.Text = trackViewModel.File.Artist;
 
-            _propertyBinder.BindButton(AlbumTitle, trackViewModel.File.Album, trackViewModel.ViewAlbumCommand, trackViewModel.File);
+                AlbumTitle?.SetTitle(trackViewModel.File.Album, UIControlState.Normal);
 
-            _propertyBinder.Bind<bool>(NowPlayingIndicator, "hidden", nameof(trackViewModel.IsPlaying),
-                valueTransformer: negateBoolTransformer);
+                _propertyBinder.Bind<bool>(NowPlayingIndicator, "hidden", nameof(trackViewModel.IsPlaying),
+                    valueTransformer: negateBoolTransformer);
 
-            var time = trackViewModel.File.Time;
-            Duration.Text = Miscellaneous.FormatTimeString(time * 1000);
+                var time = trackViewModel.File.Time;
+                Duration.Text = Miscellaneous.FormatTimeString(time * 1000);
+            }
+
+            // Remove the primaryaction in case it was already set and this cell is recycled
+            if (AlbumTitle != null)
+            {
+                AlbumTitle.PrimaryActionTriggered -= ViewAlbum;
+                AlbumTitle.PrimaryActionTriggered += ViewAlbum;
+            }
+        }
+
+        private void ViewAlbum(object sender, EventArgs e)
+        {
+            _trackViewModel?.ViewAlbumCommand.Execute(_trackViewModel.File);
         }
     }
 }

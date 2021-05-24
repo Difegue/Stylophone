@@ -39,6 +39,11 @@ namespace Stylophone.Common.ViewModels
             _mpdService.QueueChanged += MPDConnectionService_QueueChanged;
             _mpdService.ConnectionChanged += MPDConnectionService_ConnectionChanged;
 
+            if (_mpdService.IsConnected)
+            {
+                MPDConnectionService_ConnectionChanged(this, null);
+            }
+
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 

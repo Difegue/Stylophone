@@ -24,6 +24,7 @@ namespace Stylophone.iOS.ViewControllers
         public override async void AwakeFromNib()
         {
             base.AwakeFromNib();
+            NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
 
             // Init
             await ViewModel.EnsureInstanceInitializedAsync();

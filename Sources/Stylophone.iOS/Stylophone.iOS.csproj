@@ -114,6 +114,11 @@
     <Compile Include="Helpers\UICircularProgressView.designer.cs">
       <DependentUpon>UICircularProgressView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\TrackTableViewDataSource.cs" />
+    <Compile Include="ViewControllers\AlbumDetailViewController.cs" />
+    <Compile Include="ViewControllers\AlbumDetailViewController.designer.cs">
+      <DependentUpon>AlbumDetailViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

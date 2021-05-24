@@ -16,7 +16,7 @@ namespace Stylophone.iOS.Services
         {
             { typeof(QueueViewModel), UIStoryboard.FromName("Queue", null) },
             { typeof(SettingsViewModel), UIStoryboard.FromName("Settings", null)},
-            //{ typeof(AlbumDetailViewModel), typeof(LibraryDetailPage) },
+            { typeof(AlbumDetailViewModel), UIStoryboard.FromName("AlbumDetail", null) },
             { typeof(PlaybackViewModelBase), UIStoryboard.FromName("NowPlaying", null) },
             //{ typeof(SearchResultsViewModel), typeof(SearchResultsPage) },
             //{ typeof(FoldersViewModel), typeof(FoldersPage) },
@@ -38,9 +38,6 @@ namespace Stylophone.iOS.Services
                 {
                     var headerText = shellViewModel.HeaderText;
                     _navController.VisibleViewController.Title = headerText;
-
-                    // Hide the navbar if there is no header
-                    _navController.NavigationBarHidden = (headerText == "");
                 }
             };
         }
@@ -68,13 +65,13 @@ namespace Stylophone.iOS.Services
                 if (existingViewControllers.Count > 0)
                 {
                     viewController = existingViewControllers.First();
-                    (viewController as IViewController<ViewModelBase>)?.Prepare(parameter);
+                    (viewController as IPreparableViewController)?.Prepare(parameter);
                     NavigationController.PopToViewController(viewController, true);
                 }
                 else
                 {
                     viewController = storyboard.InstantiateInitialViewController();
-                    (viewController as IViewController<ViewModelBase>)?.Prepare(parameter);
+                    (viewController as IPreparableViewController)?.Prepare(parameter);
                     NavigationController.PushViewController(viewController, true);
                 }
 

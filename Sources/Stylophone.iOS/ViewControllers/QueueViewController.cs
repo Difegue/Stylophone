@@ -10,12 +10,11 @@ using Stylophone.iOS.Helpers;
 using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 
 namespace Stylophone.iOS.ViewControllers
 {
-	public partial class QueueViewController : UITableViewController, IUITableViewDataSource, IUITableViewDelegate, IViewController<QueueViewModel>
+	public partial class QueueViewController : UITableViewController, IViewController<QueueViewModel>
 	{
         private MPDConnectionService _mpdService;
 
@@ -37,6 +36,7 @@ namespace Stylophone.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
 
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
             Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
@@ -44,51 +44,11 @@ namespace Stylophone.iOS.ViewControllers
 
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
-            TableView.DataSource = this;
-            TableView.Delegate = this;
-
-            //TableView.AllowsMultipleSelection = true;
-
-            ViewModel.Source.CollectionChanged += (s, e) =>
-            {
-                if (e.Action == NotifyCollectionChangedAction.Reset)
-                {
-                    TableView.ReloadData();
-                }
-                else
-                {
-                    TableView.BeginUpdates();               
-
-                    //Build a NSIndexPath array that matches the changes from the ObservableCollection.
-                    var indexPaths = new List<NSIndexPath>();
-
-                    if (e.Action == NotifyCollectionChangedAction.Add)
-                    {
-                        for (var i = e.NewStartingIndex; i < e.NewStartingIndex + e.NewItems.Count; i++)
-                            indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
-
-                        TableView.InsertRows(indexPaths.ToArray(), UITableViewRowAnimation.Left);
-                    }
-
-                    if (e.Action == NotifyCollectionChangedAction.Remove)
-                    {
-                        for (var i = e.OldStartingIndex; i < e.OldStartingIndex + e.OldItems.Count; i++)
-                            indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
-
-                        TableView.DeleteRows(indexPaths.ToArray(), UITableViewRowAnimation.Right);
-                    }
-
-                    TableView.EndUpdates();
-                }
-            };
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu);
+            TableView.DataSource = trackDataSource;
+            TableView.Delegate = trackDataSource;
 
             _mpdService.SongChanged += ScrollToPlayingSong;
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-            ScrollToPlayingSong();
         }
 
         private void UpdateListOnPlaylistVersionChange(object sender, PropertyChangedEventArgs e)
@@ -110,50 +70,18 @@ namespace Stylophone.iOS.ViewControllers
                     UITableViewScrollPosition.Middle, true));
         }
 
-        public override nint RowsInSection(UITableView tableView, nint section)
-        {
-            return ViewModel.Source.Count;
-        }
-
-        public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
-        {
-            var cell = tableView.DequeueReusableCell("trackCell") as TrackViewCell;
-            var trackViewModel = ViewModel?.Source[indexPath.Row];
-
-            cell.Configure(indexPath.Row, trackViewModel);
-
-            // Select the row if needed
-            //var selectedIndexPaths = tableView.IndexPathsForSelectedRows;
-            //var rowIsSelected = selectedIndexPaths != null && selectedIndexPaths.Contains(indexPath);
-            //cell.Accessory = rowIsSelected ? UITableViewCellAccessory.Checkmark : UITableViewCellAccessory.None;
-
-            return cell;
-        }
-
-        /*
-        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-        {
-            tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.Checkmark;
-        }
-
-        public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
-        {
-            tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.None;
-        }
-        */
-
-        public override UIContextMenuConfiguration GetContextMenuConfiguration(UITableView tableView, NSIndexPath indexPath, CoreGraphics.CGPoint point)
+        private UIMenu GetRowContextMenu(NSIndexPath indexPath)
         {
             // The common commands take a list of objects
             var trackList = new List<object>();
 
-            if (tableView.IndexPathsForSelectedRows == null)
+            if (TableView.IndexPathsForSelectedRows == null)
             {
                 trackList.Add(ViewModel?.Source[indexPath.Row]);
             }
             else
             {
-                trackList = tableView.IndexPathsForSelectedRows.Select(indexPath => ViewModel?.Source[indexPath.Row])
+                trackList = TableView.IndexPathsForSelectedRows.Select(indexPath => ViewModel?.Source[indexPath.Row])
                 .ToList<object>();
             }
 
@@ -164,7 +92,7 @@ namespace Stylophone.iOS.ViewControllers
             var removeAction = Binder.GetCommandAction(Strings.AppDescription, "trash", ViewModel.RemoveFromQueueCommand, trackList);
             removeAction.Attributes = UIMenuElementAttributes.Destructive;
 
-            return UIContextMenuConfiguration.Create(null, null, new UIContextMenuActionProvider((arr) => UIMenu.Create(new[] { playAction, albumAction, playlistAction, removeAction })));
+            return UIMenu.Create(new[] { playAction, albumAction, playlistAction, removeAction });
         }
 
         private UIBarButtonItem CreateSettingsButton()

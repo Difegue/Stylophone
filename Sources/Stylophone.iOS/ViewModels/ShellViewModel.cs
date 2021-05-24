@@ -34,12 +34,6 @@ namespace Stylophone.iOS.ViewModels
             concreteNavService.InitializeHeaderBinding(this);
         }
 
-        protected override void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e)
-        {
-            // TODO
-            //_dispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(e.NotificationText, e.NotificationTime));
-        }
-
         protected override void UpdatePlaylistNavigation()
         {
             // Update the datasource for the sidebar's playlists.
@@ -71,8 +65,6 @@ namespace Stylophone.iOS.ViewModels
 
         protected override void OnItemInvoked(object itemInvoked)
         {
-            //var navArgs = (WinUI.NavigationViewItemInvokedEventArgs)args;
-
             if (itemInvoked is string s)
             {
                 _navigationService.Navigate<SettingsViewModel>();
@@ -89,6 +81,12 @@ namespace Stylophone.iOS.ViewModels
                 else
                     _navigationService.Navigate(pageType);
             }
+        }
+
+        protected override void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e)
+        {
+            // Noop on UIKit
+            // TODO make UWP only
         }
 
         /*
