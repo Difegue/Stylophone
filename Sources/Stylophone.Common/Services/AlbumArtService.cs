@@ -65,7 +65,7 @@ namespace Stylophone.Common.Services
 
                         if (vm.Files.Count > 0)
                         {
-                            var art = await GetAlbumArtAsync(vm.Files[0], true, 180);
+                            var art = await GetAlbumArtAsync(vm.Files[0], true, 360);
                             vm.SetAlbumArt(art);
                         }
                     }

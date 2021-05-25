@@ -237,7 +237,7 @@ namespace Stylophone.Common.ViewModels
                 // If we've already generated album art, don't use the queue and directly grab it
                 if (await _albumArtService.IsAlbumArtCachedAsync(Files[0]))
                 {
-                    var art = await _albumArtService.GetAlbumArtAsync(Files[0], true, 180);
+                    var art = await _albumArtService.GetAlbumArtAsync(Files[0], true, 360);
                     SetAlbumArt(art);
                 }
                 else

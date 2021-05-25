@@ -86,6 +86,12 @@ namespace Stylophone.iOS.ViewControllers
 
 			// Add radius to AlbumArt
 			AlbumArt.Layer.CornerRadius = 8;
+			AlbumArt.Layer.MasksToBounds = true;
+
+			ArtContainer.Layer.ShadowColor = UIColor.Black.CGColor;
+			ArtContainer.Layer.ShadowOpacity = 0.5F;
+			ArtContainer.Layer.ShadowOffset = new CGSize(0, 0);
+			ArtContainer.Layer.ShadowRadius = 4;
 		}
 
         private void UpdateAlbumArt(object sender, PropertyChangedEventArgs e)

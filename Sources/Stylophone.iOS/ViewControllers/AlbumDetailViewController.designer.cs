@@ -31,6 +31,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UILabel AlbumTrackInfo { get; set; }
 
 		[Outlet]
+		UIKit.UIView ArtContainer { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView BackgroundArt { get; set; }
 
 		[Outlet]
@@ -52,6 +55,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (AlbumArt != null) {
 				AlbumArt.Dispose ();
 				AlbumArt = null;
+			}
+
+			if (ArtContainer != null) {
+				ArtContainer.Dispose ();
+				ArtContainer = null;
 			}
 
 			if (AlbumArtists != null) {
