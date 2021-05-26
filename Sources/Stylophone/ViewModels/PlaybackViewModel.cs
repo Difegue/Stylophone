@@ -84,7 +84,7 @@ namespace Stylophone.ViewModels
             }
             catch (Exception e)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.GenericErrorText, e), false);
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorGeneric, e), false);
             }
         }
     }

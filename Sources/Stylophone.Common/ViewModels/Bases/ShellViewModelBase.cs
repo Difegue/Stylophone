@@ -82,7 +82,7 @@ namespace Stylophone.Common.ViewModels
             var suitableItems = new List<object>();
 
             if (text.Trim().Length > 0)
-                suitableItems.Add(string.Format(Resources.GoToDetailSearch, text));
+                suitableItems.Add(string.Format(Resources.SearchGoToDetail, text));
 
             if (text.Length > 2)
             {
@@ -105,7 +105,7 @@ namespace Stylophone.Common.ViewModels
                 var response = await _mpdService.SafelySendCommandAsync(new AddCommand((chosenSuggestion as IMpdFile).Path));
 
                 if (response != null)
-                    _notificationService.ShowInAppNotification(Resources.AddedToQueueText);
+                    _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
             }
             else
             {

@@ -171,11 +171,11 @@ namespace Stylophone.Common.ViewModels
             try
             {
                 await _applicationStorageService.DeleteFolderAsync("AlbumArt");
-                _notificationService.ShowInAppNotification(Resources.CacheDeletedText);
+                _notificationService.ShowInAppNotification(Resources.NotificationCacheDeleted);
             }
             catch (Exception e)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.GenericErrorText, e), false);
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorGeneric, e), false);
             }
         }
 
@@ -186,7 +186,7 @@ namespace Stylophone.Common.ViewModels
         {
             if (_mpdService.CurrentStatus.UpdatingDb > 0)
             {
-                _notificationService.ShowInAppNotification(Resources.DatabaseAlreadyUpdatingText);
+                _notificationService.ShowInAppNotification(Resources.NotificationDbAlreadyUpdating);
                 return;
             }
 
@@ -196,7 +196,7 @@ namespace Stylophone.Common.ViewModels
             var res = await _mpdService.SafelySendCommandAsync(new MpcNET.Commands.Database.UpdateCommand());
 
             if (res != null)
-                _notificationService.ShowInAppNotification(Resources.DatabaseUpdateStartedText);
+                _notificationService.ShowInAppNotification(Resources.NotificationDbUpdateStarted);
         }
 
         public async Task EnsureInstanceInitializedAsync()

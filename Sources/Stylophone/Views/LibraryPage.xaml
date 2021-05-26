@@ -3,53 +3,64 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:behaviors="using:Stylophone.Behaviors"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    xmlns:vm="using:Stylophone.Common.ViewModels"
-    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
-    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:stylophone="using:Stylophone.Helpers"
-    xmlns:behaviors="using:Stylophone.Behaviors"
-    Style="{StaticResource PageStyle}"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:vm="using:Stylophone.Common.ViewModels"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     NavigationCacheMode="Required"
+    Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
     <Page.Resources>
         <stylophone:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
-        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters:BoolToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible" x:Key="ReverseBoolToVisibilityConverter" />
+        <converters:BoolToVisibilityConverter
+            x:Key="ReverseBoolToVisibilityConverter"
+            FalseValue="Visible"
+            TrueValue="Collapsed" />
     </Page.Resources>
     <Grid x:Name="ContentArea">
 
-        <TextBox x:Uid="LibrarySearchFilter" Width="200" Height="30" Margin="24,-42" HorizontalAlignment="Right" VerticalAlignment="Top"
-                 TextChanged="OnFilterChanged" />
+        <TextBox
+            Width="200"
+            Height="30"
+            Margin="24,-42"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            PlaceholderText="{x:Bind strings:Resources.LibrarySearchPlaceholder}"
+            TextChanged="OnFilterChanged" />
 
         <GridView
             Padding="24,4,8,0"
             animations:Connected.ListItemElementName="itemThumbnail"
             animations:Connected.ListItemKey="animationKeyLibrary"
+            behaviors:ListViewBehavior.FillBeforeWrap="True"
+            behaviors:ListViewBehavior.MinItemWidth="204"
+            ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
             IsItemClickEnabled="True"
             ItemClick="AlbumClicked"
-            ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-            ItemsSource="{x:Bind ViewModel.FilteredSource,Mode=OneWay}"
-            SelectionMode="None"
-            behaviors:ListViewBehavior.FillBeforeWrap="True"
-            behaviors:ListViewBehavior.MinItemWidth="204">
+            ItemsSource="{x:Bind ViewModel.FilteredSource, Mode=OneWay}"
+            SelectionMode="None">
             <GridView.ItemContainerStyle>
-                <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealBackgroundShowsAboveContentStyle}">
-                    <Setter Property="BorderThickness" Value="0"/>
+                <Style BasedOn="{StaticResource GridViewItemRevealBackgroundShowsAboveContentStyle}" TargetType="GridViewItem">
+                    <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Margin" Value="12,0,12,64" />
-                    <Setter Property="Width" Value="180"/>
+                    <Setter Property="Width" Value="180" />
                     <Setter Property="CornerRadius" Value="3" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
             </GridView.ItemContainerStyle>
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="vm:AlbumViewModel" >
+                <DataTemplate x:DataType="vm:AlbumViewModel">
 
-                    <controls:DropShadowPanel x:Name="itemThumbnail"
+                    <controls:DropShadowPanel
+                        x:Name="itemThumbnail"
                         Width="180"
                         Height="180"
                         HorizontalAlignment="Left"
@@ -57,40 +68,79 @@
                         BlurRadius="10"
                         OffsetY="1"
                         ShadowOpacity="0.6"
-                        Color="Black" >
+                        Color="Black">
 
                         <controls:DropShadowPanel.ContextFlyout>
 
                             <MenuFlyout>
-                                <MenuFlyoutItem x:Uid="PlayFlyoutItem" Icon="Play" Command="{Binding PlayAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem x:Uid="AddToQueueFlyoutItem" Icon="Add" Command="{Binding AddAlbumCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-                                <MenuFlyoutItem x:Uid="AddToPlaylistFlyoutItem" Icon="MusicInfo" Command="{Binding AddToPlayListCommand}" DataContext="{Binding}" IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                                <MenuFlyoutItem
+                                    Command="{Binding PlayAlbumCommand}"
+                                    DataContext="{Binding}"
+                                    Icon="Play"
+                                    IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                                    Text="{x:Bind strings:Resources.ContextMenuPlay}" />
+                                <MenuFlyoutItem
+                                    Command="{Binding AddAlbumCommand}"
+                                    DataContext="{Binding}"
+                                    Icon="Add"
+                                    IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                                    Text="{x:Bind strings:Resources.ContextMenuAddToQueue}" />
+                                <MenuFlyoutItem
+                                    Command="{Binding AddToPlayListCommand}"
+                                    DataContext="{Binding}"
+                                    Icon="MusicInfo"
+                                    IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                                    Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />
                             </MenuFlyout>
                         </controls:DropShadowPanel.ContextFlyout>
 
                         <Canvas Width="180" Height="180">
-                            <Grid CornerRadius="3" Width="180" Height="180">
-                                <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:///Assets/AlbumPlaceholder.png" Stretch="UniformToFill" />
-                                <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{x:Bind AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
-                                <!-- Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back. -->
-                                <winui:ProgressBar Width="160" VerticalAlignment="Bottom" IsIndeterminate="True" Margin="{StaticResource SmallBottomMargin}"
-                                                   Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
+                            <Grid
+                                Width="180"
+                                Height="180"
+                                CornerRadius="3">
+                                <Image
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Source="ms-appx:///Assets/AlbumPlaceholder.png"
+                                    Stretch="UniformToFill" />
+                                <Image
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Source="{x:Bind AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
+                                    Stretch="UniformToFill" />
+                                <!--  Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back.  -->
+                                <winui:ProgressBar
+                                    Width="160"
+                                    Margin="{StaticResource SmallBottomMargin}"
+                                    VerticalAlignment="Bottom"
+                                    IsIndeterminate="True"
+                                    Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
                             </Grid>
                             <StackPanel HorizontalAlignment="Left">
                                 <StackPanel.RenderTransform>
-                                    <CompositeTransform TranslateY="184"/>
+                                    <CompositeTransform TranslateY="184" />
                                 </StackPanel.RenderTransform>
                                 <TextBlock
-                                Margin="{StaticResource XXSmallTopMargin}"
-                                Style="{ThemeResource BaseTextBlockStyle}"
-                                Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
-                                Text="{x:Bind Name, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}" />
-                                <winui:ProgressBar Margin="{StaticResource XXSmallTopMargin}" IsIndeterminate="True" Visibility="{x:Bind IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    Width="180"
+                                    Margin="{StaticResource XXSmallTopMargin}"
+                                    MaxLines="1"
+                                    Style="{ThemeResource BaseTextBlockStyle}"
+                                    Text="{x:Bind Name, Mode=OneWay}"
+                                    TextTrimming="CharacterEllipsis"
+                                    ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}" />
+                                <winui:ProgressBar
+                                    Margin="{StaticResource XXSmallTopMargin}"
+                                    IsIndeterminate="True"
+                                    Visibility="{x:Bind IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                                 <TextBlock
-                                Margin="{StaticResource XXSmallTopMargin}"
-                                Style="{ThemeResource CaptionTextBlockStyle}"
-                                Width="180" MaxLines="1" TextTrimming="CharacterEllipsis"
-                                Text="{x:Bind Artist, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Artist, Mode=OneWay}"/>
+                                    Width="180"
+                                    Margin="{StaticResource XXSmallTopMargin}"
+                                    MaxLines="1"
+                                    Style="{ThemeResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind Artist, Mode=OneWay}"
+                                    TextTrimming="CharacterEllipsis"
+                                    ToolTipService.ToolTip="{x:Bind Artist, Mode=OneWay}" />
                             </StackPanel>
 
                         </Canvas>
@@ -100,15 +150,24 @@
             </GridView.ItemTemplate>
         </GridView>
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
-                    Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <SymbolIcon Symbol="DisconnectDrive" RenderTransformOrigin="0.5,0.5" Height="86">
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <SymbolIcon
+                Height="86"
+                RenderTransformOrigin="0.5,0.5"
+                Symbol="DisconnectDrive">
                 <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="5" ScaleY="5"/>
+                    <CompositeTransform ScaleX="5" ScaleY="5" />
                 </SymbolIcon.RenderTransform>
             </SymbolIcon>
-            <TextBlock x:Uid="EmptyLibraryTitle" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
-            <TextBlock x:Uid="EmptyFoldersDesc" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock
+                HorizontalAlignment="Center"
+                Style="{StaticResource SubtitleTextBlockStyle}"
+                Text="{x:Bind strings:Resources.EmptyLibraryTitle}" />
+            <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptyFoldersDesc}" />
         </StackPanel>
     </Grid>
 </Page>

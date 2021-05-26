@@ -18,8 +18,6 @@ namespace Stylophone.iOS.ViewModels
         public UIImage AlbumArtNative => CurrentTrack?.AlbumArt?.ToUIImage();
         public UIColor DominantColorNative => CurrentTrack?.DominantColor.ToUIColor();
 
-        private TrackViewModel _prevTrack;
-
         public PlaybackViewModel(IDialogService dialogService, INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory) :
             base(dialogService, navigationService, notificationService, dispatcherService, interop, mpdService, trackVmFactory)
         {

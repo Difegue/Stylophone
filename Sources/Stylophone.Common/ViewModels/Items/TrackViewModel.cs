@@ -122,7 +122,7 @@ namespace Stylophone.Common.ViewModels
             var response = await _mpdService.SafelySendCommandAsync(new AddIdCommand(file.Path));
 
             if (response != null)
-                _notificationService.ShowInAppNotification(Resources.AddedToQueueText);
+                _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
 
         private ICommand _addToPlaylistCommand;
@@ -136,7 +136,7 @@ namespace Stylophone.Common.ViewModels
             var req = await _mpdService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, file.Path));
 
             if (req != null)
-                _notificationService.ShowInAppNotification(string.Format(Resources.AddedToPlaylistText, playlistName));
+                _notificationService.ShowInAppNotification(string.Format(Resources.NotificationAddedToPlaylist, playlistName));
         }
 
         private ICommand _viewAlbumCommand;
@@ -174,7 +174,7 @@ namespace Stylophone.Common.ViewModels
             {
                 if (!file.HasAlbum)
                 {
-                    _notificationService.ShowInAppNotification(Resources.NoAlbumErrorText, false);
+                    _notificationService.ShowInAppNotification(Resources.ErrorNoMatchingAlbum, false);
                     return;
                 }
 
@@ -184,7 +184,7 @@ namespace Stylophone.Common.ViewModels
             }
             catch (Exception e)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.GenericErrorText, e), false);
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorGeneric, e), false);
             }
         }
 

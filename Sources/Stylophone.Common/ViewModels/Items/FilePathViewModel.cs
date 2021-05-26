@@ -67,7 +67,7 @@ namespace Stylophone.Common.ViewModels
                 _childPaths = new RangedObservableCollection<FilePathViewModel>();
 
                 // Add a bogus child that'll be replaced when the list is loaded
-                _childPaths.Add(new FilePathViewModel(Resources.LoadingTreeItem, _dispatcherService));
+                _childPaths.Add(new FilePathViewModel(Resources.FoldersLoadingTreeItem, _dispatcherService));
             }
 
         }
@@ -145,7 +145,7 @@ namespace Stylophone.Common.ViewModels
 
             if (await _mpdService.SafelySendCommandAsync(commandList) != null)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.NowPlayingText, Path));
+                _notificationService.ShowInAppNotification(string.Format(Resources.NotificationNowPlayingTrack, Path));
             }
         }
 
@@ -158,7 +158,7 @@ namespace Stylophone.Common.ViewModels
             var response = await _mpdService.SafelySendCommandAsync(new AddCommand(Path));
 
             if (response != null)
-                _notificationService.ShowInAppNotification(Resources.AddedToQueueText);
+                _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
 
         private ICommand _addToPlaylistCommand;
@@ -171,7 +171,7 @@ namespace Stylophone.Common.ViewModels
             var response = await _mpdService.SafelySendCommandAsync(new PlaylistAddCommand(playlistName, Path));
 
             if (response != null)
-                _notificationService.ShowInAppNotification(string.Format(Resources.AddedToPlaylistText, playlistName));
+                _notificationService.ShowInAppNotification(string.Format(Resources.NotificationAddedToPlaylist, playlistName));
         }
 
     }

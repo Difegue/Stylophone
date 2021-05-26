@@ -24,31 +24,34 @@ namespace Stylophone.iOS.Services
             return cacheFolder;
         }
 
-        public async Task<bool> DoesFileExistAsync(string fileName, string parentFolder = "")
+        public Task<bool> DoesFileExistAsync(string fileName, string parentFolder = "")
         {
             var folder = GetFolder(parentFolder);
-            return File.Exists(Path.Combine(folder, fileName));
+            return Task.FromResult(File.Exists(Path.Combine(folder, fileName)));
         }
 
-        public async Task SaveDataToFileAsync(string fileName, byte[] data, string parentFolder = "")
+        public Task SaveDataToFileAsync(string fileName, byte[] data, string parentFolder = "")
         {
             var folder = GetFolder(parentFolder);
             File.WriteAllBytes(Path.Combine(folder, fileName), data);
+            return Task.CompletedTask;
         }
 
-        public async Task<Stream> OpenFileAsync(string fileName, string parentFolder = "")
+        public Task<Stream> OpenFileAsync(string fileName, string parentFolder = "")
         {
             var folder = GetFolder(parentFolder);
-            return File.OpenRead(Path.Combine(folder, fileName));
+            return Task.FromResult(File.OpenRead(Path.Combine(folder, fileName)) as Stream);
         }
 
-        public async Task DeleteFolderAsync(string folderName)
+        public Task DeleteFolderAsync(string folderName)
         {
             if (folderName != "")
             {
                 var folder = GetFolder(folderName);
                 Directory.Delete(folder, true);
             }
+
+            return Task.CompletedTask;
         }
 
         public void SetValue<T>(string key, T value)

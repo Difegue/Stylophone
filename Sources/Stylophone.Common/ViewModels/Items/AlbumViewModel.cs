@@ -162,7 +162,7 @@ namespace Stylophone.Common.ViewModels
 
             if (await _mpdService.SafelySendCommandAsync(commandList) != null)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.AddedToPlaylistText, playlistName));
+                _notificationService.ShowInAppNotification(string.Format(Resources.NotificationAddedToPlaylist, playlistName));
             }
         }
 
@@ -174,7 +174,7 @@ namespace Stylophone.Common.ViewModels
 
             if (Files.Count == 0)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorAddingAlbum, Resources.NoTracksLoaded), false);
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorAddingAlbum, Resources.NotificationNoTracksLoaded), false);
                 return;
             }
 
@@ -184,7 +184,7 @@ namespace Stylophone.Common.ViewModels
             }
 
             if (await _mpdService.SafelySendCommandAsync(commandList) != null)
-                _notificationService.ShowInAppNotification(Resources.AddedToQueueText);
+                _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
 
         private ICommand _playCommand;
@@ -193,7 +193,7 @@ namespace Stylophone.Common.ViewModels
         {
             if (Files.Count == 0)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorPlayingText, Resources.NoTracksLoaded), false);
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorPlayingTrack, Resources.NotificationNoTracksLoaded), false);
                 return;
             }
 
@@ -213,7 +213,7 @@ namespace Stylophone.Common.ViewModels
             {
                 // Auto-navigate to the queue
                 _navigationService.Navigate<QueueViewModel>();
-                _notificationService.ShowInAppNotification(string.Format(Resources.NowPlayingText, Name));
+                _notificationService.ShowInAppNotification(string.Format(Resources.NotificationNowPlayingTrack, Name));
             }
         }
 

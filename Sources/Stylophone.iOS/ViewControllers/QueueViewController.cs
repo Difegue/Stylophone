@@ -86,11 +86,11 @@ namespace Stylophone.iOS.ViewControllers
                 .ToList<object>();
             }
 
-            var playAction = Binder.GetCommandAction(Strings.AppDescription, "play", ViewModel.PlayTrackCommand, trackList);
-            var albumAction = Binder.GetCommandAction(Strings.AppDescription, "opticaldisc", ViewModel.ViewAlbumCommand, trackList);
-            var playlistAction = Binder.GetCommandAction(Strings.AppDescription, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
+            var playAction = Binder.GetCommandAction(Strings.ContextMenuPlay, "play", ViewModel.PlayTrackCommand, trackList);
+            var albumAction = Binder.GetCommandAction(Strings.ContextMenuViewAlbum, "opticaldisc", ViewModel.ViewAlbumCommand, trackList);
+            var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
 
-            var removeAction = Binder.GetCommandAction(Strings.AppDescription, "trash", ViewModel.RemoveFromQueueCommand, trackList);
+            var removeAction = Binder.GetCommandAction(Strings.ContextMenuRemoveFromQueue, "trash", ViewModel.RemoveFromQueueCommand, trackList);
             removeAction.Attributes = UIMenuElementAttributes.Destructive;
 
             return UIMenu.Create(new[] { playAction, albumAction, playlistAction, removeAction });
@@ -98,8 +98,8 @@ namespace Stylophone.iOS.ViewControllers
 
         private UIBarButtonItem CreateSettingsButton()
         {
-            var addQueueAction = Binder.GetCommandAction(Strings.AddedToPlaylistText, "sdcard", ViewModel.SaveQueueCommand);
-            var clearQueueAction = Binder.GetCommandAction(Strings.CantClearError, "trash", ViewModel.ClearQueueCommand);
+            var addQueueAction = Binder.GetCommandAction(Strings.ContextMenuAddQueueToPlaylist, "sdcard", ViewModel.SaveQueueCommand);
+            var clearQueueAction = Binder.GetCommandAction(Strings.ContextMenuClearQueue, "trash", ViewModel.ClearQueueCommand);
             clearQueueAction.Attributes = UIMenuElementAttributes.Destructive;
 
             var barButtonMenu = UIMenu.Create(new[] { addQueueAction, clearQueueAction });

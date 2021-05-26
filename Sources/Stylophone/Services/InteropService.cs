@@ -110,5 +110,22 @@ namespace Stylophone.Services
                 _ => throw new NotImplementedException(),
             };
         }
+
+        public string GetIcon(PlaybackIcon icon)
+        {
+            return icon switch
+            {
+                PlaybackIcon.Play => "\uE768",
+                PlaybackIcon.Pause => "\uE769",
+                PlaybackIcon.Repeat => "\uE8EE",
+                PlaybackIcon.RepeatSingle => "\uE8ED",
+                PlaybackIcon.VolumeMute => "\uE74F",
+                PlaybackIcon.Volume25 => "\uE992",
+                PlaybackIcon.Volume50 => "\uE993",
+                PlaybackIcon.Volume75 => "\uE994",
+                PlaybackIcon.VolumeFull => "\uE767",
+                _ => "?",
+            };
+        }
     }
 }

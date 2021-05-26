@@ -141,7 +141,7 @@ namespace Stylophone.Common.ViewModels
 
                 var r = await _mpdService.SafelySendCommandAsync(commandList);
                 if (r != null)
-                    _notificationService.ShowInAppNotification(Resources.AddedToQueueText);
+                    _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
             }
         }
 
@@ -168,7 +168,7 @@ namespace Stylophone.Common.ViewModels
                 var req = await _mpdService.SafelySendCommandAsync(commandList);
 
                 if (req != null)
-                    _notificationService.ShowInAppNotification(string.Format(Resources.AddedToPlaylistText, playlistName));
+                    _notificationService.ShowInAppNotification(string.Format(Resources.NotificationAddedToPlaylist, playlistName));
             }
         }
 

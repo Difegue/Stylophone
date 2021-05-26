@@ -2,11 +2,15 @@
     x:Class="Stylophone.Views.AddToPlaylistDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
-    x:Uid="AddToPlaylistDialog"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:strings="using:Stylophone.Localization.Strings"
+    Title="{x:Bind strings:Resources.AddToPlaylistTitle}"
     d:DesignHeight="345"
     d:DesignWidth="550"
+    CloseButtonText="{x:Bind strings:Resources.CancelButtonText}"
+    PrimaryButtonText="{x:Bind strings:Resources.AddToPlaylistPrimaryButtonText}"
     mc:Ignorable="d">
     <ContentDialog.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -14,10 +18,25 @@
     </ContentDialog.Resources>
     <ScrollViewer>
         <StackPanel>
-            <ComboBox x:Uid="AddToPlaylistComboBox" ItemsSource="{x:Bind Playlists}" DisplayMemberPath="Name" SelectedValuePath="Name" Visibility="{x:Bind AllowExistingPlaylists, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                      SelectionChanged="Update_Selected" Width="270" IsEnabled="{x:Bind AddNewPlaylist, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
-            <CheckBox x:Uid="NewPlaylistCheckBox" IsChecked="{x:Bind AddNewPlaylist, Mode=TwoWay}" Click="Update_Checkbox" Visibility="{x:Bind AllowExistingPlaylists, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            <TextBox x:Uid="NewPlaylistTextBox" Text="{x:Bind PlaylistName, Mode=TwoWay}" Visibility="{x:Bind AddNewPlaylist, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <ComboBox
+                Width="270"
+                DisplayMemberPath="Name"
+                Header="{x:Bind strings:Resources.AddToPlaylistText}"
+                IsEnabled="{x:Bind AddNewPlaylist, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                ItemsSource="{x:Bind Playlists}"
+                PlaceholderText="{x:Bind strings:Resources.AddToPlaylistPlaceholder}"
+                SelectedValuePath="Name"
+                SelectionChanged="Update_Selected"
+                Visibility="{x:Bind AllowExistingPlaylists, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <CheckBox
+                Click="Update_Checkbox"
+                Content="{x:Bind strings:Resources.AddToPlaylistCreateNewPlaylist}"
+                IsChecked="{x:Bind AddNewPlaylist, Mode=TwoWay}"
+                Visibility="{x:Bind AllowExistingPlaylists, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <TextBox
+                PlaceholderText="{x:Bind strings:Resources.AddToPlaylistNewPlaylistName}"
+                Text="{x:Bind PlaylistName, Mode=TwoWay}"
+                Visibility="{x:Bind AddNewPlaylist, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>

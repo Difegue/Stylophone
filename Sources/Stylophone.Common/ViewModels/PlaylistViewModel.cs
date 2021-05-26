@@ -122,7 +122,7 @@ namespace Stylophone.Common.ViewModels
 
                 if (res != null)
                 {
-                    _notificationService.ShowInAppNotification(Resources.PlaylistRemovedText);
+                    _notificationService.ShowInAppNotification(Resources.NotificationPlaylistRemoved);
                     _navigationService.GoBack();
                 }
             }
@@ -135,7 +135,7 @@ namespace Stylophone.Common.ViewModels
             var res = await _mpdService.SafelySendCommandAsync(new LoadCommand(Name));
 
             if (res != null)
-                _notificationService.ShowInAppNotification(Resources.AddedToQueueText);
+                _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
         private ICommand _playCommand;
         public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayPlaylist));
@@ -170,7 +170,7 @@ namespace Stylophone.Common.ViewModels
 
                 var r = await _mpdService.SafelySendCommandAsync(commandList);
                 if (r != null)
-                    _notificationService.ShowInAppNotification(Resources.AddedToQueueText);
+                    _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
             }
         }
 

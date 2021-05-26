@@ -168,9 +168,15 @@
     <InterfaceDefinition Include="Views\Settings.storyboard" />
     <InterfaceDefinition Include="Views\Queue.storyboard" />
     <InterfaceDefinition Include="Views\NowPlaying.storyboard" />
-    <ImageAsset Include="Resources\Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\PlaceholderAlbum.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\PlaceholderAlbum.imageset\AlbumPlaceholder.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\PlaceholderAlbum.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\PlaceholderAlbum.imageset\AlbumPlaceholder.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <InterfaceDefinition Include="Views\AlbumDetail.storyboard" />
   </ItemGroup>
   <ItemGroup>

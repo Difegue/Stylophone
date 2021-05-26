@@ -54,7 +54,7 @@ namespace Stylophone.iOS.ViewModels
             var playlists = _mpdService.Playlists;
 
             var snapshot = new NSDiffableDataSourceSectionSnapshot<NavigationSidebarItem>();
-            var header = NavigationSidebarItem.GetExpandableRow(Strings.AddedToPlaylistText); //TODO
+            var header = NavigationSidebarItem.GetExpandableRow(Strings.PlaylistsHeader);
 
             var items = new List<NavigationSidebarItem>();
 

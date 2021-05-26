@@ -26,7 +26,7 @@ namespace Stylophone.iOS.Services
         /// </summary>
         /// <param name="allowExistingPlaylists">If set to FALSE, the dialog will only allow you to create a new playlist.</param>
         /// <returns></returns>
-        public async Task<string> ShowAddToPlaylistDialog(bool allowExistingPlaylists = true)
+        public Task<string> ShowAddToPlaylistDialog(bool allowExistingPlaylists = true)
         {
             //var dialog = new AddToPlaylistDialog(_mpdService, allowExistingPlaylists);
             //var result = await _dispatcherService.EnqueueAsync(async () => await dialog.ShowAsync());
@@ -47,7 +47,7 @@ namespace Stylophone.iOS.Services
                         _storageService.SetValue<bool>("HasLaunchedOnce", true);
 
                         // TODO
-                        await ShowConfirmDialogAsync(Strings.ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty, Strings.GenericErrorText, Strings.OKButtonText);
+                        await ShowConfirmDialogAsync(Strings.ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty, Strings.ErrorGeneric, Strings.OKButtonText);
                     }
                 });
         }

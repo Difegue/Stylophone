@@ -6,19 +6,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Update="Strings\Resources.Designer.cs">
+		<Compile Update="Strings\Resources.en-US.Designer.cs">
 			<AutoGen>True</AutoGen>
 			<DesignTime>True</DesignTime>
-			<DependentUpon>Resources.resx</DependentUpon>
+			<DependentUpon>Resources.en-US.resx</DependentUpon>
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Strings\Resources.fr-FR.resx">
 			<SubType>Designer</SubType>
 		</EmbeddedResource>
-		<EmbeddedResource Update="Strings\Resources.resx">
+		<EmbeddedResource Update="Strings\Resources.en-US.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<LastGenOutput>Resources.en-US.Designer.cs</LastGenOutput>
 			<SubType>Designer</SubType>
 		</EmbeddedResource>
 	</ItemGroup>

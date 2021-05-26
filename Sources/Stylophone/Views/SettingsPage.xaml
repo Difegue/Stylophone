@@ -2,154 +2,205 @@
     x:Class="Stylophone.Views.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helper="using:Stylophone.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:strings="using:Stylophone.Localization.Strings"
+    xmlns:stylophone="using:Stylophone.Common.Interfaces"
     Style="{StaticResource PageStyle}"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
-    xmlns:stylophone="using:Stylophone.Common.Interfaces" xmlns:strings="using:Stylophone.Localization.Strings"
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="stylophone:Theme" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters:BoolToVisibilityConverter x:Key="ReverseBoolToVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed" />
-        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:BoolToVisibilityConverter
+            x:Key="ReverseBoolToVisibilityConverter"
+            FalseValue="Visible"
+            TrueValue="Collapsed" />
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
     </Page.Resources>
 
     <ScrollViewer Margin="{StaticResource MediumLeftMargin}">
         <StackPanel x:Name="ContentArea">
 
-            <TextBlock Text="{x:Bind strings:Resources.SettingsServer}" Style="{ThemeResource SubtitleTextBlockStyle}" />
+            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="{x:Bind strings:Resources.SettingsServer}" />
 
-            <StackPanel Margin="{StaticResource SmallTopMargin}" HorizontalAlignment="Left" Width="350" >
+            <StackPanel
+                Width="350"
+                Margin="{StaticResource SmallTopMargin}"
+                HorizontalAlignment="Left">
 
-                <TextBox PlaceholderText="{x:Bind strings:Resources.SettingsServerHost}" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}"/>
+                <TextBox PlaceholderText="{x:Bind strings:Resources.SettingsServerHost}" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}" />
 
-                <controls:NumberBox PlaceholderText="{x:Bind strings:Resources.SettingsServerPort}" SpinButtonPlacementMode="Compact" Margin="{StaticResource XSmallTopMargin}"
-                                    Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}" Minimum="1" Maximum="65536"/>
+                <controls:NumberBox
+                    Margin="{StaticResource XSmallTopMargin}"
+                    Maximum="65536"
+                    Minimum="1"
+                    PlaceholderText="{x:Bind strings:Resources.SettingsServerPort}"
+                    SpinButtonPlacementMode="Compact"
+                    Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}" />
 
-                <ProgressBar Margin="{StaticResource XSmallTopMargin}" IsIndeterminate="True"
-                             Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+                <ProgressBar
+                    Margin="{StaticResource XSmallTopMargin}"
+                    IsIndeterminate="True"
+                    Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
 
                 <StackPanel Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
-                    <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"
-                            Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
-                        <SymbolIcon Symbol="Clear" Foreground="Red" VerticalAlignment="Top"></SymbolIcon>
-                        <TextBlock x:Uid="NoServerError" TextWrapping="WrapWholeWords" Width="325"/>
+                    <StackPanel
+                        Margin="{StaticResource XSmallTopMargin}"
+                        Orientation="Horizontal"
+                        Spacing="4"
+                        Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
+                        <SymbolIcon
+                            VerticalAlignment="Top"
+                            Foreground="Red"
+                            Symbol="Clear" />
+                        <TextBlock
+                            Width="325"
+                            Text="{x:Bind strings:Resources.SettingsNoServerError}"
+                            TextWrapping="WrapWholeWords" />
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="{StaticResource XSmallTopMargin}" Spacing="4"
-                            Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
-                        <SymbolIcon Symbol="MusicInfo" Foreground="Green" VerticalAlignment="Top"></SymbolIcon>
-                        <TextBlock Text="{x:Bind ViewModel.ServerInfo, Mode=OneWay}"/>
+                    <StackPanel
+                        Margin="{StaticResource XSmallTopMargin}"
+                        Orientation="Horizontal"
+                        Spacing="4"
+                        Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <SymbolIcon
+                            VerticalAlignment="Top"
+                            Foreground="Green"
+                            Symbol="MusicInfo" />
+                        <TextBlock Text="{x:Bind ViewModel.ServerInfo, Mode=OneWay}" />
                     </StackPanel>
                 </StackPanel>
-                
+
 
             </StackPanel>
 
-            <TextBlock Text="{x:Bind strings:Resources.SettingsDatabase}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}"/>
+            <TextBlock
+                Margin="{StaticResource MediumTopMargin}"
+                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Text="{x:Bind strings:Resources.SettingsDatabase}" />
 
             <StackPanel Margin="{StaticResource SmallTopMargin}">
 
-                <Button Content="{x:Bind strings:Resources.SettingsUpdateDatabase}" IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" Command="{x:Bind ViewModel.RescanDbCommand}"/>
+                <Button
+                    Command="{x:Bind ViewModel.RescanDbCommand}"
+                    Content="{x:Bind strings:Resources.SettingsUpdateDatabase}"
+                    IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" />
 
                 <TextBlock
-                    Text="{x:Bind strings:Resources.SettingsClearCacheDescription}"
-                    Margin="{StaticResource SmallTopMargin}" Style="{ThemeResource BodyTextBlockStyle}" />
+                    Margin="{StaticResource SmallTopMargin}"
+                    Style="{ThemeResource BodyTextBlockStyle}"
+                    Text="{x:Bind strings:Resources.SettingsClearCacheDescription}" />
 
-                <Button Content="{x:Bind strings:Resources.SettingsClearCache}" Margin="{StaticResource XSmallTopMargin}" Command="{x:Bind ViewModel.ClearCacheCommand}"/>
-                
+                <Button
+                    Margin="{StaticResource XSmallTopMargin}"
+                    Command="{x:Bind ViewModel.ClearCacheCommand}"
+                    Content="{x:Bind strings:Resources.SettingsClearCache}" />
+
             </StackPanel>
 
-            <TextBlock Text="{x:Bind strings:Resources.SettingsCustomization}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
+            <TextBlock
+                Margin="{StaticResource MediumTopMargin}"
+                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Text="{x:Bind strings:Resources.SettingsCustomization}" />
             <StackPanel Margin="{StaticResource SmallTopMargin}">
                 <TextBlock Text="{x:Bind strings:Resources.SettingsTheme}" />
 
                 <StackPanel Margin="{StaticResource XSmallTopMargin}">
                     <RadioButton
-                        Content="{x:Bind strings:Resources.SettingsThemeLight}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
+                        Content="{x:Bind strings:Resources.SettingsThemeLight}"
                         FontSize="15"
-                        GroupName="AppTheme">
+                        GroupName="AppTheme"
+                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}">
                         <RadioButton.CommandParameter>
                             <stylophone:Theme>Light</stylophone:Theme>
                         </RadioButton.CommandParameter>
                     </RadioButton>
                     <RadioButton
-                        Content="{x:Bind strings:Resources.SettingsThemeDark}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
+                        Content="{x:Bind strings:Resources.SettingsThemeDark}"
                         FontSize="15"
-                        GroupName="AppTheme">
+                        GroupName="AppTheme"
+                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}">
                         <RadioButton.CommandParameter>
                             <stylophone:Theme>Dark</stylophone:Theme>
                         </RadioButton.CommandParameter>
                     </RadioButton>
                     <RadioButton
-                        Content="{x:Bind strings:Resources.SettingsThemeDefault}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
+                        Content="{x:Bind strings:Resources.SettingsThemeDefault}"
                         FontSize="15"
-                        GroupName="AppTheme">
+                        GroupName="AppTheme"
+                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}">
                         <RadioButton.CommandParameter>
                             <stylophone:Theme>Default</stylophone:Theme>
                         </RadioButton.CommandParameter>
                     </RadioButton>
                 </StackPanel>
 
-                <TextBlock Text="{x:Bind strings:Resources.SettingsUIDensity}" Margin="{StaticResource XSmallTopMargin}" />
+                <TextBlock Margin="{StaticResource XSmallTopMargin}" Text="{x:Bind strings:Resources.SettingsUIDensity}" />
 
-                <TextBlock Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" Style="{StaticResource CaptionTextBlockStyle}" />
+                <TextBlock Style="{StaticResource CaptionTextBlockStyle}" Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" />
                 <StackPanel Margin="{StaticResource XSmallTopMargin}">
                     <RadioButton
-                        Content="{x:Bind strings:Resources.SettingsUIDensityNormal}"
+                        Command="{x:Bind ViewModel.SwitchSizingCommand}"
                         CommandParameter="False"
-                        Command="{x:Bind ViewModel.SwitchSizingCommand}"
-                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}"
+                        Content="{x:Bind strings:Resources.SettingsUIDensityNormal}"
                         FontSize="15"
-                        GroupName="AppSizing"/>
+                        GroupName="AppSizing"
+                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}" />
                     <RadioButton
-                        Content="{x:Bind strings:Resources.SettingsUIDensityCompact}"
-                        CommandParameter="True"
                         Command="{x:Bind ViewModel.SwitchSizingCommand}"
-                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Mode=OneWay}"
+                        CommandParameter="True"
+                        Content="{x:Bind strings:Resources.SettingsUIDensityCompact}"
                         FontSize="15"
-                        GroupName="AppSizing"/>
+                        GroupName="AppSizing"
+                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Mode=OneWay}" />
                 </StackPanel>
-                
+
             </StackPanel>
 
-            <TextBlock Text="{x:Bind strings:Resources.SettingsAnalytics}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}"  />
+            <TextBlock
+                Margin="{StaticResource MediumTopMargin}"
+                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Text="{x:Bind strings:Resources.SettingsAnalytics}" />
 
             <StackPanel Margin="{StaticResource SmallTopMargin}">
                 <ToggleSwitch Header="{x:Bind strings:Resources.SettingsAnalyticsText}" IsOn="{x:Bind ViewModel.DisableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}" />
-                <TextBlock Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" Style="{StaticResource CaptionTextBlockStyle}" />
+                <TextBlock Style="{StaticResource CaptionTextBlockStyle}" Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" />
             </StackPanel>
 
-            <TextBlock Text="{x:Bind strings:Resources.SettingsAbout}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="{StaticResource MediumTopMargin}" />
+            <TextBlock
+                Margin="{StaticResource MediumTopMargin}"
+                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Text="{x:Bind strings:Resources.SettingsAbout}" />
 
-            <StackPanel Margin="{StaticResource SmallTopMargin}" >
+            <StackPanel Margin="{StaticResource SmallTopMargin}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Margin="12,0"
+                    <Image
                         Width="64"
                         Height="64"
+                        Margin="12,0"
                         Source="ms-appx:///Assets/Square44x44Logo.altform-unplated_targetsize-256.png" />
-                
+
                     <StackPanel>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" />
                         <TextBlock
-                        Text="{x:Bind strings:Resources.SettingsAboutText}"
-                        Margin="{StaticResource XSmallTopMargin}"
-                        Style="{ThemeResource BodyTextBlockStyle}" />
+                            Margin="{StaticResource XSmallTopMargin}"
+                            Style="{ThemeResource BodyTextBlockStyle}"
+                            Text="{x:Bind strings:Resources.SettingsAboutText}" />
                     </StackPanel>
                 </StackPanel>
 
-                <HyperlinkButton Content="{x:Bind strings:Resources.SettingsGithub}"
-                                 NavigateUri="{x:Bind strings:Resources.SettingsGithubLink}" Margin="{StaticResource XSmallTopMargin}" />
+                <HyperlinkButton
+                    Margin="{StaticResource XSmallTopMargin}"
+                    Content="{x:Bind strings:Resources.SettingsGithub}"
+                    NavigateUri="{x:Bind strings:Resources.SettingsGithubLink}" />
             </StackPanel>
         </StackPanel>
-    </ScrollViewer>    
+    </ScrollViewer>
 </Page>

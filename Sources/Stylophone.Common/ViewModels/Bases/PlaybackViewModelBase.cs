@@ -660,7 +660,7 @@ namespace Stylophone.Common.ViewModels
             // Track must exist
             if (CurrentTrack == null)
             {
-                _notificationService.ShowInAppNotification(Resources.NoTrackPlayingText);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying);
             }
 
             CurrentTrack.AddToPlayListCommand.Execute(CurrentTrack.File);
@@ -673,7 +673,7 @@ namespace Stylophone.Common.ViewModels
             // Track must exist
             if (CurrentTrack == null)
             {
-                _notificationService.ShowInAppNotification(Resources.NoTrackPlayingText);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying);
                 return;
             }
 

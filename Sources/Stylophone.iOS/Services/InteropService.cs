@@ -19,19 +19,19 @@ namespace Stylophone.iOS.Services
         {
         }
 
-        public async Task SetThemeAsync(Theme theme)
+        public Task SetThemeAsync(Theme theme)
         {
             switch (theme)
             {
                 case Theme.Dark:
                     UIApplication.SharedApplication.KeyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Dark;
-                    return;
+                    return Task.CompletedTask;
                 case Theme.Light:
                     UIApplication.SharedApplication.KeyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Light;
-                    return;
+                    return Task.CompletedTask;
                 default:
                     UIApplication.SharedApplication.KeyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Unspecified;
-                    return;
+                    return Task.CompletedTask;
             }
         }
 
@@ -56,10 +56,11 @@ namespace Stylophone.iOS.Services
             return skImage;
         }
 
-        public async Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack)
+        public Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack)
         {
             //await _smtcService.UpdateMetadataAsync(currentTrack);
             //await LiveTileHelper.UpdatePlayingSongAsync(currentTrack);
+            return Task.CompletedTask;
         }
 
         public Version GetAppVersion()

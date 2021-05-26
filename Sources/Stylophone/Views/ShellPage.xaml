@@ -2,18 +2,19 @@
     x:Class="Stylophone.Views.ShellPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    xmlns:helpers="using:Stylophone.Helpers"
-    xmlns:views="using:Stylophone.Views"
-    xmlns:viewmodels="using:Stylophone.ViewModels"
-    xmlns:stylophone="using:Stylophone.Common.ViewModels"
-    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:mpcnet="using:MpcNET.Types" xmlns:converters="using:Stylophone.Converters"
+    xmlns:converters="using:Stylophone.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="using:Stylophone.Helpers"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mpcnet="using:MpcNET.Types"
     xmlns:strings="using:Stylophone.Localization.Strings"
+    xmlns:stylophone="using:Stylophone.Common.ViewModels"
+    xmlns:viewmodels="using:Stylophone.ViewModels"
+    xmlns:views="using:Stylophone.Views"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -21,25 +22,37 @@
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
         <DataTemplate x:Key="StringItemTemplate" x:DataType="x:String">
-            <StackPanel Orientation="Vertical" Height="46" >
-                <TextBlock Text="{x:Bind}" Margin="{StaticResource XSmallTopMargin}" FontStyle="Italic" />
-                <MenuFlyoutSeparator Margin="-12,8,0,0" Width="2000"/>
+            <StackPanel Height="46" Orientation="Vertical">
+                <TextBlock
+                    Margin="{StaticResource XSmallTopMargin}"
+                    FontStyle="Italic"
+                    Text="{x:Bind}" />
+                <MenuFlyoutSeparator Width="2000" Margin="-12,8,0,0" />
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="MpdFileItemTemplate" x:DataType="mpcnet:IMpdFile" >
+        <DataTemplate x:Key="MpdFileItemTemplate" x:DataType="mpcnet:IMpdFile">
 
-            <StackPanel Orientation="Vertical" Height="46" >
-                <TextBlock Text="{x:Bind Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="{StaticResource XXSmallTopMargin}"
-                           ToolTipService.ToolTip="{x:Bind Title}"
-                           Style="{StaticResource BaseTextBlockStyle}" />
-                <TextBlock Text="{x:Bind Album}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Style="{StaticResource CaptionTextBlockStyle}" />
+            <StackPanel Height="46" Orientation="Vertical">
+                <TextBlock
+                    Margin="{StaticResource XXSmallTopMargin}"
+                    Style="{StaticResource BaseTextBlockStyle}"
+                    Text="{x:Bind Title}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="NoWrap"
+                    ToolTipService.ToolTip="{x:Bind Title}" />
+                <TextBlock
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind Album}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="NoWrap" />
             </StackPanel>
         </DataTemplate>
 
-        <views:MyDataTemplateSelector x:Key="MyDataTemplateSelector"
-            Normal="{StaticResource StringItemTemplate}"
-            MpdFile="{StaticResource MpdFileItemTemplate}"/>
+        <views:MyDataTemplateSelector
+            x:Key="MyDataTemplateSelector"
+            MpdFile="{StaticResource MpdFileItemTemplate}"
+            Normal="{StaticResource StringItemTemplate}" />
 
     </Page.Resources>
 
@@ -52,35 +65,51 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
         </Grid.RowDefinitions>
-        
-        <winui:NavigationView Grid.Row="0"
-        x:Name="navigationView"
-        IsBackButtonVisible="Visible"
-        PaneTitle="Stylophone"
-        IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
-        IsSettingsVisible="True"
-        ExpandedModeThresholdWidth="900"
-        Loaded="ApplyShadowToSideBar"
-        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-            <winui:NavigationView.MenuItems>
-                <winui:NavigationViewItem Content="{x:Bind strings:Resources.QueueHeader}" Icon="Audio" helpers:NavHelper.NavigateTo="stylophone:QueueViewModel" />
-                <winui:NavigationViewItem x:Uid="Shell_Library" Icon="Library" helpers:NavHelper.NavigateTo="viewmodels:LibraryViewModel" />
-                <winui:NavigationViewItem x:Uid="Shell_Folders" Icon="MapDrive" helpers:NavHelper.NavigateTo="stylophone:FoldersViewModel" />
 
-                <winui:NavigationViewItemSeparator/>
-                <winui:NavigationViewItem x:Name="playlistContainer" x:Uid="Shell_Playlists" Icon="MusicInfo" SelectsOnInvoked="False"/>
-                <!-- This menuitem is filled in viewmodel-->
+        <winui:NavigationView
+            x:Name="navigationView"
+            Grid.Row="0"
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+            ExpandedModeThresholdWidth="900"
+            IsBackButtonVisible="Visible"
+            IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
+            IsSettingsVisible="True"
+            Loaded="ApplyShadowToSideBar"
+            PaneTitle="Stylophone">
+            <winui:NavigationView.MenuItems>
+                <winui:NavigationViewItem
+                    helpers:NavHelper.NavigateTo="stylophone:QueueViewModel"
+                    Content="{x:Bind strings:Resources.QueueHeader}"
+                    Icon="Audio" />
+                <winui:NavigationViewItem
+                    helpers:NavHelper.NavigateTo="viewmodels:LibraryViewModel"
+                    Content="{x:Bind strings:Resources.LibraryHeader}"
+                    Icon="Library" />
+                <winui:NavigationViewItem
+                    helpers:NavHelper.NavigateTo="stylophone:FoldersViewModel"
+                    Content="{x:Bind strings:Resources.FoldersHeader}"
+                    Icon="MapDrive" />
+
+                <winui:NavigationViewItemSeparator />
+                <winui:NavigationViewItem
+                    x:Name="playlistContainer"
+                    Content="{x:Bind strings:Resources.PlaylistsHeader}"
+                    Icon="MusicInfo"
+                    SelectsOnInvoked="False" />
+                <!--  This menuitem is filled in viewmodel  -->
             </winui:NavigationView.MenuItems>
 
             <winui:NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Uid="Shell_Search" QueryIcon="Find" AutomationProperties.Name="Search"
-                                UpdateTextOnSelect="False"
-                                GotFocus="OpenSuggestionsPanel"
-                                ItemTemplateSelector = "{StaticResource MyDataTemplateSelector}">
-                </AutoSuggestBox>
+                <AutoSuggestBox
+                    AutomationProperties.Name="Search"
+                    GotFocus="OpenSuggestionsPanel"
+                    ItemTemplateSelector="{StaticResource MyDataTemplateSelector}"
+                    PlaceholderText="{x:Bind strings:Resources.SearchPlaceholderText}"
+                    QueryIcon="Find"
+                    UpdateTextOnSelect="False" />
             </winui:NavigationView.AutoSuggestBox>
 
             <i:Interaction.Behaviors>
@@ -89,32 +118,40 @@
                 </ic:EventTriggerBehavior>
             </i:Interaction.Behaviors>
 
-            <Grid Margin="0,-32,0,0" x:Name="contentContainer">
+            <Grid x:Name="contentContainer" Margin="0,-32,0,0">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Grid.Shadow>
                     <ThemeShadow x:Name="ContentShadow" />
                 </Grid.Shadow>
 
-                <!-- Custom Header so we can hide the entire pane for fullscreen views -->
-                <Grid x:Name="Header" Grid.Row="0" Margin="80,0,0,0" Padding="0,32,0,8" Visibility="{x:Bind ViewModel.HeaderText, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}">
-                    <TextBlock Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}" Style="{ThemeResource TitleTextBlockStyle}" Margin="{StaticResource SmallLeftRightMargin}" />
+                <!--  Custom Header so we can hide the entire pane for fullscreen views  -->
+                <Grid
+                    x:Name="Header"
+                    Grid.Row="0"
+                    Margin="80,0,0,0"
+                    Padding="0,32,0,8"
+                    Visibility="{x:Bind ViewModel.HeaderText, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}">
+                    <TextBlock
+                        Margin="{StaticResource SmallLeftRightMargin}"
+                        Style="{ThemeResource TitleTextBlockStyle}"
+                        Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}" />
                 </Grid>
 
-                <!-- Content -->
-                <Frame x:Name="shellFrame" Grid.Row="1"/>
+                <!--  Content  -->
+                <Frame x:Name="shellFrame" Grid.Row="1" />
 
-                <!-- InAppNotifications go here -->
-                <controls:InAppNotification x:Name="notificationHolder" Grid.Row="1"/>
-                
+                <!--  InAppNotifications go here  -->
+                <controls:InAppNotification x:Name="notificationHolder" Grid.Row="1" />
+
             </Grid>
         </winui:NavigationView>
 
-        <views:NowPlayingBar x:Name="nowPlayingBar" Grid.Row="1" >
+        <views:NowPlayingBar x:Name="nowPlayingBar" Grid.Row="1">
             <views:NowPlayingBar.Shadow>
                 <ThemeShadow x:Name="NowPlayingShadow" />
             </views:NowPlayingBar.Shadow>

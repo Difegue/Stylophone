@@ -121,10 +121,6 @@
     <value>Stylophone</value>
     <comment>Application display name</comment>
   </data>
-  <data name="AppDescription" xml:space="preserve">
-    <value>Stylophone</value>
-    <comment>Application description</comment>
-  </data>
   <data name="QueueHeader" xml:space="preserve">
     <value>Queue</value>
     <comment>Navigation view item name for NowPlaying</comment>
@@ -136,6 +132,56 @@
   <data name="FoldersHeader" xml:space="preserve">
     <value>Folders</value>
     <comment>Navigation view item name for Folders</comment>
+  </data>
+  <data name="PlaylistsHeader" xml:space="preserve">
+    <value>Playlists</value>
+    <comment>Navigation view item name for Playlists</comment>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Navigation view item name for Settings</comment>
+  </data>
+  <data name="ErrorNoMatchingAlbum" xml:space="preserve">
+    <value>This track doesn't have a matching Album.</value>
+  </data>
+  <data name="NotificationPlaylistRemoved" xml:space="preserve">
+    <value>The Playlist has been removed.</value>
+  </data>
+  <data name="NotificationNowPlayingTrack" xml:space="preserve">
+    <value>Now Playing {0}</value>
+  </data>
+  <data name="NotificationNoTracksLoaded" xml:space="preserve">
+    <value>No tracks loaded yet.</value>
+  </data>
+  <data name="NotificationNoTrackPlaying" xml:space="preserve">
+    <value>No Track is currently playing.</value>
+  </data>
+  <data name="DeletePlaylistContentDialog" xml:space="preserve">
+    <value>Delete Playlist?</value>
+  </data>
+  <data name="ErrorCantClearCache" xml:space="preserve">
+    <value>Couldn't clear queue!</value>
+  </data>
+  <data name="NotificationDbUpdateStarted" xml:space="preserve">
+    <value>Database update started.</value>
+  </data>
+  <data name="NotificationDbAlreadyUpdating" xml:space="preserve">
+    <value>The database is already being updated.</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SettingsNoServerError" xml:space="preserve">
+    <value>Couldn't find an MPD server at this address!</value>
+  </data>
+  <data name="SearchGoToDetail" xml:space="preserve">
+    <value>Search for "{0}" on the server...</value>
+  </data>
+  <data name="SearchResultsFor" xml:space="preserve">
+    <value>Search Results for "{0}"</value>
+  </data>
+  <data name="OKButtonText" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
     <value>File name is null or empty. Specify a valid file name</value>
@@ -157,80 +203,32 @@
     <value>All pages opened in a new window must subscribe to the Released Event.</value>
     <comment>The page is not subscribed to the Released event.</comment>
   </data>
-  <data name="AddedToPlaylistText" xml:space="preserve">
+  <data name="NotificationAddedToPlaylist" xml:space="preserve">
     <value>Added to Playlist {0}!</value>
   </data>
-  <data name="AddedToQueueText" xml:space="preserve">
+  <data name="NotificationAddedToQueue" xml:space="preserve">
     <value>Added to Queue!</value>
   </data>
-  <data name="CacheDeletedText" xml:space="preserve">
+  <data name="NotificationCacheDeleted" xml:space="preserve">
     <value>Album art cache has been deleted.</value>
-  </data>
-  <data name="CancelButtonText" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="CantClearError" xml:space="preserve">
-    <value>Couldn't clear queue!</value>
-  </data>
-  <data name="DatabaseAlreadyUpdatingText" xml:space="preserve">
-    <value>The database is already being updated.</value>
-  </data>
-  <data name="DatabaseUpdateStartedText" xml:space="preserve">
-    <value>Database update started.</value>
-  </data>
-  <data name="DeletePlaylistContentDialog" xml:space="preserve">
-    <value>Delete Playlist?</value>
   </data>
   <data name="ErrorAddingAlbum" xml:space="preserve">
     <value>Couldn't add Album: {0}</value>
   </data>
-  <data name="ErrorPlayingText" xml:space="preserve">
+  <data name="ErrorPlayingTrack" xml:space="preserve">
     <value>Couldn't play content: {0}</value>
   </data>
-  <data name="GenericErrorText" xml:space="preserve">
+  <data name="ErrorGeneric" xml:space="preserve">
     <value>Error: {0}</value>
   </data>
-  <data name="InvalidMPDResponseError" xml:space="preserve">
+  <data name="ErrorInvalidMPDResponse" xml:space="preserve">
     <value>Invalid MPD Response.</value>
-  </data>
-  <data name="NoTrackPlayingText" xml:space="preserve">
-    <value>No Track is currently playing.</value>
-  </data>
-  <data name="NoTracksLoaded" xml:space="preserve">
-    <value>No tracks loaded yet.</value>
-  </data>
-  <data name="NowPlayingText" xml:space="preserve">
-    <value>Now Playing {0}</value>
-  </data>
-  <data name="OKButtonText" xml:space="preserve">
-    <value>OK</value>
   </data>
   <data name="UpdateDbDialogText" xml:space="preserve">
     <value>This operation might take the server some time to complete.</value>
   </data>
   <data name="UpdateDbDialogTitle" xml:space="preserve">
     <value>Update the Server Database?</value>
-  </data>
-  <data name="LoadingTreeItem" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="NoTracksFound" xml:space="preserve">
-    <value>No Tracks found on Server.</value>
-  </data>
-  <data name="GoToDetailSearch" xml:space="preserve">
-    <value>Search for "{0}" on the server...</value>
-  </data>
-  <data name="SearchResultsFor" xml:space="preserve">
-    <value>Search Results for "{0}"</value>
-  </data>
-  <data name="NoAlbumErrorText" xml:space="preserve">
-    <value>This track doesn't have a matching Album.</value>
-  </data>
-  <data name="SettingsHeader" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="PlaylistRemovedText" xml:space="preserve">
-    <value>The Playlist has been removed.</value>
   </data>
   <data name="SettingsAbout" xml:space="preserve">
     <value>About this application</value>
@@ -282,7 +280,7 @@ If you want to clear the album art cache, click this button.</value>
     <value>Dark</value>
   </data>
   <data name="SettingsThemeDefault" xml:space="preserve">
-    <value>Windows default</value>
+    <value>System default</value>
   </data>
   <data name="SettingsThemeLight" xml:space="preserve">
     <value>Light</value>
@@ -298,5 +296,140 @@ If you want to clear the album art cache, click this button.</value>
   </data>
   <data name="SettingsUpdateDatabase" xml:space="preserve">
     <value>Update Server Database</value>
+  </data>
+  <data name="SearchPlaceholderText" xml:space="preserve">
+    <value>Search Tracks...</value>
+  </data>
+  <data name="SearchAlbumsToggle" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="SearchArtistsToggle" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="SearchTracksToggle" xml:space="preserve">
+    <value>Tracks</value>
+  </data>
+  <data name="SearchNoResultsTitle.Text" xml:space="preserve">
+    <value>No Results have been found...</value>
+  </data>
+  <data name="FirstRunText" xml:space="preserve">
+    <value>To get started, please visit the Settings page to key in your MPD server's URL and port.
+Hope you enjoy using the application!</value>
+    <comment>First use prompt message body</comment>
+  </data>
+  <data name="FirstRunTitle" xml:space="preserve">
+    <value>Welcome to Stylophone!</value>
+    <comment>First use prompt message title</comment>
+  </data>
+  <data name="ContextMenuPlay" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="ContextMenuViewAlbum" xml:space="preserve">
+    <value>View Album</value>
+  </data>
+  <data name="ContextMenuRemoveFromPlaylist" xml:space="preserve">
+    <value>Remove from Playlist</value>
+  </data>
+  <data name="ContextMenuRemoveFromQueue" xml:space="preserve">
+    <value>Remove from Queue</value>
+  </data>
+  <data name="ContextMenuAddToPlaylist" xml:space="preserve">
+    <value>Add to Playlist</value>
+  </data>
+  <data name="ContextMenuAddQueueToPlaylist" xml:space="preserve">
+    <value>Add Queue to Playlist</value>
+  </data>
+  <data name="ContextMenuClearQueue" xml:space="preserve">
+    <value>Clear Queue</value>
+  </data>
+  <data name="ContextMenuAddToQueue" xml:space="preserve">
+    <value>Add to Queue</value>
+  </data>
+  <data name="ContextMenuDeletePlaylist" xml:space="preserve">
+    <value>Delete Playlist</value>
+  </data>
+  <data name="EmptyFoldersDesc" xml:space="preserve">
+    <value>Is your MPD server connected?</value>
+  </data>
+  <data name="EmptyFoldersTitle" xml:space="preserve">
+    <value>No folders found on server.</value>
+  </data>
+  <data name="EmptyLibraryTitle" xml:space="preserve">
+    <value>Ain't nothin' like an empty library.</value>
+  </data>
+  <data name="EmptyPlaylistDesc" xml:space="preserve">
+    <value>Get some tracks in there!</value>
+  </data>
+  <data name="EmptyPlaylistTitle" xml:space="preserve">
+    <value>I can't jam to this.</value>
+  </data>
+  <data name="EmptyQueueDesc" xml:space="preserve">
+    <value>Why don't you add some music?</value>
+  </data>
+  <data name="EmptyQueueTitle" xml:space="preserve">
+    <value>All is quiet now.</value>
+  </data>
+  <data name="EmptySearchTitle" xml:space="preserve">
+    <value>Funky Fresh Search!</value>
+  </data>
+  <data name="EmptySearchDesc" xml:space="preserve">
+    <value>No Tracks found on Server.</value>
+  </data>
+  <data name="LibrarySearchPlaceholder" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="FoldersRoot" xml:space="preserve">
+    <value>MPD Filesystem</value>
+  </data>
+  <data name="FoldersLoadingTreeItem" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FoldersCollapseAll" xml:space="preserve">
+    <value>Close all open folders</value>
+  </data>
+  <data name="PlaybackUpNext" xml:space="preserve">
+    <value>Up Next:</value>
+  </data>
+  <data name="ActionToggleShuffle" xml:space="preserve">
+    <value>Toggle Shuffle</value>
+  </data>
+  <data name="ActionPlayPause" xml:space="preserve">
+    <value>Play/Pause</value>
+  </data>
+  <data name="ActionSkipPrevious" xml:space="preserve">
+    <value>Previous Track</value>
+  </data>
+  <data name="ActionToggleRepeat" xml:space="preserve">
+    <value>Toggle Repeat</value>
+  </data>
+  <data name="ActionSkipNext" xml:space="preserve">
+    <value>Next Track</value>
+  </data>
+  <data name="ActionChangeVolume" xml:space="preserve">
+    <value>Change Volume</value>
+  </data>
+  <data name="ActionCompactOverlay" xml:space="preserve">
+    <value>Compact Overlay Mode</value>
+  </data>
+  <data name="ActionMore" xml:space="preserve">
+    <value>More Actions</value>
+  </data>
+  <data name="AddToPlaylistTitle" xml:space="preserve">
+    <value>Add to Playlist</value>
+  </data>
+  <data name="AddToPlaylistText" xml:space="preserve">
+    <value>Add track(s) to the following Playlist:</value>
+  </data>
+  <data name="AddToPlaylistPlaceholder" xml:space="preserve">
+    <value>Select a Playlist</value>
+  </data>
+  <data name="AddToPlaylistPrimaryButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddToPlaylistCreateNewPlaylist" xml:space="preserve">
+    <value>Create New Playlist</value>
+  </data>
+  <data name="AddToPlaylistNewPlaylistName" xml:space="preserve">
+    <value>Playlist Name</value>
   </data>
 </root>
