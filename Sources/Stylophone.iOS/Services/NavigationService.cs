@@ -19,7 +19,7 @@ namespace Stylophone.iOS.Services
             { typeof(AlbumDetailViewModel), UIStoryboard.FromName("AlbumDetail", null) },
             { typeof(PlaybackViewModelBase), UIStoryboard.FromName("NowPlaying", null) },
             //{ typeof(SearchResultsViewModel), typeof(SearchResultsPage) },
-            //{ typeof(FoldersViewModel), typeof(FoldersPage) },
+            { typeof(FoldersViewModel), UIStoryboard.FromName("Folders", null) },
             //{ typeof(PlaylistViewModel), typeof(PlaylistPage) },
             //{ typeof(LibraryViewModel), typeof(LibraryPage) }
         };

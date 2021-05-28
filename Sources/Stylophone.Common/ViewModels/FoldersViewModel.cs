@@ -36,7 +36,7 @@ namespace Stylophone.Common.ViewModels
             if (response != null)
                 foreach (var item in response)
                 {
-                    SourceData.Add(_fileVmFactory.GetFilePathViewModel(item));
+                    SourceData.Add(_fileVmFactory.GetFilePathViewModel(item, null));
                 }
                 
             OnPropertyChanged(nameof(SourceData));

@@ -36,9 +36,9 @@ namespace Stylophone.Common.ViewModels
             MPDService = mpdService;
         }
 
-        public FilePathViewModel GetFilePathViewModel(IMpdFilePath file)
+        public FilePathViewModel GetFilePathViewModel(IMpdFilePath file, FilePathViewModel parent)
         {
-            return new FilePathViewModel(this, file);
+            return new FilePathViewModel(this, file, parent);
         }
     }
 
@@ -49,7 +49,7 @@ namespace Stylophone.Common.ViewModels
         private MPDConnectionService _mpdService;
         private FilePathViewModelFactory _filePathFactory;
 
-        internal FilePathViewModel(FilePathViewModelFactory factory, IMpdFilePath file): base(factory.DispatcherService)
+        internal FilePathViewModel(FilePathViewModelFactory factory, IMpdFilePath file, FilePathViewModel parent): base(factory.DispatcherService)
         {
             _filePathFactory = factory;
             _notificationService = factory.NotificationService;
@@ -58,6 +58,7 @@ namespace Stylophone.Common.ViewModels
 
 
             Path = file.Path;
+            Parent = parent;
             Name = file.Name ?? Path.Split('/').Last();
 
             // If it's a directory, add children
@@ -67,14 +68,15 @@ namespace Stylophone.Common.ViewModels
                 _childPaths = new RangedObservableCollection<FilePathViewModel>();
 
                 // Add a bogus child that'll be replaced when the list is loaded
-                _childPaths.Add(new FilePathViewModel(Resources.FoldersLoadingTreeItem, _dispatcherService));
+                _childPaths.Add(new FilePathViewModel(Resources.FoldersLoadingTreeItem, this, _dispatcherService));
             }
 
         }
 
-        public FilePathViewModel(string name, IDispatcherService dispatcherService): base(dispatcherService)
+        public FilePathViewModel(string name, FilePathViewModel parent, IDispatcherService dispatcherService): base(dispatcherService)
         {
             Name = name;
+            Parent = parent;
             _childPaths = new RangedObservableCollection<FilePathViewModel>();
         }
 
@@ -93,7 +95,15 @@ namespace Stylophone.Common.ViewModels
         }
 
         public bool IsDirectory { get; set; }
-        public bool IsLoaded { get; set; }
+
+        private bool _isLoaded;
+        public bool IsLoaded
+        {
+            get => _isLoaded;
+            private set => Set(ref _isLoaded, value);
+        }
+
+        public FilePathViewModel Parent { get; }
 
         private RangedObservableCollection<FilePathViewModel> _childPaths;
         public RangedObservableCollection<FilePathViewModel> Children
@@ -117,10 +127,10 @@ namespace Stylophone.Common.ViewModels
                 if (response != null)
                     foreach (var item in response)
                     {
-                        newChildren.Add(_filePathFactory.GetFilePathViewModel(item));
+                        newChildren.Add(_filePathFactory.GetFilePathViewModel(item, this));
                     }
                 else
-                    newChildren.Add(new FilePathViewModel("💥 Failed", _dispatcherService));
+                    newChildren.Add(new FilePathViewModel("💥 Failed", this, _dispatcherService));
 
                 await _dispatcherService.ExecuteOnUIThreadAsync(() =>
                 {

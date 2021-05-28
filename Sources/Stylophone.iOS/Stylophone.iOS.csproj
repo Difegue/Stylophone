@@ -119,6 +119,15 @@
     <Compile Include="ViewControllers\AlbumDetailViewController.designer.cs">
       <DependentUpon>AlbumDetailViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\FoldersViewController.cs" />
+    <Compile Include="ViewControllers\FoldersViewController.designer.cs">
+      <DependentUpon>FoldersViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\SubViews\FilePathCell.cs" />
+    <Compile Include="ViewControllers\SubViews\FilePathCell.designer.cs">
+      <DependentUpon>FilePathCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\SearchController.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -178,6 +187,7 @@
       <Visible>false</Visible>
     </ImageAsset>
     <InterfaceDefinition Include="Views\AlbumDetail.storyboard" />
+    <InterfaceDefinition Include="Views\Folders.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -203,9 +213,6 @@
     </PackageReference>
     <PackageReference Include="Xam.RMessage">
       <Version>0.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="TreeMenuView">
-      <Version>1.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
