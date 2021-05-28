@@ -31,6 +31,29 @@ namespace Stylophone.iOS.ViewControllers
             await ViewModel.EnsureInstanceInitializedAsync();
         }
 
+        // Localization not covered by LocalizedLabel
+        public override string TitleForHeader(UITableView tableView, nint section)
+        {
+            return (int)section switch
+            {
+                0 => Resources.SettingsServer,
+                1 => Resources.SettingsDatabase,
+                2 => Resources.SettingsAnalytics,
+                3 => Resources.SettingsAbout,
+                _ => "",
+            };
+        }
+
+        public override string TitleForFooter(UITableView tableView, nint section)
+        {
+            return (int)section switch
+            {
+                1 => Resources.SettingsClearCacheDescription,
+                2 => Resources.SettingsApplyOnRestart,
+                _ => "",
+            };
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

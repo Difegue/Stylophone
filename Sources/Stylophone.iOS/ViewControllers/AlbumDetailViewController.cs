@@ -75,11 +75,11 @@ namespace Stylophone.iOS.ViewControllers
 			_albumBinder.Bind<bool>(AlbumArtLoadingIndicator, "animating", nameof(album.AlbumArtLoaded),
 				valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 
-			_albumBinder.BindButton(PlayButton, "dfd", album.PlayAlbumCommand);
+			_albumBinder.BindButton(PlayButton, Strings.ContextMenuPlay, album.PlayAlbumCommand);
 			PlayButton.Layer.CornerRadius = 8;
-			_albumBinder.BindButton(AddToQueueButton, "dfd", album.AddAlbumCommand);
+			_albumBinder.BindButton(AddToQueueButton, Strings.ContextMenuAddToQueue, album.AddAlbumCommand);
 			AddToQueueButton.Layer.CornerRadius = 8;
-			_albumBinder.BindButton(PlaylistButton, "dfd", album.AddToPlaylistCommand);
+			_albumBinder.BindButton(PlaylistButton, Strings.ContextMenuAddToPlaylist, album.AddToPlaylistCommand);
 			PlaylistButton.Layer.CornerRadius = 8;
 
 			_settingsBtn = CreateSettingsButton();
