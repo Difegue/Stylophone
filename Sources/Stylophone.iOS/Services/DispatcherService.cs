@@ -15,8 +15,15 @@ namespace Stylophone.iOS.Services
 
         public Task ExecuteOnUIThreadAsync(Action function)
         {
-            UIApplication.SharedApplication.BeginInvokeOnMainThread(function);
-            return Task.CompletedTask;
+            var tcs = new TaskCompletionSource<bool>();
+
+            UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
+            {
+                function.Invoke();
+                tcs.SetResult(true);
+            });
+
+            return tcs.Task;
         }
         public Task<T> EnqueueAsync<T>(Func<Task<T>> function)
         {

@@ -66,7 +66,6 @@ namespace Stylophone.iOS.ViewModels
             }
 
             snapshot.AppendItems(new[] { header });
-            snapshot.ExpandItems(new[] { header });
             snapshot.AppendItems(items.ToArray(), header);
 
             _sidebarDataSource.ApplySnapshot(snapshot, new NSString("playlists"), false);

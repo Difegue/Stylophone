@@ -17,10 +17,13 @@ namespace Stylophone.iOS.Services
 
         public override void ShowInAppNotification(string notification, bool autoHide)
         {
-            if (autoHide)
-                RMessage.ShowNotificationWithTitle(notification, "", RMessageType.Normal, "", 2, () => { }, true);
-            else
-                RMessage.ShowNotificationWithTitle(notification, RMessageType.Error, "", () => { });
+            UIApplication.SharedApplication.InvokeOnMainThread(() =>
+            {
+                if (autoHide)
+                    RMessage.ShowNotificationWithTitle(notification, "", RMessageType.Normal, "", 2, () => { }, true);
+                else
+                    RMessage.ShowNotificationWithTitle(notification, RMessageType.Error, "", () => { });
+            });
         }
 
         public override void ShowBasicToastNotification(string title, string description)

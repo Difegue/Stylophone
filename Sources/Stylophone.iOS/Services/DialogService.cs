@@ -46,8 +46,7 @@ namespace Stylophone.iOS.Services
                         shown = true;
                         _storageService.SetValue<bool>("HasLaunchedOnce", true);
 
-                        // TODO
-                        await ShowConfirmDialogAsync(Strings.ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty, Strings.ErrorGeneric, Strings.OKButtonText);
+                        await ShowConfirmDialogAsync(Strings.FirstRunTitle, Strings.FirstRunText, Strings.OKButtonText);
                     }
                 });
         }

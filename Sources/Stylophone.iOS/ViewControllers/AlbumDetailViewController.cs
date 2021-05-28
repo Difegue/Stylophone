@@ -121,7 +121,7 @@ namespace Stylophone.iOS.ViewControllers
 				.ToList<object>();
 			}
 
-			var queueAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "opticaldisc", ViewModel.AddToQueueCommand, trackList);
+			var queueAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "plus", ViewModel.AddToQueueCommand, trackList);
 			var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
 
 			return UIMenu.Create(new[] { queueAction, playlistAction });
@@ -129,9 +129,9 @@ namespace Stylophone.iOS.ViewControllers
 
 		private UIBarButtonItem CreateSettingsButton()
 		{
-			var playAlbumAction = Binder.GetCommandAction(Strings.ContextMenuPlay, "sdcard", ViewModel.Item.PlayAlbumCommand);
-			var addAlbumAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "trash", ViewModel.Item.AddAlbumCommand);
-			var addToPlaylistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "trash", ViewModel.Item.AddToPlaylistCommand);
+			var playAlbumAction = Binder.GetCommandAction(Strings.ContextMenuPlay, "play", ViewModel.Item.PlayAlbumCommand);
+			var addAlbumAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "plus", ViewModel.Item.AddAlbumCommand);
+			var addToPlaylistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.Item.AddToPlaylistCommand);
 
 			var barButtonMenu = UIMenu.Create(new[] { playAlbumAction, addAlbumAction, addToPlaylistAction });
 			return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);

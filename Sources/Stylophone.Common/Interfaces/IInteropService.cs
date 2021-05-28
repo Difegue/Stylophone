@@ -14,15 +14,15 @@ namespace Stylophone.Common.Interfaces
 
     public enum PlaybackIcon
     {
-        Play,  //"\uE768";
-        Pause, //"\uE769";
-        Repeat, //"\uE8EE";
-        RepeatSingle, //"\uE8ED";
-        VolumeMute, //"\uE74F";
-        Volume25, //"\uE992";
-        Volume50, //"\uE993";
-        Volume75, // "\uE994";
-        VolumeFull //"\uE767";
+        Play, 
+        Pause,
+        Repeat,
+        RepeatSingle,
+        VolumeMute,
+        Volume25,
+        Volume50,
+        Volume75,
+        VolumeFull
     }
 
     public interface IInteropService
