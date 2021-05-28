@@ -4,6 +4,7 @@ using System.Linq;
 using Foundation;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
+using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using UIKit;
 using Strings = Stylophone.Localization.Strings.Resources;
@@ -62,10 +63,6 @@ namespace Stylophone.iOS.ViewControllers
             Title = Strings.AppDisplayName;
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
 
-            _searchController = new UISearchController(); // TODO
-            _searchController.SearchBar.Placeholder = Strings.SearchResultsFor;
-            NavigationItem.SearchController = _searchController;
-
             var settingsButton = new UIBarButtonItem(UIImage.GetSystemImage("gear"), UIBarButtonItemStyle.Plain, OpenSettings);
             settingsButton.AccessibilityLabel = "settingsButton";
             NavigationItem.RightBarButtonItem = settingsButton;
@@ -94,6 +91,11 @@ namespace Stylophone.iOS.ViewControllers
             // Initialize VM
             _viewModel = Ioc.Default.GetService<ShellViewModel>();
             _viewModel.Initialize(_collectionView, _dataSource);
+
+            _searchController = new SearchController(_viewModel);
+            _searchController.SearchBar.Placeholder = Strings.SearchPlaceholderText;
+            NavigationItem.SearchController = _searchController;
+            NavigationItem.HidesSearchBarWhenScrolling = false;
 
             // Navigate to the queue
             var queueItem = _dataSource.Snapshot.GetItemIdentifiersInSection(sectionIdentifier)[1];
