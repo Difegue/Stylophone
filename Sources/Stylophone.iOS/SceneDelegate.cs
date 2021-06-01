@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation;
+using Stylophone.iOS;
 using UIKit;
 
 namespace NewSingleViewTemplate
@@ -33,6 +34,9 @@ namespace NewSingleViewTemplate
         {
             // Called when the scene has moved from an inactive state to an active state.
             // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+
+            (UIApplication.SharedApplication.Delegate as AppDelegate).RootViewController =
+                Window.RootViewController as UISplitViewController;
 
             Window.TintColor = UIColor.FromDynamicProvider((traitCollection) =>
             {

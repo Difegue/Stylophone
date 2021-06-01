@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="8" id="0YO-aB-lbD">
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="12" id="0YO-aB-lbD">
                             <size key="itemSize" width="192" height="192"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -70,67 +70,53 @@
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="192"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZGR-D8-l2A">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="PlaceholderAlbum" translatesAutoresizingMaskIntoConstraints="NO" id="Ghs-Wy-Lzw">
                                             <rect key="frame" x="0.0" y="0.0" width="192" height="192"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PlaceholderAlbum" translatesAutoresizingMaskIntoConstraints="NO" id="Ghs-Wy-Lzw">
-                                                    <rect key="frame" x="0.0" y="0.0" width="192" height="192"/>
-                                                </imageView>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="52V-vM-5Zf">
-                                                    <rect key="frame" x="77" y="77" width="37" height="37"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
-                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J5h-Hf-IO9">
-                                                    <rect key="frame" x="0.0" y="140" width="192" height="52"/>
-                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="HY7-Dc-fz9">
-                                                        <rect key="frame" x="0.0" y="0.0" width="192" height="52"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ8-OH-wbQ">
-                                                                <rect key="frame" x="12" y="8" width="168" height="19.5"/>
-                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
-                                                                <nil key="highlightedColor"/>
-                                                                <color key="shadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <size key="shadowOffset" width="0.0" height="0.0"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xzo-Pi-2oc">
-                                                                <rect key="frame" x="12" y="27.5" width="168" height="14"/>
-                                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                        <constraints>
-                                                            <constraint firstAttribute="trailing" secondItem="oZ8-OH-wbQ" secondAttribute="trailing" constant="12" id="7jw-q4-AO8"/>
-                                                            <constraint firstItem="Xzo-Pi-2oc" firstAttribute="leading" secondItem="HY7-Dc-fz9" secondAttribute="leading" constant="12" id="M90-GB-UC2"/>
-                                                            <constraint firstItem="Xzo-Pi-2oc" firstAttribute="top" secondItem="oZ8-OH-wbQ" secondAttribute="bottom" id="RXw-sO-XmM"/>
-                                                            <constraint firstItem="oZ8-OH-wbQ" firstAttribute="top" secondItem="HY7-Dc-fz9" secondAttribute="top" constant="8" id="hNd-Fl-qRs"/>
-                                                            <constraint firstItem="oZ8-OH-wbQ" firstAttribute="leading" secondItem="HY7-Dc-fz9" secondAttribute="leading" constant="12" id="sO8-m2-bSo"/>
-                                                            <constraint firstAttribute="trailing" secondItem="Xzo-Pi-2oc" secondAttribute="trailing" constant="12" id="wsE-D6-aig"/>
-                                                        </constraints>
-                                                    </view>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="52" id="jQW-4t-pnI"/>
-                                                    </constraints>
-                                                    <blurEffect style="regular"/>
-                                                </visualEffectView>
-                                            </subviews>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="52V-vM-5Zf">
+                                            <rect key="frame" x="77.5" y="77.5" width="37" height="37"/>
+                                        </activityIndicatorView>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J5h-Hf-IO9">
+                                            <rect key="frame" x="0.0" y="140" width="192" height="52"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="HY7-Dc-fz9">
+                                                <rect key="frame" x="0.0" y="0.0" width="192" height="52"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ8-OH-wbQ">
+                                                        <rect key="frame" x="12" y="8" width="168" height="19.5"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <color key="shadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <size key="shadowOffset" width="0.0" height="0.0"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xzo-Pi-2oc">
+                                                        <rect key="frame" x="12" y="27.5" width="168" height="14"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="oZ8-OH-wbQ" secondAttribute="trailing" constant="12" id="7jw-q4-AO8"/>
+                                                    <constraint firstItem="Xzo-Pi-2oc" firstAttribute="leading" secondItem="HY7-Dc-fz9" secondAttribute="leading" constant="12" id="M90-GB-UC2"/>
+                                                    <constraint firstItem="Xzo-Pi-2oc" firstAttribute="top" secondItem="oZ8-OH-wbQ" secondAttribute="bottom" id="RXw-sO-XmM"/>
+                                                    <constraint firstItem="oZ8-OH-wbQ" firstAttribute="top" secondItem="HY7-Dc-fz9" secondAttribute="top" constant="8" id="hNd-Fl-qRs"/>
+                                                    <constraint firstItem="oZ8-OH-wbQ" firstAttribute="leading" secondItem="HY7-Dc-fz9" secondAttribute="leading" constant="12" id="sO8-m2-bSo"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Xzo-Pi-2oc" secondAttribute="trailing" constant="12" id="wsE-D6-aig"/>
+                                                </constraints>
+                                            </view>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="Ghs-Wy-Lzw" secondAttribute="bottom" id="20q-vl-7gN"/>
-                                                <constraint firstAttribute="trailing" secondItem="J5h-Hf-IO9" secondAttribute="trailing" id="Bfr-Q5-pzc"/>
-                                                <constraint firstAttribute="bottom" secondItem="J5h-Hf-IO9" secondAttribute="bottom" id="Bxl-g1-fA3"/>
-                                                <constraint firstAttribute="trailing" secondItem="Ghs-Wy-Lzw" secondAttribute="trailing" id="EDL-yb-DhZ"/>
-                                                <constraint firstItem="J5h-Hf-IO9" firstAttribute="leading" secondItem="ZGR-D8-l2A" secondAttribute="leading" id="dTp-lE-iiJ"/>
-                                                <constraint firstItem="Ghs-Wy-Lzw" firstAttribute="leading" secondItem="ZGR-D8-l2A" secondAttribute="leading" id="iHY-NP-Dw0"/>
-                                                <constraint firstItem="Ghs-Wy-Lzw" firstAttribute="top" secondItem="ZGR-D8-l2A" secondAttribute="top" id="uac-Sa-rBy"/>
+                                                <constraint firstAttribute="width" constant="192" id="8Df-Fb-5G2"/>
+                                                <constraint firstAttribute="height" constant="52" id="jQW-4t-pnI"/>
                                             </constraints>
-                                        </view>
+                                            <blurEffect style="regular"/>
+                                        </visualEffectView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="ZGR-D8-l2A" firstAttribute="top" secondItem="tCg-e2-Srh" secondAttribute="top" id="CxY-gK-vbh"/>
-                                        <constraint firstItem="ZGR-D8-l2A" firstAttribute="leading" secondItem="tCg-e2-Srh" secondAttribute="leading" id="Trj-Ep-pR3"/>
-                                        <constraint firstAttribute="trailing" secondItem="ZGR-D8-l2A" secondAttribute="trailing" id="hVD-4N-2IV"/>
-                                        <constraint firstAttribute="bottom" secondItem="ZGR-D8-l2A" secondAttribute="bottom" id="pR5-NF-Rbb"/>
+                                        <constraint firstItem="52V-vM-5Zf" firstAttribute="centerX" secondItem="tCg-e2-Srh" secondAttribute="centerX" id="8md-Ha-zbH"/>
+                                        <constraint firstAttribute="bottom" secondItem="J5h-Hf-IO9" secondAttribute="bottom" id="HD1-qt-bru"/>
+                                        <constraint firstItem="J5h-Hf-IO9" firstAttribute="centerX" secondItem="tCg-e2-Srh" secondAttribute="centerX" id="L8z-Qu-OJP"/>
+                                        <constraint firstItem="52V-vM-5Zf" firstAttribute="centerY" secondItem="tCg-e2-Srh" secondAttribute="centerY" id="TXc-mW-1bB"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <connections>
@@ -139,7 +125,6 @@
                                     <outlet property="AlbumInfoView" destination="J5h-Hf-IO9" id="Bjc-2a-Je3"/>
                                     <outlet property="AlbumName" destination="oZ8-OH-wbQ" id="5a3-3K-d9o"/>
                                     <outlet property="ArtLoadingIndicator" destination="52V-vM-5Zf" id="d6N-yQ-0Jm"/>
-                                    <outlet property="CornerRadiusContainer" destination="ZGR-D8-l2A" id="ls2-Il-b0l"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>

@@ -209,9 +209,12 @@ Outputs available: alsa</string>
                                             <subviews>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xsh-ag-FdC" customClass="KvoUISwitch">
                                                     <rect key="frame" x="1257" y="10.5" width="51" height="31"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="49" id="cPm-jJ-lk6"/>
+                                                    </constraints>
                                                 </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send some Analyticd " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLd-Fk-jD2" customClass="LocalizedLabel">
-                                                    <rect key="frame" x="16" y="17.5" width="140" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send some Analyticd " textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLd-Fk-jD2" customClass="LocalizedLabel">
+                                                    <rect key="frame" x="16" y="17.5" width="1233" height="17"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -222,6 +225,7 @@ Outputs available: alsa</string>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="dLd-Fk-jD2" firstAttribute="centerY" secondItem="73X-13-xWY" secondAttribute="centerY" id="3Fh-vq-PKv"/>
+                                                <constraint firstItem="Xsh-ag-FdC" firstAttribute="leading" secondItem="dLd-Fk-jD2" secondAttribute="trailing" constant="8" id="9Nc-NV-Oop"/>
                                                 <constraint firstItem="dLd-Fk-jD2" firstAttribute="leading" secondItem="73X-13-xWY" secondAttribute="leadingMargin" id="DYi-hc-6tR"/>
                                                 <constraint firstItem="Xsh-ag-FdC" firstAttribute="centerY" secondItem="73X-13-xWY" secondAttribute="centerY" id="eQL-0I-tHI"/>
                                                 <constraint firstAttribute="trailing" secondItem="Xsh-ag-FdC" secondAttribute="trailing" constant="20" symbolic="YES" id="kSO-mo-H3u"/>
@@ -261,8 +265,8 @@ Outputs available: alsa</string>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsAboutText" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2eY-wb-eIU" customClass="LocalizedLabel">
-                                                    <rect key="frame" x="88" y="52" width="119" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsAboutText" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2eY-wb-eIU" customClass="LocalizedLabel">
+                                                    <rect key="frame" x="88" y="52" width="1214" height="17"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -275,6 +279,7 @@ Outputs available: alsa</string>
                                                 <constraint firstItem="2eY-wb-eIU" firstAttribute="top" secondItem="0tG-nc-Geh" secondAttribute="bottom" constant="8" symbolic="YES" id="E4g-gI-Abm"/>
                                                 <constraint firstItem="2eY-wb-eIU" firstAttribute="leading" secondItem="24S-8r-pAn" secondAttribute="trailing" constant="8" symbolic="YES" id="HAn-QD-QlZ"/>
                                                 <constraint firstItem="S9J-vI-2yP" firstAttribute="leading" secondItem="0tG-nc-Geh" secondAttribute="trailing" constant="8" symbolic="YES" id="OJz-nQ-WPW"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="2eY-wb-eIU" secondAttribute="trailing" constant="8" id="cm0-E4-3hV"/>
                                                 <constraint firstItem="0tG-nc-Geh" firstAttribute="top" secondItem="9aU-U9-lJz" secondAttribute="topMargin" constant="8" id="ntQ-zh-uJ4"/>
                                                 <constraint firstItem="S9J-vI-2yP" firstAttribute="top" secondItem="9aU-U9-lJz" secondAttribute="topMargin" constant="12" id="quD-9b-Fca"/>
                                                 <constraint firstItem="0tG-nc-Geh" firstAttribute="leading" secondItem="24S-8r-pAn" secondAttribute="trailing" constant="8" symbolic="YES" id="shT-ZX-VwW"/>
@@ -290,13 +295,14 @@ Outputs available: alsa</string>
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8NH-3O-sbO">
-                                                    <rect key="frame" x="20" y="11" width="103" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8NH-3O-sbO">
+                                                    <rect key="frame" x="20" y="11" width="1286" height="30"/>
                                                     <state key="normal" title="SettingsGithub"/>
                                                 </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="8NH-3O-sbO" firstAttribute="leading" secondItem="VIk-fl-d3O" secondAttribute="leading" constant="20" symbolic="YES" id="aFr-48-Q5s"/>
+                                                <constraint firstAttribute="trailing" secondItem="8NH-3O-sbO" secondAttribute="trailing" constant="20" symbolic="YES" id="dGx-P6-lhO"/>
                                                 <constraint firstItem="8NH-3O-sbO" firstAttribute="centerY" secondItem="VIk-fl-d3O" secondAttribute="centerY" id="qiI-WV-li8"/>
                                             </constraints>
                                         </tableViewCellContentView>

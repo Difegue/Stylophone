@@ -47,9 +47,6 @@
             <objects>
                 <splitViewController allowDoubleColumnStyle="YES" id="H1p-Uh-vWS" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="primaryBackgroundStyle" value=".sidebar"/>
-                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="NvL-zN-gKb" kind="relationship" relationship="masterViewController" id="gK7-vY-gdr"/>
                         <segue destination="vC3-pB-5Vb" kind="relationship" relationship="detailViewController" id="lKf-j1-P89"/>

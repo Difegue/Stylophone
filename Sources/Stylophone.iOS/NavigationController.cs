@@ -55,6 +55,9 @@ namespace Stylophone.iOS
             constraints.Add(compactView.HeightAnchor.ConstraintEqualTo(128));
 
             NSLayoutConstraint.ActivateConstraints(constraints.ToArray());
+
+            // Navigate to the queue
+            concreteNavService.Navigate<QueueViewModel>();
         }
 
 

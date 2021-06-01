@@ -23,10 +23,18 @@ namespace Stylophone.iOS
         [Export("window")]
         public UIWindow Window { get; set; }
 
+        public UISplitViewController RootViewController { get; set; }
+
         public AppDelegate()
         {
             Services = ConfigureServices();
             Ioc.Default.ConfigureServices(Services);
+        }
+
+        public void ShowDetailView()
+        {
+            // Make sure the detail view is showing
+            RootViewController?.ShowColumn(UISplitViewControllerColumn.Secondary);
         }
 
         [Export("application:didFinishLaunchingWithOptions:")]

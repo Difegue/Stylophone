@@ -75,6 +75,9 @@ namespace Stylophone.iOS.Services
 
                 _lastParamUsed = parameter;
             }
+
+            // Make sure the detail view is showing, even if we didn't navigate to a new VC
+            (UIApplication.SharedApplication.Delegate as AppDelegate).ShowDetailView();
         }
 
         public override void SetListDataItemForNextConnectedAnimation(object item)

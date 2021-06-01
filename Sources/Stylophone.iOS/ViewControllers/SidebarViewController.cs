@@ -96,10 +96,6 @@ namespace Stylophone.iOS.ViewControllers
             _searchController.SearchBar.Placeholder = Strings.SearchPlaceholderText;
             NavigationItem.SearchController = _searchController;
             NavigationItem.HidesSearchBarWhenScrolling = false;
-
-            // Navigate to the queue
-            var queueItem = _dataSource.Snapshot.GetItemIdentifiersInSection(sectionIdentifier)[1];
-            _viewModel.NavigateCommand.Execute(queueItem);
         }
 
         private void OpenSettings(object sender, EventArgs e)
