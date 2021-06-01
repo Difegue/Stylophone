@@ -105,7 +105,7 @@ namespace Stylophone.iOS
             // Viewmodels
             services.AddSingleton<ShellViewModel>();
             services.AddSingleton<SettingsViewModel>();
-            //services.AddSingleton<LibraryViewModel>();
+            services.AddSingleton<LibraryViewModel>();
             services.AddSingleton<AlbumDetailViewModel>();
             services.AddSingleton<FoldersViewModel>();
             services.AddSingleton<PlaylistViewModel>();

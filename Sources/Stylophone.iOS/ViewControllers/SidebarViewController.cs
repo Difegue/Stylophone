@@ -124,7 +124,7 @@ namespace Stylophone.iOS.ViewControllers
             var items = new NavigationSidebarItem[]
             {
                 NavigationSidebarItem.GetRow(Strings.QueueHeader, typeof(QueueViewModel), null, UIImage.GetSystemImage("music.quarternote.3")),
-                NavigationSidebarItem.GetRow(Strings.LibraryHeader, typeof(LibraryViewModelBase), null, UIImage.GetSystemImage("books.vertical")),
+                NavigationSidebarItem.GetRow(Strings.LibraryHeader, typeof(LibraryViewModel), null, UIImage.GetSystemImage("books.vertical")),
                 NavigationSidebarItem.GetRow(Strings.FoldersHeader, typeof(FoldersViewModel), null, UIImage.GetSystemImage("externaldrive.connected.to.line.below")),
             };
 

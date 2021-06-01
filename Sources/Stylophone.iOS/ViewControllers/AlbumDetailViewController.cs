@@ -66,6 +66,12 @@ namespace Stylophone.iOS.ViewControllers
 			ViewModel.Initialize(album);
 			ViewModel.Item.PropertyChanged += UpdateAlbumArt;
 
+			if (ViewModel.Item.AlbumArtLoaded)
+				SetAlbumArt();
+
+			// Reset label texts
+			AlbumArtists.Text = "...";
+
 			// Rebindall to our new album VM
 			_albumBinder?.Dispose();
 			_albumBinder = new PropertyBinder<AlbumViewModel>(ViewModel.Item);
@@ -97,14 +103,17 @@ namespace Stylophone.iOS.ViewControllers
         private void UpdateAlbumArt(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ViewModel.Item.AlbumArt))
-            {
-				AlbumArt.Image = ViewModel.Item.AlbumArt.ToUIImage();
-				BackgroundArt.Image = ViewModel.Item.AlbumArt.ToUIImage();
-				PlayButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
-				AddToQueueButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
-				PlaylistButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
-			}
+				SetAlbumArt();
         }
+
+        private void SetAlbumArt()
+        {
+			AlbumArt.Image = ViewModel.Item.AlbumArt.ToUIImage();
+			BackgroundArt.Image = ViewModel.Item.AlbumArt.ToUIImage();
+			PlayButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
+			AddToQueueButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
+			PlaylistButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
+		}
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)
 		{

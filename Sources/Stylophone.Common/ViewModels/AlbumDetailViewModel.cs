@@ -127,10 +127,7 @@ namespace Stylophone.Common.ViewModels
             {
                 Task.Run(async () =>
                 {
-                    using (var c = await _mpdService.GetConnectionAsync())
-                    {
-                        await album.LoadAlbumDataAsync(c.InternalResource);
-                    }
+                    await album.LoadAlbumDataAsync();
                     await _dispatcherService.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 }).ConfigureAwait(false);
             }

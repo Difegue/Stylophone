@@ -128,6 +128,15 @@
       <DependentUpon>FilePathCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\SearchController.cs" />
+    <Compile Include="ViewControllers\SubViews\AlbumCollectionViewCell.cs" />
+    <Compile Include="ViewControllers\SubViews\AlbumCollectionViewCell.designer.cs">
+      <DependentUpon>AlbumCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\LibraryViewController.cs" />
+    <Compile Include="ViewControllers\LibraryViewController.designer.cs">
+      <DependentUpon>LibraryViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\LibraryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -188,6 +197,7 @@
     </ImageAsset>
     <InterfaceDefinition Include="Views\AlbumDetail.storyboard" />
     <InterfaceDefinition Include="Views\Folders.storyboard" />
+    <InterfaceDefinition Include="Views\Library.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -217,6 +217,19 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        /// <summary>
+        /// Load Album Data. You can either provide a MpcConnection object (for batch loading)
+        /// or leave as empty to automatically pick up a connection from the datasource.
+        /// </summary>
+        /// <returns></returns>
+        public async Task LoadAlbumDataAsync()
+        {
+            using (var c = await _mpdService.GetConnectionAsync())
+            {
+                await LoadAlbumDataAsync(c.InternalResource);
+            }
+        }
+
         public async Task LoadAlbumDataAsync(MpcConnection c)
         {
             IsDetailLoading = true;

@@ -21,18 +21,20 @@ namespace Stylophone.iOS.Services
             //{ typeof(SearchResultsViewModel), typeof(SearchResultsPage) },
             { typeof(FoldersViewModel), UIStoryboard.FromName("Folders", null) },
             //{ typeof(PlaylistViewModel), typeof(PlaylistPage) },
-            //{ typeof(LibraryViewModel), typeof(LibraryPage) }
+            { typeof(LibraryViewModel), UIStoryboard.FromName("Library", null) }
         };
 
         public NavigationService()
         {
-
+            _viewControllers = new List<UIViewController>();
         }
 
         public override bool CanGoBack => NavigationController.ViewControllers?.Count() > 1;
 
         public override Type CurrentPageViewModelType => _viewModelToStoryboardDictionary.Keys.Where(
             k => _viewModelToStoryboardDictionary[k] == NavigationController.VisibleViewController.Storyboard).FirstOrDefault();
+
+        private List<UIViewController> _viewControllers;
 
         private object _lastParamUsed;
         public override void NavigateImplementation(Type viewmodelType, object parameter = null)
@@ -46,20 +48,29 @@ namespace Stylophone.iOS.Services
             if (NavigationController.VisibleViewController?.Storyboard != storyboard || (parameter != null && !parameter.Equals(_lastParamUsed)))
             {
                 UIViewController viewController;
-                var existingViewControllers = NavigationController.ViewControllers.Where(vc => vc.Storyboard == storyboard).ToList();
+                var viewControllerInStack = NavigationController.ViewControllers.Where(vc => vc.Storyboard == storyboard).ToList();
+                var viewControllerLoaded = _viewControllers.Where(vc => vc.Storyboard == storyboard).ToList();
 
                 // If the VC is already in the stack, reuse it
-                if (existingViewControllers.Count > 0)
+                if (viewControllerInStack.Count > 0)
                 {
-                    viewController = existingViewControllers.First();
+                    viewController = viewControllerInStack.First();
                     (viewController as IPreparableViewController)?.Prepare(parameter);
                     NavigationController.PopToViewController(viewController, true);
                 }
-                else
+                else // If we already loaded this VC, push it onto the NavigationController again
+                if (viewControllerLoaded.Count > 0)
+                {
+                    viewController = viewControllerLoaded.First();
+                    (viewController as IPreparableViewController)?.Prepare(parameter);
+                    NavigationController.PushViewController(viewController, true);
+                }
+                else // This is truly new, load the VC from scratch
                 {
                     viewController = storyboard.InstantiateInitialViewController();
                     (viewController as IPreparableViewController)?.Prepare(parameter);
                     NavigationController.PushViewController(viewController, true);
+                    _viewControllers.Add(viewController);
                 }
 
                 _lastParamUsed = parameter;

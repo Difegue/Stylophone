@@ -19,7 +19,6 @@ namespace Stylophone.iOS.ViewControllers
         }
 
         private PropertyBinder<TrackViewModel> _propertyBinder;
-        private UIContextMenuInteraction _contextMenuInteraction;
         private TrackViewModel _trackViewModel;
 
         internal void Configure(int row, TrackViewModel trackViewModel)

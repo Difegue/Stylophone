@@ -14,7 +14,7 @@ using UIKit;
 
 namespace Stylophone.iOS.ViewControllers
 {
-    public partial class FilePathViewModelHolder : NSObject
+    public class FilePathViewModelHolder : NSObject
     {
         public FilePathViewModel ViewModel;
     }
@@ -78,6 +78,7 @@ namespace Stylophone.iOS.ViewControllers
         private UICollectionViewCell GetFilePathCell(UICollectionView collectionView, NSIndexPath indexPath, NSObject identifier)
         {
             var holder = identifier as FilePathViewModelHolder;
+            // This identifier is set in IB
             var cell = CollectionView.DequeueReusableCell("FilePathCell", indexPath) as FilePathCell;
             cell.Initialize(holder.ViewModel, holder.ViewModel == _currentlyShownVm?.Parent);
 
