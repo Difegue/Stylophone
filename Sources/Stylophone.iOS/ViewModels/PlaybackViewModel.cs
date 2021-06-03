@@ -14,10 +14,6 @@ namespace Stylophone.iOS.ViewModels
 {
     public class PlaybackViewModel : PlaybackViewModelBase
     {
-        // Native properties for easy binding
-        public UIImage AlbumArtNative => CurrentTrack?.AlbumArt?.ToUIImage();
-        public UIColor DominantColorNative => CurrentTrack?.DominantColor.ToUIColor();
-
         public PlaybackViewModel(IDialogService dialogService, INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory) :
             base(dialogService, navigationService, notificationService, dispatcherService, interop, mpdService, trackVmFactory)
         {
@@ -30,29 +26,6 @@ namespace Stylophone.iOS.ViewModels
                 _dispatcherService.ExecuteOnUIThreadAsync(() => {
                     //ShowTrackName = _navigationService.CurrentPageViewModelType != typeof(PlaybackViewModelBase);
                 });
-
-            PropertyChanging += (s, e) =>
-            {
-                if (e.PropertyName == nameof(CurrentTrack))
-                {
-                    if (CurrentTrack != null)
-                        CurrentTrack.PropertyChanged -= TrackAlbumArt;
-                }
-            };
-
-            PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(CurrentTrack))
-                {
-                    CurrentTrack.PropertyChanged += TrackAlbumArt;
-                }
-            };
-        }
-
-        private void TrackAlbumArt(object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(AlbumArtNative));
-            OnPropertyChanged(nameof(DominantColorNative));
         }
 
         public override Task SwitchToCompactViewAsync(EventArgs obj)

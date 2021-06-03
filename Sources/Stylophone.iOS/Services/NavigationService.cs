@@ -36,6 +36,11 @@ namespace Stylophone.iOS.Services
 
         private List<UIViewController> _viewControllers;
 
+        internal void AddViewControllerToNavigationStack(UIViewController viewController)
+        {
+            _viewControllers.Add(viewController);
+        }
+
         private object _lastParamUsed;
         public override void NavigateImplementation(Type viewmodelType, object parameter = null)
         {

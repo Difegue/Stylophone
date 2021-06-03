@@ -25,13 +25,16 @@ namespace Stylophone.iOS.ViewControllers
 		public UIKit.UIView BackgroundTint { get; private set; }
 
 		[Outlet]
-		public Stylophone.iOS.Helpers.UICircularProgressView CircularProgressView { get; set; }
+		public Stylophone.iOS.Helpers.UICircularProgressView CircularProgressView { get; private set; }
 
 		[Outlet]
 		UIKit.UIView CornerRadiusContainer { get; set; }
 
 		[Outlet]
 		public UIKit.UIButton NextButton { get; private set; }
+
+		[Outlet]
+		public UIKit.UIButton OpenFullScreenButton { get; set; }
 
 		[Outlet]
 		public UIKit.UIButton PlayPauseButton { get; private set; }
@@ -70,6 +73,11 @@ namespace Stylophone.iOS.ViewControllers
 				BackgroundTint = null;
 			}
 
+			if (CircularProgressView != null) {
+				CircularProgressView.Dispose ();
+				CircularProgressView = null;
+			}
+
 			if (CornerRadiusContainer != null) {
 				CornerRadiusContainer.Dispose ();
 				CornerRadiusContainer = null;
@@ -105,9 +113,9 @@ namespace Stylophone.iOS.ViewControllers
 				VolumeButton = null;
 			}
 
-			if (CircularProgressView != null) {
-				CircularProgressView.Dispose ();
-				CircularProgressView = null;
+			if (OpenFullScreenButton != null) {
+				OpenFullScreenButton.Dispose ();
+				OpenFullScreenButton = null;
 			}
 		}
 	}

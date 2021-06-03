@@ -344,13 +344,15 @@ namespace Stylophone.Common.ViewModels
 
                 // Set the current time value - if the user isn't scrobbling the slider
                 if (!_isUserMovingSlider)
+                {
                     CurrentTimeValue = status.Elapsed.TotalSeconds;
+
+                    // Set the time listened text
+                    TimeListened = Miscellaneous.FormatTimeString(status.Elapsed.TotalMilliseconds);
+                }  
 
                 // Get the remaining time for the track
                 var remainingTime = _mpdService.CurrentStatus.Duration.Subtract(status.Elapsed);
-
-                // Set the time listened text
-                TimeListened = Miscellaneous.FormatTimeString(status.Elapsed.TotalMilliseconds);
 
                 // Set the time remaining text
                 TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingTime.TotalMilliseconds);

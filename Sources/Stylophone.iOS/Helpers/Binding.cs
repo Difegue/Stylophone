@@ -7,6 +7,11 @@ using UIKit;
 
 namespace Stylophone.iOS.Helpers
 {
+    public class NSWrapper: NSObject
+    {
+        public object ManagedObject { get; set; }
+    }
+
     /// <summary>
     /// Model class for a lo-fi Cocoa Bindings reimplementation.
     /// You can apply a NSValueTransformer to convert the data as it goes between the NSObject and the ObservableObject.
@@ -23,11 +28,16 @@ namespace Stylophone.iOS.Helpers
         /// </summary>
         public void UpdateNSObject(object value)
         {
-            // Box the value into a NSObject, with or without the value transformer if it is set
+            // Try to box the value into a native type, and use a NSWrapper if we can't
+            var nativeValue = NSObject.FromObject(value);
+            if (nativeValue == null)
+            {
+                nativeValue = new NSWrapper { ManagedObject = value };
+            }
+
+            // Use the value transformer if it is set
             if (ValueTransformer != null)
-                value = ValueTransformer.TransformedValue(NSObject.FromObject(value));
-            else
-                value = NSObject.FromObject(value);
+                nativeValue = ValueTransformer.TransformedValue(nativeValue);
 
             UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
             {
@@ -36,8 +46,8 @@ namespace Stylophone.iOS.Helpers
                     if (Object == null)
                         throw new ArgumentNullException("Backing NSObject is null!", new Exception());
 
-                    if (!(value is NSNull))
-                        Object.SetValueForKeyPath((NSObject)value, Keypath);
+                    if (!(nativeValue is NSNull))
+                        Object.SetValueForKeyPath(nativeValue, Keypath);
                 }
                 catch (ObjectDisposedException)
                 {
@@ -62,9 +72,10 @@ namespace Stylophone.iOS.Helpers
             {
                 Type t when t == typeof(int) => ((NSNumber)nativeValue).Int32Value,
                 Type t when t == typeof(long) => ((NSNumber)nativeValue).Int64Value,
+                Type t when t == typeof(double) => ((NSNumber)nativeValue).DoubleValue,
                 Type t when t == typeof(bool) => ((NSNumber)nativeValue).BoolValue,
                 Type t when t == typeof(string) => ((NSString)nativeValue).ToString(),
-                _ => default //other types not supported
+                _ => ((NSWrapper)nativeValue).ManagedObject // This must be a NSWrapper
             };
 
             Property.SetValue(targetObservable, value);

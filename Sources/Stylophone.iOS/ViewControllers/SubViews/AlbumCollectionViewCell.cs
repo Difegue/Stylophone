@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using CoreGraphics;
 using Foundation;
+using SkiaSharp;
 using SkiaSharp.Views.iOS;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
@@ -40,35 +41,24 @@ namespace Stylophone.iOS.ViewControllers
 
         internal void Initialize(AlbumViewModel viewModel)
         {
-            if (_viewModel != null)
-                _viewModel.PropertyChanged -= UpdateAlbumArt;
 
             // Bind trackData
             _viewModel = viewModel;
-            _viewModel.PropertyChanged += UpdateAlbumArt;
             _propertyBinder?.Dispose();
             _propertyBinder = new PropertyBinder<AlbumViewModel>(viewModel);
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
 
             if (viewModel != null)
             {
-                AlbumArt.Image = viewModel.AlbumArt?.ToUIImage();
                 AlbumArtist.Text = "...";
 
                 _propertyBinder.Bind<string>(AlbumName, "text", nameof(viewModel.Name));
                 _propertyBinder.Bind<string>(AlbumArtist, "text", nameof(viewModel.Artist));
+                _propertyBinder.Bind<SKImage>(AlbumArt, "image", nameof(viewModel.AlbumArt),
+                    valueTransformer: NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer)));
 
-                //_propertyBinder.Bind<bool>(AlbumInfoView, "hidden", nameof(viewModel.IsDetailLoading));
                 _propertyBinder.Bind<bool>(ArtLoadingIndicator, "animating", nameof(viewModel.AlbumArtLoaded),
                     valueTransformer: negateBoolTransformer);
-            }
-        }
-
-        private void UpdateAlbumArt(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(_viewModel.AlbumArt))
-            {
-                AlbumArt.Image = _viewModel.AlbumArt.ToUIImage();
             }
         }
     }

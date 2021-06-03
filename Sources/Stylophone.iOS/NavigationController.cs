@@ -18,6 +18,7 @@ namespace Stylophone.iOS
     public class NavigationController : UINavigationController, IUINavigationControllerDelegate
 	{
         private PlaybackViewController _playbackViewController;
+        private NSLayoutConstraint _compactViewBottomConstraint;
 
 		public NavigationController (IntPtr handle) : base (handle)
 		{
@@ -39,17 +40,20 @@ namespace Stylophone.iOS
             _playbackViewController = UIStoryboard.FromName("NowPlaying", null)
                 .InstantiateInitialViewController() as PlaybackViewController;
 
-            //concreteNavService.PlaybackViewController = _playbackViewController;
-
             // Add the compact view of the playback VC as an overlay
             var compactView = _playbackViewController.CompactView;
             compactView.TranslatesAutoresizingMaskIntoConstraints = false;
             View.AddSubview(compactView);
 
+            // Add the playbackVC itself to the Navigation Service's known VCs so it can be reused later
+            concreteNavService.AddViewControllerToNavigationStack(_playbackViewController);
+
             // Add some layout constraints to affix it to the bottom
             var constraints = new List<NSLayoutConstraint>();
 
-            constraints.Add(compactView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -16));
+            _compactViewBottomConstraint = compactView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -16);
+
+            constraints.Add(_compactViewBottomConstraint);
             constraints.Add(compactView.LeftAnchor.ConstraintEqualTo(View.LeftAnchor, 32));
             constraints.Add(compactView.RightAnchor.ConstraintEqualTo(View.RightAnchor, -32));
             constraints.Add(compactView.HeightAnchor.ConstraintEqualTo(128));
@@ -69,6 +73,23 @@ namespace Stylophone.iOS
             // We call it manually here instead.
             var navService = Ioc.Default.GetRequiredService<INavigationService>() as NavigationService;
             navService.Navigate(navService.CurrentPageViewModelType);
+
+            if (navService.CurrentPageViewModelType == typeof(PlaybackViewModelBase))
+            {
+                UIView.Animate(0.2, () =>
+                {
+                    _compactViewBottomConstraint.Constant = 128;
+                    View.LayoutIfNeeded();
+                });    
+            }
+            else
+            {
+                UIView.Animate(0.2, () =>
+                {
+                    _compactViewBottomConstraint.Constant = -16;
+                    View.LayoutIfNeeded();
+                });
+            }
         }
     }
 }

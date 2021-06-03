@@ -11,7 +11,7 @@ namespace Stylophone.iOS.Helpers
     [Register(nameof(StringToUIImageValueTransformer))]
     public class StringToUIImageValueTransformer : NSValueTransformer
     {
-        public static new ObjCRuntime.Class TransformedValueClass => new UIImage().Class;
+        public static new Class TransformedValueClass => new UIImage().Class;
         public static new bool AllowsReverseTransformation => false;
 
         public override NSObject TransformedValue(NSObject value)
@@ -28,10 +28,55 @@ namespace Stylophone.iOS.Helpers
 
     }
 
+    [Register(nameof(SkiaToUIImageValueTransformer))]
+    public class SkiaToUIImageValueTransformer : NSValueTransformer
+    {
+        public static new Class TransformedValueClass => new UIImage().Class;
+        public static new bool AllowsReverseTransformation => false;
+
+        public override NSObject TransformedValue(NSObject value)
+        {
+            UIImage img;
+
+            if (value is NSWrapper wrap)
+            {
+                var skiaImage = wrap.ManagedObject as SKImage;
+                img = skiaImage.ToUIImage();
+            }
+            else
+                img = UIImage.GetSystemImage("opticaldisc"); //Fallback
+
+            return img;
+        }
+
+    }
+
+    [Register(nameof(SkiaToUIColorValueTransformer))]
+    public class SkiaToUIColorValueTransformer : NSValueTransformer
+    {
+        public static new Class TransformedValueClass => new UIColor(0,0).Class;
+        public static new bool AllowsReverseTransformation => false;
+
+        public override NSObject TransformedValue(NSObject value)
+        {
+            UIColor col;
+
+            if (value is NSWrapper wrap)
+            {
+                var skiaColor = (SKColor)wrap.ManagedObject;
+                col = skiaColor.ToUIColor();
+            }
+            else
+                col = UIColor.SystemBlueColor;
+
+            return col;
+        }
+    }
+
     [Register(nameof(IntToStringValueTransformer))]
     public class IntToStringValueTransformer : NSValueTransformer
     {
-        public static new ObjCRuntime.Class TransformedValueClass => new NSString().Class;
+        public static new Class TransformedValueClass => new NSString().Class;
         public static new bool AllowsReverseTransformation => true;
 
         public override NSObject TransformedValue(NSObject value)
@@ -56,7 +101,7 @@ namespace Stylophone.iOS.Helpers
     [Register(nameof(ReverseBoolValueTransformer))]
     public class ReverseBoolValueTransformer : NSValueTransformer
     {
-        public static new ObjCRuntime.Class TransformedValueClass => new NSNumber(true).Class;
+        public static new Class TransformedValueClass => new NSNumber(true).Class;
         public static new bool AllowsReverseTransformation => true;
 
         public override NSObject TransformedValue(NSObject value)

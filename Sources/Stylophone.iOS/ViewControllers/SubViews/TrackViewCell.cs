@@ -21,6 +21,17 @@ namespace Stylophone.iOS.ViewControllers
         private PropertyBinder<TrackViewModel> _propertyBinder;
         private TrackViewModel _trackViewModel;
 
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            // Hide elements depending on available screen estate
+            Artist.Hidden = (Frame.Width < 400);
+
+            if (AlbumTitle != null)
+                AlbumTitle.Hidden = (Frame.Width < 640);
+        }
+
         internal void Configure(int row, TrackViewModel trackViewModel)
         {
             // Set background depending on the row number

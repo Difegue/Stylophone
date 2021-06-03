@@ -21,6 +21,7 @@ namespace Stylophone.iOS.Helpers
         private CAShapeLayer _progressCircle = new CAShapeLayer();
 
         private UIColor _backgroundCircleColor = UIColor.SystemGray4Color;
+        [Export(nameof(BackgroundCircleColor))]
         public UIColor BackgroundCircleColor
         {
             get => _backgroundCircleColor;

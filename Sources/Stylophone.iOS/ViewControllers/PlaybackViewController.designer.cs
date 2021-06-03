@@ -28,18 +28,31 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIView BackgroundTint { get; set; }
 
 		[Outlet]
-		public Stylophone.iOS.ViewControllers.CompactPlaybackView CompactView { get; set; }
+		public Stylophone.iOS.ViewControllers.CompactPlaybackView CompactView { get; private set; }
+
+		[Outlet]
+		UIKit.UILabel ElapsedTime { get; set; }
+
+		[Outlet]
+		UIKit.UIButton PlayPauseButton { get; set; }
+
+		[Outlet]
+		UIKit.UILabel RemainingTime { get; set; }
+
+		[Outlet]
+		UIKit.UIButton SkipNextButton { get; set; }
+
+		[Outlet]
+		UIKit.UIButton SkipPrevButton { get; set; }
+
+		[Outlet]
+		UIKit.UISlider TrackSlider { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TrackTitle { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (CompactView != null) {
-				CompactView.Dispose ();
-				CompactView = null;
-			}
-
 			if (AlbumArt != null) {
 				AlbumArt.Dispose ();
 				AlbumArt = null;
@@ -65,9 +78,44 @@ namespace Stylophone.iOS.ViewControllers
 				BackgroundTint = null;
 			}
 
+			if (CompactView != null) {
+				CompactView.Dispose ();
+				CompactView = null;
+			}
+
 			if (TrackTitle != null) {
 				TrackTitle.Dispose ();
 				TrackTitle = null;
+			}
+
+			if (TrackSlider != null) {
+				TrackSlider.Dispose ();
+				TrackSlider = null;
+			}
+
+			if (ElapsedTime != null) {
+				ElapsedTime.Dispose ();
+				ElapsedTime = null;
+			}
+
+			if (RemainingTime != null) {
+				RemainingTime.Dispose ();
+				RemainingTime = null;
+			}
+
+			if (SkipPrevButton != null) {
+				SkipPrevButton.Dispose ();
+				SkipPrevButton = null;
+			}
+
+			if (PlayPauseButton != null) {
+				PlayPauseButton.Dispose ();
+				PlayPauseButton = null;
+			}
+
+			if (SkipNextButton != null) {
+				SkipNextButton.Dispose ();
+				SkipNextButton = null;
 			}
 		}
 	}
