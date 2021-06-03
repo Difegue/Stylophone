@@ -75,8 +75,9 @@ namespace Stylophone.iOS.Services
             {
                 PlaybackIcon.Play => "play.fill",
                 PlaybackIcon.Pause => "pause.fill",
-                PlaybackIcon.Repeat => "repeat",
-                PlaybackIcon.RepeatSingle => "repeat.1",
+                PlaybackIcon.RepeatOff => "repeat.circle",
+                PlaybackIcon.Repeat => "repeat.circle.fill",
+                PlaybackIcon.RepeatSingle => "repeat.1.circle.fill",
                 PlaybackIcon.VolumeMute => "speaker.slash.circle",
                 PlaybackIcon.Volume25 => "speaker.wave.2.circle",
                 PlaybackIcon.Volume50 => "speaker.wave.2.circle",

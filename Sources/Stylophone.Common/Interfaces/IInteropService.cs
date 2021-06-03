@@ -16,6 +16,7 @@ namespace Stylophone.Common.Interfaces
     {
         Play, 
         Pause,
+        RepeatOff,
         Repeat,
         RepeatSingle,
         VolumeMute,

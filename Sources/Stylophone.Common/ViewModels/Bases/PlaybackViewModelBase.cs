@@ -51,7 +51,7 @@ namespace Stylophone.Common.ViewModels
 
             // Initialize icons
             _volumeIcon = _interop.GetIcon(PlaybackIcon.VolumeFull);
-            _repeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
+            _repeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
             _playButtonContent = _interop.GetIcon(PlaybackIcon.Play);
 
             // Bind the methods that we need
@@ -291,7 +291,15 @@ namespace Stylophone.Common.ViewModels
         public bool IsRepeatEnabled
         {
             get => _isRepeatEnabled;
-            set => Set(ref _isRepeatEnabled, value);
+            set
+            {
+                Set(ref _isRepeatEnabled, value);
+
+                if (value)
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
+                else
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
+            }
         }
 
         private bool _isSingleEnabled;
@@ -309,7 +317,7 @@ namespace Stylophone.Common.ViewModels
                 if (value)
                     RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
                 else
-                    RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
             }
         }
 
@@ -609,8 +617,10 @@ namespace Stylophone.Common.ViewModels
 
                     if (_isSingleEnabled)
                         RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
-                    else
+                    else if (_isRepeatEnabled)
                         RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
+                    else
+                        RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
 
                     OnPropertyChanged(nameof(IsRepeatEnabled));
                     OnPropertyChanged(nameof(IsShuffleEnabled));

@@ -40,6 +40,21 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UILabel RemainingTime { get; set; }
 
 		[Outlet]
+		UIKit.UIButton RepeatButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint RepeatTopConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UIButton ShuffleButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint ShuffleTopConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint ShuffleTrailingConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIButton SkipNextButton { get; set; }
 
 		[Outlet]
@@ -50,6 +65,9 @@ namespace Stylophone.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel TrackTitle { get; set; }
+
+		[Outlet]
+		UIKit.UIButton VolumeButton { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -116,6 +134,36 @@ namespace Stylophone.iOS.ViewControllers
 			if (SkipNextButton != null) {
 				SkipNextButton.Dispose ();
 				SkipNextButton = null;
+			}
+
+			if (RepeatButton != null) {
+				RepeatButton.Dispose ();
+				RepeatButton = null;
+			}
+
+			if (ShuffleButton != null) {
+				ShuffleButton.Dispose ();
+				ShuffleButton = null;
+			}
+
+			if (VolumeButton != null) {
+				VolumeButton.Dispose ();
+				VolumeButton = null;
+			}
+
+			if (ShuffleTopConstraint != null) {
+				ShuffleTopConstraint.Dispose ();
+				ShuffleTopConstraint = null;
+			}
+
+			if (ShuffleTrailingConstraint != null) {
+				ShuffleTrailingConstraint.Dispose ();
+				ShuffleTrailingConstraint = null;
+			}
+
+			if (RepeatTopConstraint != null) {
+				RepeatTopConstraint.Dispose ();
+				RepeatTopConstraint = null;
 			}
 		}
 	}

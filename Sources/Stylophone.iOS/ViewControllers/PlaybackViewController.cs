@@ -2,7 +2,7 @@
 
 using System;
 using System.ComponentModel;
-using CoreGraphics;
+using Strings = Stylophone.Localization.Strings.Resources;
 using Foundation;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using SkiaSharp;
@@ -34,6 +34,7 @@ namespace Stylophone.iOS.ViewControllers
             Binder = new(ViewModel);
 
             ViewModel.PropertyChanged += OnVmPropertyChanged;
+            NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
             // Bind
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
@@ -47,6 +48,37 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
 
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            // Move elements depending on available screen estate
+            if (View.Frame.Width < 425)
+            {
+                RepeatTopConstraint.Constant = -18;
+                ShuffleTrailingConstraint.Constant = -40;
+                ShuffleTopConstraint.Constant = 40;
+            }
+            else
+            {
+                RepeatTopConstraint.Constant = 0;
+                ShuffleTrailingConstraint.Constant = 8;
+                ShuffleTopConstraint.Constant = 0;
+            }
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            NavigationController.NavigationBar.TintColor = UIColor.LabelColor;
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+            NavigationController.NavigationBar.TintColor = null;
         }
 
         public override void ViewDidLoad()
@@ -71,10 +103,16 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<double>(TrackSlider, "maximumValue", nameof(ViewModel.MaxTimeValue));
             UpdateFullView(ViewModel.CurrentTrack);
 
+            UpdateButton(PlayPauseButton, ViewModel.PlayButtonContent);
+            UpdateButton(VolumeButton, ViewModel.VolumeIcon);
+            UpdateButton(RepeatButton, ViewModel.RepeatIcon);
+            UpdateButton(ShuffleButton, ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle");
+
             SkipPrevButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipPrevious();
             SkipNextButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipNext();
             PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
-            //CompactView.ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
+            ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
+            RepeatButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleRepeat();
 
             AlbumArt.Layer.CornerRadius = 8;
         }
@@ -96,11 +134,19 @@ namespace Stylophone.iOS.ViewControllers
             if (e.PropertyName == nameof(ViewModel.VolumeIcon))
             {
                 UpdateButton(CompactView.VolumeButton, ViewModel.VolumeIcon);
+                UpdateButton(VolumeButton, ViewModel.VolumeIcon);
             }
 
             if (e.PropertyName == nameof(ViewModel.IsShuffleEnabled))
             {
-                UpdateButton(CompactView.ShuffleButton, ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle");
+                var image = ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle";
+                UpdateButton(CompactView.ShuffleButton, image);
+                UpdateButton(ShuffleButton, image);
+            }
+
+            if (e.PropertyName == nameof(ViewModel.RepeatIcon))
+            {
+                UpdateButton(RepeatButton, ViewModel.RepeatIcon);
             }
 
             if (e.PropertyName == nameof(ViewModel.CurrentTimeValue))
@@ -132,9 +178,20 @@ namespace Stylophone.iOS.ViewControllers
             _trackBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _trackBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _trackBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            //_trackBinder.Bind<SKColor>(PlayPauseButton, "tintColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            
         }
 
         private void UpdateButton(UIButton button, string systemImg) =>
             button?.SetImage(UIImage.GetSystemImage(systemImg), UIControlState.Normal);
+
+        private UIBarButtonItem CreateSettingsButton()
+        {
+            var addQueueAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlaylistCommand);
+            var viewAlbumAction = Binder.GetCommandAction(Strings.ContextMenuViewAlbum, "opticaldisc", ViewModel.ShowAlbumCommand);
+
+            var barButtonMenu = UIMenu.Create(new[] { addQueueAction, viewAlbumAction });
+            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+        }
     }
 }

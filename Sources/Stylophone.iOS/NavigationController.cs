@@ -76,19 +76,21 @@ namespace Stylophone.iOS
 
             if (navService.CurrentPageViewModelType == typeof(PlaybackViewModelBase))
             {
-                UIView.Animate(0.2, () =>
+                View.LayoutIfNeeded();
+                UIView.Animate(0.2, 0, UIViewAnimationOptions.CurveEaseIn, () =>
                 {
                     _compactViewBottomConstraint.Constant = 128;
                     View.LayoutIfNeeded();
-                });    
+                }, null);    
             }
             else
             {
-                UIView.Animate(0.2, () =>
+                View.LayoutIfNeeded();
+                UIView.Animate(0.2, 0, UIViewAnimationOptions.CurveEaseOut, () =>
                 {
                     _compactViewBottomConstraint.Constant = -16;
                     View.LayoutIfNeeded();
-                });
+                }, null);
             }
         }
     }
