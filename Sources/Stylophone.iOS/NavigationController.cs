@@ -37,8 +37,10 @@ namespace Stylophone.iOS
 
             Delegate = this;
 
-            _playbackViewController = UIStoryboard.FromName("NowPlaying", null)
-                .InstantiateInitialViewController() as PlaybackViewController;
+            var storyboard = concreteNavService.GetStoryboardForViewModel(typeof(PlaybackViewModelBase));
+            _playbackViewController = storyboard.InstantiateInitialViewController() as PlaybackViewController;
+
+            //_playbackViewController.LoadView();
 
             // Add the compact view of the playback VC as an overlay
             var compactView = _playbackViewController.CompactView;

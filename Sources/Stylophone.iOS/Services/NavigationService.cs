@@ -18,7 +18,7 @@ namespace Stylophone.iOS.Services
             { typeof(SettingsViewModel), UIStoryboard.FromName("Settings", null)},
             { typeof(AlbumDetailViewModel), UIStoryboard.FromName("AlbumDetail", null) },
             { typeof(PlaybackViewModelBase), UIStoryboard.FromName("NowPlaying", null) },
-            //{ typeof(SearchResultsViewModel), typeof(SearchResultsPage) },
+            { typeof(SearchResultsViewModel), UIStoryboard.FromName("SearchResults", null) },
             { typeof(FoldersViewModel), UIStoryboard.FromName("Folders", null) },
             //{ typeof(PlaylistViewModel), typeof(PlaylistPage) },
             { typeof(LibraryViewModel), UIStoryboard.FromName("Library", null) }
@@ -41,13 +41,18 @@ namespace Stylophone.iOS.Services
             _viewControllers.Add(viewController);
         }
 
+        public UIStoryboard GetStoryboardForViewModel(Type viewmodelType)
+        {
+           return _viewModelToStoryboardDictionary.GetValueOrDefault(viewmodelType);
+        }
+
         private object _lastParamUsed;
         public override void NavigateImplementation(Type viewmodelType, object parameter = null)
         {
             if (viewmodelType == null) return;
 
             // Get the matching page and navigate to it
-            var storyboard = _viewModelToStoryboardDictionary.GetValueOrDefault(viewmodelType); 
+            var storyboard = GetStoryboardForViewModel(viewmodelType);
 
             // Don't open the same page multiple times
             if (NavigationController.VisibleViewController?.Storyboard != storyboard || (parameter != null && !parameter.Equals(_lastParamUsed)))

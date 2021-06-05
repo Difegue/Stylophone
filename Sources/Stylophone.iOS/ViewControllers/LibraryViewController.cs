@@ -72,6 +72,9 @@ namespace Stylophone.iOS.ViewControllers
             snapshot.AppendItems(items);
 
             _dataSource.ApplySnapshot(snapshot, new NSString("base"), true);
+
+            // Make sure we load the displayed items
+            CollectionView.PrefetchDataSource.PrefetchItems(CollectionView, new NSIndexPath[] { });
         }
 
         private UICollectionViewCell GetAlbumViewCell(UICollectionView collectionView, NSIndexPath indexPath, NSObject identifier)
@@ -122,11 +125,19 @@ namespace Stylophone.iOS.ViewControllers
             return UIMenu.Create(new[] { playAction, addToQueueAction, addToPlaylistAction });
         }
 
-        [Export("searchBarTextDidEndEditing:")]
-        public void OnEditingStopped(UISearchBar searchBar)
+        [Export("searchBar:textDidChange:")]
+        public void TextChanged(UISearchBar searchBar, string text)
         {
-            ViewModel.FilterLibrary(searchBar.Text);
+            ViewModel.FilterLibrary(text);
             UpdateDataSource();
         }
+
+        [Export("searchBarCancelButtonClicked:")]
+        public void CancelButtonClicked(UISearchBar searchBar)
+        {
+            ViewModel.FilterLibrary("");
+            UpdateDataSource();
+        }
+
     }
 }

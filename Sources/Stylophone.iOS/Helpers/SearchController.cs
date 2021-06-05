@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Foundation;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using MpcNET.Types;
 using Stylophone.Common.Interfaces;
 using Stylophone.iOS.ViewModels;
+using Stylophone.Localization.Strings;
 using UIKit;
 
 namespace Stylophone.iOS.Helpers
 {
     public class SearchController: UISearchController
     {
-        public SearchController(ShellViewModel viewModel) : base(new SearchResultsViewController(viewModel))
+        public SearchController(ShellViewModel viewModel) : base(new SidebarSearchResultsController(viewModel))
         {
             // Our results view is also the updater.
-            SearchResultsUpdater = SearchResultsController as SearchResultsViewController;
+            SearchResultsUpdater = SearchResultsController as SidebarSearchResultsController;
         }
     }
 
-    public class SearchResultsViewController : UITableViewController, IUISearchResultsUpdating
+    public class SidebarSearchResultsController : UITableViewController, IUISearchResultsUpdating
     {
         private ShellViewModel _viewModel;
         private string _currentSearch;
         private IList<object> _searchResults;
 
-        public SearchResultsViewController(ShellViewModel viewModel)
+        private CancellationTokenSource _cts;
+
+        public SidebarSearchResultsController(ShellViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -33,18 +37,33 @@ namespace Stylophone.iOS.Helpers
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
             _currentSearch = searchController.SearchBar.Text;
+
+            // Directly add the full search item
+            _searchResults = new List<object>();
+            _searchResults.Add(string.Format(Resources.SearchGoToDetail, _currentSearch));
+            TableView.ReloadData();
+
+            // Cancel any ongoing previous searches
+            _cts?.Cancel();
+            _cts = new CancellationTokenSource();
+
             Task.Run(async () =>
             {
                 try
                 {
+                    var token = _cts.Token;
+                    token.ThrowIfCancellationRequested();
                     _searchResults = await _viewModel.SearchAsync(_currentSearch);
+
+                    token.ThrowIfCancellationRequested();
                     UIApplication.SharedApplication.InvokeOnMainThread(() => TableView.ReloadData());
                 }
+                catch (OperationCanceledException) { }
                 catch (Exception e)
                 {
                     Ioc.Default.GetRequiredService<INotificationService>().ShowErrorNotification(e);
                 }
-            });
+            },  _cts.Token);
         }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
@@ -72,6 +91,9 @@ namespace Stylophone.iOS.Helpers
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
+            if (_searchResults.Count == 0)
+                return new UITableViewCell();
+
             var data = _searchResults[indexPath.Row];
 
             UITableViewCell cell;

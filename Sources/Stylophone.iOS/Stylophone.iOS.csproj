@@ -137,6 +137,10 @@
       <DependentUpon>LibraryViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\LibraryViewModel.cs" />
+    <Compile Include="ViewControllers\SearchResultsViewController.cs" />
+    <Compile Include="ViewControllers\SearchResultsViewController.designer.cs">
+      <DependentUpon>SearchResultsViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -198,6 +202,7 @@
     <InterfaceDefinition Include="Views\AlbumDetail.storyboard" />
     <InterfaceDefinition Include="Views\Folders.storyboard" />
     <InterfaceDefinition Include="Views\Library.storyboard" />
+    <InterfaceDefinition Include="Views\SearchResults.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

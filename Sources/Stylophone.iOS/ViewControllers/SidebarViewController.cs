@@ -94,6 +94,7 @@ namespace Stylophone.iOS.ViewControllers
 
             _searchController = new SearchController(_viewModel);
             _searchController.SearchBar.Placeholder = Strings.SearchPlaceholderText;
+
             NavigationItem.SearchController = _searchController;
             NavigationItem.HidesSearchBarWhenScrolling = false;
         }

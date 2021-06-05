@@ -110,7 +110,7 @@ namespace Stylophone.Common.ViewModels
             else
             {
                 // Navigate to detailed search page
-                _navigationService.Navigate<SearchResultsViewModel>(text);
+                await _dispatcherService.ExecuteOnUIThreadAsync(() => _navigationService.Navigate<SearchResultsViewModel>(text));
                 HeaderText = string.Format(Resources.SearchResultsFor, text);
             }
         }
