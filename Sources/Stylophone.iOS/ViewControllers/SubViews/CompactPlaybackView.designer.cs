@@ -34,7 +34,7 @@ namespace Stylophone.iOS.ViewControllers
 		public UIKit.UIButton NextButton { get; private set; }
 
 		[Outlet]
-		public UIKit.UIButton OpenFullScreenButton { get; set; }
+		public UIKit.UIButton OpenFullScreenButton { get; private set; }
 
 		[Outlet]
 		public UIKit.UIButton PlayPauseButton { get; private set; }
@@ -88,6 +88,11 @@ namespace Stylophone.iOS.ViewControllers
 				NextButton = null;
 			}
 
+			if (OpenFullScreenButton != null) {
+				OpenFullScreenButton.Dispose ();
+				OpenFullScreenButton = null;
+			}
+
 			if (PlayPauseButton != null) {
 				PlayPauseButton.Dispose ();
 				PlayPauseButton = null;
@@ -111,11 +116,6 @@ namespace Stylophone.iOS.ViewControllers
 			if (VolumeButton != null) {
 				VolumeButton.Dispose ();
 				VolumeButton = null;
-			}
-
-			if (OpenFullScreenButton != null) {
-				OpenFullScreenButton.Dispose ();
-				OpenFullScreenButton = null;
 			}
 		}
 	}

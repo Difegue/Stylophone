@@ -82,7 +82,7 @@ namespace Stylophone.iOS.ViewControllers
                 .ToList<object>();
             }
 
-            var queueAction = Binder.GetCommandAction(Strings.ContextMenuPlay, "plus", ViewModel.AddToQueueCommand, trackList);
+            var queueAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "plus", ViewModel.AddToQueueCommand, trackList);
             var albumAction = Binder.GetCommandAction(Strings.ContextMenuViewAlbum, "opticaldisc", ViewModel.ViewAlbumCommand, trackList);
             var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
 

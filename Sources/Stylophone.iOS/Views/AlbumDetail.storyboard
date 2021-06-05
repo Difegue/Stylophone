@@ -29,21 +29,19 @@
                                         <rect key="frame" x="0.0" y="0.0" width="1024" height="296"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="kVT-2L-49m">
-                                                <rect key="frame" x="40" y="84" width="37" height="37"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </activityIndicatorView>
-                                            <stackView opaque="NO" contentMode="bottom" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-ik-QHf" userLabel="Bottom-Aligner Stack View">
+                                            <stackView opaque="NO" contentMode="bottom" verticalCompressionResistancePriority="755" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-ik-QHf" userLabel="Bottom-Aligner Stack View">
                                                 <rect key="frame" x="244" y="78" width="764" height="86"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalCompressionResistancePriority="753" text="A quite lengthy album name" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Log-9b-hFE">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalCompressionResistancePriority="754" text="A quite lengthy album name" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Log-9b-hFE">
                                                         <rect key="frame" x="0.0" y="49" width="764" height="37"/>
                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="31"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="32" id="k2C-n8-zCT"/>
+                                                </constraints>
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="753" text="....." lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rkW-qh-zOp">
                                                 <rect key="frame" x="244" y="172" width="764" height="23"/>
@@ -108,14 +106,37 @@
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PlaceholderAlbum" translatesAutoresizingMaskIntoConstraints="NO" id="THl-lR-HjL" userLabel="Album Art">
                                                         <rect key="frame" x="0.0" y="0.0" width="196" height="196"/>
                                                     </imageView>
+                                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="kVT-2L-49m">
+                                                        <rect key="frame" x="12" y="12" width="37" height="37"/>
+                                                        <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </activityIndicatorView>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="THl-lR-HjL" firstAttribute="top" secondItem="lb2-ij-LhO" secondAttribute="top" id="CvZ-vE-l0j"/>
                                                     <constraint firstAttribute="width" constant="196" id="M41-F7-zEr"/>
                                                     <constraint firstAttribute="bottom" secondItem="THl-lR-HjL" secondAttribute="bottom" id="VcJ-bh-u3B"/>
+                                                    <constraint firstItem="kVT-2L-49m" firstAttribute="top" secondItem="lb2-ij-LhO" secondAttribute="top" constant="12" id="a10-4e-OaK"/>
+                                                    <constraint firstItem="kVT-2L-49m" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="leading" constant="12" id="clV-Ga-rZe"/>
                                                     <constraint firstAttribute="trailing" secondItem="THl-lR-HjL" secondAttribute="trailing" id="vND-S7-VhA"/>
+                                                    <constraint firstAttribute="width" id="vyw-JA-J53"/>
                                                     <constraint firstItem="THl-lR-HjL" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="leading" id="zJh-n9-3H2"/>
                                                 </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="M41-F7-zEr"/>
+                                                        <exclude reference="vyw-JA-J53"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=regular-widthClass=compact">
+                                                    <mask key="constraints">
+                                                        <include reference="vyw-JA-J53"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=regular-widthClass=regular">
+                                                    <mask key="constraints">
+                                                        <include reference="M41-F7-zEr"/>
+                                                    </mask>
+                                                </variation>
                                             </view>
                                         </subviews>
                                         <constraints>
@@ -123,27 +144,54 @@
                                             <constraint firstItem="lb2-ij-LhO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="7BL-7I-F9f" secondAttribute="leading" constant="16" id="1y5-tq-8fJ"/>
                                             <constraint firstAttribute="trailing" secondItem="IeP-xT-9BP" secondAttribute="trailing" constant="16" id="7RD-dm-Co6"/>
                                             <constraint firstItem="gCa-6N-dof" firstAttribute="leading" secondItem="Wv5-1W-agw" secondAttribute="trailing" constant="8" symbolic="YES" id="8mv-rt-5Qt"/>
+                                            <constraint firstItem="cHs-Ds-hxp" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="trailing" constant="16" id="Dkl-j7-QDS"/>
                                             <constraint firstItem="IeP-xT-9BP" firstAttribute="top" secondItem="a01-rU-PtU" secondAttribute="bottom" constant="8" symbolic="YES" id="Jxv-Rd-d8R"/>
                                             <constraint firstItem="cHs-Ds-hxp" firstAttribute="top" secondItem="IeP-xT-9BP" secondAttribute="bottom" constant="12" id="Mna-nu-nS8"/>
                                             <constraint firstAttribute="trailing" secondItem="zOj-ik-QHf" secondAttribute="trailing" constant="16" id="Sf7-yw-CjT"/>
-                                            <constraint firstAttribute="bottom" secondItem="Wv5-1W-agw" secondAttribute="bottom" constant="24" id="VWG-nN-0La"/>
+                                            <constraint firstItem="zOj-ik-QHf" firstAttribute="top" secondItem="7BL-7I-F9f" secondAttribute="top" constant="96" id="UCD-1V-Cue"/>
                                             <constraint firstItem="rkW-qh-zOp" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="trailing" constant="16" id="VtX-rZ-6PY"/>
                                             <constraint firstItem="lb2-ij-LhO" firstAttribute="leading" relation="lessThanOrEqual" secondItem="7BL-7I-F9f" secondAttribute="leading" constant="32" id="VzG-Hu-nHa"/>
                                             <constraint firstAttribute="trailing" secondItem="rkW-qh-zOp" secondAttribute="trailing" constant="16" id="WuO-hr-v7J"/>
                                             <constraint firstItem="zOj-ik-QHf" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="trailing" constant="16" id="YLx-tz-sw4"/>
-                                            <constraint firstItem="cHs-Ds-hxp" firstAttribute="leading" secondItem="gCa-6N-dof" secondAttribute="trailing" constant="8" symbolic="YES" id="gVQ-7M-QO4"/>
+                                            <constraint firstItem="cHs-Ds-hxp" firstAttribute="leading" secondItem="gCa-6N-dof" secondAttribute="trailing" constant="8" id="gVQ-7M-QO4"/>
                                             <constraint firstItem="a01-rU-PtU" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="trailing" constant="16" id="jBp-jQ-4EQ"/>
                                             <constraint firstItem="a01-rU-PtU" firstAttribute="top" secondItem="rkW-qh-zOp" secondAttribute="bottom" constant="8" symbolic="YES" id="kD5-NI-FPw"/>
                                             <constraint firstItem="gCa-6N-dof" firstAttribute="top" secondItem="IeP-xT-9BP" secondAttribute="bottom" constant="12" id="kcx-Jb-owL"/>
+                                            <constraint firstAttribute="bottom" secondItem="cHs-Ds-hxp" secondAttribute="bottom" constant="24" id="p4T-DB-BtV"/>
                                             <constraint firstAttribute="trailing" secondItem="a01-rU-PtU" secondAttribute="trailing" constant="20" symbolic="YES" id="r0j-km-YTj"/>
                                             <constraint firstItem="zOj-ik-QHf" firstAttribute="top" relation="greaterThanOrEqual" secondItem="7BL-7I-F9f" secondAttribute="top" constant="32" id="rbS-Eu-mOC"/>
                                             <constraint firstItem="Wv5-1W-agw" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="trailing" constant="16" id="s9d-xT-h1b"/>
                                             <constraint firstItem="IeP-xT-9BP" firstAttribute="leading" secondItem="lb2-ij-LhO" secondAttribute="trailing" constant="16" id="swI-HE-sdJ"/>
-                                            <constraint firstAttribute="bottom" secondItem="lb2-ij-LhO" secondAttribute="bottom" constant="24" id="vMq-o7-HVS"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lb2-ij-LhO" secondAttribute="bottom" constant="24" id="vMq-o7-HVS"/>
                                             <constraint firstItem="Wv5-1W-agw" firstAttribute="top" secondItem="IeP-xT-9BP" secondAttribute="bottom" constant="12" id="wZW-bP-P1q"/>
+                                            <constraint firstItem="cHs-Ds-hxp" firstAttribute="top" secondItem="IeP-xT-9BP" secondAttribute="bottom" constant="56" id="whf-OY-vhz"/>
                                             <constraint firstItem="lb2-ij-LhO" firstAttribute="top" secondItem="7BL-7I-F9f" secondAttribute="top" constant="76" id="ykO-0n-o5A"/>
                                             <constraint firstItem="zOj-ik-QHf" firstAttribute="top" relation="lessThanOrEqual" secondItem="7BL-7I-F9f" secondAttribute="top" constant="78" id="zY0-nh-TRU"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="UCD-1V-Cue"/>
+                                                <exclude reference="zY0-nh-TRU"/>
+                                                <exclude reference="Dkl-j7-QDS"/>
+                                                <exclude reference="Mna-nu-nS8"/>
+                                                <exclude reference="gVQ-7M-QO4"/>
+                                                <exclude reference="whf-OY-vhz"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="UCD-1V-Cue"/>
+                                                <include reference="Dkl-j7-QDS"/>
+                                                <include reference="whf-OY-vhz"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <mask key="constraints">
+                                                <include reference="zY0-nh-TRU"/>
+                                                <include reference="Mna-nu-nS8"/>
+                                                <include reference="gVQ-7M-QO4"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <blurEffect style="prominent"/>
                                 </visualEffectView>
@@ -250,12 +298,14 @@
                     </tableView>
                     <connections>
                         <outlet property="AddToQueueButton" destination="cHs-Ds-hxp" id="k1K-d4-MSg"/>
+                        <outlet property="AddToQueueTopConstraint" destination="Mna-nu-nS8" id="kGa-VV-OY2"/>
                         <outlet property="AlbumArt" destination="THl-lR-HjL" id="Fy6-MD-w5a"/>
                         <outlet property="AlbumArtLoadingIndicator" destination="kVT-2L-49m" id="Wq0-O8-bOm"/>
                         <outlet property="AlbumArtists" destination="rkW-qh-zOp" id="OOA-wv-7KH"/>
                         <outlet property="AlbumTitle" destination="Log-9b-hFE" id="GWq-9M-V3g"/>
                         <outlet property="AlbumTrackInfo" destination="IeP-xT-9BP" id="ekQ-op-Mm3"/>
                         <outlet property="ArtContainer" destination="lb2-ij-LhO" id="G0J-SH-7Vx"/>
+                        <outlet property="ArtWidthConstraint" destination="M41-F7-zEr" id="knQ-St-JoC"/>
                         <outlet property="BackgroundArt" destination="QFY-Ts-zzn" id="KNs-dS-dMc"/>
                         <outlet property="EmptyView" destination="CUs-gg-W4g" id="Ru5-ky-m9L"/>
                         <outlet property="PlayButton" destination="Wv5-1W-agw" id="5EQ-rp-S1o"/>

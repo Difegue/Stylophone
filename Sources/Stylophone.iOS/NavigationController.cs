@@ -18,9 +18,12 @@ namespace Stylophone.iOS
     public class NavigationController : UINavigationController, IUINavigationControllerDelegate
 	{
         private PlaybackViewController _playbackViewController;
+        private CompactPlaybackView _compactView;
         private NSLayoutConstraint _compactViewBottomConstraint;
+        private NSLayoutConstraint _compactViewLeftConstraint;
+        private NSLayoutConstraint _compactViewRightConstraint;
 
-		public NavigationController (IntPtr handle) : base (handle)
+        public NavigationController (IntPtr handle) : base (handle)
 		{
 		}
 
@@ -43,9 +46,9 @@ namespace Stylophone.iOS
             //_playbackViewController.LoadView();
 
             // Add the compact view of the playback VC as an overlay
-            var compactView = _playbackViewController.CompactView;
-            compactView.TranslatesAutoresizingMaskIntoConstraints = false;
-            View.AddSubview(compactView);
+            _compactView = _playbackViewController.CompactView;
+            _compactView.TranslatesAutoresizingMaskIntoConstraints = false;
+            View.AddSubview(_compactView);
 
             // Add the playbackVC itself to the Navigation Service's known VCs so it can be reused later
             concreteNavService.AddViewControllerToNavigationStack(_playbackViewController);
@@ -53,17 +56,43 @@ namespace Stylophone.iOS
             // Add some layout constraints to affix it to the bottom
             var constraints = new List<NSLayoutConstraint>();
 
-            _compactViewBottomConstraint = compactView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -16);
+            _compactViewBottomConstraint = _compactView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -16);
+            _compactViewLeftConstraint = _compactView.LeftAnchor.ConstraintEqualTo(View.LeftAnchor, 32);
+            _compactViewRightConstraint = _compactView.RightAnchor.ConstraintEqualTo(View.RightAnchor, -32);
 
             constraints.Add(_compactViewBottomConstraint);
-            constraints.Add(compactView.LeftAnchor.ConstraintEqualTo(View.LeftAnchor, 32));
-            constraints.Add(compactView.RightAnchor.ConstraintEqualTo(View.RightAnchor, -32));
-            constraints.Add(compactView.HeightAnchor.ConstraintEqualTo(128));
+            constraints.Add(_compactViewLeftConstraint);
+            constraints.Add(_compactViewRightConstraint);
+            constraints.Add(_compactView.HeightAnchor.ConstraintEqualTo(128));
 
             NSLayoutConstraint.ActivateConstraints(constraints.ToArray());
 
             // Navigate to the queue
             concreteNavService.Navigate<QueueViewModel>();
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            // Move elements depending on available screen estate
+            if (View.Frame.Width < 425)
+            {
+                _compactViewLeftConstraint.Constant = -8;
+                _compactViewRightConstraint.Constant = 8;
+
+                if (_compactViewBottomConstraint.Constant < 0)
+                    _compactViewBottomConstraint.Constant = 0;
+            }
+            else
+            {
+                _compactViewLeftConstraint.Constant = 32;
+                _compactViewRightConstraint.Constant = -32;
+
+
+                if (_compactViewBottomConstraint.Constant == 0)
+                    _compactViewBottomConstraint.Constant = -16;
+            }
         }
 
 
@@ -90,7 +119,7 @@ namespace Stylophone.iOS
                 View.LayoutIfNeeded();
                 UIView.Animate(0.2, 0, UIViewAnimationOptions.CurveEaseOut, () =>
                 {
-                    _compactViewBottomConstraint.Constant = -16;
+                    _compactViewBottomConstraint.Constant = View.Frame.Width < 425 ? 0 : -16;
                     View.LayoutIfNeeded();
                 }, null);
             }

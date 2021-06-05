@@ -41,7 +41,7 @@ namespace Stylophone.iOS.ViewControllers
 			Binder.Bind<string>(AlbumTrackInfo, "text", nameof(ViewModel.PlaylistInfo));
 		}
 
-        private void OnScroll(UIScrollView scrollView)
+		private void OnScroll(UIScrollView scrollView)
         {
             if (scrollView.ContentOffset.Y > 192)
             {

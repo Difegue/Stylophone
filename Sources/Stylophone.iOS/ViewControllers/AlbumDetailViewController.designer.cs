@@ -16,6 +16,15 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIButton AddToQueueButton { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint AddToQueueCompactLeftConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint AddToQueueLeftConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint AddToQueueTopConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView AlbumArt { get; set; }
 
 		[Outlet]
@@ -32,6 +41,9 @@ namespace Stylophone.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIView ArtContainer { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint ArtWidthConstraint { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView BackgroundArt { get; set; }
@@ -57,14 +69,14 @@ namespace Stylophone.iOS.ViewControllers
 				AlbumArt = null;
 			}
 
-			if (ArtContainer != null) {
-				ArtContainer.Dispose ();
-				ArtContainer = null;
-			}
-
 			if (AlbumArtists != null) {
 				AlbumArtists.Dispose ();
 				AlbumArtists = null;
+			}
+
+			if (AlbumArtLoadingIndicator != null) {
+				AlbumArtLoadingIndicator.Dispose ();
+				AlbumArtLoadingIndicator = null;
 			}
 
 			if (AlbumTitle != null) {
@@ -77,9 +89,19 @@ namespace Stylophone.iOS.ViewControllers
 				AlbumTrackInfo = null;
 			}
 
+			if (ArtContainer != null) {
+				ArtContainer.Dispose ();
+				ArtContainer = null;
+			}
+
 			if (BackgroundArt != null) {
 				BackgroundArt.Dispose ();
 				BackgroundArt = null;
+			}
+
+			if (EmptyView != null) {
+				EmptyView.Dispose ();
+				EmptyView = null;
 			}
 
 			if (PlayButton != null) {
@@ -92,14 +114,24 @@ namespace Stylophone.iOS.ViewControllers
 				PlaylistButton = null;
 			}
 
-			if (EmptyView != null) {
-				EmptyView.Dispose ();
-				EmptyView = null;
+			if (ArtWidthConstraint != null) {
+				ArtWidthConstraint.Dispose ();
+				ArtWidthConstraint = null;
 			}
 
-			if (AlbumArtLoadingIndicator != null) {
-				AlbumArtLoadingIndicator.Dispose ();
-				AlbumArtLoadingIndicator = null;
+			if (AddToQueueTopConstraint != null) {
+				AddToQueueTopConstraint.Dispose ();
+				AddToQueueTopConstraint = null;
+			}
+
+			if (AddToQueueLeftConstraint != null) {
+				AddToQueueLeftConstraint.Dispose ();
+				AddToQueueLeftConstraint = null;
+			}
+
+			if (AddToQueueCompactLeftConstraint != null) {
+				AddToQueueCompactLeftConstraint.Dispose ();
+				AddToQueueCompactLeftConstraint = null;
 			}
 		}
 	}
