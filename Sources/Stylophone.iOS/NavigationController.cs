@@ -43,8 +43,6 @@ namespace Stylophone.iOS
             var storyboard = concreteNavService.GetStoryboardForViewModel(typeof(PlaybackViewModelBase));
             _playbackViewController = storyboard.InstantiateInitialViewController() as PlaybackViewController;
 
-            //_playbackViewController.LoadView();
-
             // Add the compact view of the playback VC as an overlay
             _compactView = _playbackViewController.CompactView;
             _compactView.TranslatesAutoresizingMaskIntoConstraints = false;

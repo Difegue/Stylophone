@@ -141,6 +141,7 @@
     <Compile Include="ViewControllers\SearchResultsViewController.designer.cs">
       <DependentUpon>SearchResultsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\AddToPlaylistViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

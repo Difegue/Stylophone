@@ -26,14 +26,17 @@ namespace Stylophone.iOS.Services
         /// </summary>
         /// <param name="allowExistingPlaylists">If set to FALSE, the dialog will only allow you to create a new playlist.</param>
         /// <returns></returns>
-        public Task<string> ShowAddToPlaylistDialog(bool allowExistingPlaylists = true)
+        public async Task<string> ShowAddToPlaylistDialog(bool allowExistingPlaylists = true)
         {
-            //var dialog = new AddToPlaylistDialog(_mpdService, allowExistingPlaylists);
-            //var result = await _dispatcherService.EnqueueAsync(async () => await dialog.ShowAsync());
+            var dialog = new AddToPlaylistViewController(_mpdService, allowExistingPlaylists);
+
+            var navigationController = new UINavigationController(dialog);
+            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(navigationController, true, null);
+
+            var result = await dialog.CompletionTask;
 
             // Return new playlist name if checked, selected playlist otherwise
-            //return result == ContentDialogResult.Primary ? dialog.AddNewPlaylist ? dialog.PlaylistName : dialog.SelectedPlaylist : null;
-            return null;
+            return result ? dialog.AddNewPlaylist ? dialog.PlaylistName : dialog.SelectedPlaylist : null;
         }
 
         private bool shown = false;
