@@ -196,7 +196,6 @@
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\DispatcherService.cs" />
     <Compile Include="Services\SystemMediaControlsService.cs" />
-    <Compile Include="Helpers\LiveTileHelper.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\InteropService.cs" />
     <Compile Include="Services\NotificationService.cs" />
