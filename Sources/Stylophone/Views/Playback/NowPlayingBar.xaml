@@ -19,7 +19,7 @@
         <converters:BoolToBrushConverter
             x:Key="BoolToBrushConverter"
             FalseColor="SystemControlDisabledTransparentBrush"
-            TrueColor="ButtonRevealBackgroundPointerOver" />
+            TrueColor="ButtonBackgroundPointerOver" />
 
         <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters1:BoolToVisibilityConverter
@@ -89,12 +89,11 @@
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch"
             Background="Transparent"
-            BorderThickness="1"
+            BorderThickness="0"
             Canvas.ZIndex="10"
             Click="{x:Bind PlaybackViewModel.NavigateNowPlaying}"
-            CornerRadius="3,0,0,3"
+            CornerRadius="4,0,0,4"
             IsEnabled="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay}"
-            Style="{ThemeResource ButtonRevealStyle}"
             Visibility="{x:Bind PlaybackViewModel.ShowTrackName, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid>
 
@@ -113,7 +112,7 @@
                     <Grid
                         Width="70"
                         Height="70"
-                        CornerRadius="3">
+                        CornerRadius="4">
                         <Image Source="ms-appx:///Assets/AlbumPlaceholder.png" Stretch="UniformToFill" />
                         <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
                     </Grid>
@@ -175,13 +174,12 @@
                     Margin="4,0"
                     Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}"
                     Visibility="Collapsed">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="18"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="16"
                             Text="&#xE8B1;"
                             TextAlignment="Center" />
                     </Button.Content>
@@ -193,12 +191,11 @@
                     Height="40"
                     Margin="4,0"
                     Click="{x:Bind PlaybackViewModel.SkipPrevious}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipPrevious}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="18"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="16"
                             Text="&#xE892;"
                             TextAlignment="Center" />
                     </Button.Content>
@@ -211,11 +208,10 @@
                     Margin="4,0"
                     BorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
                     Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
                             FontSize="26"
                             Text="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
                             TextAlignment="Center" />
@@ -228,12 +224,11 @@
                     Height="40"
                     Margin="4,0"
                     Click="{x:Bind PlaybackViewModel.SkipNext}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipNext}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="18"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="16"
                             Text="&#xE893;"
                             TextAlignment="Center" />
                     </Button.Content>
@@ -247,13 +242,12 @@
                     Margin="4,0"
                     Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}"
                     Visibility="Collapsed">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="18"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="16"
                             Text="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
                             TextAlignment="Center" />
                     </Button.Content>
@@ -288,18 +282,11 @@
                 <Slider
                     x:Name="ProgressBar"
                     Grid.Column="1"
-                    Margin="15,9,15,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    HorizontalContentAlignment="Stretch"
-                    Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                    BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                    Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush}"
+                    Margin="16,3,16,0"
                     ManipulationMode="All"
                     ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
                     Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
                     PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
-                    Style="{StaticResource CircleSlider}"
                     ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
                     Visibility="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                     Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}" />
@@ -307,7 +294,7 @@
                 <ProgressBar
                     x:Name="LoadingBar"
                     Grid.Column="1"
-                    Margin="15,2,15,0"
+                    Margin="16,8,16,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
@@ -352,12 +339,11 @@
                         Width="40"
                         Height="40"
                         Margin="{StaticResource SmallRightMargin}"
-                        Click="{x:Bind PlaybackViewModel.ToggleMute}"
-                        Style="{StaticResource CircleButtonStyle}">
+                        Click="{x:Bind PlaybackViewModel.ToggleMute}">
                         <Button.Content>
                             <TextBlock
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="18"
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                FontSize="16"
                                 Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                                 TextAlignment="Center" />
                         </Button.Content>
@@ -367,14 +353,10 @@
                         Margin="{StaticResource SmallRightMargin}"
                         Padding="0"
                         VerticalAlignment="Center"
-                        Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                        BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                        Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush}"
                         Maximum="100"
                         Minimum="0"
                         Orientation="Horizontal"
                         PointerWheelChanged="Volume_PointerWheelChanged"
-                        Style="{StaticResource CircleSlider}"
                         Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                 </StackPanel>
 
@@ -384,12 +366,11 @@
                     Width="40"
                     Height="40"
                     Margin="{StaticResource XSmallLeftMargin}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="18"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="16"
                             Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                             TextAlignment="Center" />
                     </Button.Content>
@@ -403,12 +384,11 @@
                                     Width="40"
                                     Height="40"
                                     Margin="{StaticResource SmallRightMargin}"
-                                    Click="{x:Bind PlaybackViewModel.ToggleMute}"
-                                    Style="{StaticResource CircleButtonStyle}">
+                                    Click="{x:Bind PlaybackViewModel.ToggleMute}">
                                     <Button.Content>
                                         <TextBlock
-                                            FontFamily="Segoe MDL2 Assets"
-                                            FontSize="18"
+                                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                            FontSize="16"
                                             Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                                             TextAlignment="Center" />
                                     </Button.Content>
@@ -418,14 +398,10 @@
                                     Margin="{StaticResource XXSmallTopMargin}"
                                     Padding="0"
                                     VerticalAlignment="Center"
-                                    Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                                    BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                                    Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush}"
                                     Maximum="100"
                                     Minimum="0"
                                     Orientation="Horizontal"
                                     PointerWheelChanged="Volume_PointerWheelChanged"
-                                    Style="{StaticResource CircleSlider}"
                                     Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                                 <TextBlock
                                     Margin="14,-2,0,0"
@@ -443,12 +419,11 @@
                     Height="40"
                     Margin="{StaticResource XSmallLeftMargin}"
                     Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionCompactOverlay}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="18"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="16"
                             Text="&#xE8B9;"
                             TextAlignment="Center" />
                     </Button.Content>
@@ -460,12 +435,11 @@
                     Width="40"
                     Height="40"
                     Margin="{StaticResource XSmallLeftMargin}"
-                    Style="{StaticResource CircleButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionMore}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="18"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="16"
                             Text="&#xE712;"
                             TextAlignment="Center" />
                     </Button.Content>

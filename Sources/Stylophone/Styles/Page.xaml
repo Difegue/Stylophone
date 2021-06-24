@@ -60,7 +60,7 @@
     </ResourceDictionary.ThemeDictionaries>
 
     <Style x:Key="PageStyle" TargetType="Page">
-        <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+        <Setter Property="Background" Value="Transparent" />
     </Style>
 
     <!--  Circle button used on the overlay view, now playing view and now playing bar  -->

@@ -77,7 +77,6 @@
             IsBackButtonVisible="Visible"
             IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
             IsSettingsVisible="True"
-            Loaded="ApplyShadowToSideBar"
             PaneTitle="Stylophone">
             <winui:NavigationView.MenuItems>
                 <winui:NavigationViewItem
@@ -133,11 +132,11 @@
                 <Grid
                     x:Name="Header"
                     Grid.Row="0"
-                    Margin="80,0,0,0"
-                    Padding="0,32,0,8"
+                    Padding="96,38,0,12"
                     Visibility="{x:Bind ViewModel.HeaderText, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}">
                     <TextBlock
                         Margin="{StaticResource SmallLeftRightMargin}"
+                        FontSize="24"
                         Style="{ThemeResource TitleTextBlockStyle}"
                         Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}" />
                 </Grid>
@@ -164,7 +163,7 @@
                         <AdaptiveTrigger MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="Header.Margin" Value="{StaticResource NavigationViewHeaderMargin}" />
+                        <Setter Target="Header.Padding" Value="8,24,0,12" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

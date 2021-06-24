@@ -132,51 +132,43 @@
 
                 <RelativePanel
                     x:Name="Header"
-                    Padding="24,128,24,36"
+                    Padding="24,178,24,36"
                     RequestedTheme="Dark">
 
-                    <Border
-                        Margin="-24,-78,-24,-24"
-                        Canvas.ZIndex="-1"
+                    <Grid
+                        x:Name="Container"
+                        Margin="-24,-84,-24,-24"
+                        CornerRadius="4,4,0,0"
                         RelativePanel.AlignBottomWithPanel="True"
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"
                         RelativePanel.AlignTopWithPanel="True">
-                        <Border.Background>
-                            <AcrylicBrush
-                                BackgroundSource="Backdrop"
-                                FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
-                                TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
-                                TintLuminosityOpacity="0.7"
-                                TintOpacity="0.2" />
-                        </Border.Background>
-                    </Border>
+                        <Border Canvas.ZIndex="-1">
+                            <Border.Background>
+                                <AcrylicBrush
+                                    BackgroundSource="Backdrop"
+                                    FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                                    TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                                    TintLuminosityOpacity="0.7"
+                                    TintOpacity="0.2" />
+                            </Border.Background>
+                        </Border>
 
-                    <Border
-                        Margin="-24,-78,-24,-24"
-                        Canvas.ZIndex="-1"
-                        Opacity="0.3"
-                        RelativePanel.AlignBottomWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True"
-                        Visibility="{x:Bind ViewModel.Item.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <Border.Background>
-                            <SolidColorBrush Color="Black" />
-                        </Border.Background>
-                    </Border>
+                        <Border
+                            Canvas.ZIndex="-1"
+                            Opacity="0.3"
+                            Visibility="{x:Bind ViewModel.Item.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Border.Background>
+                                <SolidColorBrush Color="Black" />
+                            </Border.Background>
+                        </Border>
 
-                    <Border
-                        Margin="-24,-78,-24,-24"
-                        Canvas.ZIndex="-2"
-                        RelativePanel.AlignBottomWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True">
-                        <Border.Background>
-                            <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
-                        </Border.Background>
-                    </Border>
+                        <Border Canvas.ZIndex="-2">
+                            <Border.Background>
+                                <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+                            </Border.Background>
+                        </Border>
+                    </Grid>
 
                     <controls:DropShadowPanel
                         x:Name="itemHero"
@@ -194,7 +186,7 @@
                         <Grid
                             Width="200"
                             Height="200"
-                            CornerRadius="3">
+                            CornerRadius="4">
                             <Image
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
