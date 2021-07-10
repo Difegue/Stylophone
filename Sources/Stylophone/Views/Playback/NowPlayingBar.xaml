@@ -31,9 +31,10 @@
     <!--  Content  -->
     <Grid
         x:Name="RootGrid"
-        Height="81"
+        Height="96"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
+        CornerRadius="8"
         RequestedTheme="Dark">
         <!--  Split the content into two main sections  -->
         <Grid.ColumnDefinitions>
@@ -85,14 +86,15 @@
             Grid.Column="0"
             Width="160"
             Height="80"
-            Padding="0"
+            Margin="4,0"
+            Padding="0,0,4,0"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch"
             Background="Transparent"
             BorderThickness="0"
             Canvas.ZIndex="10"
             Click="{x:Bind PlaybackViewModel.NavigateNowPlaying}"
-            CornerRadius="4,0,0,4"
+            CornerRadius="4"
             IsEnabled="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay}"
             Visibility="{x:Bind PlaybackViewModel.ShowTrackName, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid>

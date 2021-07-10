@@ -10,11 +10,12 @@
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mpcnet="using:MpcNET.Types"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:stylophone="using:Stylophone.Common.ViewModels"
     xmlns:viewmodels="using:Stylophone.ViewModels"
     xmlns:views="using:Stylophone.Views"
-    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -54,6 +55,11 @@
             MpdFile="{StaticResource MpdFileItemTemplate}"
             Normal="{StaticResource StringItemTemplate}" />
 
+        <!--  This top margin is the height of the custom TitleBar  -->
+        <Thickness x:Key="NavigationViewContentMargin">0,40,0,0</Thickness>
+        <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
+        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent" />
+
     </Page.Resources>
 
 
@@ -66,42 +72,61 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="80" />
+            <RowDefinition Height="112" />
         </Grid.RowDefinitions>
 
-        <winui:NavigationView
+        <Border
+            x:Name="AppTitleBar"
+            Height="40"
+            Margin="48,4,0,0"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            Canvas.ZIndex="1"
+            IsHitTestVisible="True">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    x:Name="AppTitle"
+                    Margin="12,6,0,0"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="Stylophone" />
+            </StackPanel>
+        </Border>
+
+        <muxc:NavigationView
             x:Name="navigationView"
             Grid.Row="0"
-            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+            Canvas.ZIndex="0"
+            DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
             ExpandedModeThresholdWidth="900"
             IsBackButtonVisible="Visible"
             IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
             IsSettingsVisible="True"
-            PaneTitle="Stylophone">
-            <winui:NavigationView.MenuItems>
-                <winui:NavigationViewItem
+            IsTitleBarAutoPaddingEnabled="False">
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem
                     helpers:NavHelper.NavigateTo="stylophone:QueueViewModel"
                     Content="{x:Bind strings:Resources.QueueHeader}"
                     Icon="Audio" />
-                <winui:NavigationViewItem
+                <muxc:NavigationViewItem
                     helpers:NavHelper.NavigateTo="viewmodels:LibraryViewModel"
                     Content="{x:Bind strings:Resources.LibraryHeader}"
                     Icon="Library" />
-                <winui:NavigationViewItem
+                <muxc:NavigationViewItem
                     helpers:NavHelper.NavigateTo="stylophone:FoldersViewModel"
                     Content="{x:Bind strings:Resources.FoldersHeader}"
                     Icon="MapDrive" />
 
-                <winui:NavigationViewItemSeparator />
-                <winui:NavigationViewItem
+                <muxc:NavigationViewItemSeparator />
+                <muxc:NavigationViewItem
                     x:Name="playlistContainer"
                     Content="{x:Bind strings:Resources.PlaylistsHeader}"
                     Icon="MusicInfo"
                     SelectsOnInvoked="False" />
                 <!--  This menuitem is filled in viewmodel  -->
-            </winui:NavigationView.MenuItems>
+            </muxc:NavigationView.MenuItems>
 
-            <winui:NavigationView.AutoSuggestBox>
+            <muxc:NavigationView.AutoSuggestBox>
                 <AutoSuggestBox
                     AutomationProperties.Name="Search"
                     GotFocus="OpenSuggestionsPanel"
@@ -109,7 +134,7 @@
                     PlaceholderText="{x:Bind strings:Resources.SearchPlaceholderText}"
                     QueryIcon="Find"
                     UpdateTextOnSelect="False" />
-            </winui:NavigationView.AutoSuggestBox>
+            </muxc:NavigationView.AutoSuggestBox>
 
             <i:Interaction.Behaviors>
                 <ic:EventTriggerBehavior EventName="ItemInvoked">
@@ -117,26 +142,22 @@
                 </ic:EventTriggerBehavior>
             </i:Interaction.Behaviors>
 
-            <Grid x:Name="contentContainer" Margin="0,-32,0,0">
+            <Grid x:Name="contentContainer">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Grid.Shadow>
-                    <ThemeShadow x:Name="ContentShadow" />
-                </Grid.Shadow>
 
                 <!--  Custom Header so we can hide the entire pane for fullscreen views  -->
                 <Grid
                     x:Name="Header"
                     Grid.Row="0"
-                    Padding="96,38,0,12"
                     Visibility="{x:Bind ViewModel.HeaderText, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}">
                     <TextBlock
-                        Margin="{StaticResource SmallLeftRightMargin}"
-                        FontSize="24"
+                        Margin="36,12,0,16"
+                        FontSize="28"
                         Style="{ThemeResource TitleTextBlockStyle}"
                         Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}" />
                 </Grid>
@@ -148,26 +169,17 @@
                 <controls:InAppNotification x:Name="notificationHolder" Grid.Row="1" />
 
             </Grid>
-        </winui:NavigationView>
+        </muxc:NavigationView>
 
-        <views:NowPlayingBar x:Name="nowPlayingBar" Grid.Row="1">
+        <views:NowPlayingBar
+            x:Name="nowPlayingBar"
+            Grid.Row="1"
+            Margin="8">
             <views:NowPlayingBar.Shadow>
                 <ThemeShadow x:Name="NowPlayingShadow" />
             </views:NowPlayingBar.Shadow>
         </views:NowPlayingBar>
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="Header.Padding" Value="8,24,0,12" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
     </Grid>
 
 </Page>

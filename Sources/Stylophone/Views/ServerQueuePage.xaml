@@ -10,7 +10,6 @@
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     NavigationCacheMode="Required"
-    Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
     <Page.Resources>
         <Stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
@@ -18,75 +17,87 @@
 
         <!--  DataTemplate used:  -->
         <DataTemplate x:Key="QueueTemplate" x:DataType="vm:TrackViewModel">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="1.5*" />
-                    <ColumnDefinition Width="50" />
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0">
+            <ListViewItem
+                Margin="4,0"
+                HorizontalContentAlignment="Stretch"
+                Style="{ThemeResource DefaultListViewItemStyle}">
+                <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="24" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="50" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="0"
-                        VerticalAlignment="Center"
-                        MaxLines="1"
-                        Style="{ThemeResource BaseTextBlockStyle}"
-                        Text="{x:Bind Name}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind Name}" />
 
-                    <FontIcon
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="24" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            MaxLines="1"
+                            Style="{ThemeResource BaseTextBlockStyle}"
+                            Text="{x:Bind Name}"
+                            TextTrimming="CharacterEllipsis"
+                            ToolTipService.ToolTip="{x:Bind Name}" />
+
+                        <FontIcon
+                            Grid.Column="1"
+                            Margin="-4,0,0,0"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="24"
+                            Foreground="{ThemeResource SystemAccentColor}"
+                            Glyph="&#xF61F;"
+                            Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    </Grid>
+
+                    <TextBlock
                         Grid.Column="1"
-                        Margin="-4,0,0,0"
-                        VerticalAlignment="Center"
-                        FontFamily="{StaticResource SymbolThemeFontFamily}"
-                        FontSize="24"
-                        Foreground="{ThemeResource SystemAccentColorDark2}"
-                        Glyph="&#xF61F;"
-                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-                </Grid>
-
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="12,0,0,0"
-                    VerticalAlignment="Center"
-                    MaxLines="1"
-                    Style="{ThemeResource BodyTextBlockStyle}"
-                    Text="{x:Bind File.Artist}"
-                    TextTrimming="CharacterEllipsis"
-                    ToolTipService.ToolTip="{x:Bind File.Artist}" />
-
-                <HyperlinkButton
-                    Grid.Column="2"
-                    Command="{x:Bind ViewAlbumCommand}"
-                    CommandParameter="{x:Bind File}"
-                    Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">
-                    <TextBlock
+                        Margin="12,0,0,0"
                         VerticalAlignment="Center"
                         MaxLines="1"
                         Style="{ThemeResource BodyTextBlockStyle}"
-                        Text="{x:Bind File.Album}"
+                        Text="{x:Bind File.Artist}"
                         TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind File.Album}" />
-                </HyperlinkButton>
+                        ToolTipService.ToolTip="{x:Bind File.Artist}" />
 
-                <TextBlock
-                    Grid.Column="3"
-                    VerticalAlignment="Center"
-                    MaxLines="1"
-                    Style="{ThemeResource BodyTextBlockStyle}"
-                    Text="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}"
-                    TextTrimming="CharacterEllipsis"
-                    ToolTipService.ToolTip="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}" />
-            </Grid>
+                    <HyperlinkButton
+                        Grid.Column="2"
+                        Command="{x:Bind ViewAlbumCommand}"
+                        CommandParameter="{x:Bind File}"
+                        Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            MaxLines="1"
+                            Style="{ThemeResource BodyTextBlockStyle}"
+                            Text="{x:Bind File.Album}"
+                            TextTrimming="CharacterEllipsis"
+                            ToolTipService.ToolTip="{x:Bind File.Album}" />
+                    </HyperlinkButton>
+
+                    <TextBlock
+                        Grid.Column="3"
+                        VerticalAlignment="Center"
+                        MaxLines="1"
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        Text="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        ToolTipService.ToolTip="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}" />
+                </Grid>
+            </ListViewItem>
         </DataTemplate>
     </Page.Resources>
-    <Grid x:Name="ContentArea">
+    <Grid
+        x:Name="ContentArea"
+        Margin="8,0"
+        Background="{ThemeResource LayerFillColorDefaultBrush}"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="8">
+
         <Stylophone:AlternatingRowListView
             x:Name="QueueList"
             ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
@@ -144,12 +155,6 @@
 
                 </MenuFlyout>
             </Stylophone:AlternatingRowListView.ContextFlyout>
-            <Stylophone:AlternatingRowListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
-                </Style>
-            </Stylophone:AlternatingRowListView.ItemContainerStyle>
         </Stylophone:AlternatingRowListView>
 
         <StackPanel

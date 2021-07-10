@@ -4,65 +4,6 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:muxm="using:Microsoft.UI.Xaml.Media">
 
-    <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-            <muxm:AcrylicBrush
-                x:Key="NavigationViewDefaultPaneBackground"
-                BackgroundSource="Backdrop"
-                TintColor="{StaticResource SystemChromeMediumColor}"
-                TintOpacity="0.6" />
-
-            <AcrylicBrush
-                x:Key="NavigationViewExpandedPaneBackground"
-                BackgroundSource="HostBackdrop"
-                FallbackColor="{StaticResource SystemChromeMediumLowColor}"
-                TintColor="{StaticResource SystemChromeMediumColor}"
-                TintOpacity="0.8" />
-
-            <AcrylicBrush
-                x:Key="SystemControlAcrylicElementMediumHighBrush"
-                BackgroundSource="Backdrop"
-                FallbackColor="{StaticResource SystemChromeMediumColor}"
-                TintColor="{StaticResource SystemChromeAltHighColor}"
-                TintOpacity="0.4" />
-
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-            <muxm:AcrylicBrush
-                x:Key="NavigationViewDefaultPaneBackground"
-                BackgroundSource="Backdrop"
-                TintColor="{StaticResource SystemChromeMediumColor}"
-                TintOpacity="0.6" />
-
-            <AcrylicBrush
-                x:Key="NavigationViewExpandedPaneBackground"
-                BackgroundSource="HostBackdrop"
-                FallbackColor="{StaticResource SystemChromeMediumLowColor}"
-                TintColor="{StaticResource SystemChromeMediumColor}"
-                TintOpacity="0.8" />
-
-            <AcrylicBrush
-                x:Key="SystemControlAcrylicElementMediumHighBrush"
-                BackgroundSource="Backdrop"
-                FallbackColor="{StaticResource SystemChromeMediumColor}"
-                TintColor="{StaticResource SystemChromeAltHighColor}"
-                TintOpacity="0.7" />
-
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="HighContrast">
-            <!--
-                Always include a "HighContrast" dictionary when you override
-                theme resources. This empty dictionary ensures that the
-                default high contrast resources are used when the user
-                turns on high contrast mode.
-            -->
-        </ResourceDictionary>
-    </ResourceDictionary.ThemeDictionaries>
-
-    <Style x:Key="PageStyle" TargetType="Page">
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-
     <!--  Circle button used on the overlay view, now playing view and now playing bar  -->
     <Style
         x:Key="CircleButtonStyle"

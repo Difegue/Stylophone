@@ -45,7 +45,6 @@ namespace Stylophone
 
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             Windows.ApplicationModel.Core.CoreApplication.EnablePrelaunch(true);
 
             // https://docs.microsoft.com/en-us/windows/uwp/design/devices/designing-for-tv#custom-visual-state-trigger-for-xbox

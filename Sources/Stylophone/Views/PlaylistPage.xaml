@@ -12,7 +12,6 @@
     xmlns:toolkitbehaviors="using:Microsoft.Toolkit.Uwp.UI.Behaviors"
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:vm="using:Stylophone.Common.ViewModels"
-    Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
 
     <Page.Resources>

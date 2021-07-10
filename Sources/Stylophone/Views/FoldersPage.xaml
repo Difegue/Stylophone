@@ -10,7 +10,6 @@
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -68,7 +67,7 @@
                 Background="Transparent"
                 Command="{Binding ElementName=collapseBehavior, Path=CollapseAllCommand}"
                 Content="&#xF165;"
-                FontFamily="Segoe MDL2 Assets"
+                FontFamily="{StaticResource SymbolThemeFontFamily}"
                 FontSize="14"
                 ToolTipService.ToolTip="{x:Bind strings:Resources.FoldersCollapseAll}" />
         </Grid>

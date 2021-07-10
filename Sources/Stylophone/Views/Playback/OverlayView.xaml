@@ -55,7 +55,7 @@
                 Style="{StaticResource CircleButtonStyle}">
                 <Button.Content>
                     <TextBlock
-                        FontFamily="Segoe MDL2 Assets"
+                        FontFamily="{StaticResource SymbolThemeFontFamily}"
                         FontSize="18"
                         Text="&#xE72B;"
                         TextAlignment="Center" />
@@ -138,7 +138,7 @@
                     Visibility="Collapsed">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
                             FontSize="18"
                             Text="&#xE8B1;"
                             TextAlignment="Center" />
@@ -155,7 +155,7 @@
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipPrevious}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
                             FontSize="18"
                             Text="&#xE892;"
                             TextAlignment="Center" />
@@ -172,7 +172,7 @@
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
                             FontSize="26"
                             Text="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
                             TextAlignment="Center" />
@@ -189,7 +189,7 @@
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipNext}">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
                             FontSize="18"
                             Text="&#xE893;"
                             TextAlignment="Center" />
@@ -209,7 +209,7 @@
                     Visibility="Collapsed">
                     <Button.Content>
                         <TextBlock
-                            FontFamily="Segoe MDL2 Assets"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
                             FontSize="18"
                             Text="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
                             TextAlignment="Center" />
