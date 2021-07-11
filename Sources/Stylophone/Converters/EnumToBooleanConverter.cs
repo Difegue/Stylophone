@@ -23,7 +23,7 @@ namespace Stylophone.Helpers
                 return enumValue.Equals(value);
             }
 
-            throw new ArgumentException(Resources.ExceptionEnumToBooleanConverterParameterMustBeAnEnumName);
+           throw new ArgumentException(Resources.ExceptionEnumToBooleanConverterParameterMustBeAnEnumName);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

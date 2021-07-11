@@ -6,6 +6,9 @@
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helper="using:Stylophone.Helpers"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:local="using:Stylophone.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:stylophone="using:Stylophone.Common.Interfaces"
@@ -18,188 +21,235 @@
             FalseValue="Visible"
             TrueValue="Collapsed" />
         <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
+
+        <converters:BoolToObjectConverter x:Key="IconConverter">
+            <converters:BoolToObjectConverter.TrueValue>
+                <SymbolIcon
+                    VerticalAlignment="Top"
+                    Foreground="Green"
+                    Symbol="MusicInfo" />
+            </converters:BoolToObjectConverter.TrueValue>
+            <converters:BoolToObjectConverter.FalseValue>
+                <SymbolIcon
+                    VerticalAlignment="Top"
+                    Foreground="Red"
+                    Symbol="Clear" />
+            </converters:BoolToObjectConverter.FalseValue>
+        </converters:BoolToObjectConverter>
+
+        <converters:BoolToObjectConverter x:Key="DensityLabelConverter">
+            <converters:BoolToObjectConverter.TrueValue>
+                <TextBlock Text="{x:Bind strings:Resources.SettingsUIDensityCompact}" />
+            </converters:BoolToObjectConverter.TrueValue>
+            <converters:BoolToObjectConverter.FalseValue>
+                <TextBlock Text="{x:Bind strings:Resources.SettingsUIDensityNormal}" />
+            </converters:BoolToObjectConverter.FalseValue>
+        </converters:BoolToObjectConverter>
+
     </Page.Resources>
 
-    <ScrollViewer Margin="{StaticResource MediumLeftMargin}">
-        <StackPanel x:Name="ContentArea">
+    <ScrollViewer>
+        <StackPanel x:Name="ContentArea" Margin="{StaticResource SmallLeftRightMargin}">
 
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="{x:Bind strings:Resources.SettingsServer}" />
-
-            <StackPanel
-                Width="350"
+            <local:SettingsBlockControl
+                Title="{x:Bind strings:Resources.SettingsServer}"
                 Margin="{StaticResource SmallTopMargin}"
-                HorizontalAlignment="Left">
+                Description="{x:Bind ViewModel.ServerStatus}"
+                Icon="{x:Bind ViewModel.IsServerValid, Converter={StaticResource IconConverter}, Mode=OneWay}">
 
-                <TextBox PlaceholderText="{x:Bind strings:Resources.SettingsServerHost}" Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}" />
+                <local:SettingsBlockControl.ExpandableContent>
+                    <StackPanel>
 
-                <controls:NumberBox
-                    Margin="{StaticResource XSmallTopMargin}"
-                    Maximum="65536"
-                    Minimum="1"
-                    PlaceholderText="{x:Bind strings:Resources.SettingsServerPort}"
-                    SpinButtonPlacementMode="Compact"
-                    Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}" />
+                        <local:SettingsBlockControl Title="{x:Bind strings:Resources.SettingsServerHost}" Height="52">
+                            <TextBox
+                                Width="128"
+                                Margin="0,-8"
+                                PlaceholderText="192.168.x.x"
+                                Text="{x:Bind ViewModel.ServerHost, Mode=TwoWay}" />
+                        </local:SettingsBlockControl>
 
-                <ProgressBar
-                    Margin="{StaticResource XSmallTopMargin}"
-                    IsIndeterminate="True"
-                    Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                        <local:SettingsBlockControl Title="{x:Bind strings:Resources.SettingsServerPort}" Height="52">
+                            <controls:NumberBox
+                                Width="96"
+                                Margin="0,-8"
+                                Maximum="65536"
+                                Minimum="1"
+                                PlaceholderText="6600"
+                                SpinButtonPlacementMode="Compact"
+                                Value="{x:Bind ViewModel.ServerPort, Mode=TwoWay}" />
+                        </local:SettingsBlockControl>
 
-                <StackPanel Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
-                    <StackPanel
-                        Margin="{StaticResource XSmallTopMargin}"
-                        Orientation="Horizontal"
-                        Spacing="4"
-                        Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
-                        <SymbolIcon
-                            VerticalAlignment="Top"
-                            Foreground="Red"
-                            Symbol="Clear" />
-                        <TextBlock
-                            Width="325"
-                            Text="{x:Bind strings:Resources.SettingsNoServerError}"
-                            TextWrapping="WrapWholeWords" />
+                        <local:SettingsBlockControl Title="{x:Bind strings:Resources.SettingsServerPassword}" Height="52">
+                            <PasswordBox
+                                Width="128"
+                                Margin="0,-8"
+                                Password="{x:Bind ViewModel.ServerPassword, Mode=TwoWay}"
+                                PlaceholderText="{x:Bind strings:Resources.SettingsServerPassword}" />
+                        </local:SettingsBlockControl>
+
+                        <local:SettingsBlockControl Title="{x:Bind ViewModel.ServerInfo, Mode=OneWay}" Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
+
+                            <local:SettingsBlockControl.Icon>
+                                <SymbolIcon Symbol="MapDrive" />
+                            </local:SettingsBlockControl.Icon>
+
+                            <ProgressBar
+                                Margin="8"
+                                IsIndeterminate="True"
+                                Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+
+                        </local:SettingsBlockControl>
+
                     </StackPanel>
+                </local:SettingsBlockControl.ExpandableContent>
+            </local:SettingsBlockControl>
 
-                    <StackPanel
-                        Margin="{StaticResource XSmallTopMargin}"
-                        Orientation="Horizontal"
-                        Spacing="4"
-                        Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
-                        <SymbolIcon
-                            VerticalAlignment="Top"
-                            Foreground="Green"
-                            Symbol="MusicInfo" />
-                        <TextBlock Text="{x:Bind ViewModel.ServerInfo, Mode=OneWay}" />
-                    </StackPanel>
-                </StackPanel>
-
-
-            </StackPanel>
+            <!--  DB/Art  -->
 
             <TextBlock
                 Margin="{StaticResource MediumTopMargin}"
-                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Style="{ThemeResource BaseTextBlockStyle}"
                 Text="{x:Bind strings:Resources.SettingsDatabase}" />
 
-            <StackPanel Margin="{StaticResource SmallTopMargin}">
-
+            <local:SettingsBlockControl
+                Title="{x:Bind strings:Resources.SettingsUpdateDbTitle}"
+                Margin="{StaticResource SmallTopMargin}"
+                Description="{x:Bind strings:Resources.SettingsUpdateDbDesc}">
+                <local:SettingsBlockControl.Icon>
+                    <SymbolIcon Symbol="Rotate" />
+                </local:SettingsBlockControl.Icon>
                 <Button
                     Command="{x:Bind ViewModel.RescanDbCommand}"
                     Content="{x:Bind strings:Resources.SettingsUpdateDatabase}"
                     IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" />
+            </local:SettingsBlockControl>
 
-                <TextBlock
-                    Margin="{StaticResource SmallTopMargin}"
-                    Style="{ThemeResource BodyTextBlockStyle}"
-                    Text="{x:Bind strings:Resources.SettingsClearCacheDescription}" />
+            <local:SettingsBlockControl Description="{x:Bind strings:Resources.SettingsClearCacheDescription}">
+                <local:SettingsBlockControl.Icon>
+                    <SymbolIcon Symbol="ClearSelection" />
+                </local:SettingsBlockControl.Icon>
+                <Button Command="{x:Bind ViewModel.ClearCacheCommand}" Content="{x:Bind strings:Resources.SettingsClearCache}" />
+            </local:SettingsBlockControl>
 
-                <Button
-                    Margin="{StaticResource XSmallTopMargin}"
-                    Command="{x:Bind ViewModel.ClearCacheCommand}"
-                    Content="{x:Bind strings:Resources.SettingsClearCache}" />
-
-            </StackPanel>
+            <!--  Customization  -->
 
             <TextBlock
                 Margin="{StaticResource MediumTopMargin}"
-                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Style="{ThemeResource BaseTextBlockStyle}"
                 Text="{x:Bind strings:Resources.SettingsCustomization}" />
-            <StackPanel Margin="{StaticResource SmallTopMargin}">
-                <TextBlock Text="{x:Bind strings:Resources.SettingsTheme}" />
 
-                <StackPanel Margin="{StaticResource XSmallTopMargin}">
-                    <RadioButton
-                        Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                        Content="{x:Bind strings:Resources.SettingsThemeLight}"
-                        FontSize="15"
-                        GroupName="AppTheme"
-                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}">
-                        <RadioButton.CommandParameter>
-                            <stylophone:Theme>Light</stylophone:Theme>
-                        </RadioButton.CommandParameter>
-                    </RadioButton>
-                    <RadioButton
-                        Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                        Content="{x:Bind strings:Resources.SettingsThemeDark}"
-                        FontSize="15"
-                        GroupName="AppTheme"
-                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}">
-                        <RadioButton.CommandParameter>
-                            <stylophone:Theme>Dark</stylophone:Theme>
-                        </RadioButton.CommandParameter>
-                    </RadioButton>
-                    <RadioButton
-                        Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                        Content="{x:Bind strings:Resources.SettingsThemeDefault}"
-                        FontSize="15"
-                        GroupName="AppTheme"
-                        IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}">
-                        <RadioButton.CommandParameter>
-                            <stylophone:Theme>Default</stylophone:Theme>
-                        </RadioButton.CommandParameter>
-                    </RadioButton>
-                </StackPanel>
+            <local:SettingsBlockControl Title="{x:Bind strings:Resources.SettingsTheme}" Margin="{StaticResource SmallTopMargin}">
+                <local:SettingsBlockControl.Icon>
+                    <SymbolIcon Symbol="Highlight" />
+                </local:SettingsBlockControl.Icon>
 
-                <TextBlock Margin="{StaticResource XSmallTopMargin}" Text="{x:Bind strings:Resources.SettingsUIDensity}" />
+                <TextBlock Text="{x:Bind ViewModel.ElementTheme, Mode=OneWay}" />
 
-                <TextBlock Style="{StaticResource CaptionTextBlockStyle}" Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" />
-                <StackPanel Margin="{StaticResource XSmallTopMargin}">
-                    <RadioButton
-                        Command="{x:Bind ViewModel.SwitchSizingCommand}"
-                        CommandParameter="False"
-                        Content="{x:Bind strings:Resources.SettingsUIDensityNormal}"
-                        FontSize="15"
-                        GroupName="AppSizing"
-                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}" />
-                    <RadioButton
-                        Command="{x:Bind ViewModel.SwitchSizingCommand}"
-                        CommandParameter="True"
-                        Content="{x:Bind strings:Resources.SettingsUIDensityCompact}"
-                        FontSize="15"
-                        GroupName="AppSizing"
-                        IsChecked="{x:Bind ViewModel.IsCompactSizing, Mode=OneWay}" />
-                </StackPanel>
+                <local:SettingsBlockControl.ExpandableContent>
+                    <StackPanel Margin="56,8,8,8">
+                        <RadioButton
+                            Command="{x:Bind ViewModel.SwitchThemeCommand}"
+                            Content="{x:Bind strings:Resources.SettingsThemeLight}"
+                            GroupName="AppTheme"
+                            IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}">
+                            <RadioButton.CommandParameter>
+                                <stylophone:Theme>Light</stylophone:Theme>
+                            </RadioButton.CommandParameter>
+                        </RadioButton>
+                        <RadioButton
+                            Command="{x:Bind ViewModel.SwitchThemeCommand}"
+                            Content="{x:Bind strings:Resources.SettingsThemeDark}"
+                            GroupName="AppTheme"
+                            IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}">
+                            <RadioButton.CommandParameter>
+                                <stylophone:Theme>Dark</stylophone:Theme>
+                            </RadioButton.CommandParameter>
+                        </RadioButton>
+                        <RadioButton
+                            Command="{x:Bind ViewModel.SwitchThemeCommand}"
+                            Content="{x:Bind strings:Resources.SettingsThemeDefault}"
+                            GroupName="AppTheme"
+                            IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}">
+                            <RadioButton.CommandParameter>
+                                <stylophone:Theme>Default</stylophone:Theme>
+                            </RadioButton.CommandParameter>
+                        </RadioButton>
+                    </StackPanel>
+                </local:SettingsBlockControl.ExpandableContent>
 
-            </StackPanel>
+            </local:SettingsBlockControl>
+
+            <local:SettingsBlockControl Title="{x:Bind strings:Resources.SettingsUIDensity}" Description="{x:Bind strings:Resources.SettingsApplyOnRestart}">
+                <local:SettingsBlockControl.Icon>
+                    <SymbolIcon Symbol="FontSize" />
+                </local:SettingsBlockControl.Icon>
+
+                <Border Child="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource DensityLabelConverter}, Mode=OneWay}" />
+
+                <local:SettingsBlockControl.ExpandableContent>
+                    <StackPanel Margin="56,8,8,8">
+                        <RadioButton
+                            Command="{x:Bind ViewModel.SwitchSizingCommand}"
+                            CommandParameter="False"
+                            Content="{x:Bind strings:Resources.SettingsUIDensityNormal}"
+                            GroupName="AppSizing"
+                            IsChecked="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}" />
+                        <RadioButton
+                            Command="{x:Bind ViewModel.SwitchSizingCommand}"
+                            CommandParameter="True"
+                            Content="{x:Bind strings:Resources.SettingsUIDensityCompact}"
+                            GroupName="AppSizing"
+                            IsChecked="{x:Bind ViewModel.IsCompactSizing, Mode=OneWay}" />
+                    </StackPanel>
+                </local:SettingsBlockControl.ExpandableContent>
+            </local:SettingsBlockControl>
+
+            <!--  Analytics/About  -->
 
             <TextBlock
                 Margin="{StaticResource MediumTopMargin}"
-                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Style="{ThemeResource BaseTextBlockStyle}"
                 Text="{x:Bind strings:Resources.SettingsAnalytics}" />
 
-            <StackPanel Margin="{StaticResource SmallTopMargin}">
-                <ToggleSwitch Header="{x:Bind strings:Resources.SettingsAnalyticsText}" IsOn="{x:Bind ViewModel.DisableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}" />
-                <TextBlock Style="{StaticResource CaptionTextBlockStyle}" Text="{x:Bind strings:Resources.SettingsApplyOnRestart}" />
-            </StackPanel>
+            <local:SettingsBlockControl
+                Title="{x:Bind strings:Resources.SettingsAnalyticsText}"
+                Margin="{StaticResource SmallTopMargin}"
+                Description="{x:Bind strings:Resources.SettingsApplyOnRestart}">
+                <local:SettingsBlockControl.Icon>
+                    <SymbolIcon Symbol="Repair" />
+                </local:SettingsBlockControl.Icon>
+                <local:SettingsBlockControl.SettingsActionableElement>
+                    <ToggleSwitch Margin="0,0,-80,0" IsOn="{x:Bind ViewModel.DisableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}" />
+                </local:SettingsBlockControl.SettingsActionableElement>
+            </local:SettingsBlockControl>
+
 
             <TextBlock
                 Margin="{StaticResource MediumTopMargin}"
-                Style="{ThemeResource SubtitleTextBlockStyle}"
+                Style="{ThemeResource BaseTextBlockStyle}"
                 Text="{x:Bind strings:Resources.SettingsAbout}" />
 
-            <StackPanel Margin="{StaticResource SmallTopMargin}">
-                <StackPanel Orientation="Horizontal">
-                    <Image
-                        Width="64"
-                        Height="64"
-                        Margin="12,0"
+            <local:SettingsBlockControl
+                Title="{x:Bind ViewModel.VersionDescription, Mode=OneWay}"
+                Margin="{StaticResource SmallTopMargin}"
+                Description="{x:Bind strings:Resources.SettingsAboutText}">
+
+                <local:SettingsBlockControl.Icon>
+                    <controls:ImageIcon
+                        Width="48"
+                        Height="48"
                         Source="ms-appx:///Assets/Square44x44Logo.altform-unplated_targetsize-256.png" />
+                </local:SettingsBlockControl.Icon>
 
-                    <StackPanel>
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" />
-                        <TextBlock
-                            Margin="{StaticResource XSmallTopMargin}"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Text="{x:Bind strings:Resources.SettingsAboutText}" />
-                    </StackPanel>
-                </StackPanel>
+                <local:SettingsBlockControl.ExpandableContent>
+                    <HyperlinkButton
+                        Margin="8"
+                        Content="{x:Bind strings:Resources.SettingsGithub}"
+                        NavigateUri="{x:Bind strings:Resources.SettingsGithubLink}" />
+                </local:SettingsBlockControl.ExpandableContent>
 
-                <HyperlinkButton
-                    Margin="{StaticResource XSmallTopMargin}"
-                    Content="{x:Bind strings:Resources.SettingsGithub}"
-                    NavigateUri="{x:Bind strings:Resources.SettingsGithubLink}" />
-            </StackPanel>
+            </local:SettingsBlockControl>
+
         </StackPanel>
     </ScrollViewer>
 </Page>

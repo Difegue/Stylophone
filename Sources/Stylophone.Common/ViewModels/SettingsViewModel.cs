@@ -75,7 +75,7 @@ namespace Stylophone.Common.ViewModels
                 if (value != _serverHost)
                 {
                     _applicationStorageService.SetValue(nameof(ServerHost), value ?? "localhost");
-                    TriggerServerConnection(value, ServerPort);
+                    TriggerServerConnection(value, ServerPort, ServerPassword);
                 }
                 Set(ref _serverHost, value);
             }
@@ -90,9 +90,24 @@ namespace Stylophone.Common.ViewModels
                 if (value != _serverPort)
                 {
                     _applicationStorageService.SetValue(nameof(ServerPort), value);
-                    TriggerServerConnection(ServerHost, value);
+                    TriggerServerConnection(ServerHost, value, ServerPassword);
                 }
                 Set(ref _serverPort, value);
+            }
+        }
+
+        private string _serverPass;
+        public string ServerPassword
+        {
+            get { return _serverPass; }
+            set
+            {
+                if (value != _serverPass)
+                {
+                    _applicationStorageService.SetValue(nameof(ServerPassword), value ?? "");
+                    TriggerServerConnection(ServerHost, ServerPort, value);
+                }
+                Set(ref _serverPass, value);
             }
         }
 
@@ -132,6 +147,8 @@ namespace Stylophone.Common.ViewModels
         }
 
         public bool IsServerValid => _mpdService.IsConnected;
+
+        public string ServerStatus => IsServerValid ? ServerInfo.Split('\n').First() + (IsStreamingAvailable ? ", "+ Resources.SettingsLocalPlaybackAvailable : "") : Resources.SettingsNoServerError;
 
         private bool _httpdAvailable;
         public bool IsStreamingAvailable
@@ -190,9 +207,6 @@ namespace Stylophone.Common.ViewModels
                 return;
             }
 
-            var result = await _dialogService.ShowConfirmDialogAsync(Resources.UpdateDbDialogTitle, Resources.UpdateDbDialogText, Resources.OKButtonText, Resources.CancelButtonText);
-            if (!result) return;
-
             var res = await _mpdService.SafelySendCommandAsync(new MpcNET.Commands.Database.UpdateCommand());
 
             if (res != null)
@@ -236,13 +250,13 @@ namespace Stylophone.Common.ViewModels
             var appName = Resources.AppDisplayName;
             Version version = _interop.GetAppVersion();
 
-            return $"{version.Major}.{version.Minor}.{(version.Build > -1 ? version.Build : 0)}.{(version.Revision > -1 ? version.Revision : 0)}";
+            return $"{appName} - {version.Major}.{version.Minor}.{(version.Build > -1 ? version.Build : 0)}.{(version.Revision > -1 ? version.Revision : 0)}";
         }
 
-        private void TriggerServerConnection(string host, int port)
+        private void TriggerServerConnection(string host, int port, string pass)
         {
             IsCheckingServer = true;
-            _mpdService.SetServerInfo(host, port);
+            _mpdService.SetServerInfo(host, port, pass);
 
             Task.Run(async () => await _mpdService.InitializeAsync());
         }
@@ -251,7 +265,7 @@ namespace Stylophone.Common.ViewModels
         {
             IsCheckingServer = _mpdService.IsConnecting;
 
-            await _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsServerValid)));
+            await _dispatcherService.ExecuteOnUIThreadAsync(() => { OnPropertyChanged(nameof(IsServerValid)); OnPropertyChanged(nameof(ServerStatus)); });
 
             if (!_mpdService.IsConnected) return;
 
@@ -281,6 +295,8 @@ namespace Stylophone.Common.ViewModels
 
                     IsStreamingAvailable = outputs.Select(o => o.Plugin).Contains("httpd");
                 }
+
+                await _dispatcherService.ExecuteOnUIThreadAsync(() => { OnPropertyChanged(nameof(IsServerValid)); OnPropertyChanged(nameof(ServerStatus)); });
             }
         }
     }

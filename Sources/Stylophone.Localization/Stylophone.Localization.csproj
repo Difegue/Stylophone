@@ -6,10 +6,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Update="Strings\Resources.en-US.Designer.cs">
+	  <None Remove="Strings\Resources.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Include="Strings\Resources.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Strings\Resources.Designer.cs">
 			<AutoGen>True</AutoGen>
 			<DesignTime>True</DesignTime>
-			<DependentUpon>Resources.en-US.resx</DependentUpon>
+			<DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
@@ -17,10 +27,15 @@
 			<SubType>Designer</SubType>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Strings\Resources.en-US.resx">
-			<Generator>PublicResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.en-US.Designer.cs</LastGenOutput>
 			<SubType>Designer</SubType>
 		</EmbeddedResource>
+			
+		<EmbeddedResource Update="Strings\Resources.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		
 	</ItemGroup>
 
 </Project>

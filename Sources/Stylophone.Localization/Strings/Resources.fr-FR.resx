@@ -170,11 +170,11 @@
   <data name="ErrorInvalidMPDResponse" xml:space="preserve">
     <value>Réponse du serveur MPD invalide.</value>
   </data>
-  <data name="UpdateDbDialogText" xml:space="preserve">
+  <data name="SettingsUpdateDbDesc" xml:space="preserve">
     <value>Cette opération peut prendre un certain temps.</value>
   </data>
-  <data name="UpdateDbDialogTitle" xml:space="preserve">
-    <value>Mettre à jour la base de données MPD ?</value>
+  <data name="SettingsUpdateDbTitle" xml:space="preserve">
+    <value>Mettre à jour la base de données du serveur MPD</value>
   </data>
   <data name="FoldersHeader" xml:space="preserve">
     <value>Dossiers</value>
@@ -430,5 +430,14 @@ J'espère que vous apprécierez l'application !</value>
   </data>
   <data name="AddToPlaylistNewPlaylistName" xml:space="preserve">
     <value>Nom de la Playlist</value>
+  </data>
+  <data name="SettingsServerPassword" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="ErrorPassword" xml:space="preserve">
+    <value>Mot de passe invalide</value>
+  </data>
+  <data name="SettingsLocalPlaybackAvailable" xml:space="preserve">
+    <value>Écoute en local disponible</value>
   </data>
 </root>

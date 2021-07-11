@@ -16,10 +16,10 @@
         <converters:SKColorToUWPConverter x:Key="SKColorToUWPConverter" />
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
 
-        <converters:BoolToBrushConverter
+        <converters1:BoolToObjectConverter
             x:Key="BoolToBrushConverter"
-            FalseColor="SystemControlDisabledTransparentBrush"
-            TrueColor="ButtonBackgroundPointerOver" />
+            FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
+            TrueValue="{ThemeResource ButtonBackgroundPointerOver}" />
 
         <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters1:BoolToVisibilityConverter
@@ -32,9 +32,12 @@
     <Grid
         x:Name="RootGrid"
         Height="96"
+        Margin="8"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        CornerRadius="8"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="4"
         RequestedTheme="Dark">
         <!--  Split the content into two main sections  -->
         <Grid.ColumnDefinitions>
@@ -46,6 +49,7 @@
         <!--  Track Background  -->
         <Image
             Grid.ColumnSpan="3"
+            Margin="2"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             Canvas.ZIndex="5"
@@ -58,7 +62,8 @@
             Grid.ColumnSpan="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Canvas.ZIndex="6">
+            Canvas.ZIndex="6"
+            CornerRadius="4">
             <Border.Background>
                 <AcrylicBrush
                     BackgroundSource="Backdrop"

@@ -18,25 +18,31 @@
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
         <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
-        <converters:BoolToBrushConverter
+        <converters1:BoolToObjectConverter
             x:Key="BoolToBrushConverter"
-            FalseColor="SystemControlDisabledTransparentBrush"
-            TrueColor="ButtonRevealBackgroundPointerOver" />
+            FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
+            TrueValue="{ThemeResource ButtonBackgroundPointerOver}" />
 
     </Page.Resources>
 
 
-    <RelativePanel>
+    <RelativePanel
+        Margin="8,2,8,0"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="4">
         <!--  Track Background  -->
         <Border
             Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}"
             Canvas.ZIndex="-1"
+            CornerRadius="4"
             RelativePanel.AlignBottomWithPanel="True"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.AlignTopWithPanel="True" />
 
         <Image
+            Margin="2"
             HorizontalAlignment="Center"
             Canvas.ZIndex="-2"
             Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
@@ -60,7 +66,7 @@
                 x:Name="AlbumArt"
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
-                Margin="24,72,24,0"
+                Margin="24,56,24,0"
                 Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -115,10 +121,10 @@
         </Grid>
 
         <StackPanel
-            Margin="25,0,25,10"
+            Margin="24,16,16,16"
             Orientation="Horizontal"
-            RelativePanel.AlignBottomWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
             Visibility="{x:Bind PlaybackViewModel.HasNextTrack, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <TextBlock

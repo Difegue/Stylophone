@@ -9,7 +9,7 @@ using MpcNET.Types;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
-using MpcNET.Commands.Output;
+using MpcNET.Commands.Reflection;
 
 namespace Stylophone.Common.Services
 {
@@ -56,11 +56,13 @@ namespace Stylophone.Common.Services
 
         private string _host;
         private int _port;
+        private string _pass;
 
-        public void SetServerInfo(string host, int port)
+        public void SetServerInfo(string host, int port, string pass)
         {
             _host = host;
             _port = port;
+            _pass = pass;
         }
 
         public async Task InitializeAsync(bool withRetry = false)
@@ -154,7 +156,7 @@ namespace Stylophone.Common.Services
         }
 
         /// <summary>
-        /// Get a raw MPD Connection. Please use <see cref="SafelySendCommandAsync{T}(IMpcCommand{T}, CoreDispatcher)"/> instead when possible.
+        /// Get a raw MPD Connection. Please use <see cref="SafelySendCommandAsync{T}(IMpcCommand{T})"/> instead when possible.
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
@@ -201,6 +203,18 @@ namespace Stylophone.Common.Services
         {
             var c = new MpcConnection(_mpdEndpoint);
             await c.ConnectAsync(token);
+
+            // Handle password auth if there's a password defined
+            if (!string.IsNullOrEmpty(_pass))
+            {
+                var r = await c.SendAsync(new PasswordCommand(_pass));
+                if (!r.IsResponseValid)
+                {
+                    var mpdError = r.Response?.Result?.MpdError;
+                    _notificationService.ShowInAppNotification($"Invalid password: {mpdError ?? r.ToString()}", false);
+                }
+            }
+
             return c;
         }
 

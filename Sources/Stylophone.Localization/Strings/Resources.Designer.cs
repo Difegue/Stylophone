@@ -421,6 +421,15 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid password.
+        /// </summary>
+        public static string ErrorPassword {
+            get {
+                return ResourceManager.GetString("ErrorPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Couldn&apos;t play content: {0}.
         /// </summary>
         public static string ErrorPlayingTrack {
@@ -837,6 +846,15 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Local Playback available.
+        /// </summary>
+        public static string SettingsLocalPlaybackAvailable {
+            get {
+                return ResourceManager.GetString("SettingsLocalPlaybackAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Couldn&apos;t find an MPD server at this address!.
         /// </summary>
         public static string SettingsNoServerError {
@@ -860,6 +878,15 @@ namespace Stylophone.Localization.Strings {
         public static string SettingsServerHost {
             get {
                 return ResourceManager.GetString("SettingsServerHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Password.
+        /// </summary>
+        public static string SettingsServerPassword {
+            get {
+                return ResourceManager.GetString("SettingsServerPassword", resourceCulture);
             }
         }
         
@@ -947,18 +974,18 @@ namespace Stylophone.Localization.Strings {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à This operation might take the server some time to complete..
         /// </summary>
-        public static string UpdateDbDialogText {
+        public static string SettingsUpdateDbDesc {
             get {
-                return ResourceManager.GetString("UpdateDbDialogText", resourceCulture);
+                return ResourceManager.GetString("SettingsUpdateDbDesc", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Update the Server Database?.
+        ///   Recherche une chaîne localisée semblable à Update the MPD Server Database.
         /// </summary>
-        public static string UpdateDbDialogTitle {
+        public static string SettingsUpdateDbTitle {
             get {
-                return ResourceManager.GetString("UpdateDbDialogTitle", resourceCulture);
+                return ResourceManager.GetString("SettingsUpdateDbTitle", resourceCulture);
             }
         }
     }
