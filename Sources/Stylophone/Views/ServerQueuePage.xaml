@@ -107,10 +107,11 @@
             DoubleTapped="Play_Track"
             DragItemsCompleted="QueueList_DragItemsCompleted"
             DragItemsStarting="QueueList_DragItemsStarting"
+            Margin="0,8"
             EvenRowBackground="Transparent"
             ItemTemplate="{StaticResource QueueTemplate}"
             ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
-            OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
+            OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
             ReorderMode="Enabled"
             RightTapped="Select_Item"
             SelectionMode="Extended">

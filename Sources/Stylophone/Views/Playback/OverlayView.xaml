@@ -11,7 +11,6 @@
     xmlns:strings="using:Stylophone.Localization.Strings"
     d:DesignHeight="364"
     d:DesignWidth="340"
-    RequestedTheme="Dark"
     Unloaded="Page_Unloaded"
     mc:Ignorable="d">
 

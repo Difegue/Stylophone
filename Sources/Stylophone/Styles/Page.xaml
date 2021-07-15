@@ -1,5 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="BlackOnDarkThemeOnly" Color="Transparent" />
+            <SolidColorBrush x:Key="WhiteOnLightThemeOnly" Color="#F3F3F3" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="BlackOnDarkThemeOnly" Color="#202020" />
+            <SolidColorBrush x:Key="WhiteOnLightThemeOnly" Color="Transparent" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
     <FontFamily x:Key="SymbolThemeFontFamily">Segoe Fluent Icons</FontFamily>
 
     <!--  Button style used on the overlay view, now playing view and now playing bar  -->

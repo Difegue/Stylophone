@@ -24,16 +24,18 @@
 
         <converters:BoolToObjectConverter x:Key="IconConverter">
             <converters:BoolToObjectConverter.TrueValue>
-                <SymbolIcon
+                <FontIcon
                     VerticalAlignment="Top"
+                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
                     Foreground="Green"
-                    Symbol="MusicInfo" />
+                    Glyph="&#xE953;" />
             </converters:BoolToObjectConverter.TrueValue>
             <converters:BoolToObjectConverter.FalseValue>
-                <SymbolIcon
+                <FontIcon
                     VerticalAlignment="Top"
+                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
                     Foreground="Red"
-                    Symbol="Clear" />
+                    Glyph="&#xE8C9;" />
             </converters:BoolToObjectConverter.FalseValue>
         </converters:BoolToObjectConverter>
 
@@ -90,7 +92,7 @@
                         <local:SettingsBlockControl Title="{x:Bind ViewModel.ServerInfo, Mode=OneWay}" Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
 
                             <local:SettingsBlockControl.Icon>
-                                <SymbolIcon Symbol="MapDrive" />
+                                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF167;" />
                             </local:SettingsBlockControl.Icon>
 
                             <ProgressBar

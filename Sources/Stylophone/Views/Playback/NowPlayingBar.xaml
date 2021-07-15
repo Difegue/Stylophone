@@ -18,6 +18,16 @@
         <converters:SliderValueConverter x:Key="SliderValueConverter" />
 
         <converters1:BoolToObjectConverter
+            x:Key="DarkBoolToOpacityConverter"
+            FalseValue="0.3"
+            TrueValue="0.5" />
+
+        <converters1:BoolToObjectConverter
+            x:Key="LightBoolToOpacityConverter"
+            FalseValue="0.4"
+            TrueValue="0.1" />
+
+        <converters1:BoolToObjectConverter
             x:Key="BoolToBrushConverter"
             FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
             TrueValue="{ThemeResource AccentFillColorDisabledBrush}" />
@@ -51,7 +61,7 @@
             Grid.ColumnSpan="3"
             Margin="2"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"
+            VerticalAlignment="Top"
             Canvas.ZIndex="5"
             Opacity="1"
             Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
@@ -73,18 +83,29 @@
             </Border.Background>
         </Border>
 
+        <!--  On Dark theme, add a black overlay to light album colors - Opacity is 0.3 for normal colors and 0.5 for light colors  -->
         <Border
             Grid.Column="0"
             Grid.ColumnSpan="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            Background="{ThemeResource BlackOnDarkThemeOnly}"
             Canvas.ZIndex="6"
-            Opacity="0.3"
-            Visibility="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <Border.Background>
-                <SolidColorBrush Color="Black" />
-            </Border.Background>
-        </Border>
+            CornerRadius="4"
+            Opacity="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource DarkBoolToOpacityConverter}}"
+            Visibility="Visible" />
+
+        <!--  And on Light theme, add a white overlay to dark album colors! Opacity is 0.3 for dark colors and 0.1 for light.  -->
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="{ThemeResource WhiteOnLightThemeOnly}"
+            Canvas.ZIndex="6"
+            CornerRadius="4"
+            Opacity="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource LightBoolToOpacityConverter}}"
+            Visibility="Visible" />
 
         <Button
             x:Name="AlbumView"

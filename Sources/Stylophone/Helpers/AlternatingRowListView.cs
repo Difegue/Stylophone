@@ -44,6 +44,9 @@ namespace Stylophone.Helpers
                 {
                     listViewItem.Background = EvenRowBackground;
                 }
+
+                // Force the background to be repainted
+                listViewItem.UpdateLayout();
             }
 
         }
