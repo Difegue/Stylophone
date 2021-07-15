@@ -150,7 +150,11 @@ namespace Stylophone.Common.ViewModels
                 _albumArtCancellationSource.Cancel();
                 _albumArtCancellationSource = new CancellationTokenSource();
                 
-                Task.Run(async () => await CurrentTrack?.GetAlbumArtAsync(HostType, _albumArtCancellationSource.Token));
+                Task.Run(async () =>
+                {
+                    if (CurrentTrack != null)
+                        await CurrentTrack.GetAlbumArtAsync(HostType, _albumArtCancellationSource.Token);
+                });
             }
         }
 
@@ -582,7 +586,7 @@ namespace Stylophone.Common.ViewModels
                         await _interop.UpdateOperatingSystemIntegrationsAsync(CurrentTrack); 
                 }).ConfigureAwait(false);
 
-                await UpdateUpNextAsync(_mpdService.CurrentStatus);
+                await _dispatcherService.ExecuteOnUIThreadAsync(async () => await UpdateUpNextAsync(_mpdService.CurrentStatus));
             }
             else
             {

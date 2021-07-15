@@ -32,7 +32,7 @@
                     <Grid Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="26" />
                         </Grid.ColumnDefinitions>
                         <TextBlock
                             Grid.Column="0"
@@ -45,11 +45,11 @@
 
                         <FontIcon
                             Grid.Column="1"
-                            Margin="-4,0,0,0"
+                            HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             FontFamily="{StaticResource SymbolThemeFontFamily}"
                             FontSize="24"
-                            Foreground="{ThemeResource SystemAccentColor}"
+                            Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                             Glyph="&#xF61F;"
                             Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </Grid>

@@ -7,8 +7,9 @@
     xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    d:DesignHeight="80"
+    d:DesignHeight="96"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -19,7 +20,7 @@
         <converters1:BoolToObjectConverter
             x:Key="BoolToBrushConverter"
             FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
-            TrueValue="{ThemeResource ButtonBackgroundPointerOver}" />
+            TrueValue="{ThemeResource AccentFillColorDisabledBrush}" />
 
         <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters1:BoolToVisibilityConverter
@@ -37,8 +38,7 @@
         VerticalAlignment="Stretch"
         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
         BorderThickness="1"
-        CornerRadius="4"
-        RequestedTheme="Dark">
+        CornerRadius="4">
         <!--  Split the content into two main sections  -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -176,89 +176,72 @@
                 <!--  Shuffle  -->
                 <Button
                     x:Name="ShuffleButton"
-                    Width="40"
-                    Height="40"
-                    Margin="4,0"
+                    Width="43"
+                    Height="43"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
+                    FontSize="18"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}"
                     Visibility="Collapsed">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="16"
-                            Text="&#xE8B1;"
-                            TextAlignment="Center" />
+                        &#xE8B1;
                     </Button.Content>
                 </Button>
 
                 <!--  Back  -->
                 <Button
-                    Width="40"
-                    Height="40"
-                    Margin="4,0"
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.SkipPrevious}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipPrevious}">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="16"
-                            Text="&#xE892;"
-                            TextAlignment="Center" />
+                        &#xF8AC;
                     </Button.Content>
                 </Button>
 
                 <!--  Play / Pause  -->
                 <Button
-                    Width="50"
-                    Height="50"
-                    Margin="4,0"
-                    BorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                    Width="52"
+                    Height="52"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
-                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}">
-                    <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="26"
-                            Text="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
-                            TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
+                    Content="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
+                    FontSize="29"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}" />
 
                 <!--  Next  -->
                 <Button
-                    Width="40"
-                    Height="40"
-                    Margin="4,0"
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.SkipNext}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipNext}">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="16"
-                            Text="&#xE893;"
-                            TextAlignment="Center" />
+                        &#xF8AD;
                     </Button.Content>
                 </Button>
 
                 <!--  Repeat  -->
                 <Button
                     x:Name="RepeatButton"
-                    Width="40"
-                    Height="40"
-                    Margin="4,0"
+                    Width="43"
+                    Height="43"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
+                    Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
+                    FontSize="18"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}"
-                    Visibility="Collapsed">
-                    <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="16"
-                            Text="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
-                            TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
+                    Visibility="Collapsed" />
             </StackPanel>
 
             <!--  Slider  -->
@@ -289,7 +272,7 @@
                 <Slider
                     x:Name="ProgressBar"
                     Grid.Column="1"
-                    Margin="16,3,16,0"
+                    Margin="16,8,16,0"
                     ManipulationMode="All"
                     ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
                     Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
@@ -332,6 +315,7 @@
                 Grid.RowSpan="1"
                 Grid.Column="2"
                 Margin="{StaticResource SmallRightMargin}"
+                Padding="0,4,0,0"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
 
@@ -343,18 +327,13 @@
                     Visibility="Collapsed">
                     <Button
                         x:Name="MuteButton"
-                        Width="40"
-                        Height="40"
+                        Width="46"
+                        Height="46"
                         Margin="{StaticResource SmallRightMargin}"
-                        Click="{x:Bind PlaybackViewModel.ToggleMute}">
-                        <Button.Content>
-                            <TextBlock
-                                FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                FontSize="16"
-                                Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
-                                TextAlignment="Center" />
-                        </Button.Content>
-                    </Button>
+                        Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                        Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                        FontSize="22"
+                        Style="{StaticResource SVButtonStyle}" />
                     <Slider
                         Width="105"
                         Margin="{StaticResource SmallRightMargin}"
@@ -370,36 +349,27 @@
                 <!--  Compact Sound  -->
                 <Button
                     x:Name="SoundFlyout"
-                    Width="40"
-                    Height="40"
+                    Width="46"
+                    Height="46"
                     Margin="{StaticResource XSmallLeftMargin}"
+                    Content="&#xF4C3;"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}">
-                    <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="16"
-                            Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
-                            TextAlignment="Center" />
-                    </Button.Content>
                     <Button.Flyout>
                         <Flyout Placement="Top">
                             <StackPanel
                                 Width="245"
-                                Padding="20,10"
+                                Padding="16,4"
                                 Orientation="Horizontal">
                                 <Button
-                                    Width="40"
-                                    Height="40"
-                                    Margin="{StaticResource SmallRightMargin}"
-                                    Click="{x:Bind PlaybackViewModel.ToggleMute}">
-                                    <Button.Content>
-                                        <TextBlock
-                                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                            FontSize="16"
-                                            Text="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
-                                            TextAlignment="Center" />
-                                    </Button.Content>
-                                </Button>
+                                    Width="46"
+                                    Height="46"
+                                    Margin="0,4,8,0"
+                                    Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                                    Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                                    FontSize="22"
+                                    Style="{StaticResource SVButtonStyle}" />
                                 <Slider
                                     Width="105"
                                     Margin="{StaticResource XXSmallTopMargin}"
@@ -411,8 +381,9 @@
                                     PointerWheelChanged="Volume_PointerWheelChanged"
                                     Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                                 <TextBlock
-                                    Margin="14,-2,0,0"
+                                    Margin="14,2,0,0"
                                     VerticalAlignment="Center"
+                                    FontSize="18"
                                     FontWeight="SemiBold"
                                     Text="{x:Bind PlaybackViewModel.MediaVolume, Mode=OneWay}" />
                             </StackPanel>
@@ -422,36 +393,43 @@
 
                 <!--  Compact Overlay  -->
                 <Button
-                    Width="40"
-                    Height="40"
+                    x:Name="CompactButton"
+                    Width="46"
+                    Height="46"
                     Margin="{StaticResource XSmallLeftMargin}"
                     Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
-                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionCompactOverlay}">
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionCompactOverlay}"
+                    Visibility="Collapsed">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="16"
-                            Text="&#xE8B9;"
-                            TextAlignment="Center" />
+                        &#xF5EE;
                     </Button.Content>
                 </Button>
 
                 <!--  More  -->
                 <Button
                     x:Name="MoreButton"
-                    Width="40"
-                    Height="40"
+                    Width="46"
+                    Height="46"
                     Margin="{StaticResource XSmallLeftMargin}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionMore}">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="16"
-                            Text="&#xE712;"
-                            TextAlignment="Center" />
+                        &#xE712;
                     </Button.Content>
                     <Button.Flyout>
                         <MenuFlyout Placement="Top">
+
+                            <MenuFlyoutItem
+                                x:Name="CompactMenu"
+                                Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
+                                Text="{x:Bind strings:Resources.ActionCompactOverlay}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xF5EE;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
 
                             <MenuFlyoutItem
                                 x:Name="ShuffleMenu"
@@ -519,7 +497,7 @@
 
                 <VisualState x:Name="Normal">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="630" />
+                        <AdaptiveTrigger MinWindowWidth="660" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="AlbumArt.Visibility" Value="Visible" />
@@ -528,8 +506,11 @@
                         <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />
                         <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
                         <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
                         <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="MiscButtons.Padding" Value="0" />
                         <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1" />
 
                         <Setter Target="AlbumView.Width" Value="220" />
@@ -547,8 +528,11 @@
                         <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />
                         <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
                         <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
                         <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="MiscButtons.Padding" Value="0" />
                         <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1" />
 
                         <Setter Target="AlbumView.Width" Value="320" />

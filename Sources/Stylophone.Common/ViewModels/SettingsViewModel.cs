@@ -148,7 +148,7 @@ namespace Stylophone.Common.ViewModels
 
         public bool IsServerValid => _mpdService.IsConnected;
 
-        public string ServerStatus => IsServerValid ? ServerInfo.Split('\n').First() + (IsStreamingAvailable ? ", "+ Resources.SettingsLocalPlaybackAvailable : "") : Resources.SettingsNoServerError;
+        public string ServerStatus => IsServerValid ? ServerInfo?.Split('\n')?.First() + (IsStreamingAvailable ? ", "+ Resources.SettingsLocalPlaybackAvailable : "") : Resources.SettingsNoServerError;
 
         private bool _httpdAvailable;
         public bool IsStreamingAvailable

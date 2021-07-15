@@ -135,6 +135,7 @@
 
             <TextBlock
                 x:Name="UpNextTitle"
+                MaxWidth="256"
                 Margin="{StaticResource XSmallLeftMargin}"
                 Opacity="0.6"
                 Style="{ThemeResource BaseTextBlockStyle}"

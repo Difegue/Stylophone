@@ -7,6 +7,7 @@
     xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:strings="using:Stylophone.Localization.Strings"
     d:DesignHeight="364"
     d:DesignWidth="340"
@@ -25,8 +26,12 @@
 
     </Page.Resources>
 
-    <Grid Background="{ThemeResource SystemControlAcrylicElementBrush}" RequestedTheme="Dark">
+    <Grid
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="10">
         <Image
+            Margin="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
@@ -36,9 +41,9 @@
             <Border.Background>
                 <AcrylicBrush
                     BackgroundSource="Backdrop"
-                    FallbackColor="{StaticResource SystemAccentColor}"
-                    TintColor="{StaticResource SystemAccentColorDark3}"
-                    TintOpacity="0.2" />
+                    FallbackColor="{ThemeResource SolidBackgroundFillColorBase}"
+                    TintColor="{ThemeResource SolidBackgroundFillColorBase}"
+                    TintOpacity="0.6" />
             </Border.Background>
         </Border>
 
@@ -46,20 +51,17 @@
         <StackPanel
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            Visibility="Collapsed">
             <Button
-                Width="40"
-                Height="40"
-                Margin="20,20,0,0"
-                Background="{ThemeResource ButtonRevealBackgroundPointerOver}"
+                Width="43"
+                Height="43"
+                Margin="4,6,0,0"
                 Click="{x:Bind NavigateToMainView}"
-                Style="{StaticResource CircleButtonStyle}">
+                FontSize="18"
+                Style="{StaticResource SVButtonStyle}">
                 <Button.Content>
-                    <TextBlock
-                        FontFamily="{StaticResource SymbolThemeFontFamily}"
-                        FontSize="18"
-                        Text="&#xE72B;"
-                        TextAlignment="Center" />
+                    &#xE72B;
                 </Button.Content>
             </Button>
         </StackPanel>
@@ -67,7 +69,7 @@
         <StackPanel VerticalAlignment="Bottom">
             <TextBlock
                 x:Name="compactTrackName"
-                Margin="25,0,25,5"
+                Margin="24,0,46,4"
                 FontSize="18"
                 FontWeight="Bold"
                 MaxLines="2"
@@ -78,7 +80,7 @@
 
             <TextBlock
                 x:Name="compactTrackArtist"
-                Margin="25,0,25,10"
+                Margin="24,0,46,8"
                 FontSize="14"
                 FontWeight="Bold"
                 Opacity="0.6"
@@ -90,7 +92,7 @@
             <Grid x:Name="compactSliderTimes" Visibility="Collapsed">
                 <TextBlock
                     Grid.Column="0"
-                    Margin="25,10,0,0"
+                    Margin="24,8,0,0"
                     HorizontalAlignment="Left"
                     FontSize="12"
                     FontWeight="SemiBold"
@@ -98,7 +100,7 @@
                     Text="{x:Bind PlaybackViewModel.TimeListened, Mode=OneWay}" />
 
                 <TextBlock
-                    Margin="0,10,25,0"
+                    Margin="0,8,24,0"
                     HorizontalAlignment="Right"
                     FontSize="12"
                     FontWeight="SemiBold"
@@ -109,57 +111,47 @@
             <!--  Slider  -->
             <!--  TODO: ManipulationStarting doesn't work ?  -->
             <Slider
-                Margin="25,0,25,0"
-                Background="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                BorderBrush="{ThemeResource SystemControlBackgroundBaseHighRevealBorderBrush}"
-                Foreground="{ThemeResource SystemControlHighlightAccentRevealBorderBrush}"
+                Margin="24,0,24,0"
                 ManipulationMode="All"
                 ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
                 Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
                 PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
-                Style="{StaticResource CircleSlider}"
                 ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
                 Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}" />
 
             <!--  Track Controls  -->
             <StackPanel
-                Margin="0,0,0,20"
+                Margin="0,0,0,16"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
                     x:Name="compactShuffleButton"
-                    Width="40"
-                    Height="40"
-                    Margin="5,0"
+                    Width="43"
+                    Height="43"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
-                    Style="{StaticResource CircleButtonStyle}"
+                    FontSize="18"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}"
                     Visibility="Collapsed">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="18"
-                            Text="&#xE8B1;"
-                            TextAlignment="Center" />
+                        &#xE8B1;
                     </Button.Content>
                 </Button>
 
                 <!--  Back  -->
                 <Button
-                    Width="40"
-                    Height="40"
-                    Margin="5,0"
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.SkipPrevious}"
-                    Style="{StaticResource CircleButtonStyle}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipPrevious}">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="18"
-                            Text="&#xE892;"
-                            TextAlignment="Center" />
+                        &#xF8AC;
                     </Button.Content>
                 </Button>
 
@@ -167,55 +159,40 @@
                 <Button
                     Width="52"
                     Height="52"
-                    Margin="5,0"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
-                    Style="{StaticResource CircleButtonStyle}"
-                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}">
-                    <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="26"
-                            Text="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
-                            TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
+                    Content="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
+                    FontSize="29"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}" />
 
                 <!--  Next  -->
                 <Button
-                    Width="40"
-                    Height="40"
-                    Margin="5,0"
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.SkipNext}"
-                    Style="{StaticResource CircleButtonStyle}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipNext}">
                     <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="18"
-                            Text="&#xE893;"
-                            TextAlignment="Center" />
+                        &#xF8AD;
                     </Button.Content>
                 </Button>
 
                 <!--  Repeat  -->
                 <Button
                     x:Name="compactRepeatButton"
-                    Width="40"
-                    Height="40"
-                    Margin="5,0"
+                    Width="43"
+                    Height="43"
+                    Margin="{StaticResource XXSmallLeftMargin}"
                     Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
                     Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
-                    Style="{StaticResource CircleButtonStyle}"
+                    Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
+                    FontSize="18"
+                    Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}"
-                    Visibility="Collapsed">
-                    <Button.Content>
-                        <TextBlock
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="18"
-                            Text="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
-                            TextAlignment="Center" />
-                    </Button.Content>
-                </Button>
+                    Visibility="Collapsed" />
             </StackPanel>
         </StackPanel>
 
@@ -234,7 +211,7 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowHeight="180" />
+                        <AdaptiveTrigger MinWindowHeight="160" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="compactSliderTimes.Visibility" Value="Visible" />
@@ -242,7 +219,16 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowHeight="260" />
+                        <AdaptiveTrigger MinWindowHeight="190" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="compactSliderTimes.Visibility" Value="Visible" />
+                        <Setter Target="compactTrackName.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="220" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="compactSliderTimes.Visibility" Value="Visible" />

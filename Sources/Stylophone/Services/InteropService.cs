@@ -114,15 +114,15 @@ namespace Stylophone.Services
         {
             return icon switch
             {
-                PlaybackIcon.Play => "\uE768",
-                PlaybackIcon.Pause => "\uE769",
+                PlaybackIcon.Play => "\uF5B0",
+                PlaybackIcon.Pause => "\uF8AE",
                 PlaybackIcon.Repeat => "\uE8EE",
                 PlaybackIcon.RepeatSingle => "\uE8ED",
                 PlaybackIcon.RepeatOff => "\uE8EE",
                 PlaybackIcon.VolumeMute => "\uE74F",
-                PlaybackIcon.Volume25 => "\uE992",
-                PlaybackIcon.Volume50 => "\uE993",
-                PlaybackIcon.Volume75 => "\uE994",
+                PlaybackIcon.Volume25 => "\uE993",
+                PlaybackIcon.Volume50 => "\uE994",
+                PlaybackIcon.Volume75 => "\uE767",
                 PlaybackIcon.VolumeFull => "\uE767",
                 _ => "?",
             };
