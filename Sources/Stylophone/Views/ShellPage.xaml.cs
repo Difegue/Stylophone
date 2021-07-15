@@ -86,16 +86,13 @@ namespace Stylophone.Views
         // Update the TitleBar based on the inactive/active state of the app
         private void Current_Activated(object sender, Windows.UI.Core.WindowActivatedEventArgs e)
         {
-            SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
-            SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
-
             if (e.WindowActivationState == Windows.UI.Core.CoreWindowActivationState.Deactivated)
             {
-                AppTitle.Foreground = inactiveForegroundBrush;
+                AppTitle.Opacity = 0.8;
             }
             else
             {
-                AppTitle.Foreground = defaultForegroundBrush;
+                AppTitle.Opacity = 1;
             }
         }
 

@@ -82,15 +82,18 @@
             VerticalAlignment="Top"
             Background="Transparent"
             Canvas.ZIndex="1"
-            IsHitTestVisible="True" />
-        <StackPanel Orientation="Horizontal">
-            <TextBlock
-                x:Name="AppTitle"
-                Margin="50,15,0,0"
-                VerticalAlignment="Top"
-                Style="{StaticResource CaptionTextBlockStyle}"
-                Text="Stylophone" />
-        </StackPanel>
+            IsHitTestVisible="True">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    x:Name="AppTitle"
+                    Margin="4,8,0,0"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="Stylophone" />
+            </StackPanel>
+        </Border>
+
+
 
         <muxc:NavigationView
             x:Name="navigationView"
