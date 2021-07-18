@@ -27,8 +27,8 @@
 
     <Grid
         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-        BorderThickness="1"
-        CornerRadius="10">
+        BorderThickness="0"
+        CornerRadius="4">
         <Image
             Margin="2"
             HorizontalAlignment="Center"

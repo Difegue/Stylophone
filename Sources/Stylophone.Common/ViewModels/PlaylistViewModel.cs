@@ -101,6 +101,23 @@ namespace Stylophone.Common.ViewModels
             private set => Set(ref _playlistArt3, value);
         }
 
+        private SKColor _albumColor;
+        public SKColor DominantColor
+        {
+            get => _albumColor;
+            set => Set(ref _albumColor, value);
+        }
+
+        private bool _isLight;
+        /// <summary>
+        /// If the dominant color of the album is too light to show white text on top of, this boolean will be true.
+        /// </summary>
+        public bool IsLight
+        {
+            get => _isLight;
+            private set => Set(ref _isLight, value);
+        }
+
         #region Commands
         private bool IsSingleTrackSelected(object list)
         {
@@ -258,8 +275,11 @@ namespace Stylophone.Common.ViewModels
 
                 if (distinctAlbums.Count > 1)
                 {
-                    var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, false, 150);
+                    var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, true, 150);
                     PlaylistArt = art != null ? art.ArtBitmap : PlaylistArt;
+
+                    DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
+                    IsLight = (!art?.DominantColor?.IsDark).GetValueOrDefault();
                 }
 
                 if (distinctAlbums.Count > 2)

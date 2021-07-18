@@ -4,366 +4,300 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Stylophone="using:Stylophone.Helpers"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    xmlns:toolkitbehaviors="using:Microsoft.Toolkit.Uwp.UI.Behaviors"
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
-    xmlns:vm="using:Stylophone.Common.ViewModels"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <Stylophone:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
-        <Stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
-        <Stylophone:DoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters:BoolToVisibilityConverter
-            x:Key="ReverseBoolToVisibilityConverter"
-            FalseValue="Visible"
-            TrueValue="Collapsed" />
+    <Grid x:Name="ContentArea" Margin="8,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="232" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <DataTemplate x:Key="TrackListViewTemplate" x:DataType="vm:TrackViewModel">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="1.5*" />
-                    <ColumnDefinition Width="50" />
-                </Grid.ColumnDefinitions>
+        <!--  Playlist Header  -->
+        <Grid
+            Grid.Row="0"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <Grid.Background>
+                <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+            </Grid.Background>
 
-                <Grid Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="24" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="0"
-                        VerticalAlignment="Center"
-                        MaxLines="1"
-                        Style="{ThemeResource BaseTextBlockStyle}"
-                        Text="{x:Bind Name}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind Name}" />
-                </Grid>
+            <Border Canvas.ZIndex="-1">
+                <Border.Background>
+                    <AcrylicBrush
+                        BackgroundSource="Backdrop"
+                        FallbackColor="{x:Bind ViewModel.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                        TintColor="{x:Bind ViewModel.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                        TintLuminosityOpacity="0.7"
+                        TintOpacity="0.2" />
+                </Border.Background>
+            </Border>
+
+            <!--  On Dark theme, add a black overlay to light album colors - Opacity is 0.3 for normal colors and 0.5 for light colors  -->
+            <Border
+                Background="{ThemeResource BlackOnDarkThemeOnly}"
+                Canvas.ZIndex="-1"
+                Opacity="{x:Bind ViewModel.IsLight, Mode=OneWay, Converter={StaticResource DarkBoolToOpacityConverter}}"
+                Visibility="Visible" />
+
+            <!--  And on Light theme, add a white overlay to dark album colors! Opacity is 0.4 for dark colors and 0.1 for light.  -->
+            <Border
+                Background="{ThemeResource WhiteOnLightThemeOnly}"
+                Canvas.ZIndex="-1"
+                Opacity="{x:Bind ViewModel.IsLight, Mode=OneWay, Converter={StaticResource LightBoolToOpacityConverter}}"
+                Visibility="Visible" />
+
+            <RelativePanel x:Name="Header" Padding="16">
+
+                <controls:DropShadowPanel
+                    x:Name="itemHero"
+                    Width="196"
+                    Height="196"
+                    Margin="{StaticResource MediumRightMargin}"
+                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                    BlurRadius="10"
+                    OffsetY="2"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True"
+                    ShadowOpacity="0.6"
+                    Color="Black">
+
+                    <Grid
+                        Width="148"
+                        Height="148"
+                        Margin="0,-48,0,0"
+                        CornerRadius="4">
+                        <Image
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Source="{x:Bind ViewModel.PlaylistArt3, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
+                            Stretch="UniformToFill" />
+                    </Grid>
+
+                </controls:DropShadowPanel>
+
+                <controls:DropShadowPanel
+                    x:Name="itemHero2"
+                    Margin="24,24,0,0"
+                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                    BlurRadius="10"
+                    OffsetY="3"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True"
+                    ShadowOpacity="0.6"
+                    Color="Black">
+
+                    <Grid
+                        Width="148"
+                        Height="148"
+                        CornerRadius="4">
+                        <Image
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Source="{x:Bind ViewModel.PlaylistArt2, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
+                            Stretch="UniformToFill" />
+                    </Grid>
+
+                </controls:DropShadowPanel>
+
+                <controls:DropShadowPanel
+                    x:Name="itemHero3"
+                    Margin="48,48,0,0"
+                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                    BlurRadius="10"
+                    OffsetY="4"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True"
+                    ShadowOpacity="0.6"
+                    Color="Black">
+
+                    <Grid
+                        Width="148"
+                        Height="148"
+                        CornerRadius="4">
+                        <Image
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Source="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
+                            Stretch="UniformToFill" />
+
+                        <muxc:ProgressRing
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            IsActive="{x:Bind ViewModel.ArtLoaded, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
+                    </Grid>
+
+                </controls:DropShadowPanel>
 
                 <TextBlock
-                    Grid.Column="1"
-                    Margin="12,0,0,0"
-                    VerticalAlignment="Center"
+                    x:Name="title"
                     MaxLines="1"
-                    Style="{ThemeResource BodyTextBlockStyle}"
-                    Text="{x:Bind File.Artist}"
+                    RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.RightOf="itemHero"
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="{x:Bind ViewModel.Name, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
-                    ToolTipService.ToolTip="{x:Bind File.Artist}" />
-
-                <HyperlinkButton
-                    Grid.Column="2"
-                    Command="{x:Bind ViewAlbumCommand}"
-                    CommandParameter="{x:Bind File}"
-                    Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        MaxLines="1"
-                        Style="{ThemeResource BodyTextBlockStyle}"
-                        Text="{x:Bind File.Album}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind File.Album}" />
-                </HyperlinkButton>
+                    ToolTipService.ToolTip="{x:Bind ViewModel.Name, Mode=OneWay}" />
 
                 <TextBlock
-                    Grid.Column="3"
-                    Margin="12,0,0,0"
-                    VerticalAlignment="Center"
-                    MaxLines="1"
-                    Style="{ThemeResource BodyTextBlockStyle}"
-                    Text="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}"
+                    x:Name="artist"
+                    Margin="{StaticResource SmallTopMargin}"
+                    MaxLines="2"
+                    RelativePanel.Below="title"
+                    RelativePanel.RightOf="itemHero"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="{x:Bind ViewModel.Artists, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
-                    ToolTipService.ToolTip="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}" />
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
+                    ToolTipService.ToolTip="{x:Bind ViewModel.Artists, Mode=OneWay}" />
 
-    <Grid x:Name="ContentArea">
-        <Stylophone:AlternatingRowListView
-            x:Name="QueueList"
-            Margin="0,-96"
-            ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-            ui:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
-            AllowDrop="True"
-            CanReorderItems="True"
-            DoubleTapped="Queue_Track"
-            EvenRowBackground="Transparent"
-            ItemTemplate="{StaticResource TrackListViewTemplate}"
-            ItemsSource="{x:Bind ViewModel.Source}"
-            OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
-            ReorderMode="Enabled"
-            RightTapped="Select_Item"
-            SelectionMode="Extended">
-            <Stylophone:AlternatingRowListView.ContextFlyout>
-                <MenuFlyout>
-                    <!--  View Track Album  -->
-                    <MenuFlyoutItem
-                        Command="{x:Bind ViewModel.ViewAlbumCommand}"
-                        CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
-                        Text="{x:Bind strings:Resources.ContextMenuViewAlbum}">
-                        <MenuFlyoutItem.Icon>
-                            <FontIcon Glyph="&#xE93C;" />
-                        </MenuFlyoutItem.Icon>
-                    </MenuFlyoutItem>
-                    <MenuFlyoutSeparator />
-                    <!--  Add to Queue  -->
-                    <MenuFlyoutItem
-                        Command="{x:Bind ViewModel.AddToQueueCommand}"
-                        CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
-                        Icon="Add"
-                        Text="{x:Bind strings:Resources.ContextMenuAddToQueue}">
-                        <MenuFlyoutItem.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="Enter" />
-                        </MenuFlyoutItem.KeyboardAccelerators>
-                    </MenuFlyoutItem>
-                    <!--  Remove from Playlist  -->
-                    <MenuFlyoutItem
-                        Command="{x:Bind ViewModel.RemoveTrackFromPlaylistCommand}"
-                        CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
-                        Icon="Remove"
-                        Text="{x:Bind strings:Resources.ContextMenuRemoveFromPlaylist}">
-                        <MenuFlyoutItem.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="Delete" />
-                        </MenuFlyoutItem.KeyboardAccelerators>
-                    </MenuFlyoutItem>
-                </MenuFlyout>
-            </Stylophone:AlternatingRowListView.ContextFlyout>
+                <TextBlock
+                    x:Name="info"
+                    Margin="{StaticResource SmallTopBottomMargin}"
+                    FontSize="16"
+                    RelativePanel.Above="propertiesGroup1"
+                    RelativePanel.Below="artist"
+                    RelativePanel.RightOf="itemHero"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Text="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}" />
 
-            <Stylophone:AlternatingRowListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
-                </Style>
-            </Stylophone:AlternatingRowListView.ItemContainerStyle>
+                <controls:WrapPanel
+                    x:Name="propertiesGroup1"
+                    HorizontalSpacing="8"
+                    Orientation="Horizontal"
+                    RelativePanel.AlignBottomWithPanel="True"
+                    VerticalSpacing="8">
 
-            <interactivity:Interaction.Behaviors>
-                <toolkitbehaviors:StickyHeaderBehavior />
-            </interactivity:Interaction.Behaviors>
-            <Stylophone:AlternatingRowListView.Header>
+                    <Button
+                        BorderThickness="0"
+                        Command="{x:Bind ViewModel.PlayPlaylistCommand}"
+                        Style="{StaticResource ButtonRevealStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF5B0;" />
+                            <TextBlock
+                                Text="{x:Bind strings:Resources.ContextMenuPlay}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        BorderThickness="0"
+                        Command="{x:Bind ViewModel.LoadPlaylistCommand}"
+                        Style="{StaticResource ButtonRevealStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xED0E;" />
+                            <TextBlock
+                                Text="{x:Bind strings:Resources.ContextMenuAddToQueue}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Button>
 
-                <RelativePanel
-                    x:Name="Header"
-                    Padding="24,128,24,36"
-                    RequestedTheme="Dark">
+                    <Button
+                        BorderThickness="0"
+                        Command="{x:Bind ViewModel.RemovePlaylistCommand}"
+                        Style="{StaticResource ButtonRevealStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <SymbolIcon Symbol="Delete" />
+                            <TextBlock
+                                Text="{x:Bind strings:Resources.ContextMenuDeletePlaylist}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Button>
+                </controls:WrapPanel>
 
-                    <Border
-                        Margin="-24,-78,-24,-24"
-                        Canvas.ZIndex="-1"
-                        RelativePanel.AlignBottomWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True">
-                        <Border.Background>
-                            <AcrylicBrush
-                                BackgroundSource="Backdrop"
-                                FallbackColor="{ThemeResource SystemAccentColorDark1}"
-                                TintColor="{ThemeResource SystemAccentColorDark1}"
-                                TintOpacity="0.6" />
-                        </Border.Background>
-                    </Border>
+            </RelativePanel>
+        </Grid>
 
-                    <Border
-                        Margin="-24,-78,-24,-24"
-                        Canvas.ZIndex="-2"
-                        RelativePanel.AlignBottomWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True">
-                        <Border.Background>
-                            <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
-                        </Border.Background>
-                    </Border>
+        <!--  Track List  -->
+        <Grid
+            Grid.Row="1"
+            Margin="{StaticResource XSmallTopMargin}"
+            Background="{ThemeResource LayerFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
 
-                    <controls:DropShadowPanel
-                        x:Name="itemHero"
-                        Width="200"
-                        Height="200"
-                        Margin="{StaticResource SmallRightMargin}"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                        BlurRadius="10"
-                        OffsetY="2"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True"
-                        ShadowOpacity="0.6"
-                        Color="Black">
-
-                        <Grid
-                            Width="150"
-                            Height="150"
-                            Margin="0,-50,0,0"
-                            BorderThickness="2"
-                            CornerRadius="3">
-                            <Image
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Source="{x:Bind ViewModel.PlaylistArt3, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
-                                Stretch="UniformToFill" />
-                        </Grid>
-
-                    </controls:DropShadowPanel>
-
-                    <controls:DropShadowPanel
-                        Margin="20,20,0,0"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                        BlurRadius="10"
-                        OffsetY="3"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True"
-                        ShadowOpacity="0.6"
-                        Color="Black">
-
-                        <Grid
-                            Width="150"
-                            Height="150"
-                            BorderThickness="2"
-                            CornerRadius="3">
-                            <Image
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Source="{x:Bind ViewModel.PlaylistArt2, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
-                                Stretch="UniformToFill" />
-                        </Grid>
-
-                    </controls:DropShadowPanel>
-
-                    <controls:DropShadowPanel
-                        Margin="40,40,0,0"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                        BlurRadius="10"
-                        OffsetY="4"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True"
-                        ShadowOpacity="0.6"
-                        Color="Black">
-
-                        <Grid
-                            Width="150"
-                            Height="150"
-                            BorderThickness="2"
-                            CornerRadius="3">
-                            <Image
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Source="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
-                                Stretch="UniformToFill" />
-                        </Grid>
-
-                    </controls:DropShadowPanel>
-
-                    <TextBlock
-                        x:Name="title"
-                        MaxLines="2"
-                        RelativePanel.AlignTopWithPanel="True"
-                        RelativePanel.RightOf="itemHero"
-                        Style="{ThemeResource TitleTextBlockStyle}"
-                        Text="{x:Bind ViewModel.Name, Mode=OneWay}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind ViewModel.Name, Mode=OneWay}" />
-
-                    <TextBlock
-                        x:Name="artist"
-                        MaxLines="2"
-                        RelativePanel.Below="title"
-                        RelativePanel.RightOf="itemHero"
-                        Style="{StaticResource SubtitleTextBlockStyle}"
-                        Text="{x:Bind ViewModel.Artists, Mode=OneWay}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind ViewModel.Artists, Mode=OneWay}" />
-
-                    <TextBlock
-                        x:Name="info"
-                        Margin="{StaticResource SmallTopMargin}"
-                        FontSize="16"
-                        RelativePanel.Below="artist"
-                        RelativePanel.RightOf="itemHero"
-                        Style="{ThemeResource BaseTextBlockStyle}"
-                        Text="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}" />
-
-                    <StackPanel
-                        x:Name="propertiesGroup1"
-                        Margin="{StaticResource SmallTopMargin}"
-                        Orientation="Horizontal"
-                        RelativePanel.Below="itemHero"
-                        Spacing="10">
-
-                        <Button
-                            Width="108"
-                            VerticalAlignment="Stretch"
-                            Command="{x:Bind ViewModel.PlayPlaylistCommand}"
-                            Style="{StaticResource ButtonRevealStyle}">
-                            <StackPanel>
-                                <SymbolIcon Symbol="Play" />
-                                <TextBlock
-                                    Text="{x:Bind strings:Resources.ContextMenuPlay}"
-                                    TextAlignment="Center"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Button>
-                        <Button
-                            x:Name="AddToQButton"
-                            Width="108"
-                            VerticalAlignment="Stretch"
-                            Command="{x:Bind ViewModel.LoadPlaylistCommand}"
-                            Style="{StaticResource ButtonRevealStyle}">
-                            <StackPanel>
-                                <SymbolIcon Symbol="Add" />
-                                <TextBlock
-                                    Text="{x:Bind strings:Resources.ContextMenuAddToQueue}"
-                                    TextAlignment="Center"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button
-                            Width="108"
-                            VerticalAlignment="Stretch"
-                            Command="{x:Bind ViewModel.RemovePlaylistCommand}"
-                            Style="{StaticResource ButtonRevealStyle}">
-                            <StackPanel>
-                                <SymbolIcon Symbol="Delete" />
-                                <TextBlock
-                                    Text="{x:Bind strings:Resources.ContextMenuDeletePlaylist}"
-                                    TextAlignment="Center"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-
-                </RelativePanel>
-            </Stylophone:AlternatingRowListView.Header>
-
-            <Stylophone:AlternatingRowListView.Footer>
-                <Grid Height="12" />
-            </Stylophone:AlternatingRowListView.Footer>
-        </Stylophone:AlternatingRowListView>
-
-        <StackPanel
-            Margin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <SymbolIcon
-                Height="86"
-                RenderTransformOrigin="0.5,0.5"
-                Symbol="Preview">
-                <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="5" ScaleY="5" />
-                </SymbolIcon.RenderTransform>
-            </SymbolIcon>
-            <TextBlock
-                Margin="{StaticResource SmallTopMargin}"
+            <StackPanel
                 HorizontalAlignment="Center"
-                Style="{StaticResource SubtitleTextBlockStyle}"
-                Text="{x:Bind strings:Resources.EmptyPlaylistTitle}" />
-            <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptyPlaylistDesc}" />
-        </StackPanel>
+                VerticalAlignment="Center"
+                Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <SymbolIcon
+                    Height="86"
+                    RenderTransformOrigin="0.5,0.5"
+                    Symbol="Preview">
+                    <SymbolIcon.RenderTransform>
+                        <CompositeTransform ScaleX="5" ScaleY="5" />
+                    </SymbolIcon.RenderTransform>
+                </SymbolIcon>
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="{x:Bind strings:Resources.EmptyPlaylistTitle}" />
+                <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptyPlaylistDesc}" />
+            </StackPanel>
+
+            <Stylophone:AlternatingRowListView
+                x:Name="QueueList"
+                Margin="0,8"
+                ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
+                AllowDrop="True"
+                CanReorderItems="True"
+                DoubleTapped="Queue_Track"
+                EvenRowBackground="Transparent"
+                ItemTemplate="{StaticResource TrackListTemplate}"
+                ItemsSource="{x:Bind ViewModel.Source}"
+                OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                ReorderMode="Enabled"
+                RightTapped="Select_Item"
+                SelectionMode="Extended">
+                <Stylophone:AlternatingRowListView.ContextFlyout>
+                    <MenuFlyout>
+                        <!--  View Track Album  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.ViewAlbumCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Text="{x:Bind strings:Resources.ContextMenuViewAlbum}">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE93C;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
+                        <!--  Add to Queue  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.AddToQueueCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Icon="Add"
+                            Text="{x:Bind strings:Resources.ContextMenuAddToQueue}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Enter" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <!--  Remove from Playlist  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.RemoveTrackFromPlaylistCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Icon="Remove"
+                            Text="{x:Bind strings:Resources.ContextMenuRemoveFromPlaylist}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Delete" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                    </MenuFlyout>
+                </Stylophone:AlternatingRowListView.ContextFlyout>
+
+            </Stylophone:AlternatingRowListView>
+
+
+        </Grid>
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -374,13 +308,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="propertiesGroup1.(RelativePanel.RightOf)" Value="itemHero" />
-                        <Setter Target="propertiesGroup1.(RelativePanel.Below)" Value="info" />
-                        <Setter Target="propertiesGroup1.Width" Value="400" />
-                        <Setter Target="title.FontSize" Value="32" />
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
-                        <Setter Target="Header.Margin" Value="0,0,0,0" />
-                        <Setter Target="Header.Padding" Value="24,46,24,36" />
-                        <Setter Target="QueueList.Margin" Value="0,0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

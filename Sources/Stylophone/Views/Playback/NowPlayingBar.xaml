@@ -13,30 +13,12 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <converters:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
-        <converters:SKColorToUWPConverter x:Key="SKColorToUWPConverter" />
-        <converters:SliderValueConverter x:Key="SliderValueConverter" />
-
-        <converters1:BoolToObjectConverter
-            x:Key="DarkBoolToOpacityConverter"
-            FalseValue="0.3"
-            TrueValue="0.5" />
-
-        <converters1:BoolToObjectConverter
-            x:Key="LightBoolToOpacityConverter"
-            FalseValue="0.4"
-            TrueValue="0.1" />
 
         <converters1:BoolToObjectConverter
             x:Key="BoolToBrushConverter"
             FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
             TrueValue="{ThemeResource AccentFillColorDisabledBrush}" />
 
-        <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters1:BoolToVisibilityConverter
-            x:Key="ReverseBoolToVisibilityConverter"
-            FalseValue="Visible"
-            TrueValue="Collapsed" />
     </UserControl.Resources>
 
     <!--  Content  -->

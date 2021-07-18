@@ -203,6 +203,9 @@
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\InteropService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Styles\StyloResources.xaml.cs">
+      <DependentUpon>StyloResources.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\PlaybackViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -261,9 +264,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\Page.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Styles\StyloResources.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\_Thickness.xaml">
       <SubType>Designer</SubType>

@@ -11,85 +11,7 @@
     xmlns:vm="using:Stylophone.Common.ViewModels"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
-    <Page.Resources>
-        <Stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
-        <!--  DataTemplate used:  -->
-        <DataTemplate x:Key="QueueTemplate" x:DataType="vm:TrackViewModel">
-            <ListViewItem
-                Margin="4,0"
-                HorizontalContentAlignment="Stretch"
-                Style="{ThemeResource DefaultListViewItemStyle}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="1.5*" />
-                        <ColumnDefinition Width="50" />
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="26" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Grid.Column="0"
-                            VerticalAlignment="Center"
-                            MaxLines="1"
-                            Style="{ThemeResource BaseTextBlockStyle}"
-                            Text="{x:Bind Name}"
-                            TextTrimming="CharacterEllipsis"
-                            ToolTipService.ToolTip="{x:Bind Name}" />
-
-                        <FontIcon
-                            Grid.Column="1"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="24"
-                            Foreground="{ThemeResource AccentFillColorDefaultBrush}"
-                            Glyph="&#xF61F;"
-                            Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-                    </Grid>
-
-                    <TextBlock
-                        Grid.Column="1"
-                        Margin="12,0,0,0"
-                        VerticalAlignment="Center"
-                        MaxLines="1"
-                        Style="{ThemeResource BodyTextBlockStyle}"
-                        Text="{x:Bind File.Artist}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind File.Artist}" />
-
-                    <HyperlinkButton
-                        Grid.Column="2"
-                        Command="{x:Bind ViewAlbumCommand}"
-                        CommandParameter="{x:Bind File}"
-                        Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            MaxLines="1"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Text="{x:Bind File.Album}"
-                            TextTrimming="CharacterEllipsis"
-                            ToolTipService.ToolTip="{x:Bind File.Album}" />
-                    </HyperlinkButton>
-
-                    <TextBlock
-                        Grid.Column="3"
-                        VerticalAlignment="Center"
-                        MaxLines="1"
-                        Style="{ThemeResource BodyTextBlockStyle}"
-                        Text="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind File.Time, Converter={StaticResource SecondsToTimeConverter}, Mode=OneWay}" />
-                </Grid>
-            </ListViewItem>
-        </DataTemplate>
-    </Page.Resources>
     <Grid
         x:Name="ContentArea"
         Margin="8,0"
@@ -100,16 +22,17 @@
 
         <Stylophone:AlternatingRowListView
             x:Name="QueueList"
+            Margin="0,8"
             ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+            ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
             AllowDrop="True"
             CanDragItems="True"
             CanReorderItems="True"
             DoubleTapped="Play_Track"
             DragItemsCompleted="QueueList_DragItemsCompleted"
             DragItemsStarting="QueueList_DragItemsStarting"
-            Margin="0,8"
             EvenRowBackground="Transparent"
-            ItemTemplate="{StaticResource QueueTemplate}"
+            ItemTemplate="{StaticResource TrackListTemplate}"
             ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
             OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
             ReorderMode="Enabled"

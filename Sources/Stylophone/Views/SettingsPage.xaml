@@ -25,14 +25,12 @@
         <converters:BoolToObjectConverter x:Key="IconConverter">
             <converters:BoolToObjectConverter.TrueValue>
                 <FontIcon
-                    VerticalAlignment="Top"
                     FontFamily="{ThemeResource SymbolThemeFontFamily}"
                     Foreground="Green"
                     Glyph="&#xE953;" />
             </converters:BoolToObjectConverter.TrueValue>
             <converters:BoolToObjectConverter.FalseValue>
                 <FontIcon
-                    VerticalAlignment="Top"
                     FontFamily="{ThemeResource SymbolThemeFontFamily}"
                     Foreground="Red"
                     Glyph="&#xE8C9;" />
