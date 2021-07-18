@@ -408,7 +408,7 @@ J'espère que vous apprécierez l'application !</value>
     <value>Changer le volume</value>
   </data>
   <data name="ActionCompactOverlay" xml:space="preserve">
-    <value>Mode Compact</value>
+    <value>Lecteur Miniature</value>
   </data>
   <data name="ActionMore" xml:space="preserve">
     <value>Autres actions</value>

@@ -61,7 +61,6 @@
                     Margin="{StaticResource MediumRightMargin}"
                     Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                     BlurRadius="10"
-                    OffsetY="2"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
                     ShadowOpacity="0.6"
@@ -83,10 +82,10 @@
 
                 <controls:DropShadowPanel
                     x:Name="itemHero2"
-                    Margin="24,24,0,0"
+                    Margin="24,0,0,0"
                     Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                     BlurRadius="10"
-                    OffsetY="3"
+                    OffsetX="-4"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
                     ShadowOpacity="0.6"
@@ -107,10 +106,10 @@
 
                 <controls:DropShadowPanel
                     x:Name="itemHero3"
-                    Margin="48,48,0,0"
+                    Margin="48,0,0,0"
                     Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                     BlurRadius="10"
-                    OffsetY="4"
+                    OffsetX="-4"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
                     ShadowOpacity="0.6"
@@ -309,6 +308,13 @@
                     <VisualState.Setters>
                         <Setter Target="propertiesGroup1.(RelativePanel.RightOf)" Value="itemHero" />
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="itemHero2.Margin" Value="24,24,0,0" />
+                        <Setter Target="itemHero3.Margin" Value="48,48,0,0" />
+                        <Setter Target="itemHero.OffsetY" Value="2" />
+                        <Setter Target="itemHero2.OffsetX" Value="0" />
+                        <Setter Target="itemHero2.OffsetY" Value="3" />
+                        <Setter Target="itemHero3.OffsetX" Value="0" />
+                        <Setter Target="itemHero3.OffsetY" Value="4" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

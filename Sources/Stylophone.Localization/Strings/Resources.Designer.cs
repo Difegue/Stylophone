@@ -70,7 +70,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Compact Overlay Mode.
+        ///   Recherche une chaîne localisée semblable à Show Mini Player.
         /// </summary>
         public static string ActionCompactOverlay {
             get {

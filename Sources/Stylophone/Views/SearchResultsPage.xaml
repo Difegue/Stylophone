@@ -82,11 +82,15 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid x:Name="ContentArea">
+    <Grid x:Name="ContentArea" Margin="8,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
         <StackPanel
+            Grid.Row="0"
             HorizontalAlignment="Center"
-            VerticalAlignment="Top"
             Orientation="Horizontal"
             Spacing="16">
             <ToggleButton
@@ -103,89 +107,87 @@
                 IsChecked="{x:Bind ViewModel.SearchAlbums, Mode=TwoWay}" />
         </StackPanel>
 
-        <Stylophone:AlternatingRowListView
-            x:Name="QueueList"
-            Margin="0,42,0,0"
-            ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
-            ui:ScrollViewerExtensions.VerticalScrollBarMargin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
-            DoubleTapped="Queue_Track"
-            EvenRowBackground="Transparent"
-            ItemTemplate="{StaticResource TrackListViewTemplate}"
-            ItemsSource="{x:Bind ViewModel.Source}"
-            OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
-            RightTapped="Select_Item"
-            SelectionMode="Extended">
-            <Stylophone:AlternatingRowListView.ContextFlyout>
-                <MenuFlyout>
-                    <!--  Add to Queue  -->
-                    <MenuFlyoutItem
-                        Command="{x:Bind ViewModel.AddToQueueCommand}"
-                        CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
-                        Icon="Add"
-                        Text="{x:Bind strings:Resources.ContextMenuAddToQueue}">
-                        <MenuFlyoutItem.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="Enter" />
-                        </MenuFlyoutItem.KeyboardAccelerators>
-                    </MenuFlyoutItem>
-                    <!--  Add to Playlist  -->
-                    <MenuFlyoutItem
-                        Command="{x:Bind ViewModel.AddToPlayListCommand}"
-                        CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
-                        Icon="MusicInfo"
-                        Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />
-                    <!--  View Track Album  -->
-                    <MenuFlyoutItem
-                        Command="{x:Bind ViewModel.ViewAlbumCommand}"
-                        CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
-                        Text="{x:Bind strings:Resources.ContextMenuViewAlbum}">
-                        <MenuFlyoutItem.Icon>
-                            <FontIcon Glyph="&#xE93C;" />
-                        </MenuFlyoutItem.Icon>
-                    </MenuFlyoutItem>
-                </MenuFlyout>
-            </Stylophone:AlternatingRowListView.ContextFlyout>
+        <Grid
+            Grid.Row="1"
+            Margin="{StaticResource XSmallTopMargin}"
+            Background="{ThemeResource LayerFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
 
-            <Stylophone:AlternatingRowListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="{StaticResource MediumLeftRightMargin}" />
-                </Style>
-            </Stylophone:AlternatingRowListView.ItemContainerStyle>
+            <Stylophone:AlternatingRowListView
+                x:Name="QueueList"
+                Margin="0,8"
+                ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
+                DoubleTapped="Queue_Track"
+                EvenRowBackground="Transparent"
+                ItemTemplate="{StaticResource TrackListTemplate}"
+                ItemsSource="{x:Bind ViewModel.Source}"
+                OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
+                RightTapped="Select_Item"
+                SelectionMode="Extended">
+                <Stylophone:AlternatingRowListView.ContextFlyout>
+                    <MenuFlyout>
+                        <!--  Add to Queue  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.AddToQueueCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Icon="Add"
+                            Text="{x:Bind strings:Resources.ContextMenuAddToQueue}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Enter" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <!--  Add to Playlist  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Icon="MusicInfo"
+                            Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />
+                        <!--  View Track Album  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.ViewAlbumCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Text="{x:Bind strings:Resources.ContextMenuViewAlbum}">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE93C;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                    </MenuFlyout>
+                </Stylophone:AlternatingRowListView.ContextFlyout>
 
-            <Stylophone:AlternatingRowListView.Footer>
-                <Grid Height="12" />
-            </Stylophone:AlternatingRowListView.Footer>
-
-        </Stylophone:AlternatingRowListView>
+            </Stylophone:AlternatingRowListView>
 
 
-        <winui:ProgressRing
-            Width="100"
-            Height="100"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            IsActive="{x:Bind ViewModel.IsSearchInProgress, Mode=OneWay}" />
-
-        <StackPanel
-            Margin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <SymbolIcon
-                Height="86"
-                RenderTransformOrigin="0.5,0.5"
-                Symbol="Zoom">
-                <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="5" ScaleY="5" />
-                </SymbolIcon.RenderTransform>
-            </SymbolIcon>
-            <TextBlock
-                Margin="{StaticResource SmallTopMargin}"
+            <winui:ProgressRing
+                Width="100"
+                Height="100"
                 HorizontalAlignment="Center"
-                Style="{StaticResource SubtitleTextBlockStyle}"
-                Text="{x:Bind strings:Resources.EmptySearchTitle}" />
-            <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptySearchDesc}" />
-        </StackPanel>
+                VerticalAlignment="Center"
+                IsActive="{x:Bind ViewModel.IsSearchInProgress, Mode=OneWay}" />
+
+            <StackPanel
+                Margin="{Binding ActualHeight, ElementName=Header, Converter={StaticResource DoubleToThicknessConverter}}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <SymbolIcon
+                    Height="86"
+                    RenderTransformOrigin="0.5,0.5"
+                    Symbol="Zoom">
+                    <SymbolIcon.RenderTransform>
+                        <CompositeTransform ScaleX="5" ScaleY="5" />
+                    </SymbolIcon.RenderTransform>
+                </SymbolIcon>
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="{x:Bind strings:Resources.EmptySearchTitle}" />
+                <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptySearchDesc}" />
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </Page>

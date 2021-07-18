@@ -409,7 +409,7 @@ Hope you enjoy using the application!</value>
     <value>Change Volume</value>
   </data>
   <data name="ActionCompactOverlay" xml:space="preserve">
-    <value>Compact Overlay Mode</value>
+    <value>Show Mini Player</value>
   </data>
   <data name="ActionMore" xml:space="preserve">
     <value>More Actions</value>
