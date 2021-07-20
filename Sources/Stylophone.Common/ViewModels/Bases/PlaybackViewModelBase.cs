@@ -139,23 +139,7 @@ namespace Stylophone.Common.ViewModels
         public VisualizationType HostType
         {
             get => _hostType;
-            set
-            {
-                Set(ref _hostType, value);
-
-                _albumArtCancellationSource.Cancel();
-                _albumArtCancellationSource = new CancellationTokenSource();
-
-                // (Re)Load CurrentTrack to take into account the new VisualizationType
-                _albumArtCancellationSource.Cancel();
-                _albumArtCancellationSource = new CancellationTokenSource();
-                
-                Task.Run(async () =>
-                {
-                    if (CurrentTrack != null)
-                        await CurrentTrack.GetAlbumArtAsync(HostType, _albumArtCancellationSource.Token);
-                });
-            }
+            set => Set(ref _hostType, value);
         }
 
         private string _timeListened = "00:00";

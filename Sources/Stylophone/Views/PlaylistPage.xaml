@@ -74,7 +74,7 @@
                         <Image
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Source="{x:Bind ViewModel.PlaylistArt3, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
+                            Source="{x:Bind ViewModel.PlaylistArt3, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=168}"
                             Stretch="UniformToFill" />
                     </Grid>
 
@@ -86,6 +86,7 @@
                     Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                     BlurRadius="10"
                     OffsetX="-4"
+                    OffsetY="0"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
                     ShadowOpacity="0.6"
@@ -98,7 +99,7 @@
                         <Image
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Source="{x:Bind ViewModel.PlaylistArt2, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
+                            Source="{x:Bind ViewModel.PlaylistArt2, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=168}"
                             Stretch="UniformToFill" />
                     </Grid>
 
@@ -109,7 +110,8 @@
                     Margin="48,0,0,0"
                     Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                     BlurRadius="10"
-                    OffsetX="-4"
+                    OffsetX="0"
+                    OffsetY="2"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
                     ShadowOpacity="0.6"
@@ -122,7 +124,7 @@
                         <Image
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Source="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
+                            Source="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=168}"
                             Stretch="UniformToFill" />
 
                         <muxc:ProgressRing

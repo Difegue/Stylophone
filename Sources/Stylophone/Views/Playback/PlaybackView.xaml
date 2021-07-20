@@ -77,7 +77,7 @@
                 Color="Black">
 
                 <Grid CornerRadius="3">
-                    <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" />
+                    <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=720}" />
                 </Grid>
             </controls:DropShadowPanel>
 

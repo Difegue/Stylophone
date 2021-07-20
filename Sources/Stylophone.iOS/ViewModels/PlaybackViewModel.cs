@@ -19,9 +19,6 @@ namespace Stylophone.iOS.ViewModels
         {
             //Application.Current.LeavingBackground += CurrentOnLeavingBackground;
 
-            // Default to OverlayPlayback for decoded albumart width on UIKit as the DPI is way higher
-            HostType = VisualizationType.OverlayPlayback;
-
             ((NavigationService)_navigationService).Navigated += (s, e) =>
                 _dispatcherService.ExecuteOnUIThreadAsync(() => {
                     //ShowTrackName = _navigationService.CurrentPageViewModelType != typeof(PlaybackViewModelBase);

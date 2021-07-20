@@ -165,7 +165,10 @@
                             </Border>
 
                             <!--  Hack, the BorderBrush is modified in the controltemplate but completely invisible everywhere else!  -->
-                            <Border x:Name="Overlay" Background="{Binding BorderBrush, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay}" />
+                            <Border
+                                x:Name="Overlay"
+                                Background="{Binding BorderBrush, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay}"
+                                CornerRadius="4" />
 
                             <!--  Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back.  -->
                             <winui:ProgressBar

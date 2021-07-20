@@ -120,11 +120,15 @@
                     Color="Black">
 
                     <Grid
-                        Width="70"
-                        Height="70"
+                        Width="68"
+                        Height="68"
                         CornerRadius="4">
-                        <Image Source="ms-appx:///Assets/AlbumPlaceholder.png" Stretch="UniformToFill" />
-                        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+                        <Image Stretch="UniformToFill">
+                            <Image.Source>
+                                <BitmapImage DecodePixelWidth="68" UriSource="ms-appx:///Assets/AlbumPlaceholder.png" />
+                            </Image.Source>
+                        </Image>
+                        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=98}" Stretch="UniformToFill" />
                     </Grid>
 
 

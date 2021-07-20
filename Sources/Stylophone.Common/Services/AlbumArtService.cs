@@ -65,7 +65,7 @@ namespace Stylophone.Common.Services
 
                         if (vm.Files.Count > 0)
                         {
-                            var art = await GetAlbumArtAsync(vm.Files[0], true, 360);
+                            var art = await GetAlbumArtAsync(vm.Files[0], true);
                             vm.SetAlbumArt(art);
                         }
                     }
@@ -97,16 +97,14 @@ namespace Stylophone.Common.Services
         /// </summary>
         /// <param name="f">The MpdFile</param>
         /// <param name="calculateDominantColor">Whether to calculate dominant color through ColorThief</param>
-        /// <param name="albumArtWidth">Width of the final SKImage</param>
         /// <returns>An AlbumArt object containing bitmap and color. Returns null if there was no albumart on the MPD server.</returns>
-        public async Task<AlbumArt> GetAlbumArtAsync(IMpdFile f, bool calculateDominantColor, int albumArtWidth, CancellationToken token = default)
+        public async Task<AlbumArt> GetAlbumArtAsync(IMpdFile f, bool calculateDominantColor, CancellationToken token = default)
         {
             var result = new AlbumArt();
 
             var bitmap = await GetAlbumBitmap(f, token);
             if (bitmap != null)
             {
-                bitmap = bitmap.Resize(new SKImageInfo(albumArtWidth, albumArtWidth * bitmap.Height / bitmap.Width), SKFilterQuality.High);
                 result.ArtBitmap = SKImage.FromBitmap(bitmap);
 
                 if (calculateDominantColor)
