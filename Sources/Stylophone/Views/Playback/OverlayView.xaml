@@ -154,7 +154,7 @@
                     Margin="{StaticResource XXSmallLeftMargin}"
                     Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
                     Content="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
-                    FontSize="29"
+                    FontSize="28"
                     Style="{StaticResource SVButtonStyle}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}" />
 
