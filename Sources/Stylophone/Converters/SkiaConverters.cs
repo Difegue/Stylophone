@@ -14,6 +14,15 @@ namespace Stylophone.Helpers
         {
             var image = value as SKImage;
 
+            // Resize image if parameter specified
+            if (parameter is string width && image != null)
+            {
+                var w = int.Parse(width);
+                w = (int)(w * Windows.Graphics.Display.DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel);
+                var bitmap = SKBitmap.FromImage(image);
+                image = SKImage.FromBitmap(bitmap.Resize(new SKImageInfo(w, w * bitmap.Height / bitmap.Width), SKFilterQuality.High));
+            }
+                
             return image?.ToWriteableBitmap();
         }
 

@@ -2,7 +2,6 @@
     x:Class="Stylophone.Views.AddToPlaylistDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
@@ -12,10 +11,6 @@
     CloseButtonText="{x:Bind strings:Resources.CancelButtonText}"
     PrimaryButtonText="{x:Bind strings:Resources.AddToPlaylistPrimaryButtonText}"
     mc:Ignorable="d">
-    <ContentDialog.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
-    </ContentDialog.Resources>
     <ScrollViewer>
         <StackPanel>
             <ComboBox

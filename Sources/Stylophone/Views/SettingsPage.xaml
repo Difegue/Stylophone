@@ -15,12 +15,6 @@
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="stylophone:Theme" />
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters:BoolToVisibilityConverter
-            x:Key="ReverseBoolToVisibilityConverter"
-            FalseValue="Visible"
-            TrueValue="Collapsed" />
-        <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
 
         <converters:BoolToObjectConverter x:Key="IconConverter">
             <converters:BoolToObjectConverter.TrueValue>
