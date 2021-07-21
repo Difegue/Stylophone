@@ -46,5 +46,6 @@ namespace Stylophone.Views
             var fileVm = treeViewItem.DataContext as FilePathViewModel;
             fileVm.AddToQueueCommand.Execute(null);
         }
+
     }
 }

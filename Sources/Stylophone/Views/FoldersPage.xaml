@@ -8,19 +8,34 @@
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <converters:BoolToObjectConverter
+            x:Key="IsDirectoryToIconConverter"
+            FalseValue="&#xEC4F;"
+            TrueValue="&#xF12B;" />
+
         <DataTemplate x:Key="PathTemplate" x:DataType="vm:FilePathViewModel">
             <winui:TreeViewItem
+                Margin="4,0"
                 DoubleTapped="TreeViewItem_DoubleTapped"
                 HasUnrealizedChildren="{x:Bind IsDirectory, Mode=OneTime}"
                 IsExpanded="False"
                 ItemsSource="{x:Bind Children, Mode=OneWay}">
-                <TextBlock Margin="{StaticResource XXSmallTopRightBottomMargin}" Text="{x:Bind Name, Mode=OneWay}" />
+
+                <StackPanel
+                    Margin="0,2,0,2"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="{x:Bind IsDirectory, Mode=OneTime, Converter={StaticResource IsDirectoryToIconConverter}}" />
+                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" />
+                </StackPanel>
 
                 <winui:TreeViewItem.ContextFlyout>
                     <MenuFlyout>
@@ -42,71 +57,57 @@
         </DataTemplate>
     </Page.Resources>
 
+    <Grid x:Name="ContentArea">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid x:Name="header">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock
-                Grid.Column="1"
-                Margin="{StaticResource SmallLeftMargin}"
-                VerticalAlignment="Center"
-                Style="{StaticResource ListTitleStyle}"
-                Text="{x:Bind strings:Resources.FoldersRoot}" />
-            <Button
-                Grid.Column="0"
-                Padding="{StaticResource SmallLeftRightMargin}"
-                VerticalAlignment="Stretch"
-                VerticalContentAlignment="Center"
-                Background="Transparent"
-                Command="{Binding ElementName=collapseBehavior, Path=CollapseAllCommand}"
-                Content="&#xF165;"
-                FontFamily="{StaticResource SymbolThemeFontFamily}"
-                FontSize="14"
-                ToolTipService.ToolTip="{x:Bind strings:Resources.FoldersCollapseAll}" />
-        </Grid>
+        <Button
+            Margin="24,-48"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Command="{Binding ElementName=collapseBehavior, Path=CollapseAllCommand}"
+            Content="{x:Bind strings:Resources.FoldersCollapseAll}" />
 
-        <!--
-            The WinUI TreeView is super bad at virtualization and I don't get it? Since it's all C++ I won't even bother
-            Cramming it into a ScrollViewer disables virtualization, solving most problems in one swoop.
-        -->
-        <ScrollViewer Grid.Row="1">
-            <winui:TreeView
-                x:Name="treeView"
-                Expanding="treeView_Expanding"
-                ItemTemplate="{StaticResource PathTemplate}"
-                ItemsSource="{x:Bind ViewModel.SourceData, Mode=OneWay}"
-                SelectionMode="Single">
-                <i:Interaction.Behaviors>
-                    <behaviors:TreeViewCollapseBehavior x:Name="collapseBehavior" />
-                </i:Interaction.Behaviors>
-            </winui:TreeView>
-        </ScrollViewer>
+        <Grid
+            Margin="8,0"
+            Background="{ThemeResource LayerFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
 
-        <StackPanel
-            Grid.Row="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <SymbolIcon
-                Height="86"
-                RenderTransformOrigin="0.5,0.5"
-                Symbol="DisconnectDrive">
-                <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="5" ScaleY="5" />
-                </SymbolIcon.RenderTransform>
-            </SymbolIcon>
-            <TextBlock
+            <!--
+                The WinUI TreeView is super bad at virtualization and I don't get it? Since it's all C++ I won't even bother
+                Cramming it into a ScrollViewer disables virtualization, solving most problems in one swoop.
+            -->
+            <ScrollViewer Margin="0,8" ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8">
+                <winui:TreeView
+                    x:Name="treeView"
+                    Expanding="treeView_Expanding"
+                    ItemTemplate="{StaticResource PathTemplate}"
+                    ItemsSource="{x:Bind ViewModel.SourceData, Mode=OneWay}"
+                    SelectionMode="None">
+                    <i:Interaction.Behaviors>
+                        <behaviors:TreeViewCollapseBehavior x:Name="collapseBehavior" />
+                    </i:Interaction.Behaviors>
+                </winui:TreeView>
+            </ScrollViewer>
+
+            <StackPanel
                 HorizontalAlignment="Center"
-                Style="{StaticResource SubtitleTextBlockStyle}"
-                Text="{x:Bind strings:Resources.EmptyFoldersTitle}" />
-            <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptyFoldersDesc}" />
-        </StackPanel>
+                VerticalAlignment="Center"
+                Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <SymbolIcon
+                    Height="86"
+                    RenderTransformOrigin="0.5,0.5"
+                    Symbol="DisconnectDrive">
+                    <SymbolIcon.RenderTransform>
+                        <CompositeTransform ScaleX="5" ScaleY="5" />
+                    </SymbolIcon.RenderTransform>
+                </SymbolIcon>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="{x:Bind strings:Resources.EmptyFoldersTitle}" />
+                <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptyFoldersDesc}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
