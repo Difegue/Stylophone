@@ -30,7 +30,7 @@
         VerticalAlignment="Stretch"
         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
         BorderThickness="1"
-        CornerRadius="4">
+        CornerRadius="8">
         <!--  Split the content into two main sections  -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -55,7 +55,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Canvas.ZIndex="6"
-            CornerRadius="4">
+            CornerRadius="8">
             <Border.Background>
                 <AcrylicBrush
                     BackgroundSource="Backdrop"
@@ -73,7 +73,7 @@
             VerticalAlignment="Stretch"
             Background="{ThemeResource BlackOnDarkThemeOnly}"
             Canvas.ZIndex="6"
-            CornerRadius="4"
+            CornerRadius="8"
             Opacity="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource DarkBoolToOpacityConverter}}"
             Visibility="Visible" />
 
@@ -85,7 +85,7 @@
             VerticalAlignment="Stretch"
             Background="{ThemeResource WhiteOnLightThemeOnly}"
             Canvas.ZIndex="6"
-            CornerRadius="4"
+            CornerRadius="8"
             Opacity="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource LightBoolToOpacityConverter}}"
             Visibility="Visible" />
 
