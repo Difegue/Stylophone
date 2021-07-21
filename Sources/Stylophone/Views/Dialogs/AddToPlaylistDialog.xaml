@@ -9,10 +9,12 @@
     d:DesignHeight="345"
     d:DesignWidth="550"
     CloseButtonText="{x:Bind strings:Resources.CancelButtonText}"
+    DefaultButton="Primary"
     PrimaryButtonText="{x:Bind strings:Resources.AddToPlaylistPrimaryButtonText}"
+    Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
     <ScrollViewer>
-        <StackPanel>
+        <StackPanel Spacing="4">
             <ComboBox
                 Width="270"
                 DisplayMemberPath="Name"

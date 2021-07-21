@@ -8,6 +8,8 @@
     x:Uid="FirstRunDialog"
     d:DesignHeight="345"
     d:DesignWidth="550"
+    DefaultButton="Close"
+    Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
     <ContentDialog.TitleTemplate>
         <DataTemplate x:DataType="x:String">
