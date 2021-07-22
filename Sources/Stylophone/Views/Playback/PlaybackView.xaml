@@ -28,10 +28,15 @@
 
     <RelativePanel
         Margin="8,2,8,0"
+        BackgroundSizing="InnerBorderEdge"
         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
         BorderThickness="1"
         CornerRadius="8">
         <!--  Track Background  -->
+        <RelativePanel.Background>
+            <ImageBrush ImageSource="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+        </RelativePanel.Background>
+
         <Border
             Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}"
             Canvas.ZIndex="-1"
@@ -40,13 +45,6 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.AlignTopWithPanel="True" />
-
-        <Image
-            Margin="2"
-            HorizontalAlignment="Center"
-            Canvas.ZIndex="-2"
-            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
-            Stretch="UniformToFill" />
 
         <Grid
             RelativePanel.AlignBottomWithPanel="True"
@@ -76,7 +74,7 @@
                 ShadowOpacity="0.6"
                 Color="Black">
 
-                <Grid CornerRadius="3">
+                <Grid CornerRadius="8">
                     <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=720}" />
                 </Grid>
             </controls:DropShadowPanel>

@@ -39,15 +39,9 @@
         </Grid.ColumnDefinitions>
 
         <!--  Track Background  -->
-        <Image
-            Grid.ColumnSpan="3"
-            Margin="2"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
-            Canvas.ZIndex="5"
-            Opacity="1"
-            Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}"
-            Stretch="UniformToFill" />
+        <Grid.Background>
+            <ImageBrush ImageSource="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+        </Grid.Background>
 
         <Border
             Grid.Column="0"

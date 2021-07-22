@@ -15,11 +15,13 @@ namespace Stylophone.Services
     {
         private IDispatcherService _dispatcherService;
         private IApplicationStorageService _storageService;
+        private INavigationService _navigationService;
         private MPDConnectionService _mpdService;
 
-        public DialogService(IDispatcherService dispatcherService, IApplicationStorageService storageService, MPDConnectionService mpdService)
+        public DialogService(IDispatcherService dispatcherService, INavigationService navigationService, IApplicationStorageService storageService, MPDConnectionService mpdService)
         {
             _dispatcherService = dispatcherService;
+            _navigationService = navigationService;
             _storageService = storageService;
             _mpdService = mpdService;
         }
@@ -48,6 +50,7 @@ namespace Stylophone.Services
                         shown = true;
                         var dialog = new FirstRunDialog();
                         await dialog.ShowAsync();
+                        _navigationService.Navigate<SettingsViewModel>();
                     }
                 });
         }

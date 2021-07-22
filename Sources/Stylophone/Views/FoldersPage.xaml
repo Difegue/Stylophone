@@ -18,8 +18,8 @@
 
         <converters:BoolToObjectConverter
             x:Key="IsDirectoryToIconConverter"
-            FalseValue="&#xEC4F;"
-            TrueValue="&#xF12B;" />
+            FalseValue="🎵"
+            TrueValue="📂" />
 
         <DataTemplate x:Key="PathTemplate" x:DataType="vm:FilePathViewModel">
             <winui:TreeViewItem
@@ -33,8 +33,11 @@
                     Margin="0,2,0,2"
                     Orientation="Horizontal"
                     Spacing="8">
-                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="{x:Bind IsDirectory, Mode=OneTime, Converter={StaticResource IsDirectoryToIconConverter}}" />
-                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Text="{x:Bind IsDirectory, Mode=OneTime, Converter={StaticResource IsDirectoryToIconConverter}}" />
+                    <TextBlock VerticalAlignment="Center" Text="{x:Bind Name, Mode=OneWay}" />
                 </StackPanel>
 
                 <winui:TreeViewItem.ContextFlyout>
