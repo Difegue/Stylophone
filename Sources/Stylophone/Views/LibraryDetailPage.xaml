@@ -128,7 +128,7 @@
                         BorderThickness="0"
                         Command="{x:Bind ViewModel.Item.PlayAlbumCommand}"
                         IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
-                        Style="{StaticResource ButtonRevealStyle}">
+                        Style="{StaticResource AccentButtonStyle}">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF5B0;" />
                             <TextBlock

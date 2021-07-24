@@ -336,7 +336,7 @@ J'espère que vous apprécierez l'application !</value>
     <value>Ajouter à une Playlist</value>
   </data>
   <data name="ContextMenuAddQueueToPlaylist" xml:space="preserve">
-    <value>Ajouter la file d'attente à une Playlist</value>
+    <value>Enregistrer la file d'attente comme Playlist</value>
   </data>
   <data name="ContextMenuClearQueue" xml:space="preserve">
     <value>Vider la file d'attente</value>

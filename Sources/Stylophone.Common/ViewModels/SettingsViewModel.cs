@@ -19,17 +19,15 @@ namespace Stylophone.Common.ViewModels
     {
         private IApplicationStorageService _applicationStorageService;
         private INotificationService _notificationService;
-        private IDialogService _dialogService;
         private IInteropService _interop;
         private MPDConnectionService _mpdService;
 
-        public SettingsViewModel(MPDConnectionService mpdService, IApplicationStorageService appStorage, INotificationService notificationService, IDispatcherService dispatcherService, IDialogService dialogService, IInteropService interop) :
+        public SettingsViewModel(MPDConnectionService mpdService, IApplicationStorageService appStorage, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop) :
             base(dispatcherService)
         {
             _mpdService = mpdService;
             _applicationStorageService = appStorage;
             _notificationService = notificationService;
-            _dialogService = dialogService;
             _interop = interop;
         }
 

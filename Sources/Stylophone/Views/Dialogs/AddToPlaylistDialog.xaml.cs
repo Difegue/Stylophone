@@ -22,6 +22,8 @@ namespace Stylophone.Views
             if (!allowExistingPlaylists)
             {
                 AddNewPlaylist = true;
+                // Change the title, as we can't "add" to a playlist in the creation-only mode
+                Title = Localization.Strings.Resources.ContextMenuAddQueueToPlaylist;
             }
             RequestedTheme = (Window.Current.Content as FrameworkElement).RequestedTheme;
             Playlists = new ObservableCollection<MpdPlaylist>(mpdService.Playlists);

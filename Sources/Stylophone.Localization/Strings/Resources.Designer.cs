@@ -205,7 +205,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Add Queue to Playlist.
+        ///   Recherche une chaîne localisée semblable à Save Queue as Playlist.
         /// </summary>
         public static string ContextMenuAddQueueToPlaylist {
             get {

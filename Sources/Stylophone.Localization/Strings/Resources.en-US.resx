@@ -337,7 +337,7 @@ Hope you enjoy using the application!</value>
     <value>Add to Playlist</value>
   </data>
   <data name="ContextMenuAddQueueToPlaylist" xml:space="preserve">
-    <value>Add Queue to Playlist</value>
+    <value>Save Queue as Playlist</value>
   </data>
   <data name="ContextMenuClearQueue" xml:space="preserve">
     <value>Clear Queue</value>
