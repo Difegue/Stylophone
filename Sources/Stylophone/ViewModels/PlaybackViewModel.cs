@@ -18,8 +18,8 @@ namespace Stylophone.ViewModels
 {
     public class PlaybackViewModel : PlaybackViewModelBase
     {
-        public PlaybackViewModel(IDialogService dialogService, INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
-            base(dialogService,navigationService,notificationService,dispatcherService,interop,mpdService,trackVmFactory)
+        public PlaybackViewModel(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory, LocalPlaybackViewModel localPlayback) :
+            base(navigationService, notificationService, dispatcherService, interop, mpdService, trackVmFactory, localPlayback)
         {
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
 

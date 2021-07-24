@@ -19,6 +19,11 @@
             FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
             TrueValue="{ThemeResource AccentFillColorDisabledBrush}" />
 
+        <converters1:BoolToObjectConverter
+            x:Key="BoolToBrushBorderConverter"
+            FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
+            TrueValue="{ThemeResource AccentFillColorDefaultBrush}" />
+
     </UserControl.Resources>
 
     <!--  Content  -->
@@ -175,21 +180,29 @@
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <!--  Shuffle  -->
-                <Button
+                <Grid
                     x:Name="ShuffleButton"
                     Width="43"
                     Height="43"
                     Margin="{StaticResource XXSmallLeftMargin}"
-                    Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
-                    Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
-                    FontSize="18"
-                    Style="{StaticResource SVButtonStyle}"
-                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}"
+                    Padding="-2"
+                    BorderBrush="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushBorderConverter}, Mode=OneWay}"
+                    BorderThickness="2"
+                    CornerRadius="4"
                     Visibility="Collapsed">
-                    <Button.Content>
-                        &#xE8B1;
-                    </Button.Content>
-                </Button>
+                    <Button
+                        Width="43"
+                        Height="43"
+                        Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
+                        FontSize="18"
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}">
+                        <Button.Content>
+                            &#xE8B1;
+                        </Button.Content>
+                    </Button>
+                </Grid>
+
 
                 <!--  Back  -->
                 <Button
@@ -231,18 +244,25 @@
                 </Button>
 
                 <!--  Repeat  -->
-                <Button
+                <Grid
                     x:Name="RepeatButton"
                     Width="43"
                     Height="43"
                     Margin="{StaticResource XXSmallLeftMargin}"
-                    Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
-                    Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
-                    Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
-                    FontSize="18"
-                    Style="{StaticResource SVButtonStyle}"
-                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}"
-                    Visibility="Collapsed" />
+                    Padding="-2"
+                    BorderBrush="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushBorderConverter}, Mode=OneWay}"
+                    BorderThickness="2"
+                    CornerRadius="4"
+                    Visibility="Collapsed">
+                    <Button
+                        Width="43"
+                        Height="43"
+                        Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
+                        Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
+                        FontSize="18"
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}" />
+                </Grid>
             </StackPanel>
 
             <!--  Slider  -->
@@ -359,35 +379,77 @@
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}">
                     <Button.Flyout>
                         <Flyout Placement="Top">
+
                             <StackPanel
                                 Width="245"
                                 Padding="16,4"
-                                Orientation="Horizontal">
-                                <Button
-                                    Width="46"
-                                    Height="46"
-                                    Margin="0,4,8,0"
-                                    Click="{x:Bind PlaybackViewModel.ToggleMute}"
-                                    Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
-                                    FontSize="22"
-                                    Style="{StaticResource SVButtonStyle}" />
-                                <Slider
-                                    Width="105"
-                                    Margin="{StaticResource XXSmallTopMargin}"
-                                    Padding="0"
-                                    VerticalAlignment="Center"
-                                    Maximum="100"
-                                    Minimum="0"
-                                    Orientation="Horizontal"
-                                    PointerWheelChanged="Volume_PointerWheelChanged"
-                                    Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
+                                Orientation="Vertical">
+
+                                <!--  Local Playback Volume  -->
                                 <TextBlock
-                                    Margin="14,2,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    FontWeight="SemiBold"
-                                    Text="{x:Bind PlaybackViewModel.MediaVolume, Mode=OneWay}" />
+                                    Style="{StaticResource BaseTextBlockStyle}"
+                                    Text="Local Volume"
+                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <StackPanel Orientation="Horizontal" Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Button
+                                        Width="46"
+                                        Height="46"
+                                        Margin="0,0,8,0"
+                                        Click="{x:Bind PlaybackViewModel.LocalPlayback.ToggleMute}"
+                                        Content="{x:Bind PlaybackViewModel.LocalPlayback.VolumeIcon, Mode=OneWay}"
+                                        FontSize="22"
+                                        Style="{StaticResource SVButtonStyle}" />
+                                    <Slider
+                                        Width="116"
+                                        Margin="{StaticResource XXSmallTopMargin}"
+                                        VerticalAlignment="Center"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        Orientation="Horizontal"
+                                        PointerWheelChanged="Volume_PointerWheelChanged"
+                                        Value="{x:Bind PlaybackViewModel.LocalPlayback.Volume, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Margin="14,2,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Text="{x:Bind PlaybackViewModel.LocalPlayback.Volume, Mode=OneWay}" />
+                                </StackPanel>
+
+                                <!--  Remote MPD Volume  -->
+                                <TextBlock
+                                    Margin="{StaticResource SmallTopMargin}"
+                                    Style="{StaticResource BaseTextBlockStyle}"
+                                    Text="{x:Bind strings:Resources.SettingsServer}"
+                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Width="46"
+                                        Height="46"
+                                        Margin="0,0,8,0"
+                                        Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                                        Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                                        FontSize="22"
+                                        Style="{StaticResource SVButtonStyle}" />
+                                    <Slider
+                                        Width="116"
+                                        Margin="{StaticResource XXSmallTopMargin}"
+                                        VerticalAlignment="Center"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        Orientation="Horizontal"
+                                        PointerWheelChanged="Volume_PointerWheelChanged"
+                                        Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Margin="14,2,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Text="{x:Bind PlaybackViewModel.MediaVolume, Mode=OneWay}" />
+                                </StackPanel>
                             </StackPanel>
+
                         </Flyout>
                     </Button.Flyout>
                 </Button>

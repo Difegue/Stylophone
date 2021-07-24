@@ -27,23 +27,25 @@ namespace Stylophone.Common.ViewModels
         private List<Task> volumeTasks = new List<Task>();
         private List<Task> shuffleTasks = new List<Task>();
 
-        private IDialogService _dialogService;
         protected INavigationService _navigationService;
         protected INotificationService _notificationService;
         private IInteropService _interop;
         private MPDConnectionService _mpdService;
         private TrackViewModelFactory _trackVmFactory;
 
-        public PlaybackViewModelBase(IDialogService dialogService, INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
+        public LocalPlaybackViewModel LocalPlayback;
+
+        public PlaybackViewModelBase(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, 
+            MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory, LocalPlaybackViewModel localPlayback):
             base(dispatcherService)
         {
-            _dialogService = dialogService;
             _navigationService = navigationService;
             _notificationService = notificationService;
             _dispatcherService = dispatcherService;
             _interop = interop;
             _mpdService = mpdService;
             _trackVmFactory = trackVmFactory;
+            LocalPlayback = localPlayback;
 
             // Default to NowPlayingBar
             _hostType = VisualizationType.NowPlayingBar;
