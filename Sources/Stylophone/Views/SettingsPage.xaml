@@ -34,15 +34,6 @@
             </converters:BoolToObjectConverter.FalseValue>
         </converters:BoolToObjectConverter>
 
-        <converters:BoolToObjectConverter x:Key="IsOnReverseLabelConverter">
-            <converters:BoolToObjectConverter.TrueValue>
-                <TextBlock Text="{x:Bind strings:Resources.OffText}" />
-            </converters:BoolToObjectConverter.TrueValue>
-            <converters:BoolToObjectConverter.FalseValue>
-                <TextBlock Text="{x:Bind strings:Resources.OnText}" />
-            </converters:BoolToObjectConverter.FalseValue>
-        </converters:BoolToObjectConverter>
-
         <converters:BoolToObjectConverter x:Key="DensityLabelConverter">
             <converters:BoolToObjectConverter.TrueValue>
                 <TextBlock HorizontalTextAlignment="Right" Text="{x:Bind strings:Resources.SettingsUIDensityCompact}" />
@@ -258,10 +249,10 @@
                 </local:SettingsBlockControl.Icon>
                 <local:SettingsBlockControl.SettingsActionableElement>
                     <StackPanel Orientation="Horizontal" Spacing="16">
-                        <Border VerticalAlignment="Center" Child="{x:Bind ViewModel.DisableAnalytics, Converter={StaticResource IsOnReverseLabelConverter}, Mode=OneWay}" />
+                        <Border VerticalAlignment="Center" Child="{x:Bind ViewModel.EnableAnalytics, Converter={StaticResource IsOnLabelConverter}, Mode=OneWay}" />
                         <ToggleSwitch
                             Margin="0,0,-112,0"
-                            IsOn="{x:Bind ViewModel.DisableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}"
+                            IsOn="{x:Bind ViewModel.EnableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}"
                             OffContent=""
                             OnContent="" />
                     </StackPanel>

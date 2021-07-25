@@ -75,8 +75,7 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(ServerConnectionSuccess, "hidden", nameof(ViewModel.IsServerValid),
                 valueTransformer: negateBoolTransformer);
 
-            Binder.Bind<bool>(AnalyticsToggle, "on", nameof(ViewModel.DisableAnalytics), true,
-                valueTransformer: negateBoolTransformer);
+            Binder.Bind<bool>(AnalyticsToggle, "on", nameof(ViewModel.EnableAnalytics), true);
 
             Binder.Bind<string>(VersionLabel, "text", nameof(ViewModel.VersionDescription));
 

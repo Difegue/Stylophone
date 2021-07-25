@@ -59,8 +59,8 @@ namespace Stylophone
             }
 
             // Analytics
-            var disableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.DisableAnalytics));
-            if (!disableAnalytics)
+            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics));
+            if (enableAnalytics)
             {
                 // Initialize AppCenter
                 AppCenter.Start("f2193544-6a38-42f6-92bd-69964bc3a0e8",

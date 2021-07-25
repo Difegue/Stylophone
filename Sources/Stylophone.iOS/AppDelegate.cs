@@ -10,6 +10,9 @@ using Stylophone.Common.ViewModels;
 using System.Threading.Tasks;
 using Stylophone.iOS.Services;
 using Stylophone.iOS.ViewModels;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace Stylophone.iOS
 {
@@ -67,7 +70,14 @@ namespace Stylophone.iOS
                 await Ioc.Default.GetRequiredService<IDialogService>().ShowFirstRunDialogIfAppropriateAsync();
             });
 
-            //Ioc.Default.GetRequiredService<SystemMediaControlsService>().Initialize();
+            // Analytics
+            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics));
+            if (enableAnalytics)
+            {
+                // Initialize AppCenter
+                AppCenter.Start("90b62f5a-2448-4ef1-81ca-3fb807a5b126",
+                   typeof(Analytics), typeof(Crashes));
+            }
         }
 
         // UISceneSession Lifecycle

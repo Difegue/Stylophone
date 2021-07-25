@@ -68,7 +68,14 @@ namespace Stylophone.Services
         {
             if (SettingsStorage.TryGetValue(key, out object value))
             {
-                return (T)value;
+                try
+                {
+                    return (T)value;
+                }
+                catch
+                {
+                    // Corrupted storage, return default
+                }
             }
 
             return default;

@@ -123,17 +123,17 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private bool _disableAnalytics;
-        public bool DisableAnalytics
+        private bool _enableAnalytics;
+        public bool EnableAnalytics
         {
-            get { return _disableAnalytics; }
+            get { return _enableAnalytics; }
             set
             {
-                if (value != _disableAnalytics)
+                if (value != _enableAnalytics)
                 {
-                    _applicationStorageService.SetValue(nameof(DisableAnalytics), value);
+                    _applicationStorageService.SetValue(nameof(EnableAnalytics), value);
                 }
-                Set(ref _disableAnalytics, value);
+                Set(ref _enableAnalytics, value);
             }
         }
 
@@ -236,7 +236,7 @@ namespace Stylophone.Common.ViewModels
                 _compactEnabled = _applicationStorageService.GetValue<bool>(nameof(IsCompactSizing));
                 _serverHost = _applicationStorageService.GetValue<string>(nameof(ServerHost));
                 _serverPort = _applicationStorageService.GetValue<int>(nameof(ServerPort));
-                _disableAnalytics = _applicationStorageService.GetValue<bool>(nameof(DisableAnalytics));
+                _enableAnalytics = _applicationStorageService.GetValue<bool>(nameof(EnableAnalytics));
                 _localPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
 
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);
