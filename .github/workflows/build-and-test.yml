@@ -76,9 +76,9 @@ jobs:
 
     # Execute all unit tests in the solution
     # TODO: This only runs the tests for MpcNET right now, since it's .NET Standard-based. Running the UWP tests would be nice too.
-    - name: Execute unit tests
-      working-directory: ./Sources
-      run: dotnet test
+    #- name: Execute unit tests
+    #  working-directory: ./Sources
+    #  run: dotnet test
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
