@@ -451,7 +451,8 @@ Hope you enjoy using the application!</value>
     <value>Local Playback</value>
   </data>
   <data name="SettingsLocalPlaybackText" xml:space="preserve">
-    <value>Stylophone can playback your MPD Server's music stream. Enabling this option will show a second volume slider to control local volume.</value>
+    <value>Stylophone can play your MPD Server's music stream.
+Enabling this option will show a second volume slider to control local volume.</value>
   </data>
   <data name="ErrorPlayingMPDStream" xml:space="preserve">
     <value>Error trying to play the MPD server's httpd stream: {0}</value>

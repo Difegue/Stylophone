@@ -450,7 +450,8 @@ J'espère que vous apprécierez l'application !</value>
     <value>Écoute en local</value>
   </data>
   <data name="SettingsLocalPlaybackText" xml:space="preserve">
-    <value>Stylophone peut lire le stream de votre serveur MPD. L'activation de cette option affichera un second slider pour contrôler le volume local.</value>
+    <value>Stylophone peut lire le stream de votre serveur MPD. 
+L'activation de cette option affichera un second slider pour contrôler le volume local.</value>
   </data>
   <data name="ErrorPlayingMPDStream" xml:space="preserve">
     <value>Erreur lors de la lecture du stream httpd du serveur MPD: {0}</value>

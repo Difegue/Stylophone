@@ -900,7 +900,8 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Stylophone can playback your MPD Server&apos;s music stream. Enabling this option will show a second volume slider to control local volume..
+        ///   Recherche une chaîne localisée semblable à Stylophone can play your MPD Server&apos;s music stream.
+        ///Enabling this option will show a second volume slider to control local volume..
         /// </summary>
         public static string SettingsLocalPlaybackText {
             get {

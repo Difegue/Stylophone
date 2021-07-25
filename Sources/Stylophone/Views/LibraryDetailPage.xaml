@@ -22,15 +22,15 @@
             Grid.Row="0"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
-            CornerRadius="8">
+            CornerRadius="8,8,0,0">
 
-            <Border Canvas.ZIndex="-1" CornerRadius="8">
+            <Border Canvas.ZIndex="-1" CornerRadius="8,8,0,0">
                 <Border.Background>
                     <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
                 </Border.Background>
             </Border>
 
-            <Border Canvas.ZIndex="-1" CornerRadius="8">
+            <Border Canvas.ZIndex="-1" CornerRadius="8,8,0,0">
                 <Border.Background>
                     <AcrylicBrush
                         BackgroundSource="Backdrop"
@@ -175,11 +175,11 @@
         <!--  Track List  -->
         <Grid
             Grid.Row="1"
-            Margin="{StaticResource XSmallTopMargin}"
+            Margin="0,-1,0,0"
             Background="{ThemeResource LayerFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
-            CornerRadius="8">
+            CornerRadius="0,0,8,8">
 
             <winui:ProgressRing
                 Width="96"
