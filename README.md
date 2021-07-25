@@ -1,4 +1,4 @@
-<img src="icon.svg" width="128">  
+![](Sources/Stylophone/Assets/Square44x44Logo.targetsize-256.png)
   
 Stylophone
 ===========
