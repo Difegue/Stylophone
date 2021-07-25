@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    Title="{x:Bind strings:Resources.AddToPlaylistTitle}"
+    Title="{x:Bind DialogTitle}"
     d:DesignHeight="345"
     d:DesignWidth="550"
     CloseButtonText="{x:Bind strings:Resources.CancelButtonText}"
@@ -13,6 +13,7 @@
     PrimaryButtonText="{x:Bind strings:Resources.AddToPlaylistPrimaryButtonText}"
     Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
+
     <ScrollViewer>
         <StackPanel Spacing="4">
             <ComboBox

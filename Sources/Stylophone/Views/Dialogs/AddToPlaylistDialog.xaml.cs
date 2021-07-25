@@ -18,12 +18,12 @@ namespace Stylophone.Views
         public AddToPlaylistDialog(MPDConnectionService mpdService, bool allowExistingPlaylists)
         {
             AllowExistingPlaylists = allowExistingPlaylists;
+            DialogTitle = Localization.Strings.Resources.AddToPlaylistTitle;
 
             if (!allowExistingPlaylists)
             {
+                DialogTitle = Localization.Strings.Resources.ContextMenuAddQueueToPlaylist;
                 AddNewPlaylist = true;
-                // Change the title, as we can't "add" to a playlist in the creation-only mode
-                Title = Localization.Strings.Resources.ContextMenuAddQueueToPlaylist;
             }
             RequestedTheme = (Window.Current.Content as FrameworkElement).RequestedTheme;
             Playlists = new ObservableCollection<MpdPlaylist>(mpdService.Playlists);
@@ -33,6 +33,7 @@ namespace Stylophone.Views
         public ObservableCollection<MpdPlaylist> Playlists { get; internal set; }
         public string SelectedPlaylist { get; internal set; }
         public string PlaylistName { get; internal set; }
+        public string DialogTitle { get; internal set; }
 
         public bool AddNewPlaylist { get; internal set; }
         public bool AllowExistingPlaylists { get; internal set; }
