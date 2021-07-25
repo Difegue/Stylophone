@@ -17,7 +17,7 @@ namespace Stylophone.Views
 
         public AddToPlaylistDialog(MPDConnectionService mpdService, bool allowExistingPlaylists)
         {
-            AllowExistingPlaylists = allowExistingPlaylists;
+            AllowExistingPlaylists = allowExistingPlaylists || mpdService.Playlists.Count == 0;
             DialogTitle = Localization.Strings.Resources.AddToPlaylistTitle;
 
             if (!allowExistingPlaylists)

@@ -7,13 +7,13 @@ using Stylophone.Common.ViewModels;
 using UIKit;
 using SkiaSharp.Views.iOS;
 using Foundation;
+using AVFoundation;
 
 namespace Stylophone.iOS.Services
 {
     public class InteropService: IInteropService
     {
-
-        //private SystemMediaControlsService _smtcService;
+        private AVPlayer _mediaPlayer;
 
         public InteropService( )
         {
@@ -43,11 +43,10 @@ namespace Stylophone.iOS.Services
 
         public async Task<SKImage> GetPlaceholderImageAsync()
         {
-            // TODO
             var tcs = new TaskCompletionSource<UIImage>();
             UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
             {
-                var imageFile = UIImage.GetSystemImage("tv.music.note.fill");
+                var imageFile = UIImage.FromBundle("AlbumPlaceholder");
                 tcs.SetResult(imageFile);
             });
 
@@ -85,6 +84,28 @@ namespace Stylophone.iOS.Services
                 PlaybackIcon.VolumeFull => "speaker.wave.2.circle",
                 _ => "opticaldisc",
             };
+        }
+
+        public void PlayStream(Uri streamUri)
+        {
+            if (_mediaPlayer == null)
+                _mediaPlayer = new AVPlayer();
+
+            var playerItem = new AVPlayerItem(new NSUrl(streamUri.AbsoluteUri));
+            _mediaPlayer.ReplaceCurrentItemWithPlayerItem(playerItem);
+
+            _mediaPlayer.Play();
+        }
+
+        public void StopStream()
+        {
+            _mediaPlayer.Pause();
+        }
+
+        public void SetStreamVolume(double volume)
+        {
+            if (_mediaPlayer != null)
+                _mediaPlayer.Volume = (float)volume;
         }
     }
 }

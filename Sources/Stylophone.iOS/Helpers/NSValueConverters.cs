@@ -44,7 +44,7 @@ namespace Stylophone.iOS.Helpers
                 img = skiaImage.ToUIImage();
             }
             else
-                img = UIImage.GetSystemImage("opticaldisc"); //Fallback
+                img = UIImage.FromBundle("AlbumPlaceholder"); //Fallback
 
             return img;
         }

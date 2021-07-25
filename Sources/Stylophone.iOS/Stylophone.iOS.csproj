@@ -191,19 +191,14 @@
     <InterfaceDefinition Include="Views\Settings.storyboard" />
     <InterfaceDefinition Include="Views\Queue.storyboard" />
     <InterfaceDefinition Include="Views\NowPlaying.storyboard" />
-    <ImageAsset Include="Resources\Assets.xcassets\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Assets.xcassets\PlaceholderAlbum.imageset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Assets.xcassets\PlaceholderAlbum.imageset\AlbumPlaceholder.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <InterfaceDefinition Include="Views\AlbumDetail.storyboard" />
     <InterfaceDefinition Include="Views\Folders.storyboard" />
     <InterfaceDefinition Include="Views\Library.storyboard" />
     <InterfaceDefinition Include="Views\SearchResults.storyboard" />
+    <ImageAsset Include="Assets.xcassets\AlbumPlaceholder.imageset\AlbumPlaceholderApple.png" />
+    <ImageAsset Include="Assets.xcassets\AlbumPlaceholder.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon.imageset\icon.png" />
+    <ImageAsset Include="Assets.xcassets\icon.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -241,6 +236,7 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Services\" />
     <Folder Include="ViewControllers\SubViews\" />
+    <Folder Include="Assets.xcassets\AlbumPlaceholder.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MpcNET\MpcNET.csproj">

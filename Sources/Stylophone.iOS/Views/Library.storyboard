@@ -70,7 +70,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="192"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="PlaceholderAlbum" translatesAutoresizingMaskIntoConstraints="NO" id="Ghs-Wy-Lzw">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="Ghs-Wy-Lzw">
                                             <rect key="frame" x="0.0" y="0.0" width="192" height="192"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
@@ -140,7 +140,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="PlaceholderAlbum" width="466" height="466"/>
+        <image name="AlbumPlaceholder" width="932" height="932"/>
         <image name="building.columns.fill" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

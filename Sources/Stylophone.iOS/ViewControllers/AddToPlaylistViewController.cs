@@ -18,7 +18,7 @@ namespace Stylophone.iOS.ViewControllers
         {
             _tcs = new TaskCompletionSource<bool>();
 
-            AllowExistingPlaylists = allowExistingPlaylists;
+            AllowExistingPlaylists = allowExistingPlaylists || mpdService.Playlists.Count == 0;
 
             if (!allowExistingPlaylists)
             {
@@ -52,12 +52,6 @@ namespace Stylophone.iOS.ViewControllers
             Result = (sender == NavigationItem.RightBarButtonItem);
 
             DismissViewController(true, () => _tcs.SetResult(Result));
-        }
-
-        public override void ViewWillLayoutSubviews()
-        {
-            base.ViewWillLayoutSubviews();
-            //NavigationController.View.Bounds = new CGRect(0, 0, 512, 256);
         }
 
         public override void LoadView()
@@ -96,7 +90,7 @@ namespace Stylophone.iOS.ViewControllers
             if (AllowExistingPlaylists)
                 stackView.AddArrangedSubview(playlistSwitch);
 
-            stackView.AddArrangedSubview(new UILabel { Text = Strings.AddToPlaylistText });
+            stackView.AddArrangedSubview(new UILabel { Text = Strings.AddToPlaylistText, Font = UIFont.PreferredTitle2 });
 
             if (AllowExistingPlaylists)
                 stackView.AddArrangedSubview(playlistPicker);
