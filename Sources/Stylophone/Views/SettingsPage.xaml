@@ -18,16 +18,10 @@
 
         <converters:BoolToObjectConverter x:Key="IconConverter">
             <converters:BoolToObjectConverter.TrueValue>
-                <FontIcon
-                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                    Foreground="Green"
-                    Glyph="&#xE953;" />
+                <FontIcon Foreground="Green" Glyph="&#xE953;" />
             </converters:BoolToObjectConverter.TrueValue>
             <converters:BoolToObjectConverter.FalseValue>
-                <FontIcon
-                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                    Foreground="Red"
-                    Glyph="&#xE8C9;" />
+                <FontIcon Foreground="Red" Glyph="&#xE8C9;" />
             </converters:BoolToObjectConverter.FalseValue>
         </converters:BoolToObjectConverter>
 
@@ -114,7 +108,7 @@
                             Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
 
                             <local:SettingsBlockControl.Icon>
-                                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF167;" />
+                                <FontIcon Glyph="&#xF167;" />
                             </local:SettingsBlockControl.Icon>
 
                             <ProgressBar
@@ -133,7 +127,7 @@
                 Description="{x:Bind strings:Resources.SettingsLocalPlaybackText}"
                 Visibility="{x:Bind ViewModel.IsStreamingAvailable, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                 <local:SettingsBlockControl.Icon>
-                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xED4D;" />
+                    <FontIcon Glyph="&#xED4D;" />
                 </local:SettingsBlockControl.Icon>
                 <local:SettingsBlockControl.SettingsActionableElement>
                     <StackPanel Orientation="Horizontal" Spacing="16">

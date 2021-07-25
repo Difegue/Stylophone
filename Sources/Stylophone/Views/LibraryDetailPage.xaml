@@ -133,7 +133,7 @@
                         IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
                         Style="{StaticResource AccentButtonStyle}">
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF5B0;" />
+                            <FontIcon Glyph="&#xF5B0;" />
                             <TextBlock
                                 Text="{x:Bind strings:Resources.ContextMenuPlay}"
                                 TextAlignment="Center"
@@ -146,7 +146,7 @@
                         IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
                         Style="{StaticResource ButtonRevealStyle}">
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xED0E;" />
+                            <FontIcon Glyph="&#xED0E;" />
                             <TextBlock
                                 Text="{x:Bind strings:Resources.ContextMenuAddToQueue}"
                                 TextAlignment="Center"

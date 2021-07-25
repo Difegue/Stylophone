@@ -20,7 +20,7 @@
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
-    <FontFamily x:Key="SymbolThemeFontFamily">Segoe Fluent Icons</FontFamily>
+
 
     <!--  Common Converters  -->
     <Stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
@@ -78,7 +78,6 @@
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        FontFamily="{StaticResource SymbolThemeFontFamily}"
                         FontSize="24"
                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                         Glyph="&#xF61F;"
@@ -137,7 +136,6 @@
         <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
         <Setter Property="FocusVisualMargin" Value="-3" />
         <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
-        <Setter Property="FontFamily" Value="{ThemeResource SymbolThemeFontFamily}" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
         <Setter Property="Template">
@@ -161,24 +159,20 @@
                             <BrushTransition Duration="0:0:0.083" />
                         </Grid.BackgroundTransition>
 
-                        <TextBlock
+                        <FontIcon
                             x:Name="Shadow"
                             Margin="0,4,0,0"
                             VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                            FontFamily="{TemplateBinding FontFamily}"
                             FontSize="{TemplateBinding FontSize}"
                             Foreground="{ThemeResource ControlElevationBorderBrush}"
-                            Text="{TemplateBinding Content}"
-                            TextAlignment="Center" />
+                            Glyph="{TemplateBinding Content}" />
 
-                        <TextBlock
+                        <FontIcon
                             x:Name="Content"
                             VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                            FontFamily="{TemplateBinding FontFamily}"
                             FontSize="{TemplateBinding FontSize}"
                             Foreground="{TemplateBinding Foreground}"
-                            Text="{TemplateBinding Content}"
-                            TextAlignment="Center" />
+                            Glyph="{TemplateBinding Content}" />
 
 
                         <VisualStateManager.VisualStateGroups>
