@@ -28,25 +28,26 @@
 
     <RelativePanel
         Margin="8,2,8,0"
-        BackgroundSizing="InnerBorderEdge"
         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
         BorderThickness="1"
         CornerRadius="8">
         <!--  Track Background  -->
-        <RelativePanel.Background>
-            <ImageBrush ImageSource="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
-        </RelativePanel.Background>
-
         <Border
-            Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}"
             Canvas.ZIndex="-1"
             CornerRadius="8"
             RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.AlignHorizontalCenterWithPanel="True"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
-            RelativePanel.AlignTopWithPanel="True" />
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignVerticalCenterWithPanel="True">
+            <Border.Background>
+                <ImageBrush ImageSource="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+            </Border.Background>
+        </Border>
 
         <Grid
+            Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}"
             RelativePanel.AlignBottomWithPanel="True"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"

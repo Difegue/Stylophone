@@ -23,9 +23,12 @@
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="8">
-            <Grid.Background>
-                <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
-            </Grid.Background>
+
+            <Border Canvas.ZIndex="-1" CornerRadius="8">
+                <Border.Background>
+                    <ImageBrush ImageSource="{x:Bind ViewModel.PlaylistArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+                </Border.Background>
+            </Border>
 
             <Border Canvas.ZIndex="-1" CornerRadius="8">
                 <Border.Background>

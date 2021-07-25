@@ -13,15 +13,12 @@
 
     <Page.Resources>
         <converters1:BoolToObjectConverter
-            x:Key="BoolToBrushConverter"
+            x:Key="BoolToBrushBorderConverter"
             FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
-            TrueValue="{ThemeResource ButtonBackgroundPointerOver}" />
+            TrueValue="{ThemeResource AccentFillColorDefaultBrush}" />
     </Page.Resources>
 
-    <Grid
-        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-        BorderThickness="0"
-        CornerRadius="8">
+    <Grid BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
         <Image
             Margin="2"
             HorizontalAlignment="Center"
@@ -117,21 +114,29 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
-                <Button
+
+                <Grid
                     x:Name="compactShuffleButton"
                     Width="43"
                     Height="43"
                     Margin="{StaticResource XXSmallLeftMargin}"
-                    Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
-                    Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
-                    FontSize="18"
-                    Style="{StaticResource SVButtonStyle}"
-                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}"
+                    Padding="-2"
+                    BorderBrush="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushBorderConverter}, Mode=OneWay}"
+                    BorderThickness="2"
+                    CornerRadius="4"
                     Visibility="Collapsed">
-                    <Button.Content>
-                        &#xE8B1;
-                    </Button.Content>
-                </Button>
+                    <Button
+                        Width="43"
+                        Height="43"
+                        Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
+                        FontSize="18"
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}">
+                        <Button.Content>
+                            &#xE8B1;
+                        </Button.Content>
+                    </Button>
+                </Grid>
 
                 <!--  Back  -->
                 <Button
@@ -173,18 +178,26 @@
                 </Button>
 
                 <!--  Repeat  -->
-                <Button
+                <Grid
                     x:Name="compactRepeatButton"
                     Width="43"
                     Height="43"
                     Margin="{StaticResource XXSmallLeftMargin}"
-                    Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
-                    Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
-                    Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
-                    FontSize="18"
-                    Style="{StaticResource SVButtonStyle}"
-                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}"
-                    Visibility="Collapsed" />
+                    Padding="-2"
+                    BorderBrush="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushBorderConverter}, Mode=OneWay}"
+                    BorderThickness="2"
+                    CornerRadius="4"
+                    Visibility="Collapsed">
+                    <Button
+                        Width="43"
+                        Height="43"
+                        Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
+                        Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
+                        FontSize="18"
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}" />
+                </Grid>
+
             </StackPanel>
         </StackPanel>
 
