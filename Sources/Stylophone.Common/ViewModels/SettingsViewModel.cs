@@ -155,6 +155,20 @@ namespace Stylophone.Common.ViewModels
             set => Set(ref _httpdAvailable, value);
         }
 
+        private bool _localPlaybackEnabled;
+        public bool IsLocalPlaybackEnabled
+        {
+            get { return _localPlaybackEnabled; }
+            set
+            {
+                if (value != _localPlaybackEnabled)
+                {
+                    _applicationStorageService.SetValue(nameof(IsLocalPlaybackEnabled), value);
+                }
+                Set(ref _localPlaybackEnabled, value);
+            }
+        }
+
         private ICommand _switchThemeCommand;
         public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new AsyncRelayCommand<Theme>(SwitchThemeAsync));
 
@@ -223,6 +237,8 @@ namespace Stylophone.Common.ViewModels
                 _serverHost = _applicationStorageService.GetValue<string>(nameof(ServerHost));
                 _serverPort = _applicationStorageService.GetValue<int>(nameof(ServerPort));
                 _disableAnalytics = _applicationStorageService.GetValue<bool>(nameof(DisableAnalytics));
+                _localPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
+
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);
 
                 await UpdateServerVersionAsync();
@@ -292,6 +308,9 @@ namespace Stylophone.Common.ViewModels
                     ServerInfo += $"\nOutputs available: {outputString}";
 
                     IsStreamingAvailable = outputs.Select(o => o.Plugin).Contains("httpd");
+
+                    if (!IsStreamingAvailable)
+                        IsLocalPlaybackEnabled = false;
                 }
 
                 await _dispatcherService.ExecuteOnUIThreadAsync(() => { OnPropertyChanged(nameof(IsServerValid)); OnPropertyChanged(nameof(ServerStatus)); });

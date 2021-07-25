@@ -128,6 +128,26 @@
                 </local:SettingsBlockControl.ExpandableContent>
             </local:SettingsBlockControl>
 
+            <local:SettingsBlockControl
+                Title="{x:Bind strings:Resources.SettingsLocalPlaybackHeader}"
+                Description="{x:Bind strings:Resources.SettingsLocalPlaybackText}"
+                Visibility="{x:Bind ViewModel.IsStreamingAvailable, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                <local:SettingsBlockControl.Icon>
+                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xED4D;" />
+                </local:SettingsBlockControl.Icon>
+                <local:SettingsBlockControl.SettingsActionableElement>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <Border VerticalAlignment="Center" Child="{x:Bind ViewModel.IsLocalPlaybackEnabled, Converter={StaticResource IsOnLabelConverter}, Mode=OneWay}" />
+                        <ToggleSwitch
+                            Margin="0,0,-112,0"
+                            IsOn="{x:Bind ViewModel.IsLocalPlaybackEnabled, Mode=TwoWay}"
+                            OffContent=""
+                            OnContent="" />
+                    </StackPanel>
+
+                </local:SettingsBlockControl.SettingsActionableElement>
+            </local:SettingsBlockControl>
+
             <!--  DB/Art  -->
 
             <TextBlock

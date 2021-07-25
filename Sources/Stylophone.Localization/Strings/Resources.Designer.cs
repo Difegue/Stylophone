@@ -430,6 +430,15 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Error trying to play the MPD server&apos;s httpd stream: {0}.
+        /// </summary>
+        public static string ErrorPlayingMPDStream {
+            get {
+                return ResourceManager.GetString("ErrorPlayingMPDStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Couldn&apos;t play content: {0}.
         /// </summary>
         public static string ErrorPlayingTrack {
@@ -553,6 +562,15 @@ namespace Stylophone.Localization.Strings {
         public static string LibrarySearchPlaceholder {
             get {
                 return ResourceManager.GetString("LibrarySearchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Local Volume.
+        /// </summary>
+        public static string LocalVolumeHeader {
+            get {
+                return ResourceManager.GetString("LocalVolumeHeader", resourceCulture);
             }
         }
         
@@ -869,6 +887,24 @@ namespace Stylophone.Localization.Strings {
         public static string SettingsLocalPlaybackAvailable {
             get {
                 return ResourceManager.GetString("SettingsLocalPlaybackAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Local Playback.
+        /// </summary>
+        public static string SettingsLocalPlaybackHeader {
+            get {
+                return ResourceManager.GetString("SettingsLocalPlaybackHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stylophone can playback your MPD Server&apos;s music stream. Enabling this option will show a second volume slider to control local volume..
+        /// </summary>
+        public static string SettingsLocalPlaybackText {
+            get {
+                return ResourceManager.GetString("SettingsLocalPlaybackText", resourceCulture);
             }
         }
         

@@ -1,26 +1,29 @@
 ﻿using System;
 using Stylophone.Common.Interfaces;
+using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
     public class LocalPlaybackViewModel : ViewModelBase
     {
         private IInteropService _interopService;
+        private INotificationService _notificationService;
         private SettingsViewModel _settingsVm;
 
         private string _serverHost;
 
-        public LocalPlaybackViewModel(SettingsViewModel settingsVm, IInteropService interopService, IDispatcherService dispatcherService): base(dispatcherService)
+        public LocalPlaybackViewModel(SettingsViewModel settingsVm, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService): base(dispatcherService)
         {
             _interopService = interopService;
+            _notificationService = notificationService;
             _settingsVm = settingsVm;
 
             _volumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeMute);
 
             _settingsVm.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == nameof(_settingsVm.IsStreamingAvailable))
-                    IsEnabled = _settingsVm.IsStreamingAvailable;
+                if (e.PropertyName == nameof(_settingsVm.IsLocalPlaybackEnabled))
+                    IsEnabled = _settingsVm.IsLocalPlaybackEnabled;
 
                 if (e.PropertyName == nameof(_settingsVm.ServerHost))
                     _serverHost = _settingsVm.ServerHost;
@@ -130,15 +133,22 @@ namespace Stylophone.Common.ViewModels
 
         private void UpdatePlayback()
         {
-            if (IsPlaying)
+            try
             {
-                var urlString = "http://" + _serverHost + ":8000/mpd.ogg";
-                var streamUrl = new Uri(urlString);
-                _interopService.PlayStream(streamUrl);
-            } 
-            else
+                if (IsPlaying)
+                {
+                    var urlString = "http://" + _serverHost + ":8000/mpd.ogg";
+                    var streamUrl = new Uri(urlString);
+                    _interopService.PlayStream(streamUrl);
+                }
+                else
+                {
+                    _interopService.StopStream();
+                }
+            }
+            catch (Exception e)
             {
-                _interopService.StopStream();
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorPlayingMPDStream, e.Message), false);
             }
         }
     }

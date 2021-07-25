@@ -25,5 +25,11 @@ namespace Stylophone.Views
             PlaybackViewModel.MediaVolume += 2 * delta / 120;
         }
 
+        private void VolumeLocal_PointerWheelChanged(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
+            PlaybackViewModel.LocalPlayback.Volume += 2 * delta / 120;
+        }
+
     }
 }

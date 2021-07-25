@@ -2,6 +2,7 @@
     x:Class="Stylophone.Views.NowPlayingBar"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:WindowsStateTriggers="using:WindowsStateTriggers"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:converters="using:Stylophone.Helpers"
     xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
@@ -362,7 +363,8 @@
                         Click="{x:Bind PlaybackViewModel.ToggleMute}"
                         Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                         FontSize="22"
-                        Style="{StaticResource SVButtonStyle}" />
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}" />
                     <Slider
                         Width="105"
                         Margin="{StaticResource SmallRightMargin}"
@@ -396,9 +398,9 @@
                                 <!--  Local Playback Volume  -->
                                 <TextBlock
                                     Style="{StaticResource BaseTextBlockStyle}"
-                                    Text="Local Volume"
-                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                <StackPanel Orientation="Horizontal" Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    Text="{x:Bind strings:Resources.LocalVolumeHeader}"
+                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <StackPanel Orientation="Horizontal" Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Button
                                         Width="46"
                                         Height="46"
@@ -414,7 +416,7 @@
                                         Maximum="100"
                                         Minimum="0"
                                         Orientation="Horizontal"
-                                        PointerWheelChanged="Volume_PointerWheelChanged"
+                                        PointerWheelChanged="VolumeLocal_PointerWheelChanged"
                                         Value="{x:Bind PlaybackViewModel.LocalPlayback.Volume, Mode=TwoWay}" />
                                     <TextBlock
                                         Margin="14,2,0,0"
@@ -429,7 +431,7 @@
                                     Margin="{StaticResource SmallTopMargin}"
                                     Style="{StaticResource BaseTextBlockStyle}"
                                     Text="{x:Bind strings:Resources.SettingsServer}"
-                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                                 <StackPanel Orientation="Horizontal">
                                     <Button
@@ -588,9 +590,12 @@
                     </VisualState.Setters>
                 </VisualState>
 
-                <VisualState x:Name="Large">
+                <VisualState x:Name="LargeLocalPlayback">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1024" />
+                        <WindowsStateTriggers:CompositeStateTrigger Operator="And">
+                            <WindowsStateTriggers:AdaptiveTrigger MinWindowWidth="1024" />
+                            <StateTrigger IsActive="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay}" />
+                        </WindowsStateTriggers:CompositeStateTrigger>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="AlbumArt.Visibility" Value="Visible" />
@@ -607,6 +612,33 @@
                         <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1" />
 
                         <Setter Target="AlbumView.Width" Value="320" />
+
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="LargeNoLocalPlayback">
+                    <VisualState.StateTriggers>
+                        <WindowsStateTriggers:CompositeStateTrigger Operator="And">
+                            <WindowsStateTriggers:AdaptiveTrigger MinWindowWidth="1024" />
+                            <StateTrigger IsActive="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
+                        </WindowsStateTriggers:CompositeStateTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed" />
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="MiscButtons.Padding" Value="0" />
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1" />
+
+                        <Setter Target="AlbumView.Width" Value="320" />
+
                         <Setter Target="SoundFlyout.Visibility" Value="Collapsed" />
                         <Setter Target="SoundPanel.Visibility" Value="Visible" />
                     </VisualState.Setters>
