@@ -1,4 +1,4 @@
-![](Sources/Stylophone/Assets/Square44x44Logo.targetsize-256.png)
+<img src="Sources/Stylophone/Assets/Square44x44Logo.targetsize-256.png" width="128">
   
 Stylophone
 ===========
