@@ -195,10 +195,18 @@
     <InterfaceDefinition Include="Views\Folders.storyboard" />
     <InterfaceDefinition Include="Views\Library.storyboard" />
     <InterfaceDefinition Include="Views\SearchResults.storyboard" />
-    <ImageAsset Include="Assets.xcassets\AlbumPlaceholder.imageset\AlbumPlaceholderApple.png" />
-    <ImageAsset Include="Assets.xcassets\AlbumPlaceholder.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\icon.imageset\icon.png" />
-    <ImageAsset Include="Assets.xcassets\icon.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AlbumPlaceholder.imageset\AlbumPlaceholderApple.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AlbumPlaceholder.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\icon.imageset\icon.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\icon.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -76,6 +76,7 @@ namespace Stylophone.Services
         public async Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack)
         {
             await _smtcService.UpdateMetadataAsync(currentTrack);
+            await LiveTileHelper.UpdatePlayingSongAsync(currentTrack);
         }
 
         public Version GetAppVersion()

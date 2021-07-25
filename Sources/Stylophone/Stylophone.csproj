@@ -194,6 +194,7 @@
     <Compile Include="Helpers\AlternatingRowListView.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
     <Compile Include="Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="Helpers\LiveTileHelper.cs" />
     <Compile Include="Helpers\UWPHelpers.cs" />
     <Compile Include="Helpers\NavHelper.cs" />
     <Compile Include="Converters\SliderValueConverter.cs" />
