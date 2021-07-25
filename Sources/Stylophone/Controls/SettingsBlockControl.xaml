@@ -7,8 +7,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    x:Name="Root"
     d:DesignHeight="300"
     d:DesignWidth="400"
+    CornerRadius="{ThemeResource ControlCornerRadius}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -44,7 +46,6 @@
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="MinHeight" Value="{StaticResource ExpanderMinHeight}" />
             <Setter Property="Padding" Value="{StaticResource ExpanderContentPadding}" />
-            <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
         </Style>
 
         <Style
@@ -109,6 +110,7 @@
             <Grid
                 x:Name="StaticGrid"
                 x:Load="{x:Bind IsClickable, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                CornerRadius="{x:Bind Root.CornerRadius}"
                 Style="{StaticResource GridSettingsBlockStyle}">
                 <controls:SettingsDisplayControl
                     Title="{x:Bind Title, Mode=OneWay}"

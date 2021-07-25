@@ -441,4 +441,10 @@ Hope you enjoy using the application!</value>
   <data name="SettingsLocalPlaybackAvailable" xml:space="preserve">
     <value>Local Playback available</value>
   </data>
+  <data name="OffText" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="OnText" xml:space="preserve">
+    <value>On</value>
+  </data>
 </root>

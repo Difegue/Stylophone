@@ -638,11 +638,29 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Off.
+        /// </summary>
+        public static string OffText {
+            get {
+                return ResourceManager.GetString("OffText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à OK.
         /// </summary>
         public static string OKButtonText {
             get {
                 return ResourceManager.GetString("OKButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à On.
+        /// </summary>
+        public static string OnText {
+            get {
+                return ResourceManager.GetString("OnText", resourceCulture);
             }
         }
         

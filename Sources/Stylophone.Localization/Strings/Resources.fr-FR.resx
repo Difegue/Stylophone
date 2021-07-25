@@ -440,4 +440,10 @@ J'espère que vous apprécierez l'application !</value>
   <data name="SettingsLocalPlaybackAvailable" xml:space="preserve">
     <value>Écoute en local disponible</value>
   </data>
+  <data name="OffText" xml:space="preserve">
+    <value>Désactivé</value>
+  </data>
+  <data name="OnText" xml:space="preserve">
+    <value>Activé</value>
+  </data>
 </root>
