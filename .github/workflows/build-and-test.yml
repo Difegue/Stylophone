@@ -51,9 +51,9 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Solution_Name: MpcNET                                     
-      Uap_Project_Path: FluentMPC\FluentMPC.csproj
-      Uap_Project_Directory: FluentMPC
+      Solution_Name: Stylophone                                     
+      Uap_Project_Path: Stylophone\Stylophone.csproj
+      Uap_Project_Directory: Stylophone
 
     steps:
     - name: Checkout
