@@ -20,46 +20,61 @@
 
     <Page.Resources>
 
-        <converters:StringVisibilityConverter x:Key="StringToVisibilityConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Microsoft.Toolkit.Uwp.UI.Controls.Core/InAppNotification/InAppNotification.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <DataTemplate x:Key="StringItemTemplate" x:DataType="x:String">
-            <StackPanel Height="46" Orientation="Vertical">
-                <TextBlock
-                    Margin="{StaticResource XSmallTopMargin}"
-                    FontStyle="Italic"
-                    Text="{x:Bind}" />
-                <MenuFlyoutSeparator Width="2000" Margin="-12,8,0,0" />
-            </StackPanel>
-        </DataTemplate>
+            <converters:StringVisibilityConverter x:Key="StringToVisibilityConverter" />
 
-        <DataTemplate x:Key="MpdFileItemTemplate" x:DataType="mpcnet:IMpdFile">
+            <Style
+                x:Key="CustomInAppNotificationStyle"
+                BasedOn="{StaticResource BaseInAppNotificationsStyle}"
+                TargetType="controls:InAppNotification">
 
-            <StackPanel Height="46" Orientation="Vertical">
-                <TextBlock
-                    Margin="{StaticResource XXSmallTopMargin}"
-                    Style="{StaticResource BaseTextBlockStyle}"
-                    Text="{x:Bind Title}"
-                    TextTrimming="CharacterEllipsis"
-                    TextWrapping="NoWrap"
-                    ToolTipService.ToolTip="{x:Bind Title}" />
-                <TextBlock
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="{x:Bind Album}"
-                    TextTrimming="CharacterEllipsis"
-                    TextWrapping="NoWrap" />
-            </StackPanel>
-        </DataTemplate>
+                <Setter Property="Background" Value="{ThemeResource SystemControlAcrylicElementBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            </Style>
 
-        <views:MyDataTemplateSelector
-            x:Key="MyDataTemplateSelector"
-            MpdFile="{StaticResource MpdFileItemTemplate}"
-            Normal="{StaticResource StringItemTemplate}" />
+            <DataTemplate x:Key="StringItemTemplate" x:DataType="x:String">
+                <StackPanel Height="46" Orientation="Vertical">
+                    <TextBlock
+                        Margin="{StaticResource XSmallTopMargin}"
+                        FontStyle="Italic"
+                        Text="{x:Bind}" />
+                    <MenuFlyoutSeparator Width="2000" Margin="-12,8,0,0" />
+                </StackPanel>
+            </DataTemplate>
 
-        <!--  This top margin is the height of the custom TitleBar  -->
-        <Thickness x:Key="NavigationViewContentMargin">0,40,0,0</Thickness>
-        <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
-        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent" />
+            <DataTemplate x:Key="MpdFileItemTemplate" x:DataType="mpcnet:IMpdFile">
 
+                <StackPanel Height="46" Orientation="Vertical">
+                    <TextBlock
+                        Margin="{StaticResource XXSmallTopMargin}"
+                        Style="{StaticResource BaseTextBlockStyle}"
+                        Text="{x:Bind Title}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap"
+                        ToolTipService.ToolTip="{x:Bind Title}" />
+                    <TextBlock
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="{x:Bind Album}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
+                </StackPanel>
+            </DataTemplate>
+
+            <views:MyDataTemplateSelector
+                x:Key="MyDataTemplateSelector"
+                MpdFile="{StaticResource MpdFileItemTemplate}"
+                Normal="{StaticResource StringItemTemplate}" />
+
+            <!--  This top margin is the height of the custom TitleBar  -->
+            <Thickness x:Key="NavigationViewContentMargin">0,40,0,0</Thickness>
+            <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
+            <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent" />
+        </ResourceDictionary>
     </Page.Resources>
 
 
@@ -168,7 +183,11 @@
                 <Frame x:Name="shellFrame" Grid.Row="1" />
 
                 <!--  InAppNotifications go here  -->
-                <controls:InAppNotification x:Name="notificationHolder" Grid.Row="1" />
+                <controls:InAppNotification
+                    x:Name="notificationHolder"
+                    Grid.Row="1"
+                    Style="{StaticResource CustomInAppNotificationStyle}" />
+
 
             </Grid>
         </muxc:NavigationView>
