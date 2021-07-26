@@ -39,16 +39,15 @@ You can easily contribute translations to Stylophone! To help translate, follow 
     - If an issue already exists, then don't do this step.
 - Fork and clone this repo
 - Open in VS 2019
-- In the `FluentMPC` project, find the `Strings` folder.
-- Create a new folder inside `Strings` that looks like this: `en-US` but using the language you're translating into.
-- Add a new `Resources.resw` item in that new folder
-- Copy all the existing data from `Strings > en-US` into your new `Resources.resw`
+- In the `Stylophone.Localization` project, find the `Strings` folder.
+- Create a new file inside `Strings` that looks like this: `Resources.en-US.resx` but using the language you're translating into.
+- Copy all the existing data from `Resources.en-US.resx` into your new `Resources.[language].resx`
 - Translate the strings from english to your language
 - Once done, then commit > push > create pull request!
 
 ### Improving an existing language (can be done with any text editor)
 - Fork and clone this repo
-- Open the the `.resw` file (e.g. `en-US > Resources.resw`) you want to edit. Choose any text editor
+- Open the `.resx` file (e.g. `Resources.en-US.resx`) you want to edit. Choose any text editor
 - Translate
 - Commit > push > create pull request!
 
