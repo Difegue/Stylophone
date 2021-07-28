@@ -51,19 +51,24 @@ namespace Stylophone.iOS
 
         private async Task InitializeApplicationAsync()
         {
-            var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
-            var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort));
-            var pass = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerPassword));
+            var storageService = Ioc.Default.GetRequiredService<IApplicationStorageService>();
+
+            var host = storageService.GetValue<string>(nameof(SettingsViewModel.ServerHost));
+            var port = storageService.GetValue<int>(nameof(SettingsViewModel.ServerPort));
+            var pass = storageService.GetValue<string>(nameof(SettingsViewModel.ServerPassword));
 
             var mpdService = Ioc.Default.GetRequiredService<MPDConnectionService>();
             mpdService.SetServerInfo(host, port, pass);
             await mpdService.InitializeAsync(true);
 
+            var launchCount = storageService.GetValue<int>("LaunchCount");
+            storageService.SetValue("LaunchCount", launchCount + 1);
+
             Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
 
             await Ioc.Default.GetRequiredService<IDispatcherService>().ExecuteOnUIThreadAsync(async () =>
             {
-                var theme = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ElementTheme));
+                var theme = storageService.GetValue<string>(nameof(SettingsViewModel.ElementTheme));
                 Enum.TryParse(theme, out Theme elementTheme);
                 await Ioc.Default.GetRequiredService<IInteropService>().SetThemeAsync(elementTheme);
 
@@ -71,7 +76,7 @@ namespace Stylophone.iOS
             });
 
             // Analytics
-            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics));
+            var enableAnalytics = storageService.GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics));
             if (enableAnalytics)
             {
                 // Initialize AppCenter

@@ -225,6 +225,9 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationDbUpdateStarted);
         }
 
+        private ICommand _rateAppCommand;
+        public ICommand RateAppCommand => _rateAppCommand ?? (_rateAppCommand = new RelayCommand(() => _interop.OpenStoreReviewUrlAsync()));
+
         public async Task EnsureInstanceInitializedAsync()
         {
             if (!_hasInstanceBeenInitialized)

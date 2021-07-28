@@ -8,6 +8,8 @@ using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Strings = Stylophone.Localization.Strings.Resources;
+using Windows.Services.Store;
 
 namespace Stylophone.Services
 {
@@ -16,14 +18,16 @@ namespace Stylophone.Services
         private IDispatcherService _dispatcherService;
         private IApplicationStorageService _storageService;
         private INavigationService _navigationService;
+        private INotificationService _notificationService;
         private MPDConnectionService _mpdService;
 
-        public DialogService(IDispatcherService dispatcherService, INavigationService navigationService, IApplicationStorageService storageService, MPDConnectionService mpdService)
+        public DialogService(IDispatcherService dispatcherService, INavigationService navigationService, IApplicationStorageService storageService, INotificationService notificationService, MPDConnectionService mpdService)
         {
             _dispatcherService = dispatcherService;
             _navigationService = navigationService;
             _storageService = storageService;
             _mpdService = mpdService;
+            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -53,6 +57,55 @@ namespace Stylophone.Services
                         _navigationService.Navigate<SettingsViewModel>();
                     }
                 });
+        }
+
+        public async Task ShowRateAppDialogIfAppropriateAsync()
+        {
+            var storeContext = StoreContext.GetDefault();
+            await _dispatcherService.ExecuteOnUIThreadAsync(async () =>
+            {
+                if (SystemInformation.Instance.LaunchCount >=4 && !_storageService.GetValue<bool>("HasSeenRateAppPrompt"))
+                {
+                    if (await ShowConfirmDialogAsync(Strings.RateAppPromptTitle, Strings.RateAppPromptText, Strings.YesButtonText, Strings.NoButtonText))
+                    {
+                        var rateResult = await PromptUserToRateAppAsync(storeContext);
+
+                        if (rateResult.HasValue)
+                            _storageService.SetValue("HasSeenRateAppPrompt", true);
+                    }
+                    else
+                    {
+                        _storageService.SetValue("HasSeenRateAppPrompt", true);
+                    }   
+                }
+            });
+        }
+        private async Task<bool?> PromptUserToRateAppAsync(StoreContext storeContext)
+        {
+            StoreRateAndReviewResult result = await
+                storeContext.RequestRateAndReviewAppAsync();
+
+            // Check status
+            switch (result.Status)
+            {
+                case StoreRateAndReviewStatus.Succeeded:
+                    return true;
+
+                case StoreRateAndReviewStatus.CanceledByUser:
+                    // Keep track that we prompted user and don’t prompt again for a while
+                    return false;
+
+                case StoreRateAndReviewStatus.NetworkError:
+                    // User is probably not connected, so we’ll try again, but keep track so we don’t try too often
+                    return null;
+
+                // Something else went wrong
+                case StoreRateAndReviewStatus.Error:
+                default:
+                    // Log error
+                    _notificationService.ShowErrorNotification(result.ExtendedError);
+                    return null;
+            }
         }
 
         public async Task<bool> ShowConfirmDialogAsync(string title, string text, string primaryButtonText = null, string cancelButtonText = null)

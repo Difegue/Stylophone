@@ -107,5 +107,14 @@ namespace Stylophone.iOS.Services
             if (_mediaPlayer != null)
                 _mediaPlayer.Volume = (float)volume;
         }
+
+        public Task OpenStoreReviewUrlAsync()
+        {
+            try
+            {
+                UIApplication.SharedApplication.OpenUrl(new NSUrl("https://apps.apple.com/app/idXXXXXXXXXX?action=write-review"));
+            } catch { }
+            return Task.CompletedTask;
+        }
     }
 }

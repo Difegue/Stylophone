@@ -575,6 +575,15 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à No.
+        /// </summary>
+        public static string NoButtonText {
+            get {
+                return ResourceManager.GetString("NoButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Added to Playlist {0}!.
         /// </summary>
         public static string NotificationAddedToPlaylist {
@@ -706,6 +715,25 @@ namespace Stylophone.Localization.Strings {
         public static string QueueHeader {
             get {
                 return ResourceManager.GetString("QueueHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Thanks for using Stylophone! Would you like to rate the app on the Store? 
+        ///(We won&apos;t ask again. 🙏).
+        /// </summary>
+        public static string RateAppPromptText {
+            get {
+                return ResourceManager.GetString("RateAppPromptText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Rate the Application.
+        /// </summary>
+        public static string RateAppPromptTitle {
+            get {
+                return ResourceManager.GetString("RateAppPromptTitle", resourceCulture);
             }
         }
         
@@ -1041,6 +1069,15 @@ namespace Stylophone.Localization.Strings {
         public static string SettingsUpdateDbTitle {
             get {
                 return ResourceManager.GetString("SettingsUpdateDbTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Yes.
+        /// </summary>
+        public static string YesButtonText {
+            get {
+                return ResourceManager.GetString("YesButtonText", resourceCulture);
             }
         }
     }

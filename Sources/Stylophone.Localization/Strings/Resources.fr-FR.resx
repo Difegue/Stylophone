@@ -459,4 +459,17 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   <data name="LocalVolumeHeader" xml:space="preserve">
     <value>Volume Local</value>
   </data>
+  <data name="RateAppPromptTitle" xml:space="preserve">
+    <value>Noter l'application</value>
+  </data>
+  <data name="RateAppPromptText" xml:space="preserve">
+    <value>Merci d'utiliser Stylophone! Voudriez-vous bien noter l'application sur le Store?
+(Nous ne demanderons ceci qu'une fois. 🙏)</value>
+  </data>
+  <data name="YesButtonText" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="NoButtonText" xml:space="preserve">
+    <value>Non</value>
+  </data>
 </root>

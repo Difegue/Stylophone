@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Stylophone.Activation;
-using Stylophone.Helpers;
-using Stylophone.Services;
-using Stylophone.ViewModels;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -90,6 +85,7 @@ namespace Stylophone.Services
             await Ioc.Default.GetRequiredService<IInteropService>().SetThemeAsync(elementTheme);
 
             await Ioc.Default.GetRequiredService<IDialogService>().ShowFirstRunDialogIfAppropriateAsync();
+            await Ioc.Default.GetRequiredService<IDialogService>().ShowRateAppDialogIfAppropriateAsync();
 
             var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
             var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort));

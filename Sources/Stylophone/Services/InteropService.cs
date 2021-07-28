@@ -14,6 +14,8 @@ using System.IO;
 using Windows.ApplicationModel;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.Services.Store;
+using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace Stylophone.Services
 {
@@ -85,7 +87,6 @@ namespace Stylophone.Services
             var packageId = package.Id;
             return new Version(packageId.Version.Major, packageId.Version.Minor, packageId.Version.Revision, packageId.Version.Build);
         }
-
 
         private async Task SetRequestedThemeAsync(ElementTheme theme)
         {
@@ -179,6 +180,11 @@ namespace Stylophone.Services
         {
             if (_mediaPlayer != null)
                 _mediaPlayer.Volume = volume / 100;
+        }
+
+        public async Task OpenStoreReviewUrlAsync()
+        {
+            await CoreApplication.GetCurrentView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SystemInformation.LaunchStoreForReviewAsync());
         }
     }
 }

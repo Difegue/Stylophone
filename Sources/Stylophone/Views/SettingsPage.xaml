@@ -279,10 +279,14 @@
                 </local:SettingsBlockControl.Icon>
 
                 <local:SettingsBlockControl.ExpandableContent>
-                    <HyperlinkButton
+                    <StackPanel
                         Margin="8"
-                        Content="{x:Bind strings:Resources.SettingsGithub}"
-                        NavigateUri="{x:Bind strings:Resources.SettingsGithubLink}" />
+                        Orientation="Vertical"
+                        Spacing="4">
+                        <HyperlinkButton Content="{x:Bind strings:Resources.SettingsGithub}" NavigateUri="{x:Bind strings:Resources.SettingsGithubLink}" />
+                        <HyperlinkButton Command="{x:Bind ViewModel.RateAppCommand}" Content="{x:Bind strings:Resources.RateAppPromptTitle}" />
+                    </StackPanel>
+
                 </local:SettingsBlockControl.ExpandableContent>
 
             </local:SettingsBlockControl>

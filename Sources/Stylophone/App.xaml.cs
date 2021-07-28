@@ -13,6 +13,7 @@ using Windows.UI.Xaml;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace Stylophone
 {
@@ -59,6 +60,7 @@ namespace Stylophone
             }
 
             // Analytics
+            SystemInformation.Instance.TrackAppUse(args);
             var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics));
             if (enableAnalytics)
             {

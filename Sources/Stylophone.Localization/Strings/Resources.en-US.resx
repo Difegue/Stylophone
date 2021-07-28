@@ -460,4 +460,17 @@ Enabling this option will show a second volume slider to control local volume.</
   <data name="LocalVolumeHeader" xml:space="preserve">
     <value>Local Volume</value>
   </data>
+  <data name="RateAppPromptTitle" xml:space="preserve">
+    <value>Rate the Application</value>
+  </data>
+  <data name="RateAppPromptText" xml:space="preserve">
+    <value>Thanks for using Stylophone! Would you like to rate the app on the Store? 
+(We won't ask again. 🙏)</value>
+  </data>
+  <data name="YesButtonText" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="NoButtonText" xml:space="preserve">
+    <value>No</value>
+  </data>
 </root>

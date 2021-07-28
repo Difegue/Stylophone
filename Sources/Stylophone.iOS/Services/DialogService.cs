@@ -6,20 +6,23 @@ using Stylophone.Common.Services;
 using Stylophone.iOS.ViewControllers;
 using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
+using StoreKit;
 
 namespace Stylophone.iOS.Services
 {
-    public class DialogService: IDialogService
+    public class DialogService : IDialogService
     {
         private IDispatcherService _dispatcherService;
         private IApplicationStorageService _storageService;
+        private IInteropService _interop;
         private MPDConnectionService _mpdService;
 
-        public DialogService(IDispatcherService dispatcherService, IApplicationStorageService storageService, MPDConnectionService mpdService)
+        public DialogService(IDispatcherService dispatcherService, IApplicationStorageService storageService, IInteropService interop, MPDConnectionService mpdService)
         {
             _dispatcherService = dispatcherService;
             _storageService = storageService;
             _mpdService = mpdService;
+            _interop = interop;
         }
 
         /// <summary>
@@ -53,6 +56,16 @@ namespace Stylophone.iOS.Services
                         await ShowConfirmDialogAsync(Strings.FirstRunTitle, Strings.FirstRunText, Strings.OKButtonText);
                     }
                 });
+        }
+
+        public Task ShowRateAppDialogIfAppropriateAsync()
+        {
+            if (_storageService.GetValue<int>("LaunchCount") >= 4 && !_storageService.GetValue<bool>("HasSeenRateAppPrompt"))
+            {
+                SKStoreReviewController.RequestReview();
+                _storageService.SetValue("HasSeenRateAppPrompt", true);
+            }
+            return Task.CompletedTask;
         }
 
         public async Task<bool> ShowConfirmDialogAsync(string title, string text, string primaryButtonText = null, string cancelButtonText = null)

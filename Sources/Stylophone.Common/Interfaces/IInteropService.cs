@@ -39,5 +39,7 @@ namespace Stylophone.Common.Interfaces
         void SetStreamVolume(double volume);
 
         string GetIcon(PlaybackIcon volumeFull);
+            
+        Task OpenStoreReviewUrlAsync();
     }
 }
