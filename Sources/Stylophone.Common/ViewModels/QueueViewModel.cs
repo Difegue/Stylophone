@@ -223,9 +223,9 @@ namespace Stylophone.Common.ViewModels
 
                             while (Source.Count != initialPosition)
                             {
-                                await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.RemoveAt(initialPosition));
-                                //var toRemove = Source.Skip(initialPosition - 1).Take(Source.Count - initialPosition);
-                                //await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.RemoveRange(toRemove));
+                                // Make sure
+                                if (Source.Count != initialPosition)
+                                    await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.RemoveAt(initialPosition));
                             }
 
                             var toAdd = new List<TrackViewModel>();
@@ -235,7 +235,8 @@ namespace Stylophone.Common.ViewModels
                                 toAdd.Add(trackVm);
                             }
 
-                            await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.AddRange(toAdd));
+                            if (toAdd.Count > 0)
+                                await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.AddRange(toAdd));
                         }
 
                         Source.CollectionChanged += Source_CollectionChanged;
