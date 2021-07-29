@@ -719,6 +719,24 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Add Random Tracks.
+        /// </summary>
+        public static string RandomTracksHeader {
+            get {
+                return ResourceManager.GetString("RandomTracksHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Shuffling through your library....
+        /// </summary>
+        public static string RandomTracksInProgress {
+            get {
+                return ResourceManager.GetString("RandomTracksInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Thanks for using Stylophone! Would you like to rate the app on the Store? 
         ///(We won&apos;t ask again. 🙏).
         /// </summary>

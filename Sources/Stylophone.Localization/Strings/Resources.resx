@@ -473,4 +473,10 @@ Enabling this option will show a second volume slider to control local volume.</
   <data name="NoButtonText" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="RandomTracksHeader" xml:space="preserve">
+    <value>Pick some Songs</value>
+  </data>
+  <data name="RandomTracksInProgress" xml:space="preserve">
+    <value>Shuffling through your library...</value>
+  </data>
 </root>

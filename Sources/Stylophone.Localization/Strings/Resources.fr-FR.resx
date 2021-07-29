@@ -472,4 +472,10 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   <data name="NoButtonText" xml:space="preserve">
     <value>Non</value>
   </data>
+  <data name="RandomTracksHeader" xml:space="preserve">
+    <value>Ajouter des Pistes au Hasard</value>
+  </data>
+  <data name="RandomTracksInProgress" xml:space="preserve">
+    <value>Nous parcourons votre bibliothèque...</value>
+  </data>
 </root>

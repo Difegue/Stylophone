@@ -134,6 +134,14 @@
                     Content="{x:Bind strings:Resources.FoldersHeader}"
                     Icon="MapDrive" />
 
+                <muxc:NavigationViewItem
+                    x:Name="RandomNavItem"
+                    Content="{x:Bind strings:Resources.RandomTracksHeader}"
+                    SelectsOnInvoked="False">
+                    <muxc:NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xF133;" />
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
                 <muxc:NavigationViewItemSeparator />
                 <muxc:NavigationViewItem
                     x:Name="playlistContainer"
@@ -156,6 +164,9 @@
             <i:Interaction.Behaviors>
                 <ic:EventTriggerBehavior EventName="ItemInvoked">
                     <ic:InvokeCommandAction Command="{x:Bind ViewModel.NavigateCommand}" />
+                </ic:EventTriggerBehavior>
+                <ic:EventTriggerBehavior EventName="Tapped" SourceObject="{x:Bind RandomNavItem}">
+                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.AddRandomTracksCommand}" />
                 </ic:EventTriggerBehavior>
             </i:Interaction.Behaviors>
 

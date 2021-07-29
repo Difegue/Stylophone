@@ -7,8 +7,11 @@ using System.Windows.Input;
 
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using MpcNET;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Queue;
+using MpcNET.Commands.Reflection;
+using MpcNET.Commands.Status;
 using MpcNET.Tags;
 using MpcNET.Types;
 using Stylophone.Common.Interfaces;
@@ -60,6 +63,9 @@ namespace Stylophone.Common.ViewModels
         private ICommand _navigateCommand;
         public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new RelayCommand<object>(OnItemInvoked));
 
+        private ICommand _shuffleTracksCommand;
+        public ICommand AddRandomTracksCommand => _shuffleTracksCommand ?? (_shuffleTracksCommand = new RelayCommand(() => QueueRandomTracks(5)));
+
         protected abstract void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e);
         protected abstract void OnLoaded();
         protected abstract void OnItemInvoked(object item);
@@ -96,6 +102,28 @@ namespace Stylophone.Common.ViewModels
             }
 
             return suitableItems;
+        }
+
+        private void QueueRandomTracks(int count)
+        {
+            _notificationService.ShowInAppNotification(Resources.RandomTracksInProgress, false);
+            _ = Task.Run(async () =>
+            {
+                var response = await _mpdService.SafelySendCommandAsync(new StatsCommand());
+                var songs = int.Parse(response["songs"]); // Total songs on the server
+
+                var commandList = new CommandList();
+                while (count > 0)
+                {
+                    count--;
+                    // Pick a song n°, and queue it directly with searchadd
+                    var r = new Random().Next(0, songs-1);
+                    commandList.Add(new SearchAddCommand(MpdTags.Title, "", r, r + 1));
+                }
+
+                await _mpdService.SafelySendCommandAsync(commandList);
+                _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
+            });
         }
 
         public async Task HandleSearchRequestAsync(string text, object chosenSuggestion)
