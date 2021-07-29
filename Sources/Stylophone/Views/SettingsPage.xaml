@@ -18,7 +18,7 @@
 
         <converters:BoolToObjectConverter x:Key="IconConverter">
             <converters:BoolToObjectConverter.TrueValue>
-                <FontIcon Foreground="Green" Glyph="&#xE953;" />
+                <FontIcon Foreground="{StaticResource AccentFillColorDefaultBrush}" Glyph="&#xE953;" />
             </converters:BoolToObjectConverter.TrueValue>
             <converters:BoolToObjectConverter.FalseValue>
                 <FontIcon Foreground="Red" Glyph="&#xE8C9;" />
@@ -118,7 +118,7 @@
                 Description="{x:Bind strings:Resources.SettingsLocalPlaybackText}"
                 Visibility="{x:Bind ViewModel.IsStreamingAvailable, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                 <local:SettingsBlockControl.Icon>
-                    <FontIcon Glyph="&#xED4D;" />
+                    <FontIcon Glyph="&#xE7F3;" />
                 </local:SettingsBlockControl.Icon>
                 <local:SettingsBlockControl.SettingsActionableElement>
                     <StackPanel Orientation="Horizontal" Spacing="16">
@@ -145,7 +145,7 @@
                 Margin="{StaticResource SmallTopMargin}"
                 Description="{x:Bind strings:Resources.SettingsUpdateDbDesc}">
                 <local:SettingsBlockControl.Icon>
-                    <SymbolIcon Symbol="Rotate" />
+                    <FontIcon Glyph="&#xEBC4;" />
                 </local:SettingsBlockControl.Icon>
                 <Button
                     Command="{x:Bind ViewModel.RescanDbCommand}"
@@ -155,7 +155,7 @@
 
             <local:SettingsBlockControl Description="{x:Bind strings:Resources.SettingsClearCacheDescription}">
                 <local:SettingsBlockControl.Icon>
-                    <SymbolIcon Symbol="ClearSelection" />
+                    <FontIcon Glyph="&#xED62;" />
                 </local:SettingsBlockControl.Icon>
                 <Button Command="{x:Bind ViewModel.ClearCacheCommand}" Content="{x:Bind strings:Resources.SettingsClearCache}" />
             </local:SettingsBlockControl>
@@ -169,7 +169,7 @@
 
             <local:SettingsBlockControl Title="{x:Bind strings:Resources.SettingsTheme}" Margin="{StaticResource SmallTopMargin}">
                 <local:SettingsBlockControl.Icon>
-                    <SymbolIcon Symbol="Highlight" />
+                    <FontIcon Glyph="&#xE790;" />
                 </local:SettingsBlockControl.Icon>
 
                 <TextBlock Text="{x:Bind ViewModel.ElementTheme, Mode=OneWay}" />
