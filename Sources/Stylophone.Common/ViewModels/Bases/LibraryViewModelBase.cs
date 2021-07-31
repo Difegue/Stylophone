@@ -53,7 +53,8 @@ namespace Stylophone.Common.ViewModels
             if (response != null)
                 GroupAlbumsByName(response);
 
-            FilteredSource.AddRange(Source);
+            if (Source.Count > 0)
+                FilteredSource.AddRange(Source);
         }
 
         public void FilterLibrary(string text)

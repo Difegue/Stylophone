@@ -46,7 +46,7 @@ namespace Stylophone.Services
 
         private void HandleSystemThemeChange(UISettings sender, object args)
         {
-            if (Window.Current.Content is FrameworkElement frameworkElement)
+            if (Window.Current?.Content is FrameworkElement frameworkElement)
             {
                 UpdateTitleBar(frameworkElement.RequestedTheme);
             }  

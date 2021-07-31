@@ -1,5 +1,6 @@
 ﻿using System;
 using Stylophone.Common.Interfaces;
+using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
@@ -9,14 +10,16 @@ namespace Stylophone.Common.ViewModels
         private IInteropService _interopService;
         private INotificationService _notificationService;
         private SettingsViewModel _settingsVm;
+        private MPDConnectionService _mpdService;
 
         private string _serverHost;
 
-        public LocalPlaybackViewModel(SettingsViewModel settingsVm, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService): base(dispatcherService)
+        public LocalPlaybackViewModel(SettingsViewModel settingsVm, MPDConnectionService mpdService, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService): base(dispatcherService)
         {
             _interopService = interopService;
             _notificationService = notificationService;
             _settingsVm = settingsVm;
+            _mpdService = mpdService;
 
             _volumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeMute);
 
@@ -135,7 +138,7 @@ namespace Stylophone.Common.ViewModels
         {
             try
             {
-                if (IsPlaying)
+                if (IsPlaying && _mpdService.IsConnected)
                 {
                     var urlString = "http://" + _serverHost + ":8000/mpd.ogg";
                     var streamUrl = new Uri(urlString);

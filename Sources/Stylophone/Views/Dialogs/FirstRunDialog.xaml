@@ -9,6 +9,7 @@
     d:DesignHeight="345"
     d:DesignWidth="550"
     DefaultButton="Close"
+    CloseButtonText="{x:Bind strings:Resources.OKButtonText}"
     Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
     <ContentDialog.TitleTemplate>
@@ -21,7 +22,7 @@
                 <TextBlock
                     Margin="{StaticResource SmallLeftMargin}"
                     VerticalAlignment="Center"
-                    Text="{x:Bind}" />
+                    Text="{x:Bind strings:Resources.FirstRunTitle, Mode=OneTime}" />
             </StackPanel>
         </DataTemplate>
     </ContentDialog.TitleTemplate>

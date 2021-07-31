@@ -25,15 +25,6 @@
             </converters:BoolToObjectConverter.FalseValue>
         </converters:BoolToObjectConverter>
 
-        <converters:BoolToObjectConverter x:Key="IsOnLabelConverter">
-            <converters:BoolToObjectConverter.TrueValue>
-                <TextBlock Text="{x:Bind strings:Resources.OnText}" />
-            </converters:BoolToObjectConverter.TrueValue>
-            <converters:BoolToObjectConverter.FalseValue>
-                <TextBlock Text="{x:Bind strings:Resources.OffText}" />
-            </converters:BoolToObjectConverter.FalseValue>
-        </converters:BoolToObjectConverter>
-
         <converters:BoolToObjectConverter x:Key="DensityLabelConverter">
             <converters:BoolToObjectConverter.TrueValue>
                 <TextBlock HorizontalTextAlignment="Right" Text="{x:Bind strings:Resources.SettingsUIDensityCompact}" />
@@ -51,9 +42,15 @@
             <local:SettingsBlockControl
                 Title="{x:Bind strings:Resources.SettingsServer}"
                 Margin="{StaticResource SmallTopMargin}"
-                Description="{x:Bind ViewModel.ServerStatus}"
+                Description="{x:Bind ViewModel.ServerStatus, Mode=OneWay}"
                 Icon="{x:Bind ViewModel.IsServerValid, Converter={StaticResource IconConverter}, Mode=OneWay}">
 
+                <local:SettingsBlockControl.SettingsActionableElement>
+                    <controls:ProgressRing
+                                IsIndeterminate="True"
+                                Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                </local:SettingsBlockControl.SettingsActionableElement>
+                
                 <local:SettingsBlockControl.ExpandableContent>
                     <StackPanel Spacing="-1">
 
@@ -73,7 +70,7 @@
                             Height="52"
                             CornerRadius="0">
                             <controls:NumberBox
-                                Width="96"
+                                Width="128"
                                 Margin="0,-8"
                                 Maximum="65536"
                                 Minimum="1"
@@ -96,17 +93,11 @@
                         <local:SettingsBlockControl
                             Title="{x:Bind ViewModel.ServerInfo, Mode=OneWay}"
                             CornerRadius="0,0,4,4"
-                            Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource ReverseBoolToVisibilityConverter}, Mode=OneWay}">
+                            Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
 
                             <local:SettingsBlockControl.Icon>
                                 <FontIcon Glyph="&#xF167;" />
                             </local:SettingsBlockControl.Icon>
-
-                            <ProgressBar
-                                Margin="8"
-                                IsIndeterminate="True"
-                                Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
-
                         </local:SettingsBlockControl>
 
                     </StackPanel>
@@ -121,15 +112,11 @@
                     <FontIcon Glyph="&#xE7F3;" />
                 </local:SettingsBlockControl.Icon>
                 <local:SettingsBlockControl.SettingsActionableElement>
-                    <StackPanel Orientation="Horizontal" Spacing="16">
-                        <Border VerticalAlignment="Center" Child="{x:Bind ViewModel.IsLocalPlaybackEnabled, Converter={StaticResource IsOnLabelConverter}, Mode=OneWay}" />
-                        <ToggleSwitch
+                    <ToggleSwitch
                             Margin="0,0,-112,0"
                             IsOn="{x:Bind ViewModel.IsLocalPlaybackEnabled, Mode=TwoWay}"
                             OffContent=""
                             OnContent="" />
-                    </StackPanel>
-
                 </local:SettingsBlockControl.SettingsActionableElement>
             </local:SettingsBlockControl>
 
@@ -248,15 +235,11 @@
                     <SymbolIcon Symbol="Repair" />
                 </local:SettingsBlockControl.Icon>
                 <local:SettingsBlockControl.SettingsActionableElement>
-                    <StackPanel Orientation="Horizontal" Spacing="16">
-                        <Border VerticalAlignment="Center" Child="{x:Bind ViewModel.EnableAnalytics, Converter={StaticResource IsOnLabelConverter}, Mode=OneWay}" />
-                        <ToggleSwitch
+                    <ToggleSwitch
                             Margin="0,0,-112,0"
-                            IsOn="{x:Bind ViewModel.EnableAnalytics, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}}"
+                            IsOn="{x:Bind ViewModel.EnableAnalytics, Mode=TwoWay}"
                             OffContent=""
                             OnContent="" />
-                    </StackPanel>
-
                 </local:SettingsBlockControl.SettingsActionableElement>
             </local:SettingsBlockControl>
 
