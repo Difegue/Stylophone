@@ -34,6 +34,15 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UILabel ElapsedTime { get; set; }
 
 		[Outlet]
+		UIKit.UIButton LocalMuteButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView LocalPlaybackView { get; set; }
+
+		[Outlet]
+		UIKit.UISlider LocalVolumeSlider { get; set; }
+
+		[Outlet]
 		UIKit.UIButton PlayPauseButton { get; set; }
 
 		[Outlet]
@@ -41,6 +50,12 @@ namespace Stylophone.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIButton RepeatButton { get; set; }
+
+		[Outlet]
+		UIKit.UIButton ServerMuteButton { get; set; }
+
+		[Outlet]
+		UIKit.UISlider ServerVolumeSlider { get; set; }
 
 		[Outlet]
 		UIKit.UIButton ShuffleButton { get; set; }
@@ -59,6 +74,9 @@ namespace Stylophone.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIButton VolumeButton { get; set; }
+
+		[Outlet]
+		UIKit.UIStackView VolumePopover { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -140,6 +158,36 @@ namespace Stylophone.iOS.ViewControllers
 			if (VolumeButton != null) {
 				VolumeButton.Dispose ();
 				VolumeButton = null;
+			}
+
+			if (VolumePopover != null) {
+				VolumePopover.Dispose ();
+				VolumePopover = null;
+			}
+
+			if (LocalPlaybackView != null) {
+				LocalPlaybackView.Dispose ();
+				LocalPlaybackView = null;
+			}
+
+			if (LocalMuteButton != null) {
+				LocalMuteButton.Dispose ();
+				LocalMuteButton = null;
+			}
+
+			if (LocalVolumeSlider != null) {
+				LocalVolumeSlider.Dispose ();
+				LocalVolumeSlider = null;
+			}
+
+			if (ServerMuteButton != null) {
+				ServerMuteButton.Dispose ();
+				ServerMuteButton = null;
+			}
+
+			if (ServerVolumeSlider != null) {
+				ServerVolumeSlider.Dispose ();
+				ServerVolumeSlider = null;
 			}
 		}
 	}

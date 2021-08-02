@@ -226,15 +226,21 @@
                         <outlet property="BackgroundTint" destination="px8-71-fBL" id="FCS-Pl-KHp"/>
                         <outlet property="CompactView" destination="aql-12-Rr5" id="B7c-ka-Ddb"/>
                         <outlet property="ElapsedTime" destination="Qiz-hx-9AM" id="0Gk-ie-moE"/>
+                        <outlet property="LocalMuteButton" destination="Bsw-mW-3ej" id="1Si-av-mQs"/>
+                        <outlet property="LocalPlaybackView" destination="tAZ-SV-Q6b" id="H7j-01-3wz"/>
+                        <outlet property="LocalVolumeSlider" destination="eDD-Zc-6fO" id="fSX-ai-kYJ"/>
                         <outlet property="PlayPauseButton" destination="rQf-wn-yX7" id="5BD-5i-Eie"/>
                         <outlet property="RemainingTime" destination="qWL-vA-ltN" id="7bz-Ot-Nap"/>
                         <outlet property="RepeatButton" destination="Y3U-bT-J7B" id="AeT-NY-D7Z"/>
+                        <outlet property="ServerMuteButton" destination="rMl-UN-AUS" id="SMs-M7-9N0"/>
+                        <outlet property="ServerVolumeSlider" destination="fh6-q8-ULU" id="os9-LW-pex"/>
                         <outlet property="ShuffleButton" destination="NWu-Oq-J2z" id="vmx-1w-t7q"/>
                         <outlet property="SkipNextButton" destination="XnP-Rx-7zL" id="Pop-Zi-4ZJ"/>
                         <outlet property="SkipPrevButton" destination="dwj-Kd-Fvf" id="0nU-GH-hFR"/>
                         <outlet property="TrackSlider" destination="xeg-2n-96y" id="QXI-HV-ZTC"/>
                         <outlet property="TrackTitle" destination="VfE-ml-YNY" id="B5l-bn-M98"/>
                         <outlet property="VolumeButton" destination="LVK-jg-qdQ" id="q1M-UP-Ehe"/>
+                        <outlet property="VolumePopover" destination="a6h-ap-Qy1" id="FPA-fF-TbU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qsG-Eq-ENq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -461,11 +467,106 @@
                         <outlet property="VolumeButton" destination="poz-3g-api" id="dIA-Pd-UIX"/>
                     </connections>
                 </view>
-                <view contentMode="scaleToFill" id="5Jg-Bb-iH7" userLabel="VolumePopover">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" id="a6h-ap-Qy1" userLabel="VolumePopover">
+                    <rect key="frame" x="0.0" y="0.0" width="274" height="200"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                </view>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lt6-kk-uri" userLabel="Spacer">
+                            <rect key="frame" x="0.0" y="0.0" width="256" height="8"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="8" id="sHF-7T-8AC"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tAZ-SV-Q6b" userLabel="LocalPlaybackSlider">
+                            <rect key="frame" x="0.0" y="12" width="256" height="72"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Local Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="np4-co-XXk" customClass="LocalizedLabel">
+                                    <rect key="frame" x="8" y="8" width="106" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="stringIdentifier" value="LocalVolumeHeader"/>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="eDD-Zc-6fO">
+                                    <rect key="frame" x="50" y="36" width="200" height="33"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="196" id="8L4-Oh-hsd"/>
+                                    </constraints>
+                                </slider>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bsw-mW-3ej" userLabel="Volume Button">
+                                    <rect key="frame" x="8" y="36" width="36" height="36"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="36" id="h8S-P5-Nge"/>
+                                        <constraint firstAttribute="width" constant="36" id="mUH-le-CTt"/>
+                                    </constraints>
+                                    <state key="normal">
+                                        <imageReference key="image" image="speaker.wave.2.circle" catalog="system" symbolScale="large"/>
+                                    </state>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="np4-co-XXk" firstAttribute="top" secondItem="tAZ-SV-Q6b" secondAttribute="top" constant="8" id="9Em-4p-N0s"/>
+                                <constraint firstAttribute="bottom" secondItem="Bsw-mW-3ej" secondAttribute="bottom" id="BDE-q7-K1s"/>
+                                <constraint firstAttribute="bottom" secondItem="eDD-Zc-6fO" secondAttribute="bottom" constant="4" id="MGI-PP-AhW"/>
+                                <constraint firstAttribute="trailing" secondItem="eDD-Zc-6fO" secondAttribute="trailing" constant="8" id="Y0N-xE-gjR"/>
+                                <constraint firstItem="Bsw-mW-3ej" firstAttribute="leading" secondItem="tAZ-SV-Q6b" secondAttribute="leading" constant="8" id="Yj5-hS-un5"/>
+                                <constraint firstAttribute="height" constant="72" id="bDt-dR-jbR"/>
+                                <constraint firstItem="eDD-Zc-6fO" firstAttribute="leading" secondItem="Bsw-mW-3ej" secondAttribute="trailing" constant="8" symbolic="YES" id="bb6-Mj-W98"/>
+                                <constraint firstItem="np4-co-XXk" firstAttribute="leading" secondItem="tAZ-SV-Q6b" secondAttribute="leading" constant="8" id="fWz-gE-YGc"/>
+                                <constraint firstItem="eDD-Zc-6fO" firstAttribute="top" secondItem="tAZ-SV-Q6b" secondAttribute="top" constant="36" id="keT-Yb-NcX"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A9E-2K-cbh" userLabel="Spacer">
+                            <rect key="frame" x="0.0" y="88" width="256" height="8"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="8" id="ahi-nL-gzP"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1CT-TO-KvY" userLabel="ServerVolumeSlider">
+                            <rect key="frame" x="0.0" y="100" width="256" height="72"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MPD Server" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgX-65-pwE" customClass="LocalizedLabel">
+                                    <rect key="frame" x="8" y="8" width="94" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="stringIdentifier" value="SettingsServer"/>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="fh6-q8-ULU">
+                                    <rect key="frame" x="50" y="36" width="200" height="33"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="196" id="Zm9-w9-sSY"/>
+                                    </constraints>
+                                </slider>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rMl-UN-AUS" userLabel="Volume Button">
+                                    <rect key="frame" x="8" y="36" width="36" height="36"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="36" id="5f9-8y-dAU"/>
+                                        <constraint firstAttribute="height" constant="36" id="cvI-GY-bFd"/>
+                                    </constraints>
+                                    <state key="normal">
+                                        <imageReference key="image" image="speaker.wave.2.circle" catalog="system" symbolScale="large"/>
+                                    </state>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="fh6-q8-ULU" firstAttribute="leading" secondItem="rMl-UN-AUS" secondAttribute="trailing" constant="8" symbolic="YES" id="9dk-1D-8r1"/>
+                                <constraint firstAttribute="trailing" secondItem="fh6-q8-ULU" secondAttribute="trailing" constant="8" id="D54-Ah-qui"/>
+                                <constraint firstItem="CgX-65-pwE" firstAttribute="leading" secondItem="1CT-TO-KvY" secondAttribute="leading" constant="8" id="DAh-2G-m7F"/>
+                                <constraint firstItem="rMl-UN-AUS" firstAttribute="leading" secondItem="1CT-TO-KvY" secondAttribute="leading" constant="8" id="EFw-qc-clJ"/>
+                                <constraint firstItem="CgX-65-pwE" firstAttribute="top" secondItem="1CT-TO-KvY" secondAttribute="top" constant="8" id="Q3a-Hf-GOc"/>
+                                <constraint firstAttribute="height" constant="72" id="cln-5s-WNS"/>
+                                <constraint firstAttribute="bottom" secondItem="rMl-UN-AUS" secondAttribute="bottom" id="h9d-3r-aJJ"/>
+                                <constraint firstAttribute="bottom" secondItem="fh6-q8-ULU" secondAttribute="bottom" constant="4" id="u1d-GF-tcX"/>
+                                <constraint firstItem="fh6-q8-ULU" firstAttribute="top" secondItem="1CT-TO-KvY" secondAttribute="top" constant="36" id="vb2-hC-zYw"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
             </objects>
             <point key="canvasLocation" x="20.487804878048781" y="40.677966101694921"/>
         </scene>

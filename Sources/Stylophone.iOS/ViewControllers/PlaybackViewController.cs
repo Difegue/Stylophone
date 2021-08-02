@@ -11,6 +11,7 @@ using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using UIKit;
+using Pop = ARSPopover.iOS;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -22,6 +23,7 @@ namespace Stylophone.iOS.ViewControllers
 
         public PlaybackViewModel ViewModel { get; private set; }
 		public PropertyBinder<PlaybackViewModel> Binder { get; private set; }
+        public PropertyBinder<LocalPlaybackViewModel> LocalPlaybackBinder { get; private set; }
         private PropertyBinder<TrackViewModel> _trackBinder;
 
         public override void AwakeFromNib()
@@ -32,6 +34,7 @@ namespace Stylophone.iOS.ViewControllers
             // PlaybackVM is transient, so we need to initialize it explicitly.
             ViewModel = Ioc.Default.GetRequiredService<PlaybackViewModel>();
             Binder = new(ViewModel);
+            LocalPlaybackBinder = new(ViewModel.LocalPlayback);
 
             ViewModel.PropertyChanged += OnVmPropertyChanged;
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
@@ -48,6 +51,15 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
 
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
+            CompactView.VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(CompactView.VolumeButton);
+
+            // Volume Popover Binding
+            LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
+            LocalMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.LocalPlayback.ToggleMute();
+            LocalPlaybackBinder.Bind<double>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
+            ServerMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleMute();
+            Binder.Bind<double>(ServerVolumeSlider, "value", nameof(ViewModel.MediaVolume), true);
+            
         }
 
         public override void ViewWillAppear(bool animated)
@@ -86,6 +98,7 @@ namespace Stylophone.iOS.ViewControllers
 
             UpdateButton(PlayPauseButton, ViewModel.PlayButtonContent);
             UpdateButton(VolumeButton, ViewModel.VolumeIcon);
+            UpdateButton(ServerMuteButton, ViewModel.VolumeIcon);
             UpdateButton(RepeatButton, ViewModel.RepeatIcon);
             UpdateButton(ShuffleButton, ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle");
 
@@ -94,6 +107,7 @@ namespace Stylophone.iOS.ViewControllers
             PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
             ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
             RepeatButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleRepeat();
+            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton);
 
             AlbumArt.Layer.CornerRadius = 8;
         }
@@ -116,6 +130,7 @@ namespace Stylophone.iOS.ViewControllers
             {
                 UpdateButton(CompactView.VolumeButton, ViewModel.VolumeIcon);
                 UpdateButton(VolumeButton, ViewModel.VolumeIcon);
+                UpdateButton(ServerMuteButton, ViewModel.VolumeIcon);
             }
 
             if (e.PropertyName == nameof(ViewModel.IsShuffleEnabled))
@@ -173,6 +188,22 @@ namespace Stylophone.iOS.ViewControllers
 
             var barButtonMenu = UIMenu.Create(new[] { addQueueAction, viewAlbumAction });
             return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+        }
+
+        private void ShowVolumePopover(UIButton sourceButton)
+        {
+            var popover = new Pop.ARSPopover
+            {
+                SourceView = sourceButton,
+                ContentSize = new CoreGraphics.CGSize(256, 196),
+                ArrowDirection = UIPopoverArrowDirection.Down
+            };
+
+            PresentViewController(popover, true, new Action(() => {
+                popover.InsertContentIntoPopover((popover, presentedSize, arrowHeight) => {
+                    popover.View.AddSubview(VolumePopover);
+                });
+            }));
         }
     }
 }

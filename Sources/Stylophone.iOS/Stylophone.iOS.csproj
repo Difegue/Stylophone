@@ -233,6 +233,9 @@
     <PackageReference Include="Xam.RMessage">
       <Version>0.0.1</Version>
     </PackageReference>
+    <PackageReference Include="ARSPopover.iOS">
+      <Version>1.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entitlements.plist" />
