@@ -88,24 +88,25 @@ namespace Stylophone.iOS.Services
 
         public void PlayStream(Uri streamUri)
         {
-            if (_mediaPlayer == null)
+            if (_mediaPlayer == null || _mediaPlayer.Status == AVPlayerStatus.Failed)
                 _mediaPlayer = new AVPlayer();
 
             var playerItem = new AVPlayerItem(new NSUrl(streamUri.AbsoluteUri));
             _mediaPlayer.ReplaceCurrentItemWithPlayerItem(playerItem);
 
+            _mediaPlayer.AutomaticallyWaitsToMinimizeStalling = false;
             _mediaPlayer.Play();
         }
 
         public void StopStream()
         {
-            _mediaPlayer.Pause();
+            _mediaPlayer?.Pause();
         }
 
         public void SetStreamVolume(double volume)
         {
             if (_mediaPlayer != null)
-                _mediaPlayer.Volume = (float)volume;
+                _mediaPlayer.Volume = (float)volume / 100;
         }
 
         public Task OpenStoreReviewUrlAsync()

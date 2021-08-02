@@ -22,6 +22,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIButton GithubButton { get; set; }
 
 		[Outlet]
+		UIKit.UIButton RateButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView ServerConnectedBox { get; set; }
 
 		[Outlet]
@@ -38,6 +41,9 @@ namespace Stylophone.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel ServerInfoLabel { get; set; }
+
+		[Outlet]
+		UIKit.UITextField ServerPasswordField { get; set; }
 
 		[Outlet]
 		UIKit.UITextField ServerPortField { get; set; }
@@ -63,6 +69,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (GithubButton != null) {
 				GithubButton.Dispose ();
 				GithubButton = null;
+			}
+
+			if (RateButton != null) {
+				RateButton.Dispose ();
+				RateButton = null;
 			}
 
 			if (ServerConnectedBox != null) {
@@ -98,6 +109,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (ServerPortField != null) {
 				ServerPortField.Dispose ();
 				ServerPortField = null;
+			}
+
+			if (ServerPasswordField != null) {
+				ServerPasswordField.Dispose ();
+				ServerPasswordField = null;
 			}
 
 			if (UpdateDatabaseButton != null) {

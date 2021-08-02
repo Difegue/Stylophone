@@ -66,6 +66,7 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<string>(ServerHostnameField, "text", nameof(ViewModel.ServerHost), true);
             Binder.Bind<int>(ServerPortField, "text", nameof(ViewModel.ServerPort), true,
                 valueTransformer: intToStringTransformer);
+            Binder.Bind<string>(ServerPasswordField, "text", nameof(ViewModel.ServerPassword), true);
             Binder.Bind<string>(ServerInfoLabel, "text", nameof(ViewModel.ServerInfo));
 
             Binder.Bind<bool>(ServerConnectionIndicator, "animating", nameof(ViewModel.IsCheckingServer));
@@ -75,16 +76,20 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(ServerConnectionSuccess, "hidden", nameof(ViewModel.IsServerValid),
                 valueTransformer: negateBoolTransformer);
 
+            //Binder.Bind<bool>(LocalPlaybackToggle, "enabled", nameof(ViewModel.IsStreamingAvailable));
+            //Binder.Bind<bool>(LocalPlaybackToggle, "on", nameof(ViewModel.IsLocalPlaybackEnabled), true);
             Binder.Bind<bool>(AnalyticsToggle, "on", nameof(ViewModel.EnableAnalytics), true);
 
             Binder.Bind<string>(VersionLabel, "text", nameof(ViewModel.VersionDescription));
 
             Binder.BindButton(ClearCacheButton, Resources.SettingsClearCache, ViewModel.ClearCacheCommand);
             Binder.BindButton(UpdateDatabaseButton, Resources.SettingsUpdateDatabase, ViewModel.RescanDbCommand);
+            Binder.BindButton(RateButton, Resources.RateAppPromptTitle, ViewModel.RateAppCommand);
 
             GithubButton.SetTitle(Resources.SettingsGithub, UIControlState.Normal);
             GithubButton.PrimaryActionTriggered += (s, e) =>
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(Resources.SettingsGithubLink));
+
         }
     }
 

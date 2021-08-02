@@ -77,7 +77,7 @@ namespace Stylophone.Common.ViewModels
                 Set(ref _volume, value);
 
                 // If the user changed the volume, play the stream back
-                if (!IsPlaying) 
+                if (!IsPlaying && value != 0) 
                     IsPlaying = true;
 
                 _interopService.SetStreamVolume(value);
@@ -138,7 +138,7 @@ namespace Stylophone.Common.ViewModels
         {
             try
             {
-                if (IsPlaying && _mpdService.IsConnected)
+                if (IsPlaying && _serverHost != null && _mpdService.IsConnected)
                 {
                     var urlString = "http://" + _serverHost + ":8000/mpd.ogg";
                     var streamUrl = new Uri(urlString);

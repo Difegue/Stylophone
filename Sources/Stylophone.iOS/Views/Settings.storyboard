@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="rVv-Xh-usD">
-                            <rect key="frame" x="0.0" y="672.5" width="1366" height="166"/>
+                            <rect key="frame" x="0.0" y="759.5" width="1366" height="166"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </view>
                         <sections>
@@ -37,7 +37,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" textContentType="url"/>
                                                 </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hostname" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rm5-wP-eEh" customClass="LocalizedLabel">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsServerHost" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rm5-wP-eEh" customClass="LocalizedLabel">
                                                     <rect key="frame" x="16" y="17.5" width="196" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="196" id="igE-XG-jVa"/>
@@ -65,7 +65,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Port" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-BQ-ehX" customClass="LocalizedLabel">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsServerPort" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-BQ-ehX" customClass="LocalizedLabel">
                                                     <rect key="frame" x="16" y="17.5" width="196" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="196" id="IcU-co-S47"/>
@@ -94,8 +94,44 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="LdN-rw-HBr">
+                                        <rect key="frame" x="20" y="136.5" width="1326" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LdN-rw-HBr" id="zXw-nn-B60">
+                                            <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsServerPassword" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Av1-V2-gwT" customClass="LocalizedLabel">
+                                                    <rect key="frame" x="16" y="17.5" width="196" height="17"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="196" id="8sQ-Bn-r6L"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="stringIdentifier" value="SettingsServerPassword"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="P4ssw0rd" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="qbR-MO-Ezi">
+                                                    <rect key="frame" x="1178" y="9" width="128" height="34"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="128" id="gL8-hw-hTr"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" textContentType="password"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Av1-V2-gwT" firstAttribute="centerY" secondItem="zXw-nn-B60" secondAttribute="centerY" id="2aa-3i-iAu"/>
+                                                <constraint firstItem="qbR-MO-Ezi" firstAttribute="centerY" secondItem="zXw-nn-B60" secondAttribute="centerY" id="H1C-zj-9UQ"/>
+                                                <constraint firstAttribute="trailing" secondItem="qbR-MO-Ezi" secondAttribute="trailing" constant="20" symbolic="YES" id="vaL-38-Poj"/>
+                                                <constraint firstItem="Av1-V2-gwT" firstAttribute="leading" secondItem="zXw-nn-B60" secondAttribute="leadingMargin" id="wHK-8C-u0J"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="72" id="bOc-ym-HBn">
-                                        <rect key="frame" x="20" y="136.5" width="1326" height="72"/>
+                                        <rect key="frame" x="20" y="180" width="1326" height="72"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bOc-ym-HBn" id="AMa-hb-EyX">
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="72"/>
@@ -161,7 +197,7 @@ Outputs available: alsa</string>
                             <tableViewSection headerTitle="Database and Album Art" footerTitle="Clearing the cache does stuff!" id="xQb-wS-P0x">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="16e-G5-wgu">
-                                        <rect key="frame" x="20" y="266" width="1326" height="43.5"/>
+                                        <rect key="frame" x="20" y="309.5" width="1326" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="16e-G5-wgu" id="hCI-mQ-Nzb">
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
@@ -179,7 +215,7 @@ Outputs available: alsa</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="wAY-34-Gmm">
-                                        <rect key="frame" x="20" y="309.5" width="1326" height="43.5"/>
+                                        <rect key="frame" x="20" y="353" width="1326" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wAY-34-Gmm" id="cMx-ar-acz">
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
@@ -201,7 +237,7 @@ Outputs available: alsa</string>
                             <tableViewSection headerTitle="Analytics" footerTitle="Those settings will apply on restart." id="MQa-yC-g8z">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="XQB-QV-eAK">
-                                        <rect key="frame" x="20" y="419" width="1326" height="43.5"/>
+                                        <rect key="frame" x="20" y="462.5" width="1326" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XQB-QV-eAK" id="73X-13-xWY">
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
@@ -213,7 +249,7 @@ Outputs available: alsa</string>
                                                         <constraint firstAttribute="width" constant="49" id="cPm-jJ-lk6"/>
                                                     </constraints>
                                                 </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send some Analyticd " textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLd-Fk-jD2" customClass="LocalizedLabel">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsAnalyticsText" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLd-Fk-jD2" customClass="LocalizedLabel">
                                                     <rect key="frame" x="16" y="17.5" width="1233" height="17"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
@@ -237,7 +273,7 @@ Outputs available: alsa</string>
                             <tableViewSection headerTitle="About" id="GY0-TS-0if">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="90" id="Is7-kb-42L">
-                                        <rect key="frame" x="20" y="521" width="1326" height="90"/>
+                                        <rect key="frame" x="20" y="564.5" width="1326" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Is7-kb-42L" id="9aU-U9-lJz">
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="90"/>
@@ -289,7 +325,7 @@ Outputs available: alsa</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="9bc-UK-XAd">
-                                        <rect key="frame" x="20" y="611" width="1326" height="43.5"/>
+                                        <rect key="frame" x="20" y="654.5" width="1326" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9bc-UK-XAd" id="VIk-fl-d3O">
                                             <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
@@ -307,6 +343,25 @@ Outputs available: alsa</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Jqa-BC-dEf">
+                                        <rect key="frame" x="20" y="698" width="1326" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Jqa-BC-dEf" id="iGY-wp-Q7u">
+                                            <rect key="frame" x="0.0" y="0.0" width="1326" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iBX-d3-ohi">
+                                                    <rect key="frame" x="20" y="11" width="1286" height="30"/>
+                                                    <state key="normal" title="RateAppPromptTitle"/>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="iBX-d3-ohi" secondAttribute="trailing" constant="20" symbolic="YES" id="JAw-AR-SFO"/>
+                                                <constraint firstItem="iBX-d3-ohi" firstAttribute="centerY" secondItem="iGY-wp-Q7u" secondAttribute="centerY" id="U6U-k4-Vlu"/>
+                                                <constraint firstItem="iBX-d3-ohi" firstAttribute="leading" secondItem="iGY-wp-Q7u" secondAttribute="leading" constant="20" symbolic="YES" id="wAj-Ra-c9q"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -319,12 +374,14 @@ Outputs available: alsa</string>
                         <outlet property="AnalyticsToggle" destination="Xsh-ag-FdC" id="5ZL-BC-G8m"/>
                         <outlet property="ClearCacheButton" destination="2oh-pb-PIa" id="FHD-dG-4vw"/>
                         <outlet property="GithubButton" destination="8NH-3O-sbO" id="9aS-pK-GsK"/>
+                        <outlet property="RateButton" destination="iBX-d3-ohi" id="a7m-Tf-6NR"/>
                         <outlet property="ServerConnectedBox" destination="J7x-pE-Pvd" id="dAZ-VP-0vB"/>
                         <outlet property="ServerConnectionFailed" destination="da9-UF-kde" id="R0Y-C5-lDz"/>
                         <outlet property="ServerConnectionIndicator" destination="2OQ-K0-sZp" id="fmD-IH-C1r"/>
                         <outlet property="ServerConnectionSuccess" destination="rHp-PR-quC" id="dWs-Jw-9YK"/>
                         <outlet property="ServerHostnameField" destination="6tD-ET-nIB" id="SH4-eV-WMm"/>
                         <outlet property="ServerInfoLabel" destination="EoV-sx-iAg" id="9t2-rq-Vj1"/>
+                        <outlet property="ServerPasswordField" destination="qbR-MO-Ezi" id="QBd-HC-nCM"/>
                         <outlet property="ServerPortField" destination="bvW-sX-4OV" id="Jn9-4V-OpV"/>
                         <outlet property="UpdateDatabaseButton" destination="hyY-4h-Tw9" id="vZx-Ps-MDw"/>
                         <outlet property="VersionLabel" destination="S9J-vI-2yP" id="MkN-hz-uaq"/>
