@@ -223,6 +223,10 @@ namespace Stylophone.Common.ViewModels
             get => _internalVolume;
             set
             {
+                // HACK: Abort if mpdService doesn't have updated volume from the server yet
+                if (_mpdService.CurrentStatus == MPDConnectionService.BOGUS_STATUS)
+                    return;
+
                 Set(ref _internalVolume, value);
 
                 if (value > 0) // _previousVolume is only used to keep track of volume when muting, if the volume has changed from zero due to another client, the value becomes meaningless
@@ -232,7 +236,7 @@ namespace Stylophone.Common.ViewModels
                 cts.Cancel();
                 cts = new CancellationTokenSource();
 
-                // Set the volume
+                // Set the volume 
                 volumeTasks.Add(Task.Run(async () =>
                 {
                     await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));

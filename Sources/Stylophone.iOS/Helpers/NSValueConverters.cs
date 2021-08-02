@@ -82,7 +82,7 @@ namespace Stylophone.iOS.Helpers
         public override NSObject TransformedValue(NSObject value)
         {
             if (value is NSNumber num)
-                return new NSString(value.ToString());
+                return new NSString(num.Int64Value.ToString());
 
             return null;
         }

@@ -41,6 +41,7 @@ namespace Stylophone.iOS.ViewControllers
 
             // Bind
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
+            var intToStringTransformer = NSValueTransformer.GetValueTransformer(nameof(IntToStringValueTransformer));
 
             // Compact View Binding
             Binder.Bind<bool>(CompactView, "hidden", nameof(ViewModel.IsTrackInfoAvailable), valueTransformer: negateBoolTransformer);
@@ -51,14 +52,17 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
 
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
-            CompactView.VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(CompactView.VolumeButton);
 
             // Volume Popover Binding
             LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
+
             LocalMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.LocalPlayback.ToggleMute();
             LocalPlaybackBinder.Bind<double>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
+            LocalPlaybackBinder.Bind<double>(LocalVolume, "text", nameof(ViewModel.LocalPlayback.Volume), valueTransformer: intToStringTransformer);
+
             ServerMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleMute();
             Binder.Bind<double>(ServerVolumeSlider, "value", nameof(ViewModel.MediaVolume), true);
+            Binder.Bind<double>(ServerVolume, "text", nameof(ViewModel.MediaVolume), valueTransformer: intToStringTransformer);
             
         }
 
@@ -85,7 +89,6 @@ namespace Stylophone.iOS.ViewControllers
             };
             TrackSlider.ValueChanged += (s, e) =>
             {
-                ViewModel.CurrentTimeValue = TrackSlider.Value;
                 ViewModel.OnPlayingSliderChange();
             };
 
@@ -107,7 +110,7 @@ namespace Stylophone.iOS.ViewControllers
             PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
             ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
             RepeatButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleRepeat();
-            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton);
+            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton); 
 
             AlbumArt.Layer.CornerRadius = 8;
         }
@@ -190,20 +193,25 @@ namespace Stylophone.iOS.ViewControllers
             return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
         }
 
-        private void ShowVolumePopover(UIButton sourceButton)
+        public void ShowVolumePopover(UIButton sourceButton, UIViewController sourceVc = null)
         {
+            var sourceBounds = sourceButton.ImageView.Bounds;
+
             var popover = new Pop.ARSPopover
             {
-                SourceView = sourceButton,
-                ContentSize = new CoreGraphics.CGSize(256, 196),
+                SourceView = sourceButton.ImageView,
+                SourceRect = new CoreGraphics.CGRect(sourceBounds.Width/2, -4, 0, 0),
+                ContentSize = ViewModel.LocalPlayback.IsEnabled ?
+                    new CoreGraphics.CGSize(276, 196) : new CoreGraphics.CGSize(276, 96),
                 ArrowDirection = UIPopoverArrowDirection.Down
             };
 
-            PresentViewController(popover, true, new Action(() => {
-                popover.InsertContentIntoPopover((popover, presentedSize, arrowHeight) => {
-                    popover.View.AddSubview(VolumePopover);
-                });
-            }));
+            popover.View.AddSubview(VolumePopover);
+
+            if (sourceVc == null)
+                sourceVc = this;
+
+            sourceVc.PresentViewController(popover, true, null);
         }
     }
 }

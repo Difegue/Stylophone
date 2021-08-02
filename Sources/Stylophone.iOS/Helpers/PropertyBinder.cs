@@ -71,7 +71,7 @@ namespace Stylophone.iOS.Helpers
                 // Note: This won't work if the NSObject isn't KVO-compliant. (which sadly happens often with UIKit...)
                 var observer = obj.AddObserver(keypath, NSKeyValueObservingOptions.OldNew,
                     (c) => binding.UpdateProperty<T>(_observableObject, c));
-                _observers.Add(keypath, observer);
+                _observers.Add(obj.Handle.ToString() + "-" + keypath, observer);
             }
         }
 

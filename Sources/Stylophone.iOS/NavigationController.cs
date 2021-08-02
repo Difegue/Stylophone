@@ -48,6 +48,8 @@ namespace Stylophone.iOS
             _compactView.TranslatesAutoresizingMaskIntoConstraints = false;
             View.AddSubview(_compactView);
 
+            _compactView.VolumeButton.PrimaryActionTriggered += (s, e) => _playbackViewController.ShowVolumePopover(_compactView.VolumeButton, this);
+
             // Add the playbackVC itself to the Navigation Service's known VCs so it can be reused later
             concreteNavService.AddViewControllerToNavigationStack(_playbackViewController);
 

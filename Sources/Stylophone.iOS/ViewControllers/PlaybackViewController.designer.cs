@@ -40,6 +40,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIView LocalPlaybackView { get; set; }
 
 		[Outlet]
+		UIKit.UILabel LocalVolume { get; set; }
+
+		[Outlet]
 		UIKit.UISlider LocalVolumeSlider { get; set; }
 
 		[Outlet]
@@ -53,6 +56,9 @@ namespace Stylophone.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIButton ServerMuteButton { get; set; }
+
+		[Outlet]
+		UIKit.UILabel ServerVolume { get; set; }
 
 		[Outlet]
 		UIKit.UISlider ServerVolumeSlider { get; set; }
@@ -115,6 +121,21 @@ namespace Stylophone.iOS.ViewControllers
 				ElapsedTime = null;
 			}
 
+			if (LocalMuteButton != null) {
+				LocalMuteButton.Dispose ();
+				LocalMuteButton = null;
+			}
+
+			if (LocalPlaybackView != null) {
+				LocalPlaybackView.Dispose ();
+				LocalPlaybackView = null;
+			}
+
+			if (LocalVolumeSlider != null) {
+				LocalVolumeSlider.Dispose ();
+				LocalVolumeSlider = null;
+			}
+
 			if (PlayPauseButton != null) {
 				PlayPauseButton.Dispose ();
 				PlayPauseButton = null;
@@ -128,6 +149,16 @@ namespace Stylophone.iOS.ViewControllers
 			if (RepeatButton != null) {
 				RepeatButton.Dispose ();
 				RepeatButton = null;
+			}
+
+			if (ServerMuteButton != null) {
+				ServerMuteButton.Dispose ();
+				ServerMuteButton = null;
+			}
+
+			if (ServerVolumeSlider != null) {
+				ServerVolumeSlider.Dispose ();
+				ServerVolumeSlider = null;
 			}
 
 			if (ShuffleButton != null) {
@@ -165,29 +196,14 @@ namespace Stylophone.iOS.ViewControllers
 				VolumePopover = null;
 			}
 
-			if (LocalPlaybackView != null) {
-				LocalPlaybackView.Dispose ();
-				LocalPlaybackView = null;
+			if (LocalVolume != null) {
+				LocalVolume.Dispose ();
+				LocalVolume = null;
 			}
 
-			if (LocalMuteButton != null) {
-				LocalMuteButton.Dispose ();
-				LocalMuteButton = null;
-			}
-
-			if (LocalVolumeSlider != null) {
-				LocalVolumeSlider.Dispose ();
-				LocalVolumeSlider = null;
-			}
-
-			if (ServerMuteButton != null) {
-				ServerMuteButton.Dispose ();
-				ServerMuteButton = null;
-			}
-
-			if (ServerVolumeSlider != null) {
-				ServerVolumeSlider.Dispose ();
-				ServerVolumeSlider = null;
+			if (ServerVolume != null) {
+				ServerVolume.Dispose ();
+				ServerVolume = null;
 			}
 		}
 	}

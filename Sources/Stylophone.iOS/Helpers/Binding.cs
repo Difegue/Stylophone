@@ -7,7 +7,7 @@ using UIKit;
 
 namespace Stylophone.iOS.Helpers
 {
-    public class NSWrapper: NSObject
+    public class NSWrapper : NSObject
     {
         public object ManagedObject { get; set; }
     }
