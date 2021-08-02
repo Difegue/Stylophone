@@ -127,7 +127,6 @@
     <Compile Include="ViewControllers\SubViews\FilePathCell.designer.cs">
       <DependentUpon>FilePathCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\SearchController.cs" />
     <Compile Include="ViewControllers\SubViews\AlbumCollectionViewCell.cs" />
     <Compile Include="ViewControllers\SubViews\AlbumCollectionViewCell.designer.cs">
       <DependentUpon>AlbumCollectionViewCell.cs</DependentUpon>
@@ -142,6 +141,7 @@
       <DependentUpon>SearchResultsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\AddToPlaylistViewController.cs" />
+    <Compile Include="ViewControllers\SearchController.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

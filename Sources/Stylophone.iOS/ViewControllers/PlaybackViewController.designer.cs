@@ -43,16 +43,7 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIButton RepeatButton { get; set; }
 
 		[Outlet]
-		UIKit.NSLayoutConstraint RepeatTopConstraint { get; set; }
-
-		[Outlet]
 		UIKit.UIButton ShuffleButton { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint ShuffleTopConstraint { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint ShuffleTrailingConstraint { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SkipNextButton { get; set; }
@@ -101,29 +92,9 @@ namespace Stylophone.iOS.ViewControllers
 				CompactView = null;
 			}
 
-			if (TrackTitle != null) {
-				TrackTitle.Dispose ();
-				TrackTitle = null;
-			}
-
-			if (TrackSlider != null) {
-				TrackSlider.Dispose ();
-				TrackSlider = null;
-			}
-
 			if (ElapsedTime != null) {
 				ElapsedTime.Dispose ();
 				ElapsedTime = null;
-			}
-
-			if (RemainingTime != null) {
-				RemainingTime.Dispose ();
-				RemainingTime = null;
-			}
-
-			if (SkipPrevButton != null) {
-				SkipPrevButton.Dispose ();
-				SkipPrevButton = null;
 			}
 
 			if (PlayPauseButton != null) {
@@ -131,9 +102,9 @@ namespace Stylophone.iOS.ViewControllers
 				PlayPauseButton = null;
 			}
 
-			if (SkipNextButton != null) {
-				SkipNextButton.Dispose ();
-				SkipNextButton = null;
+			if (RemainingTime != null) {
+				RemainingTime.Dispose ();
+				RemainingTime = null;
 			}
 
 			if (RepeatButton != null) {
@@ -146,24 +117,29 @@ namespace Stylophone.iOS.ViewControllers
 				ShuffleButton = null;
 			}
 
+			if (SkipNextButton != null) {
+				SkipNextButton.Dispose ();
+				SkipNextButton = null;
+			}
+
+			if (SkipPrevButton != null) {
+				SkipPrevButton.Dispose ();
+				SkipPrevButton = null;
+			}
+
+			if (TrackSlider != null) {
+				TrackSlider.Dispose ();
+				TrackSlider = null;
+			}
+
+			if (TrackTitle != null) {
+				TrackTitle.Dispose ();
+				TrackTitle = null;
+			}
+
 			if (VolumeButton != null) {
 				VolumeButton.Dispose ();
 				VolumeButton = null;
-			}
-
-			if (ShuffleTopConstraint != null) {
-				ShuffleTopConstraint.Dispose ();
-				ShuffleTopConstraint = null;
-			}
-
-			if (ShuffleTrailingConstraint != null) {
-				ShuffleTrailingConstraint.Dispose ();
-				ShuffleTrailingConstraint = null;
-			}
-
-			if (RepeatTopConstraint != null) {
-				RepeatTopConstraint.Dispose ();
-				RepeatTopConstraint = null;
 			}
 		}
 	}

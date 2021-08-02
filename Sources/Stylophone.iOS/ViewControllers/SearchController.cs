@@ -10,7 +10,7 @@ using Stylophone.iOS.ViewModels;
 using Stylophone.Localization.Strings;
 using UIKit;
 
-namespace Stylophone.iOS.Helpers
+namespace Stylophone.iOS.ViewControllers
 {
     public class SearchController: UISearchController
     {

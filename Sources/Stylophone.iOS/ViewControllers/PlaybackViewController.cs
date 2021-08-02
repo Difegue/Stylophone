@@ -50,25 +50,6 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
         }
 
-        public override void ViewDidLayoutSubviews()
-        {
-            base.ViewDidLayoutSubviews();
-
-            // Move elements depending on available screen estate
-            if (View.Frame.Width < 425)
-            {
-                RepeatTopConstraint.Constant = -18;
-                ShuffleTrailingConstraint.Constant = -40;
-                ShuffleTopConstraint.Constant = 40;
-            }
-            else
-            {
-                RepeatTopConstraint.Constant = 0;
-                ShuffleTrailingConstraint.Constant = 8;
-                ShuffleTopConstraint.Constant = 0;
-            }
-        }
-
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
