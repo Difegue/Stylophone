@@ -45,7 +45,7 @@ namespace Stylophone.iOS.ViewControllers
 
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
-            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu);
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
 
@@ -94,6 +94,18 @@ namespace Stylophone.iOS.ViewControllers
             removeAction.Attributes = UIMenuElementAttributes.Destructive;
 
             return UIMenu.Create(new[] { playAction, albumAction, playlistAction, removeAction });
+        }
+
+        private UISwipeActionsConfiguration GetRowSwipeActions(NSIndexPath indexPath, bool isLeadingSwipe)
+        {
+            // The common commands take a list of objects
+            var trackList = new List<object>();
+            trackList.Add(ViewModel?.Source[indexPath.Row]);
+            
+            var action = isLeadingSwipe ? Binder.GetContextualAction(UIContextualActionStyle.Normal,Strings.ContextMenuPlay, ViewModel.PlayTrackCommand, trackList)
+                : Binder.GetContextualAction(UIContextualActionStyle.Destructive, Strings.ContextMenuRemoveFromQueue, ViewModel.RemoveFromQueueCommand, trackList);
+
+            return UISwipeActionsConfiguration.FromActions(new[] { action });
         }
 
         private UIBarButtonItem CreateSettingsButton()

@@ -89,7 +89,7 @@
     </Compile>
     <Compile Include="ViewControllers\IViewController.cs" />
     <Compile Include="NavigationController.cs" />
-    <Compile Include="Helpers\KvoUISwitch.cs" />
+    <Compile Include="Helpers\KvoControls.cs" />
     <Compile Include="Helpers\PropertyBinder.cs" />
     <Compile Include="Helpers\Binding.cs" />
     <Compile Include="Helpers\NSValueConverters.cs" />

@@ -19,6 +19,7 @@ namespace Stylophone.iOS.ViewControllers
     {
         private UITableView _tableView;
         private Func<NSIndexPath, UIMenu> _menuFactory;
+        private Func<NSIndexPath, bool, UISwipeActionsConfiguration> _swipeFactory;
         private Action<UIScrollView> _scrollHandler;
         private ObservableCollection<TrackViewModel> _sourceCollection;
 
@@ -27,11 +28,13 @@ namespace Stylophone.iOS.ViewControllers
         }
 
         public TrackTableViewDataSource(UITableView tableView, ObservableCollection<TrackViewModel> source,
-            Func<NSIndexPath, UIMenu> contextMenuFactory, bool canSelectRows = false, Action<UIScrollView> scrollHandler = null)
+            Func<NSIndexPath, UIMenu> contextMenuFactory, Func<NSIndexPath,bool, UISwipeActionsConfiguration> swipeActionFactory,
+            bool canSelectRows = false, Action<UIScrollView> scrollHandler = null)
         {
             _tableView = tableView;
             _sourceCollection = source;
             _menuFactory = contextMenuFactory;
+            _swipeFactory = swipeActionFactory;
             _scrollHandler = scrollHandler;
 
             _sourceCollection.CollectionChanged += UpdateUITableView;
@@ -121,6 +124,16 @@ namespace Stylophone.iOS.ViewControllers
         {
             var menu = _menuFactory.Invoke(indexPath);
             return UIContextMenuConfiguration.Create(null, null, new UIContextMenuActionProvider((arr) => menu));
+        }
+
+        public override UISwipeActionsConfiguration GetLeadingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)
+        {
+            return _swipeFactory.Invoke(indexPath, true);
+        }
+
+        public override UISwipeActionsConfiguration GetTrailingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)
+        {
+            return _swipeFactory.Invoke(indexPath, false);
         }
 
         #endregion

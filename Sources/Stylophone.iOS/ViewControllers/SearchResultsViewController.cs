@@ -40,7 +40,7 @@ namespace Stylophone.iOS.ViewControllers
                 valueTransformer: negateBoolTransformer);
 
 
-            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu);
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
 
@@ -87,6 +87,18 @@ namespace Stylophone.iOS.ViewControllers
             var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
 
             return UIMenu.Create(new[] { queueAction, albumAction, playlistAction });
+        }
+
+        private UISwipeActionsConfiguration GetRowSwipeActions(NSIndexPath indexPath, bool isLeadingSwipe)
+        {
+            // The common commands take a list of objects
+            var trackList = new List<object>();
+            trackList.Add(ViewModel?.Source[indexPath.Row]);
+
+            var action = isLeadingSwipe ? Binder.GetContextualAction(UIContextualActionStyle.Normal, Strings.ContextMenuAddToQueue, ViewModel.AddToQueueCommand, trackList)
+                : Binder.GetContextualAction(UIContextualActionStyle.Normal, Strings.ContextMenuAddToPlaylist, ViewModel.AddToPlayListCommand, trackList);
+
+            return UISwipeActionsConfiguration.FromActions(new[] { action });
         }
     }
 }

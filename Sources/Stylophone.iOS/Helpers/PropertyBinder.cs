@@ -46,6 +46,24 @@ namespace Stylophone.iOS.Helpers
                 new UIActionHandler((sender) => command.Execute(parameter)));
         }
 
+        public UIContextualAction GetContextualAction(UIContextualActionStyle style, string actionText, ICommand command, object parameter = null)
+        {
+            return UIContextualAction.FromContextualActionStyle(style, actionText,
+                new UIContextualActionHandler((act, view, handler) =>
+                {
+                    if (command.CanExecute(parameter))
+                    {
+                        command.Execute(parameter);
+                        handler.Invoke(true);
+                    }
+                    else
+                    {
+                        handler.Invoke(false);
+                    }  
+                })
+            );
+        }
+
         public void Bind<T>(NSObject obj, string keypath, string property, bool isTwoWay = false, NSValueTransformer valueTransformer = null)
             => Bind<T>(obj, new NSString(keypath), property, isTwoWay, valueTransformer);
 
