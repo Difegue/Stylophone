@@ -67,7 +67,7 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<int>(ServerPortField, "text", nameof(ViewModel.ServerPort), true,
                 valueTransformer: intToStringTransformer);
             Binder.Bind<string>(ServerPasswordField, "text", nameof(ViewModel.ServerPassword), true);
-            Binder.Bind<string>(ServerInfoLabel, "text", nameof(ViewModel.ServerInfo));
+            Binder.Bind<string>(ServerInfoLabel, "text", nameof(ViewModel.ServerStatus));
 
             Binder.Bind<bool>(ServerConnectionIndicator, "animating", nameof(ViewModel.IsCheckingServer));
             Binder.Bind<bool>(ServerConnectedBox, "hidden", nameof(ViewModel.IsCheckingServer));
