@@ -362,7 +362,7 @@
                         Margin="{StaticResource SmallRightMargin}"
                         Click="{x:Bind PlaybackViewModel.ToggleMute}"
                         Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
-                        FontSize="22"
+                        FontSize="21"
                         Style="{StaticResource SVButtonStyle}"
                         ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}" />
                     <Slider
@@ -407,7 +407,7 @@
                                         Margin="0,0,8,0"
                                         Click="{x:Bind PlaybackViewModel.LocalPlayback.ToggleMute}"
                                         Content="{x:Bind PlaybackViewModel.LocalPlayback.VolumeIcon, Mode=OneWay}"
-                                        FontSize="22"
+                                        FontSize="21"
                                         Style="{StaticResource SVButtonStyle}" />
                                     <Slider
                                         Width="116"
@@ -440,7 +440,7 @@
                                         Margin="0,0,8,0"
                                         Click="{x:Bind PlaybackViewModel.ToggleMute}"
                                         Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
-                                        FontSize="22"
+                                        FontSize="21"
                                         Style="{StaticResource SVButtonStyle}" />
                                     <Slider
                                         Width="116"
