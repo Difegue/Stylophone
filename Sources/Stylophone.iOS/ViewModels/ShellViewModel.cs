@@ -86,13 +86,21 @@ namespace Stylophone.iOS.ViewModels
 
             if (itemInvoked is NavigationSidebarItem sidebarItem)
             {
-                var pageType = sidebarItem.Target;
-
-                // Playlist items navigate with their name as parameter
-                if (pageType == typeof(PlaylistViewModel))
-                    _navigationService.Navigate(pageType, sidebarItem.Title);
+                if (sidebarItem.Command == nameof(AddRandomTracksCommand))
+                {
+                    AddRandomTracksCommand.Execute(null);
+                    return;
+                }
                 else
-                    _navigationService.Navigate(pageType);
+                {
+                    var pageType = sidebarItem.Target;
+
+                    // Playlist items navigate with their name as parameter
+                    if (pageType == typeof(PlaylistViewModel))
+                        _navigationService.Navigate(pageType, sidebarItem.Title);
+                    else
+                        _navigationService.Navigate(pageType);
+                }
             }
         }
 
@@ -101,22 +109,5 @@ namespace Stylophone.iOS.ViewModels
             // Noop on UIKit
             // TODO make UWP only
         }
-
-        /*
-         * private async void UpdateSearchSuggestions(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput)
-                return;
-
-            // Clear out suggestions before filling them up again, as it takes a bit of time.
-            sender.ItemsSource = new List<object>();
-
-            sender.ItemsSource = await SearchAsync(sender.Text);
-        }
-
-        private async void HandleSearchRequest(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            await HandleSearchRequestAsync(sender.Text, args.ChosenSuggestion);
-        }*/
     }
 }

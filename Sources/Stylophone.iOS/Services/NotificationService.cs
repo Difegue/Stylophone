@@ -22,7 +22,7 @@ namespace Stylophone.iOS.Services
                 if (autoHide)
                     RMessage.ShowNotificationWithTitle(notification, "", RMessageType.Normal, "", 2, () => { }, true);
                 else
-                    RMessage.ShowNotificationWithTitle(notification, RMessageType.Error, "", () => { });
+                    RMessage.ShowNotificationWithTitle(notification, RMessageType.Normal, "", () => { });
             });
         }
 

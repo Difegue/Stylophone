@@ -25,13 +25,14 @@ namespace Stylophone.iOS.ViewControllers
         public string Subtitle { get; private set; }
         public UIImage Image { get; private set; }
         public Type Target { get; private set; }
+        public string Command { get; private set; }
 
         public static NavigationSidebarItem GetHeader(string title) =>
             new NavigationSidebarItem { Type = SidebarItemType.Header, Title = title };
         public static NavigationSidebarItem GetExpandableRow(string title, string subtitle = null) =>
             new NavigationSidebarItem { Type = SidebarItemType.ExpandableRow, Title = title, Subtitle = subtitle };
-        public static NavigationSidebarItem GetRow(string title, Type target, string subtitle = null, UIImage image = null) =>
-            new NavigationSidebarItem { Type = SidebarItemType.Row, Target = target, Title = title, Subtitle = subtitle, Image = image };
+        public static NavigationSidebarItem GetRow(string title, Type target, string subtitle = null, UIImage image = null, string command = null) =>
+            new NavigationSidebarItem { Type = SidebarItemType.Row, Target = target, Title = title, Subtitle = subtitle, Image = image, Command = command };
     }
 
     public partial class SidebarViewController : UIViewController, IUICollectionViewDelegate
@@ -64,7 +65,8 @@ namespace Stylophone.iOS.ViewControllers
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
 
             var settingsButton = new UIBarButtonItem(UIImage.GetSystemImage("gear"), UIBarButtonItemStyle.Plain, OpenSettings);
-            settingsButton.AccessibilityLabel = "settingsButton";
+            settingsButton.AccessibilityLabel = Strings.SettingsHeader;
+
             NavigationItem.RightBarButtonItem = settingsButton;
 
             _collectionView = new UICollectionView(View.Bounds, CreateLayout());
@@ -123,6 +125,7 @@ namespace Stylophone.iOS.ViewControllers
                 NavigationSidebarItem.GetRow(Strings.QueueHeader, typeof(QueueViewModel), null, UIImage.GetSystemImage("music.quarternote.3")),
                 NavigationSidebarItem.GetRow(Strings.LibraryHeader, typeof(LibraryViewModel), null, UIImage.GetSystemImage("books.vertical")),
                 NavigationSidebarItem.GetRow(Strings.FoldersHeader, typeof(FoldersViewModel), null, UIImage.GetSystemImage("externaldrive.connected.to.line.below")),
+                NavigationSidebarItem.GetRow(Strings.RandomTracksHeader, null, null, UIImage.GetSystemImage("sparkles"), nameof(ShellViewModel.AddRandomTracksCommand))
             };
 
             snapshot.AppendItems(new[] { header });
