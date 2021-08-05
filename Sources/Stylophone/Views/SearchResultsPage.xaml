@@ -52,7 +52,7 @@
                 EvenRowBackground="Transparent"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                OddRowBackground="{ThemeResource SystemControlPageBackgroundListLowBrush}"
+                OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
                 <Stylophone:AlternatingRowListView.ContextFlyout>
