@@ -1,0 +1,234 @@
+﻿<Page
+    x:Class="Stylophone.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:behaviors="using:Stylophone.Behaviors"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:strings="using:Stylophone.Localization.Strings"
+    xmlns:stylophone="using:Stylophone.Helpers"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:vm="using:Stylophone.Common.ViewModels"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    NavigationCacheMode="Required"
+    mc:Ignorable="d">
+    <Page.Resources />
+    <Grid x:Name="ContentArea">
+
+        <TextBox
+            Width="200"
+            Height="30"
+            Margin="24,-48"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            PlaceholderText="{x:Bind strings:Resources.LibrarySearchPlaceholder}"
+            TextChanged="OnFilterChanged" />
+
+        <GridView
+            Padding="24,4,8,0"
+            animations:Connected.ListItemElementName="albumCanvas"
+            animations:Connected.ListItemKey="animationKeyLibrary"
+            behaviors:ListViewBehavior.FillBeforeWrap="True"
+            behaviors:ListViewBehavior.MinItemWidth="204"
+            ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+            IsItemClickEnabled="True"
+            ItemClick="AlbumClicked"
+            ItemsSource="{x:Bind ViewModel.FilteredSource, Mode=OneWay}"
+            SelectionMode="None">
+            <GridView.ItemContainerStyle>
+                <Style BasedOn="{StaticResource DefaultGridViewItemStyle}" TargetType="GridViewItem">
+                    <Setter Property="Margin" Value="12,0,12,64" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <controls:DropShadowPanel
+                                    x:Name="itemThumbnail"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    BlurRadius="10"
+                                    OffsetY="2"
+                                    ShadowOpacity="0.6"
+                                    Color="Black">
+                                    <ContentPresenter x:Name="itemContent" />
+
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal" />
+                                            <VisualState x:Name="Pressed">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemContent" Storyboard.TargetProperty="Margin">
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.02" Value="0,-3,0,3" />
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.05" Value="0,-1,0,1" />
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.08" Value="0,2,0,-2" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <VisualState.Setters>
+                                                    <Setter Target="itemThumbnail.ShadowOpacity" Value="0" />
+                                                    <Setter Target="itemContent.BorderBrush" Value="{ThemeResource SubtleFillColorTertiaryBrush}" />
+                                                    <Setter Target="itemContent.Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="PointerOver">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemContent" Storyboard.TargetProperty="Margin">
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.02" Value="0,0,0,0" />
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.07" Value="0,-2,0,2" />
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.12" Value="0,-3,0,3" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <VisualState.Setters>
+                                                    <Setter Target="itemThumbnail.ShadowOpacity" Value="0.4" />
+
+                                                    <Setter Target="itemContent.BorderBrush" Value="{ThemeResource ButtonBackgroundPointerOver}" />
+                                                    <Setter Target="itemContent.Foreground" Value="{ThemeResource GridViewItemForegroundPointerOver}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="PointerOverSelected">
+                                                <VisualState.Setters>
+                                                    <Setter Target="itemContent.BorderBrush" Value="{ThemeResource SubtleFillColorSecondaryBrush}" />
+                                                    <Setter Target="itemContent.Foreground" Value="{ThemeResource GridViewItemForegroundPointerOver}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+
+                                    </VisualStateManager.VisualStateGroups>
+                                </controls:DropShadowPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="vm:AlbumViewModel">
+
+                    <Canvas
+                        x:Name="albumCanvas"
+                        Width="180"
+                        Height="180">
+                        <Canvas.ContextFlyout>
+
+                            <MenuFlyout>
+                                <MenuFlyoutItem
+                                    Command="{Binding PlayAlbumCommand}"
+                                    DataContext="{Binding}"
+                                    Icon="Play"
+                                    IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                                    Text="{x:Bind strings:Resources.ContextMenuPlay}" />
+                                <MenuFlyoutItem
+                                    Command="{Binding AddAlbumCommand}"
+                                    DataContext="{Binding}"
+                                    Icon="Add"
+                                    IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                                    Text="{x:Bind strings:Resources.ContextMenuAddToQueue}" />
+                                <MenuFlyoutItem
+                                    Command="{Binding AddToPlayListCommand}"
+                                    DataContext="{Binding}"
+                                    Icon="MusicInfo"
+                                    IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                                    Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />
+                            </MenuFlyout>
+                        </Canvas.ContextFlyout>
+
+                        <Grid
+                            x:Name="Album"
+                            Width="180"
+                            Height="180"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4">
+
+                            <Border CornerRadius="4">
+                                <Border.Background>
+                                    <ImageBrush
+                                        AlignmentX="Center"
+                                        AlignmentY="Center"
+                                        Stretch="UniformToFill">
+                                        <ImageBrush.ImageSource>
+                                            <BitmapImage DecodePixelWidth="180" UriSource="ms-appx:///Assets/AlbumPlaceholder.png" />
+                                        </ImageBrush.ImageSource>
+                                    </ImageBrush>
+                                </Border.Background>
+                            </Border>
+
+                            <Border CornerRadius="4">
+                                <Border.Background>
+                                    <ImageBrush
+                                        AlignmentX="Center"
+                                        AlignmentY="Center"
+                                        ImageSource="{x:Bind AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=180}"
+                                        Stretch="UniformToFill" />
+                                </Border.Background>
+                            </Border>
+
+                            <!--  Hack, the BorderBrush is modified in the controltemplate but completely invisible everywhere else!  -->
+                            <Border
+                                x:Name="Overlay"
+                                Background="{Binding BorderBrush, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay}"
+                                CornerRadius="4" />
+
+                            <!--  Using the WinUI ProgressRing here causes an animation glitch when viewing an album and navigating back.  -->
+                            <winui:ProgressBar
+                                Width="160"
+                                Margin="{StaticResource SmallBottomMargin}"
+                                VerticalAlignment="Bottom"
+                                IsIndeterminate="True"
+                                Visibility="{x:Bind AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
+                        </Grid>
+
+                        <StackPanel Margin="{Binding Margin.Bottom, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource DoubleToThicknessConverter}, Mode=OneWay}" HorizontalAlignment="Left">
+                            <StackPanel.RenderTransform>
+                                <CompositeTransform TranslateY="184" />
+                            </StackPanel.RenderTransform>
+                            <TextBlock
+                                Width="180"
+                                Margin="{StaticResource XXSmallTopMargin}"
+                                MaxLines="1"
+                                Style="{ThemeResource BaseTextBlockStyle}"
+                                Text="{x:Bind Name, Mode=OneWay}"
+                                TextTrimming="CharacterEllipsis"
+                                ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}" />
+                            <winui:ProgressBar
+                                Margin="{StaticResource XXSmallTopMargin}"
+                                IsIndeterminate="True"
+                                Visibility="{x:Bind IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            <TextBlock
+                                Width="180"
+                                Margin="{StaticResource XXSmallTopMargin}"
+                                MaxLines="1"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind Artist, Mode=OneWay}"
+                                TextTrimming="CharacterEllipsis"
+                                ToolTipService.ToolTip="{x:Bind Artist, Mode=OneWay}" />
+                        </StackPanel>
+
+                    </Canvas>
+
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <SymbolIcon
+                Height="86"
+                RenderTransformOrigin="0.5,0.5"
+                Symbol="DisconnectDrive">
+                <SymbolIcon.RenderTransform>
+                    <CompositeTransform ScaleX="5" ScaleY="5" />
+                </SymbolIcon.RenderTransform>
+            </SymbolIcon>
+            <TextBlock
+                HorizontalAlignment="Center"
+                Style="{StaticResource SubtitleTextBlockStyle}"
+                Text="{x:Bind strings:Resources.EmptyLibraryTitle}" />
+            <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptyFoldersDesc}" />
+        </StackPanel>
+    </Grid>
+</Page>

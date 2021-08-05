@@ -1,0 +1,178 @@
+﻿<Page
+    x:Class="Stylophone.Views.PlaybackView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters="using:Stylophone.Helpers"
+    xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:strings="using:Stylophone.Localization.Strings"
+    d:DesignHeight="430"
+    d:DesignWidth="300"
+    Unloaded="Page_Unloaded"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:SKImageToUWPConverter x:Key="SKImageToUWPConverter" />
+        <converters:SliderValueConverter x:Key="SliderValueConverter" />
+        <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <converters1:BoolToObjectConverter
+            x:Key="BoolToBrushConverter"
+            FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
+            TrueValue="{ThemeResource ButtonBackgroundPointerOver}" />
+
+    </Page.Resources>
+
+
+    <RelativePanel
+        Margin="8,2,8,0"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="8">
+        <!--  Track Background  -->
+        <Border
+            Canvas.ZIndex="-1"
+            CornerRadius="8"
+            RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.AlignHorizontalCenterWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignVerticalCenterWithPanel="True">
+            <Border.Background>
+                <ImageBrush ImageSource="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+            </Border.Background>
+        </Border>
+
+        <Grid
+            Background="{ThemeResource SystemControlAcrylicElementMediumHighBrush}"
+            RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".6*" />
+                <ColumnDefinition Width=".4*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".7*" />
+                <RowDefinition Height=".3*" />
+            </Grid.RowDefinitions>
+
+            <controls:DropShadowPanel
+                x:Name="AlbumArt"
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Margin="24,56,24,0"
+                Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                BlurRadius="10"
+                OffsetX="4"
+                OffsetY="4"
+                ShadowOpacity="0.6"
+                Color="Black">
+
+                <Grid CornerRadius="8">
+                    <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=720}" />
+                </Grid>
+            </controls:DropShadowPanel>
+
+            <StackPanel
+                x:Name="AlbumInfo"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Margin="0,12,0,0">
+                <TextBlock
+                    Margin="25,0,25,5"
+                    FontSize="28"
+                    FontWeight="Bold"
+                    MaxLines="5"
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="Wrap" />
+
+                <TextBlock
+                    x:Name="AlbumArtist"
+                    Margin="25,0,25,10"
+                    FontWeight="Bold"
+                    MaxLines="3"
+                    Opacity="0.6"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis" />
+
+                <TextBlock
+                    x:Name="AlbumName"
+                    Margin="25,0,25,10"
+                    FontWeight="SemiLight"
+                    MaxLines="3"
+                    Opacity="0.6"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Album, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+        </Grid>
+
+        <StackPanel
+            Margin="24,16,16,16"
+            Orientation="Horizontal"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
+            Visibility="{x:Bind PlaybackViewModel.HasNextTrack, Converter={StaticResource BoolToVisibilityConverter}}">
+
+            <TextBlock
+                x:Name="UpNext"
+                Opacity="0.6"
+                Style="{ThemeResource BaseTextBlockStyle}"
+                Text="{x:Bind strings:Resources.PlaybackUpNext}" />
+
+            <TextBlock
+                x:Name="UpNextTitle"
+                MaxWidth="256"
+                Margin="{StaticResource XSmallLeftMargin}"
+                Opacity="0.6"
+                Style="{ThemeResource BaseTextBlockStyle}"
+                Text="{x:Bind PlaybackViewModel.NextTrack.Name, Mode=OneWay}"
+                TextTrimming="CharacterEllipsis"
+                TextWrapping="NoWrap" />
+
+        </StackPanel>
+
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="830" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.(Grid.Column)" Value="0" />
+                        <Setter Target="AlbumArt.(Grid.Row)" Value="0" />
+                        <Setter Target="AlbumArt.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="AlbumArt.(Grid.ColumnSpan)" Value="1" />
+                        <Setter Target="AlbumArt.Margin" Value="36,72,36,36" />
+
+                        <Setter Target="AlbumInfo.(Grid.Column)" Value="1" />
+                        <Setter Target="AlbumInfo.(Grid.Row)" Value="0" />
+                        <Setter Target="AlbumInfo.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="AlbumInfo.(Grid.ColumnSpan)" Value="1" />
+                        <Setter Target="AlbumInfo.Margin" Value="0,72,0,36" />
+                        <Setter Target="AlbumInfo.VerticalAlignment" Value="Center" />
+
+                        <Setter Target="AlbumName.Style" Value="{ThemeResource TitleTextBlockStyle}" />
+                        <Setter Target="AlbumArtist.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="UpNext.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="UpNextTitle.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </RelativePanel>
+</Page>
