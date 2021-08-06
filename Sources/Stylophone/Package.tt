@@ -40,9 +40,9 @@
     Version="<#=version#>" />
 <#
     }
-#>
+  #>
 
-  <mp:PhoneIdentity PhoneProductId="6aab9ef0-77d1-4922-a9da-497e36a34491" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="b9cbe0bc-1e9d-42c8-abf1-85c63af45f83" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
 <# 

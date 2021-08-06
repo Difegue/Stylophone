@@ -28,7 +28,7 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>B531E204B87F721D074590440536659EA5743070</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>CD9FB0C0D8DBD004B52A32ACCA130F5F6D86D3E3</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <PropertyGroup>
@@ -376,18 +376,18 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
-    <None Include="Stylophone_TemporaryKey.pfx" />
-    <Content Include="Package.tt">
-      <SubType>Designer</SubType>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Package.appxmanifest</LastGenOutput>
-    </Content>
     <AppxManifest Include="Package.appxmanifest">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Package.tt</DependentUpon>
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Stylophone_TemporaryKey.pfx" />
+    <Content Include="Package.tt">
+      <SubType>Designer</SubType>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Package.appxmanifest</LastGenOutput>
+    </Content>
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

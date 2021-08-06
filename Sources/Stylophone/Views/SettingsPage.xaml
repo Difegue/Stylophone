@@ -46,17 +46,16 @@
                 Icon="{x:Bind ViewModel.IsServerValid, Converter={StaticResource IconConverter}, Mode=OneWay}">
 
                 <local:SettingsBlockControl.SettingsActionableElement>
-                    <controls:ProgressRing
-                                IsIndeterminate="True"
-                                Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                    <controls:ProgressRing IsIndeterminate="True" Visibility="{x:Bind ViewModel.IsCheckingServer, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
                 </local:SettingsBlockControl.SettingsActionableElement>
-                
+
                 <local:SettingsBlockControl.ExpandableContent>
                     <StackPanel Spacing="-1">
 
                         <local:SettingsBlockControl
                             Title="{x:Bind strings:Resources.SettingsServerHost}"
                             Height="52"
+                            Margin="-1,-1,-1,0"
                             CornerRadius="0">
                             <TextBox
                                 Width="128"
@@ -68,6 +67,7 @@
                         <local:SettingsBlockControl
                             Title="{x:Bind strings:Resources.SettingsServerPort}"
                             Height="52"
+                            Margin="-1,-1,-1,0"
                             CornerRadius="0">
                             <controls:NumberBox
                                 Width="128"
@@ -82,6 +82,7 @@
                         <local:SettingsBlockControl
                             Title="{x:Bind strings:Resources.SettingsServerPassword}"
                             Height="52"
+                            Margin="-1,-1,-1,0"
                             CornerRadius="0">
                             <PasswordBox
                                 Width="128"
@@ -92,6 +93,7 @@
 
                         <local:SettingsBlockControl
                             Title="{x:Bind ViewModel.ServerInfo, Mode=OneWay}"
+                            Margin="-1"
                             CornerRadius="0,0,4,4"
                             Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
 
@@ -113,10 +115,10 @@
                 </local:SettingsBlockControl.Icon>
                 <local:SettingsBlockControl.SettingsActionableElement>
                     <ToggleSwitch
-                            Margin="0,0,-112,0"
-                            IsOn="{x:Bind ViewModel.IsLocalPlaybackEnabled, Mode=TwoWay}"
-                            OffContent=""
-                            OnContent="" />
+                        Margin="0,0,-112,0"
+                        IsOn="{x:Bind ViewModel.IsLocalPlaybackEnabled, Mode=TwoWay}"
+                        OffContent=""
+                        OnContent="" />
                 </local:SettingsBlockControl.SettingsActionableElement>
             </local:SettingsBlockControl>
 
@@ -236,10 +238,10 @@
                 </local:SettingsBlockControl.Icon>
                 <local:SettingsBlockControl.SettingsActionableElement>
                     <ToggleSwitch
-                            Margin="0,0,-112,0"
-                            IsOn="{x:Bind ViewModel.EnableAnalytics, Mode=TwoWay}"
-                            OffContent=""
-                            OnContent="" />
+                        Margin="0,0,-112,0"
+                        IsOn="{x:Bind ViewModel.EnableAnalytics, Mode=TwoWay}"
+                        OffContent=""
+                        OnContent="" />
                 </local:SettingsBlockControl.SettingsActionableElement>
             </local:SettingsBlockControl>
 
