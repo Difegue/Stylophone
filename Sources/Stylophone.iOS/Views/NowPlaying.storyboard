@@ -564,11 +564,11 @@
                         </view>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="nz7-vP-z6u" firstAttribute="top" secondItem="aql-12-Rr5" secondAttribute="top" id="74z-A1-efc">
+                        <constraint firstItem="nz7-vP-z6u" firstAttribute="top" secondItem="aql-12-Rr5" secondAttribute="top" id="74z-A1-efc"/>
+                        <constraint firstAttribute="trailing" secondItem="nz7-vP-z6u" secondAttribute="trailing" id="Abt-C3-kQX"/>
+                        <constraint firstAttribute="bottom" secondItem="nz7-vP-z6u" secondAttribute="bottom" id="cqs-XH-dyE">
                             <variation key="heightClass=compact" constant="64"/>
                         </constraint>
-                        <constraint firstAttribute="trailing" secondItem="nz7-vP-z6u" secondAttribute="trailing" id="Abt-C3-kQX"/>
-                        <constraint firstAttribute="bottom" secondItem="nz7-vP-z6u" secondAttribute="bottom" id="cqs-XH-dyE"/>
                         <constraint firstItem="nz7-vP-z6u" firstAttribute="leading" secondItem="aql-12-Rr5" secondAttribute="leading" id="dEW-ep-Gg6"/>
                     </constraints>
                     <connections>

@@ -82,16 +82,20 @@ namespace Stylophone.iOS
                 _compactViewLeftConstraint.Constant = -8;
                 _compactViewRightConstraint.Constant = 8;
 
-                if (_compactViewBottomConstraint.Constant < 0)
-                    _compactViewBottomConstraint.Constant = 0;
+                if (_compactViewBottomConstraint.Constant < 128)
+                {
+                    if (TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
+                        _compactViewBottomConstraint.Constant = 64;
+                    else
+                        _compactViewBottomConstraint.Constant = 0;
+                } 
             }
             else
             {
                 _compactViewLeftConstraint.Constant = 32;
                 _compactViewRightConstraint.Constant = -32;
 
-
-                if (_compactViewBottomConstraint.Constant == 0)
+                if (_compactViewBottomConstraint.Constant >= 0)
                     _compactViewBottomConstraint.Constant = -16;
             }
         }
