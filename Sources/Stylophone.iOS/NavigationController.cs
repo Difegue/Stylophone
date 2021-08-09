@@ -76,7 +76,8 @@ namespace Stylophone.iOS
             base.ViewDidLayoutSubviews();
 
             // Move elements depending on available screen estate
-            if (View.Frame.Width < 425)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
                 _compactViewLeftConstraint.Constant = -8;
                 _compactViewRightConstraint.Constant = 8;
