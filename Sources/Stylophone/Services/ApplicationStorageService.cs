@@ -64,7 +64,7 @@ namespace Stylophone.Services
             else SettingsStorage[key] = value;
         }
 
-        public T GetValue<T>(string key)
+        public T GetValue<T>(string key, T defaultValue = default)
         {
             if (SettingsStorage.TryGetValue(key, out object value))
             {
@@ -78,7 +78,7 @@ namespace Stylophone.Services
                 }
             }
 
-            return default;
+            return defaultValue;
         }
     }
 }

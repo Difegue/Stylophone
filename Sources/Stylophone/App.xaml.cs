@@ -61,7 +61,7 @@ namespace Stylophone
 
             // Analytics
             SystemInformation.Instance.TrackAppUse(args);
-            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics));
+            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
             if (enableAnalytics)
             {
                 // Initialize AppCenter

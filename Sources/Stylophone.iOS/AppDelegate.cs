@@ -54,7 +54,7 @@ namespace Stylophone.iOS
             var storageService = Ioc.Default.GetRequiredService<IApplicationStorageService>();
 
             var host = storageService.GetValue<string>(nameof(SettingsViewModel.ServerHost));
-            var port = storageService.GetValue<int>(nameof(SettingsViewModel.ServerPort));
+            var port = storageService.GetValue<int>(nameof(SettingsViewModel.ServerPort), 6600);
             var pass = storageService.GetValue<string>(nameof(SettingsViewModel.ServerPassword));
             var localPlaybackEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsLocalPlaybackEnabled));
 
@@ -79,8 +79,14 @@ namespace Stylophone.iOS
                 await Ioc.Default.GetRequiredService<IDialogService>().ShowFirstRunDialogIfAppropriateAsync();
             });
 
+            _ = Task.Run(async () =>
+            {
+                Thread.Sleep(6000);
+                await Ioc.Default.GetRequiredService<IDialogService>().ShowRateAppDialogIfAppropriateAsync();
+            });
+
             // Analytics
-            var enableAnalytics = storageService.GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics));
+            var enableAnalytics = storageService.GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
             if (enableAnalytics)
             {
                 // Initialize AppCenter

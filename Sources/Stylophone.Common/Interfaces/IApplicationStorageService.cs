@@ -14,7 +14,7 @@ namespace Stylophone.Common.Interfaces
         Task DeleteFolderAsync(string folderName);
 
         void SetValue<T>(string key, T value);
-        T GetValue<T>(string key);
+        T GetValue<T>(string key, T defaultValue = default);
 
     }
 }

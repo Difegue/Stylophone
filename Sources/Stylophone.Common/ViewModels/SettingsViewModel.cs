@@ -238,8 +238,8 @@ namespace Stylophone.Common.ViewModels
                 // Initialize values directly to avoid calling CheckServerAddressAsync twice
                 _compactEnabled = _applicationStorageService.GetValue<bool>(nameof(IsCompactSizing));
                 _serverHost = _applicationStorageService.GetValue<string>(nameof(ServerHost));
-                _serverPort = _applicationStorageService.GetValue<int>(nameof(ServerPort));
-                _enableAnalytics = _applicationStorageService.GetValue<bool>(nameof(EnableAnalytics));
+                _serverPort = _applicationStorageService.GetValue<int>(nameof(ServerPort), 6600);
+                _enableAnalytics = _applicationStorageService.GetValue<bool>(nameof(EnableAnalytics), true);
                 _localPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
 
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);
