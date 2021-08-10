@@ -89,7 +89,7 @@ namespace Stylophone.Services
 
             _ = Task.Run(async () =>
             {
-                Thread.Sleep(6000);
+                Thread.Sleep(60000);
                 await Ioc.Default.GetRequiredService<IDialogService>().ShowRateAppDialogIfAppropriateAsync();
             });
 
