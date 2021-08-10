@@ -76,21 +76,26 @@ namespace Stylophone.iOS
             base.ViewDidLayoutSubviews();
 
             // Move elements depending on available screen estate
-            if (View.Frame.Width < 425)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
                 _compactViewLeftConstraint.Constant = -8;
                 _compactViewRightConstraint.Constant = 8;
 
-                if (_compactViewBottomConstraint.Constant < 0)
-                    _compactViewBottomConstraint.Constant = 0;
+                if (_compactViewBottomConstraint.Constant < 128)
+                {
+                    if (TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
+                        _compactViewBottomConstraint.Constant = 64;
+                    else
+                        _compactViewBottomConstraint.Constant = 0;
+                } 
             }
             else
             {
                 _compactViewLeftConstraint.Constant = 32;
                 _compactViewRightConstraint.Constant = -32;
 
-
-                if (_compactViewBottomConstraint.Constant == 0)
+                if (_compactViewBottomConstraint.Constant >= 0)
                     _compactViewBottomConstraint.Constant = -16;
             }
         }
