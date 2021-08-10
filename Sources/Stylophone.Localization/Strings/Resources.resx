@@ -314,7 +314,10 @@ If you want to clear the album art cache, click this button.</value>
   </data>
   <data name="FirstRunText" xml:space="preserve">
     <value>To get started, please visit the Settings page to key in your MPD server's URL and port.
-Hope you enjoy using the application!</value>
+Keep in mind Stylophone can send usage data to help diagnose bugs. 
+If you're not okay with this, you can disable telemetry in the Settings.
+Hope you enjoy using the application!  
+</value>
     <comment>First use prompt message body</comment>
   </data>
   <data name="FirstRunTitle" xml:space="preserve">
@@ -478,5 +481,8 @@ Enabling this option will show a second volume slider to control local volume.</
   </data>
   <data name="RandomTracksInProgress" xml:space="preserve">
     <value>Shuffling through your library...</value>
+  </data>
+  <data name="FirstRunFlavorText" xml:space="preserve">
+    <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
   </data>
 </root>

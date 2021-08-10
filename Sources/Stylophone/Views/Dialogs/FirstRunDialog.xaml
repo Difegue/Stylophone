@@ -8,30 +8,28 @@
     x:Uid="FirstRunDialog"
     d:DesignHeight="345"
     d:DesignWidth="550"
-    DefaultButton="Close"
     CloseButtonText="{x:Bind strings:Resources.OKButtonText}"
+    DefaultButton="Close"
     Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
-    <ContentDialog.TitleTemplate>
-        <DataTemplate x:DataType="x:String">
-            <StackPanel Orientation="Horizontal">
-                <Image
-                    Width="40"
-                    Height="40"
-                    Source="ms-appx:///Assets/StoreLogo.png" />
-                <TextBlock
-                    Margin="{StaticResource SmallLeftMargin}"
-                    VerticalAlignment="Center"
-                    Text="{x:Bind strings:Resources.FirstRunTitle, Mode=OneTime}" />
-            </StackPanel>
-        </DataTemplate>
-    </ContentDialog.TitleTemplate>
+    <ContentDialog.Title>
+        <StackPanel Orientation="Horizontal">
+            <Image
+                Width="40"
+                Height="40"
+                Source="ms-appx:///Assets/StoreLogo.png" />
+            <TextBlock
+                Margin="{StaticResource SmallLeftMargin}"
+                VerticalAlignment="Center"
+                Text="{x:Bind strings:Resources.FirstRunTitle}" />
+        </StackPanel>
+    </ContentDialog.Title>
     <ScrollViewer>
         <StackPanel>
-            <TextBlock Text="{x:Bind strings:Resources.FirstRunTitle}" TextWrapping="WrapWholeWords" />
+            <TextBlock Text="{x:Bind strings:Resources.FirstRunText}" TextWrapping="WrapWholeWords" />
             <TextBlock
                 FontStyle="Italic"
-                Text="{x:Bind strings:Resources.FirstRunText}"
+                Text="{x:Bind strings:Resources.FirstRunFlavorText}"
                 TextWrapping="WrapWholeWords" />
         </StackPanel>
     </ScrollViewer>

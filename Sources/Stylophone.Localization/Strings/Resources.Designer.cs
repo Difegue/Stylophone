@@ -19,7 +19,7 @@ namespace Stylophone.Localization.Strings {
     // à l'aide d'un outil, tel que ResGen ou Visual Studio.
     // Pour ajouter ou supprimer un membre, modifiez votre fichier .ResX, puis réexécutez ResGen
     // avec l'option /str ou régénérez votre projet VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -493,8 +493,20 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à David Bowie is credited with playing the Stylophone on his 1969 debut hit song &quot;Space Oddity&quot; and also for his 2002 album Heathen track titled &quot;Slip Away,&quot; as well as on the song &quot;Heathen (The Rays)&quot;..
+        /// </summary>
+        public static string FirstRunFlavorText {
+            get {
+                return ResourceManager.GetString("FirstRunFlavorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à To get started, please visit the Settings page to key in your MPD server&apos;s URL and port.
-        ///Hope you enjoy using the application!.
+        ///Keep in mind Stylophone can send usage data to help diagnose bugs. 
+        ///If you&apos;re not okay with this, you can disable telemetry in the Settings.
+        ///Hope you enjoy using the application!  
+        ///.
         /// </summary>
         public static string FirstRunText {
             get {
@@ -719,7 +731,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Add Random Tracks.
+        ///   Recherche une chaîne localisée semblable à Pick some Songs.
         /// </summary>
         public static string RandomTracksHeader {
             get {

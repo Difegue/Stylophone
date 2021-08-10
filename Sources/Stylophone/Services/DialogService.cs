@@ -10,6 +10,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Strings = Stylophone.Localization.Strings.Resources;
 using Windows.Services.Store;
+using Windows.UI.Xaml.Media;
+using System.Linq;
 
 namespace Stylophone.Services
 {
@@ -110,6 +112,10 @@ namespace Stylophone.Services
 
         public async Task<bool> ShowConfirmDialogAsync(string title, string text, string primaryButtonText = null, string cancelButtonText = null)
         {
+            // If a ContentDialog is already open, stop here and return false
+            if (VisualTreeHelper.GetOpenPopups(Window.Current).Where(p => p.Child is ContentDialog).Any())
+                return false;
+
             ContentDialog confirmDialog = new ContentDialog
             {
                 Title = title,
