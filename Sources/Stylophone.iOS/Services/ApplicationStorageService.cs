@@ -78,9 +78,13 @@ namespace Stylophone.iOS.Services
             }
         }
 
-        public T GetValue<T>(string key)
+        public T GetValue<T>(string key, T defaultValue = default)
         {
             var userDefaults = NSUserDefaults.StandardUserDefaults;
+
+            // Return default if the key isn't present in userdefaults
+            if (!userDefaults.ToDictionary().ContainsKey(new NSString(key)))
+                return defaultValue;
 
             switch (typeof(T))
             {
@@ -93,7 +97,7 @@ namespace Stylophone.iOS.Services
                 case Type t when t == typeof(string):
                     return (T)(object)userDefaults.StringForKey(key);
                 default:
-                    return default; //other types not supported
+                    return defaultValue; //other types not supported
             }
         }
     }

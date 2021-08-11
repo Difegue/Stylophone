@@ -13,6 +13,7 @@ using Stylophone.iOS.ViewModels;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using System.Threading;
 
 namespace Stylophone.iOS
 {
@@ -81,7 +82,7 @@ namespace Stylophone.iOS
 
             _ = Task.Run(async () =>
             {
-                Thread.Sleep(6000);
+                Thread.Sleep(60000);
                 await Ioc.Default.GetRequiredService<IDialogService>().ShowRateAppDialogIfAppropriateAsync();
             });
 
