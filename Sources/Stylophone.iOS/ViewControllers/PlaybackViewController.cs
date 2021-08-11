@@ -26,6 +26,8 @@ namespace Stylophone.iOS.ViewControllers
         public PropertyBinder<LocalPlaybackViewModel> LocalPlaybackBinder { get; private set; }
         private PropertyBinder<TrackViewModel> _trackBinder;
 
+        private UILabel upNextView = new UILabel();
+
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
@@ -37,6 +39,12 @@ namespace Stylophone.iOS.ViewControllers
             LocalPlaybackBinder = new(ViewModel.LocalPlayback);
 
             ViewModel.PropertyChanged += OnVmPropertyChanged;
+            NavigationItem.TitleView = upNextView;
+            upNextView.TextAlignment = UITextAlignment.Right;
+            upNextView.Lines = 2;
+            upNextView.AdjustsFontForContentSizeCategory = true;
+            upNextView.AdjustsFontSizeToFitWidth = true;
+            upNextView.AdjustsLetterSpacingToFitWidth = true;
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
             // Bind
@@ -92,11 +100,14 @@ namespace Stylophone.iOS.ViewControllers
                 ViewModel.OnPlayingSliderChange();
             };
 
+            var upNextTransformer = NSValueTransformer.GetValueTransformer(nameof(NextTrackToStringValueTransformer));
+
             // Full View Binding
             Binder.Bind<string>(ElapsedTime, "text", nameof(ViewModel.TimeListened));
             Binder.Bind<string>(RemainingTime, "text", nameof(ViewModel.TimeRemaining));
             Binder.Bind<double>(TrackSlider, "value", nameof(ViewModel.CurrentTimeValue), true);
             Binder.Bind<double>(TrackSlider, "maximumValue", nameof(ViewModel.MaxTimeValue));
+            Binder.Bind<TrackViewModel>(upNextView, "text", nameof(ViewModel.NextTrack), valueTransformer:upNextTransformer);
             UpdateFullView(ViewModel.CurrentTrack);
 
             UpdateButton(PlayPauseButton, ViewModel.PlayButtonContent);

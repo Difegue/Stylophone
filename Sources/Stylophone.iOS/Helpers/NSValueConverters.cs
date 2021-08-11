@@ -4,6 +4,7 @@ using Foundation;
 using ObjCRuntime;
 using SkiaSharp;
 using SkiaSharp.Views.iOS;
+using Stylophone.Common.ViewModels;
 using UIKit;
 
 namespace Stylophone.iOS.Helpers
@@ -115,5 +116,35 @@ namespace Stylophone.iOS.Helpers
         }
 
         public override NSObject ReverseTransformedValue(NSObject value) => TransformedValue(value);
+    }
+
+    [Register(nameof(NextTrackToStringValueTransformer))]
+    public class NextTrackToStringValueTransformer : NSValueTransformer
+    {
+        public static new Class TransformedValueClass => new NSString().Class;
+        public static new bool AllowsReverseTransformation => false;
+
+        public override NSObject TransformedValue(NSObject value)
+        {
+            var text = "";
+
+            if (value is NSWrapper wrap)
+            {
+                var trackVm = (TrackViewModel)wrap.ManagedObject;
+                text = Localization.Strings.Resources.PlaybackUpNext + " " + trackVm.Name;
+            }
+                
+            return new NSString(text);
+        }
+
+        public override NSObject ReverseTransformedValue(NSObject value)
+        {
+            int result = 0;
+
+            if (value is NSString s)
+                int.TryParse(s, out result);
+
+            return NSNumber.FromInt32(result);
+        }
     }
 }
