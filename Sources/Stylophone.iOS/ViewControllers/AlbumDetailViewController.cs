@@ -30,6 +30,7 @@ namespace Stylophone.iOS.ViewControllers
 		public override void AwakeFromNib()
 		{
 			base.AwakeFromNib();
+			TraitCollectionDidChange(null);
 			NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
 			
 			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions, true, OnScroll);
@@ -55,7 +56,25 @@ namespace Stylophone.iOS.ViewControllers
 			}
 		}
 
-        void IPreparableViewController.Prepare(object parameter)
+        public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
+        {
+            base.TraitCollectionDidChange(previousTraitCollection);
+
+			var headerView = TableView.TableHeaderView;
+			CGRect newFrame = headerView.Frame;
+			if (TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
+			{
+				newFrame.Height = 242;
+			}
+			else
+			{
+				newFrame.Height = 296;
+			}
+			headerView.Frame = newFrame;
+			TableView.TableHeaderView = headerView;
+		}
+
+		void IPreparableViewController.Prepare(object parameter)
         {
 			TableView.ScrollRectToVisible(new CGRect(0, 0, 1, 1), false);
 
