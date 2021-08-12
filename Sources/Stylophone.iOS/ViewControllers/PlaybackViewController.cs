@@ -213,7 +213,7 @@ namespace Stylophone.iOS.ViewControllers
                 SourceView = sourceButton.ImageView,
                 SourceRect = new CoreGraphics.CGRect(sourceBounds.Width/2, -4, 0, 0),
                 ContentSize = ViewModel.LocalPlayback.IsEnabled ?
-                    new CoreGraphics.CGSize(276, 196) : new CoreGraphics.CGSize(276, 96),
+                    new CoreGraphics.CGSize(276, 176) : new CoreGraphics.CGSize(276, 96),
                 ArrowDirection = UIPopoverArrowDirection.Down
             };
 

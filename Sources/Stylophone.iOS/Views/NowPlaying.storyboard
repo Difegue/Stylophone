@@ -226,8 +226,8 @@
                                     </variation>
                                     <variation key="heightClass=compact-widthClass=regular">
                                         <mask key="constraints">
-                                            <exclude reference="nH0-l2-Fh0"/>
                                             <exclude reference="4Hv-UF-APy"/>
+                                            <exclude reference="nH0-l2-Fh0"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
@@ -484,6 +484,7 @@
                                                 <exclude reference="6Tf-TA-5Xd"/>
                                                 <exclude reference="KsV-xZ-o8u"/>
                                                 <exclude reference="rqc-LJ-ZHm"/>
+                                                <exclude reference="Y2k-vB-tj7"/>
                                                 <exclude reference="ATW-CF-cR9"/>
                                                 <exclude reference="W4p-ZJ-1br"/>
                                                 <exclude reference="hRv-nI-0sI"/>
@@ -492,7 +493,6 @@
                                                 <exclude reference="gvi-Zs-cTV"/>
                                                 <exclude reference="h6q-Om-RsB"/>
                                                 <exclude reference="lBY-15-sxl"/>
-                                                <exclude reference="Y2k-vB-tj7"/>
                                                 <exclude reference="qdx-KM-zw2"/>
                                             </mask>
                                         </variation>
@@ -524,9 +524,9 @@
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
+                                                <include reference="Y2k-vB-tj7"/>
                                                 <include reference="sON-QN-IKN"/>
                                                 <exclude reference="h6q-Om-RsB"/>
-                                                <include reference="Y2k-vB-tj7"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
@@ -588,7 +588,7 @@
                     </connections>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" id="a6h-ap-Qy1" userLabel="VolumePopover">
-                    <rect key="frame" x="0.0" y="0.0" width="274" height="196"/>
+                    <rect key="frame" x="0.0" y="0.0" width="274" height="176"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lt6-kk-uri" userLabel="Spacer">
@@ -613,10 +613,10 @@
                                     <rect key="frame" x="58" y="32.5" width="165.5" height="31"/>
                                 </slider>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rMl-UN-AUS" userLabel="Volume Button">
-                                    <rect key="frame" x="16" y="28.5" width="36" height="36"/>
+                                    <rect key="frame" x="16" y="30.5" width="36" height="35"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="36" id="5f9-8y-dAU"/>
-                                        <constraint firstAttribute="height" constant="36" id="cvI-GY-bFd"/>
+                                        <constraint firstAttribute="height" constant="35" id="cvI-GY-bFd"/>
                                     </constraints>
                                     <state key="normal">
                                         <imageReference key="image" image="speaker.wave.2.circle" catalog="system" symbolScale="large"/>
@@ -638,7 +638,7 @@
                                 <constraint firstItem="CgX-65-pwE" firstAttribute="leading" secondItem="1CT-TO-KvY" secondAttribute="leading" constant="16" id="DAh-2G-m7F"/>
                                 <constraint firstItem="rMl-UN-AUS" firstAttribute="leading" secondItem="1CT-TO-KvY" secondAttribute="leading" constant="16" id="EFw-qc-clJ"/>
                                 <constraint firstItem="wCV-2J-UVG" firstAttribute="leading" secondItem="fh6-q8-ULU" secondAttribute="trailing" constant="8" id="Gmt-M5-Xas"/>
-                                <constraint firstItem="rMl-UN-AUS" firstAttribute="top" secondItem="CgX-65-pwE" secondAttribute="bottom" constant="8" id="NSW-tN-Fcv"/>
+                                <constraint firstItem="rMl-UN-AUS" firstAttribute="top" secondItem="CgX-65-pwE" secondAttribute="bottom" constant="10" id="NSW-tN-Fcv"/>
                                 <constraint firstItem="CgX-65-pwE" firstAttribute="top" secondItem="1CT-TO-KvY" secondAttribute="top" id="Q3a-Hf-GOc"/>
                                 <constraint firstAttribute="trailing" secondItem="wCV-2J-UVG" secondAttribute="trailing" constant="16" id="TrJ-8I-JPN"/>
                                 <constraint firstAttribute="height" constant="72" id="elc-gj-xed"/>
@@ -646,7 +646,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tAZ-SV-Q6b" userLabel="LocalPlaybackSlider">
-                            <rect key="frame" x="0.0" y="88" width="274" height="108"/>
+                            <rect key="frame" x="0.0" y="88" width="274" height="88"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LocalVolumeHeader" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="np4-co-XXk" customClass="LocalizedLabel">
                                     <rect key="frame" x="16" y="0.0" width="160" height="20.5"/>
@@ -661,9 +661,9 @@
                                     <rect key="frame" x="58" y="32.5" width="165.5" height="31"/>
                                 </slider>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bsw-mW-3ej" userLabel="Volume Button">
-                                    <rect key="frame" x="16" y="28.5" width="36" height="36"/>
+                                    <rect key="frame" x="16" y="30.5" width="36" height="35"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="36" id="h8S-P5-Nge"/>
+                                        <constraint firstAttribute="height" constant="35" id="h8S-P5-Nge"/>
                                         <constraint firstAttribute="width" constant="36" id="mUH-le-CTt"/>
                                     </constraints>
                                     <state key="normal">
@@ -681,7 +681,7 @@
                                 </label>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="Bsw-mW-3ej" firstAttribute="top" secondItem="np4-co-XXk" secondAttribute="bottom" constant="8" id="8O8-iK-eYX"/>
+                                <constraint firstItem="Bsw-mW-3ej" firstAttribute="top" secondItem="np4-co-XXk" secondAttribute="bottom" constant="10" id="8O8-iK-eYX"/>
                                 <constraint firstItem="np4-co-XXk" firstAttribute="top" secondItem="tAZ-SV-Q6b" secondAttribute="top" id="9Em-4p-N0s"/>
                                 <constraint firstAttribute="trailing" secondItem="xll-M7-TCe" secondAttribute="trailing" constant="16" id="Nax-EA-s3F"/>
                                 <constraint firstItem="xll-M7-TCe" firstAttribute="top" secondItem="tAZ-SV-Q6b" secondAttribute="top" constant="38" id="SfQ-da-hbq"/>
