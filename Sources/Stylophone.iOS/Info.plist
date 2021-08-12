@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>Stylophone.iOS</string>
+	<string>Stylophone</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.tvc-16.Stylophone</string>
 	<key>CFBundleShortVersionString</key>
