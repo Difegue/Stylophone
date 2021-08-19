@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.ApplicationModel.Core;
+using Windows.System;
 
 namespace Stylophone.Views
 {
@@ -134,5 +135,6 @@ namespace Stylophone.Views
                 box.IsSuggestionListOpen = true;
         }
 
+        private void GlobalPlayPauseShortcut(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e) => ViewModel?.PauseOrPlay(e);
     }
 }

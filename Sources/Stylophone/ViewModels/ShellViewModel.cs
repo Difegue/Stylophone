@@ -23,7 +23,6 @@ namespace Stylophone.ViewModels
         private IList<KeyboardAccelerator> _keyboardAccelerators;
         private KeyboardAccelerator _altLeftKeyboardAccelerator;
         private KeyboardAccelerator _backKeyboardAccelerator;
-        private KeyboardAccelerator _spaceKeyboardAccelerator;
         
         private WinUI.NavigationView _navigationView;
         private WinUI.NavigationViewItem _playlistContainer;
@@ -51,7 +50,18 @@ namespace Stylophone.ViewModels
 
             _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, GoBack, VirtualKeyModifiers.Menu);
             _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack, GoBack);
-            _spaceKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Space, PauseOrPlay);
+        }
+
+        public async void PauseOrPlay(KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Space)
+            {
+                // Don't swallow the key if the user is in a textbox
+                if (FocusManager.GetFocusedElement() is TextBox || FocusManager.GetFocusedElement() is PasswordBox) return;
+
+                e.Handled = true;
+                await _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+            }
         }
 
         private void UpdateNavigationViewSelection(object sender, CoreNavigationEventArgs e)
@@ -108,7 +118,6 @@ namespace Stylophone.ViewModels
             // More info on tracking issue https://github.com/Microsoft/microsoft-ui-xaml/issues/8
             _keyboardAccelerators.Add(_altLeftKeyboardAccelerator);
             _keyboardAccelerators.Add(_backKeyboardAccelerator);
-            _keyboardAccelerators.Add(_spaceKeyboardAccelerator);
         }
 
         protected override void OnItemInvoked(object args)
@@ -179,15 +188,6 @@ namespace Stylophone.ViewModels
         {
             var result = _navigationService.GoBack();
             args.Handled = result;
-        }
-
-        private async void PauseOrPlay(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
-        {
-            if (!_navigationView.AutoSuggestBox.IsSuggestionListOpen)
-            {
-                await _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
-                args.Handled = true;
-            }
         }
     }
 }

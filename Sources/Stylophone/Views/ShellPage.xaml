@@ -16,6 +16,7 @@
     xmlns:viewmodels="using:Stylophone.ViewModels"
     xmlns:views="using:Stylophone.Views"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
+    PreviewKeyDown="GlobalPlayPauseShortcut"
     mc:Ignorable="d">
 
     <Page.Resources>
