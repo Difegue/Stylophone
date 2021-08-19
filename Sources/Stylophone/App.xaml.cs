@@ -14,6 +14,7 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
+using Windows.Foundation;
 
 namespace Stylophone
 {
@@ -50,6 +51,7 @@ namespace Stylophone
 
             // https://docs.microsoft.com/en-us/windows/uwp/design/devices/designing-for-tv#custom-visual-state-trigger-for-xbox
             ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500,500));
 
             // Compact sizing
             var isCompactEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsCompactSizing));

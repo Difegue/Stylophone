@@ -34,10 +34,6 @@ namespace Stylophone.Services
         {
             if (IsInteractive(activationArgs))
             {
-                // Initialize services that you need before app activation
-                // take into account that the splash screen is shown while this code runs.
-                await InitializeAsync();
-
                 // Do not repeat app initialization when the Window already has content,
                 // just ensure that the window is active
                 if (Window.Current.Content == null)
@@ -60,11 +56,6 @@ namespace Stylophone.Services
                 // Tasks after activation
                 await StartupAsync();
             }
-        }
-
-        private async Task InitializeAsync()
-        {
-            
         }
 
         private async Task HandleActivationAsync(object activationArgs)
@@ -94,6 +85,7 @@ namespace Stylophone.Services
             });
 
             var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
+            host = host.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
             var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort), 6600);
             var pass = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerPassword));
             var localPlaybackEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsLocalPlaybackEnabled));
