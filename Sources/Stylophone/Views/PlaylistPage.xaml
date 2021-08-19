@@ -143,7 +143,7 @@
                     MaxLines="1"
                     RelativePanel.AlignTopWithPanel="True"
                     RelativePanel.RightOf="itemHero"
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Text="{x:Bind ViewModel.Name, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
                     ToolTipService.ToolTip="{x:Bind ViewModel.Name, Mode=OneWay}" />
@@ -154,7 +154,7 @@
                     MaxLines="2"
                     RelativePanel.Below="title"
                     RelativePanel.RightOf="itemHero"
-                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Style="{StaticResource BaseTextBlockStyle}"
                     Text="{x:Bind ViewModel.Artists, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
                     ToolTipService.ToolTip="{x:Bind ViewModel.Artists, Mode=OneWay}" />
@@ -172,6 +172,7 @@
 
                 <controls:WrapPanel
                     x:Name="propertiesGroup1"
+                    Margin="212,0,0,0"
                     HorizontalSpacing="8"
                     Orientation="Horizontal"
                     RelativePanel.AlignBottomWithPanel="True"
@@ -307,6 +308,14 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="524" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="propertiesGroup1.Margin" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
                         <!--  641 is the default CompactModeThresholdWidth in NavigationView  -->
                         <AdaptiveTrigger MinWindowWidth="641" />
                     </VisualState.StateTriggers>
@@ -320,6 +329,9 @@
                         <Setter Target="itemHero2.OffsetY" Value="3" />
                         <Setter Target="itemHero3.OffsetX" Value="0" />
                         <Setter Target="itemHero3.OffsetY" Value="4" />
+                        <Setter Target="propertiesGroup1.Margin" Value="0" />
+                        <Setter Target="title.Style" Value="{StaticResource TitleTextBlockStyle}" />
+                        <Setter Target="artist.Style" Value="{StaticResource SubtitleTextBlockStyle}" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

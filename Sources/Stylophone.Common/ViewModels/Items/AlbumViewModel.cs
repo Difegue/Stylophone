@@ -245,7 +245,7 @@ namespace Stylophone.Common.ViewModels
                 if (Files.Count == 0)
                     Files.AddRange(findReq.Response.Content);
 
-                Artist = Files.Select(f => f.Artist).Distinct().Aggregate((f1, f2) => $"{f1}, {f2}");
+                Artist = Files.Select(f => f.Artist).Distinct().Where(f => f != "").Aggregate((f1, f2) => $"{f1}, {f2}");
 
                 // If we've already generated album art, don't use the queue and directly grab it
                 if (await _albumArtService.IsAlbumArtCachedAsync(Files[0]))

@@ -94,7 +94,7 @@
                     MaxLines="2"
                     RelativePanel.AlignTopWithPanel="True"
                     RelativePanel.RightOf="itemHero"
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Text="{x:Bind ViewModel.Item.Name, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
                     ToolTipService.ToolTip="{x:Bind ViewModel.Item.Name, Mode=OneWay}" />
@@ -104,7 +104,7 @@
                     MaxLines="1"
                     RelativePanel.Below="title"
                     RelativePanel.RightOf="itemHero"
-                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Style="{StaticResource BaseTextBlockStyle}"
                     Text="{x:Bind ViewModel.Item.Artist, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
                     ToolTipService.ToolTip="{x:Bind ViewModel.Item.Artist, Mode=OneWay}" />
@@ -122,10 +122,12 @@
 
                 <controls:WrapPanel
                     x:Name="propertiesGroup1"
+                    Margin="172,0,0,0"
                     HorizontalSpacing="8"
                     Orientation="Horizontal"
                     RelativePanel.AlignBottomWithPanel="True"
                     VerticalSpacing="8">
+
 
                     <Button
                         BorderThickness="0"
@@ -228,6 +230,14 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="524" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="propertiesGroup1.Margin" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
                         <!--  641 is the default CompactModeThresholdWidth in NavigationView  -->
                         <AdaptiveTrigger MinWindowWidth="641" />
                     </VisualState.StateTriggers>
@@ -238,6 +248,9 @@
                         <Setter Target="itemHero.Height" Value="196" />
                         <Setter Target="albumImage.Width" Value="196" />
                         <Setter Target="albumImage.Height" Value="196" />
+                        <Setter Target="propertiesGroup1.Margin" Value="0" />
+                        <Setter Target="title.Style" Value="{StaticResource TitleTextBlockStyle}" />
+                        <Setter Target="artist.Style" Value="{StaticResource SubtitleTextBlockStyle}" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
