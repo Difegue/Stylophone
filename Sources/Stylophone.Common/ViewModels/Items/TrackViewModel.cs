@@ -78,7 +78,7 @@ namespace Stylophone.Common.ViewModels
 
         public string Name => File.HasTitle ? File.Title : File.Path.Split('/').Last();
 
-        public bool IsPlaying => _mpdService.CurrentStatus.SongId == File.Id;
+        public bool IsPlaying => _mpdService.CurrentStatus.SongId != -1 && _mpdService.CurrentStatus.SongId == File.Id;
 
         public void UpdatePlayingStatus() => _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
 
