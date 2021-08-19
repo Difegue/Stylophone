@@ -301,21 +301,27 @@ namespace Stylophone.Common.ViewModels
                 }
 
                 // Build info string
-                ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
-                             $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
-                             $"Database last updated {lastUpdatedDb}";
-
                 var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
 
                 if (outputs != null)
                 {
                     var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
-                    ServerInfo += $"\nOutputs available: {outputString}";
+
+                    ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
+                             $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
+                             $"Database last updated {lastUpdatedDb}\n" +
+                             $"Outputs available: {outputString}";
 
                     IsStreamingAvailable = outputs.Select(o => o.Plugin).Contains("httpd");
 
                     if (!IsStreamingAvailable)
                         IsLocalPlaybackEnabled = false;
+                } 
+                else
+                {
+                    ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
+                             $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
+                             $"Database last updated {lastUpdatedDb}";
                 }
 
                 await _dispatcherService.ExecuteOnUIThreadAsync(() => { OnPropertyChanged(nameof(IsServerValid)); OnPropertyChanged(nameof(ServerStatus)); });

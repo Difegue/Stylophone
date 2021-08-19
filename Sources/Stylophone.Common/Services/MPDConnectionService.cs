@@ -60,6 +60,7 @@ namespace Stylophone.Common.Services
 
         public void SetServerInfo(string host, int port, string pass)
         {
+            _cancelConnect?.Cancel();
             _host = host;
             _port = port;
             _pass = pass;
@@ -77,15 +78,17 @@ namespace Stylophone.Common.Services
 
             ClearResources();
 
+            var cancelToken = _cancelConnect.Token;
+
             try
             {
-                await TryConnecting(_cancelConnect.Token);
+                await TryConnecting(cancelToken);
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine($"Error while connecting: {e.Message}");
 
-                if (withRetry && !_cancelConnect.IsCancellationRequested)
+                if (withRetry && !cancelToken.IsCancellationRequested)
                 {
                     // The RetryAttempter will call TryConnect() in five seconds.
                     _connectionRetryAttempter = new System.Timers.Timer(5000);

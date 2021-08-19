@@ -274,7 +274,8 @@ namespace Stylophone.Common.ViewModels
             await _dispatcherService.ExecuteOnUIThreadAsync(() =>
             {
                 Source.Clear();
-                Source.AddRange(tracks);
+                if (tracks.Count > 0)
+                    Source.AddRange(tracks);
             });
 
             // Set our internal playlist version
