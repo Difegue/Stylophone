@@ -238,7 +238,7 @@ namespace Stylophone.Common.ViewModels
                 // Initialize values directly to avoid calling CheckServerAddressAsync twice
                 _compactEnabled = _applicationStorageService.GetValue<bool>(nameof(IsCompactSizing));
                 _serverHost = _applicationStorageService.GetValue<string>(nameof(ServerHost));
-                _serverHost = _serverHost.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
+                _serverHost = _serverHost?.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
 
                 _serverPort = _applicationStorageService.GetValue<int>(nameof(ServerPort), 6600);
                 _enableAnalytics = _applicationStorageService.GetValue<bool>(nameof(EnableAnalytics), true);

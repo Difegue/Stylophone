@@ -85,7 +85,7 @@ namespace Stylophone.Services
             });
 
             var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
-            host = host.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
+            host = host?.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
             var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort), 6600);
             var pass = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerPassword));
             var localPlaybackEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsLocalPlaybackEnabled));
