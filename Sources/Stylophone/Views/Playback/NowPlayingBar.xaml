@@ -1,0 +1,650 @@
+﻿<UserControl
+    x:Class="Stylophone.Views.NowPlayingBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:WindowsStateTriggers="using:WindowsStateTriggers"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters="using:Stylophone.Helpers"
+    xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:strings="using:Stylophone.Localization.Strings"
+    d:DesignHeight="96"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+
+        <converters1:BoolToObjectConverter
+            x:Key="BoolToBrushConverter"
+            FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
+            TrueValue="{ThemeResource AccentFillColorDisabledBrush}" />
+
+        <converters1:BoolToObjectConverter
+            x:Key="BoolToBrushBorderConverter"
+            FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
+            TrueValue="{ThemeResource AccentFillColorDefaultBrush}" />
+
+    </UserControl.Resources>
+
+    <!--  Content  -->
+    <Grid
+        x:Name="RootGrid"
+        Height="96"
+        Margin="8"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="8">
+        <!--  Split the content into two main sections  -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Track Background  -->
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Canvas.ZIndex="6"
+            CornerRadius="8">
+            <Border.Background>
+                <ImageBrush ImageSource="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+            </Border.Background>
+        </Border>
+
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Canvas.ZIndex="6"
+            CornerRadius="8">
+            <Border.Background>
+                <AcrylicBrush
+                    BackgroundSource="Backdrop"
+                    FallbackColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                    TintColor="{x:Bind PlaybackViewModel.CurrentTrack.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                    TintOpacity="0.8" />
+            </Border.Background>
+        </Border>
+
+        <!--  On Dark theme, add a black overlay to light album colors - Opacity is 0.3 for normal colors and 0.5 for light colors  -->
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="{ThemeResource BlackOnDarkThemeOnly}"
+            Canvas.ZIndex="6"
+            CornerRadius="8"
+            Opacity="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource DarkBoolToOpacityConverter}}"
+            Visibility="Visible" />
+
+        <!--  And on Light theme, add a white overlay to dark album colors! Opacity is 0.3 for dark colors and 0.1 for light.  -->
+        <Border
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="{ThemeResource WhiteOnLightThemeOnly}"
+            Canvas.ZIndex="6"
+            CornerRadius="8"
+            Opacity="{x:Bind PlaybackViewModel.CurrentTrack.IsLight, Mode=OneWay, Converter={StaticResource LightBoolToOpacityConverter}}"
+            Visibility="Visible" />
+
+        <Button
+            x:Name="AlbumView"
+            Grid.Column="0"
+            Width="160"
+            Height="80"
+            Margin="4,0"
+            Padding="0,0,4,0"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            Background="Transparent"
+            BorderThickness="0"
+            Canvas.ZIndex="10"
+            Click="{x:Bind PlaybackViewModel.NavigateNowPlaying}"
+            CornerRadius="4"
+            IsEnabled="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay}"
+            Visibility="{x:Bind PlaybackViewModel.ShowTrackName, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid>
+
+                <!--  Track Image and Navigate to now playing  -->
+                <controls:DropShadowPanel
+                    x:Name="AlbumArt"
+                    Margin="6,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    BlurRadius="10"
+                    OffsetY="2"
+                    ShadowOpacity="0.6"
+                    Visibility="Collapsed"
+                    Color="Black">
+
+                    <Grid
+                        Width="68"
+                        Height="68"
+                        CornerRadius="4">
+                        <Image Stretch="UniformToFill">
+                            <Image.Source>
+                                <BitmapImage DecodePixelWidth="68" UriSource="ms-appx:///Assets/AlbumPlaceholder.png" />
+                            </Image.Source>
+                        </Image>
+                        <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=98}" Stretch="UniformToFill" />
+                    </Grid>
+
+
+                </controls:DropShadowPanel>
+
+                <!--  Track title and user  -->
+                <StackPanel
+                    x:Name="TrackTitle"
+                    Margin="12,0,0,2"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        MaxHeight="50"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="Wrap" />
+
+                    <TextBlock
+                        Margin="0,2,0,0"
+                        FontSize="12"
+                        Opacity="0.8"
+                        Text="{x:Bind PlaybackViewModel.CurrentTrack.File.Artist, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
+                </StackPanel>
+            </Grid>
+        </Button>
+
+        <!--  Hold the rest of the content  -->
+        <Grid
+            x:Name="MainContent"
+            Grid.Column="1"
+            Canvas.ZIndex="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Buttons  -->
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="{StaticResource XXSmallTopMargin}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <!--  Shuffle  -->
+                <Grid
+                    x:Name="ShuffleButton"
+                    Width="43"
+                    Height="43"
+                    Margin="{StaticResource XXSmallLeftMargin}"
+                    Padding="-2"
+                    BorderBrush="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushBorderConverter}, Mode=OneWay}"
+                    BorderThickness="2"
+                    CornerRadius="4"
+                    Visibility="Collapsed">
+                    <Button
+                        Width="43"
+                        Height="43"
+                        Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
+                        FontSize="18"
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}">
+                        <Button.Content>
+                            &#xE8B1;
+                        </Button.Content>
+                    </Button>
+                </Grid>
+
+
+                <!--  Back  -->
+                <Button
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XXSmallLeftMargin}"
+                    Click="{x:Bind PlaybackViewModel.SkipPrevious}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipPrevious}">
+                    <Button.Content>
+                        &#xF8AC;
+                    </Button.Content>
+                </Button>
+
+                <!--  Play / Pause  -->
+                <Button
+                    Width="52"
+                    Height="52"
+                    Margin="{StaticResource XXSmallLeftMargin}"
+                    Click="{x:Bind PlaybackViewModel.ChangePlaybackState}"
+                    Content="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
+                    FontSize="28"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}" />
+
+                <!--  Next  -->
+                <Button
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XXSmallLeftMargin}"
+                    Click="{x:Bind PlaybackViewModel.SkipNext}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipNext}">
+                    <Button.Content>
+                        &#xF8AD;
+                    </Button.Content>
+                </Button>
+
+                <!--  Repeat  -->
+                <Grid
+                    x:Name="RepeatButton"
+                    Width="43"
+                    Height="43"
+                    Margin="{StaticResource XXSmallLeftMargin}"
+                    Padding="-2"
+                    BorderBrush="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushBorderConverter}, Mode=OneWay}"
+                    BorderThickness="2"
+                    CornerRadius="4"
+                    Visibility="Collapsed">
+                    <Button
+                        Width="43"
+                        Height="43"
+                        Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
+                        Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
+                        FontSize="18"
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}" />
+                </Grid>
+            </StackPanel>
+
+            <!--  Slider  -->
+            <Grid
+                x:Name="PlaybackSlider"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="20,-12,20,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    MinWidth="40"
+                    Margin="{StaticResource XXSmallTopMargin}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Opacity="0.8"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Text="{x:Bind PlaybackViewModel.TimeListened, Mode=OneWay}" />
+
+                <Slider
+                    x:Name="ProgressBar"
+                    Grid.Column="1"
+                    Margin="16,8,16,0"
+                    ManipulationMode="All"
+                    ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
+                    Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
+                    PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
+                    ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
+                    Visibility="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}" />
+
+                <ProgressBar
+                    x:Name="LoadingBar"
+                    Grid.Column="1"
+                    Margin="16,8,16,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
+                    IsIndeterminate="True"
+                    Visibility="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
+
+                <TextBlock
+                    Grid.Column="2"
+                    MinWidth="40"
+                    Margin="{StaticResource XXSmallTopMargin}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Opacity="0.8"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Text="{x:Bind PlaybackViewModel.TimeRemaining, Mode=OneWay}" />
+            </Grid>
+
+            <Border
+                Grid.Column="1"
+                Width="Auto"
+                Height="5"
+                Margin="{StaticResource MediumLeftRightMargin}"
+                HorizontalAlignment="Stretch" />
+
+            <!--  Misc Buttons  -->
+            <StackPanel
+                x:Name="MiscButtons"
+                Grid.RowSpan="1"
+                Grid.Column="2"
+                Margin="{StaticResource SmallRightMargin}"
+                Padding="0,4,0,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+
+                <!--  Sound  -->
+                <StackPanel
+                    x:Name="SoundPanel"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Visibility="Collapsed">
+                    <Button
+                        x:Name="MuteButton"
+                        Width="46"
+                        Height="46"
+                        Margin="{StaticResource SmallRightMargin}"
+                        Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                        Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                        FontSize="21"
+                        Style="{StaticResource SVButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}" />
+                    <Slider
+                        Width="105"
+                        Margin="{StaticResource SmallRightMargin}"
+                        Padding="0"
+                        VerticalAlignment="Center"
+                        Maximum="100"
+                        Minimum="0"
+                        Orientation="Horizontal"
+                        PointerWheelChanged="Volume_PointerWheelChanged"
+                        Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
+                </StackPanel>
+
+                <!--  Compact Sound  -->
+                <Button
+                    x:Name="SoundFlyout"
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XSmallLeftMargin}"
+                    Content="&#xF4C3;"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}">
+                    <Button.Flyout>
+                        <Flyout Placement="Top">
+
+                            <StackPanel
+                                Width="245"
+                                Padding="16,4"
+                                Orientation="Vertical">
+
+                                <!--  Local Playback Volume  -->
+                                <TextBlock
+                                    Style="{StaticResource BaseTextBlockStyle}"
+                                    Text="{x:Bind strings:Resources.LocalVolumeHeader}"
+                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <StackPanel Orientation="Horizontal" Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Button
+                                        Width="46"
+                                        Height="46"
+                                        Margin="0,0,8,0"
+                                        Click="{x:Bind PlaybackViewModel.LocalPlayback.ToggleMute}"
+                                        Content="{x:Bind PlaybackViewModel.LocalPlayback.VolumeIcon, Mode=OneWay}"
+                                        FontSize="21"
+                                        Style="{StaticResource SVButtonStyle}" />
+                                    <Slider
+                                        Width="116"
+                                        Margin="{StaticResource XXSmallTopMargin}"
+                                        VerticalAlignment="Center"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        Orientation="Horizontal"
+                                        PointerWheelChanged="VolumeLocal_PointerWheelChanged"
+                                        Value="{x:Bind PlaybackViewModel.LocalPlayback.Volume, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Margin="14,2,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Text="{x:Bind PlaybackViewModel.LocalPlayback.Volume, Mode=OneWay}" />
+                                </StackPanel>
+
+                                <!--  Remote MPD Volume  -->
+                                <TextBlock
+                                    Margin="{StaticResource SmallTopMargin}"
+                                    Style="{StaticResource BaseTextBlockStyle}"
+                                    Text="{x:Bind strings:Resources.SettingsServer}"
+                                    Visibility="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Width="46"
+                                        Height="46"
+                                        Margin="0,0,8,0"
+                                        Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                                        Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
+                                        FontSize="21"
+                                        Style="{StaticResource SVButtonStyle}" />
+                                    <Slider
+                                        Width="116"
+                                        Margin="{StaticResource XXSmallTopMargin}"
+                                        VerticalAlignment="Center"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        Orientation="Horizontal"
+                                        PointerWheelChanged="Volume_PointerWheelChanged"
+                                        Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Margin="14,2,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Text="{x:Bind PlaybackViewModel.MediaVolume, Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+
+                <!--  Compact Overlay  -->
+                <Button
+                    x:Name="CompactButton"
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XSmallLeftMargin}"
+                    Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionCompactOverlay}"
+                    Visibility="Collapsed">
+                    <Button.Content>
+                        &#xF5EE;
+                    </Button.Content>
+                </Button>
+
+                <!--  More  -->
+                <Button
+                    x:Name="MoreButton"
+                    Width="46"
+                    Height="46"
+                    Margin="{StaticResource XSmallLeftMargin}"
+                    FontSize="22"
+                    Style="{StaticResource SVButtonStyle}"
+                    ToolTipService.ToolTip="{x:Bind strings:Resources.ActionMore}">
+                    <Button.Content>
+                        &#xE712;
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout Placement="Top">
+
+                            <MenuFlyoutItem
+                                x:Name="CompactMenu"
+                                Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
+                                Text="{x:Bind strings:Resources.ActionCompactOverlay}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xF5EE;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <MenuFlyoutItem
+                                x:Name="ShuffleMenu"
+                                Background="{x:Bind PlaybackViewModel.IsShuffleEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
+                                Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
+                                Text="{x:Bind strings:Resources.ActionToggleShuffle}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE8B1;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <MenuFlyoutItem
+                                x:Name="RepeatMenu"
+                                Background="{x:Bind PlaybackViewModel.IsRepeatEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
+                                Click="{x:Bind PlaybackViewModel.ToggleRepeat}"
+                                Text="{x:Bind strings:Resources.ActionToggleRepeat}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <MenuFlyoutSeparator x:Name="SmallViewSeparator" Opacity="0.4" />
+
+                            <MenuFlyoutItem
+                                Click="{x:Bind PlaybackViewModel.SaveQueue}"
+                                Icon="Save"
+                                Text="{x:Bind strings:Resources.ContextMenuAddQueueToPlaylist}" />
+
+                            <MenuFlyoutItem
+                                Click="{x:Bind PlaybackViewModel.ClearQueue}"
+                                Icon="Delete"
+                                Text="{x:Bind strings:Resources.ContextMenuClearQueue}" />
+
+                            <MenuFlyoutSeparator Opacity="0.4" />
+
+                            <!--<MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist">
+                                TODO view artist
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE8D4;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>-->
+
+                            <!--  Add to playlist  -->
+                            <MenuFlyoutItem Command="{x:Bind PlaybackViewModel.AddToPlaylistCommand}" Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE142;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
+                            <!--  Go to Album  -->
+                            <MenuFlyoutItem Command="{x:Bind PlaybackViewModel.ShowAlbumCommand}" Text="{x:Bind strings:Resources.ContextMenuViewAlbum}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE93C;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="660" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed" />
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="MiscButtons.Padding" Value="0" />
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1" />
+
+                        <Setter Target="AlbumView.Width" Value="220" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="LargeLocalPlayback">
+                    <VisualState.StateTriggers>
+                        <WindowsStateTriggers:CompositeStateTrigger Operator="And">
+                            <WindowsStateTriggers:AdaptiveTrigger MinWindowWidth="1024" />
+                            <StateTrigger IsActive="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay}" />
+                        </WindowsStateTriggers:CompositeStateTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed" />
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="MiscButtons.Padding" Value="0" />
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1" />
+
+                        <Setter Target="AlbumView.Width" Value="320" />
+
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="LargeNoLocalPlayback">
+                    <VisualState.StateTriggers>
+                        <WindowsStateTriggers:CompositeStateTrigger Operator="And">
+                            <WindowsStateTriggers:AdaptiveTrigger MinWindowWidth="1024" />
+                            <StateTrigger IsActive="{x:Bind PlaybackViewModel.LocalPlayback.IsEnabled, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
+                        </WindowsStateTriggers:CompositeStateTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AlbumArt.Visibility" Value="Visible" />
+                        <Setter Target="SmallViewSeparator.Visibility" Value="Collapsed" />
+                        <Setter Target="ShuffleButton.Visibility" Value="Visible" />
+                        <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="RepeatButton.Visibility" Value="Visible" />
+                        <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
+                        <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="MiscButtons.Padding" Value="0" />
+                        <Setter Target="PlaybackSlider.(Grid.ColumnSpan)" Value="1" />
+
+                        <Setter Target="AlbumView.Width" Value="320" />
+
+                        <Setter Target="SoundFlyout.Visibility" Value="Collapsed" />
+                        <Setter Target="SoundPanel.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>

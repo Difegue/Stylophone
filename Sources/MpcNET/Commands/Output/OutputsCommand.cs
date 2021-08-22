@@ -7,6 +7,7 @@
 namespace MpcNET.Commands.Output
 {
     using System.Collections.Generic;
+    using System.Linq;
     using MpcNET.Types;
 
     /// <summary>
@@ -34,12 +35,15 @@ namespace MpcNET.Commands.Output
         {
             var result = new List<MpdOutput>();
 
-            for (var i = 0; i < response.ResponseValues.Count; i += 4)
+            // Strip out attributes so we can keep parsing the response by blocks of 4
+            var strippedResult = response.ResponseValues.Where(kvp => kvp.Key != "attribute").ToList();
+
+            for (var i = 0; i < strippedResult.Count; i+=4)
             {
-                var outputId = int.Parse(response.ResponseValues[i].Value);
-                var outputName = response.ResponseValues[i + 1].Value;
-                var outputPlugin = response.ResponseValues[i + 2].Value;
-                var outputEnabled = response.ResponseValues[i + 3].Value == "1";
+                var outputId = int.Parse(strippedResult[i].Value);
+                var outputName = strippedResult[i + 1].Value;
+                var outputPlugin = strippedResult[i + 2].Value;
+                var outputEnabled = strippedResult[i + 3].Value == "1";
 
                 result.Add(new MpdOutput(outputId, outputName, outputPlugin, outputEnabled));
             }

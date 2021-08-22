@@ -1,0 +1,260 @@
+﻿<Page
+    x:Class="Stylophone.Views.LibraryDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:strings="using:Stylophone.Localization.Strings"
+    xmlns:stylophone="using:Stylophone.Helpers"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d">
+
+    <Grid x:Name="ContentArea" Margin="8,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="232" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Album Header  -->
+        <Grid
+            Grid.Row="0"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8,8,0,0">
+
+            <Border Canvas.ZIndex="-1" CornerRadius="8,8,0,0">
+                <Border.Background>
+                    <ImageBrush ImageSource="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}}" Stretch="UniformToFill" />
+                </Border.Background>
+            </Border>
+
+            <Border Canvas.ZIndex="-1" CornerRadius="8,8,0,0">
+                <Border.Background>
+                    <AcrylicBrush
+                        BackgroundSource="Backdrop"
+                        FallbackColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                        TintColor="{x:Bind ViewModel.Item.DominantColor, Mode=OneWay, Converter={StaticResource SKColorToUWPConverter}}"
+                        TintLuminosityOpacity="0.7"
+                        TintOpacity="0.2" />
+                </Border.Background>
+            </Border>
+
+            <!--  On Dark theme, add a black overlay to light album colors - Opacity is 0.3 for normal colors and 0.5 for light colors  -->
+            <Border
+                Background="{ThemeResource BlackOnDarkThemeOnly}"
+                Canvas.ZIndex="-1"
+                Opacity="{x:Bind ViewModel.Item.IsLight, Mode=OneWay, Converter={StaticResource DarkBoolToOpacityConverter}}"
+                Visibility="Visible" />
+
+            <!--  And on Light theme, add a white overlay to dark album colors! Opacity is 0.4 for dark colors and 0.1 for light.  -->
+            <Border
+                Background="{ThemeResource WhiteOnLightThemeOnly}"
+                Canvas.ZIndex="-1"
+                Opacity="{x:Bind ViewModel.Item.IsLight, Mode=OneWay, Converter={StaticResource LightBoolToOpacityConverter}}"
+                Visibility="Visible" />
+
+            <RelativePanel x:Name="Header" Padding="16">
+
+                <controls:DropShadowPanel
+                    x:Name="itemHero"
+                    Width="148"
+                    Height="148"
+                    Margin="{StaticResource MediumRightMargin}"
+                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                    BlurRadius="10"
+                    OffsetY="2"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True"
+                    ShadowOpacity="0.6"
+                    Color="Black">
+
+                    <Grid
+                        x:Name="albumImage"
+                        Width="148"
+                        Height="148"
+                        CornerRadius="4">
+
+                        <winui:ProgressRing
+                            Margin="{StaticResource SmallLeftTopMargin}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            IsActive="{x:Bind ViewModel.Item.AlbumArtLoaded, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
+                        <Image
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=196}"
+                            Stretch="UniformToFill" />
+                    </Grid>
+                </controls:DropShadowPanel>
+
+                <TextBlock
+                    x:Name="title"
+                    FontFamily="Segoe UI Variable Display"
+                    MaxLines="2"
+                    RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.RightOf="itemHero"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="{x:Bind ViewModel.Item.Name, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.Item.Name, Mode=OneWay}" />
+
+                <TextBlock
+                    x:Name="artist"
+                    MaxLines="1"
+                    RelativePanel.Below="title"
+                    RelativePanel.RightOf="itemHero"
+                    Style="{StaticResource BaseTextBlockStyle}"
+                    Text="{x:Bind ViewModel.Item.Artist, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.Item.Artist, Mode=OneWay}" />
+
+                <TextBlock
+                    x:Name="info"
+                    Margin="{StaticResource SmallTopBottomMargin}"
+                    FontSize="16"
+                    RelativePanel.Above="propertiesGroup1"
+                    RelativePanel.Below="artist"
+                    RelativePanel.RightOf="itemHero"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    Text="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.PlaylistInfo, Mode=OneWay}" />
+
+                <controls:WrapPanel
+                    x:Name="propertiesGroup1"
+                    Margin="172,0,0,0"
+                    HorizontalSpacing="8"
+                    Orientation="Horizontal"
+                    RelativePanel.AlignBottomWithPanel="True"
+                    VerticalSpacing="8">
+
+
+                    <Button
+                        BorderThickness="0"
+                        Command="{x:Bind ViewModel.Item.PlayAlbumCommand}"
+                        IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                        Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xF5B0;" />
+                            <TextBlock
+                                Text="{x:Bind strings:Resources.ContextMenuPlay}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        BorderThickness="0"
+                        Command="{x:Bind ViewModel.Item.AddAlbumCommand}"
+                        IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                        Style="{StaticResource ButtonRevealStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xED0E;" />
+                            <TextBlock
+                                Text="{x:Bind strings:Resources.ContextMenuAddToQueue}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        BorderThickness="0"
+                        Command="{x:Bind ViewModel.Item.AddToPlaylistCommand}"
+                        IsEnabled="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                        Style="{StaticResource ButtonRevealStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <SymbolIcon Symbol="MusicInfo" />
+                            <TextBlock
+                                Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Button>
+                </controls:WrapPanel>
+
+            </RelativePanel>
+        </Grid>
+
+        <!--  Track List  -->
+        <Grid
+            Grid.Row="1"
+            Margin="0,-1,0,0"
+            Background="{ThemeResource LayerFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="0,0,8,8">
+
+            <winui:ProgressRing
+                Width="96"
+                Height="96"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsActive="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay}" />
+
+            <stylophone:AlternatingRowListView
+                x:Name="QueueList"
+                Margin="0,8"
+                ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
+                DoubleTapped="Queue_Track"
+                EvenRowBackground="Transparent"
+                ItemTemplate="{StaticResource TrackListTemplate}"
+                ItemsSource="{x:Bind ViewModel.Source}"
+                OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                RightTapped="Select_Item"
+                SelectionMode="Extended">
+                <stylophone:AlternatingRowListView.ContextFlyout>
+                    <MenuFlyout>
+                        <!--  Add to Queue  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.AddToQueueCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Icon="Add"
+                            Text="{x:Bind strings:Resources.ContextMenuAddToQueue}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Enter" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <!--  Add to Playlist  -->
+                        <MenuFlyoutItem
+                            Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                            CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
+                            Icon="MusicInfo"
+                            Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />
+                    </MenuFlyout>
+                </stylophone:AlternatingRowListView.ContextFlyout>
+
+            </stylophone:AlternatingRowListView>
+        </Grid>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="524" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="propertiesGroup1.Margin" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!--  641 is the default CompactModeThresholdWidth in NavigationView  -->
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="propertiesGroup1.(RelativePanel.RightOf)" Value="itemHero" />
+                        <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                        <Setter Target="itemHero.Width" Value="196" />
+                        <Setter Target="itemHero.Height" Value="196" />
+                        <Setter Target="albumImage.Width" Value="196" />
+                        <Setter Target="albumImage.Height" Value="196" />
+                        <Setter Target="propertiesGroup1.Margin" Value="0" />
+                        <Setter Target="title.Style" Value="{StaticResource TitleTextBlockStyle}" />
+                        <Setter Target="artist.Style" Value="{StaticResource SubtitleTextBlockStyle}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</Page>

@@ -2,35 +2,35 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/src/.vs
+/Sources/.vs
+/Sources/MpcNET.sln.DotSettings.user
 
-/src/MpcNET/bin
-/src/MpcNET/obj
+/Sources/MpcNET/bin
+/Sources/MpcNET/obj
 
-/src/MpcNET.Test/bin
-/src/MpcNET.Test/obj
+/Sources/MpcNET/MpcNET.csproj.DotSettings
+
+/Sources/MpcNET.Test/bin
+/Sources/MpcNET.Test/obj
+/Sources/MpcNET.Test/MpcNET.Test.csproj.DotSettings
+
+/Sources/Stylophone/bin
+/Sources/Stylophone/obj
+/Sources/Stylophone/Package.StoreAssociation.xml
+/Sources/Stylophone/AppPackages
+/Sources/Stylophone/BundleArtifacts
+
+/Sources/Stylophone.Common/bin
+/Sources/Stylophone.Common/obj
+
+/Sources/Stylophone.Localization/bin
+/Sources/Stylophone.Localization/obj
 
 
-/src/MpcNET.sln.DotSettings.user
-/src/MpcNET.Test/MpcNET.Test.csproj.DotSettings
-/src/MpcNET/MpcNET.csproj.DotSettings
 /.vs
 *.user
-/Sources/.vs/MpcNET/v15
-/Sources/MpcNET/bin/Debug/netstandard2.0
-/Sources/MpcNET/obj
-/Sources/MpcNET.Test/obj
-/Sources/MpcNET/bin
-/Sources/MpcNET.Test/bin/Debug/netcoreapp2.0
-/Sources/.vs
-/Sources/FluentMPC.Core/bin/Debug/netstandard2.0
-/Sources/FluentMPC/bin/x86/Debug
-/Sources/FluentMPC/obj
-/Sources/FluentMPC.Core/obj
-/Sources/FluentMPC.Tests.MSTest/obj
 *.pfx
-/Sources/FluentMPC/bin/x64/Debug
-/Sources/FluentMPC/Package.StoreAssociation.xml
-/Sources/FluentMPC/AppPackages
-/Sources/FluentMPC/bin
-/Sources/FluentMPC/BundleArtifacts
+Sources/.DS_Store
+Sources/Stylophone.iOS/bin
+Sources/Stylophone.iOS/obj
+.DS_Store
