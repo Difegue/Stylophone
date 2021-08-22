@@ -186,6 +186,7 @@
                     Visibility="{x:Bind ViewModel.HeaderText, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}">
                     <TextBlock
                         Margin="36,12,0,16"
+                        FontFamily="Segoe UI Variable Display"
                         FontSize="28"
                         Style="{ThemeResource TitleTextBlockStyle}"
                         Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}" />

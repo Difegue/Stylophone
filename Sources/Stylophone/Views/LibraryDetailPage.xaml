@@ -91,6 +91,7 @@
 
                 <TextBlock
                     x:Name="title"
+                    FontFamily="Segoe UI Variable Display"
                     MaxLines="2"
                     RelativePanel.AlignTopWithPanel="True"
                     RelativePanel.RightOf="itemHero"
