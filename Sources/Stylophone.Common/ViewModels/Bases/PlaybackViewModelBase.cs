@@ -669,7 +669,7 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying);
             }
 
-            CurrentTrack.AddToPlayListCommand.Execute(CurrentTrack.File);
+            CurrentTrack?.AddToPlayListCommand.Execute(CurrentTrack.File);
         }
 
         private ICommand _showAlbumCommand;

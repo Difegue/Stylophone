@@ -267,37 +267,40 @@ namespace Stylophone.Common.ViewModels
             PlaylistInfo = $"{Source.Count} Tracks, Total Time: {Miscellaneous.ToReadableString(t)}";
 
 
-            await Task.Run(async () =>
+            if (Source.Count > 0)
             {
-                // Get album art for three albums to display in the playlist view
-                Random r = new Random();
-                var distinctAlbums = Source.GroupBy(tr => tr.File.Album).Select(tr => tr.First()).OrderBy((item) => r.Next()).ToList();
-
-                if (distinctAlbums.Count > 1)
+                await Task.Run(async () =>
                 {
-                    var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, true);
-                    PlaylistArt = art != null ? art.ArtBitmap : PlaylistArt;
+                    // Get album art for three albums to display in the playlist view
+                    Random r = new Random();
+                    var distinctAlbums = Source.GroupBy(tr => tr.File.Album).Select(tr => tr.First()).OrderBy((item) => r.Next()).ToList();
 
-                    DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
-                    IsLight = (!art?.DominantColor?.IsDark).GetValueOrDefault();
-                }
+                    if (distinctAlbums.Count > 1)
+                    {
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, true);
+                        PlaylistArt = art != null ? art.ArtBitmap : PlaylistArt;
 
-                if (distinctAlbums.Count > 2)
-                {
-                    var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[1].File, false);
-                    PlaylistArt2 = art != null ? art.ArtBitmap : PlaylistArt2;
-                }
-                else PlaylistArt2 = PlaylistArt;
+                        DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
+                        IsLight = (!art?.DominantColor?.IsDark).GetValueOrDefault();
+                    }
 
-                if (distinctAlbums.Count > 3)
-                {
-                    var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[2].File, false);
-                    PlaylistArt3 = art != null ? art.ArtBitmap : PlaylistArt3;
-                }
-                else PlaylistArt3 = PlaylistArt2;
+                    if (distinctAlbums.Count > 2)
+                    {
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[1].File, false);
+                        PlaylistArt2 = art != null ? art.ArtBitmap : PlaylistArt2;
+                    }
+                    else PlaylistArt2 = PlaylistArt;
 
-                ArtLoaded = true;
-            });
+                    if (distinctAlbums.Count > 3)
+                    {
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[2].File, false);
+                        PlaylistArt3 = art != null ? art.ArtBitmap : PlaylistArt3;
+                    }
+                    else PlaylistArt3 = PlaylistArt2;
+
+                    ArtLoaded = true;
+                });
+            }
         }
 
         private async void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
