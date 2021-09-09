@@ -37,9 +37,10 @@ namespace Stylophone.iOS.ViewControllers
             return (int)section switch
             {
                 0 => Resources.SettingsServer,
-                1 => Resources.SettingsDatabase,
-                2 => Resources.SettingsAnalytics,
-                3 => Resources.SettingsAbout,
+                1 => Resources.SettingsLocalPlaybackHeader,
+                2 => Resources.SettingsDatabase,
+                3 => Resources.SettingsAnalytics,
+                4 => Resources.SettingsAbout,
                 _ => "",
             };
         }
@@ -48,9 +49,9 @@ namespace Stylophone.iOS.ViewControllers
         {
             return (int)section switch
             {
-                0 => Resources.SettingsLocalPlaybackText,
-                1 => Resources.SettingsClearCacheDescription,
-                2 => Resources.SettingsApplyOnRestart,
+                1 => Resources.SettingsLocalPlaybackText,
+                2 => Resources.SettingsClearCacheDescription,
+                3 => Resources.SettingsApplyOnRestart,
                 _ => "",
             };
         }
