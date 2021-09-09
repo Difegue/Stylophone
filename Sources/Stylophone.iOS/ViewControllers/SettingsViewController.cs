@@ -48,6 +48,7 @@ namespace Stylophone.iOS.ViewControllers
         {
             return (int)section switch
             {
+                0 => Resources.SettingsLocalPlaybackText,
                 1 => Resources.SettingsClearCacheDescription,
                 2 => Resources.SettingsApplyOnRestart,
                 _ => "",
@@ -76,8 +77,8 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(ServerConnectionSuccess, "hidden", nameof(ViewModel.IsServerValid),
                 valueTransformer: negateBoolTransformer);
 
-            //Binder.Bind<bool>(LocalPlaybackToggle, "enabled", nameof(ViewModel.IsStreamingAvailable));
-            //Binder.Bind<bool>(LocalPlaybackToggle, "on", nameof(ViewModel.IsLocalPlaybackEnabled), true);
+            Binder.Bind<bool>(LocalPlaybackToggle, "enabled", nameof(ViewModel.IsStreamingAvailable));
+            Binder.Bind<bool>(LocalPlaybackToggle, "on", nameof(ViewModel.IsLocalPlaybackEnabled), true);
             Binder.Bind<bool>(AnalyticsToggle, "on", nameof(ViewModel.EnableAnalytics), true);
 
             Binder.Bind<string>(VersionLabel, "text", nameof(ViewModel.VersionDescription));

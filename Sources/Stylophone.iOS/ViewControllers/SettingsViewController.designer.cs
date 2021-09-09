@@ -22,6 +22,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIButton GithubButton { get; set; }
 
 		[Outlet]
+		UIKit.UISwitch LocalPlaybackToggle { get; set; }
+
+		[Outlet]
 		UIKit.UIButton RateButton { get; set; }
 
 		[Outlet]
@@ -106,14 +109,14 @@ namespace Stylophone.iOS.ViewControllers
 				ServerInfoLabel = null;
 			}
 
-			if (ServerPortField != null) {
-				ServerPortField.Dispose ();
-				ServerPortField = null;
-			}
-
 			if (ServerPasswordField != null) {
 				ServerPasswordField.Dispose ();
 				ServerPasswordField = null;
+			}
+
+			if (ServerPortField != null) {
+				ServerPortField.Dispose ();
+				ServerPortField = null;
 			}
 
 			if (UpdateDatabaseButton != null) {
@@ -124,6 +127,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (VersionLabel != null) {
 				VersionLabel.Dispose ();
 				VersionLabel = null;
+			}
+
+			if (LocalPlaybackToggle != null) {
+				LocalPlaybackToggle.Dispose ();
+				LocalPlaybackToggle = null;
 			}
 		}
 	}
