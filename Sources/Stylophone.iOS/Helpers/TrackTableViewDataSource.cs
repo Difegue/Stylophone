@@ -95,7 +95,7 @@ namespace Stylophone.iOS.ViewControllers
         {
             var cell = tableView.DequeueReusableCell("trackCell") as TrackViewCell;
 
-            if (_sourceCollection.Count < indexPath.Row)
+            if (_sourceCollection.Count <= indexPath.Row)
                 return cell; // Safety check
 
             var trackViewModel = _sourceCollection[indexPath.Row];
