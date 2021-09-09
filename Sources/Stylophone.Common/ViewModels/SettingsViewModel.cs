@@ -303,12 +303,15 @@ namespace Stylophone.Common.ViewModels
                 // Build info string
                 var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
 
+                var songs = response.ContainsKey("songs") ? response["songs"] : "??";
+                var albums = response.ContainsKey("albums") ? response["albums"] : "??";
+
                 if (outputs != null)
                 {
                     var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
 
                     ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
-                             $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
+                             $"{songs} Songs, {albums} Albums\n" +
                              $"Database last updated {lastUpdatedDb}\n" +
                              $"Outputs available: {outputString}";
 
@@ -320,7 +323,7 @@ namespace Stylophone.Common.ViewModels
                 else
                 {
                     ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
-                             $"{response["songs"]} Songs, {response["albums"]} Albums\n" +
+                             $"{songs} Songs, {albums} Albums\n" +
                              $"Database last updated {lastUpdatedDb}";
                 }
 
