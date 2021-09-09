@@ -335,14 +335,12 @@
                     </tableView>
                     <connections>
                         <outlet property="AddToQueueButton" destination="cHs-Ds-hxp" id="k1K-d4-MSg"/>
-                        <outlet property="AddToQueueTopConstraint" destination="Mna-nu-nS8" id="kGa-VV-OY2"/>
                         <outlet property="AlbumArt" destination="THl-lR-HjL" id="Fy6-MD-w5a"/>
                         <outlet property="AlbumArtLoadingIndicator" destination="kVT-2L-49m" id="Wq0-O8-bOm"/>
                         <outlet property="AlbumArtists" destination="rkW-qh-zOp" id="OOA-wv-7KH"/>
                         <outlet property="AlbumTitle" destination="Log-9b-hFE" id="GWq-9M-V3g"/>
                         <outlet property="AlbumTrackInfo" destination="IeP-xT-9BP" id="ekQ-op-Mm3"/>
                         <outlet property="ArtContainer" destination="lb2-ij-LhO" id="G0J-SH-7Vx"/>
-                        <outlet property="ArtWidthConstraint" destination="M41-F7-zEr" id="knQ-St-JoC"/>
                         <outlet property="BackgroundArt" destination="QFY-Ts-zzn" id="KNs-dS-dMc"/>
                         <outlet property="EmptyView" destination="CUs-gg-W4g" id="Ru5-ky-m9L"/>
                         <outlet property="PlayButton" destination="Wv5-1W-agw" id="5EQ-rp-S1o"/>

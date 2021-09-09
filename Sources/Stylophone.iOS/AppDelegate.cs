@@ -86,6 +86,8 @@ namespace Stylophone.iOS
                 await Ioc.Default.GetRequiredService<IDialogService>().ShowRateAppDialogIfAppropriateAsync();
             });
 
+#if DEBUG
+#else
             // Analytics
             var enableAnalytics = storageService.GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
             if (enableAnalytics)
@@ -94,6 +96,7 @@ namespace Stylophone.iOS
                 AppCenter.Start("90b62f5a-2448-4ef1-81ca-3fb807a5b126",
                    typeof(Analytics), typeof(Crashes));
             }
+#endif
         }
 
         // UISceneSession Lifecycle
