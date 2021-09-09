@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="CodeProject.ObjectPool" Version="5.0.2" />
+    <PackageReference Include="LibVLCSharp" Version="3.6.0" />
     <PackageReference Include="Microsoft.Toolkit" Version="7.0.1" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.1" />
     <PackageReference Include="RangedObservableCollection" Version="1.0.1" />

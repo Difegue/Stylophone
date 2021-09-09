@@ -51,7 +51,7 @@ namespace Stylophone.Services
         {
             await _dispatcherService.ExecuteOnUIThreadAsync(async () =>
                 {
-                    if (SystemInformation.Instance.IsFirstRun || SystemInformation.Instance.IsAppUpdated && !shown)
+                    if (SystemInformation.Instance.IsFirstRun && !shown)
                     {
                         shown = true;
                         var dialog = new FirstRunDialog();
