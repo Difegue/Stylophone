@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.ApplicationModel.Core;
 using Windows.System;
+using Windows.System.Profile;
 
 namespace Stylophone.Views
 {
@@ -36,6 +37,10 @@ namespace Stylophone.Views
             InitializeComponent();
             DataContext = ((App)Application.Current).Services.GetService(typeof(ShellViewModel));
             ViewModel.Initialize(shellFrame, navigationView, playlistContainer, notificationHolder, KeyboardAccelerators);
+
+            // On Xbox, raise the contentContainer grid since there's no titlebar
+            if (AnalyticsInfo.VersionInfo.DeviceFamily.Contains("Xbox"))
+                contentContainer.Margin = new Thickness(0, -48, 0, 0);
 
             // Hide default title bar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
