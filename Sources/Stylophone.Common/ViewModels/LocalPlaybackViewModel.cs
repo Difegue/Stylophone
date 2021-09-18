@@ -82,8 +82,8 @@ namespace Stylophone.Common.ViewModels
             private set => Set(ref _volumeIcon, value);
         }
 
-        private double _volume = 0;
-        public double Volume
+        private int _volume = 0;
+        public int Volume
         {
             get => _volume;
             set
@@ -95,9 +95,9 @@ namespace Stylophone.Common.ViewModels
                     IsPlaying = true;
 
                 if (_mediaPlayer != null)
-                    _mediaPlayer.Volume = (int)value;
+                    _mediaPlayer.Volume = value;
 
-                if ((int)value == 0)
+                if (value == 0)
                 {
                     VolumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeMute);
                 }
@@ -131,7 +131,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private double _previousVolume = 10;
+        private int _previousVolume = 25;
         /// <summary>
         ///     Toggle if we should mute
         /// </summary>
@@ -159,9 +159,10 @@ namespace Stylophone.Common.ViewModels
                     var streamUrl = new Uri(urlString);
                     var media = new Media(_vlcCore, streamUrl);
 
-                    _mediaPlayer.Volume = (int)_volume;
-                    _mediaPlayer.Media = media;
-                    _mediaPlayer.Play();
+                    _mediaPlayer.Play(media);
+
+                    // This set won't work on UWP, see https://code.videolan.org/videolan/LibVLCSharp/-/issues/423
+                    _mediaPlayer.Volume = _volume;
                 }
                 else
                 {
