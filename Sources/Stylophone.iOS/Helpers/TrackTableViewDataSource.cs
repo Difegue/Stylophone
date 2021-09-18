@@ -27,6 +27,15 @@ namespace Stylophone.iOS.ViewControllers
         {
         }
 
+        /// <summary>
+        /// Create a UITableViewDataSource/UITableViewDelegate for a given source of TrackViewModels.
+        /// </summary>
+        /// <param name="tableView">The tableView hosting this source/delegate</param>
+        /// <param name="source">The source TrackViewModels</param>
+        /// <param name="contextMenuFactory">A factory for row context menus</param>
+        /// <param name="swipeActionFactory">A factory for row swipe actions</param>
+        /// <param name="canSelectRows">Whether you can select multiple rows</param>
+        /// <param name="scrollHandler">Optional scrollHandler</param>
         public TrackTableViewDataSource(UITableView tableView, ObservableCollection<TrackViewModel> source,
             Func<NSIndexPath, UIMenu> contextMenuFactory, Func<NSIndexPath,bool, UISwipeActionsConfiguration> swipeActionFactory,
             bool canSelectRows = false, Action<UIScrollView> scrollHandler = null)
@@ -37,7 +46,8 @@ namespace Stylophone.iOS.ViewControllers
             _swipeFactory = swipeActionFactory;
             _scrollHandler = scrollHandler;
 
-            _sourceCollection.CollectionChanged += UpdateUITableView;
+            _sourceCollection.CollectionChanged += (s,e) => UIApplication.SharedApplication.InvokeOnMainThread(
+                () => UpdateUITableView(s,e));
             _tableView.AllowsMultipleSelection = canSelectRows;
         }
 
@@ -84,6 +94,10 @@ namespace Stylophone.iOS.ViewControllers
         public UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = tableView.DequeueReusableCell("trackCell") as TrackViewCell;
+
+            if (_sourceCollection.Count <= indexPath.Row)
+                return cell; // Safety check
+
             var trackViewModel = _sourceCollection[indexPath.Row];
 
             cell.Configure(indexPath.Row, trackViewModel);

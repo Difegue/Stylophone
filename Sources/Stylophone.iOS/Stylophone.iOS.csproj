@@ -142,6 +142,10 @@
     </Compile>
     <Compile Include="ViewControllers\AddToPlaylistViewController.cs" />
     <Compile Include="ViewControllers\SearchController.cs" />
+    <Compile Include="ViewControllers\PlaylistViewController.cs" />
+    <Compile Include="ViewControllers\PlaylistViewController.designer.cs">
+      <DependentUpon>PlaylistViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -156,6 +160,7 @@
     <InterfaceDefinition Include="Views\Folders.storyboard" />
     <InterfaceDefinition Include="Views\Library.storyboard" />
     <InterfaceDefinition Include="Views\SearchResults.storyboard" />
+    <InterfaceDefinition Include="Views\Playlist.storyboard" />
     <ImageAsset Include="Assets.xcassets\AlbumPlaceholder.imageset\AlbumPlaceholderApple.png">
       <Visible>false</Visible>
     </ImageAsset>

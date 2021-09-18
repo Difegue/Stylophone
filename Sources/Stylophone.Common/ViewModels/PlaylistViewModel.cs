@@ -240,6 +240,7 @@ namespace Stylophone.Common.ViewModels
         {
             var placeholder = await _interop.GetPlaceholderImageAsync();
 
+            ArtLoaded = false;
             PlaylistArt = placeholder;
             PlaylistArt2 = placeholder;
             PlaylistArt3 = placeholder;
