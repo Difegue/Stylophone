@@ -123,6 +123,20 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        private bool _albumArtEnabled;
+        public bool IsAlbumArtFetchingEnabled
+        {
+            get { return _albumArtEnabled; }
+            set
+            {
+                if (value != _albumArtEnabled)
+                {
+                    _applicationStorageService.SetValue(nameof(IsAlbumArtFetchingEnabled), value);
+                }
+                Set(ref _albumArtEnabled, value);
+            }
+        }
+
         private bool _enableAnalytics;
         public bool EnableAnalytics
         {
@@ -240,8 +254,9 @@ namespace Stylophone.Common.ViewModels
                 _serverHost = _applicationStorageService.GetValue<string>(nameof(ServerHost));
                 _serverHost = _serverHost?.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
 
-                _serverPort = _applicationStorageService.GetValue<int>(nameof(ServerPort), 6600);
-                _enableAnalytics = _applicationStorageService.GetValue<bool>(nameof(EnableAnalytics), true);
+                _serverPort = _applicationStorageService.GetValue(nameof(ServerPort), 6600);
+                _enableAnalytics = _applicationStorageService.GetValue(nameof(EnableAnalytics), true);
+                _albumArtEnabled = _applicationStorageService.GetValue(nameof(IsAlbumArtFetchingEnabled), true);
                 _localPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
 
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);

@@ -1,4 +1,5 @@
 ﻿using ColorThiefDotNet;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using MpcNET.Commands.Database;
 using MpcNET.Types;
 using SkiaSharp;
@@ -134,6 +135,12 @@ namespace Stylophone.Common.Services
             // Try loading from art cache first
             if (await IsAlbumArtCachedAsync(f))
                 return await LoadImageFromFile(fileName);
+
+            // No cache, check if remote fetching is enabled before going further
+            var isAlbumArtFetchingEnabled = _applicationStorageService.GetValue<bool>(nameof(SettingsViewModel.IsAlbumArtFetchingEnabled), true);
+
+            if (!isAlbumArtFetchingEnabled)
+                return null;
 
             // Get albumart from MPD
             List<byte> data = new List<byte>();

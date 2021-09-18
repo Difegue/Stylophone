@@ -34,6 +34,7 @@
             </converters:BoolToObjectConverter.FalseValue>
         </converters:BoolToObjectConverter>
 
+
     </Page.Resources>
 
     <ScrollViewer>
@@ -142,11 +143,28 @@
                     IsEnabled="{x:Bind ViewModel.IsServerValid, Mode=OneWay}" />
             </local:SettingsBlockControl>
 
-            <local:SettingsBlockControl Description="{x:Bind strings:Resources.SettingsClearCacheDescription}">
+            <local:SettingsBlockControl
+                Title="{x:Bind strings:Resources.SettingsAlbumArt}"
+                Description="{x:Bind strings:Resources.SettingsAlbumArtText}">
                 <local:SettingsBlockControl.Icon>
-                    <FontIcon Glyph="&#xED62;" />
+                    <SymbolIcon Symbol="Pictures" />
                 </local:SettingsBlockControl.Icon>
-                <Button Command="{x:Bind ViewModel.ClearCacheCommand}" Content="{x:Bind strings:Resources.SettingsClearCache}" />
+                <local:SettingsBlockControl.SettingsActionableElement>
+                    <ToggleSwitch
+                        Margin="0,0,-112,0"
+                        IsOn="{x:Bind ViewModel.IsAlbumArtFetchingEnabled, Mode=TwoWay}"
+                        OffContent=""
+                        OnContent="" />
+                </local:SettingsBlockControl.SettingsActionableElement>
+
+                <local:SettingsBlockControl.ExpandableContent>
+                    <local:SettingsBlockControl Title="{x:Bind strings:Resources.SettingsClearCacheDescription}">
+                        <local:SettingsBlockControl.Icon>
+                            <FontIcon Glyph="&#xED62;" />
+                        </local:SettingsBlockControl.Icon>
+                        <Button Command="{x:Bind ViewModel.ClearCacheCommand}" Content="{x:Bind strings:Resources.SettingsClearCache}" />
+                    </local:SettingsBlockControl>
+                </local:SettingsBlockControl.ExpandableContent>
             </local:SettingsBlockControl>
 
             <!--  Customization  -->
