@@ -40,26 +40,32 @@ namespace Stylophone.Views
 
             // On Xbox, raise the contentContainer grid since there's no titlebar
             if (AnalyticsInfo.VersionInfo.DeviceFamily.Contains("Xbox"))
+            {
                 contentContainer.Margin = new Thickness(0, -48, 0, 0);
+                AppTitleBar.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                // Hide default title bar.
+                var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+                coreTitleBar.ExtendViewIntoTitleBar = true;
+                UpdateTitleBarLayout(coreTitleBar);
 
-            // Hide default title bar.
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            UpdateTitleBarLayout(coreTitleBar);
+                // Set XAML element as a draggable region.
+                Window.Current.SetTitleBar(AppTitleBar);
 
-            // Set XAML element as a draggable region.
-            Window.Current.SetTitleBar(AppTitleBar);
+                // Register a handler for when the size of the overlaid caption control changes.
+                // For example, when the app moves to a screen with a different DPI.
+                coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
 
-            // Register a handler for when the size of the overlaid caption control changes.
-            // For example, when the app moves to a screen with a different DPI.
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+                // Register a handler for when the title bar visibility changes.
+                // For example, when the title bar is invoked in full screen mode.
+                coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
 
-            // Register a handler for when the title bar visibility changes.
-            // For example, when the title bar is invoked in full screen mode.
-            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+                //Register a handler for when the window changes focus
+                Window.Current.Activated += Current_Activated;
+            }
 
-            //Register a handler for when the window changes focus
-            Window.Current.Activated += Current_Activated;
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
