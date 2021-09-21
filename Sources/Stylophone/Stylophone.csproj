@@ -30,11 +30,9 @@
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <PackageCertificateThumbprint>BA4DC65DC8E7D8306C0DA23E0768EB312CC64ED6</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-
     <!-- Workaround to prevent resource.pri exploding for other languages with LibVLC installed -->
     <AppxBundleAutoResourcePackageQualifiers>DXFeatureLevel</AppxBundleAutoResourcePackageQualifiers>
     <AppxDefaultResourceQualifiers>Language=en;fr</AppxDefaultResourceQualifiers>
-
   </PropertyGroup>
   <PropertyGroup>
     <!-- This is what will cause the templates to be transformed when the project is built (default is false) -->
@@ -175,7 +173,7 @@
       <Version>2.0.1</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views">
-      <Version>2.80.3</Version>
+      <Version>2.80.2</Version>
     </PackageReference>
     <PackageReference Include="VideoLAN.LibVLC.UWP">
       <Version>3.3.1</Version>
