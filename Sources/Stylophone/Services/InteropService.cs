@@ -12,9 +12,6 @@ using SkiaSharp;
 using Stylophone.Common.ViewModels;
 using System.IO;
 using Windows.ApplicationModel;
-using Windows.Media.Core;
-using Windows.Media.Playback;
-using Windows.Services.Store;
 using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace Stylophone.Services
@@ -23,7 +20,6 @@ namespace Stylophone.Services
     {
         private ApplicationTheme _appTheme;
         private SystemMediaControlsService _smtcService;
-        private MediaPlayer _mediaPlayer;
 
         public InteropService(SystemMediaControlsService smtcService)
         {
@@ -112,15 +108,15 @@ namespace Stylophone.Services
             switch (theme)
             {
                 case ElementTheme.Default:
-                    color = ((Color)Application.Current.Resources["SystemBaseHighColor"]);
+                    color = (Color)Application.Current.Resources["SystemBaseHighColor"];
                     break;
                 case ElementTheme.Light:
                     if (_appTheme == ApplicationTheme.Light) { color = ((Color)Application.Current.Resources["SystemBaseHighColor"]); }
-                    else { color = ((Color)Application.Current.Resources["SystemAltHighColor"]); }
+                    else { color = (Color)Application.Current.Resources["SystemAltHighColor"]; }
                     break;
                 case ElementTheme.Dark:
                     if (_appTheme == ApplicationTheme.Light) { color = ((Color)Application.Current.Resources["SystemAltHighColor"]); }
-                    else { color = ((Color)Application.Current.Resources["SystemBaseHighColor"]); }
+                    else { color = (Color)Application.Current.Resources["SystemBaseHighColor"]; }
                     break;
                 default:
                     break;
@@ -157,29 +153,6 @@ namespace Stylophone.Services
                 PlaybackIcon.VolumeFull => "\uE767",
                 _ => "?",
             };
-        }
-        public void PlayStream(Uri streamUri)
-        {
-            if (_mediaPlayer == null)
-            {
-                _mediaPlayer = new MediaPlayer();
-                _mediaPlayer.RealTimePlayback = true;
-                _mediaPlayer.CommandManager.IsEnabled = false; // Disable SMTC integration, as we use it to control the MPD server instead
-            }
-
-            _mediaPlayer.Source = MediaSource.CreateFromUri(streamUri);
-            _mediaPlayer.Play();
-        }
-
-        public void StopStream()
-        {
-            _mediaPlayer?.Pause();
-        }
-
-        public void SetStreamVolume(double volume)
-        {
-            if (_mediaPlayer != null)
-                _mediaPlayer.Volume = volume / 100;
         }
 
         public async Task OpenStoreReviewUrlAsync()

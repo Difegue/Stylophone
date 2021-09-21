@@ -7,13 +7,11 @@ using Stylophone.Common.ViewModels;
 using UIKit;
 using SkiaSharp.Views.iOS;
 using Foundation;
-using AVFoundation;
 
 namespace Stylophone.iOS.Services
 {
     public class InteropService: IInteropService
     {
-        private AVPlayer _mediaPlayer;
 
         public InteropService( )
         {
@@ -84,29 +82,6 @@ namespace Stylophone.iOS.Services
                 PlaybackIcon.VolumeFull => "speaker.wave.2.circle",
                 _ => "opticaldisc",
             };
-        }
-
-        public void PlayStream(Uri streamUri)
-        {
-            if (_mediaPlayer == null || _mediaPlayer.Status == AVPlayerStatus.Failed)
-                _mediaPlayer = new AVPlayer();
-
-            var playerItem = new AVPlayerItem(new NSUrl(streamUri.AbsoluteUri));
-            _mediaPlayer.ReplaceCurrentItemWithPlayerItem(playerItem);
-
-            _mediaPlayer.AutomaticallyWaitsToMinimizeStalling = false;
-            _mediaPlayer.Play();
-        }
-
-        public void StopStream()
-        {
-            _mediaPlayer?.Pause();
-        }
-
-        public void SetStreamVolume(double volume)
-        {
-            if (_mediaPlayer != null)
-                _mediaPlayer.Volume = (float)volume / 100;
         }
 
         public Task OpenStoreReviewUrlAsync()

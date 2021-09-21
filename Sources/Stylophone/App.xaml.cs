@@ -63,6 +63,8 @@ namespace Stylophone
 
             // Analytics
             SystemInformation.Instance.TrackAppUse(args);
+#if DEBUG
+#else
             var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
             if (enableAnalytics)
             {
@@ -70,6 +72,7 @@ namespace Stylophone
                 AppCenter.Start("f2193544-6a38-42f6-92bd-69964bc3a0e8",
                     typeof(Analytics), typeof(Crashes));
             }
+#endif
 
             var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             viewTitleBar.ButtonBackgroundColor = Colors.Transparent;

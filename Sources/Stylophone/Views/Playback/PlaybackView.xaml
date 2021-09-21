@@ -87,8 +87,8 @@
                 Margin="0,12,0,0">
                 <TextBlock
                     Margin="25,0,25,5"
+                    FontFamily="Segoe UI Variable Display"
                     FontSize="28"
-                    FontWeight="Bold"
                     MaxLines="5"
                     Style="{ThemeResource TitleTextBlockStyle}"
                     Text="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
@@ -98,7 +98,8 @@
                 <TextBlock
                     x:Name="AlbumArtist"
                     Margin="25,0,25,10"
-                    FontWeight="Bold"
+                    FontFamily="Segoe UI Variable Display"
+                    FontWeight="SemiBold"
                     MaxLines="3"
                     Opacity="0.6"
                     Style="{ThemeResource BaseTextBlockStyle}"
@@ -108,7 +109,8 @@
                 <TextBlock
                     x:Name="AlbumName"
                     Margin="25,0,25,10"
-                    FontWeight="SemiLight"
+                    FontFamily="Segoe UI Variable Display"
+                    FontWeight="Normal"
                     MaxLines="3"
                     Opacity="0.6"
                     Style="{ThemeResource SubtitleTextBlockStyle}"
@@ -128,6 +130,7 @@
 
             <TextBlock
                 x:Name="UpNext"
+                FontFamily="Segoe UI Variable Display"
                 Opacity="0.6"
                 Style="{ThemeResource BaseTextBlockStyle}"
                 Text="{x:Bind strings:Resources.PlaybackUpNext}" />
@@ -136,6 +139,7 @@
                 x:Name="UpNextTitle"
                 MaxWidth="256"
                 Margin="{StaticResource XSmallLeftMargin}"
+                FontFamily="Segoe UI Variable Display"
                 Opacity="0.6"
                 Style="{ThemeResource BaseTextBlockStyle}"
                 Text="{x:Bind PlaybackViewModel.NextTrack.Name, Mode=OneWay}"

@@ -5,12 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeProject.ObjectPool" Version="5.0.2" />
-    <PackageReference Include="Microsoft.Toolkit" Version="7.0.1" />
-    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.1" />
+    <PackageReference Include="CodeProject.ObjectPool" Version="5.0.3" />
+    <PackageReference Include="LibVLCSharp" Version="3.6.0" />
+    <PackageReference Include="Microsoft.Toolkit" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.2" />
     <PackageReference Include="RangedObservableCollection" Version="1.0.1" />
-    <PackageReference Include="SkiaSharp" Version="2.80.2" />
-    <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="2.80.2" />
+    <PackageReference Include="SkiaSharp" Version="2.80.3" />
+    <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="2.80.3" />
   </ItemGroup>
 
   <ItemGroup>

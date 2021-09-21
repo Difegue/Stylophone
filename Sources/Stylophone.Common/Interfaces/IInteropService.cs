@@ -34,10 +34,6 @@ namespace Stylophone.Common.Interfaces
         Version GetAppVersion();
         Task SetThemeAsync(Theme param);
 
-        void PlayStream(Uri streamUri);
-        void StopStream();
-        void SetStreamVolume(double volume);
-
         string GetIcon(PlaybackIcon volumeFull);
             
         Task OpenStoreReviewUrlAsync();

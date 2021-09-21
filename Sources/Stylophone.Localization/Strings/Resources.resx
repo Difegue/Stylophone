@@ -249,8 +249,7 @@
     <value>Clear Cache</value>
   </data>
   <data name="SettingsClearCacheDescription" xml:space="preserve">
-    <value>Stylophone stores album art locally to avoid overloading your MPD Server.
-If you want to clear the album art cache, click this button.</value>
+    <value>Clear the local album art cache</value>
   </data>
   <data name="SettingsCustomization" xml:space="preserve">
     <value>Personalization</value>
@@ -484,5 +483,11 @@ Enabling this option will show a second volume slider to control local volume.</
   </data>
   <data name="FirstRunFlavorText" xml:space="preserve">
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
+  </data>
+  <data name="SettingsAlbumArt" xml:space="preserve">
+    <value>Download Album Art from the MPD Server</value>
+  </data>
+  <data name="SettingsAlbumArtText" xml:space="preserve">
+    <value>Stylophone stores album art locally to avoid overloading your MPD Server.</value>
   </data>
 </root>

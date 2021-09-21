@@ -12,6 +12,7 @@ using UIKit;
 using CoreGraphics;
 using SkiaSharp.Views.iOS;
 using System.ComponentModel;
+using SkiaSharp;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -78,15 +79,8 @@ namespace Stylophone.iOS.ViewControllers
         {
 			TableView.ScrollRectToVisible(new CGRect(0, 0, 1, 1), false);
 
-			if (ViewModel.Item != null)
-				ViewModel.Item.PropertyChanged -= UpdateAlbumArt;
-
 			var album = parameter as AlbumViewModel;
 			ViewModel.Initialize(album);
-			ViewModel.Item.PropertyChanged += UpdateAlbumArt;
-
-			if (ViewModel.Item.AlbumArtLoaded)
-				SetAlbumArt();
 
 			// Reset label texts
 			AlbumArtists.Text = "...";
@@ -109,6 +103,15 @@ namespace Stylophone.iOS.ViewControllers
 
 			_settingsBtn = CreateSettingsButton();
 
+			var imageConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer));
+			var colorConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIColorValueTransformer));
+
+			_albumBinder.Bind<SKImage>(AlbumArt, "image", nameof(album.AlbumArt), valueTransformer: imageConverter);
+			_albumBinder.Bind<SKImage>(BackgroundArt, "image", nameof(album.AlbumArt), valueTransformer: imageConverter);
+			_albumBinder.Bind<SKColor>(PlayButton, "backgroundColor", nameof(album.DominantColor), valueTransformer: colorConverter);
+			_albumBinder.Bind<SKColor>(AddToQueueButton, "backgroundColor", nameof(album.DominantColor), valueTransformer: colorConverter);
+			_albumBinder.Bind<SKColor>(PlaylistButton, "backgroundColor", nameof(album.DominantColor), valueTransformer: colorConverter);
+
 			// Add radius to AlbumArt
 			AlbumArt.Layer.CornerRadius = 8;
 			AlbumArt.Layer.MasksToBounds = true;
@@ -117,21 +120,6 @@ namespace Stylophone.iOS.ViewControllers
 			ArtContainer.Layer.ShadowOpacity = 0.5F;
 			ArtContainer.Layer.ShadowOffset = new CGSize(0, 0);
 			ArtContainer.Layer.ShadowRadius = 4;
-		}
-
-        private void UpdateAlbumArt(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ViewModel.Item.AlbumArt))
-				SetAlbumArt();
-        }
-
-        private void SetAlbumArt()
-        {
-			AlbumArt.Image = ViewModel.Item.AlbumArt.ToUIImage();
-			BackgroundArt.Image = ViewModel.Item.AlbumArt.ToUIImage();
-			PlayButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
-			AddToQueueButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
-			PlaylistButton.BackgroundColor = ViewModel.Item.DominantColor.ToUIColor();
 		}
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)

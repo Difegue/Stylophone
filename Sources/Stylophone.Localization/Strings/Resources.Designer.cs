@@ -849,6 +849,24 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Download Album Art from the MPD Server.
+        /// </summary>
+        public static string SettingsAlbumArt {
+            get {
+                return ResourceManager.GetString("SettingsAlbumArt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stylophone stores album art locally to avoid overloading your MPD Server..
+        /// </summary>
+        public static string SettingsAlbumArtText {
+            get {
+                return ResourceManager.GetString("SettingsAlbumArtText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Analytics.
         /// </summary>
         public static string SettingsAnalytics {
@@ -885,8 +903,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Stylophone stores album art locally to avoid overloading your MPD Server.
-        ///If you want to clear the album art cache, click this button..
+        ///   Recherche une chaîne localisée semblable à Clear the local album art cache.
         /// </summary>
         public static string SettingsClearCacheDescription {
             get {
