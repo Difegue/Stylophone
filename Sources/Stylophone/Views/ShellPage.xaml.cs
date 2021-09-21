@@ -38,19 +38,19 @@ namespace Stylophone.Views
             DataContext = ((App)Application.Current).Services.GetService(typeof(ShellViewModel));
             ViewModel.Initialize(shellFrame, navigationView, playlistContainer, notificationHolder, KeyboardAccelerators);
 
+            // Hide default title bar.
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            UpdateTitleBarLayout(coreTitleBar);
+
             // On Xbox, raise the contentContainer grid since there's no titlebar
             if (AnalyticsInfo.VersionInfo.DeviceFamily.Contains("Xbox"))
             {
-                contentContainer.Margin = new Thickness(0, -48, 0, 0);
+                Resources["NavigationViewContentMargin"] = new Thickness(0,4,0,0);
                 AppTitleBar.Visibility = Visibility.Collapsed;
             }
             else
             {
-                // Hide default title bar.
-                var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-                coreTitleBar.ExtendViewIntoTitleBar = true;
-                UpdateTitleBarLayout(coreTitleBar);
-
                 // Set XAML element as a draggable region.
                 Window.Current.SetTitleBar(AppTitleBar);
 
@@ -65,7 +65,6 @@ namespace Stylophone.Views
                 //Register a handler for when the window changes focus
                 Window.Current.Activated += Current_Activated;
             }
-
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)

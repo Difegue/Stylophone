@@ -72,6 +72,7 @@
                 Normal="{StaticResource StringItemTemplate}" />
 
             <!--  This top margin is the height of the custom TitleBar  -->
+            <Thickness x:Key="NavigationViewMinimalContentMargin">0,40,0,0</Thickness>
             <Thickness x:Key="NavigationViewContentMargin">0,40,0,0</Thickness>
             <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
             <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent" />
@@ -108,8 +109,6 @@
                     Text="Stylophone" />
             </StackPanel>
         </Border>
-
-
 
         <muxc:NavigationView
             x:Name="navigationView"
