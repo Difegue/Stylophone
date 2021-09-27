@@ -32,9 +32,14 @@ namespace Stylophone.iOS.Services
         /// <returns></returns>
         public async Task<string> ShowAddToPlaylistDialog(bool allowExistingPlaylists = true)
         {
+            // Wrap VC in a NavigationController for top controls
             var dialog = new AddToPlaylistViewController(_mpdService, allowExistingPlaylists);
-
             var navigationController = new UINavigationController(dialog);
+
+            // Specify medium detent for the NavigationController's presentation
+            UISheetPresentationController uspc = (UISheetPresentationController)navigationController.PresentationController;
+            uspc.Detents = new [] { UISheetPresentationControllerDetent.CreateMediumDetent() };
+            
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(navigationController, true, null);
 
             var result = await dialog.CompletionTask;
