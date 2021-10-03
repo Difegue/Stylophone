@@ -233,6 +233,7 @@
     <PackageReference Include="VideoLAN.LibVLC.iOS">
       <Version>3.3.10</Version>
     </PackageReference>
+     <PackageReference Include="MpcNET" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entitlements.plist" />
@@ -247,10 +248,6 @@
     <Folder Include="Assets.xcassets\AlbumPlaceholder.imageset\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MpcNET\MpcNET.csproj">
-      <Project>{8994C820-7BA9-4BB8-B9EA-C608B07C4A11}</Project>
-      <Name>MpcNET</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Stylophone.Common\Stylophone.Common.csproj">
       <Project>{83B15D0E-C82F-4438-8290-0DFC23A6498F}</Project>
       <Name>Stylophone.Common</Name>

@@ -4,7 +4,7 @@ Stylophone
 ===========
 
 [**Music Player Daemon**](https://www.musicpd.org/) Client for UWP.
-Based on [MpcNET](https://github.com/petrkr/MpcNET), the original .NET Client Library for MPD.  
+Based on [MpcNET](https://github.com/Difegue/MpcNET), my own fork of the original .NET Client Library for MPD. (now on NuGet!)   
 
 <a href='//www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/en-us/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="142" height="52"/></a>
 
