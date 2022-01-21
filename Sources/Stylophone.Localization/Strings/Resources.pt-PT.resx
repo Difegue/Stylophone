@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>Stylophone</value>
+    <comment>Application display name</comment>
+  </data>
+  <data name="QueueHeader" xml:space="preserve">
+    <value>Fila</value>
+    <comment>Navigation view item name for NowPlaying</comment>
+  </data>
+  <data name="LibraryHeader" xml:space="preserve">
+    <value>Biblioteca</value>
+    <comment>Navigation view item name for Library</comment>
+  </data>
+  <data name="FoldersHeader" xml:space="preserve">
+    <value>Pastas</value>
+    <comment>Navigation view item name for Folders</comment>
+  </data>
+  <data name="PlaylistsHeader" xml:space="preserve">
+    <value>Listas de reprodução</value>
+    <comment>Navigation view item name for Playlists</comment>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>Definições</value>
+    <comment>Navigation view item name for Settings</comment>
+  </data>
+  <data name="ErrorNoMatchingAlbum" xml:space="preserve">
+    <value>Esta faixa não tem um Álbum correspondente.</value>
+  </data>
+  <data name="NotificationPlaylistRemoved" xml:space="preserve">
+    <value>A Lista de reprodução foi eliminada.</value>
+  </data>
+  <data name="NotificationNowPlayingTrack" xml:space="preserve">
+    <value>A reproduzir agora {0}</value>
+  </data>
+  <data name="NotificationNoTracksLoaded" xml:space="preserve">
+    <value>Ainda não há faixas carregadas.</value>
+  </data>
+  <data name="NotificationNoTrackPlaying" xml:space="preserve">
+    <value>Atualmente não está a tocar nenhuma faixa.</value>
+  </data>
+  <data name="DeletePlaylistContentDialog" xml:space="preserve">
+    <value>Eliminar Lista de reprodução?</value>
+  </data>
+  <data name="ErrorCantClearCache" xml:space="preserve">
+    <value>Não foi possível limpar a fila!</value>
+  </data>
+  <data name="NotificationDbUpdateStarted" xml:space="preserve">
+    <value>Atualização da base de dados iniciada.</value>
+  </data>
+  <data name="NotificationDbAlreadyUpdating" xml:space="preserve">
+    <value>A base de dados já está a ser atualizada.</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="SettingsNoServerError" xml:space="preserve">
+    <value>Não foi possível encontrar um servidor MPD neste endereço!</value>
+  </data>
+  <data name="SearchGoToDetail" xml:space="preserve">
+    <value>Procurar por "{0}" no servidor...</value>
+  </data>
+  <data name="SearchResultsFor" xml:space="preserve">
+    <value>Resultados da Pesquisa por "{0}"</value>
+  </data>
+  <data name="OKButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
+    <value>File name is null or empty. Specify a valid file name</value>
+    <comment>File name is null or empty to save file in settings storage extensions</comment>
+  </data>
+  <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
+    <value>value must be an Enum!</value>
+    <comment>Value must be an Enum in enum to boolean converter</comment>
+  </data>
+  <data name="ExceptionEnumToBooleanConverterParameterMustBeAnEnumName" xml:space="preserve">
+    <value>parameter must be an Enum name!</value>
+    <comment>Parameter must be an Enum name in enum to boolean converter</comment>
+  </data>
+  <data name="ExceptionViewLifeTimeControlViewDisposal" xml:space="preserve">
+    <value>This view is being disposed.</value>
+    <comment>View disposed</comment>
+  </data>
+  <data name="ExceptionViewLifeTimeControlMissingReleasedSubscription" xml:space="preserve">
+    <value>All pages opened in a new window must subscribe to the Released Event.</value>
+    <comment>The page is not subscribed to the Released event.</comment>
+  </data>
+  <data name="NotificationAddedToPlaylist" xml:space="preserve">
+    <value>Adicionado na Lista de reprodução {0}!</value>
+  </data>
+  <data name="NotificationAddedToQueue" xml:space="preserve">
+    <value>Adicionado à Fila!</value>
+  </data>
+  <data name="NotificationCacheDeleted" xml:space="preserve">
+    <value>A cache de arte do álbum foi eliminada.</value>
+  </data>
+  <data name="ErrorAddingAlbum" xml:space="preserve">
+    <value>Não foi possível adicionar o Álbum: {0}</value>
+  </data>
+  <data name="ErrorPlayingTrack" xml:space="preserve">
+    <value>Não foi possível reproduzir o conteúdo: {0}</value>
+  </data>
+  <data name="ErrorGeneric" xml:space="preserve">
+    <value>Erro: {0}</value>
+  </data>
+  <data name="ErrorInvalidMPDResponse" xml:space="preserve">
+    <value>Resposta MPD inválida.</value>
+  </data>
+  <data name="SettingsUpdateDbDesc" xml:space="preserve">
+    <value>Esta operação pode levar algum tempo ao servidor completar.</value>
+  </data>
+  <data name="SettingsUpdateDbTitle" xml:space="preserve">
+    <value>Atualizar a base de dados do servidor MPD</value>
+  </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>Acerca desta aplicação</value>
+  </data>
+  <data name="SettingsAboutText" xml:space="preserve">
+    <value>Cliente MPD para a Plataforma Universal Windows, baseado em MpcNET.</value>
+  </data>
+  <data name="SettingsAnalytics" xml:space="preserve">
+    <value>Analíticos</value>
+  </data>
+  <data name="SettingsAnalyticsText" xml:space="preserve">
+    <value>Permitir que o Stylophone envie relatórios de crash e analíticos</value>
+  </data>
+  <data name="SettingsApplyOnRestart" xml:space="preserve">
+    <value>Esta definição aplicar-se-á depois de reiniciar a aplicação.</value>
+  </data>
+  <data name="SettingsClearCache" xml:space="preserve">
+    <value>Limpar Cache</value>
+  </data>
+  <data name="SettingsClearCacheDescription" xml:space="preserve">
+    <value>Limpar a cache local de arte do álbum</value>
+  </data>
+  <data name="SettingsCustomization" xml:space="preserve">
+    <value>Personalização</value>
+  </data>
+  <data name="SettingsDatabase" xml:space="preserve">
+    <value>Base de dados e Arte do Álbum</value>
+  </data>
+  <data name="SettingsGithub" xml:space="preserve">
+    <value>Código Fonte, Licença e Declaração de Privacidade</value>
+  </data>
+  <data name="SettingsGithubLink" xml:space="preserve">
+    <value>https://github.com/Difegue/Stylophone</value>
+  </data>
+  <data name="SettingsServer" xml:space="preserve">
+    <value>Servidor MPD</value>
+  </data>
+  <data name="SettingsServerHost" xml:space="preserve">
+    <value>Nome do anfitrião</value>
+  </data>
+  <data name="SettingsServerPort" xml:space="preserve">
+    <value>Porta</value>
+  </data>
+  <data name="SettingsTheme" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="SettingsThemeDark" xml:space="preserve">
+    <value>Escuro</value>
+  </data>
+  <data name="SettingsThemeDefault" xml:space="preserve">
+    <value>Pré-definição do Sistema</value>
+  </data>
+  <data name="SettingsThemeLight" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="SettingsUIDensity" xml:space="preserve">
+    <value>Densidade IU</value>
+  </data>
+  <data name="SettingsUIDensityCompact" xml:space="preserve">
+    <value>Compacto</value>
+  </data>
+  <data name="SettingsUIDensityNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="SettingsUpdateDatabase" xml:space="preserve">
+    <value>Actualização</value>
+  </data>
+  <data name="SearchPlaceholderText" xml:space="preserve">
+    <value>Procurar Faixas...</value>
+  </data>
+  <data name="SearchAlbumsToggle" xml:space="preserve">
+    <value>Álbuns</value>
+  </data>
+  <data name="SearchArtistsToggle" xml:space="preserve">
+    <value>Artistas</value>
+  </data>
+  <data name="SearchTracksToggle" xml:space="preserve">
+    <value>Faixas</value>
+  </data>
+  <data name="SearchNoResultsTitle.Text" xml:space="preserve">
+    <value>Não foram encontrados resultados...</value>
+  </data>
+  <data name="FirstRunText" xml:space="preserve">
+    <value>Para começar, por favor visite a página Definições para introduzir o URL e a porta do seu servidor MPD.
+Tenha em mente que o Stylophone pode enviar dados de utilização para ajudar a diagnosticar bugs. 
+Se não estiver de acordo com isto, pode desativar a telemetria nas Definições.
+Espero que goste de utilizar a aplicação!  
+</value>
+    <comment>First use prompt message body</comment>
+  </data>
+  <data name="FirstRunTitle" xml:space="preserve">
+    <value>Bem-vindo ao Stylophone!</value>
+    <comment>First use prompt message title</comment>
+  </data>
+  <data name="ContextMenuPlay" xml:space="preserve">
+    <value>Reproduzir</value>
+  </data>
+  <data name="ContextMenuViewAlbum" xml:space="preserve">
+    <value>Ver Álbum</value>
+  </data>
+  <data name="ContextMenuRemoveFromPlaylist" xml:space="preserve">
+    <value>Remover da Lista de reprodução</value>
+  </data>
+  <data name="ContextMenuRemoveFromQueue" xml:space="preserve">
+    <value>Remover da Fila</value>
+  </data>
+  <data name="ContextMenuAddToPlaylist" xml:space="preserve">
+    <value>Adicionar a Lista de reprodução</value>
+  </data>
+  <data name="ContextMenuAddQueueToPlaylist" xml:space="preserve">
+    <value>Guardar Fila como Lista de reprodução</value>
+  </data>
+  <data name="ContextMenuClearQueue" xml:space="preserve">
+    <value>Limpar Fila</value>
+  </data>
+  <data name="ContextMenuAddToQueue" xml:space="preserve">
+    <value>Adicionar a Fila</value>
+  </data>
+  <data name="ContextMenuDeletePlaylist" xml:space="preserve">
+    <value>Eliminar Lista de reprodução</value>
+  </data>
+  <data name="EmptyFoldersDesc" xml:space="preserve">
+    <value>O seu servidor MPD está ligado?</value>
+  </data>
+  <data name="EmptyFoldersTitle" xml:space="preserve">
+    <value>Não se encontram pastas no servidor.</value>
+  </data>
+  <data name="EmptyLibraryTitle" xml:space="preserve">
+    <value>Não há nada como uma biblioteca vazia.</value>
+  </data>
+  <data name="EmptyPlaylistDesc" xml:space="preserve">
+    <value>Arranje algumas faixas lá!</value>
+  </data>
+  <data name="EmptyPlaylistTitle" xml:space="preserve">
+    <value>Não posso interferir com isto.</value>
+  </data>
+  <data name="EmptyQueueDesc" xml:space="preserve">
+    <value>Porque não adiciona música?</value>
+  </data>
+  <data name="EmptyQueueTitle" xml:space="preserve">
+    <value>Tudo está calmo agora.</value>
+  </data>
+  <data name="EmptySearchTitle" xml:space="preserve">
+    <value>Pesquisa Funky Fresca!</value>
+  </data>
+  <data name="EmptySearchDesc" xml:space="preserve">
+    <value>Nenhuma faixa encontrada no Servidor.</value>
+  </data>
+  <data name="LibrarySearchPlaceholder" xml:space="preserve">
+    <value>Pesquisar</value>
+  </data>
+  <data name="FoldersRoot" xml:space="preserve">
+    <value>Sistema de Ficheiros MPD</value>
+  </data>
+  <data name="FoldersLoadingTreeItem" xml:space="preserve">
+    <value>A carregar...</value>
+  </data>
+  <data name="FoldersCollapseAll" xml:space="preserve">
+    <value>Fechar todas as pastas abertas</value>
+  </data>
+  <data name="PlaybackUpNext" xml:space="preserve">
+    <value>A seguir:</value>
+  </data>
+  <data name="ActionToggleShuffle" xml:space="preserve">
+    <value>Ativar/Desativar Aleatório</value>
+  </data>
+  <data name="ActionPlayPause" xml:space="preserve">
+    <value>Reproduzir/Pausa</value>
+  </data>
+  <data name="ActionSkipPrevious" xml:space="preserve">
+    <value>Faixa Anterior</value>
+  </data>
+  <data name="ActionToggleRepeat" xml:space="preserve">
+    <value>Ativar/Desativar Repetição</value>
+  </data>
+  <data name="ActionSkipNext" xml:space="preserve">
+    <value>Próxima Faixa</value>
+  </data>
+  <data name="ActionChangeVolume" xml:space="preserve">
+    <value>Mudar Volume</value>
+  </data>
+  <data name="ActionCompactOverlay" xml:space="preserve">
+    <value>Mostrar Mini Leitor</value>
+  </data>
+  <data name="ActionMore" xml:space="preserve">
+    <value>Mais Ações</value>
+  </data>
+  <data name="AddToPlaylistTitle" xml:space="preserve">
+    <value>Adicionar à Lista de reprodução</value>
+  </data>
+  <data name="AddToPlaylistText" xml:space="preserve">
+    <value>Adicionar faixa(s) para a seguinte Lista de reprodução:</value>
+  </data>
+  <data name="AddToPlaylistPlaceholder" xml:space="preserve">
+    <value>Selecione uma Lista de reprodução</value>
+  </data>
+  <data name="AddToPlaylistPrimaryButtonText" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="AddToPlaylistCreateNewPlaylist" xml:space="preserve">
+    <value>Criar Nova Lista de reprodução</value>
+  </data>
+  <data name="AddToPlaylistNewPlaylistName" xml:space="preserve">
+    <value>Nome da Lista de reprodução</value>
+  </data>
+  <data name="SettingsServerPassword" xml:space="preserve">
+    <value>Palavra-passe</value>
+  </data>
+  <data name="ErrorPassword" xml:space="preserve">
+    <value>Palavra-passe inválida</value>
+  </data>
+  <data name="SettingsLocalPlaybackAvailable" xml:space="preserve">
+    <value>Reprodução Local disponível</value>
+  </data>
+  <data name="OffText" xml:space="preserve">
+    <value>Desligado</value>
+  </data>
+  <data name="OnText" xml:space="preserve">
+    <value>Ligado</value>
+  </data>
+  <data name="SettingsLocalPlaybackHeader" xml:space="preserve">
+    <value>Reprodução Local</value>
+  </data>
+  <data name="SettingsLocalPlaybackText" xml:space="preserve">
+    <value>Stylophone pode tocar o fluxo de música do seu Servidor MPD. 
+Ativando esta opção mostrará um segundo deslizador de volume para controlar o volume local.</value>
+  </data>
+  <data name="ErrorPlayingMPDStream" xml:space="preserve">
+    <value>Erro ao tentar reproduzir o fluxo httpd do servidor MPD: {0}</value>
+  </data>
+  <data name="LocalVolumeHeader" xml:space="preserve">
+    <value>Volume Local</value>
+  </data>
+  <data name="RateAppPromptTitle" xml:space="preserve">
+    <value>Avalie esta Aplicação</value>
+  </data>
+  <data name="RateAppPromptText" xml:space="preserve">
+    <value>Obrigado por utilizar Stylophone! Gostaria de avaliar a aplicação na Loja? 
+(Não voltaremos a perguntar. 🙏)</value>
+  </data>
+  <data name="YesButtonText" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="NoButtonText" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="RandomTracksHeader" xml:space="preserve">
+    <value>Escolha algumas Canções</value>
+  </data>
+  <data name="RandomTracksInProgress" xml:space="preserve">
+    <value>Baralhando através da sua biblioteca...</value>
+  </data>
+  <data name="FirstRunFlavorText" xml:space="preserve">
+    <value>David Bowie é creditado por ter tocado o Stylophone na sua canção de sucesso de 1969 "Space Oddity" e também pelo seu álbum de 2002 "Heathen track" intitulado "Slip Away", bem como na canção "Heathen (The Rays)".</value>
+  </data>
+  <data name="SettingsAlbumArt" xml:space="preserve">
+    <value>Transferir Arte do Álbum a partir do Servidor MPD</value>
+  </data>
+  <data name="SettingsAlbumArtText" xml:space="preserve">
+    <value>Stylophone armazena a arte do álbum localmente para evitar sobrecarregar o seu MPD Server.</value>
+  </data>
+  <data name="ActionToggleConsume" xml:space="preserve">
+    <value>Ativar/Desativar Consume</value>
+  </data>
+  <data name="DatabaseUpdateHeader" xml:space="preserve">
+    <value>Base de dados do servidor actualizando</value>
+  </data>
+</root>

@@ -294,7 +294,7 @@
     <value>Normal</value>
   </data>
   <data name="SettingsUpdateDatabase" xml:space="preserve">
-    <value>Update Server Database</value>
+    <value>Update</value>
   </data>
   <data name="SearchPlaceholderText" xml:space="preserve">
     <value>Search Tracks...</value>
@@ -489,5 +489,11 @@ Enabling this option will show a second volume slider to control local volume.</
   </data>
   <data name="SettingsAlbumArtText" xml:space="preserve">
     <value>Stylophone stores album art locally to avoid overloading your MPD Server.</value>
+  </data>
+  <data name="ActionToggleConsume" xml:space="preserve">
+    <value>Toggle Consume</value>
+  </data>
+  <data name="DatabaseUpdateHeader" xml:space="preserve">
+    <value>Server Database is Updating</value>
   </data>
 </root>

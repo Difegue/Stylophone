@@ -111,8 +111,7 @@ namespace Stylophone.Services
                 updater.MusicProperties.AlbumTitle = track.File.Album ?? "";
 
                 // Set the album art thumbnail.
-                var uniqueIdentifier = track.File.HasAlbum ? track.File.Album : track.File.HasTitle ? track.File.Title : track.File.Path;
-                uniqueIdentifier = Miscellaneous.EscapeFilename(uniqueIdentifier);
+                var uniqueIdentifier = Miscellaneous.GetFileIdentifier(track.File);
 
                 // Use the cached albumart if it exists
                 var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";

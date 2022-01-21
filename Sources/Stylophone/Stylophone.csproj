@@ -32,7 +32,7 @@
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <!-- Workaround to prevent resource.pri exploding for other languages with LibVLC installed -->
     <AppxBundleAutoResourcePackageQualifiers>DXFeatureLevel</AppxBundleAutoResourcePackageQualifiers>
-    <AppxDefaultResourceQualifiers>Language=en;fr</AppxDefaultResourceQualifiers>
+    <AppxDefaultResourceQualifiers>Language=en;fr;pt</AppxDefaultResourceQualifiers>
   </PropertyGroup>
   <PropertyGroup>
     <!-- This is what will cause the templates to be transformed when the project is built (default is false) -->
@@ -140,37 +140,40 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>4.3.0</Version>
+      <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>4.3.0</Version>
+      <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection">
-      <Version>5.0.2</Version>
+      <Version>6.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.12</Version>
+      <Version>6.2.13</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp">
-      <Version>7.0.2</Version>
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
-      <Version>7.0.2</Version>
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
-      <Version>7.0.2</Version>
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Behaviors">
-      <Version>7.0.2</Version>
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.Core">
-      <Version>7.0.2</Version>
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.7.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="MpcNET">
+      <Version>1.3.0</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views">
       <Version>2.80.2</Version>
@@ -401,7 +404,6 @@
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <PRIResource Include="Strings\fr-fr\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -413,10 +415,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MpcNET\MpcNET.csproj">
-      <Project>{8994c820-7ba9-4bb8-b9ea-c608b07c4a11}</Project>
-      <Name>MpcNET</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Stylophone.Common\Stylophone.Common.csproj">
       <Project>{83b15d0e-c82f-4438-8290-0dfc23a6498f}</Project>
       <Name>Stylophone.Common</Name>

@@ -27,6 +27,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:StringVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
             <Style
                 x:Key="CustomInAppNotificationStyle"
@@ -100,11 +101,17 @@
             Background="Transparent"
             Canvas.ZIndex="1"
             IsHitTestVisible="True">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Image VerticalAlignment="Center"
+                        Margin="0,8,0,0"
+                        Width="16"
+                        Height="16"
+                        Source="ms-appx:///Assets/Square44x44Logo.altform-unplated_targetsize-16.png" />
                 <TextBlock
                     x:Name="AppTitle"
                     Margin="4,8,0,0"
                     VerticalAlignment="Center"
+                    FontFamily="Segoe UI Variable Display"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="Stylophone" />
             </StackPanel>
@@ -160,6 +167,25 @@
                     QueryIcon="Find"
                     UpdateTextOnSelect="False" />
             </muxc:NavigationView.AutoSuggestBox>
+
+            <muxc:NavigationView.PaneFooter>
+
+                <StackPanel Orientation="Vertical" Visibility="{x:Bind ViewModel.IsServerUpdating, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="16" Margin="16,8,16,8">
+                        <muxc:InfoBadge ToolTipService.ToolTip="{x:Bind strings:Resources.DatabaseUpdateHeader}" >
+                            <muxc:InfoBadge.IconSource>
+                                <muxc:SymbolIconSource Symbol="Sync"/>
+                            </muxc:InfoBadge.IconSource>
+                        </muxc:InfoBadge>
+                        <TextBlock Text="{x:Bind strings:Resources.DatabaseUpdateHeader}" FontFamily="Segoe UI Variable Display"
+                                   ToolTipService.ToolTip="{x:Bind strings:Resources.DatabaseUpdateHeader}" Style="{StaticResource BaseTextBlockStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                
+            </muxc:NavigationView.PaneFooter>
+
 
             <i:Interaction.Behaviors>
                 <ic:EventTriggerBehavior EventName="ItemInvoked">

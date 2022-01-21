@@ -41,6 +41,10 @@ namespace Stylophone.Common.ViewModels
 
             TryUpdatePlaylists();
             _mpdService.PlaylistsChanged += (s, e) => TryUpdatePlaylists();
+            _mpdService.StatusChanged += async (s, e) =>
+            {
+                await _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsServerUpdating)));
+            };
         }
 
         private bool _isBackEnabled;
@@ -49,6 +53,8 @@ namespace Stylophone.Common.ViewModels
             get { return _isBackEnabled; }
             set { Set(ref _isBackEnabled, value); }
         }
+
+        public bool IsServerUpdating => _mpdService.CurrentStatus.UpdatingDb != -1;
 
         private string _shellHeader;
         public string HeaderText

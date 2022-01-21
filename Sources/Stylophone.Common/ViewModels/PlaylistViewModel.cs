@@ -259,8 +259,8 @@ namespace Stylophone.Common.ViewModels
 
             Source.CollectionChanged += Source_CollectionChanged;
 
-            Artists = findReq.Count() > 0 ? findReq.
-                        Select(f => f.Artist).Distinct().Where(f => f != null && f!= "").Aggregate((f1, f2) => $"{f1}, {f2}") : "";
+            var artistList = findReq.Select(f => f.Artist).Distinct().Where(f => f != null && f != "").ToList();
+            Artists = artistList.Count > 0 ? artistList.Aggregate((f1, f2) => $"{f1}, {f2}") : "";
 
             var totalTime = Source.Count > 0 ? Source.Select(tr => tr.File.Time).Aggregate((t1, t2) => t1 + t2) : 0;
             TimeSpan t = TimeSpan.FromSeconds(totalTime);

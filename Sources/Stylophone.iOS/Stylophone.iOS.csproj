@@ -150,7 +150,7 @@
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <InterfaceDefinition Include="Views\Settings.storyboard" />
@@ -173,34 +173,33 @@
     <ImageAsset Include="Assets.xcassets\icon.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\58.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\87.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\80.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\180.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\58-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40-2.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\80-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\1024.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\152.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\167.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\16.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\32.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\32-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\64.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\128.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\256.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\256-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\512.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\512-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\1024-1.png" />
+    <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\spotlight120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipad76.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\notification40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\settings87.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\spotlight80.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac16.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac64.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadPro167.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipad152.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac256.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSettings29.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac1024.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac128.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\iphone120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadNotification20.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac512.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSpotlight40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac32.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\notification60.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSpotlight80.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\settings58.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\iphone180.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\appstore1024.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSettings58.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadNotification40.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -233,6 +232,7 @@
     <PackageReference Include="VideoLAN.LibVLC.iOS">
       <Version>3.3.10</Version>
     </PackageReference>
+     <PackageReference Include="MpcNET" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entitlements.plist" />
@@ -247,10 +247,6 @@
     <Folder Include="Assets.xcassets\AlbumPlaceholder.imageset\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MpcNET\MpcNET.csproj">
-      <Project>{8994C820-7BA9-4BB8-B9EA-C608B07C4A11}</Project>
-      <Name>MpcNET</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Stylophone.Common\Stylophone.Common.csproj">
       <Project>{83B15D0E-C82F-4438-8290-0DFC23A6498F}</Project>
       <Name>Stylophone.Common</Name>

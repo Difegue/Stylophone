@@ -65,8 +65,8 @@ namespace Stylophone.iOS.ViewControllers
             LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
 
             LocalMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.LocalPlayback.ToggleMute();
-            LocalPlaybackBinder.Bind<double>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
-            LocalPlaybackBinder.Bind<double>(LocalVolume, "text", nameof(ViewModel.LocalPlayback.Volume), valueTransformer: intToStringTransformer);
+            LocalPlaybackBinder.Bind<int>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
+            LocalPlaybackBinder.Bind<int>(LocalVolume, "text", nameof(ViewModel.LocalPlayback.Volume), valueTransformer: intToStringTransformer);
 
             ServerMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleMute();
             Binder.Bind<double>(ServerVolumeSlider, "value", nameof(ViewModel.MediaVolume), true);

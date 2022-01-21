@@ -25,7 +25,7 @@ namespace Stylophone.Common.ViewModels
         private CancellationTokenSource _albumArtCancellationSource = new CancellationTokenSource();
         private CancellationTokenSource cts = new CancellationTokenSource();
         private List<Task> volumeTasks = new List<Task>();
-        private List<Task> shuffleTasks = new List<Task>();
+        private List<Task> stateTasks = new List<Task>();
 
         protected INavigationService _navigationService;
         protected INotificationService _notificationService;
@@ -278,6 +278,16 @@ namespace Stylophone.Common.ViewModels
             set => Set(ref _isShuffledEnabled, value);
         }
 
+        private bool _isConsumeEnabled;
+        /// <summary>
+        ///     Are tracks removed upon playback
+        /// </summary>
+        public bool IsConsumeEnabled
+        {
+            get => _isConsumeEnabled;
+            set => Set(ref _isConsumeEnabled, value);
+        }
+
         private bool _isRepeatEnabled;
         /// <summary>
         ///     Is the song going to repeat when finished
@@ -405,7 +415,7 @@ namespace Stylophone.Common.ViewModels
             }
 
             // Set the volume
-            shuffleTasks.Add(Task.Run(async () =>
+            stateTasks.Add(Task.Run(async () =>
             {
                 await _mpdService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled));
                 await _mpdService.SafelySendCommandAsync(new SingleCommand(IsSingleEnabled));
@@ -425,12 +435,31 @@ namespace Stylophone.Common.ViewModels
 
             IsShuffleEnabled = !IsShuffleEnabled;
 
-            // Set the volume
-            shuffleTasks.Add(Task.Run(async () =>
+            // Set shuffle
+            stateTasks.Add(Task.Run(async () =>
             {
                 await _mpdService.SafelySendCommandAsync(new RandomCommand(IsShuffleEnabled));
                 Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
                 await _dispatcherService.ExecuteOnUIThreadAsync(async () => await UpdateUpNextAsync(_mpdService.CurrentStatus));
+            }, cts.Token));
+        }
+
+        /// <summary>
+        ///     Toggle if the current playlist has consume=1
+        /// </summary>
+        public void ToggleConsume()
+        {
+            // Cancel older shuffleTasks
+            cts.Cancel();
+            cts = new CancellationTokenSource();
+
+            IsConsumeEnabled = !IsConsumeEnabled;
+
+            // Set consume
+            stateTasks.Add(Task.Run(async () =>
+            {
+                await _mpdService.SafelySendCommandAsync(new ConsumeCommand(IsConsumeEnabled));
+                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
             }, cts.Token));
         }
 
@@ -593,7 +622,7 @@ namespace Stylophone.Common.ViewModels
             {
                 // Remove completed requests
                 volumeTasks.RemoveAll(t => t.IsCompleted);
-                shuffleTasks.RemoveAll(t => t.IsCompleted);
+                stateTasks.RemoveAll(t => t.IsCompleted);
 
                 // Update volume to match the server value -- If we're not setting it ourselves
                 if (volumeTasks.Count == 0)
@@ -603,11 +632,12 @@ namespace Stylophone.Common.ViewModels
                 }
 
                 // Ditto for shuffle/repeat/single
-                if (shuffleTasks.Count == 0)
+                if (stateTasks.Count == 0)
                 {
                     _isShuffledEnabled = status.Random;
                     _isRepeatEnabled = status.Repeat;
                     _isSingleEnabled = status.Single;
+                    _isConsumeEnabled = status.Consume;
 
                     if (_isSingleEnabled)
                         RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
@@ -618,6 +648,7 @@ namespace Stylophone.Common.ViewModels
 
                     OnPropertyChanged(nameof(IsRepeatEnabled));
                     OnPropertyChanged(nameof(IsShuffleEnabled));
+                    OnPropertyChanged(nameof(IsConsumeEnabled));
                 }
 
                 switch (status.State)
