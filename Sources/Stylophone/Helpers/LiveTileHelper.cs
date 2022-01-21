@@ -18,8 +18,7 @@ namespace Stylophone.Services
             var album = track.File.Album;
 
             var f = track.File;
-            var uniqueIdentifier = f.HasAlbum ? f.Album : f.HasTitle ? f.Title : f.Path;
-            uniqueIdentifier = Miscellaneous.EscapeFilename(uniqueIdentifier);
+            var uniqueIdentifier = Miscellaneous.GetFileIdentifier(f);
 
             // Use the cached albumart if it exists
             var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";

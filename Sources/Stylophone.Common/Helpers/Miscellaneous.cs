@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using MpcNET.Types;
+using SkiaSharp;
 using System;
 using System.IO;
 
@@ -44,6 +45,20 @@ namespace Stylophone.Common.Helpers
             if (string.IsNullOrEmpty(formatted)) formatted = "0 seconds";
 
             return formatted;
+        }
+
+        /// <summary>
+        /// Get a unique identifier for a given MPD file.
+        /// </summary>
+        /// <param name="f">The MPDFile</param>
+        /// <returns></returns>
+        public static string GetFileIdentifier(IMpdFile f)
+        {
+            // This allows to cache per album, avoiding saving the same album art a ton of times.
+            // Doesn't work if files in an album have different albumarts, but that happens so rarely it's fine to ignore it.
+            var uniqueIdentifier = f.HasAlbum ? f.Album : f.HasTitle ? f.Title : f.Path;
+
+            return EscapeFilename(uniqueIdentifier);
         }
 
         /// <summary>

@@ -83,7 +83,7 @@ namespace Stylophone.Common.Services
         /// </summary>
         /// <param name="f">MpdFile to check for art</param>
         /// <returns>True if the art is cached, false otherwise.</returns>
-        public async Task<bool> IsAlbumArtCachedAsync(IMpdFile f) => await _applicationStorageService.DoesFileExistAsync(GetFileIdentifier(f), "AlbumArt");
+        public async Task<bool> IsAlbumArtCachedAsync(IMpdFile f) => await _applicationStorageService.DoesFileExistAsync(Miscellaneous.GetFileIdentifier(f), "AlbumArt");
 
         /// <summary>
         /// Queue up an AlbumViewModel for the service to grab its album art.
@@ -117,20 +117,11 @@ namespace Stylophone.Common.Services
                 return null;
         }
 
-        private string GetFileIdentifier(IMpdFile f)
-        {
-            // This allows to cache per album, avoiding saving the same album art a ton of times.
-            // Doesn't work if files in an album have different albumarts, but that happens so rarely it's fine to ignore it.
-            var uniqueIdentifier = f.HasAlbum ? f.Album : f.HasTitle ? f.Title : f.Path;
-
-            return Miscellaneous.EscapeFilename(uniqueIdentifier);
-        }
-
         private async Task<SKBitmap> GetAlbumBitmap(IMpdFile f, CancellationToken token = default)
         {
             SKBitmap result;
             var foundUsableArt = false;
-            var fileName = GetFileIdentifier(f);
+            var fileName = Miscellaneous.GetFileIdentifier(f);
 
             // Try loading from art cache first
             if (await IsAlbumArtCachedAsync(f))
