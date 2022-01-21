@@ -293,7 +293,7 @@
     <value>Normal</value>
   </data>
   <data name="SettingsUpdateDatabase" xml:space="preserve">
-    <value>Mettre à jour la base de données du serveur</value>
+    <value>Mettre à jour</value>
   </data>
   <data name="SearchPlaceholderText" xml:space="preserve">
     <value>Rechercher un morceau...</value>
@@ -488,5 +488,8 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   </data>
   <data name="SettingsAlbumArtText" xml:space="preserve">
     <value>Stylophone stocke les pochettes d'album sur votre ordinateur pour éviter de surcharger votre serveur MPD.</value>
+  </data>
+  <data name="ActionToggleConsume" xml:space="preserve">
+    <value>Activer/Désactiver le Consume</value>
   </data>
 </root>

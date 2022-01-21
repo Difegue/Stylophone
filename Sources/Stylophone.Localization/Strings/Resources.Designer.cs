@@ -115,6 +115,15 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Toggle Consume.
+        /// </summary>
+        public static string ActionToggleConsume {
+            get {
+                return ResourceManager.GetString("ActionToggleConsume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Toggle Repeat.
         /// </summary>
         public static string ActionToggleRepeat {
@@ -1093,7 +1102,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Update Server Database.
+        ///   Recherche une chaîne localisée semblable à Update.
         /// </summary>
         public static string SettingsUpdateDatabase {
             get {

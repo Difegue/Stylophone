@@ -524,6 +524,16 @@
                                 </MenuFlyoutItem.Icon>
                             </MenuFlyoutItem>
 
+                            <MenuFlyoutItem
+                                x:Name="ConsumeMenu"
+                                Background="{x:Bind PlaybackViewModel.IsConsumeEnabled, Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"
+                                Click="{x:Bind PlaybackViewModel.ToggleConsume}"
+                                Text="{x:Bind strings:Resources.ActionToggleConsume}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xED60;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+
                             <MenuFlyoutSeparator x:Name="SmallViewSeparator" Opacity="0.4" />
 
                             <MenuFlyoutItem
@@ -537,13 +547,6 @@
                                 Text="{x:Bind strings:Resources.ContextMenuClearQueue}" />
 
                             <MenuFlyoutSeparator Opacity="0.4" />
-
-                            <!--<MenuFlyoutItem Click="{x:Bind PlaybackViewModel.SkipNext}" Text="View Artist">
-                                TODO view artist
-                                <MenuFlyoutItem.Icon>
-                                    <FontIcon Glyph="&#xE8D4;" />
-                                </MenuFlyoutItem.Icon>
-                            </MenuFlyoutItem>-->
 
                             <!--  Add to playlist  -->
                             <MenuFlyoutItem Command="{x:Bind PlaybackViewModel.AddToPlaylistCommand}" Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}">

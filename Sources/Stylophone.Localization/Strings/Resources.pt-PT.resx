@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -293,7 +293,7 @@
     <value>Normal</value>
   </data>
   <data name="SettingsUpdateDatabase" xml:space="preserve">
-    <value>Actualização da Base de dados do Servidor</value>
+    <value>Actualização</value>
   </data>
   <data name="SearchPlaceholderText" xml:space="preserve">
     <value>Procurar Faixas...</value>
@@ -410,7 +410,7 @@ Espero que goste de utilizar a aplicação!
     <value>Mudar Volume</value>
   </data>
   <data name="ActionCompactOverlay" xml:space="preserve">
-    <value>Mostrar Mini Leitor </value>
+    <value>Mostrar Mini Leitor</value>
   </data>
   <data name="ActionMore" xml:space="preserve">
     <value>Mais Ações</value>
@@ -488,5 +488,8 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   </data>
   <data name="SettingsAlbumArtText" xml:space="preserve">
     <value>Stylophone armazena a arte do álbum localmente para evitar sobrecarregar o seu MPD Server.</value>
+  </data>
+  <data name="ActionToggleConsume" xml:space="preserve">
+    <value>Ativar/Desativar Consume</value>
   </data>
 </root>
