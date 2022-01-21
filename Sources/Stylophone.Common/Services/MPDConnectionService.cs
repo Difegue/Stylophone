@@ -238,7 +238,7 @@ namespace Stylophone.Common.Services
                         if (token.IsCancellationRequested || _idleConnection == null)
                             break;
 
-                        var idleChanges = await _idleConnection.SendAsync(new IdleCommand("stored_playlist playlist player mixer output options"));
+                        var idleChanges = await _idleConnection.SendAsync(new IdleCommand("stored_playlist playlist player mixer output options update"));
 
                         if (idleChanges.IsResponseValid)
                             await HandleIdleResponseAsync(idleChanges.Response.Content);
@@ -269,7 +269,7 @@ namespace Stylophone.Common.Services
                 await UpdatePlaylistsAsync();
             }
 
-            if (subsystems.Contains("player") || subsystems.Contains("mixer") || subsystems.Contains("output") || subsystems.Contains("options"))
+            if (subsystems.Contains("player") || subsystems.Contains("mixer") || subsystems.Contains("output") || subsystems.Contains("options") || subsystems.Contains("update"))
             {
                 // Status have changed in a significant way
                 await UpdateStatusAsync(_idleConnection, true);

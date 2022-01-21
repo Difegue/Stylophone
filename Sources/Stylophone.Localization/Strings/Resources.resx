@@ -493,4 +493,7 @@ Enabling this option will show a second volume slider to control local volume.</
   <data name="ActionToggleConsume" xml:space="preserve">
     <value>Toggle Consume</value>
   </data>
+  <data name="DatabaseUpdateHeader" xml:space="preserve">
+    <value>Server Database is Updating</value>
+  </data>
 </root>

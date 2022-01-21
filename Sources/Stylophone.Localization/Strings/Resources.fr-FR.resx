@@ -492,4 +492,7 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   <data name="ActionToggleConsume" xml:space="preserve">
     <value>Activer/Désactiver le Consume</value>
   </data>
+  <data name="DatabaseUpdateHeader" xml:space="preserve">
+    <value>Base de données en cours de MàJ</value>
+  </data>
 </root>

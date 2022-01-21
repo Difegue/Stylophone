@@ -295,6 +295,15 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Server Database is Updating.
+        /// </summary>
+        public static string DatabaseUpdateHeader {
+            get {
+                return ResourceManager.GetString("DatabaseUpdateHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Delete Playlist?.
         /// </summary>
         public static string DeletePlaylistContentDialog {

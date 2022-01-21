@@ -492,4 +492,7 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   <data name="ActionToggleConsume" xml:space="preserve">
     <value>Ativar/Desativar Consume</value>
   </data>
+  <data name="DatabaseUpdateHeader" xml:space="preserve">
+    <value>Base de dados do servidor actualizando</value>
+  </data>
 </root>
