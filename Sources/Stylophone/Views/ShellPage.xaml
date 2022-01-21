@@ -171,8 +171,8 @@
             <muxc:NavigationView.PaneFooter>
 
                 <StackPanel Orientation="Vertical" Visibility="{x:Bind ViewModel.IsServerUpdating, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <muxc:NavigationViewItemSeparator />
-                    <StackPanel Orientation="Horizontal" Spacing="16" Margin="16,8,16,4">
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="16" Margin="16,8,16,8">
                         <muxc:InfoBadge ToolTipService.ToolTip="{x:Bind strings:Resources.DatabaseUpdateHeader}" >
                             <muxc:InfoBadge.IconSource>
                                 <muxc:SymbolIconSource Symbol="Sync"/>
