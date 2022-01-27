@@ -129,7 +129,8 @@ namespace Stylophone.Common.Services
         private async Task TryConnecting(CancellationToken token)
         {
             if (token.IsCancellationRequested) return;
-            if (!IPAddress.TryParse(_host, out var ipAddress)) return;
+            if (!IPAddress.TryParse(_host, out var ipAddress)) 
+                throw new Exception("Invalid IP address");
 
             _mpdEndpoint = new IPEndPoint(ipAddress, _port);
 
