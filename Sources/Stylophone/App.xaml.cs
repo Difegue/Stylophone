@@ -15,6 +15,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Foundation;
+using System.Collections.Generic;
 
 namespace Stylophone
 {
@@ -33,8 +34,8 @@ namespace Stylophone
             Services = ConfigureServices();
             Ioc.Default.ConfigureServices(Services);
 
-
             InitializeComponent();
+            UnhandledException += OnAppUnhandledException;
 
             // Deferred execution until used. Check https://msdn.microsoft.com/library/dd642331(v=vs.110).aspx for further info on Lazy<T> class.
             _activationService = new Lazy<ActivationService>(CreateActivationService);
@@ -89,6 +90,25 @@ namespace Stylophone
         protected override async void OnActivated(IActivatedEventArgs args)
         {
             await ActivationService.ActivateAsync(args);
+        }
+
+        private void OnAppUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+#if DEBUG
+#else
+            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
+            if (enableAnalytics)
+            {
+                var dict = new Dictionary<string, string>();
+                dict.Add("exception", e.Exception.ToString());
+                Analytics.TrackEvent("UnhandledCrash", dict);
+            }
+#endif
+            var notificationService = Ioc.Default.GetRequiredService<INotificationService>();
+            notificationService.ShowErrorNotification(e.Exception);
+
+            // Try to handle the exception in case it's not catastrophic
+            e.Handled = true;
         }
 
         private ActivationService CreateActivationService()
