@@ -76,7 +76,7 @@ namespace Stylophone.Views
 
         private void Play_Track(object sender, RoutedEventArgs e)
         {
-            var listView = sender as AlternatingRowListView;
+            var listView = sender as ListView;
             var trackVm = listView.SelectedItem as TrackViewModel;
             // Set this ID as manually played by the user to prevent unnecessary autoscrolling.
             // Kind of a duct tape fix for now

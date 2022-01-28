@@ -45,7 +45,7 @@ namespace Stylophone.Views
 
         private void Queue_Track(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
         {
-            var listView = sender as AlternatingRowListView;
+            var listView = sender as ListView;
             var trackVm = listView.SelectedItem as TrackViewModel;
             trackVm.AddToQueueCommand.Execute(trackVm.File);
         }
