@@ -490,7 +490,7 @@
     <value>为避免 MPD 服务器过载，Stylophone 会将专辑图片本地保存。</value>
   </data>
   <data name="ActionToggleConsume" xml:space="preserve">
-    <value>连续播放</value>
+    <value>自动从播放队列中移除已播放曲目</value>
   </data>
   <data name="DatabaseUpdateHeader" xml:space="preserve">
     <value>正在更新服务器数据库</value>
