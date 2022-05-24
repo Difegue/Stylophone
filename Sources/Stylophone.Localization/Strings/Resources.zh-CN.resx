@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>Stylophone</value>
+    <comment>Application display name</comment>
+  </data>
+  <data name="QueueHeader" xml:space="preserve">
+    <value>播放队列</value>
+    <comment>Navigation view item name for NowPlaying</comment>
+  </data>
+  <data name="LibraryHeader" xml:space="preserve">
+    <value>音乐库</value>
+    <comment>Navigation view item name for Library</comment>
+  </data>
+  <data name="FoldersHeader" xml:space="preserve">
+    <value>文件夹</value>
+    <comment>Navigation view item name for Folders</comment>
+  </data>
+  <data name="PlaylistsHeader" xml:space="preserve">
+    <value>播放列表</value>
+    <comment>Navigation view item name for Playlists</comment>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>设置</value>
+    <comment>Navigation view item name for Settings</comment>
+  </data>
+  <data name="ErrorNoMatchingAlbum" xml:space="preserve">
+    <value>该曲目没有与之匹配的专辑。</value>
+  </data>
+  <data name="NotificationPlaylistRemoved" xml:space="preserve">
+    <value>已删除播放列表。</value>
+  </data>
+  <data name="NotificationNowPlayingTrack" xml:space="preserve">
+    <value>正在播放：{0}</value>
+  </data>
+  <data name="NotificationNoTracksLoaded" xml:space="preserve">
+    <value>未加载曲目。</value>
+  </data>
+  <data name="NotificationNoTrackPlaying" xml:space="preserve">
+    <value>没有播放中的曲目。</value>
+  </data>
+  <data name="DeletePlaylistContentDialog" xml:space="preserve">
+    <value>删除播放列表？</value>
+  </data>
+  <data name="ErrorCantClearCache" xml:space="preserve">
+    <value>无法清除队列。</value>
+  </data>
+  <data name="NotificationDbUpdateStarted" xml:space="preserve">
+    <value>开始更新数据库。</value>
+  </data>
+  <data name="NotificationDbAlreadyUpdating" xml:space="preserve">
+    <value>已在更新数据库。</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="SettingsNoServerError" xml:space="preserve">
+    <value>无法在该地址下找到 MPD 服务器。</value>
+  </data>
+  <data name="SearchGoToDetail" xml:space="preserve">
+    <value>在服务器上搜索 “{0}”……</value>
+  </data>
+  <data name="SearchResultsFor" xml:space="preserve">
+    <value>“{0}”的搜索结果</value>
+  </data>
+  <data name="OKButtonText" xml:space="preserve">
+    <value>好</value>
+  </data>
+  <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
+    <value>文件名为空。请指定有效文件名。</value>
+    <comment>File name is null or empty to save file in settings storage extensions</comment>
+  </data>
+  <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
+    <value>值必须为枚举类型。</value>
+    <comment>Value must be an Enum in enum to boolean converter</comment>
+  </data>
+  <data name="ExceptionEnumToBooleanConverterParameterMustBeAnEnumName" xml:space="preserve">
+    <value>参数必须为枚举类型。</value>
+    <comment>Parameter must be an Enum name in enum to boolean converter</comment>
+  </data>
+  <data name="ExceptionViewLifeTimeControlViewDisposal" xml:space="preserve">
+    <value>该视图已被释放。</value>
+    <comment>View disposed</comment>
+  </data>
+  <data name="ExceptionViewLifeTimeControlMissingReleasedSubscription" xml:space="preserve">
+    <value>所有在新窗口打开的页面必须订阅 Released 事件。</value>
+    <comment>The page is not subscribed to the Released event.</comment>
+  </data>
+  <data name="NotificationAddedToPlaylist" xml:space="preserve">
+    <value>已添加到播放列表“{0}”。</value>
+  </data>
+  <data name="NotificationAddedToQueue" xml:space="preserve">
+    <value>已添加到队列。</value>
+  </data>
+  <data name="NotificationCacheDeleted" xml:space="preserve">
+    <value>已清除专辑图片缓存。</value>
+  </data>
+  <data name="ErrorAddingAlbum" xml:space="preserve">
+    <value>无法添加专辑：{0}</value>
+  </data>
+  <data name="ErrorPlayingTrack" xml:space="preserve">
+    <value>无法播放内容：{0}</value>
+  </data>
+  <data name="ErrorGeneric" xml:space="preserve">
+    <value>错误：{0}</value>
+  </data>
+  <data name="ErrorInvalidMPDResponse" xml:space="preserve">
+    <value>无效 MPD 响应。</value>
+  </data>
+  <data name="SettingsUpdateDbDesc" xml:space="preserve">
+    <value>该操作可能需要服务器花一些时间才能完成。</value>
+  </data>
+  <data name="SettingsUpdateDbTitle" xml:space="preserve">
+    <value>更新 MPD 服务器数据库</value>
+  </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>关于此应用</value>
+  </data>
+  <data name="SettingsAboutText" xml:space="preserve">
+    <value>基于 MpcNET 的 UWP MPD 客户端。</value>
+  </data>
+  <data name="SettingsAnalytics" xml:space="preserve">
+    <value>分析</value>
+  </data>
+  <data name="SettingsAnalyticsText" xml:space="preserve">
+    <value>允许 Stylophone 发送崩溃与分析报告</value>
+  </data>
+  <data name="SettingsApplyOnRestart" xml:space="preserve">
+    <value>该设置将在重启应用后生效。</value>
+  </data>
+  <data name="SettingsClearCache" xml:space="preserve">
+    <value>清除缓存</value>
+  </data>
+  <data name="SettingsClearCacheDescription" xml:space="preserve">
+    <value>清除本地专辑图片缓存</value>
+  </data>
+  <data name="SettingsCustomization" xml:space="preserve">
+    <value>个性化</value>
+  </data>
+  <data name="SettingsDatabase" xml:space="preserve">
+    <value>数据库与专辑图片</value>
+  </data>
+  <data name="SettingsGithub" xml:space="preserve">
+    <value>源代码、许可证及隐私声明</value>
+  </data>
+  <data name="SettingsGithubLink" xml:space="preserve">
+    <value>https://github.com/Difegue/Stylophone</value>
+  </data>
+  <data name="SettingsServer" xml:space="preserve">
+    <value>MPD 服务器</value>
+  </data>
+  <data name="SettingsServerHost" xml:space="preserve">
+    <value>主机名</value>
+  </data>
+  <data name="SettingsServerPort" xml:space="preserve">
+    <value>端口</value>
+  </data>
+  <data name="SettingsTheme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="SettingsThemeDark" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="SettingsThemeDefault" xml:space="preserve">
+    <value>系统默认</value>
+  </data>
+  <data name="SettingsThemeLight" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="SettingsUIDensity" xml:space="preserve">
+    <value>界面密度</value>
+  </data>
+  <data name="SettingsUIDensityCompact" xml:space="preserve">
+    <value>紧凑</value>
+  </data>
+  <data name="SettingsUIDensityNormal" xml:space="preserve">
+    <value>标准</value>
+  </data>
+  <data name="SettingsUpdateDatabase" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="SearchPlaceholderText" xml:space="preserve">
+    <value>搜索曲目……</value>
+  </data>
+  <data name="SearchAlbumsToggle" xml:space="preserve">
+    <value>专辑</value>
+  </data>
+  <data name="SearchArtistsToggle" xml:space="preserve">
+    <value>艺术家</value>
+  </data>
+  <data name="SearchTracksToggle" xml:space="preserve">
+    <value>曲目</value>
+  </data>
+  <data name="SearchNoResultsTitle.Text" xml:space="preserve">
+    <value>未找到结果。</value>
+  </data>
+  <data name="FirstRunText" xml:space="preserve">
+    <value>要开始，请打开设置页面，输入 MPD 服务器的 URL 和端口。
+请注意，Stylophone 会发送使用数据来帮助诊断错误。
+如果您不同意，可以在设置中禁用遥测。
+祝您使用愉快！</value>
+    <comment>First use prompt message body</comment>
+  </data>
+  <data name="FirstRunTitle" xml:space="preserve">
+    <value>欢迎使用 Stylophone！</value>
+    <comment>First use prompt message title</comment>
+  </data>
+  <data name="ContextMenuPlay" xml:space="preserve">
+    <value>播放</value>
+  </data>
+  <data name="ContextMenuViewAlbum" xml:space="preserve">
+    <value>查看专辑</value>
+  </data>
+  <data name="ContextMenuRemoveFromPlaylist" xml:space="preserve">
+    <value>从播放列表移除</value>
+  </data>
+  <data name="ContextMenuRemoveFromQueue" xml:space="preserve">
+    <value>从播放队列移除</value>
+  </data>
+  <data name="ContextMenuAddToPlaylist" xml:space="preserve">
+    <value>添加到播放列表</value>
+  </data>
+  <data name="ContextMenuAddQueueToPlaylist" xml:space="preserve">
+    <value>将播放队列存为播放列表</value>
+  </data>
+  <data name="ContextMenuClearQueue" xml:space="preserve">
+    <value>清除播放队列</value>
+  </data>
+  <data name="ContextMenuAddToQueue" xml:space="preserve">
+    <value>添加到播放队列</value>
+  </data>
+  <data name="ContextMenuDeletePlaylist" xml:space="preserve">
+    <value>删除播放列表</value>
+  </data>
+  <data name="EmptyFoldersDesc" xml:space="preserve">
+    <value>是否已连接到 MPD 服务器？</value>
+  </data>
+  <data name="EmptyFoldersTitle" xml:space="preserve">
+    <value>未在服务器上找到文件夹。</value>
+  </data>
+  <data name="EmptyLibraryTitle" xml:space="preserve">
+    <value>这里空空如也。</value>
+  </data>
+  <data name="EmptyPlaylistDesc" xml:space="preserve">
+    <value>添加曲目进来吧！</value>
+  </data>
+  <data name="EmptyPlaylistTitle" xml:space="preserve">
+    <value>巧妇难为无米之炊。</value>
+  </data>
+  <data name="EmptyQueueDesc" xml:space="preserve">
+    <value>何不添加一些音乐？</value>
+  </data>
+  <data name="EmptyQueueTitle" xml:space="preserve">
+    <value>一切都静悄悄。</value>
+  </data>
+  <data name="EmptySearchTitle" xml:space="preserve">
+    <value>酷毙了！</value>
+  </data>
+  <data name="EmptySearchDesc" xml:space="preserve">
+    <value>然而未在服务器上找到任何曲目。</value>
+  </data>
+  <data name="LibrarySearchPlaceholder" xml:space="preserve">
+    <value>搜索……</value>
+  </data>
+  <data name="FoldersRoot" xml:space="preserve">
+    <value>MPD 文件系统</value>
+  </data>
+  <data name="FoldersLoadingTreeItem" xml:space="preserve">
+    <value>正在加载……</value>
+  </data>
+  <data name="FoldersCollapseAll" xml:space="preserve">
+    <value>折叠所有已打开文件夹</value>
+  </data>
+  <data name="PlaybackUpNext" xml:space="preserve">
+    <value>接下来播放：</value>
+  </data>
+  <data name="ActionToggleShuffle" xml:space="preserve">
+    <value>随机播放</value>
+  </data>
+  <data name="ActionPlayPause" xml:space="preserve">
+    <value>播放/暂停</value>
+  </data>
+  <data name="ActionSkipPrevious" xml:space="preserve">
+    <value>上一曲目</value>
+  </data>
+  <data name="ActionToggleRepeat" xml:space="preserve">
+    <value>循环播放</value>
+  </data>
+  <data name="ActionSkipNext" xml:space="preserve">
+    <value>下一曲目</value>
+  </data>
+  <data name="ActionChangeVolume" xml:space="preserve">
+    <value>改变音量</value>
+  </data>
+  <data name="ActionCompactOverlay" xml:space="preserve">
+    <value>显示迷你播放器</value>
+  </data>
+  <data name="ActionMore" xml:space="preserve">
+    <value>更多操作</value>
+  </data>
+  <data name="AddToPlaylistTitle" xml:space="preserve">
+    <value>添加到播放列表</value>
+  </data>
+  <data name="AddToPlaylistText" xml:space="preserve">
+    <value>将曲目添加到以下播放列表：</value>
+  </data>
+  <data name="AddToPlaylistPlaceholder" xml:space="preserve">
+    <value>选择播放列表</value>
+  </data>
+  <data name="AddToPlaylistPrimaryButtonText" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="AddToPlaylistCreateNewPlaylist" xml:space="preserve">
+    <value>创建新播放列表</value>
+  </data>
+  <data name="AddToPlaylistNewPlaylistName" xml:space="preserve">
+    <value>播放列表名称</value>
+  </data>
+  <data name="SettingsServerPassword" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="ErrorPassword" xml:space="preserve">
+    <value>密码无效</value>
+  </data>
+  <data name="SettingsLocalPlaybackAvailable" xml:space="preserve">
+    <value>本地回放可用</value>
+  </data>
+  <data name="OffText" xml:space="preserve">
+    <value>关</value>
+  </data>
+  <data name="OnText" xml:space="preserve">
+    <value>开</value>
+  </data>
+  <data name="SettingsLocalPlaybackHeader" xml:space="preserve">
+    <value>本地回放</value>
+  </data>
+  <data name="SettingsLocalPlaybackText" xml:space="preserve">
+    <value>Stylophone 可以播放来自 MPD 服务器的音频流。
+启用此选项后，将显示另一个音量滑块，用来控制本地音量。</value>
+  </data>
+  <data name="ErrorPlayingMPDStream" xml:space="preserve">
+    <value>试图播放 MPD 服务器的 httpd 流时出现错误：{0}</value>
+  </data>
+  <data name="LocalVolumeHeader" xml:space="preserve">
+    <value>本地音量</value>
+  </data>
+  <data name="RateAppPromptTitle" xml:space="preserve">
+    <value>给应用评分</value>
+  </data>
+  <data name="RateAppPromptText" xml:space="preserve">
+    <value>感谢使用 Stylophone！您愿意在商店打个分吗？
+（我们只问这一次🙏）</value>
+  </data>
+  <data name="YesButtonText" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="NoButtonText" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="RandomTracksHeader" xml:space="preserve">
+    <value>随机添加曲目</value>
+  </data>
+  <data name="RandomTracksInProgress" xml:space="preserve">
+    <value>正在音乐库中随机添加曲目……</value>
+  </data>
+  <data name="FirstRunFlavorText" xml:space="preserve">
+    <value>大卫·鲍伊在其 1969 年首支热门单曲《Space Oddity》，以及 2002 年专辑《Heathen》里的两支单曲《Slip Away》和《Heathen (The Rays)》中均演奏了 Stylophone，广受赞誉。</value>
+  </data>
+  <data name="SettingsAlbumArt" xml:space="preserve">
+    <value>从 MPD 服务器下载专辑图片</value>
+  </data>
+  <data name="SettingsAlbumArtText" xml:space="preserve">
+    <value>为避免 MPD 服务器过载，Stylophone 会将专辑图片本地保存。</value>
+  </data>
+  <data name="ActionToggleConsume" xml:space="preserve">
+    <value>连续播放</value>
+  </data>
+  <data name="DatabaseUpdateHeader" xml:space="preserve">
+    <value>正在更新服务器数据库</value>
+  </data>
+</root>
