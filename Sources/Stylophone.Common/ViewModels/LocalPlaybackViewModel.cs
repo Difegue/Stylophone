@@ -1,5 +1,5 @@
 ﻿using System;
-using LibVLCSharp.Shared;
+//using LibVLCSharp.Shared;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
@@ -13,8 +13,8 @@ namespace Stylophone.Common.ViewModels
         private SettingsViewModel _settingsVm;
         private MPDConnectionService _mpdService;
 
-        private LibVLC _vlcCore;
-        private MediaPlayer _mediaPlayer;
+        //private LibVLC _vlcCore;
+        //private MediaPlayer _mediaPlayer;
         private string _serverHost;
 
         public LocalPlaybackViewModel(SettingsViewModel settingsVm, MPDConnectionService mpdService, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService): base(dispatcherService)
@@ -52,11 +52,11 @@ namespace Stylophone.Common.ViewModels
 
                 if (value)
                 {
-                    if (_vlcCore == null)
-                        _vlcCore = new LibVLC();
+                    //if (_vlcCore == null)
+                    //    _vlcCore = new LibVLC();
 
-                    _mediaPlayer?.Dispose();
-                    _mediaPlayer = new MediaPlayer(_vlcCore);
+                    //_mediaPlayer?.Dispose();
+                    //_mediaPlayer = new MediaPlayer(_vlcCore);
                 }
                 else
                 {
@@ -65,8 +65,8 @@ namespace Stylophone.Common.ViewModels
                     Volume = 0;
                     _previousVolume = 10;
 
-                    _vlcCore?.Dispose();
-                    _vlcCore = null;
+                    //_vlcCore?.Dispose();
+                    //_vlcCore = null;
                 }
                     
             }
@@ -94,8 +94,8 @@ namespace Stylophone.Common.ViewModels
                 if (!IsPlaying && value != 0) 
                     IsPlaying = true;
 
-                if (_mediaPlayer != null)
-                    _mediaPlayer.Volume = value;
+                //if (_mediaPlayer != null)
+                //    _mediaPlayer.Volume = value;
 
                 if (value == 0)
                 {
@@ -157,16 +157,16 @@ namespace Stylophone.Common.ViewModels
                 {
                     var urlString = "http://" + _serverHost + ":8000";
                     var streamUrl = new Uri(urlString);
-                    var media = new Media(_vlcCore, streamUrl);
+                    //var media = new Media(_vlcCore, streamUrl);
 
-                    _mediaPlayer.Play(media);
+                    //_mediaPlayer.Play(media);
 
                     // This set won't work on UWP, see https://code.videolan.org/videolan/LibVLCSharp/-/issues/423
-                    _mediaPlayer.Volume = _volume;
+                    //_mediaPlayer.Volume = _volume;
                 }
                 else
                 {
-                    _mediaPlayer?.Stop();
+                    //_mediaPlayer?.Stop();
                 }
             }
             catch (Exception e)

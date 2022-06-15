@@ -2,7 +2,7 @@
 using UserNotifications;
 using Stylophone.Common.Interfaces;
 using UIKit;
-using Xam.RMessage;
+//using Xam.RMessage;
 
 namespace Stylophone.iOS.Services
 {
@@ -19,10 +19,10 @@ namespace Stylophone.iOS.Services
         {
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
-                if (autoHide)
-                    RMessage.ShowNotificationWithTitle(notification, "", RMessageType.Normal, "", 2, () => { }, true);
-                else
-                    RMessage.ShowNotificationWithTitle(notification, RMessageType.Normal, "", () => { });
+                //if (autoHide)
+                    //RMessage.ShowNotificationWithTitle(notification, "", RMessageType.Normal, "", 2, () => { }, true);
+                //else
+                    //RMessage.ShowNotificationWithTitle(notification, RMessageType.Normal, "", () => { });
             });
         }
 

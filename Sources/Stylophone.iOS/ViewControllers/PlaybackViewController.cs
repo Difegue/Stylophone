@@ -11,7 +11,7 @@ using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using UIKit;
-using Pop = ARSPopover.iOS;
+//using Pop = ARSPopover.iOS;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -77,7 +77,7 @@ namespace Stylophone.iOS.ViewControllers
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            NavigationController.NavigationBar.TintColor = UIColor.LabelColor;
+            NavigationController.NavigationBar.TintColor = UIColor.Label;
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -208,7 +208,7 @@ namespace Stylophone.iOS.ViewControllers
         {
             var sourceBounds = sourceButton.ImageView.Bounds;
 
-            var popover = new Pop.ARSPopover
+            /*var popover = new Pop.ARSPopover
             {
                 SourceView = sourceButton.ImageView,
                 SourceRect = new CoreGraphics.CGRect(sourceBounds.Width/2, -4, 0, 0),
@@ -222,7 +222,7 @@ namespace Stylophone.iOS.ViewControllers
             if (sourceVc == null)
                 sourceVc = this;
 
-            sourceVc.PresentViewController(popover, true, null);
+            sourceVc.PresentViewController(popover, true, null);*/
         }
     }
 }

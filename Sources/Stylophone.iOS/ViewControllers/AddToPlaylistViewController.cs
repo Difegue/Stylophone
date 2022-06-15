@@ -61,7 +61,7 @@ namespace Stylophone.iOS.ViewControllers
             PreferredContentSize = new CGSize(512, 368);
 
             var stackView = new UIStackView {
-                BackgroundColor = UIColor.SystemBackgroundColor,
+                BackgroundColor = UIColor.SystemBackground,
                 Axis = UILayoutConstraintAxis.Vertical,
                 Alignment = UIStackViewAlignment.Center,
                 Distribution = UIStackViewDistribution.Fill,
