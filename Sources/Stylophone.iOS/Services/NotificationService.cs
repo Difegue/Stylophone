@@ -2,7 +2,7 @@
 using UserNotifications;
 using Stylophone.Common.Interfaces;
 using UIKit;
-using Xam.RMessage;
+//using Xam.RMessage;
 
 namespace Stylophone.iOS.Services
 {
@@ -22,7 +22,7 @@ namespace Stylophone.iOS.Services
                 if (UIApplication.SharedApplication.ApplicationState != UIApplicationState.Active)
                     return;
 
-                RMessageType type = notification.NotificationType switch
+                /*RMessageType type = notification.NotificationType switch
                 {
                     NotificationType.Info => RMessageType.Normal,
                     NotificationType.Warning => RMessageType.Warning,
@@ -31,7 +31,7 @@ namespace Stylophone.iOS.Services
                 };
 
                 RMessage.ShowNotificationWithTitle(notification.NotificationTitle, notification.NotificationText, type, "",
-                    notification.NotificationType == NotificationType.Error ? 300000 : 2, () => { });
+                    notification.NotificationType == NotificationType.Error ? 300000 : 2, () => { }); */
             });
         }
 

@@ -35,7 +35,7 @@ namespace Stylophone.iOS.ViewControllers
         internal void Configure(int row, TrackViewModel trackViewModel)
         {
             // Set background depending on the row number
-            BackgroundColor = (row % 2 == 0) ? UIColor.SystemGray6Color : UIColor.Clear;
+            BackgroundColor = (row % 2 == 0) ? UIColor.SystemGray6 : UIColor.Clear;
 
             // Bind trackData
             _trackViewModel = trackViewModel;
