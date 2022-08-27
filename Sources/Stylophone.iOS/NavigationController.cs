@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using ObjCRuntime;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;

@@ -9,10 +9,10 @@ using MpcNET.Commands.Queue;
 using System.Threading;
 using Stylophone.Common.Services;
 using SkiaSharp;
-using Microsoft.Toolkit.Mvvm.Input;
 using Stylophone.Common.Interfaces;
 using Stylophone.Localization.Strings;
 using Stylophone.Common.Helpers;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Stylophone.Common.ViewModels
 {
@@ -48,7 +48,7 @@ namespace Stylophone.Common.ViewModels
         }
     }
 
-    public class TrackViewModel : ViewModelBase
+    public partial class TrackViewModel : ViewModelBase
     {
         private INotificationService _notificationService;
         private INavigationService _navigationService;
@@ -104,19 +104,13 @@ namespace Stylophone.Common.ViewModels
         }
 
 
-        private ICommand _playCommand;
-        public ICommand PlayTrackCommand => _playCommand ?? (_playCommand = new RelayCommand<IMpdFile>(PlayTrack));
-
+        [RelayCommand]
         private async void PlayTrack(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new PlayIdCommand(file.Id));
 
-        private ICommand _removeCommand;
-        public ICommand RemoveFromQueueCommand => _removeCommand ?? (_removeCommand = new RelayCommand<IMpdFile>(RemoveTrack));
+        [RelayCommand]
+        private async void RemoveFromQueue(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new DeleteIdCommand(file.Id));
 
-        private async void RemoveTrack(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new DeleteIdCommand(file.Id));
-
-        private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IMpdFile>(AddToQueue));
-
+        [RelayCommand]
         private async void AddToQueue(IMpdFile file)
         {
             var response = await _mpdService.SafelySendCommandAsync(new AddIdCommand(file.Path));
@@ -125,10 +119,8 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IMpdFile>(AddToPlaylist));
-
-        private async void AddToPlaylist(IMpdFile file)
+        [RelayCommand]
+        private async void AddToPlaylist(IMpdFile file) 
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;
@@ -139,8 +131,26 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(string.Format(Resources.NotificationAddedToPlaylist, playlistName));
         }
 
-        private ICommand _viewAlbumCommand;
-        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IMpdFile>(GoToMatchingAlbum));
+        [RelayCommand]
+        private void ViewAlbum(IMpdFile file)
+        {
+            try
+            {
+                if (!file.HasAlbum)
+                {
+                    _notificationService.ShowInAppNotification(Resources.ErrorNoMatchingAlbum, false);
+                    return;
+                }
+
+                // Build an AlbumViewModel from the album name and navigate to it
+                var album = _albumVmFactory.GetAlbumViewModel(file.Album);
+                _navigationService.Navigate<AlbumDetailViewModel>(album);
+            }
+            catch (Exception e)
+            {
+                _notificationService.ShowErrorNotification(e);
+            }
+        }
 
         /// <summary>
         /// Fires off an async request to get the album art from MPD.
@@ -165,26 +175,6 @@ namespace Stylophone.Common.ViewModels
                 }
 
                 AlbumArt = art.ArtBitmap;
-            }
-        }
-
-        private void GoToMatchingAlbum(IMpdFile file)
-        {
-            try
-            {
-                if (!file.HasAlbum)
-                {
-                    _notificationService.ShowInAppNotification(Resources.ErrorNoMatchingAlbum, false);
-                    return;
-                }
-
-                // Build an AlbumViewModel from the album name and navigate to it
-                var album = _albumVmFactory.GetAlbumViewModel(file.Album);
-                _navigationService.Navigate<AlbumDetailViewModel>(album);
-            }
-            catch (Exception e)
-            {
-                _notificationService.ShowErrorNotification(e);
             }
         }
 

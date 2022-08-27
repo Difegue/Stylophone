@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using MpcNET.Types;
 using Stylophone.Common.Interfaces;
 using Stylophone.iOS.ViewModels;

@@ -1,5 +1,4 @@
 ﻿using ColorThiefDotNet;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using MpcNET.Commands.Database;
 using MpcNET.Types;
 using SkiaSharp;

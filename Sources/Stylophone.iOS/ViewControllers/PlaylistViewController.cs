@@ -6,7 +6,7 @@ using Strings = Stylophone.Localization.Strings.Resources;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using UIKit;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CoreGraphics;
 using System.Linq;
 using Foundation;

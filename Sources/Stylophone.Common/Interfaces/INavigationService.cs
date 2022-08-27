@@ -1,10 +1,10 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 
 namespace Stylophone.Common.Interfaces
 {
     public class CoreNavigationEventArgs : EventArgs { public Type NavigationTarget { get; set; } public object Parameter { get; set; } }
-
+    
     public interface INavigationService
     {
         Type CurrentPageViewModelType { get; }

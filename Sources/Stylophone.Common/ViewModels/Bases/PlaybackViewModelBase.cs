@@ -1,9 +1,7 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Playback;
-using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Helpers;
@@ -19,7 +17,7 @@ using System.Windows.Input;
 
 namespace Stylophone.Common.ViewModels
 {
-    public abstract class PlaybackViewModelBase : ViewModelBase
+    public abstract partial class PlaybackViewModelBase : ViewModelBase
     {
 
         private CancellationTokenSource _albumArtCancellationSource = new CancellationTokenSource();
@@ -690,8 +688,7 @@ namespace Stylophone.Common.ViewModels
 
         #region Commands
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<EventArgs>(AddToPlaylist));
+        [RelayCommand]
         private void AddToPlaylist(EventArgs obj)
         {
             // Track must exist
@@ -700,11 +697,10 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying);
             }
 
-            CurrentTrack?.AddToPlayListCommand.Execute(CurrentTrack.File);
+            CurrentTrack?.AddToPlaylistCommand.Execute(CurrentTrack.File);
         }
 
-        private ICommand _showAlbumCommand;
-        public ICommand ShowAlbumCommand => _showAlbumCommand ?? (_showAlbumCommand = new RelayCommand<EventArgs>(ShowAlbum));
+        [RelayCommand]
         private void ShowAlbum(EventArgs obj)
         {
             // Track must exist
@@ -717,12 +713,10 @@ namespace Stylophone.Common.ViewModels
             CurrentTrack.ViewAlbumCommand.Execute(CurrentTrack.File);
         }
 
-        private ICommand _compactViewCommand;
-        public ICommand SwitchToCompactViewCommand => _compactViewCommand ?? (_compactViewCommand = new AsyncRelayCommand<EventArgs>(SwitchToCompactViewAsync));
-
         /// <summary>
         ///     Switch to compact overlay mode
         /// </summary>
+        [RelayCommand]
         public abstract Task SwitchToCompactViewAsync(EventArgs obj);
         
 

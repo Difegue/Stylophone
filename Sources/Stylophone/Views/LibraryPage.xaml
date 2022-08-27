@@ -125,7 +125,7 @@
                                     IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
                                     Text="{x:Bind strings:Resources.ContextMenuAddToQueue}" />
                                 <MenuFlyoutItem
-                                    Command="{Binding AddToPlayListCommand}"
+                                    Command="{Binding AddToPlaylistCommand}"
                                     DataContext="{Binding}"
                                     Icon="MusicInfo"
                                     IsEnabled="{Binding IsDetailLoading, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"

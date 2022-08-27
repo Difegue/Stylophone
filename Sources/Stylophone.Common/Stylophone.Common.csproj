@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CodeProject.ObjectPool" Version="6.0.0" />
+    <PackageReference Include="CommunityToolkit.Common" Version="8.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="LibVLCSharp" Version="3.6.6" />
-    <PackageReference Include="Microsoft.Toolkit" Version="7.1.2" />
-    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
     <PackageReference Include="MpcNET" Version="1.4.0" />
     <PackageReference Include="RangedObservableCollection" Version="1.0.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.0" />
-    <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="2.88.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.1" />
+    <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="2.88.1" />
   </ItemGroup>
 
   <ItemGroup>

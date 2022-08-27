@@ -216,7 +216,7 @@
                         </MenuFlyoutItem>
                         <!--  Add to Playlist  -->
                         <MenuFlyoutItem
-                            Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                            Command="{x:Bind ViewModel.AddToPlaylistCommand}"
                             CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
                             Icon="MusicInfo"
                             Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />

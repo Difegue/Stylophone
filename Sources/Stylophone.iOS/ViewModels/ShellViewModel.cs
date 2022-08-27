@@ -10,7 +10,7 @@ using UIKit;
 using Foundation;
 using Stylophone.iOS.ViewControllers;
 using Stylophone.iOS.Services;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System.Threading.Tasks;
 
 namespace Stylophone.iOS.ViewModels
@@ -71,12 +71,12 @@ namespace Stylophone.iOS.ViewModels
             _sidebarDataSource.ApplySnapshot(snapshot, new NSString("playlists"), false);
         }
 
-        protected override void OnLoaded()
+        protected override void Loaded()
         {
 
         }
 
-        protected override void OnItemInvoked(object itemInvoked)
+        protected override void Navigate(object itemInvoked)
         {
             if (itemInvoked is string s)
             {

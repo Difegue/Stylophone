@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
@@ -17,7 +15,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class AlbumDetailViewModel : ViewModelBase
+    public partial class AlbumDetailViewModel : ViewModelBase
     {
 
         private IDialogService _dialogService;
@@ -53,10 +51,8 @@ namespace Stylophone.Common.ViewModels
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
         public bool IsSourceEmpty => Source.Count == 0;
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
-
-        private async void QueueTrack(object list)
+        [RelayCommand]
+        private async void AddToQueue(object list)
         {
             var selectedTracks = (IList<object>)list;
 
@@ -76,9 +72,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
-
+        [RelayCommand]
         private async void AddToPlaylist(object list)
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();

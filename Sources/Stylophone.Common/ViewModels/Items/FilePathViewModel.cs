@@ -12,8 +12,8 @@ using System.Collections.ObjectModel;
 using MpcNET;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
-using Microsoft.Toolkit.Mvvm.Input;
 using Stylophone.Localization.Strings;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Stylophone.Common.ViewModels
 {
@@ -42,7 +42,7 @@ namespace Stylophone.Common.ViewModels
         }
     }
 
-    public class FilePathViewModel : ViewModelBase
+    public partial class FilePathViewModel : ViewModelBase
     {
         private INotificationService _notificationService;
         private IDialogService _dialogService;
@@ -145,10 +145,9 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _playCommand;
-        public ICommand PlayCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayPath));
 
-        private async void PlayPath()
+        [RelayCommand]
+        private async void Play()
         {
             // Clear queue, add path and play
             var commandList = new CommandList(new IMpcCommand<object>[] { new ClearCommand(), new AddCommand(Path), new PlayCommand(0) });
@@ -159,9 +158,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
-
+        [RelayCommand]
         private async void AddToQueue()
         {
             // AddCommand adds either the full directory or the song, depending on the path given.
@@ -171,8 +168,7 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
+        [RelayCommand]
         private async void AddToPlaylist()
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();

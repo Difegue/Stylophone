@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
@@ -84,7 +84,7 @@ namespace Stylophone.iOS.ViewControllers
 
             var queueAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "plus", ViewModel.AddToQueueCommand, trackList);
             var albumAction = Binder.GetCommandAction(Strings.ContextMenuViewAlbum, "opticaldisc", ViewModel.ViewAlbumCommand, trackList);
-            var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
+            var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlaylistCommand, trackList);
 
             return UIMenu.Create(new[] { queueAction, albumAction, playlistAction });
         }
@@ -96,7 +96,7 @@ namespace Stylophone.iOS.ViewControllers
             trackList.Add(ViewModel?.Source[indexPath.Row]);
 
             var action = isLeadingSwipe ? Binder.GetContextualAction(UIContextualActionStyle.Normal, Strings.ContextMenuAddToQueue, ViewModel.AddToQueueCommand, trackList)
-                : Binder.GetContextualAction(UIContextualActionStyle.Normal, Strings.ContextMenuAddToPlaylist, ViewModel.AddToPlayListCommand, trackList);
+                : Binder.GetContextualAction(UIContextualActionStyle.Normal, Strings.ContextMenuAddToPlaylist, ViewModel.AddToPlaylistCommand, trackList);
 
             return UISwipeActionsConfiguration.FromActions(new[] { action });
         }

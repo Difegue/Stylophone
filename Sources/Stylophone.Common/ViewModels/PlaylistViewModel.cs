@@ -5,8 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
@@ -20,7 +19,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class PlaylistViewModel : ViewModelBase
+    public partial class PlaylistViewModel : ViewModelBase
     {
         private INotificationService _notificationService;
         private INavigationService _navigationService;
@@ -127,9 +126,9 @@ namespace Stylophone.Common.ViewModels
             return (selectedTracks?.Count == 1);
         }
 
-        private ICommand _deletePlaylistCommand;
-        public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
-        private async void DeletePlaylist()
+
+        [RelayCommand]
+        private async void RemovePlaylist()
         {
             var result = await _dialogService.ShowConfirmDialogAsync(Resources.DeletePlaylistContentDialog, "", Resources.OKButtonText, Resources.CancelButtonText);
 
@@ -145,8 +144,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _loadPlaylistCommand;
-        public ICommand LoadPlaylistCommand => _loadPlaylistCommand ?? (_loadPlaylistCommand = new RelayCommand(LoadPlaylist));
+        [RelayCommand]
         private async void LoadPlaylist()
         {
             var res = await _mpdService.SafelySendCommandAsync(new LoadCommand(Name));
@@ -154,8 +152,8 @@ namespace Stylophone.Common.ViewModels
             if (res != null)
                 _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
-        private ICommand _playCommand;
-        public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayPlaylist));
+        
+        [RelayCommand]
         private async void PlayPlaylist()
         {
             // Clear queue, add playlist and play
@@ -168,11 +166,11 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
+        [RelayCommand]
 
-        private async void QueueTrack(object list)
+        private async void AddToQueue(object list)
         {
+            // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
 
             if (selectedTracks?.Count > 0)
@@ -191,9 +189,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _viewAlbumCommand;
-        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
-
+        [RelayCommand(CanExecute = nameof(IsSingleTrackSelected))]
         private void ViewAlbum(object list)
         {
             // Cast the received __ComObject
@@ -206,11 +202,11 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _removeTrackCommand;
-        public ICommand RemoveTrackFromPlaylistCommand => _removeTrackCommand ?? (_removeTrackCommand = new RelayCommand<IList<object>> (RemoveTrack));
 
-        private async void RemoveTrack(object list)
+        [RelayCommand]
+        private async void RemoveTrackFromPlaylist(object list)
         {
+            // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
 
             if (selectedTracks?.Count > 0)

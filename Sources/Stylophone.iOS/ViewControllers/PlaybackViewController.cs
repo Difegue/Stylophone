@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel;
 using Strings = Stylophone.Localization.Strings.Resources;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using SkiaSharp;
 using Stylophone.Common.Helpers;
 using Stylophone.Common.ViewModels;

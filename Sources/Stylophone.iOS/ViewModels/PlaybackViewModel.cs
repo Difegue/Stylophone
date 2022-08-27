@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SkiaSharp.Views.iOS;
 using Stylophone.Common.Helpers;
 using Stylophone.Common.Interfaces;

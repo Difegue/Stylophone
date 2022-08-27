@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Queue;
@@ -20,7 +18,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public abstract class ShellViewModelBase : ViewModelBase
+    public abstract partial class ShellViewModelBase : ViewModelBase
     {
         protected INavigationService _navigationService;
         protected INotificationService _notificationService;
@@ -63,18 +61,14 @@ namespace Stylophone.Common.ViewModels
             set { Set(ref _shellHeader, value); }
         }
 
-        private ICommand _loadedCommand;
-        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new RelayCommand(OnLoaded));
-
-        private ICommand _navigateCommand;
-        public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new RelayCommand<object>(OnItemInvoked));
-
-        private ICommand _shuffleTracksCommand;
-        public ICommand AddRandomTracksCommand => _shuffleTracksCommand ?? (_shuffleTracksCommand = new RelayCommand(() => QueueRandomTracks(5)));
+        [RelayCommand]
+        protected abstract void Loaded();
+        [RelayCommand]
+        protected abstract void Navigate(object item);
+        [RelayCommand]
+        private void AddRandomTracks() => QueueRandomTracks(5);
 
         protected abstract void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e);
-        protected abstract void OnLoaded();
-        protected abstract void OnItemInvoked(object item);
         protected abstract void UpdatePlaylistNavigation();
 
         private void OnFrameNavigated(object sender, CoreNavigationEventArgs e)

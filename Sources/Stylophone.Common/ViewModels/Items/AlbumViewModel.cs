@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
@@ -47,7 +46,7 @@ namespace Stylophone.Common.ViewModels
         }
     }
 
-    public class AlbumViewModel : ViewModelBase
+    public partial class AlbumViewModel : ViewModelBase
     {
         private INotificationService _notificationService;
         private IInteropService _interop;
@@ -146,8 +145,7 @@ namespace Stylophone.Common.ViewModels
             private set => Set(ref _isLight, value);
         }
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
+        [RelayCommand]
         private async void AddToPlaylist()
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
@@ -166,9 +164,8 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddAlbumCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
-        private async void AddToQueue()
+        [RelayCommand]
+        private async void AddAlbum()
         {
             var commandList = new CommandList();
 
@@ -187,8 +184,7 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
 
-        private ICommand _playCommand;
-        public ICommand PlayAlbumCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
+        [RelayCommand]
         private async void PlayAlbum()
         {
             if (Files.Count == 0)

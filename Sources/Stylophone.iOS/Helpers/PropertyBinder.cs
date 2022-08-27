@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using UIKit;
 
 namespace Stylophone.iOS.Helpers

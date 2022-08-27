@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Stylophone.Common.Interfaces;
 using Stylophone.Localization.Strings;
 using System;
@@ -28,8 +28,8 @@ namespace Stylophone.Common.ViewModels
 
         /// <summary>
         /// Compares the current and new values for a given property.If the value has changed,
-        /// raises the Microsoft.Toolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanging
-        /// event, updates the property with the new value, then raises the Microsoft.Toolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanged
+        /// raises the CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanging
+        /// event, updates the property with the new value, then raises the CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanged
         /// event.
         /// 
         /// This wrapper method calls SetProperty on the UI Thread.

@@ -3,7 +3,7 @@
 using System;
 
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using Strings = Stylophone.Localization.Strings.Resources;

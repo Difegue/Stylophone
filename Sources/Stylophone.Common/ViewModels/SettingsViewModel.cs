@@ -3,9 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Output;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
@@ -15,7 +13,7 @@ using Stylophone.Localization.Strings;
 namespace Stylophone.Common.ViewModels
 {
 
-    public class SettingsViewModel : ViewModelBase
+    public partial class SettingsViewModel : ViewModelBase
     {
         private IApplicationStorageService _applicationStorageService;
         private INotificationService _notificationService;
@@ -183,21 +181,18 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _switchThemeCommand;
-        public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new AsyncRelayCommand<Theme>(SwitchThemeAsync));
 
-        private async Task SwitchThemeAsync(Theme param)
+        [RelayCommand]
+        private async Task SwitchTheme(int param)
         {
             if (_hasInstanceBeenInitialized)
             {
-                ElementTheme = param;
-                await _interop.SetThemeAsync(param);
+                ElementTheme = (Theme)param;
+                await _interop.SetThemeAsync(ElementTheme);
             }
         }
 
-        private ICommand _switchSizingCommand;
-        public ICommand SwitchSizingCommand => _switchSizingCommand ?? (_switchSizingCommand = new RelayCommand<string>(SwitchSizing));
-
+        [RelayCommand]
         private void SwitchSizing(string param)
         {
             if (_hasInstanceBeenInitialized)
@@ -206,9 +201,8 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _clearCacheCommand;
-        public ICommand ClearCacheCommand => _clearCacheCommand ?? (_clearCacheCommand = new AsyncRelayCommand(ClearCacheAsync));
 
+        [RelayCommand]
         private async Task ClearCacheAsync()
         {
             try
@@ -222,9 +216,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _rescanDbCommand;
-        public ICommand RescanDbCommand => _rescanDbCommand ?? (_rescanDbCommand = new AsyncRelayCommand(RescanDbAsync));
-
+        [RelayCommand]
         private async Task RescanDbAsync()
         {
             if (_mpdService.CurrentStatus.UpdatingDb > 0)
@@ -239,8 +231,12 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationDbUpdateStarted);
         }
 
-        private ICommand _rateAppCommand;
-        public ICommand RateAppCommand => _rateAppCommand ?? (_rateAppCommand = new RelayCommand(() => _interop.OpenStoreReviewUrlAsync()));
+
+        [RelayCommand]
+        private async Task RateAppAsync()
+        {
+            await _interop.OpenStoreReviewUrlAsync();
+        }
 
         public async Task EnsureInstanceInitializedAsync()
         {

@@ -3,7 +3,7 @@
 using System;
 using CoreGraphics;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using SkiaSharp;
 using SkiaSharp.Views.iOS;
 using Stylophone.Common.ViewModels;

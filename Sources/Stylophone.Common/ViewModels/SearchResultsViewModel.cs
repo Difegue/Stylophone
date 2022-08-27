@@ -3,8 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
@@ -16,7 +15,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class SearchResultsViewModel : ViewModelBase
+    public partial class SearchResultsViewModel : ViewModelBase
     {
 
         private INotificationService _notificationService;
@@ -122,10 +121,8 @@ namespace Stylophone.Common.ViewModels
             return (selectedTracks?.Count == 1);
         }
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
-
-        private async void QueueTrack(object list)
+        [RelayCommand]
+        private async void AddToQueue(object list)
         {
             var selectedTracks = (IList<object>)list;
 
@@ -145,9 +142,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
-
+        [RelayCommand]
         private async void AddToPlaylist(object list)
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
@@ -172,9 +167,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _viewAlbumCommand;
-        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
-
+        [RelayCommand(CanExecute=nameof(IsSingleTrackSelected))]
         private void ViewAlbum(object list)
         {
             // Cast the received __ComObject

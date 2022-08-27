@@ -173,33 +173,87 @@
     <ImageAsset Include="Assets.xcassets\icon.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\spotlight120.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipad76.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\notification40.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\settings87.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\spotlight80.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac16.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac64.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadPro167.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipad152.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac256.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSettings29.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac1024.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac128.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\iphone120.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadNotification20.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac512.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSpotlight40.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac32.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\notification60.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSpotlight80.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\settings58.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\iphone180.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\appstore1024.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSettings58.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadNotification40.png" />
+    <ImageAsset Include="Assets.xcassets\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\spotlight120.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipad76.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\notification40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\settings87.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\spotlight80.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac16.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac64.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadPro167.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipad152.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac256.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSettings29.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac1024.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac128.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\iphone120.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadNotification20.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac512.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSpotlight40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\mac32.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\notification60.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSpotlight80.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\settings58.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\iphone180.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\appstore1024.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadSettings58.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\ipadNotification40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -212,16 +266,16 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="SkiaSharp.Views">
-      <Version>2.80.2</Version>
+      <Version>2.88.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection">
       <Version>6.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>4.5.1</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>4.5.1</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
     <PackageReference Include="Xam.RMessage">
       <Version>0.0.1</Version>

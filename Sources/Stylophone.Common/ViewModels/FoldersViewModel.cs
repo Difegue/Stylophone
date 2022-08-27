@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using MpcNET.Commands.Database;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;

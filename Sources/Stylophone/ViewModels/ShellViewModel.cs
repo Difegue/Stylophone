@@ -112,7 +112,7 @@ namespace Stylophone.ViewModels
             }
         }
 
-        protected override void OnLoaded()
+        protected override void Loaded()
         {
             // Keyboard accelerators are added here to avoid showing 'Alt + left' tooltip on the page.
             // More info on tracking issue https://github.com/Microsoft/microsoft-ui-xaml/issues/8
@@ -120,7 +120,7 @@ namespace Stylophone.ViewModels
             _keyboardAccelerators.Add(_backKeyboardAccelerator);
         }
 
-        protected override void OnItemInvoked(object args)
+        protected override void Navigate(object args)
         {
             var navArgs = (WinUI.NavigationViewItemInvokedEventArgs)args;
 

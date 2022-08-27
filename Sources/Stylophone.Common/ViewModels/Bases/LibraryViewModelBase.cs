@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Database;
 using MpcNET.Tags;
 using Stylophone.Common.Helpers;
@@ -18,7 +13,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public abstract class LibraryViewModelBase : ViewModelBase
+    public abstract partial class LibraryViewModelBase : ViewModelBase
     {
         private INavigationService _navigationService;
         private MPDConnectionService _mpdService;
@@ -35,9 +30,6 @@ namespace Stylophone.Common.ViewModels
         }
 
         public static new string GetHeader() => Resources.LibraryHeader;
-
-        private ICommand _itemClickCommand;
-        public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<AlbumViewModel>(OnItemClick));
 
         public List<AlbumViewModel> Source { get; } = new List<AlbumViewModel>();
         public bool IsSourceEmpty => FilteredSource.Count == 0;
@@ -97,7 +89,8 @@ namespace Stylophone.Common.ViewModels
             return char.IsLetter(c) ? c.ToString() : char.IsDigit(c) ? "#" : "&";
         }
 
-        private void OnItemClick(AlbumViewModel clickedItem)
+        [RelayCommand]
+        private void ItemClick(AlbumViewModel clickedItem)
         {
             if (clickedItem != null)
             {
