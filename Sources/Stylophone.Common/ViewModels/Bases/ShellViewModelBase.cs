@@ -13,6 +13,7 @@ using MpcNET.Commands.Reflection;
 using MpcNET.Commands.Status;
 using MpcNET.Tags;
 using MpcNET.Types;
+using MpcNET.Types.Filters;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
@@ -85,7 +86,11 @@ namespace Stylophone.Common.ViewModels
 
             if (text.Length > 2)
             {
-                var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(FindTags.Title, text));
+                List<IFilter> filterList = new()
+                {
+                    new FilterTag(FindTags.Title, text, FilterOperator.Contains)
+                };
+                var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(filterList));
 
                 if (response != null)
                 {

@@ -10,6 +10,8 @@ using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
 using MpcNET.Tags;
+using MpcNET.Types;
+using MpcNET.Types.Filters;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
@@ -36,6 +38,8 @@ namespace Stylophone.Common.ViewModels
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
             _searchTracks = true;
         }
+
+        public static new string GetHeader() => string.Format(Resources.SearchResultsFor, "..."); // Fallback when we return to this page via navigation
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
         public bool IsSourceEmpty => !IsSearchInProgress && Source.Count == 0;
@@ -183,7 +187,11 @@ namespace Stylophone.Common.ViewModels
 
         private async Task DoSearchAsync(ITag tag)
         {
-            var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(tag, QueryText));
+            List<IFilter> filterList = new()
+            {
+                new FilterTag(tag, QueryText, FilterOperator.Contains)
+            };
+            var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(filterList));
 
             if (response != null)
             {
