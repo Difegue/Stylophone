@@ -13,10 +13,20 @@
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="BlackOnDarkThemeOnly" Color="Transparent" />
             <SolidColorBrush x:Key="WhiteOnLightThemeOnly" Color="#F3F3F3" />
-        </ResourceDictionary>
+            
+            <SolidColorBrush x:Key="InfoBarErrorSeverityBackgroundBrush" Color="#FDE7E9"/>
+            <SolidColorBrush x:Key="InfoBarWarningSeverityBackgroundBrush" Color="#FFF4CE"/>
+            <SolidColorBrush x:Key="InfoBarSuccessSeverityBackgroundBrush" Color="#DFF6DD"/>
+            <SolidColorBrush x:Key="InfoBarInformationalSeverityBackgroundBrush" Color="#F2F2F2"/>
+            </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="BlackOnDarkThemeOnly" Color="#202020" />
             <SolidColorBrush x:Key="WhiteOnLightThemeOnly" Color="Transparent" />
+            
+            <SolidColorBrush x:Key="InfoBarErrorSeverityBackgroundBrush" Color="#442726"/>
+            <SolidColorBrush x:Key="InfoBarWarningSeverityBackgroundBrush" Color="#433519"/>
+            <SolidColorBrush x:Key="InfoBarSuccessSeverityBackgroundBrush" Color="#393D1B"/>
+            <SolidColorBrush x:Key="InfoBarInformationalSeverityBackgroundBrush" Color="#2B2B2B"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 

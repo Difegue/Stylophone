@@ -191,6 +191,7 @@
   <ItemGroup>
     <Compile Include="Activation\ActivationHandler.cs" />
     <Compile Include="Behaviors\ListViewBehavior.cs" />
+    <Compile Include="Behaviors\StackedNotificationsBehavior.cs" />
     <Compile Include="Behaviors\TreeViewCollapseBehavior.cs" />
     <Compile Include="Controls\SettingsBlockControl.xaml.cs">
       <DependentUpon>SettingsBlockControl.xaml</DependentUpon>

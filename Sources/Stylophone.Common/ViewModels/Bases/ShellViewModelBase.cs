@@ -35,8 +35,7 @@ namespace Stylophone.Common.ViewModels
 
             // First View, use that to initialize our DispatcherService
             _dispatcherService.Initialize();
-
-            ((NotificationServiceBase)_notificationService).InAppNotificationRequested += ShowInAppNotification;
+            
             ((NavigationServiceBase)_navigationService).Navigated += OnFrameNavigated;
 
             TryUpdatePlaylists();
@@ -62,7 +61,6 @@ namespace Stylophone.Common.ViewModels
         [RelayCommand]
         private void AddRandomTracks() => QueueRandomTracks(5);
 
-        protected abstract void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e);
         protected abstract void UpdatePlaylistNavigation();
 
         private void OnFrameNavigated(object sender, CoreNavigationEventArgs e)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Stylophone.Helpers;
-using Microsoft.Toolkit.Uwp.UI.Controls;
 using Stylophone.Common.ViewModels;
 using Windows.System;
 using Stylophone.Common.Interfaces;
@@ -15,25 +14,28 @@ using Stylophone.Common.Services;
 using Stylophone.Services;
 using Windows.Foundation;
 using MpcNET.Commands.Playback;
+using CommunityToolkit.Labs.WinUI;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Stylophone.ViewModels
 {
-    public class ShellViewModel : ShellViewModelBase
+    public class ShellViewModel : ShellViewModelBase, IRecipient<InAppNotification>
     {
         private IList<KeyboardAccelerator> _keyboardAccelerators;
         private KeyboardAccelerator _altLeftKeyboardAccelerator;
         private KeyboardAccelerator _backKeyboardAccelerator;
-        
+
         private WinUI.NavigationView _navigationView;
         private WinUI.NavigationViewItem _playlistContainer;
-        private InAppNotification _notificationHolder;
+        private StackedNotificationsBehavior _notificationHolder;
 
         public ShellViewModel(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService):
             base(navigationService, notificationService, dispatcherService, mpdService)
         {
         }
 
-        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, InAppNotification notificationHolder, IList<KeyboardAccelerator> keyboardAccelerators)
+        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, StackedNotificationsBehavior notificationHolder, IList<KeyboardAccelerator> keyboardAccelerators)
         {
             _navigationView = navigationView;
             _playlistContainer = playlistContainer;
@@ -50,6 +52,20 @@ namespace Stylophone.ViewModels
 
             _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, GoBack, VirtualKeyModifiers.Menu);
             _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack, GoBack);
+
+            WeakReferenceMessenger.Default.Register(this);
+        }
+
+        public void Receive(InAppNotification message)
+        {
+            var notification = new Notification
+            {
+                Title = $"Notification {DateTimeOffset.Now}",
+                Message = message.NotificationText,
+                Duration = message.AutoHide ? TimeSpan.FromMilliseconds(1500) : null,
+                Severity = message.AutoHide ? InfoBarSeverity.Informational : InfoBarSeverity.Error,
+            };
+            _dispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(notification));
         }
 
         public async void PauseOrPlay(KeyRoutedEventArgs e)
@@ -87,11 +103,6 @@ namespace Stylophone.ViewModels
         {
             var pageType = menuItem.GetValue(NavHelper.NavigateToProperty) as Type;
             return pageType == sourcePageType;
-        }
-
-        protected override void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e)
-        {
-            _dispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(e.NotificationText, e.NotificationTime));
         }
 
         protected override void UpdatePlaylistNavigation()
@@ -189,5 +200,6 @@ namespace Stylophone.ViewModels
             var result = _navigationService.GoBack();
             args.Handled = result;
         }
+        
     }
 }

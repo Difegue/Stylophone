@@ -36,7 +36,7 @@ namespace Stylophone.Views
         {
             InitializeComponent();
             DataContext = ((App)Application.Current).Services.GetService(typeof(ShellViewModel));
-            ViewModel.Initialize(shellFrame, navigationView, playlistContainer, notificationHolder, KeyboardAccelerators);
+            ViewModel.Initialize(shellFrame, navigationView, playlistContainer, stackedNotificationBehavior, KeyboardAccelerators);
 
             // Hide default title bar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;

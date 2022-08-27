@@ -103,11 +103,5 @@ namespace Stylophone.iOS.ViewModels
                 }
             }
         }
-
-        protected override void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e)
-        {
-            // Noop on UIKit
-            // TODO make UWP only
-        }
     }
 }
