@@ -3,6 +3,7 @@ using Stylophone.Common.Interfaces;
 using Stylophone.Localization.Strings;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,25 +28,12 @@ namespace Stylophone.Common.ViewModels
         }
 
         /// <summary>
-        /// Compares the current and new values for a given property.If the value has changed,
-        /// raises the CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanging
-        /// event, updates the property with the new value, then raises the CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanged
-        /// event.
-        /// 
-        /// This wrapper method calls SetProperty on the UI Thread.
+        /// This wrapper method calls OnPropertyChanged on the UI Thread. Thanks WinRT!
         /// </summary>
-        /// <returns></returns>
-        protected bool Set<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        /// <param name="e"></param>
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            var oldValue = field;
-            field = newValue;
-
-            _dispatcherService.ExecuteOnUIThreadAsync(() => SetProperty(ref oldValue, newValue, propertyName));
-
-            if (newValue != null)
-                return !newValue.Equals(oldValue);
-            else
-                return false;
+            _dispatcherService.ExecuteOnUIThreadAsync(() => base.OnPropertyChanged(e));
         }
     }
 }

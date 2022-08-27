@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Playback;
@@ -51,72 +52,36 @@ namespace Stylophone.Common.ViewModels
 
         public bool IsSourceEmpty => Source.Count == 0;
 
+        [ObservableProperty]
         private string _name;
-        public string Name
-        {
-            get => _name;
-            set => Set(ref _name, value);
-        }
 
+        [ObservableProperty]
         private string _artists;
-        public string Artists
-        {
-            get => _artists;
-            private set => Set(ref _artists, value);
-        }
 
-        private string _info;
-        public string PlaylistInfo
-        {
-            get => _info;
-            private set => Set(ref _info, value);
-        }
+        [ObservableProperty]
+        private string _playlistInfo;
 
+        [ObservableProperty]
         private bool _artLoaded;
-        public bool ArtLoaded
-        {
-            get => _artLoaded;
-            set => Set(ref _artLoaded, value);
-        }
 
+        [ObservableProperty]
         private SKImage _playlistArt;
-        public SKImage PlaylistArt
-        {
-            get => _playlistArt;
-            private set => Set(ref _playlistArt, value);
-        }
 
+        [ObservableProperty]
         private SKImage _playlistArt2;
-        public SKImage PlaylistArt2
-        {
-            get => _playlistArt2;
-            private set => Set(ref _playlistArt2, value);
-        }
 
+        [ObservableProperty]
         private SKImage _playlistArt3;
-        public SKImage PlaylistArt3
-        {
-            get => _playlistArt3;
-            private set => Set(ref _playlistArt3, value);
-        }
 
-        private SKColor _albumColor;
-        public SKColor DominantColor
-        {
-            get => _albumColor;
-            set => Set(ref _albumColor, value);
-        }
+        [ObservableProperty]
+        private SKColor _dominantColor;
 
-        private bool _isLight;
         /// <summary>
         /// If the dominant color of the album is too light to show white text on top of, this boolean will be true.
         /// </summary>
-        public bool IsLight
-        {
-            get => _isLight;
-            private set => Set(ref _isLight, value);
-        }
-
+        [ObservableProperty]
+        private bool _isLight;
+        
         #region Commands
         private bool IsSingleTrackSelected(object list)
         {
@@ -125,7 +90,6 @@ namespace Stylophone.Common.ViewModels
 
             return (selectedTracks?.Count == 1);
         }
-
 
         [RelayCommand]
         private async void RemovePlaylist()
@@ -237,10 +201,11 @@ namespace Stylophone.Common.ViewModels
             var placeholder = await _interop.GetPlaceholderImageAsync();
 
             ArtLoaded = false;
+
             PlaylistArt = placeholder;
             PlaylistArt2 = placeholder;
             PlaylistArt3 = placeholder;
-
+            
             Name = playlistName;
             Source.CollectionChanged -= Source_CollectionChanged;
             Source.Clear();
@@ -262,7 +227,6 @@ namespace Stylophone.Common.ViewModels
             TimeSpan t = TimeSpan.FromSeconds(totalTime);
 
             PlaylistInfo = $"{Source.Count} Tracks, Total Time: {Miscellaneous.ToReadableString(t)}";
-
 
             if (Source.Count > 0)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LibVLCSharp.Shared;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -6,7 +7,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class LocalPlaybackViewModel : ViewModelBase
+    public partial class LocalPlaybackViewModel : ViewModelBase
     {
         private IInteropService _interopService;
         private INotificationService _notificationService;
@@ -26,6 +27,7 @@ namespace Stylophone.Common.ViewModels
 
             _volumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeMute);
 
+            // TODO this'd be better with an IMessenger + [NotifyPropertyChangedRecipients] in SettingsViewModel
             _settingsVm.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(_settingsVm.IsLocalPlaybackEnabled))
@@ -39,96 +41,77 @@ namespace Stylophone.Common.ViewModels
         public void Initialize(string host, bool isEnabled)
         {
             _serverHost = host;
-            IsEnabled = isEnabled;
+            _isEnabled = isEnabled;
         }
 
+        [ObservableProperty]
         private bool _isEnabled;
-        public bool IsEnabled
-        {
-            get => _isEnabled;
-            private set
-            {
-                Set(ref _isEnabled, value);
 
-                if (value)
-                {
-                    if (_vlcCore == null)
-                        _vlcCore = new LibVLC();
-
-                    _mediaPlayer?.Dispose();
-                    _mediaPlayer = new MediaPlayer(_vlcCore);
-                }
-                else
-                {
-                    // Reset 
-                    IsPlaying = false;
-                    Volume = 0;
-                    _previousVolume = 10;
-
-                    _vlcCore?.Dispose();
-                    _vlcCore = null;
-                }
-                    
-            }
-        }
-
+        [ObservableProperty]
         private string _volumeIcon;
-        /// <summary>
-        ///     The current text for the volume icon
-        /// </summary>
-        public string VolumeIcon
-        {
-            get => _volumeIcon;
-            private set => Set(ref _volumeIcon, value);
-        }
 
+        [ObservableProperty]
         private int _volume = 0;
-        public int Volume
+
+        [ObservableProperty]
+        private bool _isPlaying;
+
+        partial void OnIsEnabledChanged(bool value)
         {
-            get => _volume;
-            set
+            if (value)
             {
-                Set(ref _volume, value);
+                if (_vlcCore == null)
+                    _vlcCore = new LibVLC();
 
-                // If the user changed the volume, play the stream back
-                if (!IsPlaying && value != 0) 
-                    IsPlaying = true;
+                _mediaPlayer?.Dispose();
+                _mediaPlayer = new MediaPlayer(_vlcCore);
+            }
+            else
+            {
+                // Reset 
+                IsPlaying = false;
+                Volume = 0;
+                _previousVolume = 10;
 
-                if (_mediaPlayer != null)
-                    _mediaPlayer.Volume = value;
-
-                if (value == 0)
-                {
-                    VolumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeMute);
-                }
-                else if (value < 25)
-                {
-                    VolumeIcon = _interopService.GetIcon(PlaybackIcon.Volume25);
-                }
-                else if (value < 50)
-                {
-                    VolumeIcon = _interopService.GetIcon(PlaybackIcon.Volume50);
-                }
-                else if (value < 75)
-                {
-                    VolumeIcon = _interopService.GetIcon(PlaybackIcon.Volume75);
-                }
-                else
-                {
-                    VolumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeFull);
-                }
+                _vlcCore?.Dispose();
+                _vlcCore = null;
             }
         }
 
-        private bool _isPlaying;
-        public bool IsPlaying
+        partial void OnVolumeChanged(int value)
         {
-            get => _isPlaying;
-            private set
+            // If the user changed the volume, play the stream back
+            if (!IsPlaying && value != 0)
+                IsPlaying = true;
+
+            if (_mediaPlayer != null)
+                _mediaPlayer.Volume = value;
+
+            if (value == 0)
             {
-                Set(ref _isPlaying, value);
-                UpdatePlayback();
+                VolumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeMute);
             }
+            else if (value < 25)
+            {
+                VolumeIcon = _interopService.GetIcon(PlaybackIcon.Volume25);
+            }
+            else if (value < 50)
+            {
+                VolumeIcon = _interopService.GetIcon(PlaybackIcon.Volume50);
+            }
+            else if (value < 75)
+            {
+                VolumeIcon = _interopService.GetIcon(PlaybackIcon.Volume75);
+            }
+            else
+            {
+                VolumeIcon = _interopService.GetIcon(PlaybackIcon.VolumeFull);
+            }
+        }
+
+        partial void OnIsPlayingChanged(bool value)
+        {
+            UpdatePlayback();
         }
 
         private int _previousVolume = 25;

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 using Microsoft.Toolkit.Uwp.Notifications;
 using Stylophone.Common.Interfaces;
-using Windows.ApplicationModel.Activation;
 using Windows.UI.Notifications;
 
 namespace Stylophone.Services

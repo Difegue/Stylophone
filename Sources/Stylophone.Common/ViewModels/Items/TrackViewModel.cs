@@ -3,7 +3,6 @@ using MpcNET.Commands.Playlist;
 using MpcNET.Types;
 using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Linq;
 using MpcNET.Commands.Queue;
 using System.Threading;
@@ -13,6 +12,7 @@ using Stylophone.Common.Interfaces;
 using Stylophone.Localization.Strings;
 using Stylophone.Common.Helpers;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Stylophone.Common.ViewModels
 {
@@ -75,34 +75,18 @@ namespace Stylophone.Common.ViewModels
         }
 
         public IMpdFile File { get; }
-
         public string Name => File.HasTitle ? File.Title : File.Path.Split('/').Last();
-
         public bool IsPlaying => _mpdService.CurrentStatus.SongId != -1 && _mpdService.CurrentStatus.SongId == File.Id;
-
         public void UpdatePlayingStatus() => _dispatcherService.ExecuteOnUIThreadAsync(() => OnPropertyChanged(nameof(IsPlaying)));
 
+        [ObservableProperty]
         private SKImage _albumArt;
-        public SKImage AlbumArt
-        {
-            get => _albumArt;
-            private set => Set(ref _albumArt, value);
-        }
+        
+        [ObservableProperty]
+        private SKColor _dominantColor;
 
-        private SKColor _albumColor;
-        public SKColor DominantColor
-        {
-            get => _albumColor;
-            private set => Set(ref _albumColor, value);
-        }
-
+        [ObservableProperty]
         private bool _isLight;
-        public bool IsLight
-        {
-            get => _isLight;
-            private set => Set(ref _isLight, value);
-        }
-
 
         [RelayCommand]
         private async void PlayTrack(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new PlayIdCommand(file.Id));

@@ -236,7 +236,7 @@ namespace Stylophone.Common.Services
                 {
                     try
                     {
-                        if (token.IsCancellationRequested || _idleConnection == null)
+                        if (token.IsCancellationRequested || _idleConnection == null || !_idleConnection.IsConnected)
                             break;
 
                         var idleChanges = await _idleConnection.SendAsync(new IdleCommand("stored_playlist playlist player mixer output options update"));

@@ -24,9 +24,7 @@ namespace Stylophone.ViewModels
             Application.Current.LeavingBackground += CurrentOnLeavingBackground;
 
             ((NavigationService)_navigationService).Navigated += (s, e) =>
-                _dispatcherService.ExecuteOnUIThreadAsync(() => {
-                    ShowTrackName = _navigationService.CurrentPageViewModelType != typeof(PlaybackViewModelBase);
-                });
+                ShowTrackName = _navigationService.CurrentPageViewModelType != typeof(PlaybackViewModelBase);
         }
 
         private void CurrentOnLeavingBackground(object sender, LeavingBackgroundEventArgs leavingBackgroundEventArgs)

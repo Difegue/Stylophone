@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playlist;
@@ -36,80 +37,58 @@ namespace Stylophone.Common.ViewModels
             _searchTracks = true;
         }
 
-        private string _search;
-        public string QueryText
-        {
-            get { return _search; }
-            set { Set(ref _search, value); }
-        }
-
-        private bool _isSearching;
-        public bool IsSearchInProgress
-        {
-            get { return _isSearching; }
-            set {
-                Set(ref _isSearching, value); 
-                OnPropertyChanged(nameof(IsSourceEmpty)); 
-            }
-        }
-
-        private bool _searchTracks;
-        public bool SearchTracks
-        {
-            get { return _searchTracks; }
-            set {
-                Set(ref _searchTracks, value);
-
-                if (value)
-                {
-                    SearchAlbums = false;
-                    SearchArtists = false;
-                }
-
-                if (value || (!SearchArtists && !SearchAlbums && !SearchTracks))
-                    UpdateSource();
-            }
-        }
-
-        private bool _searchAlbums;
-        public bool SearchAlbums
-        {
-            get { return _searchAlbums; }
-            set {
-                Set(ref _searchAlbums, value);
-
-                if (value)
-                {
-                    SearchTracks = false;
-                    SearchArtists = false;
-                }
-
-                if (value || (!SearchArtists && !SearchAlbums && !SearchTracks))
-                    UpdateSource();
-            }
-        }
-
-        private bool _searchArtists;
-        public bool SearchArtists
-        {
-            get { return _searchArtists; }
-            set {
-                Set(ref _searchArtists, value);
-
-                if (value)
-                {
-                    SearchTracks = false;
-                    SearchAlbums = false;
-                }
-
-                if (value || (!SearchArtists && !SearchAlbums && !SearchTracks))
-                    UpdateSource();
-            }
-        }
-
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
-
         public bool IsSourceEmpty => !IsSearchInProgress && Source.Count == 0;
+
+        [ObservableProperty]
+        private string _queryText;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsSourceEmpty))]
+        private bool _isSearchInProgress;
+
+        [ObservableProperty]
+        private bool _searchTracks;
+
+        [ObservableProperty]
+        private bool _searchAlbums;
+
+        [ObservableProperty]
+        private bool _searchArtists;
+
+        partial void OnSearchTracksChanged(bool value)
+        {
+            if (value)
+            {
+                SearchAlbums = false;
+                SearchArtists = false;
+            }
+
+            if (value || (!SearchArtists && !SearchAlbums && !SearchTracks))
+                UpdateSource();
+        }
+
+        partial void OnSearchAlbumsChanged(bool value)
+        {
+            if (value)
+            {
+                SearchTracks = false;
+                SearchArtists = false;
+            }
+            if (value || (!SearchArtists && !SearchAlbums && !SearchTracks))
+                UpdateSource();
+        }
+
+        partial void OnSearchArtistsChanged(bool value)
+        {
+            if (value)
+            {
+                SearchTracks = false;
+                SearchAlbums = false;
+            }
+            if (value || (!SearchArtists && !SearchAlbums && !SearchTracks))
+                UpdateSource();
+        }
 
         #region Commands
 
@@ -198,7 +177,7 @@ namespace Stylophone.Common.ViewModels
                 if (SearchAlbums)  await DoSearchAsync(FindTags.Album);
                 if (SearchArtists) await DoSearchAsync(FindTags.Artist);
 
-                await _dispatcherService.ExecuteOnUIThreadAsync(() => IsSearchInProgress = false);
+                IsSearchInProgress = false;
             });
         }
 

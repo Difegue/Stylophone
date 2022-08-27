@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Database;
@@ -45,21 +46,13 @@ namespace Stylophone.Common.ViewModels
             };
         }
 
-        private bool _isBackEnabled;
-        public bool IsBackEnabled
-        {
-            get { return _isBackEnabled; }
-            set { Set(ref _isBackEnabled, value); }
-        }
-
         public bool IsServerUpdating => _mpdService.CurrentStatus.UpdatingDb != -1;
 
-        private string _shellHeader;
-        public string HeaderText
-        {
-            get { return _shellHeader; }
-            set { Set(ref _shellHeader, value); }
-        }
+        [ObservableProperty]
+        private string _headerText;
+
+        [ObservableProperty]
+        private bool _isBackEnabled;
 
         [RelayCommand]
         protected abstract void Loaded();

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
@@ -47,6 +48,12 @@ namespace Stylophone.Common.ViewModels
         }
 
         public static new string GetHeader() => Resources.QueueHeader;
+        public RangedObservableCollection<TrackViewModel> Source { get; } = new RangedObservableCollection<TrackViewModel>();
+        public bool IsSourceEmpty => Source.Count == 0;
+
+        [ObservableProperty]
+        private int _playlistVersion;
+
         private bool IsSingleTrackSelected(object list)
         {
             // Cast the received __ComObject
@@ -175,7 +182,6 @@ namespace Stylophone.Common.ViewModels
             else
                 _dispatcherService.ExecuteOnUIThreadAsync(() => Source.Clear());
         }
-
         private async void MPDConnectionService_QueueChanged(object sender, EventArgs e)
         {
             // Ask for a new status ourselves as the shared ConnectionService one might not be up to date yet
@@ -230,17 +236,6 @@ namespace Stylophone.Common.ViewModels
                     }
                 });
             }
-        }
-
-        public RangedObservableCollection<TrackViewModel> Source { get; } = new RangedObservableCollection<TrackViewModel>();
-
-        public bool IsSourceEmpty => Source.Count == 0;
-
-        private int _playlistVersion;
-        public int PlaylistVersion
-        {
-            get => _playlistVersion;
-            private set => Set(ref _playlistVersion, value);
         }
 
         public async Task LoadInitialDataAsync()

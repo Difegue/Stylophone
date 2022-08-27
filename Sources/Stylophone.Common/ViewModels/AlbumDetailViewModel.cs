@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
@@ -34,21 +35,14 @@ namespace Stylophone.Common.ViewModels
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
-        private AlbumViewModel _item;
-        public AlbumViewModel Item
-        {
-            get { return _item; }
-            set { Set(ref _item, value); }
-        }
+        [ObservableProperty]
+        private AlbumViewModel item;
 
-        private string _info;
-        public string PlaylistInfo
-        {
-            get => _info;
-            private set => Set(ref _info, value);
-        }
+        [ObservableProperty]
+        private string _playlistInfo;
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
+        
         public bool IsSourceEmpty => Source.Count == 0;
 
         [RelayCommand]
@@ -125,7 +119,6 @@ namespace Stylophone.Common.ViewModels
                     await _dispatcherService.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 }).ConfigureAwait(false);
             }
-
         }
 
         private void CreateTrackViewModels()
