@@ -202,7 +202,7 @@
     <Compile Include="Converters\DoubleToThicknessConverter.cs" />
     <Compile Include="Converters\SkiaConverters.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
-    <Compile Include="Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="Converters\EnumConverters.cs" />
     <Compile Include="Helpers\LiveTileHelper.cs" />
     <Compile Include="Helpers\UWPHelpers.cs" />
     <Compile Include="Helpers\NavHelper.cs" />

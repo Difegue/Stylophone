@@ -13,7 +13,8 @@
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="stylophone:Theme" />
-
+        <helper:EnumToIntConverter x:Key="EnumToIntConverter" EnumType="stylophone:Theme" />
+        
         <converters:BoolToObjectConverter x:Key="IconConverter">
             <converters:BoolToObjectConverter.TrueValue>
                 <FontIcon Foreground="{StaticResource AccentFillColorDefaultBrush}" Glyph="&#xE953;" />
@@ -23,15 +24,10 @@
             </converters:BoolToObjectConverter.FalseValue>
         </converters:BoolToObjectConverter>
 
-        <converters:BoolToObjectConverter x:Key="DensityLabelConverter">
-            <converters:BoolToObjectConverter.TrueValue>
-                <TextBlock HorizontalTextAlignment="Right" Text="{x:Bind strings:Resources.SettingsUIDensityCompact}" />
-            </converters:BoolToObjectConverter.TrueValue>
-            <converters:BoolToObjectConverter.FalseValue>
-                <TextBlock HorizontalTextAlignment="Right" Text="{x:Bind strings:Resources.SettingsUIDensityNormal}" />
-            </converters:BoolToObjectConverter.FalseValue>
+        <converters:BoolToObjectConverter x:Key="DensityBoolConverter">
+            <converters:BoolToObjectConverter.TrueValue>1</converters:BoolToObjectConverter.TrueValue>
+            <converters:BoolToObjectConverter.FalseValue>0</converters:BoolToObjectConverter.FalseValue>
         </converters:BoolToObjectConverter>
-
 
     </Page.Resources>
 
@@ -177,39 +173,13 @@
                     <FontIcon Glyph="&#xE790;" />
                 </local:SettingsBlockControl.Icon>
 
-                <TextBlock Text="{x:Bind ViewModel.ElementTheme, Mode=OneWay}" />
-
-                <local:SettingsBlockControl.ExpandableContent>
-                    <StackPanel Margin="56,8,8,8">
-                        <RadioButton
-                            Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                            Content="{x:Bind strings:Resources.SettingsThemeLight}"
-                            GroupName="AppTheme"
-                            IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}">
-                            <RadioButton.CommandParameter>
-                                <stylophone:Theme>Light</stylophone:Theme>
-                            </RadioButton.CommandParameter>
-                        </RadioButton>
-                        <RadioButton
-                            Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                            Content="{x:Bind strings:Resources.SettingsThemeDark}"
-                            GroupName="AppTheme"
-                            IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}">
-                            <RadioButton.CommandParameter>
-                                <stylophone:Theme>Dark</stylophone:Theme>
-                            </RadioButton.CommandParameter>
-                        </RadioButton>
-                        <RadioButton
-                            Command="{x:Bind ViewModel.SwitchThemeCommand}"
-                            Content="{x:Bind strings:Resources.SettingsThemeDefault}"
-                            GroupName="AppTheme"
-                            IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}">
-                            <RadioButton.CommandParameter>
-                                <stylophone:Theme>Default</stylophone:Theme>
-                            </RadioButton.CommandParameter>
-                        </RadioButton>
-                    </StackPanel>
-                </local:SettingsBlockControl.ExpandableContent>
+                <local:SettingsBlockControl.SettingsActionableElement>
+                    <ComboBox SelectedIndex="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToIntConverter}, Mode=TwoWay}">
+                        <ComboBoxItem Content="{x:Bind strings:Resources.SettingsThemeDefault}"/>
+                        <ComboBoxItem Content="{x:Bind strings:Resources.SettingsThemeLight}"/>
+                        <ComboBoxItem Content="{x:Bind strings:Resources.SettingsThemeDark}"/>
+                    </ComboBox>
+                </local:SettingsBlockControl.SettingsActionableElement>               
 
             </local:SettingsBlockControl>
 
@@ -218,24 +188,13 @@
                     <SymbolIcon Symbol="FontSize" />
                 </local:SettingsBlockControl.Icon>
 
-                <Border Child="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource DensityLabelConverter}, Mode=OneWay}" />
+                <local:SettingsBlockControl.SettingsActionableElement>
+                    <ComboBox SelectedIndex="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource DensityBoolConverter}, Mode=TwoWay}">
+                        <ComboBoxItem Content="{x:Bind strings:Resources.SettingsUIDensityNormal}"/>
+                        <ComboBoxItem Content="{x:Bind strings:Resources.SettingsUIDensityCompact}"/>
+                    </ComboBox>
+                </local:SettingsBlockControl.SettingsActionableElement>
 
-                <local:SettingsBlockControl.ExpandableContent>
-                    <StackPanel Margin="56,8,8,8">
-                        <RadioButton
-                            Command="{x:Bind ViewModel.SwitchSizingCommand}"
-                            CommandParameter="False"
-                            Content="{x:Bind strings:Resources.SettingsUIDensityNormal}"
-                            GroupName="AppSizing"
-                            IsChecked="{x:Bind ViewModel.IsCompactSizing, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}" />
-                        <RadioButton
-                            Command="{x:Bind ViewModel.SwitchSizingCommand}"
-                            CommandParameter="True"
-                            Content="{x:Bind strings:Resources.SettingsUIDensityCompact}"
-                            GroupName="AppSizing"
-                            IsChecked="{x:Bind ViewModel.IsCompactSizing, Mode=OneWay}" />
-                    </StackPanel>
-                </local:SettingsBlockControl.ExpandableContent>
             </local:SettingsBlockControl>
 
             <!--  Analytics/About  -->

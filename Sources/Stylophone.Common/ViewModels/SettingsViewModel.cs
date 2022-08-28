@@ -76,6 +76,8 @@ namespace Stylophone.Common.ViewModels
 
         partial void OnElementThemeChanged(Theme value)
         {
+            Task.Run (async () => await _interop.SetThemeAsync(value));
+
             if (value != _elementTheme)
             {
                 _applicationStorageService.SetValue(nameof(ElementTheme), value.ToString());
@@ -122,25 +124,6 @@ namespace Stylophone.Common.ViewModels
         partial void OnIsLocalPlaybackEnabledChanged(bool value)
         {
             _applicationStorageService.SetValue(nameof(IsLocalPlaybackEnabled), value);
-        }
-
-        [RelayCommand]
-        private async Task SwitchTheme(int param)
-        {
-            if (_hasInstanceBeenInitialized)
-            {
-                ElementTheme = (Theme)param;
-                await _interop.SetThemeAsync(ElementTheme);
-            }
-        }
-
-        [RelayCommand]
-        private void SwitchSizing(string param)
-        {
-            if (_hasInstanceBeenInitialized)
-            {
-                IsCompactSizing = bool.Parse(param);
-            }
         }
 
 
