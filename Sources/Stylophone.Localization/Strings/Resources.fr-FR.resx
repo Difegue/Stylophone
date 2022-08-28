@@ -456,7 +456,7 @@ J'espère que vous apprécierez l'application!
 L'activation de cette option affichera un second slider pour contrôler le volume local.</value>
   </data>
   <data name="ErrorPlayingMPDStream" xml:space="preserve">
-    <value>Erreur lors de la lecture du stream httpd du serveur MPD: {0}</value>
+    <value>Erreur lors de la lecture du stream httpd du serveur MPD</value>
   </data>
   <data name="LocalVolumeHeader" xml:space="preserve">
     <value>Volume Local</value>
@@ -494,5 +494,11 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   </data>
   <data name="DatabaseUpdateHeader" xml:space="preserve">
     <value>Base de données en cours de MàJ</value>
+  </data>
+  <data name="ErrorSendingMPDCommand" xml:space="preserve">
+    <value>L'envoi de {0} a échoué</value>
+  </data>
+  <data name="ErrorUpdatingPlaylist" xml:space="preserve">
+    <value>La mise à jour des playlists a échoué</value>
   </data>
 </root>

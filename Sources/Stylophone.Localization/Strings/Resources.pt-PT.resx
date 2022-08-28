@@ -456,7 +456,7 @@ Espero que goste de utilizar a aplicação!
 Ativando esta opção mostrará um segundo deslizador de volume para controlar o volume local.</value>
   </data>
   <data name="ErrorPlayingMPDStream" xml:space="preserve">
-    <value>Erro ao tentar reproduzir o fluxo httpd do servidor MPD: {0}</value>
+    <value>Erro ao tentar reproduzir o fluxo httpd do servidor MPD</value>
   </data>
   <data name="LocalVolumeHeader" xml:space="preserve">
     <value>Volume Local</value>
@@ -494,5 +494,8 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   </data>
   <data name="DatabaseUpdateHeader" xml:space="preserve">
     <value>Base de dados do servidor actualizando</value>
+  </data>
+  <data name="ErrorSendingMPDCommand" xml:space="preserve">
+    <value>Não foi possível enviar {0}</value>
   </data>
 </root>

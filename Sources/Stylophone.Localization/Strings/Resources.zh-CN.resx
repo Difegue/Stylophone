@@ -456,7 +456,7 @@
 启用此选项后，将显示另一个音量滑块，用来控制本地音量。</value>
   </data>
   <data name="ErrorPlayingMPDStream" xml:space="preserve">
-    <value>试图播放 MPD 服务器的 httpd 流时出现错误：{0}</value>
+    <value>试图播放 MPD 服务器的 httpd 流时出现错误</value>
   </data>
   <data name="LocalVolumeHeader" xml:space="preserve">
     <value>本地音量</value>

@@ -137,7 +137,7 @@ namespace Stylophone.Common.ViewModels
 
             if (Files.Count == 0)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorAddingAlbum, Resources.NotificationNoTracksLoaded), false);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTracksLoaded, "", NotificationType.Warning);
                 return;
             }
 
@@ -155,7 +155,7 @@ namespace Stylophone.Common.ViewModels
         {
             if (Files.Count == 0)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorPlayingTrack, Resources.NotificationNoTracksLoaded), false);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTracksLoaded, "", NotificationType.Warning);
                 return;
             }
 

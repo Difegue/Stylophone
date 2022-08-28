@@ -58,12 +58,20 @@ namespace Stylophone.ViewModels
 
         public void Receive(InAppNotification message)
         {
+            InfoBarSeverity severity = message.NotificationType switch
+            {
+                NotificationType.Info => InfoBarSeverity.Informational,
+                NotificationType.Warning => InfoBarSeverity.Warning,
+                NotificationType.Error => InfoBarSeverity.Error,
+                _ => InfoBarSeverity.Informational
+            };
+
             var notification = new Notification
             {
-                Title = $"Notification {DateTimeOffset.Now}",
+                Title = message.NotificationTitle,
                 Message = message.NotificationText,
-                Duration = message.AutoHide ? TimeSpan.FromMilliseconds(1500) : null,
-                Severity = message.AutoHide ? InfoBarSeverity.Informational : InfoBarSeverity.Error,
+                Duration = message.NotificationType != NotificationType.Error ? TimeSpan.FromSeconds(2) : null,
+                Severity = severity
             };
             _dispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(notification));
         }

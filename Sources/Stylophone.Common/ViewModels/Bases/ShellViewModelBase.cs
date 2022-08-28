@@ -84,11 +84,8 @@ namespace Stylophone.Common.ViewModels
 
             if (text.Length > 2)
             {
-                List<IFilter> filterList = new()
-                {
-                    new FilterTag(FindTags.Title, text, FilterOperator.Contains)
-                };
-                var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(filterList));
+                var filter = new FilterTag(FindTags.Title, text, FilterOperator.Contains);
+                var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(filter));
 
                 if (response != null)
                 {
@@ -102,7 +99,7 @@ namespace Stylophone.Common.ViewModels
 
         private void QueueRandomTracks(int count)
         {
-            _notificationService.ShowInAppNotification(Resources.RandomTracksInProgress, false);
+            _notificationService.ShowInAppNotification(Resources.RandomTracksInProgress);
             _ = Task.Run(async () =>
             {
                 var response = await _mpdService.SafelySendCommandAsync(new StatsCommand());
@@ -114,7 +111,7 @@ namespace Stylophone.Common.ViewModels
                     count--;
                     // Pick a song n°, and queue it directly with searchadd
                     var r = new Random().Next(0, songs-1);
-                    commandList.Add(new SearchAddCommand(MpdTags.Title, "", r, r + 1));
+                    commandList.Add(new SearchAddCommand(new FilterTag(MpdTags.Title, "", FilterOperator.Contains), r, r + 1));
                 }
 
                 await _mpdService.SafelySendCommandAsync(commandList);
@@ -148,8 +145,7 @@ namespace Stylophone.Common.ViewModels
                 }
                 catch (Exception e)
                 {
-                    //TODO localize
-                    _notificationService.ShowInAppNotification($"Updating Playlist Navigation failed: {e.Message}", false);
+                    _notificationService.ShowInAppNotification(Resources.ErrorUpdatingPlaylist, e.Message, NotificationType.Error);
                 }
             });
         }

@@ -122,7 +122,7 @@ namespace Stylophone.Common.ViewModels
             {
                 if (!file.HasAlbum)
                 {
-                    _notificationService.ShowInAppNotification(Resources.ErrorNoMatchingAlbum, false);
+                    _notificationService.ShowInAppNotification(Resources.ErrorNoMatchingAlbum, "", NotificationType.Warning);
                     return;
                 }
 

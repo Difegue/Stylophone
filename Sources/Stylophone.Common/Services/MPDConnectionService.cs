@@ -10,6 +10,7 @@ using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
 using MpcNET.Commands.Reflection;
+using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.Services
 {
@@ -197,7 +198,8 @@ namespace Stylophone.Common.Services
             }
             catch (Exception e)
             {
-                _notificationService.ShowInAppNotification($"Sending {command.GetType().Name} failed: {e.Message}", false);
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorSendingMPDCommand, command.GetType().Name), 
+                    e.Message, NotificationType.Error);
             }
 
             return default(T);
@@ -215,7 +217,7 @@ namespace Stylophone.Common.Services
                 if (!r.IsResponseValid)
                 {
                     var mpdError = r.Response?.Result?.MpdError;
-                    _notificationService.ShowInAppNotification($"Invalid password: {mpdError ?? r.ToString()}", false);
+                    _notificationService.ShowInAppNotification(Resources.ErrorPassword, $"{mpdError ?? r.ToString()}", NotificationType.Error);
                 }
             }
 

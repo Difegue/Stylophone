@@ -163,7 +163,7 @@ namespace Stylophone.Common.ViewModels
         {
             if (_mpdService.CurrentStatus.UpdatingDb > 0)
             {
-                _notificationService.ShowInAppNotification(Resources.NotificationDbAlreadyUpdating);
+                _notificationService.ShowInAppNotification(Resources.NotificationDbAlreadyUpdating, "", NotificationType.Warning);
                 return;
             }
 

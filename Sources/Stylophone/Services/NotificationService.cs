@@ -8,15 +8,11 @@ using CommunityToolkit.Mvvm.Messaging;
 namespace Stylophone.Services
 {
 
-    public class InAppNotification { public string NotificationText { get; set; } public bool AutoHide { get; set; } }
-
     public class NotificationService : NotificationServiceBase
     {
-
-
-        public override void ShowInAppNotification(string notification, bool autoHide)
+        
+        public override void ShowInAppNotification(InAppNotification notificationObject)
         {
-            var notificationObject = new InAppNotification { NotificationText = notification, AutoHide = autoHide};
             WeakReferenceMessenger.Default.Send(notificationObject);
         }
         

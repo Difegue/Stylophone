@@ -154,7 +154,7 @@ namespace Stylophone.Common.ViewModels
             }
             catch (Exception e)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorPlayingMPDStream, e.Message), false);
+                _notificationService.ShowInAppNotification(Resources.ErrorPlayingMPDStream, e.Message, NotificationType.Error);
             }
         }
     }

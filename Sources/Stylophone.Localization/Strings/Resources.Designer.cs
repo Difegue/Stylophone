@@ -448,7 +448,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Error trying to play the MPD server&apos;s httpd stream: {0}.
+        ///   Recherche une chaîne localisée semblable à Error trying to play the MPD server&apos;s httpd stream.
         /// </summary>
         public static string ErrorPlayingMPDStream {
             get {
@@ -462,6 +462,24 @@ namespace Stylophone.Localization.Strings {
         public static string ErrorPlayingTrack {
             get {
                 return ResourceManager.GetString("ErrorPlayingTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sending {0} failed.
+        /// </summary>
+        public static string ErrorSendingMPDCommand {
+            get {
+                return ResourceManager.GetString("ErrorSendingMPDCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Updating Playlists failed.
+        /// </summary>
+        public static string ErrorUpdatingPlaylist {
+            get {
+                return ResourceManager.GetString("ErrorUpdatingPlaylist", resourceCulture);
             }
         }
         
