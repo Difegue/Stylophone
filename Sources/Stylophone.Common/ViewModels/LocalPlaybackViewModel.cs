@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LibVLCSharp.Shared;
 using Stylophone.Common.Interfaces;
@@ -18,7 +20,7 @@ namespace Stylophone.Common.ViewModels
         private MediaPlayer _mediaPlayer;
         private string _serverHost;
 
-        public LocalPlaybackViewModel(SettingsViewModel settingsVm, MPDConnectionService mpdService, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService): base(dispatcherService)
+        public LocalPlaybackViewModel(SettingsViewModel settingsVm, MPDConnectionService mpdService, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService) : base(dispatcherService)
         {
             _interopService = interopService;
             _notificationService = notificationService;
@@ -36,12 +38,29 @@ namespace Stylophone.Common.ViewModels
                 if (e.PropertyName == nameof(_settingsVm.ServerHost))
                     _serverHost = _settingsVm.ServerHost;
             };
+
+            // Run an idle loop in a spare thread to make sure the libVLC volume is always accurate
+            // Workaround for UWP, see https://code.videolan.org/videolan/vlc/-/commit/6ea058bf2d0813dab247f973b2d7bc9804486d81
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        if (IsPlaying && _mediaPlayer != null && _mediaPlayer.Volume != _volume)
+                            _mediaPlayer.Volume = _volume;
+
+                        Thread.Sleep(500);
+                    }
+                    catch (Exception) { }
+                }
+            });
         }
 
         public void Initialize(string host, bool isEnabled)
         {
             _serverHost = host;
-            _isEnabled = isEnabled;
+            IsEnabled = isEnabled;
         }
 
         [ObservableProperty]
@@ -64,6 +83,7 @@ namespace Stylophone.Common.ViewModels
                     _vlcCore = new LibVLC();
 
                 _mediaPlayer?.Dispose();
+                
                 _mediaPlayer = new MediaPlayer(_vlcCore);
             }
             else
@@ -111,7 +131,25 @@ namespace Stylophone.Common.ViewModels
 
         partial void OnIsPlayingChanged(bool value)
         {
-            UpdatePlayback();
+            try
+            {
+                if (value && _serverHost != null && _mpdService.IsConnected)
+                {
+                    var urlString = "http://" + _serverHost + ":8000";
+                    var streamUrl = new Uri(urlString);
+                    var media = new Media(_vlcCore, streamUrl);
+
+                    _mediaPlayer.Play(media);
+                }
+                else
+                {
+                    _mediaPlayer?.Stop();
+                }
+            }
+            catch (Exception e)
+            {
+                _notificationService.ShowInAppNotification(Resources.ErrorPlayingMPDStream, e.Message, NotificationType.Error);
+            }
         }
 
         private int _previousVolume = 25;
@@ -132,30 +170,5 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private void UpdatePlayback()
-        {
-            try
-            {
-                if (IsPlaying && _serverHost != null && _mpdService.IsConnected)
-                {
-                    var urlString = "http://" + _serverHost + ":8000";
-                    var streamUrl = new Uri(urlString);
-                    var media = new Media(_vlcCore, streamUrl);
-
-                    _mediaPlayer.Play(media);
-
-                    // This set won't work on UWP, see https://code.videolan.org/videolan/LibVLCSharp/-/issues/423
-                    _mediaPlayer.Volume = _volume;
-                }
-                else
-                {
-                    _mediaPlayer?.Stop();
-                }
-            }
-            catch (Exception e)
-            {
-                _notificationService.ShowInAppNotification(Resources.ErrorPlayingMPDStream, e.Message, NotificationType.Error);
-            }
-        }
     }
 }

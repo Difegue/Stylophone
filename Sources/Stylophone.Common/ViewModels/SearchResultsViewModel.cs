@@ -187,11 +187,8 @@ namespace Stylophone.Common.ViewModels
 
         private async Task DoSearchAsync(ITag tag)
         {
-            List<IFilter> filterList = new()
-            {
-                new FilterTag(tag, QueryText, FilterOperator.Contains)
-            };
-            var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(filterList));
+            var filter = new FilterTag(tag, QueryText, FilterOperator.Contains);
+            var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(filter));
 
             if (response != null)
             {
