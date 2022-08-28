@@ -577,21 +577,25 @@ namespace Stylophone.Common.ViewModels
                 case MpdState.Play:
                     IsTrackInfoAvailable = true;
                     PlayButtonContent = _interop.GetIcon(PlaybackIcon.Pause);
+                    LocalPlayback.Resume();
                     break;
 
                 case MpdState.Stop:
                     IsTrackInfoAvailable = true;
                     PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
+                    LocalPlayback.Stop();
                     break;
 
                 case MpdState.Pause:
                     IsTrackInfoAvailable = true;
                     PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
+                    LocalPlayback.Stop();
                     break;
 
                 default:
                     IsTrackInfoAvailable = false;
                     PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
+                    LocalPlayback.Stop();
                     break;
             }
         }

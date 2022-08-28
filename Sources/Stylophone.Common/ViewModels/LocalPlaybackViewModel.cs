@@ -63,6 +63,18 @@ namespace Stylophone.Common.ViewModels
             IsEnabled = isEnabled;
         }
 
+        public void Stop()
+        {
+            if (IsEnabled && Volume != 0)
+                IsPlaying = false;
+        }
+
+        public void Resume()
+        {
+            if (IsEnabled && Volume != 0)
+                IsPlaying = true;
+        }
+
         [ObservableProperty]
         private bool _isEnabled;
 
