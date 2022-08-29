@@ -25,6 +25,7 @@ namespace Stylophone.iOS
     {
         public IServiceProvider Services { get; }
 
+        [Export("window")]
         public UIWindow Window { get; set; }
 
         public UISplitViewController RootViewController { get; set; }
@@ -58,6 +59,9 @@ namespace Stylophone.iOS
             
             // Override point for customization after application launch
             Task.Run(async () => await InitializeApplicationAsync());
+
+            RootViewController = Window.RootViewController as UISplitViewController;
+            Window.TintColor = AppColor;
 
             return true;
         }
@@ -110,24 +114,6 @@ namespace Stylophone.iOS
                    typeof(Analytics), typeof(Crashes));
             }
 #endif
-        }
-
-        // UISceneSession Lifecycle
-
-        [Export("application:configurationForConnectingSceneSession:options:")]
-        public UISceneConfiguration GetConfiguration(UIApplication application, UISceneSession connectingSceneSession, UISceneConnectionOptions options)
-        {
-            // Called when a new scene session is being created.
-            // Use this method to select a configuration to create the new scene with.
-            return UISceneConfiguration.Create("Default Configuration", connectingSceneSession.Role);
-        }
-
-        [Export("application:didDiscardSceneSessions:")]
-        public void DidDiscardSceneSessions(UIApplication application, NSSet<UISceneSession> sceneSessions)
-        {
-            // Called when the user discards a scene session.
-            // If any sessions were discarded while the application was not running, this will be called shortly after `FinishedLaunching`.
-            // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
         }
 
         /// <summary>
