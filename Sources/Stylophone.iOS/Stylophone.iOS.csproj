@@ -146,6 +146,7 @@
     <Compile Include="ViewControllers\PlaylistViewController.designer.cs">
       <DependentUpon>PlaylistViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\NowPlayingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

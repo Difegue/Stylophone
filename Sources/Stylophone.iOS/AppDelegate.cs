@@ -14,6 +14,7 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using System.Threading;
+using AVFoundation;
 
 namespace Stylophone.iOS
 {
@@ -51,6 +52,10 @@ namespace Stylophone.iOS
         [Export("application:didFinishLaunchingWithOptions:")]
         public bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
+            // Enable Now Playing integration
+            application.BeginReceivingRemoteControlEvents();
+            AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
+            
             // Override point for customization after application launch
             Task.Run(async () => await InitializeApplicationAsync());
 
@@ -77,6 +82,7 @@ namespace Stylophone.iOS
             storageService.SetValue("LaunchCount", launchCount + 1);
 
             Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
+            Ioc.Default.GetRequiredService<NowPlayingService>().Initialize();
 
             await Ioc.Default.GetRequiredService<IDispatcherService>().ExecuteOnUIThreadAsync(async () =>
             {
@@ -139,7 +145,7 @@ namespace Stylophone.iOS
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<INotificationService, NotificationService>();
-            //services.AddSingleton<SystemMediaControlsService>();
+            services.AddSingleton<NowPlayingService>();
             services.AddSingleton<IInteropService, InteropService>();
 
             // Viewmodel Factories
