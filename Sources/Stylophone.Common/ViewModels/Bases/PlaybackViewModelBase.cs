@@ -413,6 +413,8 @@ namespace Stylophone.Common.ViewModels
             _navigationService.Navigate<PlaybackViewModelBase>(this);
         }
 
+        public bool IsFullScreen => _navigationService.CurrentPageViewModelType == typeof(PlaybackViewModelBase);
+
         #endregion Track Control Methods
 
         #region Track Playback State

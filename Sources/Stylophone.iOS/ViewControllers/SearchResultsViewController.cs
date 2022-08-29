@@ -10,6 +10,7 @@ using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
+using Stylophone.Localization.Strings;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -25,7 +26,7 @@ namespace Stylophone.iOS.ViewControllers
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            Title = Ioc.Default.GetRequiredService<ShellViewModel>().HeaderText;
+            Title = string.Format(Resources.SearchResultsFor, ViewModel.QueryText);
         }
 
         public override void ViewDidLoad()

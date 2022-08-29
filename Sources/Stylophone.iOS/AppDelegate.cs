@@ -24,7 +24,6 @@ namespace Stylophone.iOS
     {
         public IServiceProvider Services { get; }
 
-        [Export("window")]
         public UIWindow Window { get; set; }
 
         public UISplitViewController RootViewController { get; set; }

@@ -39,6 +39,9 @@ namespace NewSingleViewTemplate
                 Window.RootViewController as UISplitViewController;
 
             Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+
+            // Keep track of the window in AppDelegate so we can use it later
+            (UIApplication.SharedApplication.Delegate as AppDelegate).Window = Window;
         }
 
         [Export("sceneWillResignActive:")]

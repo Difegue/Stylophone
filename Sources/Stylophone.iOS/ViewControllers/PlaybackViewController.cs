@@ -78,12 +78,6 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewWillAppear(animated);
             NavigationController.NavigationBar.TintColor = UIColor.Label;
-
-            // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
-            if (UIScreen.MainScreen.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
-            {
-                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = UIColor.Label;
-            }
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -98,7 +92,9 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewDidLayoutSubviews();
 
-            // Move elements depending on available screen estate
+            if (!ViewModel.IsFullScreen) return;
+
+            // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
@@ -107,6 +103,9 @@ namespace Stylophone.iOS.ViewControllers
             else
             {
                 (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+                // Reset TitleView as it can disappear when moving from compact to normal size class
+                // TODO: this doesn't do anything..
+                NavigationItem.TitleView = upNextView;
             }
         }
 
