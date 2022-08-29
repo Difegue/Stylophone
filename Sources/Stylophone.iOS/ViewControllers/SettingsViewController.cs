@@ -50,7 +50,7 @@ namespace Stylophone.iOS.ViewControllers
             return (int)section switch
             {
                 1 => Resources.SettingsLocalPlaybackText,
-                2 => Resources.SettingsClearCacheDescription,
+                2 => Resources.SettingsAlbumArtText,
                 3 => Resources.SettingsApplyOnRestart,
                 _ => "",
             };
@@ -84,8 +84,8 @@ namespace Stylophone.iOS.ViewControllers
 
             Binder.Bind<string>(VersionLabel, "text", nameof(ViewModel.VersionDescription));
 
-            Binder.BindButton(ClearCacheButton, Resources.SettingsClearCache, ViewModel.ClearCacheCommand);
-            Binder.BindButton(UpdateDatabaseButton, Resources.SettingsUpdateDatabase, ViewModel.RescanDbCommand);
+            Binder.BindButton(ClearCacheButton, Resources.SettingsClearCacheDescription, ViewModel.ClearCacheCommand);
+            Binder.BindButton(UpdateDatabaseButton, Resources.SettingsUpdateDbTitle, ViewModel.RescanDbCommand);
             Binder.BindButton(RateButton, Resources.RateAppPromptTitle, ViewModel.RateAppCommand);
 
             GithubButton.SetTitle(Resources.SettingsGithub, UIControlState.Normal);
