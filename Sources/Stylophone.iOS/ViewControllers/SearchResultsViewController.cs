@@ -33,6 +33,8 @@ namespace Stylophone.iOS.ViewControllers
             base.ViewDidLoad();
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
 
+            Title = SearchResultsViewModel.GetHeader();
+
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
             Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
                 valueTransformer: negateBoolTransformer);
