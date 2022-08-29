@@ -48,7 +48,7 @@ namespace Stylophone.Common.ViewModels
         }
     }
 
-    public partial class TrackViewModel : ViewModelBase
+    public partial class TrackViewModel : ViewModelBase, IDisposable
     {
         private INotificationService _notificationService;
         private INavigationService _navigationService;
@@ -160,6 +160,11 @@ namespace Stylophone.Common.ViewModels
 
                 AlbumArt = art.ArtBitmap;
             }
+        }
+
+        public void Dispose()
+        {
+            AlbumArt?.Dispose();
         }
 
     }

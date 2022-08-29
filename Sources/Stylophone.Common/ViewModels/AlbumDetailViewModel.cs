@@ -36,7 +36,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [ObservableProperty]
-        private AlbumViewModel item;
+        private AlbumViewModel _item;
 
         [ObservableProperty]
         private string _playlistInfo;

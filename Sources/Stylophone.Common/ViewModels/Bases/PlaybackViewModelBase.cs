@@ -507,6 +507,10 @@ namespace Stylophone.Common.ViewModels
             if (response != null)
             {
                 IsTrackInfoAvailable = true;
+
+                // Dispose previous track
+                CurrentTrack?.Dispose();
+
                 // Set the new current track
                 CurrentTrack = _trackVmFactory.GetTrackViewModel(response);
             }

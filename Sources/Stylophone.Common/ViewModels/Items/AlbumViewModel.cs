@@ -12,6 +12,7 @@ using SkiaSharp;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,7 +48,7 @@ namespace Stylophone.Common.ViewModels
         }
     }
 
-    public partial class AlbumViewModel : ViewModelBase
+    public partial class AlbumViewModel : ViewModelBase, IDisposable
     {
         private INotificationService _notificationService;
         private IInteropService _interop;
@@ -225,6 +226,13 @@ namespace Stylophone.Common.ViewModels
             {
                 IsDetailLoading = false;
             }
+        }
+
+        public void Dispose()
+        {
+            AlbumArt?.Dispose();
+            AlbumArt = null;
+            AlbumArtLoaded = false;
         }
     }
 }

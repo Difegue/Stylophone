@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -20,7 +21,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public partial class PlaylistViewModel : ViewModelBase
+    public partial class PlaylistViewModel : ViewModelBase, IDisposable
     {
         private INotificationService _notificationService;
         private INavigationService _navigationService;
@@ -47,6 +48,7 @@ namespace Stylophone.Common.ViewModels
 
         private NotifyCollectionChangedAction _previousAction;
         private int _oldId;
+        private CancellationTokenSource _albumArtCts;
 
         public ObservableCollection<TrackViewModel> Source { get; private set; } = new ObservableCollection<TrackViewModel>();
 
@@ -199,6 +201,7 @@ namespace Stylophone.Common.ViewModels
         public async Task LoadDataAsync(string playlistName)
         {
             var placeholder = await _interop.GetPlaceholderImageAsync();
+            _albumArtCts = new CancellationTokenSource();
 
             ArtLoaded = false;
 
@@ -238,7 +241,7 @@ namespace Stylophone.Common.ViewModels
 
                     if (distinctAlbums.Count > 1)
                     {
-                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, true);
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, true, _albumArtCts.Token);
                         PlaylistArt = art != null ? art.ArtBitmap : PlaylistArt;
 
                         DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
@@ -247,14 +250,14 @@ namespace Stylophone.Common.ViewModels
 
                     if (distinctAlbums.Count > 2)
                     {
-                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[1].File, false);
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[1].File, false, _albumArtCts.Token);
                         PlaylistArt2 = art != null ? art.ArtBitmap : PlaylistArt2;
                     }
                     else PlaylistArt2 = PlaylistArt;
 
                     if (distinctAlbums.Count > 3)
                     {
-                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[2].File, false);
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[2].File, false, _albumArtCts.Token);
                         PlaylistArt3 = art != null ? art.ArtBitmap : PlaylistArt3;
                     }
                     else PlaylistArt3 = PlaylistArt2;
@@ -277,6 +280,20 @@ namespace Stylophone.Common.ViewModels
                 _previousAction = e.Action;
                 _oldId = e.OldStartingIndex;
             }
+        }
+
+        public void Dispose()
+        {
+            _albumArtCts?.Cancel();
+            
+            PlaylistArt?.Dispose();
+            PlaylistArt = null;
+            PlaylistArt2?.Dispose();
+            PlaylistArt2 = null;
+            PlaylistArt3?.Dispose();
+            PlaylistArt3 = null;
+            
+            ArtLoaded = false;
         }
     }
 }
