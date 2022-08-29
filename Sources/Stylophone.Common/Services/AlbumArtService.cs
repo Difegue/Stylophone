@@ -25,12 +25,14 @@ namespace Stylophone.Common.Services
         private CancellationTokenSource _queueCanceller;
 
         private IApplicationStorageService _applicationStorageService;
+        private INotificationService _notificationService;
         private MPDConnectionService _mpdService;
 
-        public AlbumArtService(MPDConnectionService mpdService, IApplicationStorageService appStorage)
+        public AlbumArtService(MPDConnectionService mpdService, IApplicationStorageService appStorage, INotificationService notificationService)
         {
             _mpdService = mpdService;
             _applicationStorageService = appStorage;
+            _notificationService = notificationService;
         }
 
         public void Initialize()
@@ -72,6 +74,7 @@ namespace Stylophone.Common.Services
                     catch (Exception e)
                     {
                         Debug.WriteLine("Exception while processing albumart queue: " + e);
+                        _notificationService.ShowErrorNotification(e);
                     }
                 }
             }).ConfigureAwait(false);
@@ -188,6 +191,7 @@ namespace Stylophone.Common.Services
             catch (Exception e)
             {
                 Debug.WriteLine("Exception caught while getting albumart: " + e);
+                _notificationService.ShowErrorNotification(e);
                 return null;
             }
 
@@ -221,8 +225,10 @@ namespace Stylophone.Common.Services
                 fileStream.Dispose();
                 return image;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Debug.WriteLine("Exception caught while loading albumart from file: " + e);
+                _notificationService.ShowErrorNotification(e);
                 return null;
             }
         }
