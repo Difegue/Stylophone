@@ -44,6 +44,7 @@ namespace Stylophone.Common.ViewModels
             _trackVmFactory = trackVmFactory;
 
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            DominantColor = _interop.GetAccentColor();
         }
 
         private NotifyCollectionChangedAction _previousAction;
@@ -245,6 +246,10 @@ namespace Stylophone.Common.ViewModels
                         PlaylistArt = art != null ? art.ArtBitmap : PlaylistArt;
 
                         DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
+
+                        if (DominantColor == default(SKColor))
+                            DominantColor = _interop.GetAccentColor();
+
                         IsLight = (!art?.DominantColor?.IsDark).GetValueOrDefault();
                     }
 

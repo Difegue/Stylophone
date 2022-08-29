@@ -97,6 +97,12 @@ namespace Stylophone.iOS.ViewControllers
             ArtContainer.Layer.ShadowRadius = 4;
         }
 
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+            ViewModel.Dispose();
+        }
+
         private void OnScroll(UIScrollView scrollView)
         {
             if (scrollView.ContentOffset.Y > 192)
