@@ -29,6 +29,14 @@ namespace Stylophone.iOS
 
         public UISplitViewController RootViewController { get; set; }
 
+        public UIColor AppColor => UIColor.FromDynamicProvider((traitCollection) =>
+        {
+            var darkColor = UIColor.FromRGB(204, 172, 128);
+            var lightColor = UIColor.FromRGB(135, 114, 85);
+
+            return traitCollection.UserInterfaceStyle == UIUserInterfaceStyle.Dark ? darkColor : lightColor;
+        });
+
         public AppDelegate()
         {
             Services = ConfigureServices();

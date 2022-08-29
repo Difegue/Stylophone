@@ -77,13 +77,37 @@ namespace Stylophone.iOS.ViewControllers
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            NavigationController.NavigationBar.TintColor = UIColor.LabelColor;
+            NavigationController.NavigationBar.TintColor = UIColor.Label;
+
+            // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
+            if (UIScreen.MainScreen.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
+            {
+                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = UIColor.Label;
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             NavigationController.NavigationBar.TintColor = null;
+
+            (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            // Move elements depending on available screen estate
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
+            {
+                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = UIColor.Label;
+            }
+            else
+            {
+                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+            }
         }
 
         public override void ViewDidLoad()

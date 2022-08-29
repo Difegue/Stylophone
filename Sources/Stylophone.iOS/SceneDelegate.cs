@@ -38,13 +38,7 @@ namespace NewSingleViewTemplate
             (UIApplication.SharedApplication.Delegate as AppDelegate).RootViewController =
                 Window.RootViewController as UISplitViewController;
 
-            Window.TintColor = UIColor.FromDynamicProvider((traitCollection) =>
-            {
-                var darkColor = UIColor.FromRGB(204,172,128);
-                var lightColor = UIColor.FromRGB(135,114,85);
-
-                return traitCollection.UserInterfaceStyle == UIUserInterfaceStyle.Dark ? darkColor : lightColor;
-            });
+            Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
         }
 
         [Export("sceneWillResignActive:")]
