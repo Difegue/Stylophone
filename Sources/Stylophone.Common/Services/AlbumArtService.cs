@@ -8,6 +8,7 @@ using Stylophone.Common.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -220,10 +221,12 @@ namespace Stylophone.Common.Services
         {
             try
             {
-                var fileStream = await _applicationStorageService.OpenFileAsync(fileName, "AlbumArt");
-                SKBitmap image = SKBitmap.Decode(fileStream);
-                fileStream.Dispose();
-                return image;
+                // Go through a SKData object to sidestep https://github.com/mono/SkiaSharp/issues/1551 
+                using (var fileStream = await _applicationStorageService.OpenFileAsync(fileName, "AlbumArt"))
+                using (var skData = SKData.Create(fileStream))
+                {
+                    return SKBitmap.Decode(skData);
+                }
             }
             catch (Exception e)
             {
