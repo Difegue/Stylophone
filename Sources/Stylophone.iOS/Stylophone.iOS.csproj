@@ -146,6 +146,10 @@
       <DependentUpon>PlaylistViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\NowPlayingService.cs" />
+    <Compile Include="Helpers\SymbolUIButton.cs" />
+    <Compile Include="Helpers\SymbolUIButton.designer.cs">
+      <DependentUpon>SymbolUIButton.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
