@@ -12,6 +12,7 @@ using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using UIKit;
 using Pop = ARSPopover.iOS;
+using static Xamarin.Essentials.Permissions;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -94,13 +95,28 @@ namespace Stylophone.iOS.ViewControllers
 
             if (!ViewModel.IsFullScreen) return;
 
+            // Don't multi-line for small phones in vertical orientation
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular && 
+                UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+            {
+                TrackTitle.Lines = 1;
+                AlbumName.Lines = 1;
+
+            }
+            else
+            {
+                TrackTitle.Lines = 2;
+                AlbumName.Lines = 2;
+            }
+
             // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
                 (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = UIColor.Label;
             }
-            else
+            else 
             {
                 (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
                 // Reset TitleView as it can disappear when moving from compact to normal size class

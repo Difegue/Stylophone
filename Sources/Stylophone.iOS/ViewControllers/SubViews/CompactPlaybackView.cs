@@ -39,6 +39,16 @@ namespace Stylophone.iOS.ViewControllers
             AlbumArt.Layer.CornerRadius = 8;
         }
 
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            if (TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
+                TrackTitle.Lines = 1;
+            else
+                TrackTitle.Lines = 2;
+        }
+
         internal void Bind(TrackViewModel currentTrack)
         {
             if (currentTrack == null)
