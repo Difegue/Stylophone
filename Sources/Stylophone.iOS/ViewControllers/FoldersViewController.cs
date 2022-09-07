@@ -19,7 +19,7 @@ namespace Stylophone.iOS.ViewControllers
         public FilePathViewModel ViewModel;
     }
 
-    public partial class FoldersViewController : UICollectionViewController, IViewController<FoldersViewModel>
+    public partial class FoldersViewController : UICollectionViewController, IUICollectionViewDelegateFlowLayout, IViewController<FoldersViewModel>
 	{
         private FilePathViewModel _currentlyShownVm;
         private PropertyBinder<FilePathViewModel> _filePathBinder;
@@ -39,6 +39,17 @@ namespace Stylophone.iOS.ViewControllers
             Title = FoldersViewModel.GetHeader();
 
             await InitTreeAsync();
+        }
+
+        
+        [Export("collectionView:layout:sizeForItemAtIndexPath:")]
+        public CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
+        {
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular)
+                return new CGSize(96, 96);
+            else
+                return new CGSize(128, 128);
         }
 
         public override async void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)

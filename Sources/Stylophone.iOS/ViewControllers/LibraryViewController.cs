@@ -12,6 +12,7 @@ using Stylophone.Common.ViewModels;
 using System.Threading.Tasks;
 using System.Linq;
 using CoreGraphics;
+using System.Drawing;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -20,7 +21,7 @@ namespace Stylophone.iOS.ViewControllers
         public AlbumViewModel ViewModel;
     }
 
-    public partial class LibraryViewController : UICollectionViewController, IViewController<LibraryViewModel>, IUISearchBarDelegate
+    public partial class LibraryViewController : UICollectionViewController, IUICollectionViewDelegateFlowLayout, IViewController<LibraryViewModel>, IUISearchBarDelegate
     {
         public LibraryViewController(IntPtr handle) : base(handle)
         {
@@ -37,6 +38,7 @@ namespace Stylophone.iOS.ViewControllers
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
             Title = LibraryViewModelBase.GetHeader();
 
+
             var searchController = new UISearchController(searchResultsController: null);
             NavigationItem.SearchController = searchController;
             NavigationItem.HidesSearchBarWhenScrolling = false;
@@ -49,7 +51,7 @@ namespace Stylophone.iOS.ViewControllers
 
             await InitializeLibraryAsync();
         }
-
+                
         private async Task InitializeLibraryAsync()
         {
             if (ViewModel.IsSourceEmpty)
@@ -123,6 +125,34 @@ namespace Stylophone.iOS.ViewControllers
             var addToPlaylistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", vm.AddToPlaylistCommand);
 
             return UIMenu.Create(new[] { playAction, addToQueueAction, addToPlaylistAction });
+        }
+
+        private CGSize? _incomingSize;
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+
+            // Keep track of the incoming size, since when we invalidate the collectionview's size won't have updated yet
+            _incomingSize = toSize;
+            var invalidation = new UICollectionViewFlowLayoutInvalidationContext();
+            invalidation.InvalidateFlowLayoutDelegateMetrics = true;
+
+            CollectionView.CollectionViewLayout.InvalidateLayout(invalidation);
+        }
+
+        [Export("collectionView:layout:sizeForItemAtIndexPath:")]
+        public CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
+        {
+            var referenceSize = _incomingSize ?? collectionView.Frame.Size;
+            var size = new CGSize(192, 192);
+
+            if (referenceSize.Width < 600)
+                size = new CGSize(148, 148);
+
+            if (referenceSize.Width < 350)
+                size = new CGSize(120, 120);
+
+            return size;
         }
 
         [Export("searchBar:textDidChange:")]
