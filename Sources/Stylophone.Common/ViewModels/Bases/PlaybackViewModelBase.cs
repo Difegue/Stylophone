@@ -183,12 +183,14 @@ namespace Stylophone.Common.ViewModels
                 cts.Cancel();
                 cts = new CancellationTokenSource();
 
-                // Set the volume 
-                volumeTasks.Add(Task.Run(async () =>
-                {
-                    await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
-                    Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
-                }, cts.Token));
+                // Set the volume
+                if (_mpdService.CurrentStatus.Volume != value)
+                    volumeTasks.Add(Task.Run(async () =>
+                    {
+                        await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
+                        Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
+                        MediaVolume = _mpdService.CurrentStatus.Volume; // Update the value to the current server volume
+                    }, cts.Token));
 
                 // Update the UI
                 if ((int)value == 0)
