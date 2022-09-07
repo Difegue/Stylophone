@@ -146,7 +146,7 @@ namespace Stylophone.iOS.ViewControllers
             var referenceSize = _incomingSize ?? collectionView.Frame.Size;
             var size = new CGSize(192, 192);
 
-            if (referenceSize.Width < 700)
+            if (referenceSize.Width < 600)
                 size = new CGSize(148, 148);
 
             if (referenceSize.Width < 350)

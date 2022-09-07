@@ -29,6 +29,7 @@ namespace Stylophone.iOS.Services
             _storageService = storageService;
 
             // https://stackoverflow.com/questions/48289037/using-mpnowplayinginfocenter-without-actually-playing-audio
+            // TODO This breaks when LibVLC playback stops
             _silencePlayer = new AVAudioPlayer(new NSUrl("silence.wav",false,NSBundle.MainBundle.ResourceUrl), null, out var error);
             _silencePlayer.NumberOfLoops = -1;
         }
@@ -93,6 +94,8 @@ namespace Stylophone.iOS.Services
 
             MPRemoteCommandCenter.Shared.ChangePlaybackPositionCommand.AddTarget((evt) => {
                 var position = (evt as MPChangePlaybackPositionCommandEvent).PositionTime;
+
+                position = Math.Round(position); // Fractional values don't seem to work well on iOS
                 _mpdService.SafelySendCommandAsync(new SeekCurCommand(position));
                 return MPRemoteCommandHandlerStatus.Success;
             });
@@ -108,7 +111,7 @@ namespace Stylophone.iOS.Services
             switch (status.State)
             {
                 case MpdState.Play:
-                    _silencePlayer.Play();
+                    _silencePlayer.Play(); 
                     _nowPlayingInfo.PlaybackRate = 1;
                     break;
                 case MpdState.Pause:

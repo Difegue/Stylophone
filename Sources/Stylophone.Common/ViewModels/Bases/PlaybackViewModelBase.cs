@@ -468,6 +468,7 @@ namespace Stylophone.Common.ViewModels
             TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingTime.TotalMilliseconds);
 
             // Set the track position
+            CurrentTimeValue = Math.Round(CurrentTimeValue); // Fractional values don't seem to work well on iOS
             await _mpdService.SafelySendCommandAsync(new SeekCurCommand(CurrentTimeValue));
 
             // Wait for MPD Status to catch up before we start auto-updating the slider again
