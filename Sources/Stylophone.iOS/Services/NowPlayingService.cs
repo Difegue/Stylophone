@@ -21,10 +21,16 @@ namespace Stylophone.iOS.Services
         private MPDConnectionService _mpdService;
         private IApplicationStorageService _storageService;
 
+        private AVAudioPlayer _silencePlayer;
+
         public NowPlayingService(MPDConnectionService mpdService, IApplicationStorageService storageService)
         {
             _mpdService = mpdService;
             _storageService = storageService;
+
+            // https://stackoverflow.com/questions/48289037/using-mpnowplayinginfocenter-without-actually-playing-audio
+            _silencePlayer = new AVAudioPlayer(new NSUrl("silence.wav",false,NSBundle.MainBundle.ResourceUrl), null, out var error);
+            _silencePlayer.NumberOfLoops = -1;
         }
 
         public void Initialize()
@@ -44,7 +50,7 @@ namespace Stylophone.iOS.Services
 
         private void EnableCommands(bool isConnected)
         {
-            AVAudioSession.SharedInstance().SetActive(isConnected);
+            AVAudioSession.SharedInstance().SetActive(isConnected, AVAudioSessionSetActiveOptions.NotifyOthersOnDeactivation);
 
             MPRemoteCommandCenter.Shared.PreviousTrackCommand.Enabled = isConnected;
             MPRemoteCommandCenter.Shared.NextTrackCommand.Enabled = isConnected;
@@ -102,15 +108,19 @@ namespace Stylophone.iOS.Services
             switch (status.State)
             {
                 case MpdState.Play:
+                    _silencePlayer.Play();
                     _nowPlayingInfo.PlaybackRate = 1;
                     break;
                 case MpdState.Pause:
+                    _silencePlayer.Stop();
                     _nowPlayingInfo.PlaybackRate = 0;
                     break;
                 case MpdState.Stop:
+                    _silencePlayer.Stop();
                     _nowPlayingInfo.PlaybackRate = 0;
                     break;
                 case MpdState.Unknown:
+                    _silencePlayer.Stop();
                     _nowPlayingInfo.PlaybackRate = 0;
                     break;
                 default:
