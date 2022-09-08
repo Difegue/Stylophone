@@ -13,6 +13,7 @@ using Stylophone.iOS.ViewModels;
 using UIKit;
 using Pop = ARSPopover.iOS;
 using static Xamarin.Essentials.Permissions;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -193,6 +194,9 @@ namespace Stylophone.iOS.ViewControllers
                 UpdateButton(ShuffleButton, image);
             }
 
+            if (e.PropertyName == nameof(ViewModel.IsConsumeEnabled))
+                _consumeAction.State = ViewModel.IsConsumeEnabled ? UIMenuElementState.On : UIMenuElementState.Off;
+
             if (e.PropertyName == nameof(ViewModel.RepeatIcon))
             {
                 UpdateButton(RepeatButton, ViewModel.RepeatIcon);
@@ -234,12 +238,18 @@ namespace Stylophone.iOS.ViewControllers
         private void UpdateButton(UIButton button, string systemImg) =>
             button?.SetImage(UIImage.GetSystemImage(systemImg), UIControlState.Normal);
 
+        private UIAction _consumeAction;
         private UIBarButtonItem CreateSettingsButton()
         {
+            _consumeAction = Binder.GetCommandAction(Strings.ActionToggleConsume, "fork.knife", new RelayCommand(ViewModel.ToggleConsume));
             var addQueueAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlaylistCommand);
             var viewAlbumAction = Binder.GetCommandAction(Strings.ContextMenuViewAlbum, "opticaldisc", ViewModel.ShowAlbumCommand);
 
-            var barButtonMenu = UIMenu.Create(new[] { addQueueAction, viewAlbumAction });
+            // https://stackoverflow.com/questions/64738005/how-to-change-the-state-for-an-uiaction-inside-uimenu-at-runtime
+            var dynamicAction = UIDeferredMenuElement.CreateUncached(new UIDeferredMenuElementProviderHandler((completion) =>
+                completion.Invoke(new[] { _consumeAction })));
+
+            var barButtonMenu = UIMenu.Create(new UIMenuElement[] { dynamicAction, addQueueAction, viewAlbumAction });
             return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
         }
 
