@@ -234,7 +234,7 @@
     <value>About this application</value>
   </data>
   <data name="SettingsAboutText" xml:space="preserve">
-    <value>MPD Client for the Universal Windows Platform, based on MpcNET.</value>
+    <value>A pretty cool MPD Client. Uses MpcNET.</value>
   </data>
   <data name="SettingsAnalytics" xml:space="preserve">
     <value>Analytics</value>

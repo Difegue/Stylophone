@@ -227,10 +227,17 @@
                 Text="{x:Bind strings:Resources.SettingsAbout}" />
 
             <local:SettingsBlockControl
-                Title="{x:Bind ViewModel.VersionDescription, Mode=OneWay}"
+                Title="{x:Bind strings:Resources.AppDisplayName}"
                 Margin="{StaticResource SmallTopMargin}"
                 Description="{x:Bind strings:Resources.SettingsAboutText}">
 
+                <local:SettingsBlockControl.AdditionalDescriptionContent>
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock Text="Version" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                        <TextBlock Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" Style="{ThemeResource CaptionTextBlockStyle}" />
+                    </StackPanel>
+                </local:SettingsBlockControl.AdditionalDescriptionContent>
+                
                 <local:SettingsBlockControl.Icon>
                     <controls:ImageIcon
                         Width="48"

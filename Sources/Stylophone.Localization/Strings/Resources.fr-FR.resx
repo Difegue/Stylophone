@@ -233,7 +233,7 @@
     <value>A propos de cette application</value>
   </data>
   <data name="SettingsAboutText" xml:space="preserve">
-    <value>Client MPD pour UWP, utilisant MpcNET.</value>
+    <value>Un client MPD plutôt cool. Utilise MpcNET.</value>
   </data>
   <data name="SettingsAnalytics" xml:space="preserve">
     <value>Télémétrie</value>

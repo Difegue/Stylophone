@@ -234,7 +234,7 @@
     <value>关于此应用</value>
   </data>
   <data name="SettingsAboutText" xml:space="preserve">
-    <value>基于 MpcNET 的 UWP MPD 客户端。</value>
+    <value>基于 MpcNET 的 MPD 客户端。</value>
   </data>
   <data name="SettingsAnalytics" xml:space="preserve">
     <value>分析</value>

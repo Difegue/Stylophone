@@ -233,7 +233,7 @@
     <value>Acerca desta aplicação</value>
   </data>
   <data name="SettingsAboutText" xml:space="preserve">
-    <value>Cliente MPD para a Plataforma Universal Windows, baseado em MpcNET.</value>
+    <value>Cliente MPD, baseado em MpcNET.</value>
   </data>
   <data name="SettingsAnalytics" xml:space="preserve">
     <value>Analíticos</value>

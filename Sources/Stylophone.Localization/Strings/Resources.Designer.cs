@@ -876,7 +876,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à MPD Client for the Universal Windows Platform, based on MpcNET..
+        ///   Recherche une chaîne localisée semblable à A pretty cool MPD Client. Uses MpcNET..
         /// </summary>
         public static string SettingsAboutText {
             get {
