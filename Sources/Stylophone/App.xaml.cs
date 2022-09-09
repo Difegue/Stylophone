@@ -15,7 +15,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Foundation;
-using System.Collections.Generic;
+using Microsoft.Services.Store.Engagement;
 
 namespace Stylophone
 {
@@ -61,6 +61,10 @@ namespace Stylophone
                 Resources.MergedDictionaries.Add(
                    new ResourceDictionary { Source = new Uri(@"ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml", UriKind.Absolute) });
             }
+
+            // Initialize MS Store Engagement notifications
+            StoreServicesEngagementManager engagementManager = StoreServicesEngagementManager.GetDefault();
+            await engagementManager.RegisterNotificationChannelAsync();
 
             // Analytics
             SystemInformation.Instance.TrackAppUse(args);
