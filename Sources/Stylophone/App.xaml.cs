@@ -16,6 +16,10 @@ using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Foundation;
 using Microsoft.Services.Store.Engagement;
+#if DEBUG
+#else
+using System.Collections.Generic;
+#endif
 
 namespace Stylophone
 {
