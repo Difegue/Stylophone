@@ -530,16 +530,16 @@
                                                 <exclude reference="6Tf-TA-5Xd"/>
                                                 <exclude reference="KsV-xZ-o8u"/>
                                                 <exclude reference="rqc-LJ-ZHm"/>
-                                                <exclude reference="Y2k-vB-tj7"/>
                                                 <exclude reference="ATW-CF-cR9"/>
                                                 <exclude reference="W4p-ZJ-1br"/>
                                                 <exclude reference="hRv-nI-0sI"/>
                                                 <exclude reference="sON-QN-IKN"/>
-                                                <exclude reference="qdx-KM-zw2"/>
                                                 <exclude reference="4Cw-C8-gfb"/>
                                                 <exclude reference="gvi-Zs-cTV"/>
                                                 <exclude reference="h6q-Om-RsB"/>
                                                 <exclude reference="lBY-15-sxl"/>
+                                                <exclude reference="qdx-KM-zw2"/>
+                                                <exclude reference="Y2k-vB-tj7"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -564,15 +564,15 @@
                                                 <include reference="4la-bA-Etd"/>
                                                 <include reference="6Tf-TA-5Xd"/>
                                                 <include reference="ATW-CF-cR9"/>
-                                                <include reference="1gc-NI-O3C"/>
                                                 <include reference="4Cw-C8-gfb"/>
+                                                <include reference="1gc-NI-O3C"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
-                                                <include reference="Y2k-vB-tj7"/>
                                                 <include reference="sON-QN-IKN"/>
                                                 <exclude reference="h6q-Om-RsB"/>
+                                                <include reference="Y2k-vB-tj7"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">

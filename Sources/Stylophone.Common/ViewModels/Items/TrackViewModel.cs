@@ -71,7 +71,7 @@ namespace Stylophone.Common.ViewModels
             _mpdService.SongChanged += (s, e) => UpdatePlayingStatus();
 
             File = file;
-            DominantColor = new SKColor();
+            DominantColor = _interop.GetAccentColor();
         }
 
         public IMpdFile File { get; }

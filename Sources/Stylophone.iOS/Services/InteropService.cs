@@ -37,7 +37,11 @@ namespace Stylophone.iOS.Services
 
         public SKColor GetAccentColor()
         {
-            var accent = UIApplication.SharedApplication.KeyWindow.TintColor;
+            var accent = UIColor.SystemBlue;
+            UIApplication.SharedApplication.InvokeOnMainThread(() =>
+            {
+                accent = UIApplication.SharedApplication.KeyWindow.TintColor;
+            });
             return accent.ToSKColor();
         }
 

@@ -68,7 +68,7 @@ namespace Stylophone.iOS.Helpers
                 col = skiaColor.ToUIColor();
             }
             else
-                col = UIColor.SystemBlueColor;
+                col = UIColor.SystemBlue;
 
             return col;
         }

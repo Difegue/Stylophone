@@ -164,6 +164,7 @@ namespace Stylophone.iOS.ViewControllers
             VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton); 
 
             AlbumArt.Layer.CornerRadius = 8;
+
         }
 
         private void OnVmPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -231,7 +232,7 @@ namespace Stylophone.iOS.ViewControllers
             _trackBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _trackBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _trackBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
-            //_trackBinder.Bind<SKColor>(PlayPauseButton, "tintColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            _trackBinder.Bind<SKColor>(TrackSlider, "maximumTrackTintColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
             
         }
 
