@@ -272,17 +272,23 @@ namespace Stylophone.Common.ViewModels
         /// </summary>
         protected async void UpdateInformation(object sender, EventArgs e)
         {
+            var status = _mpdService.CurrentStatus;
+
             // Only call the following if the player exists and the time is greater then 0.
-            if (_mpdService.CurrentStatus.Elapsed.TotalMilliseconds <= 0)
+            if (status.Elapsed.TotalMilliseconds <= 0)
                 return;
 
-            if (CurrentTrack == null)
-                return;
+            // Update song in case we went out of sync
+            if (status.SongId != CurrentTrack?.File?.Id)
+            {
+                OnTrackChange(this, new SongChangedEventArgs { NewSongId = status.SongId });
+            }
 
             if (!HasNextTrack)
-                await UpdateUpNextAsync(_mpdService.CurrentStatus);
+                await UpdateUpNextAsync(status);
 
-            var status = _mpdService.CurrentStatus;
+            if (CurrentTrack == null)
+                return;        
 
             // Set the current time value - if the user isn't scrobbling the slider
             if (!_isUserMovingSlider)
