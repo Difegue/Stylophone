@@ -484,51 +484,6 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à parameter must be an Enum name!.
-        /// </summary>
-        public static string ExceptionEnumToBooleanConverterParameterMustBeAnEnumName {
-            get {
-                return ResourceManager.GetString("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à value must be an Enum!.
-        /// </summary>
-        public static string ExceptionEnumToBooleanConverterValueMustBeAnEnum {
-            get {
-                return ResourceManager.GetString("ExceptionEnumToBooleanConverterValueMustBeAnEnum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à File name is null or empty. Specify a valid file name.
-        /// </summary>
-        public static string ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty {
-            get {
-                return ResourceManager.GetString("ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à All pages opened in a new window must subscribe to the Released Event..
-        /// </summary>
-        public static string ExceptionViewLifeTimeControlMissingReleasedSubscription {
-            get {
-                return ResourceManager.GetString("ExceptionViewLifeTimeControlMissingReleasedSubscription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à This view is being disposed..
-        /// </summary>
-        public static string ExceptionViewLifeTimeControlViewDisposal {
-            get {
-                return ResourceManager.GetString("ExceptionViewLifeTimeControlViewDisposal", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à David Bowie is credited with playing the Stylophone on his 1969 debut hit song &quot;Space Oddity&quot; and also for his 2002 album Heathen track titled &quot;Slip Away,&quot; as well as on the song &quot;Heathen (The Rays)&quot;..
         /// </summary>
         public static string FirstRunFlavorText {

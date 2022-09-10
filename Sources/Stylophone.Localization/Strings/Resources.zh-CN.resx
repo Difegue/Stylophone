@@ -183,26 +183,6 @@
   <data name="OKButtonText" xml:space="preserve">
     <value>好</value>
   </data>
-  <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
-    <value>文件名为空。请指定有效文件名。</value>
-    <comment>File name is null or empty to save file in settings storage extensions</comment>
-  </data>
-  <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
-    <value>值必须为枚举类型。</value>
-    <comment>Value must be an Enum in enum to boolean converter</comment>
-  </data>
-  <data name="ExceptionEnumToBooleanConverterParameterMustBeAnEnumName" xml:space="preserve">
-    <value>参数必须为枚举类型。</value>
-    <comment>Parameter must be an Enum name in enum to boolean converter</comment>
-  </data>
-  <data name="ExceptionViewLifeTimeControlViewDisposal" xml:space="preserve">
-    <value>该视图已被释放。</value>
-    <comment>View disposed</comment>
-  </data>
-  <data name="ExceptionViewLifeTimeControlMissingReleasedSubscription" xml:space="preserve">
-    <value>所有在新窗口打开的页面必须订阅 Released 事件。</value>
-    <comment>The page is not subscribed to the Released event.</comment>
-  </data>
   <data name="NotificationAddedToPlaylist" xml:space="preserve">
     <value>已添加到播放列表“{0}”。</value>
   </data>

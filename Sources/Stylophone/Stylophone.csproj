@@ -28,7 +28,7 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>187A5D2AFF2CB3A375B862E45117B9B7DF13CACF</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>AC6B4D78B6FC1C9719183572B36F08C049AFFB1E</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <!-- Workaround to prevent resource.pri exploding for other languages with LibVLC installed -->
     <AppxBundleAutoResourcePackageQualifiers>DXFeatureLevel</AppxBundleAutoResourcePackageQualifiers>
@@ -205,7 +205,7 @@
     <Compile Include="Converters\DoubleToThicknessConverter.cs" />
     <Compile Include="Converters\SkiaConverters.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
-    <Compile Include="Converters\EnumConverters.cs" />
+    <Compile Include="Converters\ThemeToIntConverter.cs" />
     <Compile Include="Helpers\LiveTileHelper.cs" />
     <Compile Include="Helpers\UWPHelpers.cs" />
     <Compile Include="Helpers\NavHelper.cs" />

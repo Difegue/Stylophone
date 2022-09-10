@@ -5,16 +5,15 @@
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helper="using:Stylophone.Helpers"
     xmlns:local="using:Stylophone.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    xmlns:stylophone="using:Stylophone.Common.Interfaces"
+    xmlns:helpers="using:Stylophone.Helpers"
     mc:Ignorable="d">
     <Page.Resources>
-        <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="stylophone:Theme" />
-        <helper:EnumToIntConverter x:Key="EnumToIntConverter" EnumType="stylophone:Theme" />
-        
+
+        <helpers:ThemeToIntConverter x:Key="ThemeToIntConverter"/>
+
         <converters:BoolToObjectConverter x:Key="IconConverter">
             <converters:BoolToObjectConverter.TrueValue>
                 <FontIcon Foreground="{StaticResource AccentFillColorDefaultBrush}" Glyph="&#xE953;" />
@@ -174,7 +173,7 @@
                 </local:SettingsBlockControl.Icon>
 
                 <local:SettingsBlockControl.SettingsActionableElement>
-                    <ComboBox SelectedIndex="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToIntConverter}, Mode=TwoWay}">
+                    <ComboBox SelectedIndex="{x:Bind ViewModel.ElementTheme, Converter={StaticResource ThemeToIntConverter}, Mode=TwoWay}">
                         <ComboBoxItem Content="{x:Bind strings:Resources.SettingsThemeDefault}"/>
                         <ComboBoxItem Content="{x:Bind strings:Resources.SettingsThemeLight}"/>
                         <ComboBoxItem Content="{x:Bind strings:Resources.SettingsThemeDark}"/>
