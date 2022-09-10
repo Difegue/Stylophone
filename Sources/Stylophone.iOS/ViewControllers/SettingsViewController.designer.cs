@@ -13,6 +13,9 @@ namespace Stylophone.iOS.ViewControllers
 	partial class SettingsViewController
 	{
 		[Outlet]
+		UIKit.UISwitch AlbumArtToggle { get; set; }
+
+		[Outlet]
 		UIKit.UISwitch AnalyticsToggle { get; set; }
 
 		[Outlet]
@@ -74,6 +77,16 @@ namespace Stylophone.iOS.ViewControllers
 				GithubButton = null;
 			}
 
+			if (LocalPlaybackToggle != null) {
+				LocalPlaybackToggle.Dispose ();
+				LocalPlaybackToggle = null;
+			}
+
+			if (AlbumArtToggle != null) {
+				AlbumArtToggle.Dispose ();
+				AlbumArtToggle = null;
+			}
+
 			if (RateButton != null) {
 				RateButton.Dispose ();
 				RateButton = null;
@@ -127,11 +140,6 @@ namespace Stylophone.iOS.ViewControllers
 			if (VersionLabel != null) {
 				VersionLabel.Dispose ();
 				VersionLabel = null;
-			}
-
-			if (LocalPlaybackToggle != null) {
-				LocalPlaybackToggle.Dispose ();
-				LocalPlaybackToggle = null;
 			}
 		}
 	}

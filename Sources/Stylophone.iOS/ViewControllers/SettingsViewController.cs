@@ -81,6 +81,7 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(LocalPlaybackToggle, "enabled", nameof(ViewModel.IsStreamingAvailable));
             Binder.Bind<bool>(LocalPlaybackToggle, "on", nameof(ViewModel.IsLocalPlaybackEnabled), true);
             Binder.Bind<bool>(AnalyticsToggle, "on", nameof(ViewModel.EnableAnalytics), true);
+            Binder.Bind<bool>(AlbumArtToggle, "on", nameof(ViewModel.IsAlbumArtFetchingEnabled), true);
 
             Binder.Bind<string>(VersionLabel, "text", nameof(ViewModel.VersionDescription));
 
