@@ -196,7 +196,7 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\50.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\144.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\152.png" />
-    <ImageAsset Include="Assets.xcassets\icon.imageset\icon.png" />
+    <ImageAsset Include="Assets.xcassets\icon.imageset\Square44x44Logo.altform-unplated_targetsize-256.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

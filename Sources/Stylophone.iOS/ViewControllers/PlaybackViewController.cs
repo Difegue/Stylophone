@@ -14,6 +14,7 @@ using UIKit;
 using Pop = ARSPopover.iOS;
 using static Xamarin.Essentials.Permissions;
 using CommunityToolkit.Mvvm.Input;
+using CoreGraphics;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -101,13 +102,13 @@ namespace Stylophone.iOS.ViewControllers
                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular && 
                 UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
-                TrackTitle.Lines = 1;
+                TrackTitle.Lines = 2;
                 AlbumName.Lines = 1;
 
             }
             else
             {
-                TrackTitle.Lines = 2;
+                TrackTitle.Lines = 3;
                 AlbumName.Lines = 2;
             }
 
@@ -161,10 +162,14 @@ namespace Stylophone.iOS.ViewControllers
             PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
             ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
             RepeatButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleRepeat();
-            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton); 
+            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton);
 
-            AlbumArt.Layer.CornerRadius = 8;
-
+            // Add shadow to albumart
+            AlbumArt.Layer.MasksToBounds = false;
+            AlbumArt.Layer.ShadowColor = UIColor.Black.CGColor;
+            AlbumArt.Layer.ShadowOpacity = 0.5F;
+            AlbumArt.Layer.ShadowOffset = new CGSize(0, 0);
+            AlbumArt.Layer.ShadowRadius = 4;
         }
 
         private void OnVmPropertyChanged(object sender, PropertyChangedEventArgs e)

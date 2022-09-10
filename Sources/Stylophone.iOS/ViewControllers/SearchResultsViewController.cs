@@ -27,6 +27,9 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewWillAppear(animated);
             Title = string.Format(Resources.SearchResultsFor, ViewModel.QueryText);
+
+            // Don't display large title for search results as they're usually too long
+            NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
         }
 
         public override void ViewDidLoad()
