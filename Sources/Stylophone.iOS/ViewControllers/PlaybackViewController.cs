@@ -109,7 +109,11 @@ namespace Stylophone.iOS.ViewControllers
             else
             {
                 TrackTitle.Lines = 3;
-                AlbumName.Lines = 2;
+
+                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+                    AlbumName.Lines = 1;
+                else
+                    AlbumName.Lines = 2;
             }
 
             // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
@@ -165,11 +169,15 @@ namespace Stylophone.iOS.ViewControllers
             VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton);
 
             // Add shadow to albumart
-            AlbumArt.Layer.MasksToBounds = false;
-            AlbumArt.Layer.ShadowColor = UIColor.Black.CGColor;
-            AlbumArt.Layer.ShadowOpacity = 0.5F;
-            AlbumArt.Layer.ShadowOffset = new CGSize(0, 0);
-            AlbumArt.Layer.ShadowRadius = 4;
+            ShadowCaster.Layer.MasksToBounds = false;
+            ShadowCaster.Layer.CornerRadius = 8;
+            ShadowCaster.Layer.ShadowColor = UIColor.Black.CGColor;
+            ShadowCaster.Layer.ShadowOpacity = 0.5F;
+            ShadowCaster.Layer.ShadowOffset = new CGSize(0, 0);
+            ShadowCaster.Layer.ShadowRadius = 4;
+
+            AlbumArt.Layer.CornerRadius = 8;
+            //View.BringSubviewToFront(AlbumArt);
         }
 
         private void OnVmPropertyChanged(object sender, PropertyChangedEventArgs e)

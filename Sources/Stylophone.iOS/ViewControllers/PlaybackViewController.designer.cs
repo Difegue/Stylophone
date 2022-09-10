@@ -64,6 +64,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UISlider ServerVolumeSlider { get; set; }
 
 		[Outlet]
+		UIKit.UIView ShadowCaster { get; set; }
+
+		[Outlet]
 		UIKit.UIButton ShuffleButton { get; set; }
 
 		[Outlet]
@@ -131,6 +134,11 @@ namespace Stylophone.iOS.ViewControllers
 				LocalPlaybackView = null;
 			}
 
+			if (LocalVolume != null) {
+				LocalVolume.Dispose ();
+				LocalVolume = null;
+			}
+
 			if (LocalVolumeSlider != null) {
 				LocalVolumeSlider.Dispose ();
 				LocalVolumeSlider = null;
@@ -154,6 +162,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (ServerMuteButton != null) {
 				ServerMuteButton.Dispose ();
 				ServerMuteButton = null;
+			}
+
+			if (ServerVolume != null) {
+				ServerVolume.Dispose ();
+				ServerVolume = null;
 			}
 
 			if (ServerVolumeSlider != null) {
@@ -196,14 +209,9 @@ namespace Stylophone.iOS.ViewControllers
 				VolumePopover = null;
 			}
 
-			if (LocalVolume != null) {
-				LocalVolume.Dispose ();
-				LocalVolume = null;
-			}
-
-			if (ServerVolume != null) {
-				ServerVolume.Dispose ();
-				ServerVolume = null;
+			if (ShadowCaster != null) {
+				ShadowCaster.Dispose ();
+				ShadowCaster = null;
 			}
 		}
 	}
