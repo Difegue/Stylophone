@@ -282,6 +282,8 @@ namespace Stylophone.Common.ViewModels
             if (status.SongId != CurrentTrack?.File?.Id)
             {
                 OnTrackChange(this, new SongChangedEventArgs { NewSongId = status.SongId });
+                OnStateChange(this, null);
+                await UpdateUpNextAsync(_mpdService.CurrentStatus);
             }
 
             if (!HasNextTrack)
