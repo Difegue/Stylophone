@@ -28,11 +28,11 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>BA4DC65DC8E7D8306C0DA23E0768EB312CC64ED6</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>187A5D2AFF2CB3A375B862E45117B9B7DF13CACF</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <!-- Workaround to prevent resource.pri exploding for other languages with LibVLC installed -->
     <AppxBundleAutoResourcePackageQualifiers>DXFeatureLevel</AppxBundleAutoResourcePackageQualifiers>
-    <AppxDefaultResourceQualifiers>Language=en;fr;pt</AppxDefaultResourceQualifiers>
+    <AppxDefaultResourceQualifiers>Language=en;fr;pt;zh</AppxDefaultResourceQualifiers>
   </PropertyGroup>
   <PropertyGroup>
     <!-- This is what will cause the templates to be transformed when the project is built (default is false) -->

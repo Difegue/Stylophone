@@ -10,6 +10,15 @@
 	<string>2.5</string>
 	<key>CFBundleVersion</key>
 	<string>2.5</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>fr</string>
+		<string>pt</string>
+		<string>zh</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
