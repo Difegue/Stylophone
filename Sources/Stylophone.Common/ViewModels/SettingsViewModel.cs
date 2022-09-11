@@ -205,7 +205,7 @@ namespace Stylophone.Common.ViewModels
             var appName = Resources.AppDisplayName;
             Version version = _interop.GetAppVersion();
 
-            return $"{version.Major}.{version.Minor}.{(version.Build > -1 ? version.Build : 0)}";
+            return $"{version.Major}.{version.Minor}.{(version.Revision > -1 ? version.Revision : 0)}";
         }
 
         private void TriggerServerConnection(string host, int port, string pass)
