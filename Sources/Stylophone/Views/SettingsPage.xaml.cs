@@ -1,7 +1,7 @@
 ﻿using System;
 using Stylophone.Helpers;
 using Stylophone.ViewModels;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;

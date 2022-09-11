@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Reflection;
@@ -17,7 +16,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class AlbumDetailViewModel : ViewModelBase
+    public partial class AlbumDetailViewModel : ViewModelBase
     {
 
         private IDialogService _dialogService;
@@ -36,27 +35,18 @@ namespace Stylophone.Common.ViewModels
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
         }
 
+        [ObservableProperty]
         private AlbumViewModel _item;
-        public AlbumViewModel Item
-        {
-            get { return _item; }
-            set { Set(ref _item, value); }
-        }
 
-        private string _info;
-        public string PlaylistInfo
-        {
-            get => _info;
-            private set => Set(ref _info, value);
-        }
+        [ObservableProperty]
+        private string _playlistInfo;
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
+        
         public bool IsSourceEmpty => Source.Count == 0;
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
-
-        private async void QueueTrack(object list)
+        [RelayCommand]
+        private async void AddToQueue(object list)
         {
             var selectedTracks = (IList<object>)list;
 
@@ -76,9 +66,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlayListCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<IList<object>>(AddToPlaylist));
-
+        [RelayCommand]
         private async void AddToPlaylist(object list)
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
@@ -131,7 +119,6 @@ namespace Stylophone.Common.ViewModels
                     await _dispatcherService.ExecuteOnUIThreadAsync(() => CreateTrackViewModels());
                 }).ConfigureAwait(false);
             }
-
         }
 
         private void CreateTrackViewModels()

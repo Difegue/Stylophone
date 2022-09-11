@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Playlist;
@@ -20,7 +21,7 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public class PlaylistViewModel : ViewModelBase
+    public partial class PlaylistViewModel : ViewModelBase, IDisposable
     {
         private INotificationService _notificationService;
         private INavigationService _navigationService;
@@ -43,81 +44,47 @@ namespace Stylophone.Common.ViewModels
             _trackVmFactory = trackVmFactory;
 
             Source.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
+            DominantColor = _interop.GetAccentColor();
         }
 
         private NotifyCollectionChangedAction _previousAction;
         private int _oldId;
+        private CancellationTokenSource _albumArtCts;
 
         public ObservableCollection<TrackViewModel> Source { get; private set; } = new ObservableCollection<TrackViewModel>();
 
         public bool IsSourceEmpty => Source.Count == 0;
 
+        [ObservableProperty]
         private string _name;
-        public string Name
-        {
-            get => _name;
-            set => Set(ref _name, value);
-        }
 
+        [ObservableProperty]
         private string _artists;
-        public string Artists
-        {
-            get => _artists;
-            private set => Set(ref _artists, value);
-        }
 
-        private string _info;
-        public string PlaylistInfo
-        {
-            get => _info;
-            private set => Set(ref _info, value);
-        }
+        [ObservableProperty]
+        private string _playlistInfo;
 
+        [ObservableProperty]
         private bool _artLoaded;
-        public bool ArtLoaded
-        {
-            get => _artLoaded;
-            set => Set(ref _artLoaded, value);
-        }
 
+        [ObservableProperty]
         private SKImage _playlistArt;
-        public SKImage PlaylistArt
-        {
-            get => _playlistArt;
-            private set => Set(ref _playlistArt, value);
-        }
 
+        [ObservableProperty]
         private SKImage _playlistArt2;
-        public SKImage PlaylistArt2
-        {
-            get => _playlistArt2;
-            private set => Set(ref _playlistArt2, value);
-        }
 
+        [ObservableProperty]
         private SKImage _playlistArt3;
-        public SKImage PlaylistArt3
-        {
-            get => _playlistArt3;
-            private set => Set(ref _playlistArt3, value);
-        }
 
-        private SKColor _albumColor;
-        public SKColor DominantColor
-        {
-            get => _albumColor;
-            set => Set(ref _albumColor, value);
-        }
+        [ObservableProperty]
+        private SKColor _dominantColor;
 
-        private bool _isLight;
         /// <summary>
         /// If the dominant color of the album is too light to show white text on top of, this boolean will be true.
         /// </summary>
-        public bool IsLight
-        {
-            get => _isLight;
-            private set => Set(ref _isLight, value);
-        }
-
+        [ObservableProperty]
+        private bool _isLight;
+        
         #region Commands
         private bool IsSingleTrackSelected(object list)
         {
@@ -127,9 +94,8 @@ namespace Stylophone.Common.ViewModels
             return (selectedTracks?.Count == 1);
         }
 
-        private ICommand _deletePlaylistCommand;
-        public ICommand RemovePlaylistCommand => _deletePlaylistCommand ?? (_deletePlaylistCommand = new RelayCommand(DeletePlaylist));
-        private async void DeletePlaylist()
+        [RelayCommand]
+        private async void RemovePlaylist()
         {
             var result = await _dialogService.ShowConfirmDialogAsync(Resources.DeletePlaylistContentDialog, "", Resources.OKButtonText, Resources.CancelButtonText);
 
@@ -145,8 +111,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _loadPlaylistCommand;
-        public ICommand LoadPlaylistCommand => _loadPlaylistCommand ?? (_loadPlaylistCommand = new RelayCommand(LoadPlaylist));
+        [RelayCommand]
         private async void LoadPlaylist()
         {
             var res = await _mpdService.SafelySendCommandAsync(new LoadCommand(Name));
@@ -154,8 +119,8 @@ namespace Stylophone.Common.ViewModels
             if (res != null)
                 _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
-        private ICommand _playCommand;
-        public ICommand PlayPlaylistCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayPlaylist));
+        
+        [RelayCommand]
         private async void PlayPlaylist()
         {
             // Clear queue, add playlist and play
@@ -168,11 +133,11 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddToQueueCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand<IList<object>>(QueueTrack));
+        [RelayCommand]
 
-        private async void QueueTrack(object list)
+        private async void AddToQueue(object list)
         {
+            // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
 
             if (selectedTracks?.Count > 0)
@@ -191,9 +156,7 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _viewAlbumCommand;
-        public ICommand ViewAlbumCommand => _viewAlbumCommand ?? (_viewAlbumCommand = new RelayCommand<IList<object>>(ViewAlbum, IsSingleTrackSelected));
-
+        [RelayCommand(CanExecute = nameof(IsSingleTrackSelected))]
         private void ViewAlbum(object list)
         {
             // Cast the received __ComObject
@@ -206,11 +169,11 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _removeTrackCommand;
-        public ICommand RemoveTrackFromPlaylistCommand => _removeTrackCommand ?? (_removeTrackCommand = new RelayCommand<IList<object>> (RemoveTrack));
 
-        private async void RemoveTrack(object list)
+        [RelayCommand]
+        private async void RemoveTrackFromPlaylist(object list)
         {
+            // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
 
             if (selectedTracks?.Count > 0)
@@ -239,12 +202,14 @@ namespace Stylophone.Common.ViewModels
         public async Task LoadDataAsync(string playlistName)
         {
             var placeholder = await _interop.GetPlaceholderImageAsync();
+            _albumArtCts = new CancellationTokenSource();
 
             ArtLoaded = false;
+
             PlaylistArt = placeholder;
             PlaylistArt2 = placeholder;
             PlaylistArt3 = placeholder;
-
+            
             Name = playlistName;
             Source.CollectionChanged -= Source_CollectionChanged;
             Source.Clear();
@@ -267,7 +232,6 @@ namespace Stylophone.Common.ViewModels
 
             PlaylistInfo = $"{Source.Count} Tracks, Total Time: {Miscellaneous.ToReadableString(t)}";
 
-
             if (Source.Count > 0)
             {
                 await Task.Run(async () =>
@@ -278,23 +242,27 @@ namespace Stylophone.Common.ViewModels
 
                     if (distinctAlbums.Count > 1)
                     {
-                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, true);
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[0].File, true, _albumArtCts.Token);
                         PlaylistArt = art != null ? art.ArtBitmap : PlaylistArt;
 
                         DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
+
+                        if (DominantColor == default(SKColor))
+                            DominantColor = _interop.GetAccentColor();
+
                         IsLight = (!art?.DominantColor?.IsDark).GetValueOrDefault();
                     }
 
                     if (distinctAlbums.Count > 2)
                     {
-                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[1].File, false);
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[1].File, false, _albumArtCts.Token);
                         PlaylistArt2 = art != null ? art.ArtBitmap : PlaylistArt2;
                     }
                     else PlaylistArt2 = PlaylistArt;
 
                     if (distinctAlbums.Count > 3)
                     {
-                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[2].File, false);
+                        var art = await _albumArtService.GetAlbumArtAsync(distinctAlbums[2].File, false, _albumArtCts.Token);
                         PlaylistArt3 = art != null ? art.ArtBitmap : PlaylistArt3;
                     }
                     else PlaylistArt3 = PlaylistArt2;
@@ -317,6 +285,20 @@ namespace Stylophone.Common.ViewModels
                 _previousAction = e.Action;
                 _oldId = e.OldStartingIndex;
             }
+        }
+
+        public void Dispose()
+        {
+            _albumArtCts?.Cancel();
+            
+            PlaylistArt?.Dispose();
+            PlaylistArt = null;
+            PlaylistArt2?.Dispose();
+            PlaylistArt2 = null;
+            PlaylistArt3?.Dispose();
+            PlaylistArt3 = null;
+            
+            ArtLoaded = false;
         }
     }
 }

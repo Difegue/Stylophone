@@ -3,7 +3,7 @@
 using System;
 using System.Linq;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
@@ -88,7 +88,7 @@ namespace Stylophone.iOS.ViewControllers
 
             var playAction = Binder.GetCommandAction(Strings.ContextMenuPlay, "play", ViewModel.PlayTrackCommand, trackList);
             var albumAction = Binder.GetCommandAction(Strings.ContextMenuViewAlbum, "opticaldisc", ViewModel.ViewAlbumCommand, trackList);
-            var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlayListCommand, trackList);
+            var playlistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlaylistCommand, trackList);
 
             var removeAction = Binder.GetCommandAction(Strings.ContextMenuRemoveFromQueue, "trash", ViewModel.RemoveFromQueueCommand, trackList);
             removeAction.Attributes = UIMenuElementAttributes.Destructive;

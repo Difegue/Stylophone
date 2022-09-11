@@ -2,7 +2,7 @@
 using UIKit;
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
@@ -14,6 +14,7 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using System.Threading;
+using AVFoundation;
 
 namespace Stylophone.iOS
 {
@@ -28,6 +29,14 @@ namespace Stylophone.iOS
         public UIWindow Window { get; set; }
 
         public UISplitViewController RootViewController { get; set; }
+
+        public UIColor AppColor => UIColor.FromDynamicProvider((traitCollection) =>
+        {
+            var darkColor = UIColor.FromRGB(204, 172, 128);
+            var lightColor = UIColor.FromRGB(135, 114, 85);
+
+            return traitCollection.UserInterfaceStyle == UIUserInterfaceStyle.Dark ? darkColor : lightColor;
+        });
 
         public AppDelegate()
         {
@@ -44,8 +53,15 @@ namespace Stylophone.iOS
         [Export("application:didFinishLaunchingWithOptions:")]
         public bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
+            // Enable Now Playing integration
+            application.BeginReceivingRemoteControlEvents();
+            AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
+            
             // Override point for customization after application launch
             Task.Run(async () => await InitializeApplicationAsync());
+
+            RootViewController = Window.RootViewController as UISplitViewController;
+            Window.TintColor = AppColor;
 
             return true;
         }
@@ -70,6 +86,7 @@ namespace Stylophone.iOS
             storageService.SetValue("LaunchCount", launchCount + 1);
 
             Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
+            Ioc.Default.GetRequiredService<NowPlayingService>().Initialize();
 
             await Ioc.Default.GetRequiredService<IDispatcherService>().ExecuteOnUIThreadAsync(async () =>
             {
@@ -99,24 +116,6 @@ namespace Stylophone.iOS
 #endif
         }
 
-        // UISceneSession Lifecycle
-
-        [Export("application:configurationForConnectingSceneSession:options:")]
-        public UISceneConfiguration GetConfiguration(UIApplication application, UISceneSession connectingSceneSession, UISceneConnectionOptions options)
-        {
-            // Called when a new scene session is being created.
-            // Use this method to select a configuration to create the new scene with.
-            return UISceneConfiguration.Create("Default Configuration", connectingSceneSession.Role);
-        }
-
-        [Export("application:didDiscardSceneSessions:")]
-        public void DidDiscardSceneSessions(UIApplication application, NSSet<UISceneSession> sceneSessions)
-        {
-            // Called when the user discards a scene session.
-            // If any sessions were discarded while the application was not running, this will be called shortly after `FinishedLaunching`.
-            // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-        }
-
         /// <summary>
         /// Configures the services for the application.
         /// </summary>
@@ -132,7 +131,7 @@ namespace Stylophone.iOS
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<INotificationService, NotificationService>();
-            //services.AddSingleton<SystemMediaControlsService>();
+            services.AddSingleton<NowPlayingService>();
             services.AddSingleton<IInteropService, InteropService>();
 
             // Viewmodel Factories

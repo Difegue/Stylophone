@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml.Controls;

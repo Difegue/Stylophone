@@ -14,7 +14,7 @@
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:stylophone="using:Stylophone.Common.ViewModels"
     xmlns:viewmodels="using:Stylophone.ViewModels"
-    xmlns:views="using:Stylophone.Views"
+    xmlns:views="using:Stylophone.Views" xmlns:behaviors="using:CommunityToolkit.Labs.WinUI"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     PreviewKeyDown="GlobalPlayPauseShortcut"
     mc:Ignorable="d">
@@ -22,22 +22,8 @@
     <Page.Resources>
 
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ms-appx:///Microsoft.Toolkit.Uwp.UI.Controls.Core/InAppNotification/InAppNotification.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
             <converters:StringVisibilityConverter x:Key="StringToVisibilityConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-
-            <Style
-                x:Key="CustomInAppNotificationStyle"
-                BasedOn="{StaticResource BaseInAppNotificationsStyle}"
-                TargetType="controls:InAppNotification">
-
-                <Setter Property="Background" Value="{ThemeResource SystemControlAcrylicElementBrush}" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
-            </Style>
 
             <DataTemplate x:Key="StringItemTemplate" x:DataType="x:String">
                 <StackPanel Height="46" Orientation="Vertical">
@@ -221,12 +207,16 @@
                 <Frame x:Name="shellFrame" Grid.Row="1" />
 
                 <!--  InAppNotifications go here  -->
-                <controls:InAppNotification
-                    x:Name="notificationHolder"
-                    Grid.Row="1"
-                    Style="{StaticResource CustomInAppNotificationStyle}" />
-
-
+                <muxc:InfoBar 
+                      Grid.Row="1"
+                      Margin="0,0,0,36"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Bottom">
+                    <i:Interaction.Behaviors>
+                        <behaviors:StackedNotificationsBehavior x:Name="stackedNotificationBehavior" />
+                    </i:Interaction.Behaviors>
+                </muxc:InfoBar>
+                
             </Grid>
         </muxc:NavigationView>
 

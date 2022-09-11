@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Stylophone.Helpers;
-using Microsoft.Toolkit.Uwp.UI.Controls;
 using Stylophone.Common.ViewModels;
 using Windows.System;
 using Stylophone.Common.Interfaces;
@@ -15,25 +14,28 @@ using Stylophone.Common.Services;
 using Stylophone.Services;
 using Windows.Foundation;
 using MpcNET.Commands.Playback;
+using CommunityToolkit.Labs.WinUI;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Stylophone.ViewModels
 {
-    public class ShellViewModel : ShellViewModelBase
+    public class ShellViewModel : ShellViewModelBase, IRecipient<InAppNotification>
     {
         private IList<KeyboardAccelerator> _keyboardAccelerators;
         private KeyboardAccelerator _altLeftKeyboardAccelerator;
         private KeyboardAccelerator _backKeyboardAccelerator;
-        
+
         private WinUI.NavigationView _navigationView;
         private WinUI.NavigationViewItem _playlistContainer;
-        private InAppNotification _notificationHolder;
+        private StackedNotificationsBehavior _notificationHolder;
 
         public ShellViewModel(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService):
             base(navigationService, notificationService, dispatcherService, mpdService)
         {
         }
 
-        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, InAppNotification notificationHolder, IList<KeyboardAccelerator> keyboardAccelerators)
+        public void Initialize(Frame frame, WinUI.NavigationView navigationView, WinUI.NavigationViewItem playlistContainer, StackedNotificationsBehavior notificationHolder, IList<KeyboardAccelerator> keyboardAccelerators)
         {
             _navigationView = navigationView;
             _playlistContainer = playlistContainer;
@@ -50,6 +52,28 @@ namespace Stylophone.ViewModels
 
             _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, GoBack, VirtualKeyModifiers.Menu);
             _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack, GoBack);
+
+            WeakReferenceMessenger.Default.Register(this);
+        }
+
+        public void Receive(InAppNotification message)
+        {
+            InfoBarSeverity severity = message.NotificationType switch
+            {
+                NotificationType.Info => InfoBarSeverity.Informational,
+                NotificationType.Warning => InfoBarSeverity.Warning,
+                NotificationType.Error => InfoBarSeverity.Error,
+                _ => InfoBarSeverity.Informational
+            };
+
+            var notification = new Notification
+            {
+                Title = message.NotificationTitle,
+                Message = message.NotificationText,
+                Duration = message.NotificationType != NotificationType.Error ? TimeSpan.FromSeconds(2) : null,
+                Severity = severity
+            };
+            _dispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(notification));
         }
 
         public async void PauseOrPlay(KeyRoutedEventArgs e)
@@ -89,11 +113,6 @@ namespace Stylophone.ViewModels
             return pageType == sourcePageType;
         }
 
-        protected override void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e)
-        {
-            _dispatcherService.ExecuteOnUIThreadAsync(() => _notificationHolder.Show(e.NotificationText, e.NotificationTime));
-        }
-
         protected override void UpdatePlaylistNavigation()
         {
             // Update the navigationview by hand - It ain't clean but partial databinding would be an even bigger mess...
@@ -112,7 +131,7 @@ namespace Stylophone.ViewModels
             }
         }
 
-        protected override void OnLoaded()
+        protected override void Loaded()
         {
             // Keyboard accelerators are added here to avoid showing 'Alt + left' tooltip on the page.
             // More info on tracking issue https://github.com/Microsoft/microsoft-ui-xaml/issues/8
@@ -120,7 +139,7 @@ namespace Stylophone.ViewModels
             _keyboardAccelerators.Add(_backKeyboardAccelerator);
         }
 
-        protected override void OnItemInvoked(object args)
+        protected override void Navigate(object args)
         {
             var navArgs = (WinUI.NavigationViewItemInvokedEventArgs)args;
 
@@ -189,5 +208,6 @@ namespace Stylophone.ViewModels
             var result = _navigationService.GoBack();
             args.Handled = result;
         }
+        
     }
 }

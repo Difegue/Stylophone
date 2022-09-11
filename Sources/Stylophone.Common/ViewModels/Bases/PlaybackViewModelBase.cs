@@ -1,9 +1,8 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Playback;
-using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Queue;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Helpers;
@@ -15,11 +14,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Stylophone.Common.ViewModels
 {
-    public abstract class PlaybackViewModelBase : ViewModelBase
+    public abstract partial class PlaybackViewModelBase : ViewModelBase
     {
 
         private CancellationTokenSource _albumArtCancellationSource = new CancellationTokenSource();
@@ -35,8 +33,8 @@ namespace Stylophone.Common.ViewModels
 
         public LocalPlaybackViewModel LocalPlayback;
 
-        public PlaybackViewModelBase(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, 
-            MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory, LocalPlaybackViewModel localPlayback):
+        public PlaybackViewModelBase(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop,
+            MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory, LocalPlaybackViewModel localPlayback) :
             base(dispatcherService)
         {
             _navigationService = navigationService;
@@ -49,7 +47,7 @@ namespace Stylophone.Common.ViewModels
 
             // Default to NowPlayingBar
             _hostType = VisualizationType.NowPlayingBar;
-            _trackInfoAvailable = false;
+            _isTrackInfoAvailable = false;
 
             // Initialize icons
             _volumeIcon = _interop.GetIcon(PlaybackIcon.VolumeFull);
@@ -79,7 +77,7 @@ namespace Stylophone.Common.ViewModels
             if (_mpdService.IsConnected)
             {
                 Task.Run(() => InitializeAsync());
-            } 
+            }
             else
             {
                 IsTrackInfoAvailable = false;
@@ -95,124 +93,73 @@ namespace Stylophone.Common.ViewModels
             await UpdateUpNextAsync(_mpdService.CurrentStatus);
         }
 
-
         #region Getters and Setters
 
-        private TrackViewModel _currentTrack;
+        public bool HasNextTrack => NextTrack != null;
+
         /// <summary>
         /// The current playing track
         /// </summary>
-        public TrackViewModel CurrentTrack
-        {
-            get => _currentTrack;
-            private set => Set(ref _currentTrack, value);
-        }
+        [ObservableProperty]
+        private TrackViewModel _currentTrack;
 
-        private TrackViewModel _nextTrack;
         /// <summary>
         /// The next track in queue
         /// </summary>
-        public TrackViewModel NextTrack
-        {
-            get => _nextTrack;
-            private set
-            {
-                Set(ref _nextTrack, value);
-                OnPropertyChanged(nameof(HasNextTrack));
-            }
-        }
-        public bool HasNextTrack => NextTrack != null;
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasNextTrack))]
+        private TrackViewModel _nextTrack;
 
+        [ObservableProperty]
         private bool _showTrackName;
-        public bool ShowTrackName
-        {
-            get => _showTrackName;
-            set => Set(ref _showTrackName, value);
-        }
 
-        private bool _trackInfoAvailable;
-        public bool IsTrackInfoAvailable
-        {
-            get => _trackInfoAvailable;
-            set => Set(ref _trackInfoAvailable, value);
-        }
+        [ObservableProperty]
+        private bool _isTrackInfoAvailable;
 
+        [ObservableProperty]
         private VisualizationType _hostType;
-        public VisualizationType HostType
-        {
-            get => _hostType;
-            set => Set(ref _hostType, value);
-        }
 
-        private string _timeListened = "00:00";
         /// <summary>
         ///     The amount of time spent listening to the track
         /// </summary>
-        public string TimeListened
-        {
-            get => _timeListened;
-            set => Set(ref _timeListened, value);
-        }
+        [ObservableProperty]
+        private string _timeListened = "00:00";
 
-        private string _timeRemaining = "-00:00";
         /// <summary>
         ///     The amount of time remaining
         /// </summary>
-        public string TimeRemaining
-        {
-            get => _timeRemaining;
-            set => Set(ref _timeRemaining, value);
-        }
+        [ObservableProperty]
+        private string _timeRemaining = "-00:00";
 
-        private double _currentTimeValue;
         /// <summary>
         ///     The current slider value
         /// </summary>
-        public double CurrentTimeValue
-        {
-            get => _currentTimeValue;
-            set => Set(ref _currentTimeValue, value);
-        }
+        [ObservableProperty]
+        private double _currentTimeValue;
 
-        private double _maxTimeValue = 100;
         /// <summary>
         ///     The max slider value
         /// </summary>
-        public double MaxTimeValue
-        {
-            get => _maxTimeValue;
-            private set => Set(ref _maxTimeValue, value);
-        }
+        [ObservableProperty]
+        private double _maxTimeValue = 100;
 
-        private string _volumeIcon;
         /// <summary>
         ///     The current text for the volume icon
         /// </summary>
-        public string VolumeIcon
-        {
-            get => _volumeIcon;
-            private set => Set(ref _volumeIcon, value);
-        }
+        [ObservableProperty]
+        private string _volumeIcon;
 
-        private string _repeatIcon;
         /// <summary>
         ///     The current text for the repeat icon
         /// </summary>
-        public string RepeatIcon
-        {
-            get => _repeatIcon;
-            private set => Set(ref _repeatIcon, value);
-        }
+        [ObservableProperty]
+        private string _repeatIcon;
 
-        private string _playButtonContent;
         /// <summary>
         ///     The content on the play_pause button
         /// </summary>
-        public string PlayButtonContent
-        {
-            get => _playButtonContent;
-            set => Set(ref _playButtonContent, value);
-        }
+        [ObservableProperty]
+        private string _playButtonContent;
 
         private double _internalVolume;
         /// <summary>
@@ -227,7 +174,7 @@ namespace Stylophone.Common.ViewModels
                 if (_mpdService.CurrentStatus == MPDConnectionService.BOGUS_STATUS)
                     return;
 
-                Set(ref _internalVolume, value);
+                SetProperty(ref _internalVolume, value);
 
                 if (value > 0) // _previousVolume is only used to keep track of volume when muting, if the volume has changed from zero due to another client, the value becomes meaningless
                     _previousVolume = -1;
@@ -236,12 +183,14 @@ namespace Stylophone.Common.ViewModels
                 cts.Cancel();
                 cts = new CancellationTokenSource();
 
-                // Set the volume 
-                volumeTasks.Add(Task.Run(async () =>
-                {
-                    await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
-                    Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
-                }, cts.Token));
+                // Set the volume
+                if (_mpdService.CurrentStatus.Volume != value)
+                    volumeTasks.Add(Task.Run(async () =>
+                    {
+                        await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
+                        Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
+                        MediaVolume = _mpdService.CurrentStatus.Volume; // Update the value to the current server volume
+                    }, cts.Token));
 
                 // Update the UI
                 if ((int)value == 0)
@@ -267,62 +216,45 @@ namespace Stylophone.Common.ViewModels
 
             }
         }
-
-        private bool _isShuffledEnabled;
         /// <summary>
         ///     Are tracks shuffled
         /// </summary>
-        public bool IsShuffleEnabled
-        {
-            get => _isShuffledEnabled;
-            set => Set(ref _isShuffledEnabled, value);
-        }
+        [ObservableProperty]
+        private bool _isShuffleEnabled;
 
-        private bool _isConsumeEnabled;
         /// <summary>
         ///     Are tracks removed upon playback
         /// </summary>
-        public bool IsConsumeEnabled
-        {
-            get => _isConsumeEnabled;
-            set => Set(ref _isConsumeEnabled, value);
-        }
+        [ObservableProperty]
+        private bool _isConsumeEnabled;
 
-        private bool _isRepeatEnabled;
         /// <summary>
         ///     Is the song going to repeat when finished
         /// </summary>
-        public bool IsRepeatEnabled
-        {
-            get => _isRepeatEnabled;
-            set
-            {
-                Set(ref _isRepeatEnabled, value);
+        [ObservableProperty]
+        private bool _isRepeatEnabled;
 
-                if (value)
-                    RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
-                else
-                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
-            }
-        }
-
-        private bool _isSingleEnabled;
         /// <summary>
         ///     Is the song going to loop when finished
         /// </summary>
-        public bool IsSingleEnabled
-        {
-            get => _isSingleEnabled;
-            set
-            {
-                Set(ref _isSingleEnabled, value);
+        [ObservableProperty]
+        private bool _isSingleEnabled;
 
-                // Update UI icon
-                if (value)
-                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
-                else
-                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
-            }
+        partial void OnIsRepeatEnabledChanged(bool value)
+        {
+            if (value)
+                RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
+            else
+                RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
+        }
+
+        partial void OnIsSingleEnabledChanged(bool value)
+        {
+            // Update UI icon
+            if (value)
+                RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
+            else
+                RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
         }
 
         #endregion Getters and Setters
@@ -340,38 +272,43 @@ namespace Stylophone.Common.ViewModels
         /// </summary>
         protected async void UpdateInformation(object sender, EventArgs e)
         {
+            var status = _mpdService.CurrentStatus;
+
             // Only call the following if the player exists and the time is greater then 0.
-            if (_mpdService.CurrentStatus.Elapsed.TotalMilliseconds <= 0)
+            if (status.Elapsed.TotalMilliseconds <= 0)
                 return;
 
-            if (CurrentTrack == null)
-                return;
+            // Update song in case we went out of sync
+            if (status.SongId != CurrentTrack?.File?.Id)
+            {
+                OnTrackChange(this, new SongChangedEventArgs { NewSongId = status.SongId });
+                OnStateChange(this, null);
+                await UpdateUpNextAsync(_mpdService.CurrentStatus);
+            }
 
             if (!HasNextTrack)
-                await UpdateUpNextAsync(_mpdService.CurrentStatus);
+                await UpdateUpNextAsync(status);
 
-            await _dispatcherService.ExecuteOnUIThreadAsync(() =>
+            if (CurrentTrack == null)
+                return;        
+
+            // Set the current time value - if the user isn't scrobbling the slider
+            if (!_isUserMovingSlider)
             {
-                var status = _mpdService.CurrentStatus;
+                CurrentTimeValue = status.Elapsed.TotalSeconds;
 
-                // Set the current time value - if the user isn't scrobbling the slider
-                if (!_isUserMovingSlider)
-                {
-                    CurrentTimeValue = status.Elapsed.TotalSeconds;
+                // Set the time listened text
+                TimeListened = Miscellaneous.FormatTimeString(status.Elapsed.TotalMilliseconds);
+            }
 
-                    // Set the time listened text
-                    TimeListened = Miscellaneous.FormatTimeString(status.Elapsed.TotalMilliseconds);
-                }  
+            // Get the remaining time for the track
+            var remainingTime = _mpdService.CurrentStatus.Duration.Subtract(status.Elapsed);
 
-                // Get the remaining time for the track
-                var remainingTime = _mpdService.CurrentStatus.Duration.Subtract(status.Elapsed);
+            // Set the time remaining text
+            TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingTime.TotalMilliseconds);
 
-                // Set the time remaining text
-                TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingTime.TotalMilliseconds);
-
-                // Set the maximum value
-                MaxTimeValue = status.Duration.TotalSeconds;
-            });
+            // Set the maximum value
+            MaxTimeValue = status.Duration.TotalSeconds;
         }
 
         #endregion Timer Methods
@@ -440,7 +377,7 @@ namespace Stylophone.Common.ViewModels
             {
                 await _mpdService.SafelySendCommandAsync(new RandomCommand(IsShuffleEnabled));
                 Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
-                await _dispatcherService.ExecuteOnUIThreadAsync(async () => await UpdateUpNextAsync(_mpdService.CurrentStatus));
+                await UpdateUpNextAsync(_mpdService.CurrentStatus);
             }, cts.Token));
         }
 
@@ -485,6 +422,8 @@ namespace Stylophone.Common.ViewModels
         {
             _navigationService.Navigate<PlaybackViewModelBase>(this);
         }
+
+        public bool IsFullScreen => _navigationService.CurrentPageViewModelType == typeof(PlaybackViewModelBase);
 
         #endregion Track Control Methods
 
@@ -537,6 +476,7 @@ namespace Stylophone.Common.ViewModels
             TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingTime.TotalMilliseconds);
 
             // Set the track position
+            CurrentTimeValue = Math.Round(CurrentTimeValue); // Fractional values don't seem to work well on iOS
             await _mpdService.SafelySendCommandAsync(new SeekCurCommand(CurrentTimeValue));
 
             // Wait for MPD Status to catch up before we start auto-updating the slider again
@@ -580,6 +520,10 @@ namespace Stylophone.Common.ViewModels
             if (response != null)
             {
                 IsTrackInfoAvailable = true;
+
+                // Dispose previous track
+                CurrentTrack?.Dispose();
+
                 // Set the new current track
                 CurrentTrack = _trackVmFactory.GetTrackViewModel(response);
             }
@@ -596,16 +540,17 @@ namespace Stylophone.Common.ViewModels
                 CurrentTimeValue = 0;
                 MaxTimeValue = CurrentTrack.File.Time;
 
-                _ = Task.Run(async () => {
+                _ = Task.Run(async () =>
+                {
                     await _interop.UpdateOperatingSystemIntegrationsAsync(CurrentTrack);
                     await CurrentTrack.GetAlbumArtAsync(HostType, _albumArtCancellationSource.Token);
 
                     // Re-update OS integrations, as we have album art now
                     if (!_albumArtCancellationSource.Token.IsCancellationRequested)
-                        await _interop.UpdateOperatingSystemIntegrationsAsync(CurrentTrack); 
+                        await _interop.UpdateOperatingSystemIntegrationsAsync(CurrentTrack);
                 }).ConfigureAwait(false);
 
-                await _dispatcherService.ExecuteOnUIThreadAsync(async () => await UpdateUpNextAsync(_mpdService.CurrentStatus));
+                await UpdateUpNextAsync(_mpdService.CurrentStatus);
             }
             else
             {
@@ -614,66 +559,62 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private async void OnStateChange(object sender, EventArgs eventArgs)
+        private void OnStateChange(object sender, EventArgs eventArgs)
         {
             var status = _mpdService.CurrentStatus;
 
-            await _dispatcherService.ExecuteOnUIThreadAsync(() =>
+            // Remove completed requests
+            volumeTasks.RemoveAll(t => t.IsCompleted);
+            stateTasks.RemoveAll(t => t.IsCompleted);
+
+            // Update volume to match the server value -- If we're not setting it ourselves
+            if (volumeTasks.Count == 0)
             {
-                // Remove completed requests
-                volumeTasks.RemoveAll(t => t.IsCompleted);
-                stateTasks.RemoveAll(t => t.IsCompleted);
+                MediaVolume = status.Volume;
+            }
 
-                // Update volume to match the server value -- If we're not setting it ourselves
-                if (volumeTasks.Count == 0)
-                {
-                    _internalVolume = status.Volume;
-                    OnPropertyChanged(nameof(MediaVolume));
-                }
+            // Ditto for shuffle/repeat/single
+            if (stateTasks.Count == 0)
+            {
+                IsShuffleEnabled = status.Random;
+                IsRepeatEnabled = status.Repeat;
+                IsSingleEnabled = status.Single;
+                IsConsumeEnabled = status.Consume;
 
-                // Ditto for shuffle/repeat/single
-                if (stateTasks.Count == 0)
-                {
-                    _isShuffledEnabled = status.Random;
-                    _isRepeatEnabled = status.Repeat;
-                    _isSingleEnabled = status.Single;
-                    _isConsumeEnabled = status.Consume;
+                if (status.Single)
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
+                else if (status.Repeat)
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
+                else
+                    RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
+            }
 
-                    if (_isSingleEnabled)
-                        RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatSingle);
-                    else if (_isRepeatEnabled)
-                        RepeatIcon = _interop.GetIcon(PlaybackIcon.Repeat);
-                    else
-                        RepeatIcon = _interop.GetIcon(PlaybackIcon.RepeatOff);
+            switch (status.State)
+            {
+                case MpdState.Play:
+                    IsTrackInfoAvailable = true;
+                    PlayButtonContent = _interop.GetIcon(PlaybackIcon.Pause);
+                    LocalPlayback.Resume();
+                    break;
 
-                    OnPropertyChanged(nameof(IsRepeatEnabled));
-                    OnPropertyChanged(nameof(IsShuffleEnabled));
-                    OnPropertyChanged(nameof(IsConsumeEnabled));
-                }
+                case MpdState.Stop:
+                    IsTrackInfoAvailable = true;
+                    PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
+                    LocalPlayback.Stop();
+                    break;
 
-                switch (status.State)
-                {
-                    case MpdState.Play:
-                        IsTrackInfoAvailable = true;
-                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Pause);
-                        break;
+                case MpdState.Pause:
+                    IsTrackInfoAvailable = true;
+                    PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
+                    LocalPlayback.Stop();
+                    break;
 
-                    case MpdState.Stop:
-                        IsTrackInfoAvailable = true;
-                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
-                        break;
-
-                    case MpdState.Pause:
-                        IsTrackInfoAvailable = true;
-                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
-                        break;
-
-                    default:
-                        IsTrackInfoAvailable = false;
-                        PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
-                        break;
-                }
-            });
+                default:
+                    IsTrackInfoAvailable = false;
+                    PlayButtonContent = _interop.GetIcon(PlaybackIcon.Play);
+                    LocalPlayback.Stop();
+                    break;
+            }
         }
 
         #endregion Methods
@@ -690,41 +631,37 @@ namespace Stylophone.Common.ViewModels
 
         #region Commands
 
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand<EventArgs>(AddToPlaylist));
+        [RelayCommand]
         private void AddToPlaylist(EventArgs obj)
         {
             // Track must exist
             if (CurrentTrack == null)
             {
-                _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying, "", NotificationType.Warning);
             }
 
-            CurrentTrack?.AddToPlayListCommand.Execute(CurrentTrack.File);
+            CurrentTrack?.AddToPlaylistCommand.Execute(CurrentTrack.File);
         }
 
-        private ICommand _showAlbumCommand;
-        public ICommand ShowAlbumCommand => _showAlbumCommand ?? (_showAlbumCommand = new RelayCommand<EventArgs>(ShowAlbum));
+        [RelayCommand]
         private void ShowAlbum(EventArgs obj)
         {
             // Track must exist
             if (CurrentTrack == null)
             {
-                _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTrackPlaying, "", NotificationType.Warning);
                 return;
             }
 
             CurrentTrack.ViewAlbumCommand.Execute(CurrentTrack.File);
         }
 
-        private ICommand _compactViewCommand;
-        public ICommand SwitchToCompactViewCommand => _compactViewCommand ?? (_compactViewCommand = new AsyncRelayCommand<EventArgs>(SwitchToCompactViewAsync));
-
         /// <summary>
         ///     Switch to compact overlay mode
         /// </summary>
+        [RelayCommand]
         public abstract Task SwitchToCompactViewAsync(EventArgs obj);
-        
+
 
         #endregion Method Bindings
     }

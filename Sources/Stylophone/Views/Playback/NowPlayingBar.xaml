@@ -4,23 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:WindowsStateTriggers="using:WindowsStateTriggers"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:converters="using:Stylophone.Helpers"
-    xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:strings="using:Stylophone.Localization.Strings"
     d:DesignHeight="96"
     mc:Ignorable="d">
 
     <UserControl.Resources>
 
-        <converters1:BoolToObjectConverter
+        <converters:BoolToObjectConverter
             x:Key="BoolToBrushConverter"
             FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
             TrueValue="{ThemeResource AccentFillColorDisabledBrush}" />
 
-        <converters1:BoolToObjectConverter
+        <converters:BoolToObjectConverter
             x:Key="BoolToBrushBorderConverter"
             FalseValue="{ThemeResource SystemControlDisabledTransparentBrush}"
             TrueValue="{ThemeResource AccentFillColorDefaultBrush}" />
@@ -498,6 +497,7 @@
                             <MenuFlyoutItem
                                 x:Name="CompactMenu"
                                 Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
+                                Visibility="{ui:OnDevice Xbox=Collapsed, Default=Visible}"
                                 Text="{x:Bind strings:Resources.ActionCompactOverlay}">
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xF5EE;" />
@@ -582,7 +582,7 @@
                         <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />
                         <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
-                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactButton.Visibility" Value="{ui:OnDevice Xbox=Collapsed, Default=Visible}" />
                         <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
                         <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
                         <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />
@@ -607,7 +607,7 @@
                         <Setter Target="ShuffleMenu.Visibility" Value="Collapsed" />
                         <Setter Target="RepeatButton.Visibility" Value="Visible" />
                         <Setter Target="RepeatMenu.Visibility" Value="Collapsed" />
-                        <Setter Target="CompactButton.Visibility" Value="Visible" />
+                        <Setter Target="CompactButton.Visibility" Value="{ui:OnDevice Xbox=Collapsed, Default=Visible}" />
                         <Setter Target="CompactMenu.Visibility" Value="Collapsed" />
                         <Setter Target="TrackTitle.Margin" Value="88,0,0,2" />
                         <Setter Target="MiscButtons.(Grid.RowSpan)" Value="2" />

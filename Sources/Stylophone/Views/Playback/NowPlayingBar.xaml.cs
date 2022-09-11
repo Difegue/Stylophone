@@ -5,7 +5,7 @@ using Windows.UI.Xaml;
 using Stylophone.Common.Helpers;
 using Stylophone.Common.Services;
 using Stylophone.Common.Interfaces;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Stylophone.Views
 {

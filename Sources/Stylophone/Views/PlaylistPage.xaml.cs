@@ -1,5 +1,5 @@
 ﻿using Stylophone.Helpers;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -22,9 +22,15 @@ namespace Stylophone.Views
             await ViewModel.LoadDataAsync(e.Parameter as string);
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            ViewModel.Dispose();
+        }
+
         private void Queue_Track(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
         {
-            var listView = sender as AlternatingRowListView;
+            var listView = sender as ListView;
             var trackVm = listView.SelectedItem as TrackViewModel;
             trackVm.AddToQueueCommand.Execute(trackVm.File);
         }

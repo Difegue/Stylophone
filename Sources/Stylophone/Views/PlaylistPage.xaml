@@ -250,7 +250,7 @@
                 <TextBlock HorizontalAlignment="Center" Text="{x:Bind strings:Resources.EmptyPlaylistDesc}" />
             </StackPanel>
 
-            <Stylophone:AlternatingRowListView
+            <ListView
                 x:Name="QueueList"
                 Margin="0,8"
                 ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
@@ -258,14 +258,13 @@
                 AllowDrop="True"
                 CanReorderItems="True"
                 DoubleTapped="Queue_Track"
-                EvenRowBackground="Transparent"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                ui:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 ReorderMode="Enabled"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
-                <Stylophone:AlternatingRowListView.ContextFlyout>
+                <ListView.ContextFlyout>
                     <MenuFlyout>
                         <!--  View Track Album  -->
                         <MenuFlyoutItem
@@ -298,9 +297,9 @@
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
                     </MenuFlyout>
-                </Stylophone:AlternatingRowListView.ContextFlyout>
+                </ListView.ContextFlyout>
 
-            </Stylophone:AlternatingRowListView>
+            </ListView>
 
 
         </Grid>

@@ -3,7 +3,7 @@
 using System;
 
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.Localization.Strings;
@@ -50,7 +50,7 @@ namespace Stylophone.iOS.ViewControllers
             return (int)section switch
             {
                 1 => Resources.SettingsLocalPlaybackText,
-                2 => Resources.SettingsClearCacheDescription,
+                2 => Resources.SettingsAlbumArtText,
                 3 => Resources.SettingsApplyOnRestart,
                 _ => "",
             };
@@ -81,11 +81,12 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(LocalPlaybackToggle, "enabled", nameof(ViewModel.IsStreamingAvailable));
             Binder.Bind<bool>(LocalPlaybackToggle, "on", nameof(ViewModel.IsLocalPlaybackEnabled), true);
             Binder.Bind<bool>(AnalyticsToggle, "on", nameof(ViewModel.EnableAnalytics), true);
+            Binder.Bind<bool>(AlbumArtToggle, "on", nameof(ViewModel.IsAlbumArtFetchingEnabled), true);
 
             Binder.Bind<string>(VersionLabel, "text", nameof(ViewModel.VersionDescription));
 
-            Binder.BindButton(ClearCacheButton, Resources.SettingsClearCache, ViewModel.ClearCacheCommand);
-            Binder.BindButton(UpdateDatabaseButton, Resources.SettingsUpdateDatabase, ViewModel.RescanDbCommand);
+            Binder.BindButton(ClearCacheButton, Resources.SettingsClearCacheDescription, ViewModel.ClearCacheCommand);
+            Binder.BindButton(UpdateDatabaseButton, Resources.SettingsUpdateDbTitle, ViewModel.RescanDbCommand);
             Binder.BindButton(RateButton, Resources.RateAppPromptTitle, ViewModel.RateAppCommand);
 
             GithubButton.SetTitle(Resources.SettingsGithub, UIControlState.Normal);

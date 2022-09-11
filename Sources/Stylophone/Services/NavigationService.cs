@@ -1,6 +1,6 @@
 ﻿using Stylophone.ViewModels;
 using Stylophone.Views;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;

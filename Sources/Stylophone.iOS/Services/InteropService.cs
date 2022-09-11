@@ -12,9 +12,11 @@ namespace Stylophone.iOS.Services
 {
     public class InteropService: IInteropService
     {
+        private NowPlayingService _nowPlayingService;
 
-        public InteropService( )
+        public InteropService(NowPlayingService nowPlayingService)
         {
+            _nowPlayingService = nowPlayingService;
         }
 
         public Task SetThemeAsync(Theme theme)
@@ -35,7 +37,11 @@ namespace Stylophone.iOS.Services
 
         public SKColor GetAccentColor()
         {
-            var accent = UIApplication.SharedApplication.KeyWindow.TintColor;
+            var accent = UIColor.SystemBlue;
+            UIApplication.SharedApplication.InvokeOnMainThread(() =>
+            {
+                accent = UIApplication.SharedApplication.KeyWindow.TintColor;
+            });
             return accent.ToSKColor();
         }
 
@@ -53,11 +59,10 @@ namespace Stylophone.iOS.Services
             return skImage;
         }
 
-        public Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack)
+        public async Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack)
         {
-            //await _smtcService.UpdateMetadataAsync(currentTrack);
+            await _nowPlayingService.UpdateMetadataAsync(currentTrack);
             //await LiveTileHelper.UpdatePlayingSongAsync(currentTrack);
-            return Task.CompletedTask;
         }
 
         public Version GetAppVersion()

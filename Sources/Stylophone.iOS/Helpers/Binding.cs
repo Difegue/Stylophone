@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using UIKit;
 
 namespace Stylophone.iOS.Helpers

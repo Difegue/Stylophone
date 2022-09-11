@@ -1,5 +1,5 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Playback;
@@ -12,6 +12,7 @@ using SkiaSharp;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,7 +48,7 @@ namespace Stylophone.Common.ViewModels
         }
     }
 
-    public class AlbumViewModel : ViewModelBase
+    public partial class AlbumViewModel : ViewModelBase, IDisposable
     {
         private INotificationService _notificationService;
         private IInteropService _interop;
@@ -72,48 +73,32 @@ namespace Stylophone.Common.ViewModels
             DominantColor = _interop.GetAccentColor();
         }
 
-        public string Name
-        {
-            get => _name;
-            set => Set(ref _name, value);
-        }
+        [ObservableProperty]
         private string _name;
 
+        [ObservableProperty]
         private string _artist;
-        public string Artist
-        {
-            get => _artist;
-            private set => Set(ref _artist, value);
-            
-        }
 
-        public List<IMpdFile> Files
-        {
-            get => _files;
-            set => Set(ref _files, value);
-        }
+        [ObservableProperty]
         private List<IMpdFile> _files;
 
-        private bool _detailLoading;
-        public bool IsDetailLoading
-        {
-            get => _detailLoading;
-            set => Set(ref _detailLoading, value);
-        }
+        [ObservableProperty]
+        private bool _isDetailLoading;
 
-        private bool _artLoaded;
-        public bool AlbumArtLoaded
-        {
-            get => _artLoaded;
-            private set => Set(ref _artLoaded, value);
-        }
+        [ObservableProperty]
+        private bool _albumArtLoaded;
 
+        [ObservableProperty]
         private SKImage _albumArt;
-        public SKImage AlbumArt
-        {
-            get => _albumArt;
-            private set => Set(ref _albumArt, value);
-        }
+
+        [ObservableProperty]
+        private SKColor _dominantColor;
+
+        /// <summary>
+        /// If the dominant color of the album is too light to show white text on top of, this boolean will be true.
+        /// </summary>
+        [ObservableProperty]
+        private bool _isLight;
 
         internal void SetAlbumArt(AlbumArt art)
         {
@@ -127,27 +112,7 @@ namespace Stylophone.Common.ViewModels
            AlbumArtLoaded = true;
         }
 
-
-        private SKColor _albumColor;
-        public SKColor DominantColor
-        {
-            get => _albumColor;
-            set => Set(ref _albumColor, value);
-        }
-
-
-        private bool _isLight;
-        /// <summary>
-        /// If the dominant color of the album is too light to show white text on top of, this boolean will be true.
-        /// </summary>
-        public bool IsLight
-        {
-            get => _isLight;
-            private set => Set(ref _isLight, value);
-        }
-
-        private ICommand _addToPlaylistCommand;
-        public ICommand AddToPlaylistCommand => _addToPlaylistCommand ?? (_addToPlaylistCommand = new RelayCommand(AddToPlaylist));
+        [RelayCommand]
         private async void AddToPlaylist()
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
@@ -166,15 +131,14 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _addToQueueCommand;
-        public ICommand AddAlbumCommand => _addToQueueCommand ?? (_addToQueueCommand = new RelayCommand(AddToQueue));
-        private async void AddToQueue()
+        [RelayCommand]
+        private async void AddAlbum()
         {
             var commandList = new CommandList();
 
             if (Files.Count == 0)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorAddingAlbum, Resources.NotificationNoTracksLoaded), false);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTracksLoaded, "", NotificationType.Warning);
                 return;
             }
 
@@ -187,13 +151,12 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationAddedToQueue);
         }
 
-        private ICommand _playCommand;
-        public ICommand PlayAlbumCommand => _playCommand ?? (_playCommand = new RelayCommand(PlayAlbum));
+        [RelayCommand]
         private async void PlayAlbum()
         {
             if (Files.Count == 0)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorPlayingTrack, Resources.NotificationNoTracksLoaded), false);
+                _notificationService.ShowInAppNotification(Resources.NotificationNoTracksLoaded, "", NotificationType.Warning);
                 return;
             }
 
@@ -263,6 +226,13 @@ namespace Stylophone.Common.ViewModels
             {
                 IsDetailLoading = false;
             }
+        }
+
+        public void Dispose()
+        {
+            AlbumArt?.Dispose();
+            AlbumArt = null;
+            AlbumArtLoaded = false;
         }
     }
 }

@@ -15,14 +15,20 @@ namespace Stylophone.iOS.Services
             _dispatcherService = dispatcherService;
         }
 
-        public override void ShowInAppNotification(string notification, bool autoHide)
+        public override void ShowInAppNotification(InAppNotification notification)
         {
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
-                if (autoHide)
-                    RMessage.ShowNotificationWithTitle(notification, "", RMessageType.Normal, "", 2, () => { }, true);
-                else
-                    RMessage.ShowNotificationWithTitle(notification, RMessageType.Normal, "", () => { });
+                RMessageType type = notification.NotificationType switch
+                {
+                    NotificationType.Info => RMessageType.Normal,
+                    NotificationType.Warning => RMessageType.Warning,
+                    NotificationType.Error => RMessageType.Error,
+                    _ => RMessageType.Normal
+                };
+
+                RMessage.ShowNotificationWithTitle(notification.NotificationTitle, notification.NotificationText, type, "",
+                    notification.NotificationType == NotificationType.Error ? 300000 : 2, () => { });
             });
         }
 

@@ -90,7 +90,7 @@ namespace Stylophone.iOS.ViewControllers
             if (AllowExistingPlaylists)
                 stackView.AddArrangedSubview(playlistSwitch);
 
-            stackView.AddArrangedSubview(new UILabel { Text = Strings.AddToPlaylistText, Font = UIFont.PreferredTitle2 });
+            //stackView.AddArrangedSubview(new UILabel { Text = Strings.AddToPlaylistText, Font = UIFont.PreferredTitle2 });
 
             if (AllowExistingPlaylists)
                 stackView.AddArrangedSubview(playlistPicker);

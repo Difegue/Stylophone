@@ -6,7 +6,7 @@ using Strings = Stylophone.Localization.Strings.Resources;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using UIKit;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CoreGraphics;
 using System.Linq;
 using Foundation;
@@ -95,6 +95,12 @@ namespace Stylophone.iOS.ViewControllers
             ArtContainer.Layer.ShadowOpacity = 0.5F;
             ArtContainer.Layer.ShadowOffset = new CGSize(0, 0);
             ArtContainer.Layer.ShadowRadius = 4;
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+            ViewModel.Dispose();
         }
 
         private void OnScroll(UIScrollView scrollView)

@@ -191,19 +191,18 @@
                 VerticalAlignment="Center"
                 IsActive="{x:Bind ViewModel.Item.IsDetailLoading, Mode=OneWay}" />
 
-            <stylophone:AlternatingRowListView
+            <ListView
                 x:Name="QueueList"
                 Margin="0,8"
                 ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                 ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
                 DoubleTapped="Queue_Track"
-                EvenRowBackground="Transparent"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                ui:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
-                <stylophone:AlternatingRowListView.ContextFlyout>
+                <ListView.ContextFlyout>
                     <MenuFlyout>
                         <!--  Add to Queue  -->
                         <MenuFlyoutItem
@@ -217,14 +216,14 @@
                         </MenuFlyoutItem>
                         <!--  Add to Playlist  -->
                         <MenuFlyoutItem
-                            Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                            Command="{x:Bind ViewModel.AddToPlaylistCommand}"
                             CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
                             Icon="MusicInfo"
                             Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />
                     </MenuFlyout>
-                </stylophone:AlternatingRowListView.ContextFlyout>
+                </ListView.ContextFlyout>
 
-            </stylophone:AlternatingRowListView>
+            </ListView>
         </Grid>
 
         <VisualStateManager.VisualStateGroups>

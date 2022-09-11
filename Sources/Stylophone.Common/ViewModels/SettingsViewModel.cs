@@ -3,9 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Output;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
@@ -15,7 +14,7 @@ using Stylophone.Localization.Strings;
 namespace Stylophone.Common.ViewModels
 {
 
-    public class SettingsViewModel : ViewModelBase
+    public partial class SettingsViewModel : ViewModelBase
     {
         private IApplicationStorageService _applicationStorageService;
         private INotificationService _notificationService;
@@ -36,179 +35,99 @@ namespace Stylophone.Common.ViewModels
         private bool _hasInstanceBeenInitialized = false;
         private int _previousUpdatingDb = 0;
 
+        [ObservableProperty]
         private Theme _elementTheme;
-        public Theme ElementTheme
-        {
-            get { return _elementTheme; }
-            set
-            {
-                if (value != _elementTheme)
-                {
-                    _applicationStorageService.SetValue(nameof(ElementTheme), value.ToString());
-                }
-                Set(ref _elementTheme, value);
-            }
-        }
 
+        [ObservableProperty]
         private string _versionDescription;
-        public string VersionDescription
-        {
-            get { return _versionDescription; }
-            set { Set(ref _versionDescription, value); }
-        }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ServerStatus))]
         private string _serverInfo;
-        public string ServerInfo
-        {
-            get { return _serverInfo; }
-            set { Set(ref _serverInfo, value); }
-        }
 
+        [ObservableProperty]
         private string _serverHost;
-        public string ServerHost
-        {
-            get { return _serverHost; }
-            set
-            {
-                if (value != _serverHost)
-                {
-                    _applicationStorageService.SetValue(nameof(ServerHost), value ?? "localhost");
-                    TriggerServerConnection(value, ServerPort, ServerPassword);
-                }
-                Set(ref _serverHost, value);
-            }
-        }
 
+        [ObservableProperty]
         private int _serverPort;
-        public int ServerPort
-        {
-            get { return _serverPort; }
-            set
-            {
-                if (value != _serverPort)
-                {
-                    _applicationStorageService.SetValue(nameof(ServerPort), value);
-                    TriggerServerConnection(ServerHost, value, ServerPassword);
-                }
-                Set(ref _serverPort, value);
-            }
-        }
 
-        private string _serverPass;
-        public string ServerPassword
-        {
-            get { return _serverPass; }
-            set
-            {
-                if (value != _serverPass)
-                {
-                    _applicationStorageService.SetValue(nameof(ServerPassword), value ?? "");
-                    TriggerServerConnection(ServerHost, ServerPort, value);
-                }
-                Set(ref _serverPass, value);
-            }
-        }
+        [ObservableProperty]
+        private string _serverPassword;
 
-        private bool _compactEnabled;
-        public bool IsCompactSizing
-        {
-            get { return _compactEnabled; }
-            set
-            {
-                if (value != _compactEnabled)
-                {
-                    _applicationStorageService.SetValue(nameof(IsCompactSizing), value);
-                }
-                Set(ref _compactEnabled, value);
-            }
-        }
+        [ObservableProperty]
+        private bool _isCompactSizing;
 
-        private bool _albumArtEnabled;
-        public bool IsAlbumArtFetchingEnabled
-        {
-            get { return _albumArtEnabled; }
-            set
-            {
-                if (value != _albumArtEnabled)
-                {
-                    _applicationStorageService.SetValue(nameof(IsAlbumArtFetchingEnabled), value);
-                }
-                Set(ref _albumArtEnabled, value);
-            }
-        }
+        [ObservableProperty]
+        private bool _isAlbumArtFetchingEnabled;
 
+        [ObservableProperty]
         private bool _enableAnalytics;
-        public bool EnableAnalytics
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsServerValid))]
+        private bool _isCheckingServer;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ServerStatus))]
+        private bool _isStreamingAvailable;
+
+        [ObservableProperty]
+        private bool _isLocalPlaybackEnabled;
+
+        partial void OnElementThemeChanged(Theme value)
         {
-            get { return _enableAnalytics; }
-            set
+            Task.Run (async () => await _interop.SetThemeAsync(value));
+
+            if (value != _elementTheme)
             {
-                if (value != _enableAnalytics)
-                {
-                    _applicationStorageService.SetValue(nameof(EnableAnalytics), value);
-                }
-                Set(ref _enableAnalytics, value);
+                _applicationStorageService.SetValue(nameof(ElementTheme), value.ToString());
             }
         }
 
-        private bool _isCheckingServer;
-        public bool IsCheckingServer
+        partial void OnServerHostChanged(string value)
         {
-            get { return _isCheckingServer; }
-            set => Set(ref _isCheckingServer, value);
+            _applicationStorageService.SetValue(nameof(ServerHost), value ?? "localhost");
+            TriggerServerConnection(value, ServerPort, ServerPassword);
+        }
+
+        partial void OnServerPortChanged(int value)
+        {
+            _applicationStorageService.SetValue(nameof(ServerPort), value);
+            TriggerServerConnection(ServerHost, value, ServerPassword);
+        }
+
+        partial void OnServerPasswordChanged(string value)
+        {
+            _applicationStorageService.SetValue(nameof(ServerPassword), value);
+            TriggerServerConnection(ServerHost, ServerPort, value);
+        }
+
+        partial void OnIsCompactSizingChanged(bool value)
+        {
+            _applicationStorageService.SetValue(nameof(IsCompactSizing), value);
+        }
+
+        partial void OnIsAlbumArtFetchingEnabledChanged(bool value)
+        {
+            _applicationStorageService.SetValue(nameof(IsAlbumArtFetchingEnabled), value);
+        }
+
+        partial void OnEnableAnalyticsChanged(bool value)
+        {
+            _applicationStorageService.SetValue(nameof(EnableAnalytics), value);
         }
 
         public bool IsServerValid => _mpdService.IsConnected;
+        public string ServerStatus => IsServerValid ? ServerInfo?.Split('\n')?.First() + (IsStreamingAvailable ? ", "+ Resources.SettingsLocalPlaybackAvailable : "") : 
+            Resources.SettingsNoServerError;
 
-        public string ServerStatus => IsServerValid ? ServerInfo?.Split('\n')?.First() + (IsStreamingAvailable ? ", "+ Resources.SettingsLocalPlaybackAvailable : "") : Resources.SettingsNoServerError;
-
-        private bool _httpdAvailable;
-        public bool IsStreamingAvailable
+        partial void OnIsLocalPlaybackEnabledChanged(bool value)
         {
-            get { return _httpdAvailable; }
-            set => Set(ref _httpdAvailable, value);
+            _applicationStorageService.SetValue(nameof(IsLocalPlaybackEnabled), value);
         }
 
-        private bool _localPlaybackEnabled;
-        public bool IsLocalPlaybackEnabled
-        {
-            get { return _localPlaybackEnabled; }
-            set
-            {
-                if (value != _localPlaybackEnabled)
-                {
-                    _applicationStorageService.SetValue(nameof(IsLocalPlaybackEnabled), value);
-                }
-                Set(ref _localPlaybackEnabled, value);
-            }
-        }
 
-        private ICommand _switchThemeCommand;
-        public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new AsyncRelayCommand<Theme>(SwitchThemeAsync));
-
-        private async Task SwitchThemeAsync(Theme param)
-        {
-            if (_hasInstanceBeenInitialized)
-            {
-                ElementTheme = param;
-                await _interop.SetThemeAsync(param);
-            }
-        }
-
-        private ICommand _switchSizingCommand;
-        public ICommand SwitchSizingCommand => _switchSizingCommand ?? (_switchSizingCommand = new RelayCommand<string>(SwitchSizing));
-
-        private void SwitchSizing(string param)
-        {
-            if (_hasInstanceBeenInitialized)
-            {
-                IsCompactSizing = bool.Parse(param);
-            }
-        }
-
-        private ICommand _clearCacheCommand;
-        public ICommand ClearCacheCommand => _clearCacheCommand ?? (_clearCacheCommand = new AsyncRelayCommand(ClearCacheAsync));
-
+        [RelayCommand]
         private async Task ClearCacheAsync()
         {
             try
@@ -222,14 +141,12 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private ICommand _rescanDbCommand;
-        public ICommand RescanDbCommand => _rescanDbCommand ?? (_rescanDbCommand = new AsyncRelayCommand(RescanDbAsync));
-
+        [RelayCommand]
         private async Task RescanDbAsync()
         {
             if (_mpdService.CurrentStatus.UpdatingDb > 0)
             {
-                _notificationService.ShowInAppNotification(Resources.NotificationDbAlreadyUpdating);
+                _notificationService.ShowInAppNotification(Resources.NotificationDbAlreadyUpdating, "", NotificationType.Warning);
                 return;
             }
 
@@ -239,8 +156,12 @@ namespace Stylophone.Common.ViewModels
                 _notificationService.ShowInAppNotification(Resources.NotificationDbUpdateStarted);
         }
 
-        private ICommand _rateAppCommand;
-        public ICommand RateAppCommand => _rateAppCommand ?? (_rateAppCommand = new RelayCommand(() => _interop.OpenStoreReviewUrlAsync()));
+
+        [RelayCommand]
+        private async Task RateAppAsync()
+        {
+            await _interop.OpenStoreReviewUrlAsync();
+        }
 
         public async Task EnsureInstanceInitializedAsync()
         {
@@ -250,14 +171,14 @@ namespace Stylophone.Common.ViewModels
                 _mpdService.StatusChanged += async (s, e) => await CheckUpdatingDbAsync();
 
                 // Initialize values directly to avoid calling CheckServerAddressAsync twice
-                _compactEnabled = _applicationStorageService.GetValue<bool>(nameof(IsCompactSizing));
+                _isCompactSizing = _applicationStorageService.GetValue<bool>(nameof(IsCompactSizing));
                 _serverHost = _applicationStorageService.GetValue<string>(nameof(ServerHost));
                 _serverHost = _serverHost?.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
 
                 _serverPort = _applicationStorageService.GetValue(nameof(ServerPort), 6600);
                 _enableAnalytics = _applicationStorageService.GetValue(nameof(EnableAnalytics), true);
-                _albumArtEnabled = _applicationStorageService.GetValue(nameof(IsAlbumArtFetchingEnabled), true);
-                _localPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
+                _isAlbumArtFetchingEnabled = _applicationStorageService.GetValue(nameof(IsAlbumArtFetchingEnabled), true);
+                _isLocalPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
 
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);
 
@@ -284,7 +205,7 @@ namespace Stylophone.Common.ViewModels
             var appName = Resources.AppDisplayName;
             Version version = _interop.GetAppVersion();
 
-            return $"{appName} - {version.Major}.{version.Minor}.{(version.Build > -1 ? version.Build : 0)}.{(version.Revision > -1 ? version.Revision : 0)}";
+            return $"{version.Major}.{version.Minor}.{(version.Build > -1 ? version.Build : 0)}";
         }
 
         private void TriggerServerConnection(string host, int port, string pass)
@@ -298,9 +219,6 @@ namespace Stylophone.Common.ViewModels
         private async Task UpdateServerVersionAsync()
         {
             IsCheckingServer = _mpdService.IsConnecting;
-
-            await _dispatcherService.ExecuteOnUIThreadAsync(() => { OnPropertyChanged(nameof(IsServerValid)); OnPropertyChanged(nameof(ServerStatus)); });
-
             if (!_mpdService.IsConnected) return;
 
             var response = await _mpdService.SafelySendCommandAsync(new StatsCommand());
@@ -341,8 +259,6 @@ namespace Stylophone.Common.ViewModels
                              $"{songs} Songs, {albums} Albums\n" +
                              $"Database last updated {lastUpdatedDb}";
                 }
-
-                await _dispatcherService.ExecuteOnUIThreadAsync(() => { OnPropertyChanged(nameof(IsServerValid)); OnPropertyChanged(nameof(ServerStatus)); });
             }
         }
     }

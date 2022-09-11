@@ -1,5 +1,5 @@
 ﻿using Stylophone.ViewModels;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Toolkit.Uwp;
 using Stylophone.Common.Helpers;
 using System;

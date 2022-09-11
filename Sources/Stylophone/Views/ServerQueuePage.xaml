@@ -20,7 +20,7 @@
         BorderThickness="1"
         CornerRadius="8">
 
-        <Stylophone:AlternatingRowListView
+        <ListView
             x:Name="QueueList"
             Margin="0,8"
             ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
@@ -31,14 +31,13 @@
             DoubleTapped="Play_Track"
             DragItemsCompleted="QueueList_DragItemsCompleted"
             DragItemsStarting="QueueList_DragItemsStarting"
-            EvenRowBackground="Transparent"
+            ui:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
             ItemTemplate="{StaticResource TrackListTemplate}"
             ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
-            OddRowBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
             ReorderMode="Enabled"
             RightTapped="Select_Item"
             SelectionMode="Extended">
-            <Stylophone:AlternatingRowListView.ContextFlyout>
+            <ListView.ContextFlyout>
                 <MenuFlyout>
                     <!--  Play Track  -->
                     <MenuFlyoutItem
@@ -72,14 +71,14 @@
                     </MenuFlyoutItem>
                     <!--  Add Track to Playlist  -->
                     <MenuFlyoutItem
-                        Command="{x:Bind ViewModel.AddToPlayListCommand}"
+                        Command="{x:Bind ViewModel.AddToPlaylistCommand}"
                         CommandParameter="{x:Bind QueueList.SelectedItems, Mode=OneWay}"
                         Icon="MusicInfo"
                         Text="{x:Bind strings:Resources.ContextMenuAddToPlaylist}" />
 
                 </MenuFlyout>
-            </Stylophone:AlternatingRowListView.ContextFlyout>
-        </Stylophone:AlternatingRowListView>
+            </ListView.ContextFlyout>
+        </ListView>
 
         <StackPanel
             HorizontalAlignment="Center"

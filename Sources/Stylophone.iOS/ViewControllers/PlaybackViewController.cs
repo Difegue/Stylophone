@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel;
 using Strings = Stylophone.Localization.Strings.Resources;
 using Foundation;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using SkiaSharp;
 using Stylophone.Common.Helpers;
 using Stylophone.Common.ViewModels;
@@ -12,6 +12,9 @@ using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using UIKit;
 using Pop = ARSPopover.iOS;
+using static Xamarin.Essentials.Permissions;
+using CommunityToolkit.Mvvm.Input;
+using CoreGraphics;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -77,13 +80,55 @@ namespace Stylophone.iOS.ViewControllers
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            NavigationController.NavigationBar.TintColor = UIColor.LabelColor;
+            NavigationController.NavigationBar.TintColor = UIColor.Label;
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             NavigationController.NavigationBar.TintColor = null;
+
+            (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            if (!ViewModel.IsFullScreen) return;
+
+            // Don't multi-line for small phones in vertical orientation
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular && 
+                UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+            {
+                TrackTitle.Lines = 2;
+                AlbumName.Lines = 1;
+
+            }
+            else
+            {
+                TrackTitle.Lines = 3;
+
+                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+                    AlbumName.Lines = 1;
+                else
+                    AlbumName.Lines = 2;
+            }
+
+            // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
+            {
+                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = UIColor.Label;
+            }
+            else 
+            {
+                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+                // Reset TitleView as it can disappear when moving from compact to normal size class
+                // TODO: this doesn't do anything..
+                NavigationItem.TitleView = upNextView;
+            }
         }
 
         public override void ViewDidLoad()
@@ -121,9 +166,18 @@ namespace Stylophone.iOS.ViewControllers
             PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
             ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
             RepeatButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleRepeat();
-            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton); 
+            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton);
+
+            // Add shadow to albumart
+            ShadowCaster.Layer.MasksToBounds = false;
+            ShadowCaster.Layer.CornerRadius = 8;
+            ShadowCaster.Layer.ShadowColor = UIColor.Black.CGColor;
+            ShadowCaster.Layer.ShadowOpacity = 0.5F;
+            ShadowCaster.Layer.ShadowOffset = new CGSize(0, 0);
+            ShadowCaster.Layer.ShadowRadius = 4;
 
             AlbumArt.Layer.CornerRadius = 8;
+            //View.BringSubviewToFront(AlbumArt);
         }
 
         private void OnVmPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -153,6 +207,9 @@ namespace Stylophone.iOS.ViewControllers
                 UpdateButton(CompactView.ShuffleButton, image);
                 UpdateButton(ShuffleButton, image);
             }
+
+            if (e.PropertyName == nameof(ViewModel.IsConsumeEnabled))
+                _consumeAction.State = ViewModel.IsConsumeEnabled ? UIMenuElementState.On : UIMenuElementState.Off;
 
             if (e.PropertyName == nameof(ViewModel.RepeatIcon))
             {
@@ -188,19 +245,25 @@ namespace Stylophone.iOS.ViewControllers
             _trackBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _trackBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _trackBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
-            //_trackBinder.Bind<SKColor>(PlayPauseButton, "tintColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            _trackBinder.Bind<SKColor>(TrackSlider, "maximumTrackTintColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
             
         }
 
         private void UpdateButton(UIButton button, string systemImg) =>
             button?.SetImage(UIImage.GetSystemImage(systemImg), UIControlState.Normal);
 
+        private UIAction _consumeAction;
         private UIBarButtonItem CreateSettingsButton()
         {
+            _consumeAction = Binder.GetCommandAction(Strings.ActionToggleConsume, "fork.knife", new RelayCommand(ViewModel.ToggleConsume));
             var addQueueAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.AddToPlaylistCommand);
             var viewAlbumAction = Binder.GetCommandAction(Strings.ContextMenuViewAlbum, "opticaldisc", ViewModel.ShowAlbumCommand);
 
-            var barButtonMenu = UIMenu.Create(new[] { addQueueAction, viewAlbumAction });
+            // https://stackoverflow.com/questions/64738005/how-to-change-the-state-for-an-uiaction-inside-uimenu-at-runtime
+            var dynamicAction = UIDeferredMenuElement.CreateUncached(new UIDeferredMenuElementProviderHandler((completion) =>
+                completion.Invoke(new[] { _consumeAction })));
+
+            var barButtonMenu = UIMenu.Create(new UIMenuElement[] { dynamicAction, addQueueAction, viewAlbumAction });
             return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
         }
 

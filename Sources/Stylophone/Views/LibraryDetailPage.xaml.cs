@@ -4,7 +4,7 @@ using Microsoft.Toolkit.Uwp.UI.Animations;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Stylophone.Common.ViewModels;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Interfaces;
 
 namespace Stylophone.Views
@@ -45,7 +45,7 @@ namespace Stylophone.Views
 
         private void Queue_Track(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
         {
-            var listView = sender as AlternatingRowListView;
+            var listView = sender as ListView;
             var trackVm = listView.SelectedItem as TrackViewModel;
             trackVm.AddToQueueCommand.Execute(trackVm.File);
         }

@@ -1,5 +1,4 @@
 ﻿using ColorThiefDotNet;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using MpcNET.Commands.Database;
 using MpcNET.Types;
 using SkiaSharp;
@@ -9,6 +8,7 @@ using Stylophone.Common.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,12 +26,14 @@ namespace Stylophone.Common.Services
         private CancellationTokenSource _queueCanceller;
 
         private IApplicationStorageService _applicationStorageService;
+        private INotificationService _notificationService;
         private MPDConnectionService _mpdService;
 
-        public AlbumArtService(MPDConnectionService mpdService, IApplicationStorageService appStorage)
+        public AlbumArtService(MPDConnectionService mpdService, IApplicationStorageService appStorage, INotificationService notificationService)
         {
             _mpdService = mpdService;
             _applicationStorageService = appStorage;
+            _notificationService = notificationService;
         }
 
         public void Initialize()
@@ -73,6 +75,7 @@ namespace Stylophone.Common.Services
                     catch (Exception e)
                     {
                         Debug.WriteLine("Exception while processing albumart queue: " + e);
+                        _notificationService.ShowErrorNotification(e);
                     }
                 }
             }).ConfigureAwait(false);
@@ -189,6 +192,7 @@ namespace Stylophone.Common.Services
             catch (Exception e)
             {
                 Debug.WriteLine("Exception caught while getting albumart: " + e);
+                _notificationService.ShowErrorNotification(e);
                 return null;
             }
 
@@ -217,13 +221,17 @@ namespace Stylophone.Common.Services
         {
             try
             {
-                var fileStream = await _applicationStorageService.OpenFileAsync(fileName, "AlbumArt");
-                SKBitmap image = SKBitmap.Decode(fileStream);
-                fileStream.Dispose();
-                return image;
+                // Go through a SKData object to sidestep https://github.com/mono/SkiaSharp/issues/1551 
+                using (var fileStream = await _applicationStorageService.OpenFileAsync(fileName, "AlbumArt"))
+                using (var skData = SKData.Create(fileStream))
+                {
+                    return SKBitmap.Decode(skData);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Debug.WriteLine("Exception caught while loading albumart from file: " + e);
+                _notificationService.ShowErrorNotification(e);
                 return null;
             }
         }

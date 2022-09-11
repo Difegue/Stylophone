@@ -4,9 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MpcNET;
 using MpcNET.Commands.Database;
 using MpcNET.Commands.Queue;
@@ -14,13 +13,14 @@ using MpcNET.Commands.Reflection;
 using MpcNET.Commands.Status;
 using MpcNET.Tags;
 using MpcNET.Types;
+using MpcNET.Types.Filters;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
-    public abstract class ShellViewModelBase : ViewModelBase
+    public abstract partial class ShellViewModelBase : ViewModelBase
     {
         protected INavigationService _navigationService;
         protected INotificationService _notificationService;
@@ -35,8 +35,7 @@ namespace Stylophone.Common.ViewModels
 
             // First View, use that to initialize our DispatcherService
             _dispatcherService.Initialize();
-
-            ((NotificationServiceBase)_notificationService).InAppNotificationRequested += ShowInAppNotification;
+            
             ((NavigationServiceBase)_navigationService).Navigated += OnFrameNavigated;
 
             TryUpdatePlaylists();
@@ -47,34 +46,21 @@ namespace Stylophone.Common.ViewModels
             };
         }
 
-        private bool _isBackEnabled;
-        public bool IsBackEnabled
-        {
-            get { return _isBackEnabled; }
-            set { Set(ref _isBackEnabled, value); }
-        }
-
         public bool IsServerUpdating => _mpdService.CurrentStatus.UpdatingDb != -1;
 
-        private string _shellHeader;
-        public string HeaderText
-        {
-            get { return _shellHeader; }
-            set { Set(ref _shellHeader, value); }
-        }
+        [ObservableProperty]
+        private string _headerText;
 
-        private ICommand _loadedCommand;
-        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new RelayCommand(OnLoaded));
+        [ObservableProperty]
+        private bool _isBackEnabled;
 
-        private ICommand _navigateCommand;
-        public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new RelayCommand<object>(OnItemInvoked));
+        [RelayCommand]
+        protected abstract void Loaded();
+        [RelayCommand]
+        protected abstract void Navigate(object item);
+        [RelayCommand]
+        private void AddRandomTracks() => QueueRandomTracks(5);
 
-        private ICommand _shuffleTracksCommand;
-        public ICommand AddRandomTracksCommand => _shuffleTracksCommand ?? (_shuffleTracksCommand = new RelayCommand(() => QueueRandomTracks(5)));
-
-        protected abstract void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e);
-        protected abstract void OnLoaded();
-        protected abstract void OnItemInvoked(object item);
         protected abstract void UpdatePlaylistNavigation();
 
         private void OnFrameNavigated(object sender, CoreNavigationEventArgs e)
@@ -98,7 +84,8 @@ namespace Stylophone.Common.ViewModels
 
             if (text.Length > 2)
             {
-                var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(FindTags.Title, text));
+                var filter = new FilterTag(FindTags.Title, text, FilterOperator.Contains);
+                var response = await _mpdService.SafelySendCommandAsync(new SearchCommand(filter));
 
                 if (response != null)
                 {
@@ -112,7 +99,7 @@ namespace Stylophone.Common.ViewModels
 
         private void QueueRandomTracks(int count)
         {
-            _notificationService.ShowInAppNotification(Resources.RandomTracksInProgress, false);
+            _notificationService.ShowInAppNotification(Resources.RandomTracksInProgress);
             _ = Task.Run(async () =>
             {
                 var response = await _mpdService.SafelySendCommandAsync(new StatsCommand());
@@ -124,7 +111,7 @@ namespace Stylophone.Common.ViewModels
                     count--;
                     // Pick a song n°, and queue it directly with searchadd
                     var r = new Random().Next(0, songs-1);
-                    commandList.Add(new SearchAddCommand(MpdTags.Title, "", r, r + 1));
+                    commandList.Add(new SearchAddCommand(new FilterTag(MpdTags.Title, "", FilterOperator.Contains), r, r + 1));
                 }
 
                 await _mpdService.SafelySendCommandAsync(commandList);
@@ -158,8 +145,7 @@ namespace Stylophone.Common.ViewModels
                 }
                 catch (Exception e)
                 {
-                    //TODO localize
-                    _notificationService.ShowInAppNotification($"Updating Playlist Navigation failed: {e.Message}", false);
+                    _notificationService.ShowInAppNotification(Resources.ErrorUpdatingPlaylist, e.Message, NotificationType.Error);
                 }
             });
         }

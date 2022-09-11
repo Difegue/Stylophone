@@ -2,7 +2,7 @@
 using Stylophone.Services;
 using Stylophone.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
@@ -15,6 +15,11 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Foundation;
+using Microsoft.Services.Store.Engagement;
+#if DEBUG
+#else
+using System.Collections.Generic;
+#endif
 
 namespace Stylophone
 {
@@ -33,8 +38,8 @@ namespace Stylophone
             Services = ConfigureServices();
             Ioc.Default.ConfigureServices(Services);
 
-
             InitializeComponent();
+            UnhandledException += OnAppUnhandledException;
 
             // Deferred execution until used. Check https://msdn.microsoft.com/library/dd642331(v=vs.110).aspx for further info on Lazy<T> class.
             _activationService = new Lazy<ActivationService>(CreateActivationService);
@@ -60,6 +65,10 @@ namespace Stylophone
                 Resources.MergedDictionaries.Add(
                    new ResourceDictionary { Source = new Uri(@"ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml", UriKind.Absolute) });
             }
+
+            // Initialize MS Store Engagement notifications
+            StoreServicesEngagementManager engagementManager = StoreServicesEngagementManager.GetDefault();
+            await engagementManager.RegisterNotificationChannelAsync();
 
             // Analytics
             SystemInformation.Instance.TrackAppUse(args);
@@ -89,6 +98,25 @@ namespace Stylophone
         protected override async void OnActivated(IActivatedEventArgs args)
         {
             await ActivationService.ActivateAsync(args);
+        }
+
+        private void OnAppUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+#if DEBUG
+#else
+            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
+            if (enableAnalytics)
+            {
+                var dict = new Dictionary<string, string>();
+                dict.Add("exception", e.Exception.ToString());
+                Analytics.TrackEvent("UnhandledCrash", dict);
+            }
+#endif
+            var notificationService = Ioc.Default.GetRequiredService<INotificationService>();
+            notificationService.ShowErrorNotification(e.Exception);
+
+            // Try to handle the exception in case it's not catastrophic
+            e.Handled = true;
         }
 
         private ActivationService CreateActivationService()

@@ -1,28 +1,21 @@
 ﻿using System;
-using System.Threading.Tasks;
-
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Toolkit.Uwp.Notifications;
-using Stylophone.Common.Interfaces;
-using Windows.ApplicationModel.Activation;
 using Windows.UI.Notifications;
+using Stylophone.Common.Interfaces;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Stylophone.Services
 {
+
     public class NotificationService : NotificationServiceBase
     {
-        private IDispatcherService _dispatcherService;
-
-        public NotificationService(IDispatcherService dispatcherService)
+        
+        public override void ShowInAppNotification(InAppNotification notificationObject)
         {
-            _dispatcherService = dispatcherService;
+            WeakReferenceMessenger.Default.Send(notificationObject);
         }
-
-        public override void ShowInAppNotification(string notification, bool autoHide)
-        {
-            //TODO: check for compact mode
-            InvokeInAppNotificationRequested(new InAppNotificationRequestedEventArgs { NotificationText = notification, NotificationTime = autoHide ? 1500 : 0});
-        }
-
+        
         public override void ShowBasicToastNotification(string title, string description)
         {
             // Create the toast content

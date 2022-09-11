@@ -39,6 +39,16 @@ namespace Stylophone.iOS.ViewControllers
             Layer.ShadowPath = UIBezierPath.FromRoundedRect(Bounds, 8).CGPath;
         }
 
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            // Adjust content and shadow to current bounds of cell
+            var bounds = Bounds;
+            ContentView.Bounds = bounds;
+            Layer.ShadowPath = UIBezierPath.FromRoundedRect(bounds, 8).CGPath;
+        }
+
         internal void Initialize(AlbumViewModel viewModel)
         {
 

@@ -448,7 +448,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Error trying to play the MPD server&apos;s httpd stream: {0}.
+        ///   Recherche une chaîne localisée semblable à Error trying to play the MPD server&apos;s httpd stream.
         /// </summary>
         public static string ErrorPlayingMPDStream {
             get {
@@ -466,47 +466,20 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à parameter must be an Enum name!.
+        ///   Recherche une chaîne localisée semblable à Sending {0} failed.
         /// </summary>
-        public static string ExceptionEnumToBooleanConverterParameterMustBeAnEnumName {
+        public static string ErrorSendingMPDCommand {
             get {
-                return ResourceManager.GetString("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName", resourceCulture);
+                return ResourceManager.GetString("ErrorSendingMPDCommand", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à value must be an Enum!.
+        ///   Recherche une chaîne localisée semblable à Updating Playlists failed.
         /// </summary>
-        public static string ExceptionEnumToBooleanConverterValueMustBeAnEnum {
+        public static string ErrorUpdatingPlaylist {
             get {
-                return ResourceManager.GetString("ExceptionEnumToBooleanConverterValueMustBeAnEnum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à File name is null or empty. Specify a valid file name.
-        /// </summary>
-        public static string ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty {
-            get {
-                return ResourceManager.GetString("ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à All pages opened in a new window must subscribe to the Released Event..
-        /// </summary>
-        public static string ExceptionViewLifeTimeControlMissingReleasedSubscription {
-            get {
-                return ResourceManager.GetString("ExceptionViewLifeTimeControlMissingReleasedSubscription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à This view is being disposed..
-        /// </summary>
-        public static string ExceptionViewLifeTimeControlViewDisposal {
-            get {
-                return ResourceManager.GetString("ExceptionViewLifeTimeControlViewDisposal", resourceCulture);
+                return ResourceManager.GetString("ErrorUpdatingPlaylist", resourceCulture);
             }
         }
         
@@ -858,7 +831,7 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à MPD Client for the Universal Windows Platform, based on MpcNET..
+        ///   Recherche une chaîne localisée semblable à A pretty cool MPD Client. Uses MpcNET..
         /// </summary>
         public static string SettingsAboutText {
             get {

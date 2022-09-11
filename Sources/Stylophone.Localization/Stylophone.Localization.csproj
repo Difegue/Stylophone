@@ -22,7 +22,10 @@
 		<EmbeddedResource Update="Strings\Resources.pt-PT.resx">
 			<SubType>Designer</SubType>
 		</EmbeddedResource>
-			
+		<EmbeddedResource Update="Strings\Resources.zh-CN.resx">
+			<SubType>Designer</SubType>
+		</EmbeddedResource>	
+		
 		<EmbeddedResource Update="Strings\Resources.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>

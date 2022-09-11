@@ -10,6 +10,7 @@ using MpcNET.Commands.Playlist;
 using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
 using MpcNET.Commands.Reflection;
+using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.Services
 {
@@ -129,7 +130,8 @@ namespace Stylophone.Common.Services
         private async Task TryConnecting(CancellationToken token)
         {
             if (token.IsCancellationRequested) return;
-            if (!IPAddress.TryParse(_host, out var ipAddress)) return;
+            if (!IPAddress.TryParse(_host, out var ipAddress)) 
+                throw new Exception("Invalid IP address");
 
             _mpdEndpoint = new IPEndPoint(ipAddress, _port);
 
@@ -196,7 +198,8 @@ namespace Stylophone.Common.Services
             }
             catch (Exception e)
             {
-                _notificationService.ShowInAppNotification($"Sending {command.GetType().Name} failed: {e.Message}", false);
+                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorSendingMPDCommand, command.GetType().Name), 
+                    e.Message, NotificationType.Error);
             }
 
             return default(T);
@@ -214,7 +217,7 @@ namespace Stylophone.Common.Services
                 if (!r.IsResponseValid)
                 {
                     var mpdError = r.Response?.Result?.MpdError;
-                    _notificationService.ShowInAppNotification($"Invalid password: {mpdError ?? r.ToString()}", false);
+                    _notificationService.ShowInAppNotification(Resources.ErrorPassword, $"{mpdError ?? r.ToString()}", NotificationType.Error);
                 }
             }
 
@@ -235,7 +238,7 @@ namespace Stylophone.Common.Services
                 {
                     try
                     {
-                        if (token.IsCancellationRequested || _idleConnection == null)
+                        if (token.IsCancellationRequested || _idleConnection == null || !_idleConnection.IsConnected)
                             break;
 
                         var idleChanges = await _idleConnection.SendAsync(new IdleCommand("stored_playlist playlist player mixer output options update"));

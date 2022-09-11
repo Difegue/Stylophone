@@ -10,8 +10,9 @@ using UIKit;
 using Foundation;
 using Stylophone.iOS.ViewControllers;
 using Stylophone.iOS.Services;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Stylophone.iOS.ViewModels
 {
@@ -33,6 +34,22 @@ namespace Stylophone.iOS.ViewModels
 
             var concreteNavService = _navigationService as NavigationService;
             concreteNavService.Navigated += UpdateNavigationViewSelection;
+
+            PropertyChanged += UpdateDatabaseIndicator;
+        }
+
+        private void UpdateDatabaseIndicator(object sender, PropertyChangedEventArgs e)
+        {
+            // Only run this code when IsServerUpdating changes
+            if (e.PropertyName != nameof(IsServerUpdating)) return;
+
+            var snapshot = new NSDiffableDataSourceSectionSnapshot<NavigationSidebarItem>();
+            var item = NavigationSidebarItem.GetRow(Strings.DatabaseUpdateHeader, null, null, UIImage.GetSystemImage("hourglass"));
+
+            if (IsServerUpdating)
+                snapshot.AppendItems(new[] { item });
+
+            _sidebarDataSource.ApplySnapshot(snapshot, new NSString("database_update"), false);
         }
 
         private void UpdateNavigationViewSelection(object sender, CoreNavigationEventArgs e)
@@ -71,12 +88,12 @@ namespace Stylophone.iOS.ViewModels
             _sidebarDataSource.ApplySnapshot(snapshot, new NSString("playlists"), false);
         }
 
-        protected override void OnLoaded()
+        protected override void Loaded()
         {
 
         }
 
-        protected override void OnItemInvoked(object itemInvoked)
+        protected override void Navigate(object itemInvoked)
         {
             if (itemInvoked is string s)
             {
@@ -102,12 +119,6 @@ namespace Stylophone.iOS.ViewModels
                         _navigationService.Navigate(pageType);
                 }
             }
-        }
-
-        protected override void ShowInAppNotification(object sender, InAppNotificationRequestedEventArgs e)
-        {
-            // Noop on UIKit
-            // TODO make UWP only
         }
     }
 }

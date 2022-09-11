@@ -69,12 +69,24 @@ namespace Stylophone.ViewModels
                             else if (token.IsCancellationRequested)
                                 album.IsDetailLoading = false;
                         }
+
+                    /* Needs more refactoring for this to work
+                    // Dispose albumart in invisible range
+                    for (var i = 0; i < visibleRange.FirstIndex; i++)
+                        this[i].Dispose();
+                    for (var i = visibleRange.LastIndex + 1; i < Count; i++)
+                        this[i].Dispose();
+                    */
+                    
                 });
             }).ConfigureAwait(false);
         }
 
         public void Dispose()
         {
+            // Dispose all albumart
+            foreach (var album in this)
+                album.Dispose();
         }
     }
 
