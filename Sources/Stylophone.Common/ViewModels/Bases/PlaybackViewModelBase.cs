@@ -189,7 +189,9 @@ namespace Stylophone.Common.ViewModels
                     {
                         await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
                         Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
-                        MediaVolume = _mpdService.CurrentStatus.Volume; // Update the value to the current server volume
+
+                        if (volumeTasks.Count == 1)
+                            MediaVolume = _mpdService.CurrentStatus.Volume; // Update the value to the current server volume
                     }, cts.Token));
 
                 // Update the UI
