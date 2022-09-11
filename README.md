@@ -74,10 +74,10 @@ You can easily contribute translations to Stylophone! To help translate, follow 
 |---|---|
 | ![xbox](Screenshots/ScreenXbox.jpg)| ![controlcenter](Screenshots/ScreenNowPlaying.jpg) |
 
-## Privacy Policy
+## Privacy Policy  
 
-Stylophone collects no data from your computer by default.  
-The Windows Store version can send anonymized error reports related to crashes of the application back to me.  
-
-If you enable Telemetry in the app's settings, the application will send detailed crash reports using [App Center](https://appcenter.ms).  
+If Telemetry is enabled in the app's settings, the application will send detailed crash reports using [App Center](https://appcenter.ms).  
 Those reports can contain information about your hardware. (Motherboard type, etc)  
+
+Stylophone collects no other data from your device.  
+The Windows Store version can send anonymized error reports related to crashes of the application back to me.  
