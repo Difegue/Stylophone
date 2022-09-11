@@ -36,6 +36,14 @@ namespace Stylophone.iOS.ViewControllers
             Layer.ShadowOffset = new CGSize(0, 0);
             Layer.ShadowRadius = 4;
 
+            // Add shadow to albumart
+            ShadowCaster.Layer.MasksToBounds = false;
+            ShadowCaster.Layer.CornerRadius = 8;
+            ShadowCaster.Layer.ShadowColor = UIColor.Black.CGColor;
+            ShadowCaster.Layer.ShadowOpacity = 0.5F;
+            ShadowCaster.Layer.ShadowOffset = new CGSize(0, 0);
+            ShadowCaster.Layer.ShadowRadius = 4;
+
             AlbumArt.Layer.CornerRadius = 8;
         }
 

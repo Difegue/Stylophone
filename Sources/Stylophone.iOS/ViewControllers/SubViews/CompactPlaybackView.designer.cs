@@ -43,6 +43,9 @@ namespace Stylophone.iOS.ViewControllers
 		public UIKit.UIButton PrevButton { get; private set; }
 
 		[Outlet]
+		UIKit.UIView ShadowCaster { get; set; }
+
+		[Outlet]
 		public UIKit.UIButton ShuffleButton { get; private set; }
 
 		[Outlet]
@@ -116,6 +119,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (VolumeButton != null) {
 				VolumeButton.Dispose ();
 				VolumeButton = null;
+			}
+
+			if (ShadowCaster != null) {
+				ShadowCaster.Dispose ();
+				ShadowCaster = null;
 			}
 		}
 	}
