@@ -3,7 +3,7 @@
 Stylophone
 ===========
 
-[**Music Player Daemon**](https://www.musicpd.org/) Client for UWP.  
+[**Music Player Daemon**](https://www.musicpd.org/) Client for UWP and iOS/iPadOS.  
 Based on [MpcNET](https://github.com/Difegue/MpcNET), my own fork of the original .NET Client Library for MPD. (now on NuGet!)   
 
 <a href='//www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/en-us/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="142" height="52"/></a>
@@ -15,7 +15,8 @@ Based on [MpcNET](https://github.com/Difegue/MpcNET), my own fork of the origina
 * Full playback control  
 * Playlist management (Create, Add/Remove tracks, Delete)  
 * Picture-in-picture mode  
-* Live tile  
+* Live tile on Windows 10
+* Integration with native playback controls
 * Browse library by albums, or directly by folders  
 * All data is pulled from your MPD Server only  
 * Support for both albumart and readpicture commands for maximum compatibility with your cover art library
@@ -53,12 +54,25 @@ You can easily contribute translations to Stylophone! To help translate, follow 
 
 ## Screenshots
 
-![Screen1](Screenshots/Screen1.jpg)
-![Screen2](Screenshots/Screen2.jpg)
-![Screen3](Screenshots/Screen3.jpg)
-![Screen4](Screenshots/Screen4.jpg)
-![Screen5](Screenshots/Screen5.jpg)
-![Screen6](Screenshots/Screen6.jpg)
+|Queue, UWP | Queue, iOS |
+|---|---|
+| ![queue_win](Screenshots/Screen1.jpg) | ![queue_ios](Screenshots/Screen5.jpg) |
+
+|Library, UWP | Library, iOS |
+|---|---|
+| ![library_win](Screenshots/Screen2.jpg) | ![library_ios](Screenshots/Screen6.jpg) |
+
+|Playlist, UWP | Playlist, iOS |
+|---|---|
+| ![playlist_win](Screenshots/Screen3.jpg)| ![playlist_ios](Screenshots/Screen7.jpg) |
+
+|Now Playing, UWP | Now Playing, iOS |
+|---|---|
+| ![nowplaying_win](Screenshots/Screen4.jpg)| ![nowplaying_ios](Screenshots/Screen8.jpg) |
+
+|Xbox Integration | iOS Control Center Integration |
+|---|---|
+| ![xbox](Screenshots/ScreenXbox.jpg)| ![controlcenter](Screenshots/ScreenNowPlaying.jpg) |
 
 ## Privacy Policy
 
