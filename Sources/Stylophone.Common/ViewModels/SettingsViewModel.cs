@@ -208,6 +208,8 @@ namespace Stylophone.Common.ViewModels
             return $"{version.Major}.{version.Minor}.{(version.Revision > -1 ? version.Revision : 0)}";
         }
 
+        public void RetryConnection() => TriggerServerConnection(ServerHost, ServerPort, ServerPassword);
+
         private void TriggerServerConnection(string host, int port, string pass)
         {
             IsCheckingServer = true;

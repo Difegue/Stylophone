@@ -60,6 +60,11 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            // Trick iOS into showing us the local network access prompt,
+            // So that the user can accept/decline it before we actually try to connect to MPD servers.
+            // cf. https://stackoverflow.com/questions/63940427/ios-14-how-to-trigger-local-network-dialog-and-check-user-answer
+            var hostName = NSProcessInfo.ProcessInfo.HostName;
+
             // Value Transformers
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
             var intToStringTransformer = NSValueTransformer.GetValueTransformer(nameof(IntToStringValueTransformer));
@@ -93,9 +98,19 @@ namespace Stylophone.iOS.ViewControllers
             GithubButton.PrimaryActionTriggered += (s, e) =>
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(Resources.SettingsGithubLink));
 
-            ServerHostnameField.PrimaryActionTriggered += (s, e) => ((UITextField)s).ResignFirstResponder();
-            ServerPortField.PrimaryActionTriggered += (s, e) => ((UITextField)s).ResignFirstResponder();
-            ServerPasswordField.PrimaryActionTriggered += (s, e) => ((UITextField)s).ResignFirstResponder();
+            ServerHostnameField.PrimaryActionTriggered += (s, e) => {
+                ((UITextField)s).ResignFirstResponder();
+                ViewModel.RetryConnection();
+            };
+            ServerPortField.PrimaryActionTriggered += (s, e) =>
+            {
+                ((UITextField)s).ResignFirstResponder();
+                ViewModel.RetryConnection();
+            };
+            ServerPasswordField.PrimaryActionTriggered += (s, e) => {
+                ((UITextField)s).ResignFirstResponder();
+                ViewModel.RetryConnection();
+            };
 
         }
     }
