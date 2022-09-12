@@ -7,6 +7,7 @@ using Stylophone.iOS.ViewControllers;
 using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
 using StoreKit;
+using Stylophone.Common.ViewModels;
 
 namespace Stylophone.iOS.Services
 {
@@ -15,12 +16,14 @@ namespace Stylophone.iOS.Services
         private IDispatcherService _dispatcherService;
         private IApplicationStorageService _storageService;
         private IInteropService _interop;
+        private INavigationService _navigationService;
         private MPDConnectionService _mpdService;
 
-        public DialogService(IDispatcherService dispatcherService, IApplicationStorageService storageService, IInteropService interop, MPDConnectionService mpdService)
+        public DialogService(IDispatcherService dispatcherService, IApplicationStorageService storageService, IInteropService interop, INavigationService navigationService, MPDConnectionService mpdService)
         {
             _dispatcherService = dispatcherService;
             _storageService = storageService;
+            _navigationService = navigationService;
             _mpdService = mpdService;
             _interop = interop;
         }
@@ -59,6 +62,7 @@ namespace Stylophone.iOS.Services
                         _storageService.SetValue<bool>("HasLaunchedOnce", true);
 
                         await ShowConfirmDialogAsync(Strings.FirstRunTitle, Strings.FirstRunText, Strings.OKButtonText);
+                        _navigationService.Navigate<SettingsViewModel>();
                     }
                 });
         }
