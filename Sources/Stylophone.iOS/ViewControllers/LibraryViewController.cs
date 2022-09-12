@@ -148,7 +148,7 @@ namespace Stylophone.iOS.ViewControllers
             if (referenceSize.Width < 600)
                 size = new CGSize(148, 148);
 
-            if (referenceSize.Width < 350)
+            if (referenceSize.Width < 350 || referenceSize.Width == 490) 
                 size = new CGSize(120, 120);
 
             return size;
