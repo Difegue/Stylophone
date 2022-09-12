@@ -35,7 +35,7 @@
                                                         <constraint firstAttribute="width" constant="128" id="jqy-NR-Al9"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" textContentType="url"/>
+                                                    <textInputTraits key="textInputTraits" returnKeyType="done" textContentType="url"/>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsServerHost" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rm5-wP-eEh" customClass="LocalizedLabel">
                                                     <rect key="frame" x="16" y="13.5" width="196" height="17"/>
@@ -83,7 +83,7 @@
                                                         <constraint firstAttribute="width" constant="128" id="VdB-ne-xyG"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -119,7 +119,7 @@
                                                         <constraint firstAttribute="width" constant="128" id="gL8-hw-hTr"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" textContentType="password"/>
+                                                    <textInputTraits key="textInputTraits" returnKeyType="done" textContentType="password"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>

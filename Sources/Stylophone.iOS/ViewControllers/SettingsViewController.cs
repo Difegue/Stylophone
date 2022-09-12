@@ -93,6 +93,10 @@ namespace Stylophone.iOS.ViewControllers
             GithubButton.PrimaryActionTriggered += (s, e) =>
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(Resources.SettingsGithubLink));
 
+            ServerHostnameField.PrimaryActionTriggered += (s, e) => ((UITextField)s).ResignFirstResponder();
+            ServerPortField.PrimaryActionTriggered += (s, e) => ((UITextField)s).ResignFirstResponder();
+            ServerPasswordField.PrimaryActionTriggered += (s, e) => ((UITextField)s).ResignFirstResponder();
+
         }
     }
 
