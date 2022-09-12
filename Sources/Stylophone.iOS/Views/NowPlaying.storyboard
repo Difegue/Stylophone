@@ -246,12 +246,12 @@
                                     <variation key="default">
                                         <mask key="constraints">
                                             <exclude reference="clh-gF-B5P"/>
-                                            <exclude reference="0ED-dw-maN"/>
                                             <exclude reference="8KU-6c-FfF"/>
-                                            <exclude reference="AQC-t5-1Z3"/>
-                                            <exclude reference="yYw-ct-TYn"/>
                                             <exclude reference="qqE-UV-hXb"/>
                                             <exclude reference="lmG-cz-i7S"/>
+                                            <exclude reference="0ED-dw-maN"/>
+                                            <exclude reference="AQC-t5-1Z3"/>
+                                            <exclude reference="yYw-ct-TYn"/>
                                             <exclude reference="GRW-HG-97x"/>
                                             <exclude reference="ep7-zK-Ajj"/>
                                         </mask>
@@ -263,7 +263,6 @@
                                             <exclude reference="nVX-PU-aW4"/>
                                             <exclude reference="vi2-fi-uGV"/>
                                             <exclude reference="y3n-WS-UXH"/>
-                                            <include reference="0ED-dw-maN"/>
                                             <include reference="8KU-6c-FfF"/>
                                             <exclude reference="Ykn-Sg-Z4T"/>
                                             <exclude reference="gFP-gR-vh2"/>
@@ -274,6 +273,7 @@
                                             <exclude reference="FXJ-hp-PA6"/>
                                             <include reference="lmG-cz-i7S"/>
                                             <exclude reference="ru5-Uw-1or"/>
+                                            <include reference="0ED-dw-maN"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular">
@@ -289,9 +289,9 @@
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
                                         <mask key="constraints">
+                                            <exclude reference="A5j-EC-2vw"/>
                                             <include reference="AQC-t5-1Z3"/>
                                             <include reference="yYw-ct-TYn"/>
-                                            <exclude reference="A5j-EC-2vw"/>
                                             <include reference="GRW-HG-97x"/>
                                             <exclude reference="GnG-mr-zne"/>
                                             <include reference="ep7-zK-Ajj"/>
@@ -389,8 +389,8 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist1, Artist2, Artist3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pu2-Xs-TVz">
-                                                <rect key="frame" x="32" y="70.5" width="186" height="23"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pu2-Xs-TVz">
+                                                <rect key="frame" x="32" y="70.5" width="15.5" height="23"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -554,11 +554,11 @@
                                                 <exclude reference="W4p-ZJ-1br"/>
                                                 <exclude reference="hRv-nI-0sI"/>
                                                 <exclude reference="sON-QN-IKN"/>
+                                                <exclude reference="qdx-KM-zw2"/>
                                                 <exclude reference="4Cw-C8-gfb"/>
                                                 <exclude reference="gvi-Zs-cTV"/>
                                                 <exclude reference="h6q-Om-RsB"/>
                                                 <exclude reference="lBY-15-sxl"/>
-                                                <exclude reference="qdx-KM-zw2"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -583,8 +583,8 @@
                                                 <include reference="4la-bA-Etd"/>
                                                 <include reference="6Tf-TA-5Xd"/>
                                                 <include reference="ATW-CF-cR9"/>
-                                                <include reference="4Cw-C8-gfb"/>
                                                 <include reference="1gc-NI-O3C"/>
+                                                <include reference="4Cw-C8-gfb"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">

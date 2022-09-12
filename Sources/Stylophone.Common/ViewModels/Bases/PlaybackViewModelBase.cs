@@ -433,9 +433,15 @@ namespace Stylophone.Common.ViewModels
 
         /// <summary>
         ///     Toggles the state between the track playing
-        ///     and not playing
+        ///     and not playing. If playback is fully stopped, this will play index 0.
         /// </summary>
-        public void ChangePlaybackState() => _ = _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+        public void ChangePlaybackState()
+        {
+            if (_mpdService.CurrentStatus.State == MpdState.Stop)
+                _mpdService.SafelySendCommandAsync(new PlayCommand(0));
+            else
+                _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+        }
 
         /// <summary>
         ///     Go forward one track

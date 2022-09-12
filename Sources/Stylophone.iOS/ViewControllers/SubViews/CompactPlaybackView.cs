@@ -45,6 +45,9 @@ namespace Stylophone.iOS.ViewControllers
             ShadowCaster.Layer.ShadowRadius = 4;
 
             AlbumArt.Layer.CornerRadius = 8;
+
+            // Fallback default
+            TrackTitle.Text = Localization.Strings.Resources.NotificationNoTrackPlaying;
         }
 
         public override void LayoutSubviews()
