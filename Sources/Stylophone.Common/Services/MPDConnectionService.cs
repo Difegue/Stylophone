@@ -19,7 +19,7 @@ namespace Stylophone.Common.Services
     public class MPDConnectionService
     {
         private const int ConnectionPoolSize = 5;
-        public static MpdStatus BOGUS_STATUS = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "", "");
+        public static MpdStatus BOGUS_STATUS = new MpdStatus(-1, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "", "");
 
         private INotificationService _notificationService;
 

@@ -73,6 +73,7 @@ namespace Stylophone.iOS.ViewControllers
 
             ServerMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleMute();
             Binder.Bind<double>(ServerVolumeSlider, "value", nameof(ViewModel.MediaVolume), true);
+            Binder.Bind<bool>(ServerVolumeSlider, "enabled", nameof(ViewModel.CanSetVolume));
             Binder.Bind<double>(ServerVolume, "text", nameof(ViewModel.MediaVolume), valueTransformer: intToStringTransformer);
             
         }

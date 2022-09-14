@@ -28,6 +28,9 @@ namespace Stylophone.iOS
         [Export("window")]
         public UIWindow Window { get; set; }
 
+        public event EventHandler<EventArgs> ApplicationWillResign;
+        public event EventHandler<EventArgs> ApplicationWillBecomeActive;
+
         public UISplitViewController RootViewController { get; set; }
 
         public UIColor AppColor => UIColor.FromDynamicProvider((traitCollection) =>
@@ -50,7 +53,7 @@ namespace Stylophone.iOS
             RootViewController?.ShowColumn(UISplitViewControllerColumn.Secondary);
         }
 
-        [Export("application:didFinishLaunchingWithOptions:")]
+        //[Export("application:didFinishLaunchingWithOptions:")]
         public bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
             // Enable Now Playing integration
@@ -64,6 +67,18 @@ namespace Stylophone.iOS
             Window.TintColor = AppColor;
 
             return true;
+        }
+
+        //[Export("applicationWillResignActive:")]
+        public void OnResignActivation(UIApplication application)
+        {
+            ApplicationWillResign?.Invoke(this, EventArgs.Empty);
+        }
+
+        //[Export("applicationDidBecomeActive:")]
+        public void OnActivated(UIApplication application)
+        {
+            ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task InitializeApplicationAsync()

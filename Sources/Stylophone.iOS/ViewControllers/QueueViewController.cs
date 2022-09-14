@@ -31,6 +31,14 @@ namespace Stylophone.iOS.ViewControllers
             base.AwakeFromNib();
 
             ViewModel.PropertyChanged += UpdateListOnPlaylistVersionChange;
+
+            (UIApplication.SharedApplication.Delegate as AppDelegate).ApplicationWillBecomeActive += OnLeavingBackground;
+        }
+
+        private void OnLeavingBackground(object sender, EventArgs e)
+        {
+            // Reload queue 
+            ViewModel.LoadInitialDataAsync();
         }
 
         public override void ViewDidLoad()

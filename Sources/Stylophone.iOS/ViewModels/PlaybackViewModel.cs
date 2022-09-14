@@ -17,12 +17,14 @@ namespace Stylophone.iOS.ViewModels
         public PlaybackViewModel(INavigationService navigationService, INotificationService notificationService, IDispatcherService dispatcherService, IInteropService interop, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory, LocalPlaybackViewModel localPlayback) :
             base(navigationService, notificationService, dispatcherService, interop, mpdService, trackVmFactory, localPlayback)
         {
-            //Application.Current.LeavingBackground += CurrentOnLeavingBackground;
+            (UIApplication.SharedApplication.Delegate as AppDelegate).ApplicationWillBecomeActive += OnLeavingBackground;
 
-            ((NavigationService)_navigationService).Navigated += (s, e) =>
-                _dispatcherService.ExecuteOnUIThreadAsync(() => {
-                    //ShowTrackName = _navigationService.CurrentPageViewModelType != typeof(PlaybackViewModelBase);
-                });
+        }
+
+        private void OnLeavingBackground(object sender, EventArgs e)
+        {
+            // Refresh all
+            UpdateInformation(sender, null);
         }
 
         public override Task SwitchToCompactViewAsync(EventArgs obj)

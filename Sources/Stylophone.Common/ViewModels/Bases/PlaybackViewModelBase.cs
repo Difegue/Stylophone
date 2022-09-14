@@ -98,6 +98,11 @@ namespace Stylophone.Common.ViewModels
         public bool HasNextTrack => NextTrack != null;
 
         /// <summary>
+        /// "(deprecated: -1 if the volume cannot be determined)"
+        /// </summary>
+        public bool CanSetVolume => _mpdService.CurrentStatus.Volume != -1; 
+
+        /// <summary>
         /// The current playing track
         /// </summary>
         [ObservableProperty]
@@ -171,7 +176,7 @@ namespace Stylophone.Common.ViewModels
             set
             {
                 // HACK: Abort if mpdService doesn't have updated volume from the server yet
-                if (_mpdService.CurrentStatus == MPDConnectionService.BOGUS_STATUS)
+                if (_mpdService.CurrentStatus == MPDConnectionService.BOGUS_STATUS || !CanSetVolume)
                     return;
 
                 SetProperty(ref _internalVolume, value);
@@ -195,7 +200,7 @@ namespace Stylophone.Common.ViewModels
                     }, cts.Token));
 
                 // Update the UI
-                if ((int)value == 0)
+                if ((int)value <= 0)
                 {
                     VolumeIcon = _interop.GetIcon(PlaybackIcon.VolumeMute);
                 }
@@ -275,18 +280,11 @@ namespace Stylophone.Common.ViewModels
         protected async void UpdateInformation(object sender, EventArgs e)
         {
             var status = _mpdService.CurrentStatus;
+            OnPropertyChanged(nameof(CanSetVolume));
 
             // Only call the following if the player exists and the time is greater then 0.
             if (status.Elapsed.TotalMilliseconds <= 0)
                 return;
-
-            // Update song in case we went out of sync
-            if (status.SongId != CurrentTrack?.File?.Id)
-            {
-                OnTrackChange(this, new SongChangedEventArgs { NewSongId = status.SongId });
-                OnStateChange(this, null);
-                await UpdateUpNextAsync(_mpdService.CurrentStatus);
-            }
 
             if (!HasNextTrack)
                 await UpdateUpNextAsync(status);

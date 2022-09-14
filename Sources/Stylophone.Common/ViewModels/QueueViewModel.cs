@@ -193,7 +193,6 @@ namespace Stylophone.Common.ViewModels
             {
                 _ = Task.Run(async () =>
                 {
-
                     var response = await _mpdService.SafelySendCommandAsync(new PlChangesCommand(PlaylistVersion));
 
                     if (response != null)
@@ -240,6 +239,8 @@ namespace Stylophone.Common.ViewModels
 
         public async Task LoadInitialDataAsync()
         {
+            Source.CollectionChanged -= Source_CollectionChanged;
+
             var tracks = new List<TrackViewModel>();
             var response = await _mpdService.SafelySendCommandAsync(new PlaylistInfoCommand());
 
