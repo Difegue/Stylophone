@@ -11,6 +11,7 @@ using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -37,8 +38,8 @@ namespace Stylophone.iOS.ViewControllers
 
         private void OnLeavingBackground(object sender, EventArgs e)
         {
-            // Reload queue 
-            ViewModel.LoadInitialDataAsync();
+            if (_mpdService.IsConnected)
+                Task.Run(async () => await ViewModel.LoadInitialDataAsync());
         }
 
         public override void ViewDidLoad()
@@ -77,8 +78,9 @@ namespace Stylophone.iOS.ViewControllers
                 UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
                 {
                     var indexPath = NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0);
+                    var tableViewRows = TableView.NumberOfRowsInSection(0);
 
-                    if (TableView.NumberOfRowsInSection(0) <= indexPath.Row)
+                    if (tableViewRows >= indexPath.Row)
                         TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
                 });
         }

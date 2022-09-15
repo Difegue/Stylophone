@@ -69,14 +69,14 @@ namespace Stylophone.Common.ViewModels
             _mpdService.ConnectionChanged += OnConnectionChanged;
 
             if (_mpdService.IsConnected)
-                Task.Run(() => InitializeAsync());
+                Initialize();
         }
 
         private void OnConnectionChanged(object sender, EventArgs e)
         {
             if (_mpdService.IsConnected)
             {
-                Task.Run(() => InitializeAsync());
+                Initialize();
             }
             else
             {
@@ -84,13 +84,12 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private async Task InitializeAsync()
+        private void Initialize()
         {
-            OnTrackChange(this, new SongChangedEventArgs { NewSongId = _mpdService.CurrentStatus.SongId });
+            OnTrackChange(this, new SongChangedEventArgs { NewSongId = -1 });
             CurrentTimeValue = _mpdService.CurrentStatus.Elapsed.TotalSeconds;
 
             OnStateChange(this, null);
-            await UpdateUpNextAsync(_mpdService.CurrentStatus);
         }
 
         #region Getters and Setters
