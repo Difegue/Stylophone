@@ -72,11 +72,15 @@ namespace Stylophone.iOS.ViewControllers
         {
             // Scroll to currently playing song
             var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
-            
+
             if (playing != null)
                 UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
-                TableView.ScrollToRow(NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0),
-                    UITableViewScrollPosition.Middle, true));
+                {
+                    var indexPath = NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0);
+
+                    if (TableView.NumberOfRowsInSection(0) <= indexPath.Row)
+                        TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
+                });
         }
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)

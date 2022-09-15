@@ -17,11 +17,11 @@ namespace Stylophone.iOS.Services
 
         public override void ShowInAppNotification(InAppNotification notification)
         {
-            if (UIApplication.SharedApplication.ApplicationState != UIApplicationState.Active)
-                return;
-
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
+                if (UIApplication.SharedApplication.ApplicationState != UIApplicationState.Active)
+                    return;
+
                 RMessageType type = notification.NotificationType switch
                 {
                     NotificationType.Info => RMessageType.Normal,

@@ -53,7 +53,7 @@ namespace Stylophone.iOS
             RootViewController?.ShowColumn(UISplitViewControllerColumn.Secondary);
         }
 
-        //[Export("application:didFinishLaunchingWithOptions:")]
+        [Export("application:didFinishLaunchingWithOptions:")]
         public bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
             // Enable Now Playing integration
@@ -69,13 +69,13 @@ namespace Stylophone.iOS
             return true;
         }
 
-        //[Export("applicationWillResignActive:")]
+        [Export("applicationWillResignActive:")]
         public void OnResignActivation(UIApplication application)
         {
             ApplicationWillResign?.Invoke(this, EventArgs.Empty);
         }
 
-        //[Export("applicationDidBecomeActive:")]
+        [Export("applicationDidBecomeActive:")]
         public void OnActivated(UIApplication application)
         {
             ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty);
