@@ -212,9 +212,11 @@ namespace Stylophone.Common.ViewModels
 
                             while (Source.Count != initialPosition)
                             {
-                                // Make sure
-                                if (Source.Count != initialPosition)
-                                    await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.RemoveAt(initialPosition));
+                                await _dispatcherService.ExecuteOnUIThreadAsync(() => {
+                                    // Make sure
+                                    if (Source.Count != initialPosition)
+                                        Source.RemoveAt(initialPosition);
+                                }); 
                             }
 
                             var toAdd = new List<TrackViewModel>();
