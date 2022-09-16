@@ -15,6 +15,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using System.Threading;
 using AVFoundation;
+using System.Collections.Generic;
 
 namespace Stylophone.iOS
 {
@@ -127,6 +128,12 @@ namespace Stylophone.iOS
                 // Initialize AppCenter
                 AppCenter.Start("90b62f5a-2448-4ef1-81ca-3fb807a5b126",
                    typeof(Analytics), typeof(Crashes));
+
+                AppDomain.CurrentDomain.UnhandledException += (sender, args) => {
+                    var dict = new Dictionary<string, string>();
+                    dict.Add("exception", args.ExceptionObject.ToString());
+                    Analytics.TrackEvent("UnhandledCrash", dict);
+                };
             }
 #endif
         }

@@ -12,6 +12,7 @@ using Stylophone.Localization.Strings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -192,7 +193,7 @@ namespace Stylophone.Common.ViewModels
                     volumeTasks.Add(Task.Run(async () =>
                     {
                         await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
-                        Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
+                        Thread.Sleep(500); // Wait for MPD to acknowledge the new volume in its status...
 
                         if (volumeTasks.Count == 1)
                             MediaVolume = _mpdService.CurrentStatus.Volume; // Update the value to the current server volume
@@ -355,7 +356,8 @@ namespace Stylophone.Common.ViewModels
             {
                 await _mpdService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled));
                 await _mpdService.SafelySendCommandAsync(new SingleCommand(IsSingleEnabled));
-                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+                Thread.Sleep(500); // Wait for MPD to acknowledge the new status...
+                await UpdateUpNextAsync(_mpdService.CurrentStatus);
             }, cts.Token));
 
         }
@@ -375,7 +377,7 @@ namespace Stylophone.Common.ViewModels
             stateTasks.Add(Task.Run(async () =>
             {
                 await _mpdService.SafelySendCommandAsync(new RandomCommand(IsShuffleEnabled));
-                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+                Thread.Sleep(500); // Wait for MPD to acknowledge the new status...
                 await UpdateUpNextAsync(_mpdService.CurrentStatus);
             }, cts.Token));
         }
@@ -395,7 +397,7 @@ namespace Stylophone.Common.ViewModels
             stateTasks.Add(Task.Run(async () =>
             {
                 await _mpdService.SafelySendCommandAsync(new ConsumeCommand(IsConsumeEnabled));
-                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+                Thread.Sleep(500); // Wait for MPD to acknowledge the new status...
             }, cts.Token));
         }
 
@@ -495,7 +497,8 @@ namespace Stylophone.Common.ViewModels
             var nextSongId = status.NextSongId;
             if (nextSongId != -1)
             {
-                var response = await _mpdService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId));
+                // Don't show errors if we can't get the next track due to an old status or something, it's fairly minor
+                var response = await _mpdService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId), false);
 
                 if (response != null)
                 {
@@ -581,6 +584,10 @@ namespace Stylophone.Common.ViewModels
             // Ditto for shuffle/repeat/single
             if (stateTasks.Count == 0)
             {
+                if (status.Random != IsShuffleEnabled || IsRepeatEnabled != status.Repeat || IsSingleEnabled != status.Single)
+                {
+                    UpdateUpNextAsync(status);
+                }
                 IsShuffleEnabled = status.Random;
                 IsRepeatEnabled = status.Repeat;
                 IsSingleEnabled = status.Single;
