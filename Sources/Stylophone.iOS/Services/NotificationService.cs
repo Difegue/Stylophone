@@ -19,6 +19,9 @@ namespace Stylophone.iOS.Services
         {
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
+                if (UIApplication.SharedApplication.ApplicationState != UIApplicationState.Active)
+                    return;
+
                 RMessageType type = notification.NotificationType switch
                 {
                     NotificationType.Info => RMessageType.Normal,

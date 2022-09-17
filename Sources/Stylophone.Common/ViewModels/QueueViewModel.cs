@@ -193,7 +193,6 @@ namespace Stylophone.Common.ViewModels
             {
                 _ = Task.Run(async () =>
                 {
-
                     var response = await _mpdService.SafelySendCommandAsync(new PlChangesCommand(PlaylistVersion));
 
                     if (response != null)
@@ -213,9 +212,11 @@ namespace Stylophone.Common.ViewModels
 
                             while (Source.Count != initialPosition)
                             {
-                                // Make sure
-                                if (Source.Count != initialPosition)
-                                    await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.RemoveAt(initialPosition));
+                                await _dispatcherService.ExecuteOnUIThreadAsync(() => {
+                                    // Make sure
+                                    if (Source.Count != initialPosition)
+                                        Source.RemoveAt(initialPosition);
+                                }); 
                             }
 
                             var toAdd = new List<TrackViewModel>();
@@ -240,6 +241,8 @@ namespace Stylophone.Common.ViewModels
 
         public async Task LoadInitialDataAsync()
         {
+            Source.CollectionChanged -= Source_CollectionChanged;
+
             var tracks = new List<TrackViewModel>();
             var response = await _mpdService.SafelySendCommandAsync(new PlaylistInfoCommand());
 

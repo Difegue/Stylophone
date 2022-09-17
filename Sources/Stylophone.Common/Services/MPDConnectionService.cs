@@ -11,6 +11,11 @@ using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
 using MpcNET.Commands.Reflection;
 using Stylophone.Localization.Strings;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Stylophone.Common.ViewModels;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter;
+using System.Drawing;
 
 namespace Stylophone.Common.Services
 {
@@ -19,7 +24,7 @@ namespace Stylophone.Common.Services
     public class MPDConnectionService
     {
         private const int ConnectionPoolSize = 5;
-        public static MpdStatus BOGUS_STATUS = new MpdStatus(0, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "", "");
+        public static MpdStatus BOGUS_STATUS = new MpdStatus(-1, false, false, false, false, -1, -1, -1, MpdState.Unknown, -1, -1, -1, -1, TimeSpan.Zero, TimeSpan.Zero, -1, -1, -1, -1, -1, "", "");
 
         private INotificationService _notificationService;
 
@@ -70,6 +75,7 @@ namespace Stylophone.Common.Services
         public async Task InitializeAsync(bool withRetry = false)
         {
             IsConnecting = true;
+            CurrentStatus = BOGUS_STATUS; // Reset status
 
             if (IsConnected)
             {
@@ -89,6 +95,8 @@ namespace Stylophone.Common.Services
             {
                 System.Diagnostics.Debug.WriteLine($"Error while connecting: {e.Message}");
 
+                ConnectionChanged?.Invoke(this, new EventArgs());
+
                 if (withRetry && !cancelToken.IsCancellationRequested)
                 {
                     // The RetryAttempter will call TryConnect() in five seconds.
@@ -100,7 +108,6 @@ namespace Stylophone.Common.Services
             }
 
             IsConnecting = false;
-            ConnectionChanged?.Invoke(this, new EventArgs());
         }
 
         private void ClearResources()
@@ -135,7 +142,6 @@ namespace Stylophone.Common.Services
 
             _mpdEndpoint = new IPEndPoint(ipAddress, _port);
 
-            _idleConnection = await GetConnectionInternalAsync(token);
             _statusConnection = await GetConnectionInternalAsync(token);
 
             ConnectionPool = new ObjectPool<PooledObjectWrapper<MpcConnection>>(ConnectionPoolSize,
@@ -153,11 +159,14 @@ namespace Stylophone.Common.Services
 
             // Connected, initialize basic data
             Version = _statusConnection.Version;
+
+            _idleConnection = await GetConnectionInternalAsync(_cancelIdle.Token);
             await UpdatePlaylistsAsync();
             InitializeStatusUpdater(_cancelIdle.Token);
 
-            ConnectionChanged?.Invoke(this, new EventArgs());
+            IsConnecting = false;
             IsConnected = true;
+            ConnectionChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -176,8 +185,11 @@ namespace Stylophone.Common.Services
         /// <typeparam name="T">Return type of the command</typeparam>
         /// <param name="command">IMpcCommand to send</param>
         /// <returns>The command results, or default value.</returns>
-        public async Task<T> SafelySendCommandAsync<T>(IMpcCommand<T> command)
+        public async Task<T> SafelySendCommandAsync<T>(IMpcCommand<T> command, bool showError = true)
         {
+            if (!IsConnected)
+                return default(T);
+
             try
             {
                 using (var c = await GetConnectionAsync())
@@ -198,8 +210,23 @@ namespace Stylophone.Common.Services
             }
             catch (Exception e)
             {
-                _notificationService.ShowInAppNotification(string.Format(Resources.ErrorSendingMPDCommand, command.GetType().Name), 
-                    e.Message, NotificationType.Error);
+                System.Diagnostics.Debug.WriteLine($"MPD Error: {e.Message}");
+
+                if (showError)
+                    _notificationService.ShowInAppNotification(string.Format(Resources.ErrorSendingMPDCommand, command.GetType().Name), 
+                        e.Message, NotificationType.Error);
+
+#if DEBUG
+#else
+            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
+            if (enableAnalytics)
+            {
+                var dict = new Dictionary<string, string>();
+                dict.Add("command", command.Serialize());
+                dict.Add("exception", e.ToString());
+                Analytics.TrackEvent("MPDError", dict);
+            }
+#endif
             }
 
             return default(T);
@@ -226,16 +253,21 @@ namespace Stylophone.Common.Services
 
         private void InitializeStatusUpdater(CancellationToken token = default)
         {
-            // Update status every second
-            _statusUpdater = new System.Timers.Timer(1000);
-            _statusUpdater.Elapsed += async (s, e) => await UpdateStatusAsync(_statusConnection);
-            _statusUpdater.Start();
-
             // Run an idle loop in a spare thread to fire events when needed
             Task.Run(async () =>
             {
                 while (true)
                 {
+                    if (_statusUpdater?.Enabled != true && _statusConnection.IsConnected)
+                    {
+                        // Update status every second
+                        _statusUpdater?.Stop();
+                        _statusUpdater?.Dispose();
+                        _statusUpdater = new System.Timers.Timer(1000);
+                        _statusUpdater.Elapsed += async (s, e) => await UpdateStatusAsync(_statusConnection);
+                        _statusUpdater.Start();
+                    }
+
                     try
                     {
                         if (token.IsCancellationRequested || _idleConnection == null || !_idleConnection.IsConnected)
@@ -250,11 +282,15 @@ namespace Stylophone.Common.Services
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Error in Idle connection thread: {e.Message}");
-                        await InitializeAsync(true);
+                        if (token.IsCancellationRequested)
+                            System.Diagnostics.Debug.WriteLine($"Idle connection cancelled.");
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error in Idle connection thread: {e.Message}");
+                            await InitializeAsync(true);
+                        }
                     }
                 }
-
             }).ConfigureAwait(false);
         }
 

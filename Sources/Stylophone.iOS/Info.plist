@@ -2,16 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>Stylophone</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.tvc-16.Stylophone</string>
-	<key>CFBundleShortVersionString</key>
-	<string>2.5</string>
-	<key>CFBundleVersion</key>
-	<string>2.5</string>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>com.tvc16.stylophone</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
@@ -19,6 +15,10 @@
 		<string>pt</string>
 		<string>zh</string>
 	</array>
+	<key>CFBundleShortVersionString</key>
+	<string>2.5.4</string>
+	<key>CFBundleVersion</key>
+	<string>2.5.4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -45,6 +45,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>

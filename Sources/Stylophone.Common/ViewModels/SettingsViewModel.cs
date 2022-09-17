@@ -65,6 +65,7 @@ namespace Stylophone.Common.ViewModels
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsServerValid))]
+        [NotifyPropertyChangedFor(nameof(ServerStatus))]
         private bool _isCheckingServer;
 
         [ObservableProperty]
@@ -118,7 +119,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         public bool IsServerValid => _mpdService.IsConnected;
-        public string ServerStatus => IsServerValid ? ServerInfo?.Split('\n')?.First() + (IsStreamingAvailable ? ", "+ Resources.SettingsLocalPlaybackAvailable : "") : 
+        public string ServerStatus => IsCheckingServer ? "..." : IsServerValid ? ServerInfo?.Split('\n')?.First() + (IsStreamingAvailable ? ", "+ Resources.SettingsLocalPlaybackAvailable : "") : 
             Resources.SettingsNoServerError;
 
         partial void OnIsLocalPlaybackEnabledChanged(bool value)
@@ -205,8 +206,10 @@ namespace Stylophone.Common.ViewModels
             var appName = Resources.AppDisplayName;
             Version version = _interop.GetAppVersion();
 
-            return $"{version.Major}.{version.Minor}.{(version.Build > -1 ? version.Build : 0)}";
+            return $"{version.Major}.{version.Minor}.{(version.Revision > -1 ? version.Revision : 0)}";
         }
+
+        public void RetryConnection() => TriggerServerConnection(ServerHost, ServerPort, ServerPassword);
 
         private void TriggerServerConnection(string host, int port, string pass)
         {
@@ -252,7 +255,7 @@ namespace Stylophone.Common.ViewModels
 
                     if (!IsStreamingAvailable)
                         IsLocalPlaybackEnabled = false;
-                } 
+                }
                 else
                 {
                     ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +

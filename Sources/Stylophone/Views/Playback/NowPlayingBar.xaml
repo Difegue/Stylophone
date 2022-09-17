@@ -360,6 +360,7 @@
                         Height="46"
                         Margin="{StaticResource SmallRightMargin}"
                         Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                        IsEnabled="{x:Bind PlaybackViewModel.CanSetVolume, Mode=OneWay}"
                         Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                         FontSize="21"
                         Style="{StaticResource SVButtonStyle}"
@@ -373,6 +374,7 @@
                         Minimum="0"
                         Orientation="Horizontal"
                         PointerWheelChanged="Volume_PointerWheelChanged"
+                        IsEnabled="{x:Bind PlaybackViewModel.CanSetVolume, Mode=OneWay}"
                         Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                 </StackPanel>
 
@@ -438,6 +440,7 @@
                                         Height="46"
                                         Margin="0,0,8,0"
                                         Click="{x:Bind PlaybackViewModel.ToggleMute}"
+                                        IsEnabled="{x:Bind PlaybackViewModel.CanSetVolume, Mode=OneWay}"
                                         Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                                         FontSize="21"
                                         Style="{StaticResource SVButtonStyle}" />
@@ -449,6 +452,7 @@
                                         Minimum="0"
                                         Orientation="Horizontal"
                                         PointerWheelChanged="Volume_PointerWheelChanged"
+                                        IsEnabled="{x:Bind PlaybackViewModel.CanSetVolume, Mode=OneWay}"
                                         Value="{x:Bind PlaybackViewModel.MediaVolume, Mode=TwoWay}" />
                                     <TextBlock
                                         Margin="14,2,0,0"

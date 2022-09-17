@@ -14,10 +14,14 @@
     <PackageReference Include="RangedObservableCollection" Version="1.0.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.1" />
     <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="2.88.1" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Stylophone.Localization\Stylophone.Localization.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Microsoft.AppCenter.Analytics" />
+  </ItemGroup>
 </Project>

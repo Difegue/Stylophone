@@ -191,6 +191,9 @@ namespace Stylophone.Common.Services
             }
             catch (Exception e)
             {
+                if (token.IsCancellationRequested)
+                    return null;
+
                 Debug.WriteLine("Exception caught while getting albumart: " + e);
                 _notificationService.ShowErrorNotification(e);
                 return null;

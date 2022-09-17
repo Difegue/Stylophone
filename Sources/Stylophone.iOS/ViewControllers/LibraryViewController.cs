@@ -64,6 +64,14 @@ namespace Stylophone.iOS.ViewControllers
             CollectionView.PrefetchingEnabled = true;
 
             UpdateDataSource();
+
+            // Start a timer to load visible items every sec -- a bit jank but eh
+            var timer = NSTimer.CreateRepeatingScheduledTimer(TimeSpan.FromSeconds(1), (NSTimer obj) =>
+            {
+                // Make sure we load the displayed items -- We don't specify IndexPaths here, the method picks up visible items automatically
+                CollectionView.PrefetchDataSource.PrefetchItems(CollectionView, new NSIndexPath[] { });
+            });
+            NSRunLoop.Current.AddTimer(timer, NSRunLoopMode.Common);
         }
 
         private void UpdateDataSource()
@@ -74,9 +82,6 @@ namespace Stylophone.iOS.ViewControllers
             snapshot.AppendItems(items);
 
             _dataSource.ApplySnapshot(snapshot, new NSString("base"), true);
-
-            // Make sure we load the displayed items
-            CollectionView.PrefetchDataSource.PrefetchItems(CollectionView, new NSIndexPath[] { });
         }
 
         private UICollectionViewCell GetAlbumViewCell(UICollectionView collectionView, NSIndexPath indexPath, NSObject identifier)
@@ -87,12 +92,6 @@ namespace Stylophone.iOS.ViewControllers
             cell.Initialize(holder.ViewModel);
 
             return cell;
-        }
-
-        public override void Scrolled(UIScrollView scrollView)
-        {
-            var visibleIndexes = CollectionView.IndexPathsForVisibleItems;
-
         }
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
@@ -149,7 +148,7 @@ namespace Stylophone.iOS.ViewControllers
             if (referenceSize.Width < 600)
                 size = new CGSize(148, 148);
 
-            if (referenceSize.Width < 350)
+            if (referenceSize.Width < 350 || referenceSize.Width == 490) 
                 size = new CGSize(120, 120);
 
             return size;

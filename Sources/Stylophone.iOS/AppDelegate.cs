@@ -15,6 +15,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using System.Threading;
 using AVFoundation;
+using System.Collections.Generic;
 
 namespace Stylophone.iOS
 {
@@ -27,6 +28,9 @@ namespace Stylophone.iOS
 
         [Export("window")]
         public UIWindow Window { get; set; }
+
+        public event EventHandler<EventArgs> ApplicationWillResign;
+        public event EventHandler<EventArgs> ApplicationWillBecomeActive;
 
         public UISplitViewController RootViewController { get; set; }
 
@@ -64,6 +68,18 @@ namespace Stylophone.iOS
             Window.TintColor = AppColor;
 
             return true;
+        }
+
+        [Export("applicationWillResignActive:")]
+        public void OnResignActivation(UIApplication application)
+        {
+            ApplicationWillResign?.Invoke(this, EventArgs.Empty);
+        }
+
+        [Export("applicationDidBecomeActive:")]
+        public void OnActivated(UIApplication application)
+        {
+            ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task InitializeApplicationAsync()
@@ -112,6 +128,12 @@ namespace Stylophone.iOS
                 // Initialize AppCenter
                 AppCenter.Start("90b62f5a-2448-4ef1-81ca-3fb807a5b126",
                    typeof(Analytics), typeof(Crashes));
+
+                AppDomain.CurrentDomain.UnhandledException += (sender, args) => {
+                    var dict = new Dictionary<string, string>();
+                    dict.Add("exception", args.ExceptionObject.ToString());
+                    Analytics.TrackEvent("UnhandledCrash", dict);
+                };
             }
 #endif
         }

@@ -11,6 +11,7 @@ using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -31,6 +32,14 @@ namespace Stylophone.iOS.ViewControllers
             base.AwakeFromNib();
 
             ViewModel.PropertyChanged += UpdateListOnPlaylistVersionChange;
+
+            (UIApplication.SharedApplication.Delegate as AppDelegate).ApplicationWillBecomeActive += OnLeavingBackground;
+        }
+
+        private void OnLeavingBackground(object sender, EventArgs e)
+        {
+            if (_mpdService.IsConnected)
+                Task.Run(async () => await ViewModel.LoadInitialDataAsync());
         }
 
         public override void ViewDidLoad()
@@ -64,11 +73,22 @@ namespace Stylophone.iOS.ViewControllers
         {
             // Scroll to currently playing song
             var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
-            
+
             if (playing != null)
                 UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
-                TableView.ScrollToRow(NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0),
-                    UITableViewScrollPosition.Middle, true));
+                {
+                    try
+                    {
+                        var indexPath = NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0);
+                        var tableViewRows = TableView.NumberOfRowsInSection(0);
+
+                        if (tableViewRows >= indexPath.Row)
+                            TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
+                    } catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error while scrolling to row: {e}");
+                    }
+                });
         }
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)

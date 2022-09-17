@@ -12,6 +12,7 @@ using Stylophone.Localization.Strings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -69,14 +70,14 @@ namespace Stylophone.Common.ViewModels
             _mpdService.ConnectionChanged += OnConnectionChanged;
 
             if (_mpdService.IsConnected)
-                Task.Run(() => InitializeAsync());
+                Initialize();
         }
 
         private void OnConnectionChanged(object sender, EventArgs e)
         {
             if (_mpdService.IsConnected)
             {
-                Task.Run(() => InitializeAsync());
+                Initialize();
             }
             else
             {
@@ -84,18 +85,22 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
-        private async Task InitializeAsync()
+        private void Initialize()
         {
-            OnTrackChange(this, new SongChangedEventArgs { NewSongId = _mpdService.CurrentStatus.SongId });
+            OnTrackChange(this, new SongChangedEventArgs { NewSongId = -1 });
             CurrentTimeValue = _mpdService.CurrentStatus.Elapsed.TotalSeconds;
 
             OnStateChange(this, null);
-            await UpdateUpNextAsync(_mpdService.CurrentStatus);
         }
 
         #region Getters and Setters
 
         public bool HasNextTrack => NextTrack != null;
+
+        /// <summary>
+        /// "(deprecated: -1 if the volume cannot be determined)"
+        /// </summary>
+        public bool CanSetVolume => _mpdService.CurrentStatus.Volume != -1; 
 
         /// <summary>
         /// The current playing track
@@ -171,7 +176,7 @@ namespace Stylophone.Common.ViewModels
             set
             {
                 // HACK: Abort if mpdService doesn't have updated volume from the server yet
-                if (_mpdService.CurrentStatus == MPDConnectionService.BOGUS_STATUS)
+                if (_mpdService.CurrentStatus == MPDConnectionService.BOGUS_STATUS || !CanSetVolume)
                     return;
 
                 SetProperty(ref _internalVolume, value);
@@ -188,12 +193,14 @@ namespace Stylophone.Common.ViewModels
                     volumeTasks.Add(Task.Run(async () =>
                     {
                         await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)value));
-                        Thread.Sleep(1000); // Wait for MPD to acknowledge the new volume in its status...
-                        MediaVolume = _mpdService.CurrentStatus.Volume; // Update the value to the current server volume
+                        Thread.Sleep(500); // Wait for MPD to acknowledge the new volume in its status...
+
+                        if (volumeTasks.Count == 1)
+                            MediaVolume = _mpdService.CurrentStatus.Volume; // Update the value to the current server volume
                     }, cts.Token));
 
                 // Update the UI
-                if ((int)value == 0)
+                if ((int)value <= 0)
                 {
                     VolumeIcon = _interop.GetIcon(PlaybackIcon.VolumeMute);
                 }
@@ -273,18 +280,11 @@ namespace Stylophone.Common.ViewModels
         protected async void UpdateInformation(object sender, EventArgs e)
         {
             var status = _mpdService.CurrentStatus;
+            OnPropertyChanged(nameof(CanSetVolume));
 
             // Only call the following if the player exists and the time is greater then 0.
             if (status.Elapsed.TotalMilliseconds <= 0)
                 return;
-
-            // Update song in case we went out of sync
-            if (status.SongId != CurrentTrack?.File?.Id)
-            {
-                OnTrackChange(this, new SongChangedEventArgs { NewSongId = status.SongId });
-                OnStateChange(this, null);
-                await UpdateUpNextAsync(_mpdService.CurrentStatus);
-            }
 
             if (!HasNextTrack)
                 await UpdateUpNextAsync(status);
@@ -356,7 +356,8 @@ namespace Stylophone.Common.ViewModels
             {
                 await _mpdService.SafelySendCommandAsync(new RepeatCommand(IsRepeatEnabled));
                 await _mpdService.SafelySendCommandAsync(new SingleCommand(IsSingleEnabled));
-                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+                Thread.Sleep(500); // Wait for MPD to acknowledge the new status...
+                await UpdateUpNextAsync(_mpdService.CurrentStatus);
             }, cts.Token));
 
         }
@@ -376,7 +377,7 @@ namespace Stylophone.Common.ViewModels
             stateTasks.Add(Task.Run(async () =>
             {
                 await _mpdService.SafelySendCommandAsync(new RandomCommand(IsShuffleEnabled));
-                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+                Thread.Sleep(500); // Wait for MPD to acknowledge the new status...
                 await UpdateUpNextAsync(_mpdService.CurrentStatus);
             }, cts.Token));
         }
@@ -396,7 +397,7 @@ namespace Stylophone.Common.ViewModels
             stateTasks.Add(Task.Run(async () =>
             {
                 await _mpdService.SafelySendCommandAsync(new ConsumeCommand(IsConsumeEnabled));
-                Thread.Sleep(1000); // Wait for MPD to acknowledge the new status...
+                Thread.Sleep(500); // Wait for MPD to acknowledge the new status...
             }, cts.Token));
         }
 
@@ -431,9 +432,15 @@ namespace Stylophone.Common.ViewModels
 
         /// <summary>
         ///     Toggles the state between the track playing
-        ///     and not playing
+        ///     and not playing. If playback is fully stopped, this will play index 0.
         /// </summary>
-        public void ChangePlaybackState() => _ = _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+        public void ChangePlaybackState()
+        {
+            if (_mpdService.CurrentStatus.State == MpdState.Stop)
+                _mpdService.SafelySendCommandAsync(new PlayCommand(0));
+            else
+                _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+        }
 
         /// <summary>
         ///     Go forward one track
@@ -490,7 +497,8 @@ namespace Stylophone.Common.ViewModels
             var nextSongId = status.NextSongId;
             if (nextSongId != -1)
             {
-                var response = await _mpdService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId));
+                // Don't show errors if we can't get the next track due to an old status or something, it's fairly minor
+                var response = await _mpdService.SafelySendCommandAsync(new PlaylistIdCommand(nextSongId), false);
 
                 if (response != null)
                 {
@@ -576,6 +584,10 @@ namespace Stylophone.Common.ViewModels
             // Ditto for shuffle/repeat/single
             if (stateTasks.Count == 0)
             {
+                if (status.Random != IsShuffleEnabled || IsRepeatEnabled != status.Repeat || IsSingleEnabled != status.Single)
+                {
+                    UpdateUpNextAsync(status);
+                }
                 IsShuffleEnabled = status.Random;
                 IsRepeatEnabled = status.Repeat;
                 IsSingleEnabled = status.Single;
