@@ -206,18 +206,17 @@ namespace Stylophone.Common.ViewModels
                         }
                         else
                         {
-                            // PlChanges gives the full list of files starting from the change, so we delete all existing tracks from the source after that change, and swap the new ones in.
+                            // PlChanges gives the full list of files starting from the change,
+                            // so we delete all existing tracks from the source after that change, and swap the new ones in.
                             // If the response is empty, that means the last file in the source was removed.
                             var initialPosition = response.Count() == 0 ? Source.Count - 1 : response.First().Position;
 
-                            while (Source.Count != initialPosition)
-                            {
-                                await _dispatcherService.ExecuteOnUIThreadAsync(() => {
-                                    // Make sure
-                                    if (Source.Count != initialPosition)
-                                        Source.RemoveAt(initialPosition);
-                                }); 
-                            }
+                            await _dispatcherService.ExecuteOnUIThreadAsync(() => {
+                                while (Source.Count > initialPosition)
+                                {
+                                    Source.RemoveAt(initialPosition);  
+                                }
+                            });
 
                             var toAdd = new List<TrackViewModel>();
                             foreach (var item in response)

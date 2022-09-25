@@ -12,7 +12,7 @@
 <Identity 
     Name="StylophoneDebug"
     Publisher="CN=B2F6FFCA-07C7-479C-AC33-2C75463C7DCE"
-    Version="2.5.2.0" />
+    Version="2.5.5.0" />
 
   <mp:PhoneIdentity PhoneProductId="b9cbe0bc-1e9d-42c8-abf1-85c63af45f83" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

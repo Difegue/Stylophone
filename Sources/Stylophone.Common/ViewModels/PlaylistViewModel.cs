@@ -248,7 +248,12 @@ namespace Stylophone.Common.ViewModels
                         DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
 
                         if (DominantColor == default(SKColor))
-                            DominantColor = _interop.GetAccentColor();
+                        {
+                            await _dispatcherService.ExecuteOnUIThreadAsync(() =>
+                            {
+                                DominantColor = _interop.GetAccentColor();
+                            });
+                        }
 
                         IsLight = (!art?.DominantColor?.IsDark).GetValueOrDefault();
                     }

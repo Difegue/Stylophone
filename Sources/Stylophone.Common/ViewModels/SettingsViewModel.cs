@@ -78,11 +78,7 @@ namespace Stylophone.Common.ViewModels
         partial void OnElementThemeChanged(Theme value)
         {
             Task.Run (async () => await _interop.SetThemeAsync(value));
-
-            if (value != _elementTheme)
-            {
-                _applicationStorageService.SetValue(nameof(ElementTheme), value.ToString());
-            }
+            _applicationStorageService.SetValue(nameof(ElementTheme), value.ToString());
         }
 
         partial void OnServerHostChanged(string value)
