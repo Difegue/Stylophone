@@ -6,7 +6,7 @@ Stylophone
 [**Music Player Daemon**](https://www.musicpd.org/) Client for UWP and iOS/iPadOS.  
 Based on [MpcNET](https://github.com/Difegue/MpcNET), my own fork of the original .NET Client Library for MPD. (now on NuGet!)   
 
-[<img src="https://getbadgecdn.azureedge.net/images/en-us%20dark.svg" width="200"/>](https://www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge) [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="216"/>](https://apps.apple.com/us/app/stylophone/id1644672889?itsct=apps_box_link&itscg=30200)
+[<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>](https://www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge) [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="216"/>](https://apps.apple.com/us/app/stylophone/id1644672889?itsct=apps_box_link&itscg=30200)
 
 [Buy a sticker if you want!](https://ko-fi.com/s/9fcf421b6e)  
 
