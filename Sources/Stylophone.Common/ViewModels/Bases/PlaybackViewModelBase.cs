@@ -61,10 +61,9 @@ namespace Stylophone.Common.ViewModels
 
             _internalVolume = _mpdService.CurrentStatus.Volume;
 
-            // Bind timer methods and start it
+            // Bind timer methods 
             _updateInformationTimer = new System.Timers.Timer(500);
             _updateInformationTimer.Elapsed += UpdateInformation;
-            _updateInformationTimer.Start();
 
             // Update info to current track
             _mpdService.ConnectionChanged += OnConnectionChanged;
@@ -82,6 +81,7 @@ namespace Stylophone.Common.ViewModels
             else
             {
                 IsTrackInfoAvailable = false;
+                _updateInformationTimer?.Stop();
             }
         }
 
@@ -90,6 +90,7 @@ namespace Stylophone.Common.ViewModels
             OnTrackChange(this, new SongChangedEventArgs { NewSongId = -1 });
             CurrentTimeValue = _mpdService.CurrentStatus.Elapsed.TotalSeconds;
 
+            _updateInformationTimer.Start();
             OnStateChange(this, null);
         }
 

@@ -40,7 +40,6 @@ namespace Stylophone.Common.Services
         {
             _queueCanceller?.Cancel();
             _queueCanceller = new CancellationTokenSource();
-
             var token = _queueCanceller.Token;
 
             _albumArtQueue = new Stack<AlbumViewModel>();
@@ -79,6 +78,11 @@ namespace Stylophone.Common.Services
                     }
                 }
             }).ConfigureAwait(false);
+        }
+
+        public void Stop()
+        {
+            _queueCanceller?.Cancel();
         }
 
         /// <summary>

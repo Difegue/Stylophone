@@ -77,13 +77,7 @@ namespace Stylophone.Common.Services
             IsConnecting = true;
             CurrentStatus = BOGUS_STATUS; // Reset status
 
-            if (IsConnected)
-            {
-                IsConnected = false;
-                ConnectionChanged?.Invoke(this, new EventArgs());
-            }
-
-            ClearResources();
+            Disconnect();
 
             var cancelToken = _cancelConnect.Token;
 
@@ -106,23 +100,31 @@ namespace Stylophone.Common.Services
                     _connectionRetryAttempter.Start();
                 }
             }
-
+            
             IsConnecting = false;
         }
 
-        private void ClearResources()
+        public void Disconnect()
         {
-            _idleConnection?.SendAsync(new NoIdleCommand());
-            _idleConnection?.DisconnectAsync();
-            _statusConnection?.DisconnectAsync();
+            
+            if (IsConnected)
+            {
+                System.Diagnostics.Debug.WriteLine($"Terminating MPD connections");
+                IsConnected = false;
+                ConnectionChanged?.Invoke(this, new EventArgs());
+            }
+
+            // Stop the idle connection first
+            _cancelIdle?.Cancel();
 
             _connectionRetryAttempter?.Stop();
             _connectionRetryAttempter?.Dispose();
 
+            // Stop the status timer before killing the matching connection
             _statusUpdater?.Stop();
             _statusUpdater?.Dispose();
+            _statusConnection?.DisconnectAsync();
 
-            _cancelIdle?.Cancel();
             _cancelIdle = new CancellationTokenSource();
 
             _cancelConnect?.Cancel();
@@ -270,15 +272,25 @@ namespace Stylophone.Common.Services
 
                     try
                     {
+                        // Run the idleConnection in a wrapper task since MpcNET isn't fully async and will block here
+                        var idleChangesTask = Task.Run(async () => await _idleConnection.SendAsync(new IdleCommand("stored_playlist playlist player mixer output options update")));
+
+                        // Wait for the idle command to finish or for the token to be cancelled
+                        await Task.WhenAny(idleChangesTask, Task.Delay(-1, token));
+
                         if (token.IsCancellationRequested || _idleConnection == null || !_idleConnection.IsConnected)
+                        {
+                            //_idleConnection?.SendAsync(new NoIdleCommand());
+                            _idleConnection?.DisconnectAsync();
                             break;
+                        }
+                        
+                        var message = idleChangesTask.Result;
 
-                        var idleChanges = await _idleConnection.SendAsync(new IdleCommand("stored_playlist playlist player mixer output options update"));
-
-                        if (idleChanges.IsResponseValid)
-                            await HandleIdleResponseAsync(idleChanges.Response.Content);
+                        if (message.IsResponseValid)
+                            await HandleIdleResponseAsync(message.Response.Content);
                         else
-                            throw new Exception(idleChanges.Response?.Content);
+                            throw new Exception(message.Response?.Content);
                     }
                     catch (Exception e)
                     {
