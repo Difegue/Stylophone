@@ -211,11 +211,10 @@ namespace Stylophone.Common.ViewModels
                             // If the response is empty, that means the last file in the source was removed.
                             var initialPosition = response.Count() == 0 ? Source.Count - 1 : response.First().Position;
 
+                            // Get all the tracks between initialPosition and the end of the Source
+                            var tracksToRemove = Source.Skip(initialPosition).ToList();
                             await _dispatcherService.ExecuteOnUIThreadAsync(() => {
-                                while (Source.Count > initialPosition)
-                                {
-                                    Source.RemoveAt(initialPosition);  
-                                }
+                                Source.RemoveRange(tracksToRemove);
                             });
 
                             var toAdd = new List<TrackViewModel>();

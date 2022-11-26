@@ -7,6 +7,7 @@ using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.Specialized;
 
 namespace Stylophone.Views
 {
@@ -31,7 +32,7 @@ namespace Stylophone.Views
         {
             base.OnNavigatedTo(e);
 
-            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            ViewModel.Source.CollectionChanged += ScrollToPlayingSong;
 
             _mpdService.SongChanged += MPDConnectionService_SongChanged;
 
@@ -58,19 +59,16 @@ namespace Stylophone.Views
             });
         }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ScrollToPlayingSong(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ViewModel.Source))
-            {
-                if (QueueList.Items.Count == 0)
-                    return;
+            if (QueueList.Items.Count == 0)
+                return;
 
-                var playing = ViewModel.Source.Where(t => t.IsPlaying && t.File.Id != manualSongId).FirstOrDefault();
-                if (playing != null)
-                {
-                    playing.UpdatePlayingStatus();
-                    QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
-                }
+            var playing = ViewModel.Source.Where(t => t.IsPlaying && t.File.Id != manualSongId).FirstOrDefault();
+            if (playing != null)
+            {
+                playing.UpdatePlayingStatus();
+                QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
             }
         }
 
