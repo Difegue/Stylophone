@@ -225,8 +225,12 @@ namespace Stylophone.Common.Services
             {
                 var dict = new Dictionary<string, string>();
                 dict.Add("command", command.Serialize());
-                dict.Add("exception", e.ToString());
-                Analytics.TrackEvent("MPDError", dict);
+                dict.Add("exception", e.InnerException?.ToString());
+                dict.Add("source", e.Source);
+                dict.Add("message", e.Message);
+                dict.Add("stacktrace", e.StackTrace);
+                    
+                    Analytics.TrackEvent("MPDError", dict);
             }
 #endif
             }
