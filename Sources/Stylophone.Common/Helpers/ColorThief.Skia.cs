@@ -93,6 +93,12 @@ namespace Stylophone.Common.Helpers
         {
             var palette = GetPalette(sourceImage, 3, quality, ignoreWhite);
 
+            // Handle case where GetPalette returns an empty list (because GetColorMap failed?)
+            if (palette.Count == 0)
+            {
+                return new QuantizedColor(SKColors.Black, 1);
+            }
+
             var avgR = Convert.ToByte(palette.Average(a => a.Color.Red));
             var avgG = Convert.ToByte(palette.Average(a => a.Color.Green));
             var avgB = Convert.ToByte(palette.Average(a => a.Color.Blue));
