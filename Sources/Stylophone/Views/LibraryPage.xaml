@@ -4,16 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     xmlns:behaviors="using:Stylophone.Behaviors"
-    xmlns:controls="using:CommunityToolkit.WinUI.Converters"
-    xmlns:converters="using:CommunityToolkit.WinUI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    xmlns:stylophone="using:Stylophone.Helpers"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:media="using:CommunityToolkit.WinUI.Media"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
     <Page.Resources />
@@ -49,37 +47,37 @@
                                 <Border
                                     x:Name="itemThumbnail"
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    ui:Effects.Shadow="{StaticResource CommonShadow}">
-                                    <ContentPresenter x:Name="itemContent" />
+                                    VerticalAlignment="Center">
+                                    <ui:Effects.Shadow>
+                                        <media:AttachedCardShadow CornerRadius="4" Offset="0,2" />
+                                    </ui:Effects.Shadow>
+                                        <ContentPresenter x:Name="itemContent" />
 
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup x:Name="CommonStates">
                                             <VisualState x:Name="Normal" />
                                             <VisualState x:Name="Pressed">
                                                 <Storyboard>
-                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemContent" Storyboard.TargetProperty="Margin">
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemThumbnail" Storyboard.TargetProperty="Margin">
                                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.02" Value="0,-3,0,3" />
                                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.05" Value="0,-1,0,1" />
                                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.08" Value="0,2,0,-2" />
                                                     </ObjectAnimationUsingKeyFrames>
                                                 </Storyboard>
                                                 <VisualState.Setters>
-                                                    <Setter Target="itemThumbnail.ShadowOpacity" Value="0" />
                                                     <Setter Target="itemContent.BorderBrush" Value="{ThemeResource SubtleFillColorTertiaryBrush}" />
                                                     <Setter Target="itemContent.Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}" />
                                                 </VisualState.Setters>
                                             </VisualState>
                                             <VisualState x:Name="PointerOver">
                                                 <Storyboard>
-                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemContent" Storyboard.TargetProperty="Margin">
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemThumbnail" Storyboard.TargetProperty="Margin">
                                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.02" Value="0,0,0,0" />
                                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.07" Value="0,-2,0,2" />
                                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.12" Value="0,-3,0,3" />
                                                     </ObjectAnimationUsingKeyFrames>
                                                 </Storyboard>
                                                 <VisualState.Setters>
-                                                    <Setter Target="itemThumbnail.ShadowOpacity" Value="0.4" />
 
                                                     <Setter Target="itemContent.BorderBrush" Value="{ThemeResource ButtonBackgroundPointerOver}" />
                                                     <Setter Target="itemContent.Foreground" Value="{ThemeResource GridViewItemForegroundPointerOver}" />
@@ -106,7 +104,7 @@
                     <Canvas
                         x:Name="albumCanvas"
                         Width="180"
-                        Height="180">
+                        Height="180" >
                         <Canvas.ContextFlyout>
 
                             <MenuFlyout>
@@ -135,8 +133,6 @@
                             x:Name="Album"
                             Width="180"
                             Height="180"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
                             CornerRadius="4">
 
                             <Border CornerRadius="4">

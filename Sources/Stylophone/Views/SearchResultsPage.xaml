@@ -8,7 +8,7 @@
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
-    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls" xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea" Margin="8,0">
@@ -17,24 +17,22 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal"
-            Spacing="16">
-            <ToggleButton
-                Width="120"
-                Content="{x:Bind strings:Resources.SearchTracksToggle}"
-                IsChecked="{x:Bind ViewModel.SearchTracks, Mode=TwoWay}" />
-            <ToggleButton
-                Width="120"
-                Content="{x:Bind strings:Resources.SearchArtistsToggle}"
-                IsChecked="{x:Bind ViewModel.SearchArtists, Mode=TwoWay}" />
-            <ToggleButton
-                Width="120"
-                Content="{x:Bind strings:Resources.SearchAlbumsToggle}"
-                IsChecked="{x:Bind ViewModel.SearchAlbums, Mode=TwoWay}" />
-        </StackPanel>
+
+
+        <controls:Segmented Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            SelectedIndex="0"
+                            SelectionMode="Single">
+            <controls:SegmentedItem Content="{x:Bind strings:Resources.SearchTracksToggle}"
+                                    IsSelected="{x:Bind ViewModel.SearchTracks, Mode=TwoWay}"
+                                    Icon="{ui:FontIcon Glyph=&#xEC4F;}" />
+            <controls:SegmentedItem Content="{x:Bind strings:Resources.SearchArtistsToggle}"
+                                    IsSelected="{x:Bind ViewModel.SearchArtists, Mode=TwoWay}"
+                                    Icon="{ui:FontIcon Glyph=&#xE13D;}" />
+            <controls:SegmentedItem Content="{x:Bind strings:Resources.SearchAlbumsToggle}"
+                                    IsSelected="{x:Bind ViewModel.SearchAlbums, Mode=TwoWay}"
+                                    Icon="{ui:FontIcon Glyph=&#xE93C;}" />
+        </controls:Segmented>
 
         <Grid
             Grid.Row="1"
