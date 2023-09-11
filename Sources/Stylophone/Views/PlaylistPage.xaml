@@ -9,6 +9,7 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:ui="using:CommunityToolkit.WinUI"
+    xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea" Margin="8,0">
@@ -237,14 +238,14 @@
             <ListView
                 x:Name="QueueList"
                 Margin="0,8"
-                ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                ui7:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                 ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
                 AllowDrop="True"
                 CanReorderItems="True"
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                ui:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
+                ui7:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 ReorderMode="Enabled"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:ui="using:CommunityToolkit.WinUI"
+    xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
 
@@ -46,12 +47,12 @@
             <ListView
                 x:Name="QueueList"
                 Margin="0,8"
-                ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                ui7:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                 ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                ui:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
+                ui7:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
                 <ListView.ContextFlyout>
