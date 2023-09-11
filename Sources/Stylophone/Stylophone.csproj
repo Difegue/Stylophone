@@ -178,12 +178,6 @@
     <Compile Include="Activation\ActivationHandler.cs" />
     <Compile Include="Behaviors\ListViewBehavior.cs" />
     <Compile Include="Behaviors\TreeViewCollapseBehavior.cs" />
-    <Compile Include="Controls\SettingsBlockControl.xaml.cs">
-      <DependentUpon>SettingsBlockControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SettingsDisplayControl.xaml.cs">
-      <DependentUpon>SettingsDisplayControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\DoubleToThicknessConverter.cs" />
     <Compile Include="Converters\SkiaConverters.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
@@ -256,14 +250,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\SettingsBlockControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\SettingsDisplayControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Styles\StyloResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
