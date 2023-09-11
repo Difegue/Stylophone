@@ -117,7 +117,7 @@
                 <!--  Track Image and Navigate to now playing  -->
                 <Border
                     x:Name="AlbumArt"
-                    Margin="6,0,0,0"
+                    Margin="8,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Visibility="Collapsed"
