@@ -14,9 +14,9 @@ using Stylophone.Common.Services;
 using Stylophone.Services;
 using Windows.Foundation;
 using MpcNET.Commands.Playback;
-using CommunityToolkit.Labs.WinUI;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
+using CommunityToolkit.WinUI.Behaviors;
 
 namespace Stylophone.ViewModels
 {

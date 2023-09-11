@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Stylophone="using:Stylophone.Helpers"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea" Margin="8,0">
@@ -57,22 +57,16 @@
 
             <RelativePanel x:Name="Header" Padding="16">
 
-                <controls:DropShadowPanel
+                <Border
                     x:Name="itemHero"
-                    Width="196"
-                    Height="196"
-                    Margin="{StaticResource MediumRightMargin}"
-                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                    BlurRadius="10"
+                    Margin="0,0,64,0"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
-                    ShadowOpacity="0.6"
-                    Color="Black">
+                    ui:Effects.Shadow="{StaticResource CommonShadow}">
 
                     <Grid
                         Width="148"
                         Height="148"
-                        Margin="0,-48,0,0"
                         CornerRadius="4">
                         <Image
                             HorizontalAlignment="Center"
@@ -81,19 +75,14 @@
                             Stretch="UniformToFill" />
                     </Grid>
 
-                </controls:DropShadowPanel>
+                </Border>
 
-                <controls:DropShadowPanel
+                <Border
                     x:Name="itemHero2"
                     Margin="24,0,0,0"
-                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                    BlurRadius="10"
-                    OffsetX="-4"
-                    OffsetY="0"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
-                    ShadowOpacity="0.6"
-                    Color="Black">
+                    ui:Effects.Shadow="{StaticResource CommonShadow}">
 
                     <Grid
                         Width="148"
@@ -106,19 +95,14 @@
                             Stretch="UniformToFill" />
                     </Grid>
 
-                </controls:DropShadowPanel>
+                </Border>
 
-                <controls:DropShadowPanel
+                <Border
                     x:Name="itemHero3"
                     Margin="48,0,0,0"
-                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                    BlurRadius="10"
-                    OffsetX="0"
-                    OffsetY="2"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
-                    ShadowOpacity="0.6"
-                    Color="Black">
+                    ui:Effects.Shadow="{StaticResource CommonShadow}">
 
                     <Grid
                         Width="148"
@@ -136,7 +120,7 @@
                             IsActive="{x:Bind ViewModel.ArtLoaded, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
                     </Grid>
 
-                </controls:DropShadowPanel>
+                </Border>
 
                 <TextBlock
                     x:Name="title"
@@ -324,11 +308,6 @@
                         <Setter Target="artist.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
                         <Setter Target="itemHero2.Margin" Value="24,24,0,0" />
                         <Setter Target="itemHero3.Margin" Value="48,48,0,0" />
-                        <Setter Target="itemHero.OffsetY" Value="2" />
-                        <Setter Target="itemHero2.OffsetX" Value="0" />
-                        <Setter Target="itemHero2.OffsetY" Value="3" />
-                        <Setter Target="itemHero3.OffsetX" Value="0" />
-                        <Setter Target="itemHero3.OffsetY" Value="4" />
                         <Setter Target="propertiesGroup1.Margin" Value="0" />
                         <Setter Target="title.Style" Value="{StaticResource TitleTextBlockStyle}" />
                         <Setter Target="artist.Style" Value="{StaticResource SubtitleTextBlockStyle}" />

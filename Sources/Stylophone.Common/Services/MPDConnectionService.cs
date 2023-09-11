@@ -11,11 +11,6 @@ using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
 using MpcNET.Commands.Reflection;
 using Stylophone.Localization.Strings;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using Stylophone.Common.ViewModels;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter;
-using System.Drawing;
 
 namespace Stylophone.Common.Services
 {

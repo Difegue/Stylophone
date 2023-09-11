@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Stylophone.Helpers;
-using Microsoft.Toolkit.Uwp.Helpers;
 using MpcNET;
 using MpcNET.Commands.Playback;
 using Stylophone.Common.Helpers;
@@ -10,6 +8,7 @@ using Stylophone.Common.ViewModels;
 using Windows.Media;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace Stylophone.Services
 {

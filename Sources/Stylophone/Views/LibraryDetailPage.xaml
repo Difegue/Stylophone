@@ -2,12 +2,12 @@
     x:Class="Stylophone.Views.LibraryDetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:stylophone="using:Stylophone.Helpers"
-    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
 
@@ -57,18 +57,15 @@
 
             <RelativePanel x:Name="Header" Padding="16">
 
-                <controls:DropShadowPanel
+                <Border
                     x:Name="itemHero"
                     Width="148"
                     Height="148"
                     Margin="{StaticResource MediumRightMargin}"
-                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                    BlurRadius="10"
-                    OffsetY="2"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
-                    ShadowOpacity="0.6"
-                    Color="Black">
+                    ui:Effects.Shadow="{StaticResource CommonShadow}"
+                    >
 
                     <Grid
                         x:Name="albumImage"
@@ -87,7 +84,7 @@
                             Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=196}"
                             Stretch="UniformToFill" />
                     </Grid>
-                </controls:DropShadowPanel>
+                </Border>
 
                 <TextBlock
                     x:Name="title"

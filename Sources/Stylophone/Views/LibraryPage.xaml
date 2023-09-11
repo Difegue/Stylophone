@@ -2,15 +2,15 @@
     x:Class="Stylophone.Views.LibraryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     xmlns:behaviors="using:Stylophone.Behaviors"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:controls="using:CommunityToolkit.WinUI.Converters"
+    xmlns:converters="using:CommunityToolkit.WinUI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:stylophone="using:Stylophone.Helpers"
-    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     NavigationCacheMode="Required"
@@ -45,14 +45,11 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <controls:DropShadowPanel
+                                <Border
                                     x:Name="itemThumbnail"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    BlurRadius="10"
-                                    OffsetY="2"
-                                    ShadowOpacity="0.6"
-                                    Color="Black">
+                                    ui:Effects.Shadow="{StaticResource CommonShadow}">
                                     <ContentPresenter x:Name="itemContent" />
 
                                     <VisualStateManager.VisualStateGroups>
@@ -96,7 +93,7 @@
                                         </VisualStateGroup>
 
                                     </VisualStateManager.VisualStateGroups>
-                                </controls:DropShadowPanel>
+                                </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>

@@ -1,6 +1,6 @@
 ﻿using Stylophone.ViewModels;
 using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.Toolkit.Uwp;
+using CommunityToolkit;
 using Stylophone.Common.Helpers;
 using System;
 using System.Threading.Tasks;

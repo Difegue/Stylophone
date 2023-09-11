@@ -1,5 +1,4 @@
 ﻿using System;
-using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Notifications;
 using Stylophone.Common.Interfaces;
@@ -21,7 +20,7 @@ namespace Stylophone.Services
             // Create the toast content
             var content = new ToastContent()
             {
-                // More about the Launch property at https://docs.microsoft.com/dotnet/api/microsoft.toolkit.uwp.notifications.toastcontent
+                // More about the Launch property at https://docs.microsoft.com/dotnet/api/CommunityToolkit.notifications.toastcontent
                 Launch = "ToastContentActivationParams",
 
                 Visual = new ToastVisual()
@@ -47,7 +46,7 @@ namespace Stylophone.Services
                 {
                     Buttons =
                     {
-                        // More about Toast Buttons at https://docs.microsoft.com/dotnet/api/microsoft.toolkit.uwp.notifications.toastbutton
+                        // More about Toast Buttons at https://docs.microsoft.com/dotnet/api/CommunityToolkit.notifications.toastbutton
                         new ToastButton("OK", "ToastButtonActivationArguments")
                         {
                             ActivationType = ToastActivationType.Foreground
