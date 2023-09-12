@@ -1,10 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-ios</TargetFrameworks>
+    <TargetFrameworks>net7.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <CreatePackage>false</CreatePackage>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <CreatePackage>false</CreatePackage>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="ViewControllers\SidebarViewController.designer.cs">
@@ -49,23 +55,17 @@
     <Compile Update="ViewControllers\PlaylistViewController.designer.cs">
       <DependentUpon>PlaylistViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\NowPlayingService.cs" />
-    <Compile Include="Helpers\SymbolUIButton.cs" />
-    <Compile Include="Helpers\SymbolUIButton.designer.cs">
+    <Compile Update="Helpers\SymbolUIButton.designer.cs">
       <DependentUpon>SymbolUIButton.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
-    <PackageReference Include="SkiaSharp.Views" Version="2.88.1">
-    </PackageReference>
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2">
-    </PackageReference>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.2">
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0">
-	<PackageReference Include="VideoLAN.LibVLC.iOS" Version="3.3.17"/>
-    </PackageReference>
+    <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+    <PackageReference Include="SkiaSharp.Views" Version="2.88.5" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+	  <PackageReference Include="VideoLAN.LibVLC.iOS" Version="3.3.18" />
     <PackageReference Include="MpcNET" Version="1.4.0" />
   </ItemGroup>
   <ItemGroup>
