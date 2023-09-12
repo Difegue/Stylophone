@@ -2,7 +2,6 @@
 using UserNotifications;
 using Stylophone.Common.Interfaces;
 using UIKit;
-//using Xam.RMessage;
 
 namespace Stylophone.iOS.Services
 {
@@ -22,16 +21,12 @@ namespace Stylophone.iOS.Services
                 if (UIApplication.SharedApplication.ApplicationState != UIApplicationState.Active)
                     return;
 
-                /*RMessageType type = notification.NotificationType switch
-                {
-                    NotificationType.Info => RMessageType.Normal,
-                    NotificationType.Warning => RMessageType.Warning,
-                    NotificationType.Error => RMessageType.Error,
-                    _ => RMessageType.Normal
-                };
+                // Let's just use alerts until TipKit is available... This is cheap but w/e
+                var alert = new UIAlertView(notification.NotificationTitle, notification.NotificationText, null, "Ok");
 
-                RMessage.ShowNotificationWithTitle(notification.NotificationTitle, notification.NotificationText, type, "",
-                    notification.NotificationType == NotificationType.Error ? 300000 : 2, () => { }); */
+                if (notification.NotificationType == NotificationType.Error) 
+                    alert.Show();
+
             });
         }
 
