@@ -10,11 +10,9 @@ using Stylophone.Common.Helpers;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
-using UIKit;
-// using Pop = ARSPopover.iOS;
-using static Xamarin.Essentials.Permissions;
 using CommunityToolkit.Mvvm.Input;
 using CoreGraphics;
+using UIKit;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -271,22 +269,46 @@ namespace Stylophone.iOS.ViewControllers
         public void ShowVolumePopover(UIButton sourceButton, UIViewController sourceVc = null)
         {
             var sourceBounds = sourceButton.ImageView.Bounds;
+            var size = ViewModel.LocalPlayback.IsEnabled ? new CGSize(276, 176) : new CGSize(276, 96);
 
-            /*var popover = new Pop.ARSPopover
-            {
-                SourceView = sourceButton.ImageView,
-                SourceRect = new CoreGraphics.CGRect(sourceBounds.Width/2, -4, 0, 0),
-                ContentSize = ViewModel.LocalPlayback.IsEnabled ?
-                    new CoreGraphics.CGSize(276, 176) : new CoreGraphics.CGSize(276, 96),
-                ArrowDirection = UIPopoverArrowDirection.Down
-            };
-
-            popover.View.AddSubview(VolumePopover);
+            var popover = new VolumePopoverViewController(VolumePopover, sourceButton, sourceBounds, size);
 
             if (sourceVc == null)
                 sourceVc = this;
 
-            sourceVc.PresentViewController(popover, true, null);*/
+            sourceVc.PresentViewController(popover, true, null);
+        }
+    }
+
+    public class VolumePopoverViewController: UIViewController, IUIPopoverPresentationControllerDelegate
+    {
+        private UIView _volumeView;
+
+        public VolumePopoverViewController(UIView view, UIButton sourceButton, CGRect sourceBounds, CGSize contentSize)
+        {
+            _volumeView = view;
+
+            ModalPresentationStyle = UIModalPresentationStyle.Popover;
+            PopoverPresentationController.SourceItem = sourceButton.ImageView;
+            PopoverPresentationController.Delegate = this;
+            PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Down;
+            PopoverPresentationController.SourceRect = new CGRect(sourceBounds.Width / 2, -4, 0, 0);
+
+            PreferredContentSize = contentSize;
+        }
+
+        [Export("adaptivePresentationStyleForPresentationController:traitCollection:")]
+        public UIModalPresentationStyle GetAdaptivePresentationStyle(UIPresentationController controller, UITraitCollection traitCollection)
+        {
+            // Prevent popover from being adaptive fullscreen on phones
+            // (https://pspdfkit.com/blog/2022/presenting-popovers-on-iphone-with-swiftui/)
+            return UIModalPresentationStyle.None;
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            View.AddSubview(_volumeView);
         }
     }
 }
