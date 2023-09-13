@@ -74,7 +74,9 @@ namespace Stylophone.iOS.ViewControllers
 
                 if (e.Action == NotifyCollectionChangedAction.Remove)
                 {
-                    for (var i = e.OldStartingIndex; i < e.OldStartingIndex + e.OldItems.Count; i++)
+                    var startIndex = e.OldStartingIndex;
+
+                    for (var i = startIndex; i < startIndex + e.OldItems.Count; i++)
                         indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
 
                     _tableView.DeleteRows(indexPaths.ToArray(), UITableViewRowAnimation.Right);
