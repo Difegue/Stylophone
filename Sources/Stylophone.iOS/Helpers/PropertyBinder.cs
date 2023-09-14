@@ -13,8 +13,9 @@ namespace Stylophone.iOS.Helpers
     public class PropertyBinder<TObservable>: IDisposable
         where TObservable : ObservableObject
     {
-        private readonly Dictionary<string, IList<Binding>> _bindings = new Dictionary<string, IList<Binding>>();
-        private readonly Dictionary<string, IDisposable> _observers = new Dictionary<string, IDisposable>();
+        private readonly Dictionary<string, IList<Binding>> _bindings = new();
+        private readonly Dictionary<string, IDisposable> _observers = new();
+        private readonly Dictionary<UIButton, EventHandler> _buttonBindings = new();
         private TObservable _observableObject;
 
         public PropertyBinder(TObservable viewModel)
@@ -31,13 +32,22 @@ namespace Stylophone.iOS.Helpers
             // Dispose our observers
             foreach (IDisposable observer in _observers.Values)
                 observer.Dispose();
+
+            // Unregister our button bindings
+            foreach (var kvp in _buttonBindings)
+                kvp.Key.PrimaryActionTriggered -= kvp.Value;
         }
 
         // Shorthand method to attach a command to a UIButton.
         public void BindButton(UIButton button, string buttonText, ICommand command, object parameter = null)
         {
             button.SetTitle(buttonText, UIControlState.Normal);
-            button.PrimaryActionTriggered += (s, e) => command.Execute(parameter);
+
+            // Record button/eventhandler association so we can unregister them when the binder is disposed
+            var evtHandler = new EventHandler((s, e) => command.Execute(parameter));
+            button.PrimaryActionTriggered += evtHandler;
+
+            _buttonBindings.Add(button, evtHandler);
         }
 
         public UIAction GetCommandAction(string actionText, string systemImage, ICommand command, object parameter = null)
