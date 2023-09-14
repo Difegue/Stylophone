@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ZMi-Au-TSz">
-    <device id="ipad11_0rounded" orientation="portrait" layout="fullscreen" appearance="light">
+    <device id="retina6_72" orientation="landscape" appearance="light">
         <simulatedSceneSize key="mac" width="1222" height="1298"/>
     </device>
     <dependencies>
@@ -18,53 +18,53 @@
                         <viewControllerLayoutGuide type="top" id="RNb-WT-Yzb"/>
                         <viewControllerLayoutGuide type="bottom" id="9ag-vI-NX6"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="i75-3G-leJ">
-                        <rect key="frame" x="0.0" y="0.0" width="834" height="1194"/>
+                    <view key="view" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="i75-3G-leJ">
+                        <rect key="frame" x="0.0" y="0.0" width="932" height="430"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="hDT-Mu-pHy" userLabel="Album Background">
-                                <rect key="frame" x="-180" y="-96" width="1194" height="1306"/>
+                                <rect key="frame" x="-121" y="-96" width="1174" height="541"/>
                             </imageView>
                             <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="px8-71-fBL" userLabel="Background Tint">
-                                <rect key="frame" x="-180" y="-96" width="1194" height="1306"/>
+                                <rect key="frame" x="-121" y="-96" width="1174" height="541"/>
                                 <color key="backgroundColor" systemColor="systemPinkColor"/>
                             </view>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Xs-Z1-yFr">
-                                <rect key="frame" x="-180" y="-96" width="1194" height="1326"/>
+                                <rect key="frame" x="-121" y="-96" width="1174" height="562"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="b1X-dW-5Dh">
-                                    <rect key="frame" x="0.0" y="0.0" width="1194" height="1326"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1174" height="562"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="regular"/>
                             </visualEffectView>
-                            <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="DG4-0R-Uua">
-                                <rect key="frame" x="0.0" y="0.0" width="834" height="1194"/>
+                            <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" id="DG4-0R-Uua">
+                                <rect key="frame" x="0.0" y="0.0" width="932" height="430"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qgK-bP-GXK" customClass="UIImageView">
-                                        <rect key="frame" x="169" y="221" width="496" height="496"/>
+                                        <rect key="frame" x="123.66666666666669" y="59" width="212" height="212"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Palm Tree Panic Bad Future (Sonic CD USA)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E5Z-bz-pda">
-                                        <rect key="frame" x="12" y="894.5" width="810" height="33.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Palm Tree Panic Bad Future (Sonic CD USA)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E5Z-bz-pda">
+                                        <rect key="frame" x="362.66666666666669" y="163.33333333333334" width="557.33333333333326" height="33.666666666666657"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Artist Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2x2-ws-IDR">
-                                        <rect key="frame" x="32" y="940" width="770" height="29"/>
+                                        <rect key="frame" x="382.66666666666669" y="209" width="517.33333333333326" height="29"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Palm Tree Panic Bad Future (Sonic CD USA)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWH-34-r0I">
-                                        <rect key="frame" x="12" y="973" width="810" height="29"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Palm Tree Panic Bad Future (Sonic CD USA)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWH-34-r0I">
+                                        <rect key="frame" x="362.66666666666669" y="242" width="557.33333333333326" height="29"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="753" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ndk-fa-CPd" customClass="KvoUISlider">
-                                        <rect key="frame" x="159" y="1022" width="516" height="31"/>
+                                        <rect key="frame" x="208" y="279" width="516" height="31"/>
                                         <color key="tintColor" systemColor="systemBlueColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="tLf-xX-qeL"/>
@@ -72,7 +72,7 @@
                                         </constraints>
                                     </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UdR-Zx-KXJ">
-                                        <rect key="frame" x="16" y="1030" width="133" height="17"/>
+                                        <rect key="frame" x="16" y="287" width="182" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="kUp-el-Dwf"/>
                                         </constraints>
@@ -81,7 +81,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-05:36" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aed-cf-8Kx">
-                                        <rect key="frame" x="685" y="1030" width="133" height="17"/>
+                                        <rect key="frame" x="734" y="287" width="182" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="gyT-j7-ggb"/>
                                         </constraints>
@@ -89,7 +89,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnF-Il-g1n" userLabel="Skip Prev Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="315" y="1088" width="42" height="40"/>
+                                        <rect key="frame" x="364" y="345" width="42" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="42" id="PZK-do-YzC"/>
                                             <constraint firstAttribute="height" constant="40" id="eAo-Fe-Ek3"/>
@@ -100,7 +100,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uWp-iF-Upl" userLabel="Repeat Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="689" y="1088" width="40" height="40"/>
+                                        <rect key="frame" x="738" y="345" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="UE8-bx-YXD"/>
                                             <constraint firstAttribute="width" constant="40" id="ZDb-ao-4uh"/>
@@ -111,7 +111,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWt-w6-VmQ" userLabel="Shuffle Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="641" y="1088" width="40" height="40"/>
+                                        <rect key="frame" x="690" y="345" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="kBF-62-3VB"/>
                                             <constraint firstAttribute="height" constant="40" id="oIe-Za-M2q"/>
@@ -122,7 +122,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzv-k0-5VN" userLabel="Volume Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="109" y="1088" width="40" height="40"/>
+                                        <rect key="frame" x="158" y="345" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="8gi-aB-Ggu"/>
                                             <constraint firstAttribute="height" constant="40" id="csE-rR-Qwp"/>
@@ -133,7 +133,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sfs-XQ-aF1" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="477" y="1088" width="42" height="40"/>
+                                        <rect key="frame" x="526" y="345" width="42" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="81H-pS-OLq"/>
                                             <constraint firstAttribute="width" constant="42" id="NQN-ln-qOQ"/>
@@ -144,7 +144,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RI5-DA-btJ" customClass="SymbolUIButton">
-                                        <rect key="frame" x="393" y="1084" width="48" height="48"/>
+                                        <rect key="frame" x="442" y="341" width="48" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="48" id="PNe-G5-AMX"/>
                                             <constraint firstAttribute="height" constant="48" id="qgi-ao-D5G"/>
@@ -155,7 +155,7 @@
                                         </state>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="745" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="lka-vy-mHi">
-                                        <rect key="frame" x="169" y="221" width="496" height="496"/>
+                                        <rect key="frame" x="123.66666666666669" y="59" width="212" height="212"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="496" id="2BL-kA-zy0"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="256" id="C59-e5-JVo"/>
@@ -361,27 +361,27 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nz7-vP-z6u" userLabel="Corner Radius Container">
-                            <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                            <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="epV-FX-SaH" userLabel="Album Background">
-                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
                                 </imageView>
                                 <view hidden="YES" alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B74-8z-6Q6" userLabel="Background Tint">
-                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
                                     <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 </view>
                                 <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D49-0v-YVb">
-                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="DXd-9F-gc4">
-                                        <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="05J-Ld-RDm">
-                                                <rect key="frame" x="16" y="16" width="96" height="96"/>
+                                                <rect key="frame" x="16" y="8" width="48" height="48"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="e9S-Rc-HA6">
-                                                <rect key="frame" x="16" y="16" width="96" height="96"/>
+                                                <rect key="frame" x="16" y="8" width="48" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="96" id="0Mw-lU-IW0">
                                                         <variation key="heightClass=compact-widthClass=regular" constant="48"/>
@@ -393,20 +393,20 @@
                                                     </constraint>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track now Playing..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rwy-TS-6DM">
-                                                <rect key="frame" x="128" y="33.5" width="214" height="29"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track now Playing..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="16" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rwy-TS-6DM">
+                                                <rect key="frame" x="80" y="1.6666666666666643" width="214" height="28.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pu2-Xs-TVz">
-                                                <rect key="frame" x="128" y="70.5" width="15.5" height="23"/>
+                                                <rect key="frame" x="80" y="38.333333333333336" width="15.666666666666671" height="23"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWe-5W-eb4" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1020" y="40" width="48" height="48"/>
+                                                <rect key="frame" x="1016" y="14" width="36" height="36"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="IIM-8D-8bv">
                                                         <variation key="heightClass=compact-widthClass=compact" constant="36"/>
@@ -423,7 +423,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="poz-3g-api" userLabel="Volume Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1110" y="11" width="50" height="50"/>
+                                                <rect key="frame" x="1121" y="14.666666666666664" width="35" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="6M5-Mj-2Mq">
                                                         <variation key="heightClass=compact-widthClass=compact" constant="35"/>
@@ -440,7 +440,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fbv-li-bzQ" userLabel="Skip Prev Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="844" y="40" width="48" height="48"/>
+                                                <rect key="frame" x="908" y="14" width="36" height="36"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="48" id="eGF-5v-Pgk">
                                                         <variation key="heightClass=compact-widthClass=compact" constant="36"/>
@@ -457,17 +457,17 @@
                                                 </state>
                                             </button>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MMx-P1-0Cf" customClass="UICircularProgressView">
-                                                <rect key="frame" x="908" y="16" width="96" height="96"/>
+                                                <rect key="frame" x="1360" y="-16" width="96" height="96"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="96" id="8HL-Sa-QLA"/>
                                                     <constraint firstAttribute="height" constant="96" id="eOb-ba-geX"/>
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xJI-gJ-y33">
-                                                <rect key="frame" x="0.0" y="0.0" width="828" height="128"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="892" height="64"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DlZ-qx-4Nb" userLabel="Shuffle Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1110" y="67" width="50" height="50"/>
+                                                <rect key="frame" x="1081" y="14.666666666666664" width="35" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="CZl-WI-puR">
                                                         <variation key="heightClass=compact" constant="35"/>
@@ -482,7 +482,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ugU-4p-yom" customClass="SymbolUIButton">
-                                                <rect key="frame" x="928" y="36" width="56" height="56"/>
+                                                <rect key="frame" x="956" y="8" width="48" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="56" id="9Zn-x0-10S">
                                                         <variation key="heightClass=compact" constant="48"/>
@@ -677,7 +677,7 @@
                             <rect key="frame" x="0.0" y="12" width="274" height="72"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsServer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgX-65-pwE" customClass="LocalizedLabel">
-                                    <rect key="frame" x="16" y="0.0" width="119" height="20.5"/>
+                                    <rect key="frame" x="16" y="0.0" width="119" height="20.333333333333332"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -686,10 +686,10 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="fh6-q8-ULU" customClass="KvoUISlider">
-                                    <rect key="frame" x="57" y="32.5" width="166.5" height="31"/>
+                                    <rect key="frame" x="56.999999999999986" y="32.333333333333336" width="166.66666666666663" height="31"/>
                                 </slider>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rMl-UN-AUS" userLabel="Volume Button" customClass="SymbolUIButton">
-                                    <rect key="frame" x="16" y="30.5" width="35" height="35"/>
+                                    <rect key="frame" x="16" y="30.333333333333336" width="35" height="35.000000000000007"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="35" id="5f9-8y-dAU"/>
                                         <constraint firstAttribute="height" constant="35" id="cvI-GY-bFd"/>
@@ -699,7 +699,7 @@
                                     </state>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wCV-2J-UVG">
-                                    <rect key="frame" x="229.5" y="38" width="28.5" height="20.5"/>
+                                    <rect key="frame" x="229.66666666666666" y="38" width="28.333333333333343" height="20.333333333333329"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="28.5" id="jcZ-UP-3yt"/>
                                     </constraints>
@@ -725,7 +725,7 @@
                             <rect key="frame" x="0.0" y="88" width="274" height="76"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LocalVolumeHeader" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="np4-co-XXk" customClass="LocalizedLabel">
-                                    <rect key="frame" x="16" y="0.0" width="160" height="20.5"/>
+                                    <rect key="frame" x="16" y="0.0" width="160" height="20.333333333333332"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -734,10 +734,10 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="eDD-Zc-6fO" customClass="KvoUISlider">
-                                    <rect key="frame" x="57" y="32.5" width="166.5" height="31"/>
+                                    <rect key="frame" x="56.999999999999986" y="32.333333333333329" width="166.66666666666663" height="31"/>
                                 </slider>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bsw-mW-3ej" userLabel="Volume Button" customClass="SymbolUIButton">
-                                    <rect key="frame" x="16" y="30.5" width="35" height="35"/>
+                                    <rect key="frame" x="16" y="30.333333333333329" width="35" height="35"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="35" id="h8S-P5-Nge"/>
                                         <constraint firstAttribute="width" constant="35" id="mUH-le-CTt"/>
@@ -747,7 +747,7 @@
                                     </state>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xll-M7-TCe">
-                                    <rect key="frame" x="229.5" y="38" width="28.5" height="20.5"/>
+                                    <rect key="frame" x="229.66666666666666" y="38" width="28.333333333333343" height="20.333333333333329"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="28.5" id="5Gi-jb-iZn"/>
                                     </constraints>

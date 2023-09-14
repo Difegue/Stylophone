@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="x9f-gd-wcr">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="x9f-gd-wcr">
     <device id="ipad10_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -37,14 +37,14 @@
                             </constraints>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="Qis-5w-PWd" userLabel="Footer View">
-                            <rect key="frame" x="0.0" y="141.00000034679067" width="820" height="389"/>
+                            <rect key="frame" x="0.0" y="170" width="820" height="389"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2pl-vG-OKK">
                                     <rect key="frame" x="0.0" y="0.0" width="820" height="389"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="magnifyingglass" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="TsB-oI-Eq7">
-                                            <rect key="frame" x="362" y="146.5" width="96" height="96"/>
+                                            <rect key="frame" x="362" y="146" width="96" height="96.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="98" id="Fof-bl-UPV"/>
                                                 <constraint firstAttribute="width" constant="96" id="prh-5R-Det"/>
@@ -107,7 +107,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="trackCell" rowHeight="48" id="wrz-Kb-5mf" customClass="TrackViewCell">
-                                <rect key="frame" x="0.0" y="68.5" width="820" height="48"/>
+                                <rect key="frame" x="0.0" y="94" width="820" height="48"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wrz-Kb-5mf" id="of2-Lw-K3K">
                                     <rect key="frame" x="0.0" y="0.0" width="820" height="48"/>
@@ -127,7 +127,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="MVO-jc-Yog">
-                                                    <rect key="frame" x="256" y="1" width="36" height="45.5"/>
+                                                    <rect key="frame" x="256" y="0.0" width="36" height="47.5"/>
                                                     <gestureRecognizers/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="36" id="JEW-ow-aaX"/>
@@ -147,7 +147,9 @@
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M4B-X8-WSP">
                                                     <rect key="frame" x="452" y="0.0" width="256" height="48"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="256" id="O3C-7l-mrA"/>
+                                                        <constraint firstAttribute="width" constant="256" id="O3C-7l-mrA">
+                                                            <variation key="widthClass=compact" constant="0.0"/>
+                                                        </constraint>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <state key="normal" title="Album Title"/>
@@ -164,8 +166,18 @@
                                             </subviews>
                                             <gestureRecognizers/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="48" id="IdB-v7-p5r"/>
+                                                <constraint firstAttribute="height" constant="46" id="IdB-v7-p5r"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="IdB-v7-p5r"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular">
+                                                <mask key="constraints">
+                                                    <include reference="IdB-v7-p5r"/>
+                                                </mask>
+                                            </variation>
                                         </stackView>
                                     </subviews>
                                     <constraints>
@@ -202,8 +214,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="magnifyingglass" catalog="system" width="128" height="115"/>
-        <image name="waveform" catalog="system" width="128" height="128"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
+        <image name="waveform" catalog="system" width="125" height="128"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
