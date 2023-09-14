@@ -639,7 +639,6 @@ namespace Stylophone.Common.ViewModels
             _mpdService.SongChanged -= OnTrackChange;
 
             _updateInformationTimer.Stop();
-            _updateInformationTimer.Dispose();
         }
 
         #region Commands
