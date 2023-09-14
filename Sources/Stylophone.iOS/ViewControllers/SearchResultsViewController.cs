@@ -47,7 +47,7 @@ namespace Stylophone.iOS.ViewControllers
 
 
             var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
-                GetRowContextMenu, GetRowSwipeActions, tapHandler:OnTap);
+                GetRowContextMenu, GetRowSwipeActions, primaryAction: OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
 

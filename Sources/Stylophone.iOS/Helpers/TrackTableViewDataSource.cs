@@ -21,7 +21,7 @@ namespace Stylophone.iOS.ViewControllers
         private Func<NSIndexPath, UIMenu> _menuFactory;
         private Func<NSIndexPath, bool, UISwipeActionsConfiguration> _swipeFactory;
         private Action<UIScrollView> _scrollHandler;
-        private Action<NSIndexPath> _tapHandler;
+        private Action<NSIndexPath> _primaryAction;
         private ObservableCollection<TrackViewModel> _sourceCollection;
 
         public TrackTableViewDataSource(IntPtr handle) : base(handle)
@@ -37,16 +37,17 @@ namespace Stylophone.iOS.ViewControllers
         /// <param name="swipeActionFactory">A factory for row swipe actions</param>
         /// <param name="canSelectRows">Whether you can select multiple rows</param>
         /// <param name="scrollHandler">Optional scrollHandler</param>
+        /// <param name="primaryAction">Optional primary action</param>
         public TrackTableViewDataSource(UITableView tableView, ObservableCollection<TrackViewModel> source,
             Func<NSIndexPath, UIMenu> contextMenuFactory, Func<NSIndexPath,bool, UISwipeActionsConfiguration> swipeActionFactory,
-            bool canSelectRows = false, Action<UIScrollView> scrollHandler = null, Action<NSIndexPath> tapHandler = null)
+            bool canSelectRows = false, Action<UIScrollView> scrollHandler = null, Action<NSIndexPath> primaryAction = null)
         {
             _tableView = tableView;
             _sourceCollection = source;
             _menuFactory = contextMenuFactory;
             _swipeFactory = swipeActionFactory;
             _scrollHandler = scrollHandler;
-            _tapHandler = tapHandler;
+            _primaryAction = primaryAction;
 
             _sourceCollection.CollectionChanged += (s,e) => UIApplication.SharedApplication.InvokeOnMainThread(
                 () => UpdateUITableView(s,e));
@@ -130,14 +131,17 @@ namespace Stylophone.iOS.ViewControllers
         {
             if (tableView.AllowsMultipleSelection)
                 tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.Checkmark;
-            else
-                _tapHandler?.Invoke(indexPath);
         }
 
         public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
         {
             if (tableView.AllowsMultipleSelection)
                 tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.None;
+        }
+
+        public override void PerformPrimaryAction(UITableView tableView, NSIndexPath rowIndexPath)
+        {
+            _primaryAction?.Invoke(rowIndexPath);
         }
 
         public override UIContextMenuConfiguration GetContextMenuConfiguration(UITableView tableView, NSIndexPath indexPath, CoreGraphics.CGPoint point)

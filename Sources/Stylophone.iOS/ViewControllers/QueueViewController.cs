@@ -11,8 +11,6 @@ using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Collections;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -56,7 +54,7 @@ namespace Stylophone.iOS.ViewControllers
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
             var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
-                GetRowContextMenu, GetRowSwipeActions, tapHandler:OnTap);
+                GetRowContextMenu, GetRowSwipeActions, true, primaryAction:OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
             TableView.SelfSizingInvalidation = UITableViewSelfSizingInvalidation.EnabledIncludingConstraints;
