@@ -12,6 +12,7 @@ using UIKit;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -39,7 +40,7 @@ namespace Stylophone.iOS.ViewControllers
         private void OnLeavingBackground(object sender, EventArgs e)
         {
             if (_mpdService.IsConnected)
-                Task.Run(async () => await ViewModel.LoadInitialDataAsync());
+                Task.Run(ViewModel.LoadInitialDataAsync);
         }
 
         public override void ViewDidLoad()
@@ -54,13 +55,17 @@ namespace Stylophone.iOS.ViewControllers
 
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
-            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions);
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
+                GetRowContextMenu, GetRowSwipeActions, tapHandler:OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
             TableView.SelfSizingInvalidation = UITableViewSelfSizingInvalidation.EnabledIncludingConstraints;
 
             _mpdService.SongChanged += ScrollToPlayingSong;
         }
+
+        private void OnTap(NSIndexPath indexPath) =>
+            ViewModel.PlayTrackCommand.Execute(new List<object> { ViewModel?.Source[indexPath.Row] });
 
         private void UpdateListOnPlaylistVersionChange(object sender, PropertyChangedEventArgs e)
         {

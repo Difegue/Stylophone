@@ -59,7 +59,8 @@ namespace Stylophone.iOS.ViewControllers
 
             _settingsBtn = CreateSettingsButton();
 
-            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions, true, OnScroll);
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
+                GetRowContextMenu, GetRowSwipeActions, false, OnScroll, OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
 
@@ -102,6 +103,9 @@ namespace Stylophone.iOS.ViewControllers
             base.ViewWillDisappear(animated);
             ViewModel.Dispose();
         }
+
+        private void OnTap(NSIndexPath indexPath) =>
+            ViewModel.AddToQueueCommand.Execute(new List<object> { ViewModel?.Source[indexPath.Row] });
 
         private void OnScroll(UIScrollView scrollView)
         {

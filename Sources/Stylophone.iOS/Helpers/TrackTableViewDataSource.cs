@@ -21,6 +21,7 @@ namespace Stylophone.iOS.ViewControllers
         private Func<NSIndexPath, UIMenu> _menuFactory;
         private Func<NSIndexPath, bool, UISwipeActionsConfiguration> _swipeFactory;
         private Action<UIScrollView> _scrollHandler;
+        private Action<NSIndexPath> _tapHandler;
         private ObservableCollection<TrackViewModel> _sourceCollection;
 
         public TrackTableViewDataSource(IntPtr handle) : base(handle)
@@ -38,13 +39,14 @@ namespace Stylophone.iOS.ViewControllers
         /// <param name="scrollHandler">Optional scrollHandler</param>
         public TrackTableViewDataSource(UITableView tableView, ObservableCollection<TrackViewModel> source,
             Func<NSIndexPath, UIMenu> contextMenuFactory, Func<NSIndexPath,bool, UISwipeActionsConfiguration> swipeActionFactory,
-            bool canSelectRows = false, Action<UIScrollView> scrollHandler = null)
+            bool canSelectRows = false, Action<UIScrollView> scrollHandler = null, Action<NSIndexPath> tapHandler = null)
         {
             _tableView = tableView;
             _sourceCollection = source;
             _menuFactory = contextMenuFactory;
             _swipeFactory = swipeActionFactory;
             _scrollHandler = scrollHandler;
+            _tapHandler = tapHandler;
 
             _sourceCollection.CollectionChanged += (s,e) => UIApplication.SharedApplication.InvokeOnMainThread(
                 () => UpdateUITableView(s,e));
@@ -128,6 +130,8 @@ namespace Stylophone.iOS.ViewControllers
         {
             if (tableView.AllowsMultipleSelection)
                 tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.Checkmark;
+            else
+                _tapHandler?.Invoke(indexPath);
         }
 
         public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)

@@ -46,7 +46,8 @@ namespace Stylophone.iOS.ViewControllers
                 valueTransformer: negateBoolTransformer);
 
 
-            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions);
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
+                GetRowContextMenu, GetRowSwipeActions, tapHandler:OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
 
@@ -57,6 +58,9 @@ namespace Stylophone.iOS.ViewControllers
 
             SearchSegmentedControl.PrimaryActionTriggered += SearchSegmentedControl_PrimaryActionTriggered;
         }
+
+        private void OnTap(NSIndexPath indexPath) =>
+            ViewModel.AddToQueueCommand.Execute(new List<object> { ViewModel?.Source[indexPath.Row] });
 
         private void SearchSegmentedControl_PrimaryActionTriggered(object sender, EventArgs e)
         {
