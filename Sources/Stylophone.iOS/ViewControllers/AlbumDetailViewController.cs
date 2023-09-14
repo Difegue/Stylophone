@@ -37,8 +37,9 @@ namespace Stylophone.iOS.ViewControllers
 			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions, true, OnScroll);
 			TableView.DataSource = trackDataSource;
 			TableView.Delegate = trackDataSource;
+            TableView.SelfSizingInvalidation = UITableViewSelfSizingInvalidation.EnabledIncludingConstraints;
 
-			Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
+            Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
 				valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 			Binder.Bind<string>(AlbumTrackInfo, "text", nameof(ViewModel.PlaylistInfo));
 		}

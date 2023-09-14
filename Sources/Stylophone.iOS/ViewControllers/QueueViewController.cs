@@ -57,6 +57,7 @@ namespace Stylophone.iOS.ViewControllers
             var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
+            TableView.SelfSizingInvalidation = UITableViewSelfSizingInvalidation.EnabledIncludingConstraints;
 
             _mpdService.SongChanged += ScrollToPlayingSong;
         }

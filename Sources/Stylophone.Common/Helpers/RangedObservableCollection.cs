@@ -109,7 +109,7 @@ namespace System.Collections.ObjectModel
 
             // HACK ATTACK: normally, since this method can remove items from multiple different spaces in the collection, this'd be incorrect...
             // but since we only use it for ranged deletions of queue items, which are always sequential, it should be fine(tm)
-            var index = Items.IndexOf(collection.First());
+            var index = Items.IndexOf(collection.FirstOrDefault());
 
             var changedItems = new List<T>(collection);
             for (int i = 0; i < changedItems.Count; i++)
