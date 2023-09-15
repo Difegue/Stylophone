@@ -2,7 +2,6 @@
     x:Class="Stylophone.Views.PlaylistPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Stylophone="using:Stylophone.Helpers"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,6 +9,8 @@
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:Stylophone.Behaviors"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea" Margin="8,0">
@@ -245,10 +246,15 @@
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                ui7:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 ReorderMode="Enabled"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
+                <interactivity:Interaction.Behaviors>
+                    <behaviors:AlternatingListViewBehavior
+                        AlternateBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                        AlternateBorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        AlternateBorderThickness="0" />
+                </interactivity:Interaction.Behaviors>
                 <ListView.ContextFlyout>
                     <MenuFlyout>
                         <!--  View Track Album  -->

@@ -6,10 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    xmlns:stylophone="using:Stylophone.Helpers"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:Stylophone.Behaviors"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea" Margin="8,0">
@@ -197,9 +198,14 @@
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                ui7:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
+                <interactivity:Interaction.Behaviors>
+                    <behaviors:AlternatingListViewBehavior
+                    AlternateBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                    AlternateBorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    AlternateBorderThickness="0" />
+                </interactivity:Interaction.Behaviors>
                 <ListView.ContextFlyout>
                     <MenuFlyout>
                         <!--  Add to Queue  -->
