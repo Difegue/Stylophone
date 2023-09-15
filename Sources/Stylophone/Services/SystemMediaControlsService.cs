@@ -9,6 +9,8 @@ using Windows.Media;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Microsoft.Toolkit.Uwp.Helpers;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 
 namespace Stylophone.Services
 {
@@ -17,11 +19,19 @@ namespace Stylophone.Services
         private SystemMediaTransportControls _smtc;
         private MPDConnectionService _mpdService;
 
+        private MediaPlayer _silencePlayer;
+
         public SystemMediaControlsService(MPDConnectionService mpdService)
         {
             _mpdService = mpdService;
-        }
 
+            // https://stackoverflow.com/questions/47339719/how-to-disable-uwp-app-suspension
+            _silencePlayer = new MediaPlayer();
+            _silencePlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/silence.wav"));
+            _silencePlayer.CommandManager.IsEnabled = false; // Hide silencePlayer from SMTC
+            _silencePlayer.IsLoopingEnabled = true;
+        }
+        
         public void Initialize()
         {
 
@@ -71,6 +81,8 @@ namespace Stylophone.Services
 
         private void UpdateState(MpdStatus status)
         {
+            _silencePlayer.Play();
+            
             switch (status.State)
             {
                 case MpdState.Play:

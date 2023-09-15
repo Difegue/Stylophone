@@ -176,13 +176,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activation\ActivationHandler.cs" />
+    <Compile Include="Behaviors\AlternatingListViewBehavior.cs" />
     <Compile Include="Behaviors\ListViewBehavior.cs" />
     <Compile Include="Behaviors\TreeViewCollapseBehavior.cs" />
     <Compile Include="Converters\DoubleToThicknessConverter.cs" />
     <Compile Include="Converters\SkiaConverters.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
     <Compile Include="Converters\ThemeToIntConverter.cs" />
-    <Compile Include="Helpers\ListViewExtensions.AlternateRows.cs" />
     <Compile Include="Helpers\LiveTileHelper.cs" />
     <Compile Include="Helpers\ScrollViewerExtensions.MiddleClickScrolling.cs" />
     <Compile Include="Helpers\UWPHelpers.cs" />
@@ -318,6 +318,7 @@
     <Content Include="Assets\LargeTile.scale-150.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\silence.wav" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-125.png" />
     <Content Include="Assets\SmallTile.scale-150.png" />
