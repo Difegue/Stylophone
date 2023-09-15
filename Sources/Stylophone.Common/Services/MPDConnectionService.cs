@@ -11,6 +11,7 @@ using MpcNET.Commands.Status;
 using Stylophone.Common.Interfaces;
 using MpcNET.Commands.Reflection;
 using Stylophone.Localization.Strings;
+using Stylophone.Common.Helpers;
 
 namespace Stylophone.Common.Services
 {
@@ -134,10 +135,16 @@ namespace Stylophone.Common.Services
         private async Task TryConnecting(CancellationToken token)
         {
             if (token.IsCancellationRequested) return;
-            if (!IPAddress.TryParse(_host, out var ipAddress)) 
-                throw new Exception("Invalid IP address");
 
-            _mpdEndpoint = new IPEndPoint(ipAddress, _port);
+            if (!IPAddress.TryParse(_host, out var ipAddress))
+            {
+                // Maybe it's a hostname? Try getting an IP from it nonetheless
+                _mpdEndpoint = Miscellaneous.GetIPEndPointFromHostName(_host, _port, false);
+            } 
+            else
+            {
+                _mpdEndpoint = new IPEndPoint(ipAddress, _port);
+            }
 
             _statusConnection = await GetConnectionInternalAsync(token);
 
