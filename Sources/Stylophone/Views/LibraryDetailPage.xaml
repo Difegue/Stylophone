@@ -75,16 +75,17 @@
                         Height="148"
                         CornerRadius="4">
 
-                        <winui:ProgressRing
-                            Margin="{StaticResource SmallLeftTopMargin}"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            IsActive="{x:Bind ViewModel.Item.AlbumArtLoaded, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
                         <Image
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=196}"
                             Stretch="UniformToFill" />
+                        <winui:ProgressBar
+                            Width="160"
+                            Margin="{StaticResource SmallBottomMargin}"
+                            VerticalAlignment="Bottom"
+                            IsIndeterminate="True"
+                            Visibility="{x:Bind ViewModel.Item.AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
                     </Grid>
                 </Border>
 
