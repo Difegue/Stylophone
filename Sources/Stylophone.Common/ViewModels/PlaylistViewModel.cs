@@ -175,23 +175,16 @@ namespace Stylophone.Common.ViewModels
         {
             // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
-
-            if (selectedTracks?.Count > 0)
+            var trackCount = selectedTracks?.Count;
+            if (trackCount > 0)
             {
-                var commandList = new CommandList();
+                var command = new PlaylistDeleteCommand(Name, Source.IndexOf(selectedTracks.First() as TrackViewModel));
+                
+                // Use new ranged variant if necessary
+                if (trackCount > 1)
+                    command = new PlaylistDeleteCommand(Name, Source.IndexOf(selectedTracks.First() as TrackViewModel), Source.IndexOf(selectedTracks.Last() as TrackViewModel));
 
-                // We can't batch PlaylistDeleteCommands cleanly, since they're index-based and logically, said indexes will shift as we remove stuff from the playlist.
-                // To simulate this behavior, we copy our Source list and incrementally remove the affected tracks from it to get the valid indexes as we move down the commandList.
-                IList<TrackViewModel> copy = Source.ToList();
-
-                foreach (var f in selectedTracks)
-                {
-                    var trackVM = f as TrackViewModel;
-                    commandList.Add(new PlaylistDeleteCommand(Name, copy.IndexOf(trackVM)));
-                    copy.Remove(trackVM);
-                }
-
-                var r = await _mpdService.SafelySendCommandAsync(commandList);
+                var r = await _mpdService.SafelySendCommandAsync(command);
                 if (r != null) // Reload playlist
                     await LoadDataAsync(Name);
             }
