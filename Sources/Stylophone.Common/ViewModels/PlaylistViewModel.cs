@@ -95,7 +95,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void RemovePlaylist()
+        private async Task RemovePlaylist()
         {
             var result = await _dialogService.ShowConfirmDialogAsync(Resources.DeletePlaylistContentDialog, "", Resources.OKButtonText, Resources.CancelButtonText);
 
@@ -112,7 +112,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void LoadPlaylist()
+        private async Task LoadPlaylist()
         {
             var res = await _mpdService.SafelySendCommandAsync(new LoadCommand(Name));
 
@@ -121,7 +121,7 @@ namespace Stylophone.Common.ViewModels
         }
         
         [RelayCommand]
-        private async void PlayPlaylist()
+        private async Task PlayPlaylist()
         {
             // Clear queue, add playlist and play
             var commandList = new CommandList(new IMpcCommand<object>[] { new ClearCommand() , new LoadCommand(Name), new PlayCommand(0) });
@@ -135,7 +135,7 @@ namespace Stylophone.Common.ViewModels
 
         [RelayCommand]
 
-        private async void AddToQueue(object list)
+        private async Task AddToQueue(object list)
         {
             // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
@@ -171,7 +171,7 @@ namespace Stylophone.Common.ViewModels
 
 
         [RelayCommand]
-        private async void RemoveTrackFromPlaylist(object list)
+        private async Task RemoveTrackFromPlaylist(object list)
         {
             // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
@@ -230,7 +230,7 @@ namespace Stylophone.Common.ViewModels
                 await Task.Run(async () =>
                 {
                     // Get album art for three albums to display in the playlist view
-                    Random r = new Random();
+                    Random r = new();
                     var distinctAlbums = Source.GroupBy(tr => tr.File.Album).Select(tr => tr.First()).OrderBy((item) => r.Next()).ToList();
 
                     if (distinctAlbums.Count > 1)
@@ -240,7 +240,7 @@ namespace Stylophone.Common.ViewModels
 
                         DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
 
-                        if (DominantColor == default(SKColor))
+                        if (DominantColor == default)
                         {
                             await _dispatcherService.ExecuteOnUIThreadAsync(() =>
                             {

@@ -113,7 +113,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddToPlaylist()
+        private async Task AddToPlaylist()
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
             if (playlistName == null || Files.Count == 0) return;
@@ -132,7 +132,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddAlbum()
+        private async Task AddAlbum()
         {
             var commandList = new CommandList();
 
@@ -152,7 +152,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void PlayAlbum()
+        private async Task PlayAlbum()
         {
             if (Files.Count == 0)
             {

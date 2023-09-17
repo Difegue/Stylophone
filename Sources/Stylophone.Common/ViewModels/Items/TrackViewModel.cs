@@ -90,13 +90,13 @@ namespace Stylophone.Common.ViewModels
         private bool _isLight;
 
         [RelayCommand]
-        private async void PlayTrack(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new PlayIdCommand(file.Id));
+        private async Task PlayTrack(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new PlayIdCommand(file.Id));
 
         [RelayCommand]
-        private async void RemoveFromQueue(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new DeleteIdCommand(file.Id));
+        private async Task RemoveFromQueue(IMpdFile file) => await _mpdService.SafelySendCommandAsync(new DeleteIdCommand(file.Id));
 
         [RelayCommand]
-        private async void AddToQueue(IMpdFile file)
+        private async Task AddToQueue(IMpdFile file)
         {
             var response = await _mpdService.SafelySendCommandAsync(new AddIdCommand(file.Path));
 
@@ -105,7 +105,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddToPlaylist(IMpdFile file) 
+        private async Task AddToPlaylist(IMpdFile file) 
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;

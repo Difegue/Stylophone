@@ -66,10 +66,11 @@ namespace Stylophone.Common.ViewModels
             if (file is MpdDirectory)
             {
                 IsDirectory = true;
-                _children = new RangedObservableCollection<FilePathViewModel>();
-
-                // Add a bogus child that'll be replaced when the list is loaded
-                _children.Add(new FilePathViewModel(Resources.FoldersLoadingTreeItem, this, _dispatcherService));
+                _children = new RangedObservableCollection<FilePathViewModel>
+                {
+                    // Add a bogus child that'll be replaced when the list is loaded
+                    new FilePathViewModel(Resources.FoldersLoadingTreeItem, this, _dispatcherService)
+                };
             }
 
         }
@@ -99,7 +100,7 @@ namespace Stylophone.Common.ViewModels
         private bool _isLoadingChildren;
         public async Task LoadChildrenAsync()
         {
-            if (IsLoaded || _isLoadingChildren || IsDirectory == false || _children == null || Path == null) return;
+            if (IsLoaded || _isLoadingChildren || IsDirectory == false || Children == null || Path == null) return;
 
             _isLoadingChildren = true;
             try
@@ -118,8 +119,8 @@ namespace Stylophone.Common.ViewModels
 
                 await _dispatcherService.ExecuteOnUIThreadAsync(() =>
                 {
-                    _children.AddRange(newChildren);
-                    _children.RemoveAt(0); // Remove the placeholder after adding the new items, otherwise the treeitem can close back up
+                    Children.AddRange(newChildren);
+                    Children.RemoveAt(0); // Remove the placeholder after adding the new items, otherwise the treeitem can close back up
                     IsLoaded = true;
                 });
             }
@@ -131,7 +132,7 @@ namespace Stylophone.Common.ViewModels
 
 
         [RelayCommand]
-        private async void Play()
+        private async Task Play()
         {
             // Clear queue, add path and play
             var commandList = new CommandList(new IMpcCommand<object>[] { new ClearCommand(), new AddCommand(Path), new PlayCommand(0) });
@@ -143,7 +144,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddToQueue()
+        private async Task AddToQueue()
         {
             // AddCommand adds either the full directory or the song, depending on the path given.
             var response = await _mpdService.SafelySendCommandAsync(new AddCommand(Path));
@@ -153,7 +154,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddToPlaylist()
+        private async Task AddToPlaylist()
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;

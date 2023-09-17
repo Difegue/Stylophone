@@ -46,7 +46,7 @@ namespace Stylophone.Common.ViewModels
         public bool IsSourceEmpty => Source.Count == 0;
 
         [RelayCommand]
-        private async void AddToQueue(object list)
+        private async Task AddToQueue(object list)
         {
             var selectedTracks = (IList<object>)list;
 
@@ -67,7 +67,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddToPlaylist(object list)
+        private async Task AddToPlaylist(object list)
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
             if (playlistName == null) return;
