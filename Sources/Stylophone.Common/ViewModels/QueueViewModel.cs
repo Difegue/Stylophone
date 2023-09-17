@@ -162,12 +162,21 @@ namespace Stylophone.Common.ViewModels
         /// </summary>
         private async void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            // iOS uses move
+            if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                _oldId = e.OldItems.Count > 0 ? (e.OldItems[0] as TrackViewModel).File.Id : -1;
+                await _mpdService.SafelySendCommandAsync(new MoveIdCommand(_oldId, e.NewStartingIndex));
+                return;
+            }
+
             if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
             {
                 // One Remove->Add Pair means one MoveIdCommand
-                await _mpdService.SafelySendCommandAsync(new MoveIdCommand(_oldId, e.NewStartingIndex));
                 _previousAction = NotifyCollectionChangedAction.Move;
+                await _mpdService.SafelySendCommandAsync(new MoveIdCommand(_oldId, e.NewStartingIndex));
             }
+
             if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 _previousAction = e.Action;
@@ -199,34 +208,35 @@ namespace Stylophone.Common.ViewModels
                     {
                         Source.CollectionChanged -= Source_CollectionChanged;
 
-                        // If the queue was cleared, PlaylistLength is 0.
-                        if (status.PlaylistLength == 0)
+                        // PlChanges gives the full list of files affected by the change.
+                        foreach (var f in response)
                         {
-                            await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.Clear());
-                        }
-                        else
-                        {
-                            // PlChanges gives the full list of files starting from the change,
-                            // so we delete all existing tracks from the source after that change, and swap the new ones in.
-                            // If the response is empty, that means the last file in the source was removed.
-                            var initialPosition = response.Count() == 0 ? Source.Count - 1 : response.First().Position;
+                            var trackVm = Source.Where(tvm => tvm.File.Id == f.Id).FirstOrDefault();
 
-                            // Get all the tracks between initialPosition and the end of the Source
-                            var tracksToRemove = Source.Skip(initialPosition).ToList();
-                            await _dispatcherService.ExecuteOnUIThreadAsync(() => {
-                                Source.RemoveRange(tracksToRemove);
-                            });
+                            // We might already be up to date
+                            if (Source.IndexOf(trackVm) == f.Position)
+                                continue;
 
-                            var toAdd = new List<TrackViewModel>();
-                            foreach (var item in response)
+                            // Nw track
+                            if (trackVm == default)
                             {
-                                var trackVm = _trackVmFactory.GetTrackViewModel(item);
-                                toAdd.Add(trackVm);
+                                trackVm = _trackVmFactory.GetTrackViewModel(f);
+                            }
+                            else
+                            {
+                                Source.Remove(trackVm);
                             }
 
-                            if (toAdd.Count > 0)
-                                await _dispatcherService.ExecuteOnUIThreadAsync(() => Source.AddRange(toAdd));
+                            Source.Insert(f.Position, trackVm);
                         }
+
+                        // To detect songs that were deleted at the end of the playlist, use playlistlength returned by status command.
+                        // (If the queue was cleared, PlaylistLength is 0.)
+                        var tracksToRemove = Source.Skip(status.PlaylistLength).ToList();
+
+                        await _dispatcherService.ExecuteOnUIThreadAsync(() => {
+                            Source.RemoveRange(tracksToRemove);
+                        });
 
                         Source.CollectionChanged += Source_CollectionChanged;
 

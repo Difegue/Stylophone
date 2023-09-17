@@ -51,7 +51,7 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
                 valueTransformer: negateBoolTransformer);
 
-            NavigationItem.RightBarButtonItem = CreateSettingsButton();
+            NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { CreateSettingsButton(), EditButtonItem };
 
             var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
                 GetRowContextMenu, GetRowSwipeActions, true, primaryAction:OnTap);
