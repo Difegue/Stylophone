@@ -22,7 +22,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
-	<string>15.0</string>
+	<string>16.0</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
