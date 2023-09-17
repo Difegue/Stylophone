@@ -272,6 +272,13 @@ namespace Stylophone.Common.ViewModels
 
         private async void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            // iOS uses move
+            if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                await _mpdService.SafelySendCommandAsync(new PlaylistMoveCommand(Name, e.OldStartingIndex, e.NewStartingIndex));
+                return;
+            }
+
             if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
             {
                 // User reordered tracks, send matching command

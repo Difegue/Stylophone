@@ -60,7 +60,7 @@ namespace Stylophone.iOS.ViewControllers
             _settingsBtn = CreateSettingsButton();
 
             var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
-                GetRowContextMenu, GetRowSwipeActions, false, OnScroll, OnTap);
+                GetRowContextMenu, GetRowSwipeActions, true, OnScroll, OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
 
@@ -112,12 +112,12 @@ namespace Stylophone.iOS.ViewControllers
             if (scrollView.ContentOffset.Y > 192)
             {
                 Title = ViewModel?.Name;
-                NavigationItem.RightBarButtonItem = _settingsBtn;
+                NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { _settingsBtn, EditButtonItem };
             }
             else
             {
                 Title = "";
-                NavigationItem.RightBarButtonItem = null;
+                NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { EditButtonItem };
             }
         }
 
