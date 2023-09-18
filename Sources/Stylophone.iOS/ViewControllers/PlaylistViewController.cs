@@ -96,6 +96,8 @@ namespace Stylophone.iOS.ViewControllers
             ArtContainer.Layer.ShadowOpacity = 0.5F;
             ArtContainer.Layer.ShadowOffset = new CGSize(0, 0);
             ArtContainer.Layer.ShadowRadius = 4;
+
+            NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { EditButtonItem };
         }
 
         public override void ViewWillDisappear(bool animated)

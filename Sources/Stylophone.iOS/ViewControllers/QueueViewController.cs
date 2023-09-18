@@ -88,11 +88,14 @@ namespace Stylophone.iOS.ViewControllers
 
                         if (tableViewRows >= indexPath.Row)
                             TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
                         System.Diagnostics.Debug.WriteLine($"Error while scrolling to row: {e}");
                     }
                 });
+            else // inconsistency, reload source wholesale
+                ViewModel.LoadInitialDataAsync(); 
         }
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)
