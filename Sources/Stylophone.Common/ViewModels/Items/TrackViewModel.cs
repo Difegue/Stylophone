@@ -170,7 +170,7 @@ namespace Stylophone.Common.ViewModels
 
         public override string ToString()
         {
-            return $"{Name} - {File.Artist} - {File.Album}";
+            return $"{Name} - {File.Artist} - {File.Album} - {Miscellaneous.FormatTimeString(File.Time*1000)}";
         }
     }
 }
