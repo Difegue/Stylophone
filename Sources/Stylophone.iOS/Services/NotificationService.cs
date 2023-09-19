@@ -39,7 +39,7 @@ namespace Stylophone.iOS.Services
             _notificationTimer?.Dispose();
             _notificationTimer = new Timer((_) => UIApplication.SharedApplication.InvokeOnMainThread(() =>
                         rootVc.DismissViewController(true, null)),
-                    null, 1500, Timeout.Infinite);
+                    null, 2000, Timeout.Infinite);
         }
 
         public override void ShowBasicToastNotification(string title, string description)
@@ -81,14 +81,24 @@ namespace Stylophone.iOS.Services
 
             PreferredContentSize = new CGSize(196, 54);
 
-            View = new UILabel
+            var stackView = new UIStackView
+            {
+                Axis = UILayoutConstraintAxis.Horizontal,
+                Distribution = UIStackViewDistribution.FillProportionally,
+                Spacing = 32
+            };
+
+            stackView.AddArrangedSubview(new UIView());
+            stackView.AddArrangedSubview(new UILabel
             {
                 Text = _text,
                 Font = UIFont.PreferredHeadline,
-                TextAlignment = UITextAlignment.Center,
                 AdjustsFontSizeToFitWidth = true,
                 Lines = 2,
-            };
+            });
+            stackView.AddArrangedSubview(new UIView());
+
+            View = stackView;
 
         }
 
