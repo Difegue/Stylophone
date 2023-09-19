@@ -51,6 +51,7 @@ namespace Stylophone.iOS.ViewControllers
             // Bind
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
             var intToStringTransformer = NSValueTransformer.GetValueTransformer(nameof(IntToStringValueTransformer));
+            var trackToStringTransformer = NSValueTransformer.GetValueTransformer(nameof(TrackToStringValueTransformer));
 
             // Compact View Binding
             Binder.Bind<bool>(CompactView, "hidden", nameof(ViewModel.IsTrackInfoAvailable), valueTransformer: negateBoolTransformer);
@@ -60,9 +61,12 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
             CompactView.ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
 
+            CompactView.VolumeButton.AccessibilityLabel = Strings.ActionChangeVolume;
+            CompactView.ShuffleButton.AccessibilityLabel = Strings.ActionToggleShuffle;
+
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
             CompactView.OpenFullScreenButton.AccessibilityLabel = Strings.ActionFullscreenPlayback;
-            Binder.Bind<string>(CompactView.OpenFullScreenButton, "accessibilityValue", nameof(ViewModel.CurrentTrack));
+            Binder.Bind<string>(CompactView.OpenFullScreenButton, "accessibilityValue", nameof(ViewModel.CurrentTrack), valueTransformer: trackToStringTransformer);
 
             // Volume Popover Binding
             LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
@@ -70,12 +74,13 @@ namespace Stylophone.iOS.ViewControllers
             LocalMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.LocalPlayback.ToggleMute();
             LocalPlaybackBinder.Bind<int>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
             LocalPlaybackBinder.Bind<int>(LocalVolume, "text", nameof(ViewModel.LocalPlayback.Volume), valueTransformer: intToStringTransformer);
+            LocalVolumeSlider.AccessibilityLabel = Strings.LocalVolumeHeader;
 
             ServerMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleMute();
             Binder.Bind<double>(ServerVolumeSlider, "value", nameof(ViewModel.MediaVolume), true);
             Binder.Bind<bool>(ServerVolumeSlider, "enabled", nameof(ViewModel.CanSetVolume));
             Binder.Bind<double>(ServerVolume, "text", nameof(ViewModel.MediaVolume), valueTransformer: intToStringTransformer);
-            
+            ServerVolumeSlider.AccessibilityLabel = Strings.ActionChangeVolume;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -134,7 +139,6 @@ namespace Stylophone.iOS.ViewControllers
             TrackSlider.TouchDragInside += (s, e) =>
             {
                 ViewModel.TimeListened = Miscellaneous.FormatTimeString(TrackSlider.Value * 1000);
-                TrackSlider.AccessibilityValue = ViewModel.TimeListened;
                 ViewModel.OnPlayingSliderMoving();
             };
             TrackSlider.ValueChanged += (s, e) =>
@@ -150,6 +154,8 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<string>(RemainingTime, "text", nameof(ViewModel.TimeRemaining));
             Binder.Bind<double>(TrackSlider, "value", nameof(ViewModel.CurrentTimeValue), true);
             Binder.Bind<double>(TrackSlider, "maximumValue", nameof(ViewModel.MaxTimeValue));
+            Binder.Bind<string>(TrackSlider, "accessibilityValue", nameof(ViewModel.TimeListened));
+
             Binder.Bind<TrackViewModel>(upNextView, "text", nameof(ViewModel.NextTrack), valueTransformer:upNextTransformer);
             UpdateFullView(ViewModel.CurrentTrack);
 
@@ -158,6 +164,10 @@ namespace Stylophone.iOS.ViewControllers
             UpdateButton(ServerMuteButton, ViewModel.VolumeIcon);
             UpdateButton(RepeatButton, ViewModel.RepeatIcon);
             UpdateButton(ShuffleButton, ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle");
+
+            VolumeButton.AccessibilityLabel = Strings.ActionChangeVolume;
+            ShuffleButton.AccessibilityLabel = Strings.ActionToggleShuffle;
+            RepeatButton.AccessibilityLabel = Strings.ActionToggleRepeat;
 
             SkipPrevButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipPrevious();
             SkipNextButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipNext();
