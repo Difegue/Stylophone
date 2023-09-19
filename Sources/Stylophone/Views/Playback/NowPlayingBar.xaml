@@ -310,12 +310,15 @@
                     Margin="16,8,16,0"
                     ManipulationMode="All"
                     ManipulationStarting="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
-                    Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
+                    GettingFocus="{x:Bind PlaybackViewModel.OnPlayingSliderMoving}"
                     PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
+                    LosingFocus="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
                     ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
-                    AutomationProperties.ItemStatus="{x:Bind PlaybackViewModel.CurrentTimeValue, Converter={StaticResource SliderValueConverter}}"
+                    AutomationProperties.Name="{x:Bind strings:Resources.SongPlaybackLabel}"
+                    AutomationProperties.FullDescription="{x:Bind PlaybackViewModel.CurrentTimeValue, Converter={StaticResource SliderValueConverter}}"
                     Visibility="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}" />
+                    Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}"
+                    Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}" />
 
                 <ProgressBar
                     x:Name="LoadingBar"
