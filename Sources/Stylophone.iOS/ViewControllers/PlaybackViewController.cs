@@ -96,23 +96,17 @@ namespace Stylophone.iOS.ViewControllers
 
             if (!ViewModel.IsFullScreen) return;
 
-            // Don't multi-line for small phones in vertical orientation
+            // Different multi-line behavior depending on size classes
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular && 
                 UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
                 TrackTitle.Lines = 2;
-                AlbumName.Lines = 1;
-
             }
             else
             {
-                TrackTitle.Lines = 3;
-
-                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
-                    AlbumName.Lines = 1;
-                else
-                    AlbumName.Lines = 2;
+                if (UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Phone)
+                    TrackTitle.Lines = 3;
             }
 
             // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
