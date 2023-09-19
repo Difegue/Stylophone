@@ -78,24 +78,24 @@ namespace Stylophone.iOS.ViewControllers
             // Scroll to currently playing song
             var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
 
-            if (playing != null)
-                UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
-                {
-                    try
-                    {
-                        var indexPath = NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0);
-                        var tableViewRows = TableView.NumberOfRowsInSection(0);
+            if (playing == null)
+                return;
 
-                        if (tableViewRows >= indexPath.Row)
-                            TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
-                    }
-                    catch (Exception e)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Error while scrolling to row: {e}");
-                    }
-                });
-            else // inconsistency, reload source wholesale
-                ViewModel.LoadInitialDataAsync(); 
+            UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
+            {
+                try
+                {
+                    var indexPath = NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0);
+                    var tableViewRows = TableView.NumberOfRowsInSection(0);
+
+                    if (tableViewRows >= indexPath.Row)
+                        TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error while scrolling to row: {e}");
+                }
+            });
         }
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)
