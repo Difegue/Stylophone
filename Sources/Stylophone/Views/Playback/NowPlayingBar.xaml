@@ -110,6 +110,8 @@
             Canvas.ZIndex="10"
             Click="{x:Bind PlaybackViewModel.NavigateNowPlaying}"
             CornerRadius="4"
+            AutomationProperties.Name="{x:Bind strings:Resources.ActionFullscreenPlayback}"
+            AutomationProperties.FullDescription="{x:Bind PlaybackViewModel.CurrentTrack.Name, Mode=OneWay}"
             IsEnabled="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay}"
             Visibility="{x:Bind PlaybackViewModel.ShowTrackName, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid>
@@ -201,6 +203,8 @@
                         Click="{x:Bind PlaybackViewModel.ToggleShuffle}"
                         FontSize="18"
                         Style="{StaticResource SVButtonStyle}"
+                        AutomationProperties.Name="{x:Bind strings:Resources.ActionToggleShuffle}"
+                        AutomationProperties.ItemStatus="{x:Bind PlaybackViewModel.IsShuffleEnabled}"
                         ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleShuffle}">
                         <Button.Content>
                             &#xE8B1;
@@ -217,6 +221,7 @@
                     Click="{x:Bind PlaybackViewModel.SkipPrevious}"
                     FontSize="22"
                     Style="{StaticResource SVButtonStyle}"
+                    AutomationProperties.Name="{x:Bind strings:Resources.ActionSkipPrevious}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipPrevious}">
                     <Button.Content>
                         &#xF8AC;
@@ -232,6 +237,7 @@
                     Content="{x:Bind PlaybackViewModel.PlayButtonContent, Mode=OneWay}"
                     FontSize="28"
                     Style="{StaticResource SVButtonStyle}"
+                    AutomationProperties.Name="{x:Bind strings:Resources.ActionPlayPause}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionPlayPause}" />
 
                 <!--  Next  -->
@@ -242,6 +248,7 @@
                     Click="{x:Bind PlaybackViewModel.SkipNext}"
                     FontSize="22"
                     Style="{StaticResource SVButtonStyle}"
+                    AutomationProperties.Name="{x:Bind strings:Resources.ActionSkipNext}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionSkipNext}">
                     <Button.Content>
                         &#xF8AD;
@@ -266,6 +273,8 @@
                         Content="{x:Bind PlaybackViewModel.RepeatIcon, Mode=OneWay}"
                         FontSize="18"
                         Style="{StaticResource SVButtonStyle}"
+                        AutomationProperties.Name="{x:Bind strings:Resources.ActionToggleRepeat}"
+                        AutomationProperties.ItemStatus="{x:Bind PlaybackViewModel.IsRepeatEnabled}"
                         ToolTipService.ToolTip="{x:Bind strings:Resources.ActionToggleRepeat}" />
                 </Grid>
             </StackPanel>
@@ -304,6 +313,7 @@
                     Maximum="{x:Bind PlaybackViewModel.MaxTimeValue, Mode=OneWay}"
                     PointerCaptureLost="{x:Bind PlaybackViewModel.OnPlayingSliderChange}"
                     ThumbToolTipValueConverter="{StaticResource SliderValueConverter}"
+                    AutomationProperties.ItemStatus="{x:Bind PlaybackViewModel.CurrentTimeValue, Converter={StaticResource SliderValueConverter}}"
                     Visibility="{x:Bind PlaybackViewModel.IsTrackInfoAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                     Value="{x:Bind PlaybackViewModel.CurrentTimeValue, Mode=TwoWay}" />
 
@@ -361,6 +371,7 @@
                         Content="{x:Bind PlaybackViewModel.VolumeIcon, Mode=OneWay}"
                         FontSize="21"
                         Style="{StaticResource SVButtonStyle}"
+                        AutomationProperties.Name="{x:Bind strings:Resources.ActionChangeVolume}"
                         ToolTipService.ToolTip="{x:Bind strings:Resources.ActionChangeVolume}" />
                     <Slider
                         Width="105"
@@ -473,6 +484,7 @@
                     Command="{x:Bind PlaybackViewModel.SwitchToCompactViewCommand}"
                     FontSize="22"
                     Style="{StaticResource SVButtonStyle}"
+                    AutomationProperties.Name="{x:Bind strings:Resources.ActionCompactOverlay}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionCompactOverlay}"
                     Visibility="Collapsed">
                     <Button.Content>
@@ -488,6 +500,7 @@
                     Margin="{StaticResource XSmallLeftMargin}"
                     FontSize="22"
                     Style="{StaticResource SVButtonStyle}"
+                    AutomationProperties.Name="{x:Bind strings:Resources.ActionMore}"
                     ToolTipService.ToolTip="{x:Bind strings:Resources.ActionMore}">
                     <Button.Content>
                         &#xE712;

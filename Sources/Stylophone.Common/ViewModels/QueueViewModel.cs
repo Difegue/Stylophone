@@ -222,12 +222,15 @@ namespace Stylophone.Common.ViewModels
                             {
                                 trackVm = _trackVmFactory.GetTrackViewModel(f);
                             }
-                            else
+                            else await _dispatcherService.ExecuteOnUIThreadAsync(() =>
                             {
                                 Source.Remove(trackVm);
-                            }
+                            });
 
-                            Source.Insert(f.Position, trackVm);
+                            await _dispatcherService.ExecuteOnUIThreadAsync(() =>
+                            {
+                                Source.Insert(f.Position, trackVm);
+                            });
                         }
 
                         // To detect songs that were deleted at the end of the playlist, use playlistlength returned by status command.

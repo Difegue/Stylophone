@@ -62,6 +62,7 @@
         <ListViewItem
             Margin="4,0"
             HorizontalContentAlignment="Stretch"
+            AutomationProperties.Name="{x:Bind Name}"
             Style="{ThemeResource DefaultListViewItemStyle}">
             <Grid>
                 <Grid.ColumnDefinitions>
