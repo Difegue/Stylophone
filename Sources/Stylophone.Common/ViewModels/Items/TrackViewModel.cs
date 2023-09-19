@@ -168,5 +168,9 @@ namespace Stylophone.Common.ViewModels
             AlbumArt?.Dispose();
         }
 
+        public override string ToString()
+        {
+            return $"{Name} - {File.Artist} - {File.Album}";
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ZMi-Au-TSz">
-    <device id="retina6_7" orientation="landscape" appearance="light">
+    <device id="retina6_72" orientation="portrait" appearance="light">
         <simulatedSceneSize key="mac" width="688" height="450"/>
     </device>
     <dependencies>
@@ -19,52 +19,52 @@
                         <viewControllerLayoutGuide type="bottom" id="9ag-vI-NX6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="i75-3G-leJ">
-                        <rect key="frame" x="0.0" y="0.0" width="926" height="428"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="hDT-Mu-pHy" userLabel="Album Background">
-                                <rect key="frame" x="-133" y="-96" width="1192" height="539"/>
+                                <rect key="frame" x="-180" y="-96" width="790" height="1030"/>
                             </imageView>
                             <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="px8-71-fBL" userLabel="Background Tint">
-                                <rect key="frame" x="-133" y="-96" width="1192" height="539"/>
+                                <rect key="frame" x="-180" y="-96" width="790" height="1030"/>
                                 <color key="backgroundColor" systemColor="systemPinkColor"/>
                             </view>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Xs-Z1-yFr">
-                                <rect key="frame" x="-133" y="-96" width="1192" height="560"/>
+                                <rect key="frame" x="-180" y="-96" width="790" height="1064"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="b1X-dW-5Dh">
-                                    <rect key="frame" x="0.0" y="0.0" width="1192" height="560"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="790" height="1064"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="regular"/>
                             </visualEffectView>
                             <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" id="DG4-0R-Uua">
-                                <rect key="frame" x="0.0" y="0.0" width="926" height="428"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qgK-bP-GXK" customClass="UIImageView">
-                                        <rect key="frame" x="121.33333333333331" y="58" width="212" height="212"/>
+                                        <rect key="frame" x="16" y="138.66666666666663" width="398" height="398"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Palm Tree Panic Bad Future (Sonic CD USA)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E5Z-bz-pda">
-                                        <rect key="frame" x="380.66666666666674" y="76.666666666666671" width="489.33333333333326" height="67.000000000000014"/>
+                                        <rect key="frame" x="12" y="552.66666666666663" width="406" height="67"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Artist Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2x2-ws-IDR">
-                                        <rect key="frame" x="380.66666666666674" y="155.66666666666666" width="489.33333333333326" height="29"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="757" text="Artist Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2x2-ws-IDR">
+                                        <rect key="frame" x="8" y="631.66666666666663" width="414" height="29"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Sonic and The Secret Rings Original Soundtrack Seven Rings in Hand" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWH-34-r0I">
-                                        <rect key="frame" x="380.66666666666674" y="196.66666666666666" width="489.33333333333326" height="57.333333333333343"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="756" text="Sonic and The Secret Rings Original Soundtrack Seven Rings in Hand" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWH-34-r0I">
+                                        <rect key="frame" x="12" y="672.66666666666663" width="406" height="57.333333333333371"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="753" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ndk-fa-CPd" customClass="KvoUISlider">
-                                        <rect key="frame" x="205" y="278" width="516" height="31"/>
+                                        <rect key="frame" x="74" y="750" width="282" height="31"/>
                                         <color key="tintColor" systemColor="systemBlueColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="tLf-xX-qeL"/>
@@ -72,7 +72,7 @@
                                         </constraints>
                                     </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UdR-Zx-KXJ">
-                                        <rect key="frame" x="16" y="286" width="179" height="17"/>
+                                        <rect key="frame" x="16" y="758" width="48" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="kUp-el-Dwf"/>
                                         </constraints>
@@ -81,7 +81,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-05:36" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aed-cf-8Kx">
-                                        <rect key="frame" x="731" y="286" width="179" height="17"/>
+                                        <rect key="frame" x="366" y="758" width="48" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="gyT-j7-ggb"/>
                                         </constraints>
@@ -89,7 +89,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnF-Il-g1n" userLabel="Skip Prev Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="361" y="344" width="42" height="40"/>
+                                        <rect key="frame" x="113" y="816" width="42" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="42" id="PZK-do-YzC"/>
                                             <constraint firstAttribute="height" constant="40" id="eAo-Fe-Ek3"/>
@@ -100,7 +100,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uWp-iF-Upl" userLabel="Repeat Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="735" y="344" width="40" height="40"/>
+                                        <rect key="frame" x="370" y="864" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="UE8-bx-YXD"/>
                                             <constraint firstAttribute="width" constant="40" id="ZDb-ao-4uh"/>
@@ -111,7 +111,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWt-w6-VmQ" userLabel="Shuffle Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="687" y="344" width="40" height="40"/>
+                                        <rect key="frame" x="322" y="864" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="kBF-62-3VB"/>
                                             <constraint firstAttribute="height" constant="40" id="oIe-Za-M2q"/>
@@ -122,7 +122,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzv-k0-5VN" userLabel="Volume Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="155" y="344" width="40" height="40"/>
+                                        <rect key="frame" x="24" y="864" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="8gi-aB-Ggu"/>
                                             <constraint firstAttribute="height" constant="40" id="csE-rR-Qwp"/>
@@ -133,7 +133,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sfs-XQ-aF1" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="523" y="344" width="42" height="40"/>
+                                        <rect key="frame" x="275" y="816" width="42" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="81H-pS-OLq"/>
                                             <constraint firstAttribute="width" constant="42" id="NQN-ln-qOQ"/>
@@ -144,7 +144,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RI5-DA-btJ" customClass="SymbolUIButton">
-                                        <rect key="frame" x="439" y="340" width="48" height="48"/>
+                                        <rect key="frame" x="191" y="812" width="48" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="48" id="PNe-G5-AMX"/>
                                             <constraint firstAttribute="height" constant="48" id="qgi-ao-D5G"/>
@@ -155,12 +155,12 @@
                                         </state>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="745" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="lka-vy-mHi">
-                                        <rect key="frame" x="121.33333333333331" y="58" width="212" height="212"/>
+                                        <rect key="frame" x="16" y="138.66666666666663" width="398" height="398"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="496" id="2BL-kA-zy0"/>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="640" id="2BL-kA-zy0"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="256" id="C59-e5-JVo"/>
                                             <constraint firstAttribute="width" secondItem="lka-vy-mHi" secondAttribute="height" multiplier="1:1" id="KQc-Cb-cdb"/>
-                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="496" id="OuE-42-0LM">
+                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="640" id="OuE-42-0LM">
                                                 <variation key="heightClass=compact" constant="212"/>
                                                 <variation key="heightClass=compact-widthClass=compact" constant="400"/>
                                             </constraint>
@@ -209,11 +209,11 @@
                                     </constraint>
                                     <constraint firstItem="uWp-iF-Upl" firstAttribute="leading" secondItem="aed-cf-8Kx" secondAttribute="leading" constant="4" id="GTr-no-sId"/>
                                     <constraint firstItem="UdR-Zx-KXJ" firstAttribute="leading" secondItem="DG4-0R-Uua" secondAttribute="leading" constant="16" id="Jee-Ne-kHV"/>
-                                    <constraint firstItem="E5Z-bz-pda" firstAttribute="top" relation="greaterThanOrEqual" secondItem="lka-vy-mHi" secondAttribute="bottom" constant="24" id="Jqv-ff-4Uy">
+                                    <constraint firstItem="E5Z-bz-pda" firstAttribute="top" secondItem="lka-vy-mHi" secondAttribute="bottom" constant="24" id="Jqv-ff-4Uy">
                                         <variation key="heightClass=regular-widthClass=compact" constant="16"/>
                                     </constraint>
                                     <constraint firstItem="kzv-k0-5VN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DG4-0R-Uua" secondAttribute="leading" constant="16" id="KG3-De-EvI"/>
-                                    <constraint firstAttribute="bottom" secondItem="uWp-iF-Upl" secondAttribute="bottom" constant="48" id="KhF-sX-Dsb"/>
+                                    <constraint firstAttribute="bottom" secondItem="uWp-iF-Upl" secondAttribute="bottom" constant="28" id="KhF-sX-Dsb"/>
                                     <constraint firstItem="Ndk-fa-CPd" firstAttribute="top" secondItem="MWH-34-r0I" secondAttribute="bottom" constant="20" id="LtA-94-x0q">
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
                                         <variation key="heightClass=compact-widthClass=regular" constant="24"/>
@@ -256,16 +256,16 @@
                                     <constraint firstAttribute="bottom" secondItem="RI5-DA-btJ" secondAttribute="bottom" constant="62" id="inO-cX-yOf">
                                         <variation key="heightClass=compact-widthClass=compact" constant="20"/>
                                         <variation key="heightClass=compact-widthClass=regular" constant="40"/>
-                                        <variation key="heightClass=regular-widthClass=compact" constant="96"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="72"/>
                                     </constraint>
                                     <constraint firstItem="RI5-DA-btJ" firstAttribute="leading" secondItem="tnF-Il-g1n" secondAttribute="trailing" constant="36" id="jmj-uQ-Hy1"/>
                                     <constraint firstItem="tnF-Il-g1n" firstAttribute="top" secondItem="kzv-k0-5VN" secondAttribute="top" id="nKG-fu-mqs"/>
                                     <constraint firstItem="uWp-iF-Upl" firstAttribute="top" secondItem="sfs-XQ-aF1" secondAttribute="top" id="nVh-du-4GV"/>
                                     <constraint firstItem="lka-vy-mHi" firstAttribute="centerY" secondItem="DG4-0R-Uua" secondAttribute="centerY" constant="-128" id="nie-cO-DlT">
                                         <variation key="heightClass=compact" constant="-50"/>
-                                        <variation key="heightClass=regular-widthClass=compact" constant="-160"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="-180"/>
                                     </constraint>
-                                    <constraint firstAttribute="bottom" secondItem="kzv-k0-5VN" secondAttribute="bottom" constant="48" id="ocU-MS-4o9"/>
+                                    <constraint firstAttribute="bottom" secondItem="kzv-k0-5VN" secondAttribute="bottom" constant="28" id="ocU-MS-4o9"/>
                                     <constraint firstItem="2x2-ws-IDR" firstAttribute="top" secondItem="E5Z-bz-pda" secondAttribute="bottom" constant="12" id="qdB-AA-MIa">
                                         <variation key="heightClass=compact-widthClass=compact" constant="4"/>
                                     </constraint>
@@ -279,14 +279,14 @@
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="0QZ-hU-gzs"/>
-                                        <exclude reference="SCv-P0-qBe"/>
-                                        <exclude reference="9wP-Ed-sok"/>
-                                        <exclude reference="ocU-MS-4o9"/>
                                         <exclude reference="R7B-La-Xhd"/>
                                         <exclude reference="ZYw-4H-VVT"/>
                                         <exclude reference="a2g-ph-i3t"/>
                                         <exclude reference="g0D-kf-jsk"/>
                                         <exclude reference="zhH-G9-9oD"/>
+                                        <exclude reference="SCv-P0-qBe"/>
+                                        <exclude reference="9wP-Ed-sok"/>
+                                        <exclude reference="ocU-MS-4o9"/>
                                         <exclude reference="0hp-1M-Q1p"/>
                                         <exclude reference="KhF-sX-Dsb"/>
                                     </mask>
@@ -298,7 +298,6 @@
                                         <exclude reference="DBh-Jj-3hC"/>
                                         <exclude reference="DIm-rD-9mB"/>
                                         <exclude reference="ue5-NS-PG0"/>
-                                        <include reference="SCv-P0-qBe"/>
                                         <exclude reference="Jqv-ff-4Uy"/>
                                         <include reference="R7B-La-Xhd"/>
                                         <exclude reference="W1k-l1-Uet"/>
@@ -311,6 +310,7 @@
                                         <exclude reference="YIl-td-AKZ"/>
                                         <include reference="g0D-kf-jsk"/>
                                         <include reference="zhH-G9-9oD"/>
+                                        <include reference="SCv-P0-qBe"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular">
@@ -326,9 +326,10 @@
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="constraints">
+                                        <exclude reference="nie-cO-DlT"/>
+                                        <exclude reference="nKG-fu-mqs"/>
                                         <include reference="9wP-Ed-sok"/>
                                         <include reference="ocU-MS-4o9"/>
-                                        <exclude reference="nKG-fu-mqs"/>
                                         <include reference="0hp-1M-Q1p"/>
                                         <include reference="KhF-sX-Dsb"/>
                                         <exclude reference="nVh-du-4GV"/>
@@ -386,27 +387,27 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nz7-vP-z6u" userLabel="Corner Radius Container">
-                            <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
+                            <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="epV-FX-SaH" userLabel="Album Background">
-                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
                                 </imageView>
                                 <view hidden="YES" alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B74-8z-6Q6" userLabel="Background Tint">
-                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
                                     <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 </view>
                                 <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D49-0v-YVb">
-                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="DXd-9F-gc4">
-                                        <rect key="frame" x="0.0" y="0.0" width="1180" height="64"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="05J-Ld-RDm">
-                                                <rect key="frame" x="46" y="8" width="48" height="48"/>
+                                                <rect key="frame" x="16" y="16" width="0.0" height="96"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="e9S-Rc-HA6">
-                                                <rect key="frame" x="46" y="8" width="48" height="48"/>
+                                                <rect key="frame" x="16" y="16" width="0.0" height="96"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="96" id="0Mw-lU-IW0">
                                                         <variation key="heightClass=compact-widthClass=regular" constant="48"/>
@@ -419,19 +420,19 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track now Playing..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="16" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rwy-TS-6DM">
-                                                <rect key="frame" x="110" y="1.6666666666666643" width="214" height="28.666666666666671"/>
+                                                <rect key="frame" x="32" y="33.666666666666664" width="214" height="28.666666666666664"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pu2-Xs-TVz">
-                                                <rect key="frame" x="110" y="38.333333333333336" width="15.666666666666671" height="23"/>
+                                                <rect key="frame" x="32" y="70.333333333333329" width="15.666666666666664" height="23"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWe-5W-eb4" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1004" y="14" width="36" height="36"/>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWe-5W-eb4" userLabel="Skip Next Button" customClass="SymbolUIButton">
+                                                <rect key="frame" x="1260" y="14" width="48" height="36"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="IIM-8D-8bv">
                                                         <variation key="heightClass=compact-widthClass=compact" constant="36"/>
@@ -448,7 +449,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="poz-3g-api" userLabel="Volume Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1103" y="14.666666666666664" width="35" height="35"/>
+                                                <rect key="frame" x="1202" y="11" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="6M5-Mj-2Mq">
                                                         <variation key="heightClass=compact-widthClass=compact" constant="35"/>
@@ -465,7 +466,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fbv-li-bzQ" userLabel="Skip Prev Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="896" y="14" width="36" height="36"/>
+                                                <rect key="frame" x="-128" y="40" width="48" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="48" id="eGF-5v-Pgk">
                                                         <variation key="heightClass=compact-widthClass=compact" constant="36"/>
@@ -482,17 +483,18 @@
                                                 </state>
                                             </button>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MMx-P1-0Cf" customClass="UICircularProgressView">
-                                                <rect key="frame" x="1348" y="-16" width="96" height="96"/>
+                                                <rect key="frame" x="1056" y="16" width="96" height="96"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="96" id="8HL-Sa-QLA"/>
                                                     <constraint firstAttribute="height" constant="96" id="eOb-ba-geX"/>
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xJI-gJ-y33">
-                                                <rect key="frame" x="0.0" y="0.0" width="880" height="64"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="1020" height="128"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Control " label="Open fullscreen playback"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DlZ-qx-4Nb" userLabel="Shuffle Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1063" y="14.666666666666664" width="35" height="35"/>
+                                                <rect key="frame" x="1202" y="67" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="CZl-WI-puR">
                                                         <variation key="heightClass=compact" constant="35"/>
@@ -507,7 +509,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ugU-4p-yom" customClass="SymbolUIButton">
-                                                <rect key="frame" x="944" y="8" width="48" height="48"/>
+                                                <rect key="frame" x="1076" y="36" width="56" height="56"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="56" id="9Zn-x0-10S">
                                                         <variation key="heightClass=compact" constant="48"/>
@@ -528,7 +530,7 @@
                                                 <variation key="heightClass=compact" constant="40"/>
                                             </constraint>
                                             <constraint firstAttribute="trailing" secondItem="poz-3g-api" secondAttribute="trailing" constant="20" id="288-Pb-upZ">
-                                                <variation key="heightClass=compact" constant="42"/>
+                                                <variation key="heightClass=compact" constant="28"/>
                                                 <variation key="heightClass=regular-widthClass=compact" constant="-72"/>
                                             </constraint>
                                             <constraint firstItem="cWe-5W-eb4" firstAttribute="leading" secondItem="ugU-4p-yom" secondAttribute="trailing" constant="12" id="4Cw-C8-gfb"/>
@@ -586,16 +588,16 @@
                                                 <exclude reference="6Tf-TA-5Xd"/>
                                                 <exclude reference="KsV-xZ-o8u"/>
                                                 <exclude reference="rqc-LJ-ZHm"/>
+                                                <exclude reference="Y2k-vB-tj7"/>
                                                 <exclude reference="ATW-CF-cR9"/>
                                                 <exclude reference="W4p-ZJ-1br"/>
                                                 <exclude reference="hRv-nI-0sI"/>
                                                 <exclude reference="sON-QN-IKN"/>
+                                                <exclude reference="qdx-KM-zw2"/>
                                                 <exclude reference="4Cw-C8-gfb"/>
                                                 <exclude reference="gvi-Zs-cTV"/>
                                                 <exclude reference="h6q-Om-RsB"/>
                                                 <exclude reference="lBY-15-sxl"/>
-                                                <exclude reference="qdx-KM-zw2"/>
-                                                <exclude reference="Y2k-vB-tj7"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -620,15 +622,15 @@
                                                 <include reference="4la-bA-Etd"/>
                                                 <include reference="6Tf-TA-5Xd"/>
                                                 <include reference="ATW-CF-cR9"/>
-                                                <include reference="4Cw-C8-gfb"/>
                                                 <include reference="1gc-NI-O3C"/>
+                                                <include reference="4Cw-C8-gfb"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
+                                                <include reference="Y2k-vB-tj7"/>
                                                 <include reference="sON-QN-IKN"/>
                                                 <exclude reference="h6q-Om-RsB"/>
-                                                <include reference="Y2k-vB-tj7"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">

@@ -61,6 +61,8 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
 
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
+            CompactView.OpenFullScreenButton.AccessibilityLabel = Strings.ActionFullscreenPlayback;
+            Binder.Bind<string>(CompactView.OpenFullScreenButton, "accessibilityValue", nameof(ViewModel.CurrentTrack));
 
             // Volume Popover Binding
             LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
@@ -128,14 +130,17 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            TrackSlider.AccessibilityLabel = Strings.SongPlaybackLabel;
             TrackSlider.TouchDragInside += (s, e) =>
             {
                 ViewModel.TimeListened = Miscellaneous.FormatTimeString(TrackSlider.Value * 1000);
+                TrackSlider.AccessibilityValue = ViewModel.TimeListened;
                 ViewModel.OnPlayingSliderMoving();
             };
             TrackSlider.ValueChanged += (s, e) =>
             {
                 ViewModel.OnPlayingSliderChange();
+                TrackSlider.AccessibilityValue = ViewModel.TimeListened;
             };
 
             var upNextTransformer = NSValueTransformer.GetValueTransformer(nameof(NextTrackToStringValueTransformer));
