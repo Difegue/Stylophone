@@ -27,7 +27,6 @@ namespace Stylophone.iOS.ViewControllers
 
             Playlists = new ObservableCollection<MpdPlaylist>(mpdService.Playlists);
 
-            Title = Strings.AddToPlaylistTitle;
             ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
             ModalTransitionStyle = UIModalTransitionStyle.CoverVertical;
 
@@ -92,7 +91,9 @@ namespace Stylophone.iOS.ViewControllers
             };
 
             if (AllowExistingPlaylists)
-                stackView.AddArrangedSubview(playlistSwitch);
+                NavigationItem.TitleView = playlistSwitch;
+            else
+                Title = Strings.AddToPlaylistCreateNewPlaylist;
 
             if (AllowExistingPlaylists)
                 stackView.AddArrangedSubview(playlistPicker);
