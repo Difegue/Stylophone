@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Stylophone.Helpers;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Interfaces;
@@ -7,6 +8,7 @@ using Stylophone.Common.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.Specialized;
 
 namespace Stylophone.Views
 {
@@ -31,7 +33,7 @@ namespace Stylophone.Views
         {
             base.OnNavigatedTo(e);
 
-            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            ViewModel.Source.CollectionChanged += ScrollToPlayingSong;
 
             _mpdService.SongChanged += MPDConnectionService_SongChanged;
 
@@ -58,31 +60,35 @@ namespace Stylophone.Views
             });
         }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ScrollToPlayingSong(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ViewModel.Source))
-            {
-                if (QueueList.Items.Count == 0)
-                    return;
+            if (QueueList.Items.Count == 0)
+                return;
 
-                var playing = ViewModel.Source.Where(t => t.IsPlaying && t.File.Id != manualSongId).FirstOrDefault();
-                if (playing != null)
-                {
-                    playing.UpdatePlayingStatus();
-                    QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
-                }
+            var playing = ViewModel.Source.Where(t => t.IsPlaying && t.File.Id != manualSongId).FirstOrDefault();
+            if (playing != null)
+            {
+                playing.UpdatePlayingStatus();
+                QueueList.ScrollIntoView(playing, ScrollIntoViewAlignment.Leading);
             }
         }
 
         private void Play_Track(object sender, RoutedEventArgs e)
         {
-            var listView = sender as ListView;
-            var trackVm = listView.SelectedItem as TrackViewModel;
-            // Set this ID as manually played by the user to prevent unnecessary autoscrolling.
-            // Kind of a duct tape fix for now
-            // TODO: Apply to context menu as well, maybe main playbar buttons if the queue is showing?
-            manualSongId = trackVm.File.Id;
-            trackVm.PlayTrackCommand.Execute(trackVm.File);
+            try
+            {
+                var listView = sender as ListView;
+                var trackVm = listView.SelectedItem as TrackViewModel;
+                // Set this ID as manually played by the user to prevent unnecessary autoscrolling.
+                // Kind of a duct tape fix for now
+                // TODO: Apply to context menu as well, maybe main playbar buttons if the queue is showing?
+                manualSongId = trackVm.File.Id;
+                trackVm.PlayTrackCommand.Execute(trackVm.File);
+            }
+            catch (Exception ex)
+            {
+                Ioc.Default.GetRequiredService<INotificationService>().ShowErrorNotification(ex);
+            }
         }
 
         private void Select_Item(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) => UWPHelpers.SelectItemOnFlyoutRightClick<TrackViewModel>(QueueList, e);

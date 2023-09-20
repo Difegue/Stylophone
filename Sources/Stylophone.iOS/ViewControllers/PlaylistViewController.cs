@@ -59,7 +59,8 @@ namespace Stylophone.iOS.ViewControllers
 
             _settingsBtn = CreateSettingsButton();
 
-            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions, true, OnScroll);
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
+                GetRowContextMenu, GetRowSwipeActions, true, OnScroll, OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
 
@@ -95,6 +96,8 @@ namespace Stylophone.iOS.ViewControllers
             ArtContainer.Layer.ShadowOpacity = 0.5F;
             ArtContainer.Layer.ShadowOffset = new CGSize(0, 0);
             ArtContainer.Layer.ShadowRadius = 4;
+
+            NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { EditButtonItem };
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -103,17 +106,20 @@ namespace Stylophone.iOS.ViewControllers
             ViewModel.Dispose();
         }
 
+        private void OnTap(NSIndexPath indexPath) =>
+            ViewModel.AddToQueueCommand.Execute(new List<object> { ViewModel?.Source[indexPath.Row] });
+
         private void OnScroll(UIScrollView scrollView)
         {
             if (scrollView.ContentOffset.Y > 192)
             {
                 Title = ViewModel?.Name;
-                NavigationItem.RightBarButtonItem = _settingsBtn;
+                NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { _settingsBtn, EditButtonItem };
             }
             else
             {
                 Title = "";
-                NavigationItem.RightBarButtonItem = null;
+                NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { EditButtonItem };
             }
         }
 

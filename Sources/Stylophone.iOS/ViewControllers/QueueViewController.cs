@@ -11,7 +11,6 @@ using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -39,7 +38,7 @@ namespace Stylophone.iOS.ViewControllers
         private void OnLeavingBackground(object sender, EventArgs e)
         {
             if (_mpdService.IsConnected)
-                Task.Run(async () => await ViewModel.LoadInitialDataAsync());
+                Task.Run(ViewModel.LoadInitialDataAsync);
         }
 
         public override void ViewDidLoad()
@@ -52,14 +51,19 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
                 valueTransformer: negateBoolTransformer);
 
-            NavigationItem.RightBarButtonItem = CreateSettingsButton();
+            NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { CreateSettingsButton(), EditButtonItem };
 
-            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions);
+            var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
+                GetRowContextMenu, GetRowSwipeActions, true, primaryAction:OnTap);
             TableView.DataSource = trackDataSource;
             TableView.Delegate = trackDataSource;
+            TableView.SelfSizingInvalidation = UITableViewSelfSizingInvalidation.EnabledIncludingConstraints;
 
             _mpdService.SongChanged += ScrollToPlayingSong;
         }
+
+        private void OnTap(NSIndexPath indexPath) =>
+            ViewModel.PlayTrackCommand.Execute(new List<object> { ViewModel?.Source[indexPath.Row] });
 
         private void UpdateListOnPlaylistVersionChange(object sender, PropertyChangedEventArgs e)
         {
@@ -74,21 +78,24 @@ namespace Stylophone.iOS.ViewControllers
             // Scroll to currently playing song
             var playing = ViewModel.Source.Where(t => t.IsPlaying).FirstOrDefault();
 
-            if (playing != null)
-                UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
-                {
-                    try
-                    {
-                        var indexPath = NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0);
-                        var tableViewRows = TableView.NumberOfRowsInSection(0);
+            if (playing == null)
+                return;
 
-                        if (tableViewRows >= indexPath.Row)
-                            TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
-                    } catch (Exception e)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Error while scrolling to row: {e}");
-                    }
-                });
+            UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
+            {
+                try
+                {
+                    var indexPath = NSIndexPath.FromRowSection(ViewModel.Source.IndexOf(playing), 0);
+                    var tableViewRows = TableView.NumberOfRowsInSection(0);
+
+                    if (tableViewRows >= indexPath.Row)
+                        TableView.ScrollToRow(indexPath, UITableViewScrollPosition.Middle, true);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error while scrolling to row: {e}");
+                }
+            });
         }
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)

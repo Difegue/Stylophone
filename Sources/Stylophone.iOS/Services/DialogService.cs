@@ -39,9 +39,11 @@ namespace Stylophone.iOS.Services
             var dialog = new AddToPlaylistViewController(_mpdService, allowExistingPlaylists);
             var navigationController = new UINavigationController(dialog);
 
-            // Specify medium detent for the NavigationController's presentation
+            // Custom size detent since the addToPlaylist view is quite small
             UISheetPresentationController uspc = (UISheetPresentationController)navigationController.PresentationController;
-            uspc.Detents = new [] { UISheetPresentationControllerDetent.CreateMediumDetent() };
+
+            var detent = UISheetPresentationControllerDetent.Create(null, (context) => 240);
+            uspc.Detents = new [] { detent };
             
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(navigationController, true, null);
 

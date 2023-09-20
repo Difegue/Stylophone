@@ -2,13 +2,15 @@
     x:Class="Stylophone.Views.LibraryDetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    xmlns:stylophone="using:Stylophone.Helpers"
-    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:ui="using:CommunityToolkit.WinUI"
+    xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:Stylophone.Behaviors"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea" Margin="8,0">
@@ -57,18 +59,15 @@
 
             <RelativePanel x:Name="Header" Padding="16">
 
-                <controls:DropShadowPanel
+                <Border
                     x:Name="itemHero"
                     Width="148"
                     Height="148"
                     Margin="{StaticResource MediumRightMargin}"
-                    Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                    BlurRadius="10"
-                    OffsetY="2"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"
-                    ShadowOpacity="0.6"
-                    Color="Black">
+                    ui:Effects.Shadow="{StaticResource CommonShadow}"
+                    >
 
                     <Grid
                         x:Name="albumImage"
@@ -76,18 +75,19 @@
                         Height="148"
                         CornerRadius="4">
 
-                        <winui:ProgressRing
-                            Margin="{StaticResource SmallLeftTopMargin}"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            IsActive="{x:Bind ViewModel.Item.AlbumArtLoaded, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
                         <Image
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Source="{x:Bind ViewModel.Item.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=196}"
                             Stretch="UniformToFill" />
+                        <winui:ProgressBar
+                            Width="160"
+                            Margin="{StaticResource SmallBottomMargin}"
+                            VerticalAlignment="Bottom"
+                            IsIndeterminate="True"
+                            Visibility="{x:Bind ViewModel.Item.AlbumArtLoaded, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
                     </Grid>
-                </controls:DropShadowPanel>
+                </Border>
 
                 <TextBlock
                     x:Name="title"
@@ -194,14 +194,19 @@
             <ListView
                 x:Name="QueueList"
                 Margin="0,8"
-                ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                ui7:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                 ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                ui:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
+                <interactivity:Interaction.Behaviors>
+                    <behaviors:AlternatingListViewBehavior
+                    AlternateBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                    AlternateBorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    AlternateBorderThickness="0" />
+                </interactivity:Interaction.Behaviors>
                 <ListView.ContextFlyout>
                     <MenuFlyout>
                         <!--  Add to Queue  -->

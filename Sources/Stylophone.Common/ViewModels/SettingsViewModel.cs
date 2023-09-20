@@ -78,11 +78,7 @@ namespace Stylophone.Common.ViewModels
         partial void OnElementThemeChanged(Theme value)
         {
             Task.Run (async () => await _interop.SetThemeAsync(value));
-
-            if (value != _elementTheme)
-            {
-                _applicationStorageService.SetValue(nameof(ElementTheme), value.ToString());
-            }
+            _applicationStorageService.SetValue(nameof(ElementTheme), value.ToString());
         }
 
         partial void OnServerHostChanged(string value)
@@ -242,7 +238,7 @@ namespace Stylophone.Common.ViewModels
                 var songs = response.ContainsKey("songs") ? response["songs"] : "??";
                 var albums = response.ContainsKey("albums") ? response["albums"] : "??";
 
-                if (outputs != null)
+                if (outputs != null && outputs.Count() > 0)
                 {
                     var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
 

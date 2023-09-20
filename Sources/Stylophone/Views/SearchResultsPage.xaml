@@ -2,12 +2,15 @@
     x:Class="Stylophone.Views.SearchResultsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Stylophone="using:Stylophone.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
-    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    xmlns:ui="using:CommunityToolkit.WinUI"
+    xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:Stylophone.Behaviors"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea" Margin="8,0">
@@ -16,24 +19,22 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal"
-            Spacing="16">
-            <ToggleButton
-                Width="120"
-                Content="{x:Bind strings:Resources.SearchTracksToggle}"
-                IsChecked="{x:Bind ViewModel.SearchTracks, Mode=TwoWay}" />
-            <ToggleButton
-                Width="120"
-                Content="{x:Bind strings:Resources.SearchArtistsToggle}"
-                IsChecked="{x:Bind ViewModel.SearchArtists, Mode=TwoWay}" />
-            <ToggleButton
-                Width="120"
-                Content="{x:Bind strings:Resources.SearchAlbumsToggle}"
-                IsChecked="{x:Bind ViewModel.SearchAlbums, Mode=TwoWay}" />
-        </StackPanel>
+
+
+        <controls:Segmented Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            SelectedIndex="0"
+                            SelectionMode="Single">
+            <controls:SegmentedItem Content="{x:Bind strings:Resources.SearchTracksToggle}"
+                                    IsSelected="{x:Bind ViewModel.SearchTracks, Mode=TwoWay}"
+                                    Icon="{ui:FontIcon Glyph=&#xEC4F;}" />
+            <controls:SegmentedItem Content="{x:Bind strings:Resources.SearchArtistsToggle}"
+                                    IsSelected="{x:Bind ViewModel.SearchArtists, Mode=TwoWay}"
+                                    Icon="{ui:FontIcon Glyph=&#xE13D;}" />
+            <controls:SegmentedItem Content="{x:Bind strings:Resources.SearchAlbumsToggle}"
+                                    IsSelected="{x:Bind ViewModel.SearchAlbums, Mode=TwoWay}"
+                                    Icon="{ui:FontIcon Glyph=&#xE93C;}" />
+        </controls:Segmented>
 
         <Grid
             Grid.Row="1"
@@ -46,14 +47,19 @@
             <ListView
                 x:Name="QueueList"
                 Margin="0,8"
-                ui:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
+                ui7:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                 ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"
-                ui:ListViewExtensions.AlternateColor="{ThemeResource SubtleFillColorTertiaryBrush}"
                 RightTapped="Select_Item"
                 SelectionMode="Extended">
+                <interactivity:Interaction.Behaviors>
+                    <behaviors:AlternatingListViewBehavior
+                        AlternateBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                        AlternateBorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        AlternateBorderThickness="0" />
+                </interactivity:Interaction.Behaviors>
                 <ListView.ContextFlyout>
                     <MenuFlyout>
                         <!--  Add to Queue  -->

@@ -2,6 +2,7 @@
 using SkiaSharp;
 using System;
 using System.IO;
+using System.Net;
 
 namespace Stylophone.Common.Helpers
 {
@@ -82,6 +83,26 @@ namespace Stylophone.Common.Helpers
                 fileName = fileName.Replace(invalidChar.ToString(), string.Format("{0,4:X}", Convert.ToInt16(invalidChar)).Replace(' ', '0'));
             }
             return fileName.Replace(".", "002E");
+        }
+
+        public static IPEndPoint GetIPEndPointFromHostName(string hostName, int port, bool throwIfMoreThanOneIP)
+        {
+            var addresses = System.Net.Dns.GetHostAddresses(hostName);
+            if (addresses.Length == 0)
+            {
+                throw new ArgumentException(
+                    "Unable to retrieve address from specified host name.",
+                    "hostName"
+                );
+            }
+            else if (throwIfMoreThanOneIP && addresses.Length > 1)
+            {
+                throw new ArgumentException(
+                    "There is more that one IP address to the specified host.",
+                    "hostName"
+                );
+            }
+            return new IPEndPoint(addresses[0], port); // Port gets validated here.
         }
     }
 }

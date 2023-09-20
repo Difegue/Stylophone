@@ -40,7 +40,7 @@ namespace Stylophone.Common.ViewModels
             FilteredSource.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
 
             Source.Clear();
-            var response = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.Album));
+            var response = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.AlbumSort));
 
             if (response != null)
                 GroupAlbumsByName(response);

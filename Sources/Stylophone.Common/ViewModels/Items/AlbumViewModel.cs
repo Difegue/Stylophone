@@ -113,7 +113,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddToPlaylist()
+        private async Task AddToPlaylist()
         {
             var playlistName = await _dialogService.ShowAddToPlaylistDialog();
             if (playlistName == null || Files.Count == 0) return;
@@ -132,7 +132,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void AddAlbum()
+        private async Task AddAlbum()
         {
             var commandList = new CommandList();
 
@@ -152,7 +152,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void PlayAlbum()
+        private async Task PlayAlbum()
         {
             if (Files.Count == 0)
             {
@@ -208,7 +208,8 @@ namespace Stylophone.Common.ViewModels
                 if (Files.Count == 0)
                     Files.AddRange(findReq.Response.Content);
 
-                Artist = Files.Select(f => f.Artist).Distinct().Where(f => f != "").Aggregate((f1, f2) => $"{f1}, {f2}");
+                Artist = Files.Any(f => f.HasAlbumArtist) ? Files.First(f => f.HasAlbumArtist).AlbumArtist : 
+                         Files.Select(f => f.Artist).Distinct().Where(f => f != "").Aggregate((f1, f2) => $"{f1}, {f2}");
 
                 // If we've already generated album art, don't use the queue and directly grab it
                 if (await _albumArtService.IsAlbumArtCachedAsync(Files[0]))

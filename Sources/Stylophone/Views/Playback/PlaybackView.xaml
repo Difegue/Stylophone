@@ -2,9 +2,9 @@
     x:Class="Stylophone.Views.PlaybackView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:converters="using:Stylophone.Helpers"
-    xmlns:converters1="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:converters1="using:CommunityToolkit.WinUI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
@@ -61,24 +61,19 @@
                 <RowDefinition Height=".3*" />
             </Grid.RowDefinitions>
 
-            <controls:DropShadowPanel
+            <Border
                 x:Name="AlbumArt"
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
                 Margin="24,56,24,0"
-                Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                BlurRadius="10"
-                OffsetX="4"
-                OffsetY="4"
-                ShadowOpacity="0.6"
-                Color="Black">
+                ui:Effects.Shadow="{StaticResource CommonShadow}">
 
                 <Grid CornerRadius="8">
                     <Image Source="{x:Bind PlaybackViewModel.CurrentTrack.AlbumArt, Mode=OneWay, Converter={StaticResource SKImageToUWPConverter}, ConverterParameter=720}" />
                 </Grid>
-            </controls:DropShadowPanel>
+            </Border>
 
             <StackPanel
                 x:Name="AlbumInfo"

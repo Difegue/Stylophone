@@ -21,7 +21,9 @@ namespace Stylophone.iOS.ViewControllers
         private Func<NSIndexPath, UIMenu> _menuFactory;
         private Func<NSIndexPath, bool, UISwipeActionsConfiguration> _swipeFactory;
         private Action<UIScrollView> _scrollHandler;
+        private Action<NSIndexPath> _primaryAction;
         private ObservableCollection<TrackViewModel> _sourceCollection;
+        private bool _canReorder;
 
         public TrackTableViewDataSource(IntPtr handle) : base(handle)
         {
@@ -34,21 +36,26 @@ namespace Stylophone.iOS.ViewControllers
         /// <param name="source">The source TrackViewModels</param>
         /// <param name="contextMenuFactory">A factory for row context menus</param>
         /// <param name="swipeActionFactory">A factory for row swipe actions</param>
-        /// <param name="canSelectRows">Whether you can select multiple rows</param>
+        /// <param name="canReorder">Whether you can reorder items</param>
         /// <param name="scrollHandler">Optional scrollHandler</param>
+        /// <param name="primaryAction">Optional primary action</param>
         public TrackTableViewDataSource(UITableView tableView, ObservableCollection<TrackViewModel> source,
             Func<NSIndexPath, UIMenu> contextMenuFactory, Func<NSIndexPath,bool, UISwipeActionsConfiguration> swipeActionFactory,
-            bool canSelectRows = false, Action<UIScrollView> scrollHandler = null)
+            bool canReorder = false, Action<UIScrollView> scrollHandler = null, Action<NSIndexPath> primaryAction = null)
         {
             _tableView = tableView;
             _sourceCollection = source;
             _menuFactory = contextMenuFactory;
             _swipeFactory = swipeActionFactory;
+            _canReorder = canReorder;
             _scrollHandler = scrollHandler;
+            _primaryAction = primaryAction;
 
             _sourceCollection.CollectionChanged += (s,e) => UIApplication.SharedApplication.InvokeOnMainThread(
                 () => UpdateUITableView(s,e));
-            _tableView.AllowsMultipleSelection = canSelectRows;
+
+            //_tableView.AllowsMultipleSelectionDuringEditing = _canReorder;
+            //_tableView.AllowsMultipleSelection = canSelectRows;
         }
 
         private void UpdateUITableView(object sender, NotifyCollectionChangedEventArgs e)
@@ -74,7 +81,9 @@ namespace Stylophone.iOS.ViewControllers
 
                 if (e.Action == NotifyCollectionChangedAction.Remove)
                 {
-                    for (var i = e.OldStartingIndex; i < e.OldStartingIndex + e.OldItems.Count; i++)
+                    var startIndex = e.OldStartingIndex;
+
+                    for (var i = startIndex; i < startIndex + e.OldItems.Count; i++)
                         indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
 
                     _tableView.DeleteRows(indexPaths.ToArray(), UITableViewRowAnimation.Right);
@@ -85,6 +94,9 @@ namespace Stylophone.iOS.ViewControllers
         }
 
         #region DataSource
+
+        [Export("tableView:canMoveRowAtIndexPath:")]
+        public bool CanMoveRow(UITableView tableView, NSIndexPath indexPath) => _canReorder;
 
         public nint RowsInSection(UITableView tableView, nint section)
         {
@@ -113,9 +125,19 @@ namespace Stylophone.iOS.ViewControllers
             return cell;
         }
 
+        [Export("tableView:moveRowAtIndexPath:toIndexPath:")]
+        public void MoveRow(UITableView tableView, NSIndexPath sourceIndexPath, NSIndexPath destinationIndexPath)
+        {
+            _sourceCollection.Move(sourceIndexPath.Row, destinationIndexPath.Row);
+        }
+
         #endregion
 
         #region Delegate
+
+        // If multiselect isn't enabled, this will show a delete icon on the left side of the cells
+        public override UITableViewCellEditingStyle EditingStyleForRow(UITableView tableView, NSIndexPath indexPath)
+            => UITableViewCellEditingStyle.Delete;
 
         public override void Scrolled(UIScrollView scrollView)
         {
@@ -124,14 +146,20 @@ namespace Stylophone.iOS.ViewControllers
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            if (tableView.AllowsMultipleSelection)
-                tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.Checkmark;
+            //if (tableView.Editing)
+              //  tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.Checkmark;
         }
 
         public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
         {
-            if (tableView.AllowsMultipleSelection)
-                tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.None;
+            //if (tableView.Editing)
+             //   tableView.CellAt(indexPath).Accessory = UITableViewCellAccessory.None;
+        }
+
+        public override void PerformPrimaryAction(UITableView tableView, NSIndexPath rowIndexPath)
+        {
+            if (!tableView.Editing)
+                _primaryAction?.Invoke(rowIndexPath);
         }
 
         public override UIContextMenuConfiguration GetContextMenuConfiguration(UITableView tableView, NSIndexPath indexPath, CoreGraphics.CGPoint point)

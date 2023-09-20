@@ -1,5 +1,5 @@
 ﻿using Stylophone.Helpers;
-using Microsoft.Toolkit.Uwp.UI.Animations;
+using CommunityToolkit.WinUI.Animations;
 
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;

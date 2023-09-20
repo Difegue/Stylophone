@@ -481,4 +481,10 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   <data name="ErrorUpdatingPlaylist" xml:space="preserve">
     <value>La mise à jour des playlists a échoué</value>
   </data>
+  <data name="ActionFullscreenPlayback" xml:space="preserve">
+    <value>Ouvrir le lecteur plein écran</value>
+  </data>
+  <data name="SongPlaybackLabel" xml:space="preserve">
+    <value>Lecture de la piste</value>
+  </data>
 </root>

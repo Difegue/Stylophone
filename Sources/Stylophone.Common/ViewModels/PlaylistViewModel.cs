@@ -95,7 +95,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void RemovePlaylist()
+        private async Task RemovePlaylist()
         {
             var result = await _dialogService.ShowConfirmDialogAsync(Resources.DeletePlaylistContentDialog, "", Resources.OKButtonText, Resources.CancelButtonText);
 
@@ -112,7 +112,7 @@ namespace Stylophone.Common.ViewModels
         }
 
         [RelayCommand]
-        private async void LoadPlaylist()
+        private async Task LoadPlaylist()
         {
             var res = await _mpdService.SafelySendCommandAsync(new LoadCommand(Name));
 
@@ -121,7 +121,7 @@ namespace Stylophone.Common.ViewModels
         }
         
         [RelayCommand]
-        private async void PlayPlaylist()
+        private async Task PlayPlaylist()
         {
             // Clear queue, add playlist and play
             var commandList = new CommandList(new IMpcCommand<object>[] { new ClearCommand() , new LoadCommand(Name), new PlayCommand(0) });
@@ -135,7 +135,7 @@ namespace Stylophone.Common.ViewModels
 
         [RelayCommand]
 
-        private async void AddToQueue(object list)
+        private async Task AddToQueue(object list)
         {
             // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
@@ -171,27 +171,20 @@ namespace Stylophone.Common.ViewModels
 
 
         [RelayCommand]
-        private async void RemoveTrackFromPlaylist(object list)
+        private async Task RemoveTrackFromPlaylist(object list)
         {
             // Cast the received __ComObject
             var selectedTracks = (IList<object>)list;
-
-            if (selectedTracks?.Count > 0)
+            var trackCount = selectedTracks?.Count;
+            if (trackCount > 0)
             {
-                var commandList = new CommandList();
+                var command = new PlaylistDeleteCommand(Name, Source.IndexOf(selectedTracks.First() as TrackViewModel));
+                
+                // Use new ranged variant if necessary
+                if (trackCount > 1)
+                    command = new PlaylistDeleteCommand(Name, Source.IndexOf(selectedTracks.First() as TrackViewModel), Source.IndexOf(selectedTracks.Last() as TrackViewModel));
 
-                // We can't batch PlaylistDeleteCommands cleanly, since they're index-based and logically, said indexes will shift as we remove stuff from the playlist.
-                // To simulate this behavior, we copy our Source list and incrementally remove the affected tracks from it to get the valid indexes as we move down the commandList.
-                IList<TrackViewModel> copy = Source.ToList();
-
-                foreach (var f in selectedTracks)
-                {
-                    var trackVM = f as TrackViewModel;
-                    commandList.Add(new PlaylistDeleteCommand(Name, copy.IndexOf(trackVM)));
-                    copy.Remove(trackVM);
-                }
-
-                var r = await _mpdService.SafelySendCommandAsync(commandList);
+                var r = await _mpdService.SafelySendCommandAsync(command);
                 if (r != null) // Reload playlist
                     await LoadDataAsync(Name);
             }
@@ -237,7 +230,7 @@ namespace Stylophone.Common.ViewModels
                 await Task.Run(async () =>
                 {
                     // Get album art for three albums to display in the playlist view
-                    Random r = new Random();
+                    Random r = new();
                     var distinctAlbums = Source.GroupBy(tr => tr.File.Album).Select(tr => tr.First()).OrderBy((item) => r.Next()).ToList();
 
                     if (distinctAlbums.Count > 1)
@@ -247,8 +240,13 @@ namespace Stylophone.Common.ViewModels
 
                         DominantColor = (art?.DominantColor?.Color).GetValueOrDefault();
 
-                        if (DominantColor == default(SKColor))
-                            DominantColor = _interop.GetAccentColor();
+                        if (DominantColor == default)
+                        {
+                            await _dispatcherService.ExecuteOnUIThreadAsync(() =>
+                            {
+                                DominantColor = _interop.GetAccentColor();
+                            });
+                        }
 
                         IsLight = (!art?.DominantColor?.IsDark).GetValueOrDefault();
                     }
@@ -274,6 +272,13 @@ namespace Stylophone.Common.ViewModels
 
         private async void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            // iOS uses move
+            if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                await _mpdService.SafelySendCommandAsync(new PlaylistMoveCommand(Name, e.OldStartingIndex, e.NewStartingIndex));
+                return;
+            }
+
             if (e.Action == NotifyCollectionChangedAction.Add && _previousAction == NotifyCollectionChangedAction.Remove)
             {
                 // User reordered tracks, send matching command

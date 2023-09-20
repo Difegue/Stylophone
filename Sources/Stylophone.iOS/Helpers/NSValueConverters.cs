@@ -147,4 +147,34 @@ namespace Stylophone.iOS.Helpers
             return NSNumber.FromInt32(result);
         }
     }
+
+    [Register(nameof(TrackToStringValueTransformer))]
+    public class TrackToStringValueTransformer : NSValueTransformer
+    {
+        public static new Class TransformedValueClass => new NSString().Class;
+        public static new bool AllowsReverseTransformation => false;
+
+        public override NSObject TransformedValue(NSObject value)
+        {
+            var text = "";
+
+            if (value is NSWrapper wrap)
+            {
+                var trackVm = (TrackViewModel)wrap.ManagedObject;
+                text = trackVm.ToString();
+            }
+
+            return new NSString(text);
+        }
+
+        public override NSObject ReverseTransformedValue(NSObject value)
+        {
+            int result = 0;
+
+            if (value is NSString s)
+                int.TryParse(s, out result);
+
+            return NSNumber.FromInt32(result);
+        }
+    }
 }

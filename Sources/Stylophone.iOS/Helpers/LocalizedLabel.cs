@@ -26,10 +26,10 @@ namespace Stylophone.iOS.Helpers
 
             // Use the text set in IB to find the matching property.
             // Set the identifier in "User Defined Runtime Attributes".
-            var prop = typeof(Resources).GetProperty(stringIdentifier ?? "AppDisplayName");
+            var identifier = stringIdentifier ?? "AppDisplayName";
 
             // Get the property value to have the localized string.
-            Text = prop.GetValue(null, null).ToString();
+            Text = Resources.ResourceManager.GetString(identifier);
         }
     }
 }

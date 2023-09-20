@@ -482,4 +482,10 @@ Enabling this option will show a second volume slider to control local volume.</
   <data name="ErrorUpdatingPlaylist" xml:space="preserve">
     <value>Updating Playlists failed</value>
   </data>
+  <data name="ActionFullscreenPlayback" xml:space="preserve">
+    <value>Open Fullscreen Playback</value>
+  </data>
+  <data name="SongPlaybackLabel" xml:space="preserve">
+    <value>Song playback</value>
+  </data>
 </root>

@@ -10,11 +10,9 @@ using Stylophone.Common.Helpers;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
-using UIKit;
-using Pop = ARSPopover.iOS;
-using static Xamarin.Essentials.Permissions;
 using CommunityToolkit.Mvvm.Input;
 using CoreGraphics;
+using UIKit;
 
 namespace Stylophone.iOS.ViewControllers
 {
@@ -53,6 +51,7 @@ namespace Stylophone.iOS.ViewControllers
             // Bind
             var negateBoolTransformer = NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer));
             var intToStringTransformer = NSValueTransformer.GetValueTransformer(nameof(IntToStringValueTransformer));
+            var trackToStringTransformer = NSValueTransformer.GetValueTransformer(nameof(TrackToStringValueTransformer));
 
             // Compact View Binding
             Binder.Bind<bool>(CompactView, "hidden", nameof(ViewModel.IsTrackInfoAvailable), valueTransformer: negateBoolTransformer);
@@ -62,7 +61,12 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
             CompactView.ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
 
+            CompactView.VolumeButton.AccessibilityLabel = Strings.ActionChangeVolume;
+            CompactView.ShuffleButton.AccessibilityLabel = Strings.ActionToggleShuffle;
+
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
+            CompactView.OpenFullScreenButton.AccessibilityLabel = Strings.ActionFullscreenPlayback;
+            Binder.Bind<string>(CompactView.OpenFullScreenButton, "accessibilityValue", nameof(ViewModel.CurrentTrack), valueTransformer: trackToStringTransformer);
 
             // Volume Popover Binding
             LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
@@ -70,12 +74,13 @@ namespace Stylophone.iOS.ViewControllers
             LocalMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.LocalPlayback.ToggleMute();
             LocalPlaybackBinder.Bind<int>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
             LocalPlaybackBinder.Bind<int>(LocalVolume, "text", nameof(ViewModel.LocalPlayback.Volume), valueTransformer: intToStringTransformer);
+            LocalVolumeSlider.AccessibilityLabel = Strings.LocalVolumeHeader;
 
             ServerMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleMute();
             Binder.Bind<double>(ServerVolumeSlider, "value", nameof(ViewModel.MediaVolume), true);
             Binder.Bind<bool>(ServerVolumeSlider, "enabled", nameof(ViewModel.CanSetVolume));
             Binder.Bind<double>(ServerVolume, "text", nameof(ViewModel.MediaVolume), valueTransformer: intToStringTransformer);
-            
+            ServerVolumeSlider.AccessibilityLabel = Strings.ActionChangeVolume;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -98,23 +103,17 @@ namespace Stylophone.iOS.ViewControllers
 
             if (!ViewModel.IsFullScreen) return;
 
-            // Don't multi-line for small phones in vertical orientation
+            // Different multi-line behavior depending on size classes
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular && 
                 UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
                 TrackTitle.Lines = 2;
-                AlbumName.Lines = 1;
-
             }
             else
             {
-                TrackTitle.Lines = 3;
-
-                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
-                    AlbumName.Lines = 1;
-                else
-                    AlbumName.Lines = 2;
+                if (UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Phone)
+                    TrackTitle.Lines = 3;
             }
 
             // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
@@ -136,6 +135,7 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            TrackSlider.AccessibilityLabel = Strings.SongPlaybackLabel;
             TrackSlider.TouchDragInside += (s, e) =>
             {
                 ViewModel.TimeListened = Miscellaneous.FormatTimeString(TrackSlider.Value * 1000);
@@ -144,6 +144,7 @@ namespace Stylophone.iOS.ViewControllers
             TrackSlider.ValueChanged += (s, e) =>
             {
                 ViewModel.OnPlayingSliderChange();
+                TrackSlider.AccessibilityValue = ViewModel.TimeListened;
             };
 
             var upNextTransformer = NSValueTransformer.GetValueTransformer(nameof(NextTrackToStringValueTransformer));
@@ -153,6 +154,8 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<string>(RemainingTime, "text", nameof(ViewModel.TimeRemaining));
             Binder.Bind<double>(TrackSlider, "value", nameof(ViewModel.CurrentTimeValue), true);
             Binder.Bind<double>(TrackSlider, "maximumValue", nameof(ViewModel.MaxTimeValue));
+            Binder.Bind<string>(TrackSlider, "accessibilityValue", nameof(ViewModel.TimeListened));
+
             Binder.Bind<TrackViewModel>(upNextView, "text", nameof(ViewModel.NextTrack), valueTransformer:upNextTransformer);
             UpdateFullView(ViewModel.CurrentTrack);
 
@@ -161,6 +164,10 @@ namespace Stylophone.iOS.ViewControllers
             UpdateButton(ServerMuteButton, ViewModel.VolumeIcon);
             UpdateButton(RepeatButton, ViewModel.RepeatIcon);
             UpdateButton(ShuffleButton, ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle");
+
+            VolumeButton.AccessibilityLabel = Strings.ActionChangeVolume;
+            ShuffleButton.AccessibilityLabel = Strings.ActionToggleShuffle;
+            RepeatButton.AccessibilityLabel = Strings.ActionToggleRepeat;
 
             SkipPrevButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipPrevious();
             SkipNextButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipNext();
@@ -271,22 +278,46 @@ namespace Stylophone.iOS.ViewControllers
         public void ShowVolumePopover(UIButton sourceButton, UIViewController sourceVc = null)
         {
             var sourceBounds = sourceButton.ImageView.Bounds;
+            var size = ViewModel.LocalPlayback.IsEnabled ? new CGSize(276, 176) : new CGSize(276, 96);
 
-            var popover = new Pop.ARSPopover
-            {
-                SourceView = sourceButton.ImageView,
-                SourceRect = new CoreGraphics.CGRect(sourceBounds.Width/2, -4, 0, 0),
-                ContentSize = ViewModel.LocalPlayback.IsEnabled ?
-                    new CoreGraphics.CGSize(276, 176) : new CoreGraphics.CGSize(276, 96),
-                ArrowDirection = UIPopoverArrowDirection.Down
-            };
-
-            popover.View.AddSubview(VolumePopover);
+            var popover = new VolumePopoverViewController(VolumePopover, sourceButton, sourceBounds, size);
 
             if (sourceVc == null)
                 sourceVc = this;
 
             sourceVc.PresentViewController(popover, true, null);
+        }
+    }
+
+    public class VolumePopoverViewController: UIViewController, IUIPopoverPresentationControllerDelegate
+    {
+        private UIView _volumeView;
+
+        public VolumePopoverViewController(UIView view, UIButton sourceButton, CGRect sourceBounds, CGSize contentSize)
+        {
+            _volumeView = view;
+
+            ModalPresentationStyle = UIModalPresentationStyle.Popover;
+            PopoverPresentationController.SourceItem = sourceButton.ImageView;
+            PopoverPresentationController.Delegate = this;
+            PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Down;
+            PopoverPresentationController.SourceRect = new CGRect(sourceBounds.Width / 2, -4, 0, 0);
+
+            PreferredContentSize = contentSize;
+        }
+
+        [Export("adaptivePresentationStyleForPresentationController:traitCollection:")]
+        public UIModalPresentationStyle GetAdaptivePresentationStyle(UIPresentationController controller, UITraitCollection traitCollection)
+        {
+            // Prevent popover from being adaptive fullscreen on phones
+            // (https://pspdfkit.com/blog/2022/presenting-popovers-on-iphone-with-swiftui/)
+            return UIModalPresentationStyle.None;
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            View.AddSubview(_volumeView);
         }
     }
 }

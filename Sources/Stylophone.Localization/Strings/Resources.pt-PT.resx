@@ -478,4 +478,10 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   <data name="ErrorSendingMPDCommand" xml:space="preserve">
     <value>Não foi possível enviar {0}</value>
   </data>
+  <data name="ActionFullscreenPlayback" xml:space="preserve">
+    <value>Mostrar Leitor</value>
+  </data>
+  <data name="SongPlaybackLabel" xml:space="preserve">
+    <value>Leitura da faixa</value>
+  </data>
 </root>

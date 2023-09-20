@@ -16,13 +16,13 @@
 		<string>zh</string>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5.4</string>
+	<string>2.6.0</string>
 	<key>CFBundleVersion</key>
-	<string>2.5.4</string>
+	<string>2.6.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
-	<string>15.0</string>
+	<string>16.0</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

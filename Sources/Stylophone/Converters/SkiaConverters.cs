@@ -37,7 +37,7 @@ namespace Stylophone.Helpers
     }
 
     /// <summary>
-    ///     Converts an SKImage to a WriteableBitmap for use in XAML.
+    ///     Converts an SKColor to a Windows.UI.Color for use in XAML.
     /// </summary>
     public class SKColorToUWPConverter : IValueConverter
     {

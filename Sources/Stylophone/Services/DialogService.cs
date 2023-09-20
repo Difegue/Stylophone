@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 using Stylophone.Views;
-using Microsoft.Toolkit.Uwp.Helpers;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
@@ -12,6 +11,7 @@ using Strings = Stylophone.Localization.Strings.Resources;
 using Windows.Services.Store;
 using Windows.UI.Xaml.Media;
 using System.Linq;
+using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace Stylophone.Services
 {

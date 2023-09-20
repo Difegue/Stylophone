@@ -16,6 +16,7 @@ using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Foundation;
 using Microsoft.Services.Store.Engagement;
+using Windows.ApplicationModel;
 #if DEBUG
 #else
 using System.Collections.Generic;
@@ -40,6 +41,8 @@ namespace Stylophone
 
             InitializeComponent();
             UnhandledException += OnAppUnhandledException;
+            Suspending += OnAppSuspending;
+            Resuming += OnAppResuming;
 
             // Deferred execution until used. Check https://msdn.microsoft.com/library/dd642331(v=vs.110).aspx for further info on Lazy<T> class.
             _activationService = new Lazy<ActivationService>(CreateActivationService);
@@ -117,6 +120,18 @@ namespace Stylophone
 
             // Try to handle the exception in case it's not catastrophic
             e.Handled = true;
+        }
+
+        private async void OnAppResuming(object sender, object e)
+        {
+            await Ioc.Default.GetRequiredService<MPDConnectionService>().InitializeAsync(true);
+            Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
+        }
+
+        private void OnAppSuspending(object sender, SuspendingEventArgs e)
+        {
+            Ioc.Default.GetRequiredService<MPDConnectionService>().Disconnect();
+            Ioc.Default.GetRequiredService<AlbumArtService>().Stop();
         }
 
         private ActivationService CreateActivationService()

@@ -27,7 +27,6 @@ namespace Stylophone.iOS.ViewControllers
 
             Playlists = new ObservableCollection<MpdPlaylist>(mpdService.Playlists);
 
-            Title = Strings.AddToPlaylistTitle;
             ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
             ModalTransitionStyle = UIModalTransitionStyle.CoverVertical;
 
@@ -58,10 +57,10 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.LoadView();
 
-            PreferredContentSize = new CGSize(512, 368);
+            PreferredContentSize = new CGSize(512, 196);
 
             var stackView = new UIStackView {
-                BackgroundColor = UIColor.SystemBackgroundColor,
+                BackgroundColor = UIColor.SystemBackground,
                 Axis = UILayoutConstraintAxis.Vertical,
                 Alignment = UIStackViewAlignment.Center,
                 Distribution = UIStackViewDistribution.Fill,
@@ -70,7 +69,10 @@ namespace Stylophone.iOS.ViewControllers
 
             var playlistPicker = new UIPickerView();
             playlistPicker.DataSource = this;
-            playlistPicker.Delegate = this;  
+            playlistPicker.Delegate = this;
+
+            var newPlaylistLabel = new UILabel { Text = Strings.AddToPlaylistText, Font = UIFont.PreferredTitle2 };
+            newPlaylistLabel.Hidden = AllowExistingPlaylists;
 
             var newPlaylistTextField = new UITextField { Placeholder = Strings.AddToPlaylistNewPlaylistName, BorderStyle = UITextBorderStyle.RoundedRect };
             newPlaylistTextField.EditingChanged += (s, e) => PlaylistName = newPlaylistTextField.Text;
@@ -85,16 +87,18 @@ namespace Stylophone.iOS.ViewControllers
                 AddNewPlaylist = playlistSwitch.SelectedSegment == 1;
                 playlistPicker.Hidden = AddNewPlaylist;
                 newPlaylistTextField.Hidden = !AddNewPlaylist;
+                newPlaylistLabel.Hidden = !AddNewPlaylist;
             };
 
             if (AllowExistingPlaylists)
-                stackView.AddArrangedSubview(playlistSwitch);
-
-            //stackView.AddArrangedSubview(new UILabel { Text = Strings.AddToPlaylistText, Font = UIFont.PreferredTitle2 });
+                NavigationItem.TitleView = playlistSwitch;
+            else
+                Title = Strings.AddToPlaylistCreateNewPlaylist;
 
             if (AllowExistingPlaylists)
                 stackView.AddArrangedSubview(playlistPicker);
-            
+
+            stackView.AddArrangedSubview(newPlaylistLabel);
             stackView.AddArrangedSubview(newPlaylistTextField);
 
             var spacerView = new UIView();
@@ -104,6 +108,7 @@ namespace Stylophone.iOS.ViewControllers
 
             var constraints = new List<NSLayoutConstraint>();
             constraints.Add(newPlaylistTextField.WidthAnchor.ConstraintEqualTo(View.WidthAnchor, 0.8F));
+            constraints.Add(playlistPicker.HeightAnchor.ConstraintLessThanOrEqualTo(196));
 
             NSLayoutConstraint.ActivateConstraints(constraints.ToArray());
         }

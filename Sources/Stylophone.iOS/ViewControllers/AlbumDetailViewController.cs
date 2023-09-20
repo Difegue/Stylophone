@@ -34,16 +34,21 @@ namespace Stylophone.iOS.ViewControllers
 			TraitCollectionDidChange(null);
 			NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
 			
-			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source, GetRowContextMenu, GetRowSwipeActions, true, OnScroll);
+			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
+				GetRowContextMenu, GetRowSwipeActions, false, OnScroll, OnTap);
 			TableView.DataSource = trackDataSource;
 			TableView.Delegate = trackDataSource;
+            TableView.SelfSizingInvalidation = UITableViewSelfSizingInvalidation.EnabledIncludingConstraints;
 
-			Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
+            Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
 				valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 			Binder.Bind<string>(AlbumTrackInfo, "text", nameof(ViewModel.PlaylistInfo));
 		}
 
-		private void OnScroll(UIScrollView scrollView)
+        private void OnTap(NSIndexPath indexPath) =>
+			ViewModel.AddToQueueCommand.Execute(new List<object> { ViewModel?.Source[indexPath.Row] });
+
+        private void OnScroll(UIScrollView scrollView)
         {
             if (scrollView.ContentOffset.Y > 192)
             {

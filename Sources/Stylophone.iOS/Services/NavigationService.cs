@@ -29,7 +29,7 @@ namespace Stylophone.iOS.Services
             _viewControllers = new List<UIViewController>();
         }
 
-        public override bool CanGoBack => NavigationController.ViewControllers?.Count() > 1;
+        public override bool CanGoBack => NavigationController.ViewControllers?.Length > 1;
 
         public override Type CurrentPageViewModelType => _viewModelToStoryboardDictionary.Keys.Where(
             k => _viewModelToStoryboardDictionary[k] == NavigationController.VisibleViewController.Storyboard).FirstOrDefault();
@@ -73,14 +73,22 @@ namespace Stylophone.iOS.Services
                 {
                     viewController = viewControllerLoaded.First();
                     (viewController as IPreparableViewController)?.Prepare(parameter);
-                    NavigationController.PushViewController(viewController, true);
+
+                    if (NavigationController.ViewControllers.Length == 0)
+                        NavigationController.ViewControllers = new UIViewController[] { viewController };
+                    else
+                        NavigationController.PushViewController(viewController, true);
                 }
                 else // This is truly new, load the VC from scratch
                 {
                     viewController = storyboard.InstantiateInitialViewController();
                     (viewController as IPreparableViewController)?.Prepare(parameter);
-                    NavigationController.PushViewController(viewController, true);
                     _viewControllers.Add(viewController);
+
+                    if (NavigationController.ViewControllers.Length == 0)
+                        NavigationController.ViewControllers = new UIViewController[] { viewController };
+                    else
+                        NavigationController.PushViewController(viewController, true);
                 }
 
                 _lastParamUsed = parameter;
