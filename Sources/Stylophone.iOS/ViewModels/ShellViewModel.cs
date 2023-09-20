@@ -97,7 +97,7 @@ namespace Stylophone.iOS.ViewModels
         {
             if (itemInvoked is string s)
             {
-                _navigationService.Navigate<SettingsViewModel>();
+                Navigate(typeof(SettingsViewModel));
                 return;
             }
 
@@ -114,11 +114,21 @@ namespace Stylophone.iOS.ViewModels
 
                     // Playlist items navigate with their name as parameter
                     if (pageType == typeof(PlaylistViewModel))
-                        _navigationService.Navigate(pageType, sidebarItem.Title);
+                        Navigate(pageType, sidebarItem.Title);
                     else
-                        _navigationService.Navigate(pageType);
+                        Navigate(pageType);
                 }
             }
+        }
+
+        private void Navigate(Type viewModel, object parameter = null)
+        {
+            // On phones, since the sidebar is its own screen,
+            // we don't want to keep the root view controller(usually the queue) when navigating from the sidebar.
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+                ((NavigationService)_navigationService).NavigationController.SetViewControllers(new UIViewController[0], false);
+
+            _navigationService.Navigate(viewModel, parameter);
         }
     }
 }
