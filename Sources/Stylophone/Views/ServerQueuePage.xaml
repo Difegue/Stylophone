@@ -35,7 +35,8 @@
             ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
             ReorderMode="Enabled"
             RightTapped="Select_Item"
-            SelectionMode="Extended">
+            SelectionMode="Extended"
+            Visibility="{x:Bind ViewModel.IsSourceEmpty, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}">
             <interactivity:Interaction.Behaviors>
                 <behaviors:AlternatingListViewBehavior
                     AlternateBackground="{ThemeResource SubtleFillColorTertiaryBrush}"

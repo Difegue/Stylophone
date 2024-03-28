@@ -13,8 +13,15 @@ using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
 {
+
     public abstract partial class LibraryViewModelBase : ViewModelBase
     {
+        private record Album
+        {
+            public string Name { get; set; }
+            public string SortName { get; set; }
+        }
+
         private INavigationService _navigationService;
         private MPDConnectionService _mpdService;
         private AlbumViewModelFactory _albumVmFactory;
@@ -40,9 +47,13 @@ namespace Stylophone.Common.ViewModels
             FilteredSource.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsSourceEmpty));
 
             Source.Clear();
-            var response = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.AlbumSort));
+            var albumList = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.Album));
+            var albumSortList = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.AlbumSort));
 
-            if (response != null)
+            // Create a list of tuples
+            var response = albumList.Zip(albumSortList, (album, albumSort) => new Album{ Name = album, SortName = albumSort });
+
+            if (albumSortList != null)
                 GroupAlbumsByName(response);
 
             if (Source.Count > 0)
@@ -63,10 +74,10 @@ namespace Stylophone.Common.ViewModels
             AddBack(filtered);
         }
 
-        public void GroupAlbumsByName(List<string> albums)
+        private void GroupAlbumsByName(IEnumerable<Album> albums)
         {
             var query = from item in albums
-                        group item by GetGroupHeader(item) into g
+                        group item by GetGroupHeader(item.SortName) into g
                         orderby g.Key
                         select new { GroupName = g.Key, Items = g };
 
@@ -76,9 +87,9 @@ namespace Stylophone.Common.ViewModels
                 //GroupInfosList info = new GroupInfosList();
                 //info.Key = g.GroupName + " (" + g.Items.Count() + ")";
 
-                foreach (var item in g.Items.OrderBy(s => s.ToLower()))
+                foreach (var item in g.Items.OrderBy(s => s.SortName.ToLower()))
                 {
-                    Source.Add(_albumVmFactory.GetAlbumViewModel(item));
+                    Source.Add(_albumVmFactory.GetAlbumViewModel(item.Name));
                 }
             }
         }
