@@ -10,7 +10,7 @@
     <PackageReference Include="CommunityToolkit.Common" Version="8.2.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="LibVLCSharp" Version="3.7.0" />
-    <PackageReference Include="MpcNET" Version="1.5.0" />
+    <PackageReference Include="MpcNET" Version="1.6.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.5" />
     <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="2.88.5" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.2" />
