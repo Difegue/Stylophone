@@ -59,6 +59,13 @@ namespace Stylophone.ViewModels
                 // Albumart loads still use their own connections.
                 Task.Run(async () =>
                 {
+                    // Try to show album artwork early if we have it in cache
+                    for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
+                    {
+                        var album = this[i];
+                        await album.LoadAlbumArtFromCacheAsync();
+                    }
+
                     using (var c = await _mpdService.GetConnectionAsync(token))
                         for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
                         {

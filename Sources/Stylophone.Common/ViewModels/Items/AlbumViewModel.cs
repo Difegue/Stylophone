@@ -9,12 +9,14 @@ using MpcNET.Commands.Reflection;
 using MpcNET.Tags;
 using MpcNET.Types;
 using SkiaSharp;
+using Stylophone.Common.Helpers;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -180,6 +182,16 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        public async Task LoadAlbumArtFromCacheAsync()
+        {
+            // Try to show album art early if we have it in cache
+            var cacheName = Miscellaneous.EscapeFilename(Name);
+            if (await _albumArtService.IsAlbumArtCachedAsync(cacheName))
+            {
+                AlbumArt = SKImage.FromBitmap(await _albumArtService.LoadImageFromFile(cacheName));
+            }
+        }
+
         /// <summary>
         /// Load Album Data. You can either provide a MpcConnection object (for batch loading)
         /// or leave as empty to automatically pick up a connection from the datasource.
@@ -196,7 +208,8 @@ namespace Stylophone.Common.ViewModels
         public async Task LoadAlbumDataAsync(MpcConnection c)
         {
             IsDetailLoading = true;
-            AlbumArt = await _interop.GetPlaceholderImageAsync();
+            AlbumArt ??= await _interop.GetPlaceholderImageAsync();
+
             try
             {
                 var findReq = await c.SendAsync(new FindCommand(MpdTags.Album, Name));
