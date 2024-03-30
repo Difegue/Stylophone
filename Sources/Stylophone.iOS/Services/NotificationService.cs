@@ -20,7 +20,7 @@ namespace Stylophone.iOS.Services
             {
                 // Let's just use alerts until TipKit is available... This is cheap but w/e
                 var alert = new UIAlertView(notification.NotificationTitle, notification.NotificationText, null, "Ok");
-                alert.Show();
+                UIApplication.SharedApplication.InvokeOnMainThread(() => alert.Show());
                 return;
             }
 

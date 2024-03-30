@@ -88,6 +88,7 @@ namespace Stylophone.Common.Services
             {
                 System.Diagnostics.Debug.WriteLine($"Error while connecting: {e.Message}");
 
+                IsConnecting = false;
                 ConnectionChanged?.Invoke(this, new EventArgs());
 
                 if (withRetry && !cancelToken.IsCancellationRequested)

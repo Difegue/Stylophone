@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0-ios</TargetFrameworks>
+    <TargetFrameworks>net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
@@ -61,12 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
-    <PackageReference Include="SkiaSharp.Views" Version="2.88.5" />
+    <PackageReference Include="SkiaSharp.Views" Version="2.88.7" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 	  <PackageReference Include="VideoLAN.LibVLC.iOS" Version="3.3.18" />
-    <PackageReference Include="MpcNET" Version="1.5.0" />
+    <PackageReference Include="MpcNET" Version="1.6.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stylophone.Common\Stylophone.Common.csproj">

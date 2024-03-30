@@ -91,6 +91,7 @@ namespace Stylophone.Common.Services
         /// <param name="f">MpdFile to check for art</param>
         /// <returns>True if the art is cached, false otherwise.</returns>
         public async Task<bool> IsAlbumArtCachedAsync(IMpdFile f) => await _applicationStorageService.DoesFileExistAsync(Miscellaneous.GetFileIdentifier(f), "AlbumArt");
+        public async Task<bool> IsAlbumArtCachedAsync(string albumName) => await _applicationStorageService.DoesFileExistAsync(albumName, "AlbumArt");
 
         /// <summary>
         /// Queue up an AlbumViewModel for the service to grab its album art.
@@ -224,7 +225,7 @@ namespace Stylophone.Common.Services
 
         private async Task SaveArtToFileAsync(string fileName, List<byte> data) => await _applicationStorageService.SaveDataToFileAsync(fileName, data.ToArray(), "AlbumArt");
 
-        private async Task<SKBitmap> LoadImageFromFile(string fileName)
+        internal async Task<SKBitmap> LoadImageFromFile(string fileName)
         {
             try
             {
