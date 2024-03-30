@@ -150,16 +150,16 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
     <PackageReference Include="Microsoft.Toolkit.Uwp" Version="7.1.2" />
-    <PackageReference Include="CommunityToolkit.Uwp.Animations" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Behaviors" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.SettingsControls" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.Segmented" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.HeaderedControls" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Converters" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Extensions" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Media" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.Uwp.Helpers" Version="8.0.230907" />
+    <PackageReference Include="CommunityToolkit.Uwp.Animations" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Behaviors" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.SettingsControls" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.Segmented" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.HeaderedControls" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Converters" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Extensions" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Media" Version="8.0.240109" />
+    <PackageReference Include="CommunityToolkit.Uwp.Helpers" Version="8.0.240109" />
     <PackageReference Include="Microsoft.UI.Xaml" Version="2.7.3" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.1" />
     <PackageReference Include="MpcNET" Version="1.6.5" />
