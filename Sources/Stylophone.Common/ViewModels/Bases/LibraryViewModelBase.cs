@@ -50,11 +50,12 @@ namespace Stylophone.Common.ViewModels
             var albumList = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.Album));
             var albumSortList = await _mpdService.SafelySendCommandAsync(new ListCommand(MpdTags.AlbumSort));
 
-            // Create a list of tuples
-            var response = albumList.Zip(albumSortList, (album, albumSort) => new Album{ Name = album, SortName = albumSort });
-
-            if (albumSortList != null)
+            if (albumList != null && albumSortList != null)
+            {
+                // Create a list of tuples
+                var response = albumList.Zip(albumSortList, (album, albumSort) => new Album { Name = album, SortName = albumSort });
                 GroupAlbumsByName(response);
+            }
 
             if (Source.Count > 0)
                 FilteredSource.AddRange(Source);
