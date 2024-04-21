@@ -16,6 +16,7 @@ Based on [MpcNET](https://github.com/Difegue/MpcNET), my own fork of the origina
 * Playlist management (Create, Add/Remove tracks, Delete)  
 * Picture-in-picture mode  
 * Live tile on Windows 10
+* Local playback support if your MPD server has `httpd` as an output
 * Integration with native playback controls
 * Browse library by albums, or directly by folders  
 * All data is pulled from your MPD Server only  
