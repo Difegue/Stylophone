@@ -2,7 +2,7 @@
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{5A5CE693-A67D-4B28-8DCE-4B0EA3A47533}</ProjectGuid>
@@ -163,7 +163,15 @@
     <PackageReference Include="Microsoft.UI.Xaml" Version="2.7.3" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.1" />
     <PackageReference Include="MpcNET" Version="1.6.5" />
+    <PackageReference Include="PolySharp">
+      <Version>1.14.1</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="SkiaSharp.Views" Version="2.88.7" />
+    <PackageReference Include="System.Text.Json">
+      <Version>8.0.4</Version>
+    </PackageReference>
     <PackageReference Include="VideoLAN.LibVLC.UWP" Version="3.3.2" />
     <PackageReference Include="WindowsStateTriggers">
       <Version>1.1.0</Version>
@@ -182,11 +190,13 @@
     <Compile Include="Converters\SkiaConverters.cs" />
     <Compile Include="Converters\SecondsToTimeConverter.cs" />
     <Compile Include="Converters\ThemeToIntConverter.cs" />
+    <Compile Include="Helpers\WidgetHelper.cs" />
     <Compile Include="Helpers\LiveTileHelper.cs" />
     <Compile Include="Helpers\ScrollViewerExtensions.MiddleClickScrolling.cs" />
     <Compile Include="Helpers\UWPHelpers.cs" />
     <Compile Include="Helpers\NavHelper.cs" />
     <Compile Include="Converters\SliderValueConverter.cs" />
+    <Compile Include="PayloadSender.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
     <Compile Include="Services\ApplicationStorageService.cs" />
@@ -241,6 +251,7 @@
     <Compile Include="Views\ShellPage.xaml.cs">
       <DependentUpon>ShellPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WidgetPayload.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -377,6 +388,7 @@
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\widgetTemplate.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

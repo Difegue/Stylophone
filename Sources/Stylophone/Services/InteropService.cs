@@ -75,6 +75,7 @@ namespace Stylophone.Services
         {
             await _smtcService.UpdateMetadataAsync(currentTrack);
             await LiveTileHelper.UpdatePlayingSongAsync(currentTrack);
+            await WidgetHelper.UpdatePlayingSongAsync(currentTrack);
         }
 
         public Version GetAppVersion()
