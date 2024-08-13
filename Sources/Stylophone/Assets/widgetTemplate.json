@@ -1,107 +1,110 @@
 {
-    "type": "AdaptiveCard",
-    "body": [
+  "type": "AdaptiveCard",
+  "body": [
+    {
+      "type": "Image",
+      "url": "${stylophone_albumArt}",
+      "altText": "${stylophone_album}",
+      "size": "Large",
+      "horizontalAlignment": "Left",
+      "$when": "${$host.widgetSize==\"medium\"}"
+    },
+    {
+      "type": "Image",
+      "url": "${stylophone_albumArt}",
+      "altText": "${stylophone_album}",
+      "$when": "${$host.widgetSize==\"large\"}"
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
         {
-            "type": "Image",
-            "url": "${stylophone_albumArt}",
-            "altText": "${stylophone_album}",
-            "size": "Large",
-            "horizontalAlignment": "Center",
-            "$when": "${$host.widgetSize==\"medium\"}"
+          "type": "Column",
+          "items": [
+            {
+              "type": "Image",
+              "url": "${stylophone_albumArt}",
+              "altText": "${stylophone_album}",
+              "size": "Medium",
+              "width": "80px"
+            }
+          ],
+          "$when": "${$host.widgetSize==\"small\"}",
+          "width": "auto"
         },
         {
-            "type": "Image",
-            "url": "${stylophone_albumArt}",
-            "altText": "${stylophone_album}",
-            "$when": "${$host.widgetSize==\"large\"}"
-        },
-        {
-            "type": "ColumnSet",
-            "columns": [
-                {
-                    "type": "Column",
-                    "items": [
-                        {
-                            "type": "Image",
-                            "url": "${stylophone_albumArt}",
-                            "altText": "${stylophone_album}",
-                            "size": "Medium",
-                            "width": "80px"
-                        }
-                    ],
-                    "$when": "${$host.widgetSize==\"small\"}",
-                    "width": "auto"
-                },
-                {
-                    "type": "Column",
-                    "items": [
-                        {
-                            "type": "TextBlock",
-                            "size": "Medium",
-                            "weight": "Bolder",
-                            "text": "${stylophone_title}",
-                            "wrap": true,
-                            "maxLines": 2
-                        },
-                        {
-                            "type": "TextBlock",
-                            "text": "${stylophone_artist}",
-                            "wrap": true,
-                            "weight": "Lighter"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "spacing": "None",
-                            "text": "${stylophone_album}",
-                            "isSubtle": true
-                        }
-                    ],
-                    "width": "stretch"
-                }
-            ]
-        },
-        {
-            "type": "ActionSet",
-            "actions": [
-                {
-                    "type": "Action.Execute",
-                    "mode": "secondary",
-                    "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e8b1.png",
-                    "tooltip": "Shuffle",
-                    "verb": "stylophone_shuffle"
-                },
-                {
-                    "type": "Action.Execute",
-                    "mode": "secondary",
-                    "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e892.png",
-                    "tooltip": "Previous",
-                    "verb": "stylophone_prev"
-                },
-                {
-                    "type": "Action.Execute",
-                    "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/edb4.png",
-                    "tooltip": "Pause",
-                    "verb": "stylophone_pause"
-                },
-                {
-                    "type": "Action.Execute",
-                    "mode": "secondary",
-                    "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e893.png",
-                    "tooltip": "Next",
-                    "verb": "stylophone_next"
-                },
-                {
-                    "type": "Action.Execute",
-                    "mode": "secondary",
-                    "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e8ee.png",
-                    "tooltip": "Repeat",
-                    "verb": "stylophone_repeat"
-                }
-            ],
-            "spacing": "Small",
-            "horizontalAlignment": "Center"
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "size": "Medium",
+              "weight": "Bolder",
+              "text": "${stylophone_title}",
+              "wrap": true,
+              "maxLines": 2
+            },
+            {
+              "type": "TextBlock",
+              "text": "${stylophone_artist}",
+              "weight": "Lighter",
+              "isSubtle": true,
+              "spacing": "None"
+            },
+            {
+              "type": "TextBlock",
+              "spacing": "None",
+              "text": "${stylophone_album}",
+              "isSubtle": true
+            }
+          ],
+          "width": "stretch",
+          "height": "stretch"
         }
-    ],
-    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-    "version": "1.6"
+      ]
+    },
+    {
+      "type": "ActionSet",
+      "actions": [
+        {
+          "type": "Action.Execute",
+          "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e8b1.png",
+          "tooltip": "Shuffle",
+          "verb": "stylophone_shuffle",
+          "$when": "${$host.widgetSize!=\"small\"}"
+        },
+        {
+          "type": "Action.Execute",
+          "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e892.png",
+          "tooltip": "Previous",
+          "verb": "stylophone_prev",
+          "$when": "${$host.widgetSize!=\"small\"}"
+        },
+        {
+          "type": "Action.Execute",
+          "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/edb4.png",
+          "tooltip": "Pause",
+          "verb": "stylophone_pause",
+          "$when": "${$host.widgetSize!=\"small\"}"
+        },
+        {
+          "type": "Action.Execute",
+          "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e893.png",
+          "tooltip": "Next",
+          "verb": "stylophone_next",
+          "$when": "${$host.widgetSize!=\"small\"}"
+        },
+        {
+          "type": "Action.Execute",
+          "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e8ee.png",
+          "tooltip": "Repeat",
+          "verb": "stylophone_repeat",
+          "$when": "${$host.widgetSize!=\"small\"}"
+        }
+      ],
+      "spacing": "Small",
+      "horizontalAlignment": "Center"
+    }
+  ],
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.6"
 }

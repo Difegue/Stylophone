@@ -101,6 +101,12 @@
       </uap:VisualElements>
 
       <Extensions>
+		  <uap:Extension Category="windows.protocol">
+			  <uap:Protocol Name="stylophone">
+				  <uap:Logo>Assets\Square44x44Logo.png</uap:Logo>
+				  <uap:DisplayName>Stylophone URI Scheme</uap:DisplayName>
+			  </uap:Protocol>
+		  </uap:Extension>
       </Extensions>
     </Application>
   </Applications>
