@@ -21,13 +21,18 @@ namespace Stylophone.Services
             var uniqueIdentifier = Miscellaneous.GetFileIdentifier(f);
 
             // Use the cached albumart if it exists
-            var artUri = $"ms-appdata:///local/AlbumArt/{uniqueIdentifier}";
-
+            var artPath = "";
             StorageFolder pictureFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("AlbumArt", CreationCollisionOption.OpenIfExists);
 
-            if (!await pictureFolder.FileExistsAsync(uniqueIdentifier))
+            if (await pictureFolder.FileExistsAsync(uniqueIdentifier))
             {
-                artUri = "ms-appx:///Assets/AlbumPlaceholder.png";
+                var file = await pictureFolder.GetFileAsync(uniqueIdentifier);
+                artPath = file.Path;
+            }
+            else
+            {   
+                var file = await StorageFile.GetFileFromApplicationUriAsync(new("ms-appx:///Assets/AlbumPlaceholder.png"));
+                artPath = file.Path;
             }
 
             var widgetTemplate = PayloadSender.ReadPackageFileFromUri("ms-appx:///Assets/widgetTemplate.json");
@@ -57,7 +62,7 @@ namespace Stylophone.Services
                 {
                     Key = "stylophone_albumArt",
                     Type = DataType.IMAGE,
-                    Value = artUri
+                    Value = artPath
                 }
             };
 
