@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Stylophone.Services;
 using Stylophone.Common.Interfaces;
 using Windows.ApplicationModel.Activation;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Services;
-using Windows.UI.Xaml.Controls;
 using MpcNET.Commands.Playback;
 using MpcNET.Commands.Status;
 using MpcNET.Commands.Playlist;
-using System.Xml.Linq;
 using Stylophone.Common.ViewModels;
-using Windows.Services.Maps;
-using System.Diagnostics;
 using Windows.UI.Popups;
 
 namespace Stylophone.Activation
@@ -83,7 +78,7 @@ namespace Stylophone.Activation
                     await _mpdService.SafelySendCommandAsync(new SetVolumeCommand((byte)(int.Parse(volume))));
                     break;
                 case "stylophone_seek":
-                    var seek = int.Parse(queryDictionary["volseekume"] ?? "0");
+                    var seek = int.Parse(queryDictionary["seek"] ?? "0");
                     await _mpdService.SafelySendCommandAsync(new SeekCurCommand(seek));
                     break;
                 case "stylophone_load_playlist":
