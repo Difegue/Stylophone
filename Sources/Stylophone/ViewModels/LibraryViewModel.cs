@@ -62,6 +62,12 @@ namespace Stylophone.ViewModels
                     // Try to show album artwork early if we have it in cache
                     for (var i = visibleRange.FirstIndex; i < visibleRange.LastIndex + 1; i++) // Increment LastIndex by one to properly cover the visible range
                     {
+                        if (i >= this.Count)
+                        {
+                            // The collection changed while this task was queued up, give up
+                            return;
+                        }
+
                         var album = this[i];
                         await album.LoadAlbumArtFromCacheAsync();
                     }
