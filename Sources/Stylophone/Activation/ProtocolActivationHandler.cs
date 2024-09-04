@@ -12,6 +12,8 @@ using MpcNET.Commands.Playlist;
 using System.Xml.Linq;
 using Stylophone.Common.ViewModels;
 using Windows.Services.Maps;
+using System.Diagnostics;
+using Windows.UI.Popups;
 
 namespace Stylophone.Activation
 {
@@ -40,13 +42,8 @@ namespace Stylophone.Activation
 
             if (!_mpdService.IsConnected)
             {
-                var msgbox = new ContentDialog
-                {
-                    Title = "Couldn't connect to MPD server",
-                    Content = "Please open Stylophone and configure a MPD server.",
-                    CloseButtonText = "OK"
-                };
-                await msgbox.ShowAsync();
+                var dlg = new MessageDialog("Please open Stylophone and configure a MPD server.", "Couldn't connect to MPD server");
+                await dlg.ShowAsync();
                 return;
             }
 
