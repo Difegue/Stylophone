@@ -975,6 +975,24 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stream port.
+        /// </summary>
+        public static string SettingsLocalPlaybackPortHeader {
+            get {
+                return ResourceManager.GetString("SettingsLocalPlaybackPortHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set this to the port of your server&apos;s httpd stream..
+        /// </summary>
+        public static string SettingsLocalPlaybackPortText {
+            get {
+                return ResourceManager.GetString("SettingsLocalPlaybackPortText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stylophone can play your MPD Server&apos;s music stream.
         ///Enabling this option will show a second volume slider to control local volume..
         /// </summary>

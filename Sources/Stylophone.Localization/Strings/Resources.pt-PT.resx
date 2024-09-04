@@ -484,4 +484,10 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   <data name="SongPlaybackLabel" xml:space="preserve">
     <value>Leitura da faixa</value>
   </data>
+  <data name="SettingsLocalPlaybackPortHeader" xml:space="preserve">
+    <value>Porta do fluxo</value>
+  </data>
+  <data name="SettingsLocalPlaybackPortText" xml:space="preserve">
+    <value>Introduze a porta do fluxo httpd do seu servidor MPD aqui.</value>
+  </data>
 </root>

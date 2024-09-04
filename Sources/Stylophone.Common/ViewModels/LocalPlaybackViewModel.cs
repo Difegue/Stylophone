@@ -19,6 +19,7 @@ namespace Stylophone.Common.ViewModels
         private LibVLC _vlcCore;
         private MediaPlayer _mediaPlayer;
         private string _serverHost;
+        private int _serverPort;
 
         public LocalPlaybackViewModel(SettingsViewModel settingsVm, MPDConnectionService mpdService, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService) : base(dispatcherService)
         {
@@ -37,6 +38,9 @@ namespace Stylophone.Common.ViewModels
 
                 if (e.PropertyName == nameof(_settingsVm.ServerHost))
                     _serverHost = _settingsVm.ServerHost;
+
+                if (e.PropertyName == nameof(_settingsVm.LocalPlaybackPort))
+                    _serverPort = _settingsVm.LocalPlaybackPort;
             };
 
             // Run an idle loop in a spare thread to make sure the libVLC volume is always accurate
@@ -57,9 +61,10 @@ namespace Stylophone.Common.ViewModels
             });
         }
 
-        public void Initialize(string host, bool isEnabled)
+        public void Initialize(string host, int port, bool isEnabled)
         {
             _serverHost = host;
+            _serverPort = port;
             IsEnabled = isEnabled;
         }
 
@@ -147,7 +152,7 @@ namespace Stylophone.Common.ViewModels
             {
                 if (value && _serverHost != null && _mpdService.IsConnected)
                 {
-                    var urlString = "http://" + _serverHost + ":8000";
+                    var urlString = "http://" + _serverHost + ":" + _serverPort;
                     var streamUrl = new Uri(urlString);
                     var media = new Media(_vlcCore, streamUrl);
 

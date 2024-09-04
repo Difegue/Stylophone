@@ -62,9 +62,10 @@ namespace Stylophone.Activation
             var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort), 6600);
             var pass = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerPassword));
             var localPlaybackEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsLocalPlaybackEnabled));
+            var localPlaybackPort = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.LocalPlaybackPort), 8000);
 
             var localPlaybackVm = Ioc.Default.GetRequiredService<LocalPlaybackViewModel>();
-            localPlaybackVm.Initialize(host, localPlaybackEnabled);
+            localPlaybackVm.Initialize(host, localPlaybackPort, localPlaybackEnabled);
 
             var mpdService = Ioc.Default.GetRequiredService<MPDConnectionService>();
             mpdService.SetServerInfo(host, port, pass);

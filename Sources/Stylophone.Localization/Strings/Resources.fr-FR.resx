@@ -487,4 +487,10 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   <data name="SongPlaybackLabel" xml:space="preserve">
     <value>Lecture de la piste</value>
   </data>
+  <data name="SettingsLocalPlaybackPortHeader" xml:space="preserve">
+    <value>Port du stream </value>
+  </data>
+  <data name="SettingsLocalPlaybackPortText" xml:space="preserve">
+    <value>Ajustez ce paramètre pour correspondre au port de votre stream httpd sur le serveur.</value>
+  </data>
 </root>

@@ -84,19 +84,34 @@
                 </toolkit:SettingsExpander.ItemsFooter>
             </toolkit:SettingsExpander>
 
-            <toolkit:SettingsCard
+            <toolkit:SettingsExpander
                 Header="{x:Bind strings:Resources.SettingsLocalPlaybackHeader}"
                 Description="{x:Bind strings:Resources.SettingsLocalPlaybackText}"
                 Visibility="{x:Bind ViewModel.IsStreamingAvailable, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
-                <toolkit:SettingsCard.HeaderIcon>
+                <toolkit:SettingsExpander.HeaderIcon>
                     <FontIcon Glyph="&#xE7F3;" />
-                </toolkit:SettingsCard.HeaderIcon>
+                </toolkit:SettingsExpander.HeaderIcon>
                 
                 <ToggleSwitch
                         IsOn="{x:Bind ViewModel.IsLocalPlaybackEnabled, Mode=TwoWay}"
                         OffContent=""
                         OnContent="" />
-            </toolkit:SettingsCard>
+
+                <toolkit:SettingsExpander.ItemsFooter>
+                    <toolkit:SettingsCard CornerRadius="0" Margin="-1,0"
+                                          Header="{x:Bind strings:Resources.SettingsLocalPlaybackPortHeader}"
+                                          Description="{x:Bind strings:Resources.SettingsLocalPlaybackPortText}">
+                        <controls:NumberBox
+                             Width="128"
+                             Margin="0,-8"
+                             Maximum="65536"
+                             Minimum="1"
+                             PlaceholderText="8000"
+                             SpinButtonPlacementMode="Compact"
+                             Value="{x:Bind ViewModel.LocalPlaybackPort, Mode=TwoWay}" />
+                    </toolkit:SettingsCard>
+                </toolkit:SettingsExpander.ItemsFooter>
+            </toolkit:SettingsExpander>
 
             <!--  DB/Art  -->
 

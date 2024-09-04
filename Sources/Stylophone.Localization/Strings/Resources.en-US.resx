@@ -488,4 +488,10 @@ Enabling this option will show a second volume slider to control local volume.</
   <data name="SongPlaybackLabel" xml:space="preserve">
     <value>Song playback</value>
   </data>
+  <data name="SettingsLocalPlaybackPortHeader" xml:space="preserve">
+    <value>Stream port</value>
+  </data>
+  <data name="SettingsLocalPlaybackPortText" xml:space="preserve">
+    <value>Set this to the port of your server's httpd stream.</value>
+  </data>
 </root>

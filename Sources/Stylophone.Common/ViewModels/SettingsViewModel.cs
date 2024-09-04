@@ -75,6 +75,9 @@ namespace Stylophone.Common.ViewModels
         [ObservableProperty]
         private bool _isLocalPlaybackEnabled;
 
+        [ObservableProperty]
+        private int _localPlaybackPort;
+
         partial void OnElementThemeChanged(Theme value)
         {
             Task.Run (async () => await _interop.SetThemeAsync(value));
@@ -121,6 +124,11 @@ namespace Stylophone.Common.ViewModels
         partial void OnIsLocalPlaybackEnabledChanged(bool value)
         {
             _applicationStorageService.SetValue(nameof(IsLocalPlaybackEnabled), value);
+        }
+
+        partial void OnLocalPlaybackPortChanged(int value)
+        {
+            _applicationStorageService.SetValue(nameof(LocalPlaybackPort), value);
         }
 
 
@@ -176,6 +184,7 @@ namespace Stylophone.Common.ViewModels
                 _enableAnalytics = _applicationStorageService.GetValue(nameof(EnableAnalytics), true);
                 _isAlbumArtFetchingEnabled = _applicationStorageService.GetValue(nameof(IsAlbumArtFetchingEnabled), true);
                 _isLocalPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
+                _localPlaybackPort = _applicationStorageService.GetValue(nameof(LocalPlaybackPort), 8000);
 
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);
 
