@@ -97,7 +97,7 @@
                         OffContent=""
                         OnContent="" />
 
-                <toolkit:SettingsExpander.ItemsFooter>
+                <toolkit:SettingsExpander.Items>
                     <toolkit:SettingsCard CornerRadius="0" Margin="-1,0"
                                           Header="{x:Bind strings:Resources.SettingsLocalPlaybackPortHeader}"
                                           Description="{x:Bind strings:Resources.SettingsLocalPlaybackPortText}">
@@ -110,7 +110,7 @@
                              SpinButtonPlacementMode="Compact"
                              Value="{x:Bind ViewModel.LocalPlaybackPort, Mode=TwoWay}" />
                     </toolkit:SettingsCard>
-                </toolkit:SettingsExpander.ItemsFooter>
+                </toolkit:SettingsExpander.Items>
             </toolkit:SettingsExpander>
 
             <!--  DB/Art  -->

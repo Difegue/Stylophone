@@ -246,14 +246,26 @@ namespace Stylophone.Common.Services
 
         private SKBitmap ImageFromBytes(byte[] bytes)
         {
-            SKBitmap image = SKBitmap.Decode(bytes);
-
-            // Resize overly large images to reduce OOM risk. Is 2048 too small ?
-            if (image.Width > 2048)
+            try
             {
-                image.Resize(new SKImageInfo(2048, 2048 * image.Height / image.Width), SKFilterQuality.High);
+                SKBitmap image = SKBitmap.Decode(bytes);
+
+                if (image == null)
+                    return null;
+
+                // Resize overly large images to reduce OOM risk. Is 2048 too small ?
+                if (image.Width > 2048)
+                {
+                    image.Resize(new SKImageInfo(2048, 2048 * image.Height / image.Width), SKFilterQuality.High);
+                }
+                return image;
             }
-            return image;
+            catch (Exception e)
+            {
+                Debug.WriteLine("Exception caught while loading albumart from MPD response: " + e);
+                _notificationService.ShowErrorNotification(e);
+                return null;
+            }
         }
 
     }
