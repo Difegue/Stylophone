@@ -1,5 +1,7 @@
 {
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
   "type": "AdaptiveCard",
+  "version": "1.6",
   "body": [
     {
       "type": "Image",
@@ -63,6 +65,114 @@
       ]
     },
     {
+      "_comment": "Player control buttons",
+      "type": "ColumnSet",
+      "$when": "${$host.widgetSize!=\"small\"}",
+      "horizontalAlignment": "Center",
+      "spacing": "None",
+      "columns": [
+        {
+          "type": "Column",
+          "selectAction": {
+            "type": "Action.Execute",
+            "verb": "stylophone_shuffle",
+            "tooltip": "Shuffle"
+          },
+          "width": "32px",
+          "minHeight": "32px",
+          "verticalContentAlignment": "Center",
+          "horizontalCellContentAlignment": "center",
+          "items": [
+            {
+              "type": "ColumnSet",
+              "horizontalAlignment": "Center",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "Image",
+                      "width": "18px",
+                      "height": "18px",
+                      "url": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e8b1.png"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "selectAction": {
+            "type": "Action.Execute",
+            "verb": "stylophone_prev",
+            "tooltip": "Previous"
+          },
+          "width": "32px",
+          "minHeight": "32px",
+          "verticalContentAlignment": "Center",
+          "horizontalCellContentAlignment": "center",
+          "items": [
+            {
+              "type": "ColumnSet",
+              "horizontalAlignment": "Center",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "Image",
+                      "width": "14px",
+                      "height": "17px",
+                      "url": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e892.png",
+                      "horizontalAlignment": "Center"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "_comment": "Pause button",
+          "type": "Column",
+          "selectAction": {
+            "type": "Action.Execute",
+            "verb": "stylophone_pause",
+            "tooltip": "Pause"
+          },
+          "width": "32px",
+          "spacing": "None",
+          "minHeight": "32px",
+          "verticalContentAlignment": "Center",
+          "items": [
+            {
+              "type": "ColumnSet",
+              "horizontalAlignment": "Center",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "Image",
+                      "width": "14px",
+                      "height": "17px",
+                      "url": "data:image/svg+xml;utf8,%3Csvg%20width%3D%2228%22%20height%3D%2224%22%20viewBox%3D%220%200%2028%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0D%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2226%22%20height%3D%2222%22%20rx%3D%223%22%20fill%3D%22black%22%20fill-opacity%3D%220.00373%22%2F%3E%0D%3Crect%20x%3D%220.5%22%20y%3D%220.5%22%20width%3D%2227%22%20height%3D%2223%22%20rx%3D%223.5%22%20stroke%3D%22black%22%20stroke-opacity%3D%220.00373%22%2F%3E%0D%3C%2Fsvg%3E%0D",
+                      "horizontalAlignment": "Center"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "type": "ActionSet",
       "actions": [
         {
@@ -70,6 +180,8 @@
           "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/e8b1.png",
           "tooltip": "Shuffle",
           "verb": "stylophone_shuffle",
+          "width": "14px",
+          "height": "17px",
           "$when": "${$host.widgetSize!=\"small\"}"
         },
         {
@@ -81,7 +193,7 @@
         },
         {
           "type": "Action.Execute",
-          "iconUrl": "https://learn.microsoft.com/en-us/windows/apps/design/style/images/segoe-mdl/edb4.png",
+          "iconUrl": "data:image/svg+xml;utf8,%3Csvg%20width%3D%2228%22%20height%3D%2224%22%20viewBox%3D%220%200%2028%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0D%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2226%22%20height%3D%2222%22%20rx%3D%223%22%20fill%3D%22black%22%20fill-opacity%3D%220.00373%22%2F%3E%0D%3Crect%20x%3D%220.5%22%20y%3D%220.5%22%20width%3D%2227%22%20height%3D%2223%22%20rx%3D%223.5%22%20stroke%3D%22black%22%20stroke-opacity%3D%220.00373%22%2F%3E%0D%3C%2Fsvg%3E%0D",
           "tooltip": "Pause",
           "verb": "stylophone_pause",
           "$when": "${$host.widgetSize!=\"small\"}"
