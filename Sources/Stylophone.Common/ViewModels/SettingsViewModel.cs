@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,8 +9,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Output;
 using MpcNET.Commands.Status;
+using MpcNET.Types;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
+using Stylophone.Common.ViewModels.Items;
 using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
@@ -77,6 +81,9 @@ namespace Stylophone.Common.ViewModels
 
         [ObservableProperty]
         private int _localPlaybackPort;
+
+        [ObservableProperty]
+        private ObservableCollection<OutputViewModel> _outputs;
 
         partial void OnElementThemeChanged(Theme value)
         {
@@ -241,13 +248,15 @@ namespace Stylophone.Common.ViewModels
                     lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
                 }
 
-                // Build info string
+                // Get server outputs
                 var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
+                Outputs = new ObservableCollection<OutputViewModel>(outputs.Select(o => new OutputViewModel(o)));
 
                 var songs = response.ContainsKey("songs") ? response["songs"] : "??";
                 var albums = response.ContainsKey("albums") ? response["albums"] : "??";
 
-                if (outputs != null && outputs.Count() > 0)
+                // Build info string
+                if (outputs?.Count() > 0)
                 {
                     var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
 
@@ -256,7 +265,7 @@ namespace Stylophone.Common.ViewModels
                              $"Database last updated {lastUpdatedDb}\n" +
                              $"Outputs available: {outputString}";
 
-                    IsStreamingAvailable = outputs.Select(o => o.Plugin).Contains("httpd");
+                    IsStreamingAvailable = outputs.Any(o => o.Plugin.Contains("httpd"));
 
                     if (!IsStreamingAvailable)
                         IsLocalPlaybackEnabled = false;

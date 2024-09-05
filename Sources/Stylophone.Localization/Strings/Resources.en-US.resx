@@ -494,4 +494,10 @@ Enabling this option will show a second volume slider to control local volume.</
   <data name="SettingsLocalPlaybackPortText" xml:space="preserve">
     <value>Set this to the port of your server's httpd stream.</value>
   </data>
+  <data name="SettingsOutputsHeader" xml:space="preserve">
+    <value>Server Outputs</value>
+  </data>
+  <data name="SettingsOutputsText" xml:space="preserve">
+    <value>Enable or disable the server's music outputs. </value>
+  </data>
 </root>

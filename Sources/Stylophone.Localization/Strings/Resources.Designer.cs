@@ -1012,6 +1012,24 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server Outputs.
+        /// </summary>
+        public static string SettingsOutputsHeader {
+            get {
+                return ResourceManager.GetString("SettingsOutputsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable or disable the server&apos;s music outputs. .
+        /// </summary>
+        public static string SettingsOutputsText {
+            get {
+                return ResourceManager.GetString("SettingsOutputsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MPD Server.
         /// </summary>
         public static string SettingsServer {

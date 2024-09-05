@@ -490,4 +490,10 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   <data name="SettingsLocalPlaybackPortText" xml:space="preserve">
     <value>Introduze a porta do fluxo httpd do seu servidor MPD aqui.</value>
   </data>
+  <data name="SettingsOutputsHeader" xml:space="preserve">
+    <value>Saidas do servidor</value>
+  </data>
+  <data name="SettingsOutputsText" xml:space="preserve">
+    <value>Active o deactive as saidas audio do servidor MPD.</value>
+  </data>
 </root>

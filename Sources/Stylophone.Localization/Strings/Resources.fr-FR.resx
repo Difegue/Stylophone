@@ -493,4 +493,10 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   <data name="SettingsLocalPlaybackPortText" xml:space="preserve">
     <value>Ajustez ce paramètre pour correspondre au port de votre stream httpd sur le serveur.</value>
   </data>
+  <data name="SettingsOutputsHeader" xml:space="preserve">
+    <value>Sorties du serveur</value>
+  </data>
+  <data name="SettingsOutputsText" xml:space="preserve">
+    <value>Activez ou désactivez les sorties audio du serveur.</value>
+  </data>
 </root>
