@@ -139,6 +139,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Labs.Uwp.MarqueeText">
+      <Version>0.1.240906-build.1745</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.5" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />

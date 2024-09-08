@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     xmlns:media="using:CommunityToolkit.WinUI.Media"
+    xmlns:labs="using:CommunityToolkit.Labs.WinUI.MarqueeTextRns" xmlns:strings="using:Stylophone.Localization.Strings"
     mc:Ignorable="d">
 
     <ResourceDictionary.ThemeDictionaries>
@@ -73,26 +74,45 @@
 
                 <Grid Grid.Column="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="26" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
+                    <FontIcon
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                        Glyph="&#xF128;"
+                        ToolTipService.ToolTip="{x:Bind strings:Resources.SongPlaybackLabel}"
+                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    
+                    <labs:MarqueeText
+                        Grid.Column="1"
+                        Margin="{StaticResource XSmallLeftMargin}"
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                        Text="{x:Bind Name}"
+                        Behavior="Looping"
+                        RepeatBehavior="Forever"
+                        Direction="Left"
+                        ToolTipService.ToolTip="{x:Bind Name}"
+                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
                     <TextBlock
                         Grid.Column="0"
+                        Grid.ColumnSpan="2"
                         VerticalAlignment="Center"
                         MaxLines="1"
                         Style="{ThemeResource BaseTextBlockStyle}"
                         Text="{x:Bind Name}"
                         TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind Name}" />
+                        ToolTipService.ToolTip="{x:Bind Name}"
+                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
 
-                    <FontIcon
-                        Grid.Column="1"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        FontSize="24"
-                        Foreground="{ThemeResource AccentFillColorDefaultBrush}"
-                        Glyph="&#xF61F;"
-                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    
                 </Grid>
 
                 <TextBlock
@@ -103,7 +123,20 @@
                     Style="{ThemeResource BodyTextBlockStyle}"
                     Text="{x:Bind File.Artist}"
                     TextTrimming="CharacterEllipsis"
-                    ToolTipService.ToolTip="{x:Bind File.Artist}" />
+                    ToolTipService.ToolTip="{x:Bind File.Artist}"
+                    Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
+
+                <labs:MarqueeText
+                    Grid.Column="1"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                    Text="{x:Bind File.Artist}"
+                    Behavior="Looping"
+                    RepeatBehavior="Forever"
+                    Direction="Left"
+                    ToolTipService.ToolTip="{x:Bind File.Artist}"
+                    Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                 <HyperlinkButton
                     Grid.Column="2"
