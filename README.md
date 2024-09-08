@@ -3,10 +3,12 @@
 Stylophone
 ===========
 
-[**Music Player Daemon**](https://www.musicpd.org/) Client for UWP and iOS/iPadOS.  
+[**Music Player Daemon**](https://www.musicpd.org/) Client for Windows, Xbox, macOS and iOS/iPadOS.  
 Based on [MpcNET](https://github.com/Difegue/MpcNET), my own fork of the original .NET Client Library for MPD. (now on NuGet!)   
 
-[<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>](https://www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge) [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="216"/>](https://apps.apple.com/us/app/stylophone/id1644672889?itsct=apps_box_link&itscg=30200)
+[<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="244"/>](https://www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge) [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="216"/>](https://apps.apple.com/us/app/stylophone/id1644672889?itsct=apps_box_link&itscg=30200)
+
+Get the macOS version for free from the [Releases!](https://github.com/Difegue/Stylophone/releases)  
 
 [Buy a sticker if you want!](https://ko-fi.com/s/9fcf421b6e)  
 
@@ -46,7 +48,7 @@ The following URLs are supported:
 - `stylophone://?verb=stylophone_volume_up` : Raise volume
 - `stylophone://?verb=stylophone_volume_down` : Lower volume  
 - `stylophone://?verb=stylophone_volume_set&volume=50` : Set volume to desired value  
-- `stylophone://?verb=stylophone_seek&seek=50` : Seek to desired position in current track 
+- `stylophone://?verb=stylophone_seek&seek=50` : Seek to desired position in current track, in seconds 
 - `stylophone://?verb=stylophone_load_playlistt&playlist=YourPlaylistName` : Load the desired playlist in queue  
 
 ## Translation
