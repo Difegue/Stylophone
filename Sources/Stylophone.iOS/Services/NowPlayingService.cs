@@ -23,7 +23,9 @@ namespace Stylophone.iOS.Services
 
         private AVAudioPlayer? _silencePlayer;
 
-        public NowPlayingService(MPDConnectionService mpdService, IApplicationStorageService storageService)
+        private bool _localPlaybackWasInterrupted;
+
+        public NowPlayingService(MPDConnectionService mpdService, LocalPlaybackViewModel localPlaybackVm, IApplicationStorageService storageService)
         {
             _mpdService = mpdService;
             _storageService = storageService;
@@ -35,6 +37,25 @@ namespace Stylophone.iOS.Services
 
             _silencePlayer = new AVAudioPlayer(new NSUrl("silence.wav",false,NSBundle.MainBundle.ResourceUrl), null, out var error);
             _silencePlayer.NumberOfLoops = -1;
+
+            // Listen for AVAudio interruptions (eg phone calls)    
+            AVAudioSession.Notifications.ObserveInterruption((s, e) =>
+            {
+                Task.Run(() =>
+                {
+                    // The interruption always seems to be marked as ended, but using a bool of our own to track interrupting works well enough.
+                    if (localPlaybackVm.IsPlaying)
+                    {
+                        localPlaybackVm.Stop();
+                        _localPlaybackWasInterrupted = true;
+                    }
+                    else if (_localPlaybackWasInterrupted)
+                    {
+                        localPlaybackVm.Resume();
+                        _localPlaybackWasInterrupted = false;
+                    }
+                });
+            });
         }
 
         public void Initialize()

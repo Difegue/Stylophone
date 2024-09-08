@@ -60,7 +60,8 @@ namespace Stylophone.iOS
             // Enable Now Playing integration
             application.BeginReceivingRemoteControlEvents();
             AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
-            
+            //AVAudioSession.SharedInstance().SetPrefersNoInterruptionsFromSystemAlerts(true, out _);
+
             // Override point for customization after application launch
             Task.Run(async () => await InitializeApplicationAsync());
 
