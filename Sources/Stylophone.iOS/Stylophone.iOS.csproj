@@ -58,6 +58,9 @@
     <Compile Update="Helpers\SymbolUIButton.designer.cs">
       <DependentUpon>SymbolUIButton.cs</DependentUpon>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="ViewControllers\SubViews\ServerOutputCell.designer.cs">
+      <DependentUpon>ServerOutputCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />

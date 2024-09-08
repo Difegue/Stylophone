@@ -25,6 +25,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIButton GithubButton { get; set; }
 
 		[Outlet]
+		UIKit.UITextField LocalPlaybackPortField { get; set; }
+
+		[Outlet]
 		UIKit.UISwitch LocalPlaybackToggle { get; set; }
 
 		[Outlet]
@@ -49,6 +52,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UILabel ServerInfoLabel { get; set; }
 
 		[Outlet]
+		UIKit.UITableView ServerOutputsTable { get; set; }
+
+		[Outlet]
 		UIKit.UITextField ServerPasswordField { get; set; }
 
 		[Outlet]
@@ -62,6 +68,11 @@ namespace Stylophone.iOS.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (AlbumArtToggle != null) {
+				AlbumArtToggle.Dispose ();
+				AlbumArtToggle = null;
+			}
+
 			if (AnalyticsToggle != null) {
 				AnalyticsToggle.Dispose ();
 				AnalyticsToggle = null;
@@ -77,14 +88,14 @@ namespace Stylophone.iOS.ViewControllers
 				GithubButton = null;
 			}
 
+			if (LocalPlaybackPortField != null) {
+				LocalPlaybackPortField.Dispose ();
+				LocalPlaybackPortField = null;
+			}
+
 			if (LocalPlaybackToggle != null) {
 				LocalPlaybackToggle.Dispose ();
 				LocalPlaybackToggle = null;
-			}
-
-			if (AlbumArtToggle != null) {
-				AlbumArtToggle.Dispose ();
-				AlbumArtToggle = null;
 			}
 
 			if (RateButton != null) {
@@ -140,6 +151,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (VersionLabel != null) {
 				VersionLabel.Dispose ();
 				VersionLabel = null;
+			}
+
+			if (ServerOutputsTable != null) {
+				ServerOutputsTable.Dispose ();
+				ServerOutputsTable = null;
 			}
 		}
 	}
