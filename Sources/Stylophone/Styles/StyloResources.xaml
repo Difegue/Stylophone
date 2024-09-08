@@ -8,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Stylophone.Common.ViewModels"
     xmlns:media="using:CommunityToolkit.WinUI.Media"
-    xmlns:labs="using:CommunityToolkit.Labs.WinUI.MarqueeTextRns" xmlns:strings="using:Stylophone.Localization.Strings"
+    xmlns:labs="using:CommunityToolkit.Labs.WinUI.MarqueeTextRns"
+    xmlns:strings="using:Stylophone.Localization.Strings"
     mc:Ignorable="d">
 
     <ResourceDictionary.ThemeDictionaries>

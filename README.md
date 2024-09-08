@@ -32,6 +32,23 @@ There is a workaround you can use with checknetisolation which should work:
 checknetisolation loopbackexempt -a -n="13459Difegue.Stylophone_zd7bwy3j4yjfy"
 ```  
 
+## Protocol usage (Windows only)  
+
+Stylophone can be launched through the `stylophone://` protocol on Windows devices; This feature also makes it so you can control some features of the app through protocol invocations.  
+
+The following URLs are supported:  
+
+- `stylophone://?verb=stylophone_play` or `stylophone://?verb=stylophone_pause` : Toggle playback status  
+- `stylophone://?verb=stylophone_stop` : Stop playback
+- `stylophone://?verb=stylophone_next` : Go to next track
+- `stylophone://?verb=stylophone_prev` : Go to previous track
+- `stylophone://?verb=stylophone_shuffle` : Toggle shuffle 
+- `stylophone://?verb=stylophone_volume_up` : Raise volume
+- `stylophone://?verb=stylophone_volume_down` : Lower volume  
+- `stylophone://?verb=stylophone_volume_set&volume=50` : Set volume to desired value  
+- `stylophone://?verb=stylophone_seek&seek=50` : Seek to desired position in current track 
+- `stylophone://?verb=stylophone_load_playlistt&playlist=YourPlaylistName` : Load the desired playlist in queue  
+
 ## Translation
 
 You can easily contribute translations to Stylophone! To help translate, follow these instructions.
