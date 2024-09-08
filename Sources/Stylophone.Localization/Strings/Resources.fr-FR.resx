@@ -464,7 +464,7 @@ L'activation de cette option affichera un second slider pour contrôler le volum
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
   </data>
   <data name="SettingsAlbumArt" xml:space="preserve">
-    <value>Récupérer les pochettes d'album depuis le serveur MPD</value>
+    <value>Télécharger les pochettes d'album depuis le serveur MPD</value>
   </data>
   <data name="SettingsAlbumArtText" xml:space="preserve">
     <value>Stylophone stocke les pochettes d'album sur votre ordinateur pour éviter de surcharger votre serveur MPD.</value>

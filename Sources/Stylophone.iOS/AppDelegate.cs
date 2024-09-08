@@ -89,10 +89,11 @@ namespace Stylophone.iOS
             var host = storageService.GetValue<string>(nameof(SettingsViewModel.ServerHost));
             var port = storageService.GetValue<int>(nameof(SettingsViewModel.ServerPort), 6600);
             var pass = storageService.GetValue<string>(nameof(SettingsViewModel.ServerPassword));
-            var localPlaybackEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsLocalPlaybackEnabled));
 
+            var localPlaybackEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsLocalPlaybackEnabled));
+            var localPlaybackPort = storageService.GetValue<int>(nameof(SettingsViewModel.LocalPlaybackPort), 8000);
             var localPlaybackVm = Ioc.Default.GetRequiredService<LocalPlaybackViewModel>();
-            localPlaybackVm.Initialize(host, localPlaybackEnabled);
+            localPlaybackVm.Initialize(host, localPlaybackPort, localPlaybackEnabled);
 
             var mpdService = Ioc.Default.GetRequiredService<MPDConnectionService>();
             mpdService.SetServerInfo(host, port, pass);

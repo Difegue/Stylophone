@@ -83,7 +83,7 @@ namespace Stylophone.Common.ViewModels
         private int _localPlaybackPort;
 
         [ObservableProperty]
-        private ObservableCollection<OutputViewModel> _outputs;
+        private ObservableCollection<OutputViewModel> _outputs = new();
 
         partial void OnElementThemeChanged(Theme value)
         {
@@ -215,7 +215,6 @@ namespace Stylophone.Common.ViewModels
 
         private string GetVersionDescription()
         {
-            var appName = Resources.AppDisplayName;
             Version version = _interop.GetAppVersion();
 
             return $"{version.Major}.{version.Minor}.{(version.Revision > -1 ? version.Revision : 0)}";
@@ -250,7 +249,10 @@ namespace Stylophone.Common.ViewModels
 
                 // Get server outputs
                 var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
-                Outputs = new ObservableCollection<OutputViewModel>(outputs.Select(o => new OutputViewModel(o)));
+                Outputs.Clear();
+
+                foreach (var o in outputs)
+                    Outputs.Add(new OutputViewModel(o));
 
                 var songs = response.ContainsKey("songs") ? response["songs"] : "??";
                 var albums = response.ContainsKey("albums") ? response["albums"] : "??";
