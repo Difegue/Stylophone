@@ -82,6 +82,22 @@ namespace Stylophone.iOS
             ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty);
         }
 
+        public override void BuildMenu(IUIMenuBuilder builder)
+        {
+            base.BuildMenu(builder);
+
+            builder.RemoveMenu(UIMenuIdentifier.Edit.GetConstant());
+            builder.RemoveMenu(UIMenuIdentifier.Font.GetConstant());
+            builder.RemoveMenu(UIMenuIdentifier.Format.GetConstant());
+            builder.RemoveMenu(UIMenuIdentifier.Services.GetConstant());
+            builder.RemoveMenu(UIMenuIdentifier.Hide.GetConstant());
+
+            builder.RemoveMenu(UIMenuIdentifier.File.GetConstant());
+            builder.RemoveMenu(UIMenuIdentifier.Document.GetConstant());
+
+            builder.System.SetNeedsRebuild();
+        }
+
         private async Task InitializeApplicationAsync()
         {
             var storageService = Ioc.Default.GetRequiredService<IApplicationStorageService>();
