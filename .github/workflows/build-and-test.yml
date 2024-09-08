@@ -65,6 +65,10 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
+    - name: Add Toolkit Labs nuget feed
+      run:  |
+        nuget sources add -name "CommunityToolkit-Labs" -source "https://pkgs.dev.azure.com/dotnet/CommunityToolkit/_packaging/CommunityToolkit-Labs/nuget/v3/index.json" 
+
     # Restore the application 
     - name: Restore the application
       working-directory: ./Sources
