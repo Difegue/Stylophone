@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,8 +9,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MpcNET.Commands.Output;
 using MpcNET.Commands.Status;
+using MpcNET.Types;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
+using Stylophone.Common.ViewModels.Items;
 using Stylophone.Localization.Strings;
 
 namespace Stylophone.Common.ViewModels
@@ -75,6 +79,12 @@ namespace Stylophone.Common.ViewModels
         [ObservableProperty]
         private bool _isLocalPlaybackEnabled;
 
+        [ObservableProperty]
+        private int _localPlaybackPort;
+
+        [ObservableProperty]
+        private ObservableCollection<OutputViewModel> _outputs = new();
+
         partial void OnElementThemeChanged(Theme value)
         {
             Task.Run (async () => await _interop.SetThemeAsync(value));
@@ -121,6 +131,11 @@ namespace Stylophone.Common.ViewModels
         partial void OnIsLocalPlaybackEnabledChanged(bool value)
         {
             _applicationStorageService.SetValue(nameof(IsLocalPlaybackEnabled), value);
+        }
+
+        partial void OnLocalPlaybackPortChanged(int value)
+        {
+            _applicationStorageService.SetValue(nameof(LocalPlaybackPort), value);
         }
 
 
@@ -176,6 +191,7 @@ namespace Stylophone.Common.ViewModels
                 _enableAnalytics = _applicationStorageService.GetValue(nameof(EnableAnalytics), true);
                 _isAlbumArtFetchingEnabled = _applicationStorageService.GetValue(nameof(IsAlbumArtFetchingEnabled), true);
                 _isLocalPlaybackEnabled = _applicationStorageService.GetValue<bool>(nameof(IsLocalPlaybackEnabled));
+                _localPlaybackPort = _applicationStorageService.GetValue(nameof(LocalPlaybackPort), 8000);
 
                 Enum.TryParse(_applicationStorageService.GetValue<string>(nameof(ElementTheme)), out _elementTheme);
 
@@ -199,7 +215,6 @@ namespace Stylophone.Common.ViewModels
 
         private string GetVersionDescription()
         {
-            var appName = Resources.AppDisplayName;
             Version version = _interop.GetAppVersion();
 
             return $"{version.Major}.{version.Minor}.{(version.Revision > -1 ? version.Revision : 0)}";
@@ -232,13 +247,18 @@ namespace Stylophone.Common.ViewModels
                     lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
                 }
 
-                // Build info string
+                // Get server outputs
                 var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
+                Outputs.Clear();
+
+                foreach (var o in outputs)
+                    Outputs.Add(new OutputViewModel(o));
 
                 var songs = response.ContainsKey("songs") ? response["songs"] : "??";
                 var albums = response.ContainsKey("albums") ? response["albums"] : "??";
 
-                if (outputs != null && outputs.Count() > 0)
+                // Build info string
+                if (outputs?.Count() > 0)
                 {
                     var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
 
@@ -247,7 +267,7 @@ namespace Stylophone.Common.ViewModels
                              $"Database last updated {lastUpdatedDb}\n" +
                              $"Outputs available: {outputString}";
 
-                    IsStreamingAvailable = outputs.Select(o => o.Plugin).Contains("httpd");
+                    IsStreamingAvailable = outputs.Any(o => o.Plugin.Contains("httpd"));
 
                     if (!IsStreamingAvailable)
                         IsLocalPlaybackEnabled = false;

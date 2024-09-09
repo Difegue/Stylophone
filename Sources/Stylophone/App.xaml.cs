@@ -136,12 +136,7 @@ namespace Stylophone
 
         private ActivationService CreateActivationService()
         {
-            return new ActivationService(this, typeof(QueueViewModel), new Lazy<UIElement>(CreateShell));
-        }
-
-        private UIElement CreateShell()
-        {
-            return new Views.ShellPage();
+            return new ActivationService(this, typeof(QueueViewModel));
         }
 
         protected override async void OnBackgroundActivated(BackgroundActivatedEventArgs args)

@@ -8,13 +8,17 @@ using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.Localization.Strings;
 using UIKit;
+using System.Collections.ObjectModel;
+using Stylophone.Common.ViewModels.Items;
+using System.Collections.Specialized;
+using Stylophone.iOS.Views;
 
 namespace Stylophone.iOS.ViewControllers
 {
     public partial class SettingsViewController : UITableViewController, IViewController<SettingsViewModel>
     {
 
-        public SettingsViewController(IntPtr handle) : base(handle)
+        public SettingsViewController(ObjCRuntime.NativeHandle handle) : base(handle)
         {
         }
 
@@ -38,9 +42,10 @@ namespace Stylophone.iOS.ViewControllers
             {
                 0 => Resources.SettingsServer,
                 1 => Resources.SettingsLocalPlaybackHeader,
-                2 => Resources.SettingsDatabase,
-                3 => Resources.SettingsAnalytics,
-                4 => Resources.SettingsAbout,
+                2 => Resources.SettingsOutputsHeader,
+                3 => Resources.SettingsDatabase,
+                4 => Resources.SettingsAnalytics,
+                5 => Resources.SettingsAbout,
                 _ => "",
             };
         }
@@ -50,8 +55,9 @@ namespace Stylophone.iOS.ViewControllers
             return (int)section switch
             {
                 1 => Resources.SettingsLocalPlaybackText,
-                2 => Resources.SettingsAlbumArtText,
-                3 => Resources.SettingsApplyOnRestart,
+                2 => Resources.SettingsOutputsText,
+                3 => Resources.SettingsAlbumArtText,
+                4 => Resources.SettingsApplyOnRestart,
                 _ => "",
             };
         }
@@ -85,6 +91,10 @@ namespace Stylophone.iOS.ViewControllers
 
             Binder.Bind<bool>(LocalPlaybackToggle, "enabled", nameof(ViewModel.IsStreamingAvailable));
             Binder.Bind<bool>(LocalPlaybackToggle, "on", nameof(ViewModel.IsLocalPlaybackEnabled), true);
+
+            Binder.Bind<int>(LocalPlaybackPortField, "text", nameof(ViewModel.LocalPlaybackPort), true,
+                valueTransformer: intToStringTransformer);
+
             Binder.Bind<bool>(AnalyticsToggle, "on", nameof(ViewModel.EnableAnalytics), true);
             Binder.Bind<bool>(AlbumArtToggle, "on", nameof(ViewModel.IsAlbumArtFetchingEnabled), true);
 
@@ -112,7 +122,83 @@ namespace Stylophone.iOS.ViewControllers
                 ViewModel.RetryConnection();
             };
 
+            var outputsDataSource = new ServerOutputsDataSource(ServerOutputsTable, ViewModel.Outputs);
+
+            ServerOutputsTable.DataSource = outputsDataSource;
+            ServerOutputsTable.Delegate = outputsDataSource;
+
         }
+    }
+
+    public class ServerOutputsDataSource : UITableViewDelegate, IUITableViewDataSource
+    {
+        private UITableView _tableView;
+        private ObservableCollection<OutputViewModel> _sourceCollection;
+
+        public ServerOutputsDataSource(UITableView tableView, ObservableCollection<OutputViewModel> source)
+        {
+            _tableView = tableView;
+            _sourceCollection = source;
+
+            _sourceCollection.CollectionChanged += (s, e) => UIApplication.SharedApplication.InvokeOnMainThread(
+                () => UpdateUITableView(e));
+        }
+
+        public nint RowsInSection(UITableView tableView, nint section)
+        {
+            return _sourceCollection.Count;
+        }
+
+        public UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+        {
+            var cell = tableView.DequeueReusableCell("outputCell") as ServerOutputCell;
+
+            if (_sourceCollection.Count <= indexPath.Row)
+                return cell; // Safety check
+
+            var outputViewModel = _sourceCollection[indexPath.Row];
+
+            cell.Configure(indexPath.Row, outputViewModel);
+
+            return cell;
+        }
+
+        // TODO make an extension of UITableView?
+        private void UpdateUITableView(NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                _tableView.ReloadData();
+            }
+            else
+            {
+                _tableView.BeginUpdates();
+
+                //Build a NSIndexPath array that matches the changes from the ObservableCollection.
+                var indexPaths = new List<NSIndexPath>();
+
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                {
+                    for (var i = e.NewStartingIndex; i < e.NewStartingIndex + e.NewItems.Count; i++)
+                        indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
+
+                    _tableView.InsertRows(indexPaths.ToArray(), UITableViewRowAnimation.Left);
+                }
+
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    var startIndex = e.OldStartingIndex;
+
+                    for (var i = startIndex; i < startIndex + e.OldItems.Count; i++)
+                        indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
+
+                    _tableView.DeleteRows(indexPaths.ToArray(), UITableViewRowAnimation.Right);
+                }
+
+                _tableView.EndUpdates();
+            }
+        }
+
     }
 
 }

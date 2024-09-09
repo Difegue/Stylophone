@@ -135,6 +135,14 @@ namespace Stylophone.iOS.ViewControllers
 
         #region Delegate
 
+        public override bool ShouldBeginMultipleSelectionInteraction(UITableView tableView, NSIndexPath indexPath)
+            => _canReorder;
+
+        public override void DidBeginMultipleSelectionInteraction(UITableView tableView, NSIndexPath indexPath)
+        {
+            tableView.SetEditing(true, true);
+        }
+
         // If multiselect isn't enabled, this will show a delete icon on the left side of the cells
         public override UITableViewCellEditingStyle EditingStyleForRow(UITableView tableView, NSIndexPath indexPath)
             => UITableViewCellEditingStyle.Delete;

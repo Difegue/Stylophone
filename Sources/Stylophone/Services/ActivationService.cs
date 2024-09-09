@@ -10,6 +10,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Stylophone.Services
 {
@@ -19,86 +20,40 @@ namespace Stylophone.Services
     {
         private readonly App _app;
         private readonly Type _defaultNavItem;
-        private Lazy<UIElement> _shell;
 
-        private object _lastActivationArgs;
-
-        public ActivationService(App app, Type defaultNavItem, Lazy<UIElement> shell = null)
+        public ActivationService(App app, Type defaultNavItem)
         {
             _app = app;
-            _shell = shell;
             _defaultNavItem = defaultNavItem;
         }
 
         public async Task ActivateAsync(object activationArgs)
         {
-            if (IsInteractive(activationArgs))
+            // Do not repeat app initialization when the Window already has content,
+            // just ensure that the window is active
+            if (Window.Current.Content == null)
             {
-                // Do not repeat app initialization when the Window already has content,
-                // just ensure that the window is active
-                if (Window.Current.Content == null)
-                {
-                    // Create a Shell or Frame to act as the navigation context
-                    Window.Current.Content = _shell?.Value ?? new Frame();
-                }
+                // Create a Shell to act as the navigation context
+                Window.Current.Content = new Views.ShellPage();
             }
 
-            // Depending on activationArgs one of ActivationHandlers or DefaultActivationHandler
-            // will navigate to the first page
+            // Depending on activationArgs, ProtocolActivationHandler and DefaultActivationHandler will trigger
             await HandleActivationAsync(activationArgs);
-            _lastActivationArgs = activationArgs;
-
-            if (IsInteractive(activationArgs))
-            {
-                // Ensure the current window is active
-                Window.Current.Activate();
-
-                // Tasks after activation
-                await StartupAsync();
-            }
         }
 
         private async Task HandleActivationAsync(object activationArgs)
         {
+            var defaultHandler = new DefaultActivationHandler(_defaultNavItem, Ioc.Default.GetRequiredService<INavigationService>());
+            var protocolHandler = new ProtocolActivationHandler(Ioc.Default.GetRequiredService<MPDConnectionService>());
+
             if (IsInteractive(activationArgs))
             {
-                var defaultHandler = new DefaultActivationHandler(_defaultNavItem, Ioc.Default.GetRequiredService<INavigationService>());
+                if (protocolHandler.CanHandle(activationArgs))
+                    await protocolHandler.HandleAsync(activationArgs);
+
                 if (defaultHandler.CanHandle(activationArgs))
-                {
                     await defaultHandler.HandleAsync(activationArgs);
-                }
             }
-        }
-
-        private async Task StartupAsync()
-        {
-            var theme = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ElementTheme));
-            Enum.TryParse(theme, out Theme elementTheme);
-            await Ioc.Default.GetRequiredService<IInteropService>().SetThemeAsync(elementTheme);
-
-            await Ioc.Default.GetRequiredService<IDialogService>().ShowFirstRunDialogIfAppropriateAsync();
-
-            _ = Task.Run(async () =>
-            {
-                Thread.Sleep(60000);
-                await Ioc.Default.GetRequiredService<IDialogService>().ShowRateAppDialogIfAppropriateAsync();
-            });
-
-            var host = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerHost));
-            host = host?.Replace("\"", ""); // TODO: This is a quickfix for 1.x updates
-            var port = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<int>(nameof(SettingsViewModel.ServerPort), 6600);
-            var pass = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<string>(nameof(SettingsViewModel.ServerPassword));
-            var localPlaybackEnabled = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.IsLocalPlaybackEnabled));
-
-            var localPlaybackVm = Ioc.Default.GetRequiredService<LocalPlaybackViewModel>();
-            localPlaybackVm.Initialize(host, localPlaybackEnabled);
-
-            var mpdService = Ioc.Default.GetRequiredService<MPDConnectionService>();
-            mpdService.SetServerInfo(host, port, pass);
-            await mpdService.InitializeAsync(true);
-
-            Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
-            Ioc.Default.GetRequiredService<SystemMediaControlsService>().Initialize();
         }
 
         private bool IsInteractive(object args)

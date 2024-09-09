@@ -10,6 +10,7 @@
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:helpers="using:Stylophone.Helpers"
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:vm="using:Stylophone.Common.ViewModels.Items"
     mc:Ignorable="d">
     <Page.Resources>
 
@@ -84,19 +85,58 @@
                 </toolkit:SettingsExpander.ItemsFooter>
             </toolkit:SettingsExpander>
 
-            <toolkit:SettingsCard
+            <toolkit:SettingsExpander
                 Header="{x:Bind strings:Resources.SettingsLocalPlaybackHeader}"
                 Description="{x:Bind strings:Resources.SettingsLocalPlaybackText}"
                 Visibility="{x:Bind ViewModel.IsStreamingAvailable, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
-                <toolkit:SettingsCard.HeaderIcon>
+                <toolkit:SettingsExpander.HeaderIcon>
                     <FontIcon Glyph="&#xE7F3;" />
-                </toolkit:SettingsCard.HeaderIcon>
+                </toolkit:SettingsExpander.HeaderIcon>
                 
                 <ToggleSwitch
                         IsOn="{x:Bind ViewModel.IsLocalPlaybackEnabled, Mode=TwoWay}"
                         OffContent=""
                         OnContent="" />
-            </toolkit:SettingsCard>
+
+                <toolkit:SettingsExpander.Items>
+                    <toolkit:SettingsCard CornerRadius="0" 
+                                          Header="{x:Bind strings:Resources.SettingsLocalPlaybackPortHeader}"
+                                          Description="{x:Bind strings:Resources.SettingsLocalPlaybackPortText}">
+                        <controls:NumberBox
+                             Width="128"
+                             Margin="0,-8"
+                             Maximum="65536"
+                             Minimum="1"
+                             PlaceholderText="8000"
+                             SpinButtonPlacementMode="Compact"
+                             Value="{x:Bind ViewModel.LocalPlaybackPort, Mode=TwoWay}" />
+                    </toolkit:SettingsCard>
+                </toolkit:SettingsExpander.Items>
+            </toolkit:SettingsExpander>
+
+            <toolkit:SettingsExpander
+                Header="{x:Bind strings:Resources.SettingsOutputsHeader}"
+                Description="{x:Bind strings:Resources.SettingsOutputsText}"
+                ItemsSource="{x:Bind ViewModel.Outputs}"
+                Visibility="{x:Bind ViewModel.IsServerValid, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                <toolkit:SettingsExpander.HeaderIcon>
+                    <FontIcon Glyph="&#xF4C3;" />
+                </toolkit:SettingsExpander.HeaderIcon>
+
+                <toolkit:SettingsExpander.ItemTemplate>
+                    <DataTemplate x:DataType="vm:OutputViewModel">
+                        <toolkit:SettingsCard CornerRadius="0" 
+                                              Header="{x:Bind Name}"
+                                              Description="{x:Bind Plugin}">
+                            <ToggleSwitch
+                                IsOn="{x:Bind IsEnabled, Mode=TwoWay}"
+                                OffContent=""
+                                OnContent="" />
+                        </toolkit:SettingsCard>
+                    </DataTemplate>
+                    
+                </toolkit:SettingsExpander.ItemTemplate>
+            </toolkit:SettingsExpander>
 
             <!--  DB/Art  -->
 

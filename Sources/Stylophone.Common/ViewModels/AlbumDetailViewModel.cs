@@ -128,7 +128,8 @@ namespace Stylophone.Common.ViewModels
                 Source.Add(_trackVmFactory.GetTrackViewModel(file));
             }
 
-            var totalTime = Source.Select(vm => vm.File.Time).Aggregate((t1, t2) => t1 + t2);
+            var times = Source.Select(vm => vm.File.Time);
+            var totalTime = times.Count() > 0 ? times.Aggregate((t1, t2) => t1 + t2) : 0;
             TimeSpan t = TimeSpan.FromSeconds(totalTime);
 
             PlaylistInfo = $"{Source.Count} Tracks, Total Time: {t.ToReadableString()}";

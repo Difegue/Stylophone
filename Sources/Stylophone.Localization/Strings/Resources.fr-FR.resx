@@ -464,7 +464,7 @@ L'activation de cette option affichera un second slider pour contrôler le volum
     <value>David Bowie is credited with playing the Stylophone on his 1969 debut hit song "Space Oddity" and also for his 2002 album Heathen track titled "Slip Away," as well as on the song "Heathen (The Rays)".</value>
   </data>
   <data name="SettingsAlbumArt" xml:space="preserve">
-    <value>Récupérer les pochettes d'album depuis le serveur MPD</value>
+    <value>Télécharger les pochettes d'album depuis le serveur MPD</value>
   </data>
   <data name="SettingsAlbumArtText" xml:space="preserve">
     <value>Stylophone stocke les pochettes d'album sur votre ordinateur pour éviter de surcharger votre serveur MPD.</value>
@@ -486,5 +486,17 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   </data>
   <data name="SongPlaybackLabel" xml:space="preserve">
     <value>Lecture de la piste</value>
+  </data>
+  <data name="SettingsLocalPlaybackPortHeader" xml:space="preserve">
+    <value>Port du stream </value>
+  </data>
+  <data name="SettingsLocalPlaybackPortText" xml:space="preserve">
+    <value>Ajustez ce paramètre pour correspondre au port de votre stream httpd sur le serveur.</value>
+  </data>
+  <data name="SettingsOutputsHeader" xml:space="preserve">
+    <value>Sorties du serveur</value>
+  </data>
+  <data name="SettingsOutputsText" xml:space="preserve">
+    <value>Activez ou désactivez les sorties audio du serveur.</value>
   </data>
 </root>

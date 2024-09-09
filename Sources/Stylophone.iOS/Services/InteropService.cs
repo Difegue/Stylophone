@@ -7,16 +7,14 @@ using Stylophone.Common.ViewModels;
 using UIKit;
 using SkiaSharp.Views.iOS;
 using Foundation;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Stylophone.iOS.Services
 {
     public class InteropService: IInteropService
     {
-        private NowPlayingService _nowPlayingService;
-
-        public InteropService(NowPlayingService nowPlayingService)
+        public InteropService()
         {
-            _nowPlayingService = nowPlayingService;
         }
 
         public Task SetThemeAsync(Theme theme)
@@ -61,8 +59,9 @@ namespace Stylophone.iOS.Services
 
         public async Task UpdateOperatingSystemIntegrationsAsync(TrackViewModel currentTrack)
         {
-            await _nowPlayingService.UpdateMetadataAsync(currentTrack);
-            //await LiveTileHelper.UpdatePlayingSongAsync(currentTrack);
+            // This needs to be instantiated lazily since NPService depends on LocalPlayback, which depends on Interop already..
+            var nowPlayingService = Ioc.Default.GetRequiredService<NowPlayingService>();
+            await nowPlayingService.UpdateMetadataAsync(currentTrack);
         }
 
         public Version GetAppVersion()
