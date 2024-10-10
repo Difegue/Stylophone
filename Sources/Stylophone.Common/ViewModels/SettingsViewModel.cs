@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -232,52 +233,62 @@ namespace Stylophone.Common.ViewModels
 
         private async Task UpdateServerVersionAsync()
         {
-            IsCheckingServer = _mpdService.IsConnecting;
-            if (!_mpdService.IsConnected) return;
-
-            var response = await _mpdService.SafelySendCommandAsync(new StatsCommand());
-
-            if (response != null)
+            try
             {
-                var lastUpdatedDb = DateTime.MinValue;
+                IsCheckingServer = _mpdService.IsConnecting;
+                if (!_mpdService.IsConnected) return;
 
-                if (response.ContainsKey("db_update"))
+                var response = await _mpdService.SafelySendCommandAsync(new StatsCommand());
+
+                if (response != null)
                 {
-                    var db_update = int.Parse(response["db_update"]);
-                    lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
+                    var lastUpdatedDb = DateTime.MinValue;
+
+                    if (response.ContainsKey("db_update"))
+                    {
+                        var db_update = int.Parse(response["db_update"]);
+                        lastUpdatedDb = DateTimeOffset.FromUnixTimeSeconds(db_update).UtcDateTime;
+                    }
+
+                    // Get server outputs
+                    var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
+                    await _dispatcherService.ExecuteOnUIThreadAsync(() => {
+
+                        Outputs.Clear();
+
+                        foreach (var o in outputs)
+                            Outputs.Add(new OutputViewModel(o));
+                    });
+
+                    var songs = response.ContainsKey("songs") ? response["songs"] : "??";
+                    var albums = response.ContainsKey("albums") ? response["albums"] : "??";
+
+                    // Build info string
+                    if (outputs?.Count() > 0)
+                    {
+                        var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
+
+                        ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
+                                 $"{songs} Songs, {albums} Albums\n" +
+                                 $"Database last updated {lastUpdatedDb}\n" +
+                                 $"Outputs available: {outputString}";
+
+                        IsStreamingAvailable = outputs.Any(o => o.Plugin.Contains("httpd"));
+
+                        if (!IsStreamingAvailable)
+                            IsLocalPlaybackEnabled = false;
+                    }
+                    else
+                    {
+                        ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
+                                 $"{songs} Songs, {albums} Albums\n" +
+                                 $"Database last updated {lastUpdatedDb}";
+                    }
                 }
-
-                // Get server outputs
-                var outputs = await _mpdService.SafelySendCommandAsync(new OutputsCommand());
-                Outputs.Clear();
-
-                foreach (var o in outputs)
-                    Outputs.Add(new OutputViewModel(o));
-
-                var songs = response.ContainsKey("songs") ? response["songs"] : "??";
-                var albums = response.ContainsKey("albums") ? response["albums"] : "??";
-
-                // Build info string
-                if (outputs?.Count() > 0)
-                {
-                    var outputString = outputs.Select(o => o.Plugin).Aggregate((s, s2) => $"{s}, {s2}");
-
-                    ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
-                             $"{songs} Songs, {albums} Albums\n" +
-                             $"Database last updated {lastUpdatedDb}\n" +
-                             $"Outputs available: {outputString}";
-
-                    IsStreamingAvailable = outputs.Any(o => o.Plugin.Contains("httpd"));
-
-                    if (!IsStreamingAvailable)
-                        IsLocalPlaybackEnabled = false;
-                }
-                else
-                {
-                    ServerInfo = $"MPD Protocol {_mpdService.Version}\n" +
-                             $"{songs} Songs, {albums} Albums\n" +
-                             $"Database last updated {lastUpdatedDb}";
-                }
+            } 
+            catch (Exception e)
+            {
+                _notificationService.ShowErrorNotification(e);
             }
         }
     }
