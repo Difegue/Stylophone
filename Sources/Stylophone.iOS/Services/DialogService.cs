@@ -44,8 +44,8 @@ namespace Stylophone.iOS.Services
 
             var detent = UISheetPresentationControllerDetent.Create(null, (context) => 240);
             uspc.Detents = new [] { detent };
-            
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(navigationController, true, null);
+
+            InteropService.GetKeyWindow().RootViewController?.PresentViewController(navigationController, true, null);
 
             var result = await dialog.CompletionTask;
 
@@ -96,9 +96,10 @@ namespace Stylophone.iOS.Services
                 confirmDialog.AddAction(cancelAction);
             }
 
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(confirmDialog, true, null);
+            InteropService.GetKeyWindow().RootViewController?.PresentViewController(confirmDialog, true, null);
 
             return await tcs.Task;
         }
+
     }
 }
