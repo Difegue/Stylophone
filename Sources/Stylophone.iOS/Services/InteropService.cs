@@ -92,7 +92,7 @@ namespace Stylophone.iOS.Services
         {
             try
             {
-                UIApplication.SharedApplication.OpenUrl(new NSUrl("https://apps.apple.com/app/idXXXXXXXXXX?action=write-review"));
+                UIApplication.SharedApplication.OpenUrl(new NSUrl("https://apps.apple.com/app/id1644672889?action=write-review"),new UIApplicationOpenUrlOptions() { OpenInPlace = true }, null);
             } catch { }
             return Task.CompletedTask;
         }
