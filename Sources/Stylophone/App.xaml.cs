@@ -10,13 +10,12 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Foundation;
 using Microsoft.Services.Store.Engagement;
 using Windows.ApplicationModel;
+using System.Reflection;
+using Sentry;
 #if DEBUG
 #else
 using System.Collections.Generic;
@@ -75,16 +74,6 @@ namespace Stylophone
 
             // Analytics
             SystemInformation.Instance.TrackAppUse(args);
-#if DEBUG
-#else
-            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
-            if (enableAnalytics)
-            {
-                // Initialize AppCenter
-                AppCenter.Start("f2193544-6a38-42f6-92bd-69964bc3a0e8",
-                    typeof(Analytics), typeof(Crashes));
-            }
-#endif
 
             var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
@@ -105,16 +94,16 @@ namespace Stylophone
 
         private void OnAppUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
+
 #if DEBUG
 #else
             var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
             if (enableAnalytics)
             {
-                var dict = new Dictionary<string, string>();
-                dict.Add("exception", e.Exception.ToString());
-                Analytics.TrackEvent("UnhandledCrash", dict);
+                SentrySdk.CaptureException(e.Exception);
             }
 #endif
+
             var notificationService = Ioc.Default.GetRequiredService<INotificationService>();
             notificationService.ShowErrorNotification(e.Exception);
 

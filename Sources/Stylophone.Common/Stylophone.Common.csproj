@@ -11,16 +11,13 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="LibVLCSharp" Version="3.9.0" />
     <PackageReference Include="MpcNET" Version="1.6.6" />
+    <PackageReference Include="Sentry" Version="5.0.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="2.88.8" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Stylophone.Localization\Stylophone.Localization.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Microsoft.AppCenter.Analytics" />
-  </ItemGroup>
 </Project>

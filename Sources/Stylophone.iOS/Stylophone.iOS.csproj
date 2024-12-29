@@ -66,8 +66,7 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
     <PackageReference Include="SkiaSharp.Views" Version="2.88.8" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.5" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.5" />
+	<PackageReference Include="Sentry" Version="5.0.0"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 	  <PackageReference Include="VideoLAN.LibVLC.iOS" Version="3.3.18" />
     <PackageReference Include="MpcNET" Version="1.6.6" />
