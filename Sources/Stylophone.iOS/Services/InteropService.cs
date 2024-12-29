@@ -17,28 +17,38 @@ namespace Stylophone.iOS.Services
         {
         }
 
+        public static UIWindow GetKeyWindow()
+        {
+            return UIApplication.SharedApplication.ConnectedScenes.ToArray()
+                    .Select(s => (UIWindowScene)s)
+                    .First().Windows.Where(w => w.IsKeyWindow).First();
+        }
+
         public Task SetThemeAsync(Theme theme)
         {
+            var keyWindow = GetKeyWindow();
+
             switch (theme)
             {
                 case Theme.Dark:
-                    UIApplication.SharedApplication.KeyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Dark;
+                    keyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Dark;
                     return Task.CompletedTask;
                 case Theme.Light:
-                    UIApplication.SharedApplication.KeyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Light;
+                    keyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Light;
                     return Task.CompletedTask;
                 default:
-                    UIApplication.SharedApplication.KeyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Unspecified;
+                    keyWindow.OverrideUserInterfaceStyle = UIUserInterfaceStyle.Unspecified;
                     return Task.CompletedTask;
             }
         }
 
         public SKColor GetAccentColor()
         {
-            var accent = UIColor.SystemBlue;
+            var keyWindow = GetKeyWindow();
+            UIColor accent = UIColor.SystemBlue;
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
-                accent = UIApplication.SharedApplication.KeyWindow.TintColor;
+                accent = keyWindow.TintColor ?? UIColor.SystemBlue;
             });
             return accent.ToSKColor();
         }
@@ -92,7 +102,7 @@ namespace Stylophone.iOS.Services
         {
             try
             {
-                UIApplication.SharedApplication.OpenUrl(new NSUrl("https://apps.apple.com/app/idXXXXXXXXXX?action=write-review"));
+                UIApplication.SharedApplication.OpenUrl(new NSUrl("https://apps.apple.com/app/id1644672889?action=write-review"),new UIApplicationOpenUrlOptions() { OpenInPlace = true }, null);
             } catch { }
             return Task.CompletedTask;
         }

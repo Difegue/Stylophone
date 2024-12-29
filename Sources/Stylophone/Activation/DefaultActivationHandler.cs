@@ -9,6 +9,9 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Stylophone.Common.Services;
 using Stylophone.Common.ViewModels;
 using System.Threading;
+using Microsoft.Toolkit.Uwp.Helpers;
+using Sentry;
+using System.Reflection;
 
 namespace Stylophone.Activation
 {
@@ -73,6 +76,46 @@ namespace Stylophone.Activation
 
             Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
             Ioc.Default.GetRequiredService<SystemMediaControlsService>().Initialize();
+
+#if DEBUG
+#else
+            var enableAnalytics = Ioc.Default.GetRequiredService<IApplicationStorageService>().GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
+            if (enableAnalytics)
+            {
+                var assembly = Assembly.GetExecutingAssembly().GetName();
+                var isUnpackaged = false;
+
+                SentrySdk.Init(options =>
+                {
+                    options.Dsn = "https://e0fe6745e1dd14e850ade2518e7080b3@o4508492455149568.ingest.de.sentry.io/4508549239537744";
+                });
+
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    scope.Release = assembly.Version.ToString();
+
+                    try
+                    {
+                        scope.Release = SystemInformation.Instance.ApplicationVersion.ToFormattedString();
+                        scope.Contexts.Device.Brand = SystemInformation.Instance.DeviceManufacturer;
+                        scope.Contexts.Device.Name = SystemInformation.Instance.DeviceModel;
+                        scope.Contexts.Device.Family = SystemInformation.Instance.DeviceFamily;
+                        scope.Contexts.Device.Architecture = SystemInformation.Instance.OperatingSystemArchitecture.ToString();
+
+                        scope.SetTag("total_launch_count", SystemInformation.Instance.TotalLaunchCount.ToString());
+                        scope.SetTag("unpackaged", "false");
+                    }
+                    catch
+                    {
+                        // SystemInformation will fail in unpackaged scenarios
+                        scope.SetTag("unpackaged", "true");
+                        isUnpackaged = true;
+                    }
+                });
+
+                SentrySdk.CaptureMessage($"{assembly.Name} - {assembly.Version} " + (isUnpackaged ? "(Unpackaged)" : ""));
+            }
+#endif 
         }
 
         protected override bool CanHandleInternal(IActivatedEventArgs args)

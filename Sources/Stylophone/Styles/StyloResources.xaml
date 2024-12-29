@@ -5,35 +5,61 @@
     xmlns:Stylophone="using:Stylophone.Helpers"
     xmlns:converters="using:CommunityToolkit.WinUI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:Stylophone.Common.ViewModels"
-    xmlns:media="using:CommunityToolkit.WinUI.Media"
     xmlns:labs="using:CommunityToolkit.Labs.WinUI.MarqueeTextRns"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:media="using:CommunityToolkit.WinUI.Media"
     xmlns:strings="using:Stylophone.Localization.Strings"
+    xmlns:vm="using:Stylophone.Common.ViewModels"
     mc:Ignorable="d">
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="BlackOnDarkThemeOnly" Color="Transparent" />
             <SolidColorBrush x:Key="WhiteOnLightThemeOnly" Color="#F3F3F3" />
-            
-            <SolidColorBrush x:Key="InfoBarErrorSeverityBackgroundBrush" Color="#FDE7E9"/>
-            <SolidColorBrush x:Key="InfoBarWarningSeverityBackgroundBrush" Color="#FFF4CE"/>
-            <SolidColorBrush x:Key="InfoBarSuccessSeverityBackgroundBrush" Color="#DFF6DD"/>
-            <SolidColorBrush x:Key="InfoBarInformationalSeverityBackgroundBrush" Color="#F2F2F2"/>
-            </ResourceDictionary>
+
+            <SolidColorBrush x:Key="InfoBarErrorSeverityBackgroundBrush" Color="#FDE7E9" />
+            <SolidColorBrush x:Key="InfoBarWarningSeverityBackgroundBrush" Color="#FFF4CE" />
+            <SolidColorBrush x:Key="InfoBarSuccessSeverityBackgroundBrush" Color="#DFF6DD" />
+            <SolidColorBrush x:Key="InfoBarInformationalSeverityBackgroundBrush" Color="#F2F2F2" />
+
+            <!--  Restore ListView color mapping that broke for some reason  -->
+            <StaticResource x:Key="ListViewItemBackgroundSelected" ResourceKey="SubtleFillColorSecondaryBrush" />
+            <StaticResource x:Key="ListViewItemBackgroundSelectedPointerOver" ResourceKey="SubtleFillColorTertiaryBrush" />
+            <StaticResource x:Key="ListViewItemBackgroundSelectedPressed" ResourceKey="SubtleFillColorSecondaryBrush" />
+            <StaticResource x:Key="ListViewItemForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundPressed" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundSelected" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundSelectedPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundSelectedPressed" ResourceKey="TextFillColorPrimaryBrush" />
+
+        </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="BlackOnDarkThemeOnly" Color="#202020" />
             <SolidColorBrush x:Key="WhiteOnLightThemeOnly" Color="Transparent" />
-            
-            <SolidColorBrush x:Key="InfoBarErrorSeverityBackgroundBrush" Color="#442726"/>
-            <SolidColorBrush x:Key="InfoBarWarningSeverityBackgroundBrush" Color="#433519"/>
-            <SolidColorBrush x:Key="InfoBarSuccessSeverityBackgroundBrush" Color="#393D1B"/>
-            <SolidColorBrush x:Key="InfoBarInformationalSeverityBackgroundBrush" Color="#2B2B2B"/>
+
+            <SolidColorBrush x:Key="InfoBarErrorSeverityBackgroundBrush" Color="#442726" />
+            <SolidColorBrush x:Key="InfoBarWarningSeverityBackgroundBrush" Color="#433519" />
+            <SolidColorBrush x:Key="InfoBarSuccessSeverityBackgroundBrush" Color="#393D1B" />
+            <SolidColorBrush x:Key="InfoBarInformationalSeverityBackgroundBrush" Color="#2B2B2B" />
+
+            <!--  Restore ListView color mapping that broke for some reason  -->
+            <StaticResource x:Key="ListViewItemBackgroundSelected" ResourceKey="SubtleFillColorSecondaryBrush" />
+            <StaticResource x:Key="ListViewItemBackgroundSelectedPointerOver" ResourceKey="SubtleFillColorTertiaryBrush" />
+            <StaticResource x:Key="ListViewItemBackgroundSelectedPressed" ResourceKey="SubtleFillColorSecondaryBrush" />
+            <StaticResource x:Key="ListViewItemForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundPressed" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundSelected" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundSelectedPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="ListViewItemForegroundSelectedPressed" ResourceKey="TextFillColorPrimaryBrush" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
-    <media:AttachedCardShadow x:Key="CommonShadow" CornerRadius="8" Offset="0,2" />
+    <media:AttachedCardShadow
+        x:Key="CommonShadow"
+        CornerRadius="8"
+        Offset="0,2" />
 
     <!--  Common Converters  -->
     <Stylophone:SecondsToTimeConverter x:Key="SecondsToTimeConverter" />
@@ -88,19 +114,19 @@
                         Glyph="&#xF128;"
                         ToolTipService.ToolTip="{x:Bind strings:Resources.SongPlaybackLabel}"
                         Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-                    
+
                     <labs:MarqueeText
                         Grid.Column="1"
                         Margin="{StaticResource XSmallLeftMargin}"
                         VerticalAlignment="Center"
+                        Behavior="Looping"
+                        Direction="Left"
                         FontWeight="SemiBold"
                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
-                        Text="{x:Bind Name}"
-                        Behavior="Looping"
                         RepeatBehavior="Forever"
-                        Direction="Left"
+                        Text="{x:Bind Name}"
                         ToolTipService.ToolTip="{x:Bind Name}"
-                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                     <TextBlock
                         Grid.Column="0"
@@ -111,9 +137,9 @@
                         Text="{x:Bind Name}"
                         TextTrimming="CharacterEllipsis"
                         ToolTipService.ToolTip="{x:Bind Name}"
-                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
+                        Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
 
-                    
+
                 </Grid>
 
                 <TextBlock
@@ -125,19 +151,19 @@
                     Text="{x:Bind File.Artist}"
                     TextTrimming="CharacterEllipsis"
                     ToolTipService.ToolTip="{x:Bind File.Artist}"
-                    Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}"/>
+                    Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
 
                 <labs:MarqueeText
                     Grid.Column="1"
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
-                    Foreground="{ThemeResource AccentFillColorDefaultBrush}"
-                    Text="{x:Bind File.Artist}"
                     Behavior="Looping"
-                    RepeatBehavior="Forever"
                     Direction="Left"
+                    Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                    RepeatBehavior="Forever"
+                    Text="{x:Bind File.Artist}"
                     ToolTipService.ToolTip="{x:Bind File.Artist}"
-                    Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                 <HyperlinkButton
                     Grid.Column="2"

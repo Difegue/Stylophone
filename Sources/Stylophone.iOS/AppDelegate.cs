@@ -10,12 +10,11 @@ using Stylophone.Common.ViewModels;
 using System.Threading.Tasks;
 using Stylophone.iOS.Services;
 using Stylophone.iOS.ViewModels;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
+using Sentry;
 using System.Threading;
 using AVFoundation;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Stylophone.iOS
 {
@@ -116,8 +115,8 @@ namespace Stylophone.iOS
             mpdService.SetServerInfo(host, port, pass);
             await mpdService.InitializeAsync(true);
 
-            var launchCount = storageService.GetValue<int>("LaunchCount");
-            storageService.SetValue("LaunchCount", launchCount + 1);
+            var launchCount = storageService.GetValue<int>("LaunchCount") + 1;
+            storageService.SetValue("LaunchCount", launchCount);
 
             Ioc.Default.GetRequiredService<AlbumArtService>().Initialize();
             Ioc.Default.GetRequiredService<NowPlayingService>().Initialize();
@@ -143,17 +142,28 @@ namespace Stylophone.iOS
             var enableAnalytics = storageService.GetValue<bool>(nameof(SettingsViewModel.EnableAnalytics), true);
             if (enableAnalytics)
             {
-                // Initialize AppCenter
-                AppCenter.Start("90b62f5a-2448-4ef1-81ca-3fb807a5b126",
-                   typeof(Analytics), typeof(Crashes));
+                var assembly = Assembly.GetExecutingAssembly().GetName();
+                var isUnpackaged = false;
+
+                SentrySdk.Init(options =>
+                {
+                    options.Dsn = "https://e0fe6745e1dd14e850ade2518e7080b3@o4508492455149568.ingest.de.sentry.io/4508549239537744";
+                });
+
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    scope.Release = assembly.Version.ToString();
+                    scope.SetTag("total_launch_count", launchCount);
+                });
+
+                SentrySdk.CaptureMessage($"{assembly.Name} - {assembly.Version} ");
 
                 AppDomain.CurrentDomain.UnhandledException += (sender, args) => {
-                    var dict = new Dictionary<string, string>();
-                    dict.Add("exception", args.ExceptionObject.ToString());
-                    Analytics.TrackEvent("UnhandledCrash", dict);
+                    SentrySdk.CaptureException(args.ExceptionObject as Exception);
                 };
             }
 #endif
+
         }
 
         /// <summary>

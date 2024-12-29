@@ -18,7 +18,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    <PackageCertificateKeyFile>Stylophone_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>
+    </PackageCertificateKeyFile>
     <Win32Resource>MiddleClickScrolling-CursorType.res</Win32Resource>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
@@ -27,8 +28,7 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>
-    </PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>A99D5FA89AE07642A953B8A7CF3085D471712C7D</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <!-- Workaround to prevent resource.pri exploding for other languages with LibVLC installed -->
     <AppxBundleAutoResourcePackageQualifiers>DXFeatureLevel</AppxBundleAutoResourcePackageQualifiers>
@@ -142,8 +142,7 @@
     <PackageReference Include="CommunityToolkit.Labs.Uwp.MarqueeText">
       <Version>0.1.240906-build.1745</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.5" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.5" />
+    <PackageReference Include="Sentry" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
@@ -164,6 +163,7 @@
     <PackageReference Include="CommunityToolkit.Uwp.Media" Version="8.1.240821" />
     <PackageReference Include="CommunityToolkit.Uwp.Helpers" Version="8.1.240821" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.1" />
+    <PackageReference Include="Microsoft.UI.Xaml" Version="2.7.3" />
     <PackageReference Include="MpcNET" Version="1.6.6" />
     <PackageReference Include="SkiaSharp.Views" Version="2.88.8" />
     <PackageReference Include="VideoLAN.LibVLC.UWP" Version="3.3.2" />
@@ -360,7 +360,6 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
-    <None Include="Stylophone_TemporaryKey.pfx" />
     <Content Include="Package.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>

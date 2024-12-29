@@ -16,9 +16,9 @@
 		<string>zh</string>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>2.7.0</string>
+	<string>2.7.3</string>
 	<key>CFBundleVersion</key>
-	<string>2.7.0.0</string>
+	<string>2.7.3.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
 	<key>MinimumOSVersion</key>

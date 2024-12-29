@@ -13,8 +13,8 @@ using MpcNET.Commands.Reflection;
 using Stylophone.Localization.Strings;
 using Stylophone.Common.Helpers;
 using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.AppCenter.Analytics;
 using Stylophone.Common.ViewModels;
+using Sentry;
 
 namespace Stylophone.Common.Services
 {
@@ -235,8 +235,9 @@ namespace Stylophone.Common.Services
                 dict.Add("source", e.Source);
                 dict.Add("message", e.Message);
                 dict.Add("stacktrace", e.StackTrace);
-                    
-                    Analytics.TrackEvent("MPDError", dict);
+
+                SentrySdk.CaptureException(e, scope => scope.AddBreadcrumb(new(command.Serialize(), "MPDError")));
+
             }
 #endif
             }
