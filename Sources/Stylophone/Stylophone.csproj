@@ -365,7 +365,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Package.appxmanifest</LastGenOutput>
     </Content>
-    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />

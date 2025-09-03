@@ -57,6 +57,15 @@
 				  <uap:DisplayName>Stylophone URI Scheme</uap:DisplayName>
 			  </uap:Protocol>
 		  </uap:Extension>
+
+          <uap3:Extension Category="windows.appExtension">
+              <uap3:AppExtension Name="com.microsoft.windows.ai.actions" DisplayName="Stylophone" 
+                                 Id="windows-action" PublicFolder="Assets">
+                <uap3:Properties>
+                  <Registration>AppActions.json</Registration>
+                </uap3:Properties>
+              </uap3:AppExtension>
+          </uap3:Extension>
       </Extensions>
     </Application>
   </Applications>

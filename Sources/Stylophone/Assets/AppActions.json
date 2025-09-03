@@ -1,0 +1,157 @@
+{
+  "version": 2,
+  "actions": [
+    {
+      "id": "Stylophone.Seek",
+      "description": "Seek MPD server playback",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [
+        {
+          "name": "Seconds",
+          "kind": "Text"
+        }
+      ],
+      "inputCombinations": [
+        {
+          "inputs": [ "Seconds" ],
+          "description": "seek to ${PlaylistName.Text} seconds"
+        }
+      ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_seek&seek=${Seconds.Text}"
+      }
+    },
+    {
+      "id": "Stylophone.PlayPause",
+      "description": "Play/Pause MPD server",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [],
+      "inputCombinations": [ { "inputs": [] } ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_play"
+      }
+    },
+    {
+      "id": "Stylophone.Stop",
+      "description": "Stop MPD server playback",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [],
+      "inputCombinations": [ { "inputs": [] } ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_stop"
+      }
+    },
+    {
+      "id": "Stylophone.NextTrack",
+      "description": "Skip to next track",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [],
+      "inputCombinations": [ { "inputs": [] } ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_next"
+      }
+    },
+    {
+      "id": "Stylophone.PrevTrack",
+      "description": "Skip to previous track",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [],
+      "inputCombinations": [ { "inputs": [] } ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_prev"
+      }
+    },
+    {
+      "id": "Stylophone.Shuffle",
+      "description": "Toggle MPD server shuffle mode",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [],
+      "inputCombinations": [ { "inputs": [] } ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_shuffle"
+      }
+    },
+    {
+      "id": "Stylophone.VolumeUp",
+      "description": "Raise MPD server volume",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [],
+      "inputCombinations": [ { "inputs": [] } ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_volume_up"
+      }
+    },
+    {
+      "id": "Stylophone.VolumeDown",
+      "description": "Lower MPD server volume",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [],
+      "inputCombinations": [ { "inputs": [] } ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_volume_down"
+      }
+    },
+    {
+      "id": "Stylophone.LoadPlaylist",
+      "description": "Load the desired playlist in MPD",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [
+        {
+          "name": "PlaylistName",
+          "kind": "Text"
+        }
+      ],
+      "inputCombinations": [
+        {
+          "inputs": [ "PlaylistName" ],
+          "description": "load playlist ${PlaylistName.Text}"
+        }
+      ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_load_playlist&playlist=${SceneName.Text}"
+      }
+    },
+    {
+      "id": "Stylophone.SetVolume",
+      "description": "Set volume of the MPD server",
+      "icon": "ms-resource://Files/Images/StoreLogo.png",
+      "usesGenerativeAI": false,
+      "inputs": [
+        {
+          "name": "Volume",
+          "kind": "Text"
+        }
+      ],
+      "inputCombinations": [
+        {
+          "inputs": [ "Volume" ],
+          "description": "set volume to ${Volume.Text}"
+        }
+      ],
+      "invocation": {
+        "type": "Uri",
+        "uri": "stylophone://?verb=stylophone_volume_set&volume=${Volume.Text}"
+      }
+    }
+
+
+  ]
+}
