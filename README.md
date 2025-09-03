@@ -49,7 +49,7 @@ The following URLs are supported:
 - `stylophone://?verb=stylophone_volume_down` : Lower volume  
 - `stylophone://?verb=stylophone_volume_set&volume=50` : Set volume to desired value  
 - `stylophone://?verb=stylophone_seek&seek=50` : Seek to desired position in current track, in seconds 
-- `stylophone://?verb=stylophone_load_playlistt&playlist=YourPlaylistName` : Load the desired playlist in queue  
+- `stylophone://?verb=stylophone_load_playlist&playlist=YourPlaylistName` : Load the desired playlist in queue  
 
 ## Translation
 

@@ -374,6 +374,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <Content Include="Assets\AppActions.json" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
