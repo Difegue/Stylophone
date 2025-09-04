@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -32,6 +33,8 @@ namespace Stylophone.Services
             { typeof(PlaylistViewModel), typeof(PlaylistPage) },
             { typeof(LibraryViewModel), typeof(LibraryPage) }
         };
+
+        public static Dictionary<Frame, AppWindow> AppWindows = new();
 
         public NavigationService()
         {
@@ -72,14 +75,17 @@ namespace Stylophone.Services
             newWindow.Title = parameter.ToString();
 
             Frame appWindowContentFrame = new();
+            // This doesn't actually work
             BackdropMaterial.SetApplyToRootOrPageBackground(appWindowContentFrame, true);
             appWindowContentFrame.Navigate(pageType, parameter);
 
             ElementCompositionPreview.SetAppWindowContent(newWindow, appWindowContentFrame);
+            AppWindows.Add(appWindowContentFrame, newWindow);
 
             newWindow.Closed += delegate
             {
                 appWindowContentFrame.Content = null;
+                AppWindows.Remove(appWindowContentFrame);
                 newWindow = null;
             };
             await newWindow.TryShowAsync();
