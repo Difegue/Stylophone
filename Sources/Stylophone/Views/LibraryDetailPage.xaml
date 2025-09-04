@@ -2,18 +2,18 @@
     x:Class="Stylophone.Views.LibraryDetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="using:Stylophone.Behaviors"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:strings="using:Stylophone.Localization.Strings"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:behaviors="using:Stylophone.Behaviors"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea" Margin="8,0">
+    <Grid x:Name="ContentArea" Margin="4,2,8,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="232" />
             <RowDefinition Height="*" />
@@ -64,10 +64,9 @@
                     Width="148"
                     Height="148"
                     Margin="{StaticResource MediumRightMargin}"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    RelativePanel.AlignTopWithPanel="True"
                     ui:Effects.Shadow="{StaticResource CommonShadow}"
-                    >
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True">
 
                     <Grid
                         x:Name="albumImage"
@@ -203,9 +202,9 @@
                 SelectionMode="Extended">
                 <interactivity:Interaction.Behaviors>
                     <behaviors:AlternatingListViewBehavior
-                    AlternateBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
-                    AlternateBorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    AlternateBorderThickness="0" />
+                        AlternateBackground="{ThemeResource SubtleFillColorTertiaryBrush}"
+                        AlternateBorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        AlternateBorderThickness="0" />
                 </interactivity:Interaction.Behaviors>
                 <ListView.ContextFlyout>
                     <MenuFlyout>

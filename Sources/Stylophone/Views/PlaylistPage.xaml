@@ -14,7 +14,7 @@
     xmlns:ui7="using:Microsoft.Toolkit.Uwp.UI"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea" Margin="8,2,8,0">
+    <Grid x:Name="ContentArea" Margin="4,2,8,0">
         <!--  Track List  -->
         <Grid
             Background="{ThemeResource LayerFillColorDefaultBrush}"
@@ -214,10 +214,7 @@
                                 RelativePanel.AlignBottomWithPanel="True"
                                 VerticalSpacing="8">
 
-                                <Button
-                                    BorderThickness="0"
-                                    Command="{x:Bind ViewModel.PlayPlaylistCommand}"
-                                    Style="{StaticResource AccentButtonStyle}">
+                                <Button Command="{x:Bind ViewModel.PlayPlaylistCommand}" Style="{StaticResource AccentButtonStyle}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <FontIcon Glyph="&#xF5B0;" />
                                         <TextBlock
@@ -226,15 +223,11 @@
                                             TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Button>
-                                <Button
-                                    BorderThickness="0"
-                                    Command="{x:Bind ViewModel.LoadPlaylistCommand}"
-                                    ToolTipService.ToolTip="{x:Bind strings:Resources.ContextMenuAddToQueue}">
+                                <Button Command="{x:Bind ViewModel.LoadPlaylistCommand}" ToolTipService.ToolTip="{x:Bind strings:Resources.ContextMenuAddToQueue}">
                                     <FontIcon Glyph="&#xED0E;" />
                                 </Button>
 
                                 <Button
-                                    BorderThickness="0"
                                     Command="{x:Bind ViewModel.OpenInSeparateWindowCommand}"
                                     ToolTipService.ToolTip="{x:Bind strings:Resources.PlaylistShowInSecondWindow}"
                                     Visibility="{ui:OnDevice Xbox=Collapsed,
@@ -242,10 +235,7 @@
                                     <FontIcon Glyph="&#xE8A7;" />
                                 </Button>
 
-                                <Button
-                                    BorderThickness="0"
-                                    Command="{x:Bind ViewModel.RemovePlaylistCommand}"
-                                    ToolTipService.ToolTip="{x:Bind strings:Resources.ContextMenuDeletePlaylist}">
+                                <Button Command="{x:Bind ViewModel.RemovePlaylistCommand}" ToolTipService.ToolTip="{x:Bind strings:Resources.ContextMenuDeletePlaylist}">
                                     <FontIcon Glyph="&#xE74D;" />
                                 </Button>
                             </controls:WrapPanel>

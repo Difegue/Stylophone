@@ -70,7 +70,7 @@
             Content="{x:Bind strings:Resources.FoldersCollapseAll}" />
 
         <Grid
-            Margin="8,0"
+            Margin="4,0,8,0"
             Background="{ThemeResource LayerFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
