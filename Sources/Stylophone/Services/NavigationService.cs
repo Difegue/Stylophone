@@ -1,21 +1,26 @@
-﻿using Stylophone.ViewModels;
-using Stylophone.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.WinUI.Animations;
+using Microsoft.UI.Xaml.Controls;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
+using Stylophone.ViewModels;
+using Stylophone.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Windows.Foundation;
+using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Navigation;
 
 namespace Stylophone.Services
 {
     public class NavigationService : NavigationServiceBase
     {
-        private Dictionary<Type, Type> _viewModelToPageDictionary = new Dictionary<Type, Type>()
+        private Dictionary<Type, Type> _viewModelToPageDictionary = new()
         {
             { typeof(QueueViewModel), typeof(ServerQueuePage) },
             { typeof(SettingsViewModel), typeof(SettingsPage) },
@@ -53,6 +58,31 @@ namespace Stylophone.Services
                     _lastParamUsed = parameter;
                 }
             }
+        }
+
+        public override async Task ShowInSeparateWindowAsync<T>(object parameter = null)
+        {
+            // Get the matching page and navigate to it
+            var pageType = _viewModelToPageDictionary.GetValueOrDefault(typeof(T));
+
+            // Create a new window
+            var newWindow = await AppWindow.TryCreateAsync();
+            //newWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+            newWindow.RequestSize(new Size(780, 800));
+            newWindow.Title = parameter.ToString();
+
+            Frame appWindowContentFrame = new();
+            BackdropMaterial.SetApplyToRootOrPageBackground(appWindowContentFrame, true);
+            appWindowContentFrame.Navigate(pageType, parameter);
+
+            ElementCompositionPreview.SetAppWindowContent(newWindow, appWindowContentFrame);
+
+            newWindow.Closed += delegate
+            {
+                appWindowContentFrame.Content = null;
+                newWindow = null;
+            };
+            await newWindow.TryShowAsync();
         }
 
         public override void SetListDataItemForNextConnectedAnimation(object item) => Frame.SetListDataItemForNextConnectedAnimation(item);

@@ -68,6 +68,9 @@ namespace Stylophone.Common.ViewModels
         private bool _artLoaded;
 
         [ObservableProperty]
+        private bool _canShowInSecondWindow = true;
+
+        [ObservableProperty]
         private SKImage _playlistArt;
 
         [ObservableProperty]
@@ -190,6 +193,14 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        [RelayCommand(CanExecute = nameof(CanShowInSecondWindow))]
+        private async Task OpenInSeparateWindow()
+        {
+            // Open this playlist in a new window, then navigate the main window back
+            await _navigationService.ShowInSeparateWindowAsync<PlaylistViewModel>(this);
+            _navigationService.GoBack();
+        }
+
         #endregion
 
         public async Task LoadDataAsync(string playlistName)
@@ -291,6 +302,8 @@ namespace Stylophone.Common.ViewModels
                 _oldId = e.OldStartingIndex;
             }
         }
+
+        public override string ToString() => Name;
 
         public void Dispose()
         {

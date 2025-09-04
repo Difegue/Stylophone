@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using System.Threading.Tasks;
 
 namespace Stylophone.Common.Interfaces
 {
@@ -11,6 +12,7 @@ namespace Stylophone.Common.Interfaces
         bool CanGoBack { get; }
         bool GoBack();
 
+        Task ShowInSeparateWindowAsync<T>(object parameter = null) where T : ObservableObject;
         void Navigate(Type viewmodel, object parameter = null);
         void Navigate<T>(object parameter = null) where T : ObservableObject;
         void SetListDataItemForNextConnectedAnimation(object item);
@@ -28,6 +30,7 @@ namespace Stylophone.Common.Interfaces
             Navigated?.Invoke(this, new CoreNavigationEventArgs { NavigationTarget = viewmodel, Parameter = parameter});
         }
         public abstract void NavigateImplementation(Type viewmodel, object parameter = null);
+        public abstract Task ShowInSeparateWindowAsync<T>(object parameter = null) where T : ObservableObject;
 
         public bool GoBack()
         {

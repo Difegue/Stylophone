@@ -496,4 +496,7 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   <data name="SettingsOutputsText" xml:space="preserve">
     <value>Active o deactive as saidas audio do servidor MPD.</value>
   </data>
+  <data name="PlaylistShowInSecondWindow" xml:space="preserve">
+    <value>Mostrar numa otra janela</value>
+  </data>
 </root>

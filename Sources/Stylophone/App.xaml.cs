@@ -162,12 +162,12 @@ namespace Stylophone
             services.AddSingleton<LibraryViewModel>();
             services.AddSingleton<AlbumDetailViewModel>();
             services.AddSingleton<FoldersViewModel>();
-            services.AddSingleton<PlaylistViewModel>();
             services.AddSingleton<QueueViewModel>();
             services.AddSingleton<SearchResultsViewModel>();
             services.AddSingleton<LocalPlaybackViewModel>();
 
             services.AddTransient<PlaybackViewModel>();
+            services.AddTransient<PlaylistViewModel>();
 
             return services.BuildServiceProvider();
         }

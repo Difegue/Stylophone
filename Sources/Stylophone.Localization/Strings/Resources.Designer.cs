@@ -722,6 +722,15 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show in separate window.
+        /// </summary>
+        public static string PlaylistShowInSecondWindow {
+            get {
+                return ResourceManager.GetString("PlaylistShowInSecondWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Queue.
         /// </summary>
         public static string QueueHeader {
