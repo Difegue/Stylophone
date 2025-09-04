@@ -51,7 +51,6 @@
                 ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
                 AllowDrop="True"
                 CanReorderItems="True"
-                CornerRadius="8"
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"

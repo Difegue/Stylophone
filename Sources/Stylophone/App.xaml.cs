@@ -160,7 +160,6 @@ namespace Stylophone
             services.AddSingleton<ShellViewModel>();
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<LibraryViewModel>();
-            services.AddSingleton<AlbumDetailViewModel>();
             services.AddSingleton<FoldersViewModel>();
             services.AddSingleton<QueueViewModel>();
             services.AddSingleton<SearchResultsViewModel>();
@@ -168,6 +167,7 @@ namespace Stylophone
 
             services.AddTransient<PlaybackViewModel>();
             services.AddTransient<PlaylistViewModel>();
+            services.AddTransient<AlbumDetailViewModel>();
 
             return services.BuildServiceProvider();
         }

@@ -20,7 +20,7 @@
             Background="{ThemeResource LayerFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
-            CornerRadius="0,0,8,8">
+            CornerRadius="8">
 
             <winui:ProgressRing
                 Width="96"
@@ -36,7 +36,6 @@
                 Padding="0,-1,0,0"
                 ui7:ScrollViewerExtensions.EnableMiddleClickScrolling="True"
                 ui:ScrollViewerExtensions.VerticalScrollBarMargin="0,-8"
-                CornerRadius="8"
                 DoubleTapped="Queue_Track"
                 ItemTemplate="{StaticResource TrackListTemplate}"
                 ItemsSource="{x:Bind ViewModel.Source}"

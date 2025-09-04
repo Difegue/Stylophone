@@ -13,7 +13,6 @@ namespace Stylophone.Views
         public PlaylistPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<PlaylistViewModel>();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -27,7 +26,10 @@ namespace Stylophone.Views
                 DataContext = vm;
             }
             else
+            {
+                DataContext = Ioc.Default.GetRequiredService<PlaylistViewModel>();
                 await ViewModel.LoadDataAsync(e.Parameter as string);
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
