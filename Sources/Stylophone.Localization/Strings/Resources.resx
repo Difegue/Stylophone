@@ -503,4 +503,10 @@ Enabling this option will show a second volume slider to control local volume.</
   <data name="PlaylistShowInSecondWindow" xml:space="preserve">
     <value>Show in separate window</value>
   </data>
+  <data name="QueueScrollTop" xml:space="preserve">
+    <value>Scroll to top of queue</value>
+  </data>
+  <data name="QueueScrollBottom" xml:space="preserve">
+    <value>Scroll to bottom of queue</value>
+  </data>
 </root>

@@ -104,5 +104,15 @@ namespace Stylophone.Views
         {
             _mpdService.DisableQueueEvents = false;
         }
+
+        private void Scroll_Top(object sender, RoutedEventArgs e)
+        {
+            QueueList.ScrollIntoView(QueueList.Items.First());
+        }
+
+        private void Scroll_Bottom(object sender, RoutedEventArgs e)
+        {
+            QueueList.ScrollIntoView(QueueList.Items.Last());
+        }
     }
 }

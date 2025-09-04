@@ -740,6 +740,24 @@ namespace Stylophone.Localization.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scroll to bottom of queue.
+        /// </summary>
+        public static string QueueScrollBottom {
+            get {
+                return ResourceManager.GetString("QueueScrollBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll to top of queue.
+        /// </summary>
+        public static string QueueScrollTop {
+            get {
+                return ResourceManager.GetString("QueueScrollTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick some Songs.
         /// </summary>
         public static string RandomTracksHeader {

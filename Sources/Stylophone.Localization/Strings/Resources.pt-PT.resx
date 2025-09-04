@@ -499,4 +499,10 @@ Ativando esta opção mostrará um segundo deslizador de volume para controlar o
   <data name="PlaylistShowInSecondWindow" xml:space="preserve">
     <value>Mostrar numa otra janela</value>
   </data>
+  <data name="QueueScrollTop" xml:space="preserve">
+    <value>Ir a cima da Fila</value>
+  </data>
+  <data name="QueueScrollBottom" xml:space="preserve">
+    <value>Ir a baixa da Fila</value>
+  </data>
 </root>
