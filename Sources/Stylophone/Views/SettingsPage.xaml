@@ -250,7 +250,7 @@
                 </StackPanel>
 
                 <toolkit:SettingsExpander.HeaderIcon>
-                    <controls:ImageIcon
+                    <controls:ImageIcon Margin="-42"
                         Source="ms-appx:///Assets/Square44x44Logo.altform-unplated_targetsize-256.png" />
                 </toolkit:SettingsExpander.HeaderIcon>
 
