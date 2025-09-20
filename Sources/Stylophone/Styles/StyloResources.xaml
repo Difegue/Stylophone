@@ -5,7 +5,6 @@
     xmlns:Stylophone="using:Stylophone.Helpers"
     xmlns:converters="using:CommunityToolkit.WinUI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:labs="using:CommunityToolkit.Labs.WinUI.MarqueeTextRns"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:CommunityToolkit.WinUI.Media"
     xmlns:strings="using:Stylophone.Localization.Strings"
@@ -115,12 +114,10 @@
                         ToolTipService.ToolTip="{x:Bind strings:Resources.SongPlaybackLabel}"
                         Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                    <labs:MarqueeText
+                    <TextBlock
                         Grid.Column="1"
                         Margin="{StaticResource XSmallLeftMargin}"
                         VerticalAlignment="Center"
-                        Behavior="Looping"
-                        Direction="Left"
                         FontWeight="SemiBold"
                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                         RepeatBehavior="Forever"
@@ -153,12 +150,10 @@
                     ToolTipService.ToolTip="{x:Bind File.Artist}"
                     Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource ReverseBoolToVisibilityConverter}}" />
 
-                <labs:MarqueeText
+                <TextBlock
                     Grid.Column="1"
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
-                    Behavior="Looping"
-                    Direction="Left"
                     Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                     RepeatBehavior="Forever"
                     Text="{x:Bind File.Artist}"

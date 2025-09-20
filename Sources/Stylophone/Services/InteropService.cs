@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.Uwp.Helpers;
-using SkiaSharp;
+﻿using SkiaSharp;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
 using System;
@@ -177,7 +176,7 @@ namespace Stylophone.Services
 
         public async Task OpenStoreReviewUrlAsync()
         {
-            await CoreApplication.GetCurrentView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SystemInformation.LaunchStoreForReviewAsync());
+            //await CoreApplication.GetCurrentView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SystemInformation.LaunchStoreForReviewAsync());
         }
     }
 }

@@ -4,7 +4,6 @@
     <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <UseUwp>true</UseUwp>
-    <UseUwpTools>true</UseUwpTools>
     <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -15,9 +14,12 @@
     <PackageCertificateKeyFile>Stylophone_TemporaryKey.pfx</PackageCertificateKeyFile>
     <Win32Resource>MiddleClickScrolling-CursorType.res</Win32Resource>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+	  
     <!-- Workaround to prevent resource.pri exploding for other languages with LibVLC installed -->
     <AppxBundleAutoResourcePackageQualifiers>DXFeatureLevel</AppxBundleAutoResourcePackageQualifiers>
     <AppxDefaultResourceQualifiers>Language=en;fr;pt;zh</AppxDefaultResourceQualifiers>
+
+	<WindowsSdkPackageVersion>10.0.26100.38</WindowsSdkPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,78 +31,30 @@
     <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Labs.Uwp.MarqueeText">
-      <Version>0.1.240906-build.1745</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.5" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
+    <PackageReference Include="Sentry" Version="5.15.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
     <PackageReference Include="Microsoft.Services.Store.Engagement">
       <Version>10.2307.3001</Version>
     </PackageReference>
 
-    <PackageReference Include="CommunityToolkit.Uwp.Animations" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Behaviors" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.SettingsControls" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.Segmented" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Controls.HeaderedControls" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Converters" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Extensions" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Media" Version="8.1.240821" />
-    <PackageReference Include="CommunityToolkit.Uwp.Helpers" Version="8.1.240821" />
-    <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.7-prerelease.241119001" />
+    <PackageReference Include="CommunityToolkit.Uwp.Animations" Version="8.2.250402" />
+	<PackageReference Include="CommunityToolkit.Uwp.Behaviors" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.SettingsControls" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.Segmented" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.HeaderedControls" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Converters" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Extensions" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Media" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.Uwp.Helpers" Version="8.2.250402" />
+    <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.7" />
     <PackageReference Include="MpcNET" Version="1.6.6" />
-    <PackageReference Include="SkiaSharp.Views" Version="2.88.8" />
-    <PackageReference Include="VideoLAN.LibVLC.UWP" Version="3.3.2" />
-	<PackageReference Include="Microsoft.Windows.SDK.NET.Ref" Version="10.0.26100.38" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Styles\StyloResources.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Styles\_Thickness.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Dialogs\AddToPlaylistDialog.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Dialogs\FirstRunDialog.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\FoldersPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\SearchResultsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\LibraryDetailPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\LibraryPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Playback\PlaybackView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ServerQueuePage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Playback\NowPlayingBar.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Playback\OverlayView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\PlaylistPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\SettingsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ShellPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
+	<PackageReference Include="SkiaSharp" Version="3.119.0" />
+    <PackageReference Include="SkiaSharp.Views" Version="3.119.0" />
+
+	<PackageReference Include="Microsoft.Windows.SDK.CPP" Version="10.0.26100.2161" />
+
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\*.png" />
@@ -135,11 +89,11 @@
       <Visible>false</Visible>
     </T4ParameterValues>
   </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
-      <Name>Microsoft Engagement Framework</Name>
-    </SDKReference>
-  </ItemGroup>
+	<ItemGroup>
+		<SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
+			<Name>Microsoft Engagement Framework</Name>
+		</SDKReference>
+	</ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
@@ -149,11 +103,4 @@
     </AppxManifest>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TextTemplating\Microsoft.TextTemplating.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

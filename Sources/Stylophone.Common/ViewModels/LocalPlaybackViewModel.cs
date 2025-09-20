@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using LibVLCSharp.Shared;
+//using LibVLCSharp.Shared;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
@@ -16,8 +16,8 @@ namespace Stylophone.Common.ViewModels
         private SettingsViewModel _settingsVm;
         private MPDConnectionService _mpdService;
 
-        private LibVLC _vlcCore;
-        private MediaPlayer _mediaPlayer;
+        //private LibVLC _vlcCore;
+        //private MediaPlayer _mediaPlayer;
         private string _serverHost;
         private int _serverPort;
 
@@ -51,8 +51,8 @@ namespace Stylophone.Common.ViewModels
                 {
                     try
                     {
-                        if (IsPlaying && _mediaPlayer != null && _mediaPlayer.Volume != _volume)
-                            _mediaPlayer.Volume = _volume;
+                        //if (IsPlaying && _mediaPlayer != null && _mediaPlayer.Volume != _volume)
+                        //    _mediaPlayer.Volume = _volume;
 
                         Thread.Sleep(500);
                     }
@@ -94,7 +94,7 @@ namespace Stylophone.Common.ViewModels
 
         partial void OnIsEnabledChanged(bool value)
         {
-            if (value)
+            /*if (value)
             {
                 if (_vlcCore == null)
                     _vlcCore = new LibVLC();
@@ -112,7 +112,7 @@ namespace Stylophone.Common.ViewModels
 
                 _vlcCore?.Dispose();
                 _vlcCore = null;
-            }
+            }*/
         }
 
         partial void OnVolumeChanged(int value)
@@ -121,8 +121,8 @@ namespace Stylophone.Common.ViewModels
             if (!IsPlaying && value != 0)
                 IsPlaying = true;
 
-            if (_mediaPlayer != null)
-                _mediaPlayer.Volume = value;
+            //if (_mediaPlayer != null)
+            //    _mediaPlayer.Volume = value;
 
             if (value == 0)
             {
@@ -154,13 +154,13 @@ namespace Stylophone.Common.ViewModels
                 {
                     var urlString = "http://" + _serverHost + ":" + _serverPort;
                     var streamUrl = new Uri(urlString);
-                    var media = new Media(_vlcCore, streamUrl);
+                    //var media = new Media(_vlcCore, streamUrl);
 
-                    _mediaPlayer.Play(media);
+                    //_mediaPlayer.Play(media);
                 }
                 else
                 {
-                    _mediaPlayer?.Stop();
+                    //_mediaPlayer?.Stop();
                 }
             }
             catch (Exception e)

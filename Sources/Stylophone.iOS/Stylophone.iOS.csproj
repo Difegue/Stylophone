@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
     <!--RuntimeIdentifiers>maccatalyst-arm64;maccatalyst-x64</RuntimeIdentifiers-->
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
@@ -65,10 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
-    <PackageReference Include="SkiaSharp.Views" Version="2.88.8" />
-	<PackageReference Include="Sentry" Version="5.0.0"/>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-	  <PackageReference Include="VideoLAN.LibVLC.iOS" Version="3.3.18" />
+    <PackageReference Include="SkiaSharp.Views" Version="3.119.0" />
+	<PackageReference Include="Sentry" Version="5.15.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+	  <PackageReference Include="VideoLAN.LibVLC.iOS" Version="3.6.1" />
     <PackageReference Include="MpcNET" Version="1.6.6" />
   </ItemGroup>
   <ItemGroup>
