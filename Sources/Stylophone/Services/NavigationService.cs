@@ -9,10 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
+using Windows.UI.Xaml.Media;
 
 namespace Stylophone.Services
 {
@@ -30,12 +32,13 @@ namespace Stylophone.Services
             { typeof(PlaylistViewModel), typeof(PlaylistPage) },
             { typeof(LibraryViewModel), typeof(LibraryPage) }
         };
+        private IApplicationStorageService _storageService;
 
         public static Dictionary<Frame, AppWindow> AppWindows = new();
 
-        public NavigationService()
+        public NavigationService(IApplicationStorageService storageService)
         {
-
+            _storageService = storageService;
         }
 
         public override bool CanGoBack => Frame.CanGoBack;
@@ -71,12 +74,24 @@ namespace Stylophone.Services
             newWindow.RequestSize(new Size(780, 800));
             newWindow.Title = parameter.ToString();
 
+            Grid appWindowContent = new() { RequestedTheme = InteropService.CurrentTheme,
+                                            Background = (SolidColorBrush)Application.Current.Resources["ApplicationPageBackgroundThemeBrush"] };
+
+            if (InteropService.CurrentTheme == ElementTheme.Light)
+                appWindowContent.Background = new SolidColorBrush(Color.FromArgb(255, 243, 243, 243));
+            if (InteropService.CurrentTheme == ElementTheme.Dark)
+                appWindowContent.Background = new SolidColorBrush(Color.FromArgb(255, 32, 32, 32));
+
             Frame appWindowContentFrame = new();
-            // This doesn't actually work
-            BackdropMaterial.SetApplyToRootOrPageBackground(appWindowContentFrame, true);
+
+            appWindowContent.Children.Add(appWindowContentFrame);
+
+            // This doesn't actually work 
+            //BackdropMaterial.SetApplyToRootOrPageBackground(appWindowContentFrame, true);
+
             appWindowContentFrame.Navigate(pageType, parameter);
 
-            ElementCompositionPreview.SetAppWindowContent(newWindow, appWindowContentFrame);
+            ElementCompositionPreview.SetAppWindowContent(newWindow, appWindowContent);
             AppWindows.Add(appWindowContentFrame, newWindow);
 
             newWindow.Closed += delegate
