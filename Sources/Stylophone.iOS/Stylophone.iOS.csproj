@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net9.0-ios26.0</TargetFrameworks>
+    <NoWarn>$(NoWarn);XCODE_26_0_PREVIEW</NoWarn>
     <!--RuntimeIdentifiers>maccatalyst-arm64;maccatalyst-x64</RuntimeIdentifiers-->
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
