@@ -114,6 +114,11 @@ namespace Stylophone.iOS.Services
             return false;
         }
 
+        public override Task ShowInSeparateWindowAsync<T>(object parameter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         private UINavigationController _navController;
         public UINavigationController NavigationController
         {

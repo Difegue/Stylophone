@@ -16,9 +16,9 @@
 		<string>zh</string>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>2.7.3</string>
+	<string>2.8.0</string>
 	<key>CFBundleVersion</key>
-	<string>2.7.3.0</string>
+	<string>2.8.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
 	<key>MinimumOSVersion</key>
@@ -56,7 +56,30 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon60x60</string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+		</dict>
+	</dict>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon60x60</string>
+				<string>AppIcon76x76</string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
