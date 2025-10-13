@@ -80,5 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\silence.wav" />
+    <BundleResource Include="Assets.car" />
   </ItemGroup>
 </Project>
