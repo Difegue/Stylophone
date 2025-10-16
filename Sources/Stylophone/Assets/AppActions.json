@@ -18,6 +18,8 @@
           "description": "seek to ${PlaylistName.Text} seconds"
         }
       ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_seek&seek=${Seconds.Text}"
@@ -28,8 +30,10 @@
       "description": "Play/Pause MPD server",
       "icon": "ms-resource://Files/Images/StoreLogo.png",
       "usesGenerativeAI": false,
-      "inputs": [],
-      "inputCombinations": [ { "inputs": [] } ],
+      "inputs": [ { "name": "_Unused", "kind": "Text" } ],
+      "inputCombinations": [ { "inputs": [ "_Unused" ] } ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_play"
@@ -40,8 +44,10 @@
       "description": "Stop MPD server playback",
       "icon": "ms-resource://Files/Images/StoreLogo.png",
       "usesGenerativeAI": false,
-      "inputs": [],
-      "inputCombinations": [ { "inputs": [] } ],
+      "inputs": [ { "name": "_Unused", "kind": "Text" } ],
+      "inputCombinations": [ { "inputs": [ "_Unused" ] } ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_stop"
@@ -52,8 +58,10 @@
       "description": "Skip to next track",
       "icon": "ms-resource://Files/Images/StoreLogo.png",
       "usesGenerativeAI": false,
-      "inputs": [],
-      "inputCombinations": [ { "inputs": [] } ],
+      "inputs": [ { "name": "_Unused", "kind": "Text" } ],
+      "inputCombinations": [ { "inputs": [ "_Unused" ] } ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_next"
@@ -64,8 +72,10 @@
       "description": "Skip to previous track",
       "icon": "ms-resource://Files/Images/StoreLogo.png",
       "usesGenerativeAI": false,
-      "inputs": [],
-      "inputCombinations": [ { "inputs": [] } ],
+      "inputs": [ { "name": "_Unused", "kind": "Text" } ],
+      "inputCombinations": [ { "inputs": [ "_Unused" ] } ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_prev"
@@ -76,8 +86,10 @@
       "description": "Toggle MPD server shuffle mode",
       "icon": "ms-resource://Files/Images/StoreLogo.png",
       "usesGenerativeAI": false,
-      "inputs": [],
-      "inputCombinations": [ { "inputs": [] } ],
+      "inputs": [ { "name": "_Unused", "kind": "Text" } ],
+      "inputCombinations": [ { "inputs": [ "_Unused" ] } ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_shuffle"
@@ -88,8 +100,10 @@
       "description": "Raise MPD server volume",
       "icon": "ms-resource://Files/Images/StoreLogo.png",
       "usesGenerativeAI": false,
-      "inputs": [],
-      "inputCombinations": [ { "inputs": [] } ],
+      "inputs": [ { "name": "_Unused", "kind": "Text" } ],
+      "inputCombinations": [ { "inputs": [ "_Unused" ] } ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_volume_up"
@@ -100,8 +114,10 @@
       "description": "Lower MPD server volume",
       "icon": "ms-resource://Files/Images/StoreLogo.png",
       "usesGenerativeAI": false,
-      "inputs": [],
-      "inputCombinations": [ { "inputs": [] } ],
+      "inputs": [ { "name": "_Unused", "kind": "Text" } ],
+      "inputCombinations": [ { "inputs": [ "_Unused" ] } ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_volume_down"
@@ -124,6 +140,8 @@
           "description": "load playlist ${PlaylistName.Text}"
         }
       ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_load_playlist&playlist=${SceneName.Text}"
@@ -146,6 +164,8 @@
           "description": "set volume to ${Volume.Text}"
         }
       ],
+      "allowedAppInvokers": [ "*" ],
+      "outputs": [],
       "invocation": {
         "type": "Uri",
         "uri": "stylophone://?verb=stylophone_volume_set&volume=${Volume.Text}"
