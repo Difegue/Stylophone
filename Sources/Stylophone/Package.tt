@@ -2,7 +2,7 @@
 <#@ output extension=".appxmanifest" #>
 <#@ parameter type="System.String" name="BuildConfiguration" #>
 <#  
-    string version = "2.7.3.0";
+    string version = "2.8.0.0";
     
     // Get configuration name at Build time
     string configName = Host.ResolveParameterValue("-", "-", "BuildConfiguration");
@@ -89,7 +89,7 @@
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="ms-resource:AppDescription"
-        BackgroundColor="#404040">
+        BackgroundColor="#dab887">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\LargeTile.png" Square71x71Logo="Assets\SmallTile.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="wide310x150Logo"/>
@@ -107,6 +107,15 @@
 				  <uap:DisplayName>Stylophone URI Scheme</uap:DisplayName>
 			  </uap:Protocol>
 		  </uap:Extension>
+
+          <uap3:Extension Category="windows.appExtension">
+              <uap3:AppExtension Name="com.microsoft.windows.ai.actions" DisplayName="Stylophone" 
+                                 Id="windows-action" PublicFolder="Assets">
+                <uap3:Properties>
+                  <Registration>AppActions.json</Registration>
+                </uap3:Properties>
+              </uap3:AppExtension>
+          </uap3:Extension>
       </Extensions>
     </Application>
   </Applications>

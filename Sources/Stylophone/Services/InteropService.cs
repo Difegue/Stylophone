@@ -1,18 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
-
+﻿using Microsoft.Toolkit.Uwp.Helpers;
+using SkiaSharp;
 using Stylophone.Common.Interfaces;
+using Stylophone.Common.ViewModels;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using SkiaSharp;
-using Stylophone.Common.ViewModels;
-using System.IO;
-using Windows.ApplicationModel;
-using Microsoft.Toolkit.Uwp.Helpers;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Stylophone.Services
 {
@@ -20,6 +21,8 @@ namespace Stylophone.Services
     {
         private ApplicationTheme _appTheme;
         private SystemMediaControlsService _smtcService;
+
+        public static ElementTheme CurrentTheme = ElementTheme.Default;
 
         public InteropService(SystemMediaControlsService smtcService)
         {
@@ -86,6 +89,8 @@ namespace Stylophone.Services
 
         private async Task SetRequestedThemeAsync(ElementTheme theme)
         {
+            CurrentTheme = theme;
+
             foreach (var view in CoreApplication.Views)
             {
                 await view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -95,6 +100,21 @@ namespace Stylophone.Services
                         frameworkElement.RequestedTheme = theme;
                         UpdateTitleBar(theme);
                     }
+                });
+            }
+
+            foreach (var appWindow in NavigationService.AppWindows)
+            {
+                await appWindow.Key.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    var parent = appWindow.Key.Parent as Grid;
+                    parent.RequestedTheme = theme;
+
+                    var color = Color.FromArgb(255, 32, 32, 32);
+                    if (theme == ElementTheme.Light || (theme == ElementTheme.Default && _appTheme == ApplicationTheme.Light))
+                        color = Color.FromArgb(255, 243, 243, 243);
+
+                    parent.Background = new SolidColorBrush(color);
                 });
             }
         }

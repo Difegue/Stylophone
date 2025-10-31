@@ -21,14 +21,16 @@ namespace Stylophone.Common.ViewModels
 
         private IDialogService _dialogService;
         private INotificationService _notificationService;
+        private INavigationService _navigationService;
         private MPDConnectionService _mpdService;
         private TrackViewModelFactory _trackVmFactory;
 
-        public AlbumDetailViewModel(IDialogService dialogService, INotificationService notificationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
+        public AlbumDetailViewModel(IDialogService dialogService, INotificationService notificationService, INavigationService navigationService, IDispatcherService dispatcherService, MPDConnectionService mpdService, TrackViewModelFactory trackVmFactory):
             base(dispatcherService)
         {
             _dialogService = dialogService;
             _notificationService = notificationService;
+            _navigationService = navigationService;
             _mpdService = mpdService;
             _trackVmFactory = trackVmFactory;
 
@@ -40,6 +42,9 @@ namespace Stylophone.Common.ViewModels
 
         [ObservableProperty]
         private string _playlistInfo;
+
+        [ObservableProperty]
+        private bool _canShowInSecondWindow = true;
 
         public ObservableCollection<TrackViewModel> Source { get; } = new ObservableCollection<TrackViewModel>();
         
@@ -90,6 +95,16 @@ namespace Stylophone.Common.ViewModels
                     _notificationService.ShowInAppNotification(string.Format(Resources.NotificationAddedToPlaylist, playlistName));
             }
         }
+
+        [RelayCommand(CanExecute = nameof(CanShowInSecondWindow))]
+        private async Task OpenInSeparateWindow()
+        {
+            // Open this vm in a new window, then navigate the main window back
+            await _navigationService.ShowInSeparateWindowAsync<AlbumDetailViewModel>(this);
+            _navigationService.GoBack();
+        }
+
+        public override string ToString() => Item?.Name ?? Resources.ContextMenuViewAlbum;
 
         public void Initialize(AlbumViewModel album)
         {

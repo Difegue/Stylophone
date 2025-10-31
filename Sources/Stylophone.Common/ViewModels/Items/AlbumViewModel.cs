@@ -242,6 +242,8 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        public override string ToString() => Name;
+
         public void Dispose()
         {
             AlbumArt?.Dispose();

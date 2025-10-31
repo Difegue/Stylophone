@@ -1,21 +1,26 @@
-﻿using Stylophone.ViewModels;
-using Stylophone.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.WinUI.Animations;
+﻿using CommunityToolkit.WinUI.Animations;
+using Microsoft.UI.Xaml.Controls;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
+using Stylophone.ViewModels;
+using Stylophone.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Windows.Foundation;
+using Windows.UI;
+using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Hosting;
+using Windows.UI.Xaml.Media;
 
 namespace Stylophone.Services
 {
     public class NavigationService : NavigationServiceBase
     {
-        private Dictionary<Type, Type> _viewModelToPageDictionary = new Dictionary<Type, Type>()
+        private Dictionary<Type, Type> _viewModelToPageDictionary = new()
         {
             { typeof(QueueViewModel), typeof(ServerQueuePage) },
             { typeof(SettingsViewModel), typeof(SettingsPage) },
@@ -27,10 +32,13 @@ namespace Stylophone.Services
             { typeof(PlaylistViewModel), typeof(PlaylistPage) },
             { typeof(LibraryViewModel), typeof(LibraryPage) }
         };
+        private IApplicationStorageService _storageService;
 
-        public NavigationService()
+        public static Dictionary<Frame, AppWindow> AppWindows = new();
+
+        public NavigationService(IApplicationStorageService storageService)
         {
-
+            _storageService = storageService;
         }
 
         public override bool CanGoBack => Frame.CanGoBack;
@@ -53,6 +61,46 @@ namespace Stylophone.Services
                     _lastParamUsed = parameter;
                 }
             }
+        }
+
+        public override async Task ShowInSeparateWindowAsync<T>(object parameter = null)
+        {
+            // Get the matching page and navigate to it
+            var pageType = _viewModelToPageDictionary.GetValueOrDefault(typeof(T));
+
+            // Create a new window
+            var newWindow = await AppWindow.TryCreateAsync();
+            //newWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+            newWindow.RequestSize(new Size(780, 800));
+            newWindow.Title = parameter.ToString();
+
+            Grid appWindowContent = new() { RequestedTheme = InteropService.CurrentTheme,
+                                            Background = (SolidColorBrush)Application.Current.Resources["ApplicationPageBackgroundThemeBrush"] };
+
+            if (InteropService.CurrentTheme == ElementTheme.Light)
+                appWindowContent.Background = new SolidColorBrush(Color.FromArgb(255, 243, 243, 243));
+            if (InteropService.CurrentTheme == ElementTheme.Dark)
+                appWindowContent.Background = new SolidColorBrush(Color.FromArgb(255, 32, 32, 32));
+
+            Frame appWindowContentFrame = new();
+
+            appWindowContent.Children.Add(appWindowContentFrame);
+
+            // This doesn't actually work 
+            //BackdropMaterial.SetApplyToRootOrPageBackground(appWindowContentFrame, true);
+
+            appWindowContentFrame.Navigate(pageType, parameter);
+
+            ElementCompositionPreview.SetAppWindowContent(newWindow, appWindowContent);
+            AppWindows.Add(appWindowContentFrame, newWindow);
+
+            newWindow.Closed += delegate
+            {
+                appWindowContentFrame.Content = null;
+                AppWindows.Remove(appWindowContentFrame);
+                newWindow = null;
+            };
+            await newWindow.TryShowAsync();
         }
 
         public override void SetListDataItemForNextConnectedAnimation(object item) => Frame.SetListDataItemForNextConnectedAnimation(item);

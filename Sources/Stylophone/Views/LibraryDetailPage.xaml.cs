@@ -18,8 +18,7 @@ namespace Stylophone.Views
         public LibraryDetailPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<AlbumDetailViewModel>();
-
+            
             // TODO hacky
             _navigationService = Ioc.Default.GetRequiredService<INavigationService>();
         }
@@ -28,9 +27,17 @@ namespace Stylophone.Views
         {
             base.OnNavigatedTo(e);
             this.RegisterElementForConnectedAnimation("animationKeyLibrary", itemHero);
-            if (e.Parameter is AlbumViewModel album)
+
+            if (e.Parameter is AlbumDetailViewModel vm)
             {
-               ViewModel.Initialize(album);
+                vm.CanShowInSecondWindow = false;
+                ContentArea.Margin = new(0, 2, 0, 0); // Nuke margins in AppWindow mode
+                DataContext = vm;
+            }
+            else if (e.Parameter is AlbumViewModel album)
+            {
+                DataContext = Ioc.Default.GetRequiredService<AlbumDetailViewModel>();
+                ViewModel.Initialize(album);
             }
         }
 

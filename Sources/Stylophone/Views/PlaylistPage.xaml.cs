@@ -13,19 +13,32 @@ namespace Stylophone.Views
         public PlaylistPage()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetRequiredService<PlaylistViewModel>();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            await ViewModel.LoadDataAsync(e.Parameter as string);
+
+            if (e.Parameter is PlaylistViewModel vm)
+            {
+                vm.CanShowInSecondWindow = false;
+                ContentArea.Margin = new(0,2,0,0); // Nuke margins in AppWindow mode
+                DataContext = vm;
+            }
+            else
+            {
+                DataContext = Ioc.Default.GetRequiredService<PlaylistViewModel>();
+                await ViewModel.LoadDataAsync(e.Parameter as string);
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            ViewModel.Dispose();
+
+            // Silly logic hack to only dispose the VM if it hasn't been moved to a spare window
+            if (ViewModel.CanShowInSecondWindow)
+                ViewModel.Dispose();
         }
 
         private void Queue_Track(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)

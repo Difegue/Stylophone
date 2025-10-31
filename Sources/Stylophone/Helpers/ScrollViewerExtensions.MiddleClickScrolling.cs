@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using CommunityToolkit.WinUI;
+using Stylophone.Services;
 using System;
 using System.Threading;
 using Windows.Devices.Input;
@@ -146,6 +147,15 @@ namespace Microsoft.Toolkit.Uwp.UI
 
             Window.Current.CoreWindow.PointerMoved += CoreWindow_PointerMoved;
             Window.Current.CoreWindow.PointerReleased += CoreWindow_PointerReleased;
+
+            foreach (var appWindow in NavigationService.AppWindows)
+            {
+                appWindow.Key.PointerMoved -= AppWindow_PointerMoved;
+                appWindow.Key.PointerReleased -= AppWindow_PointerReleased;
+
+                appWindow.Key.PointerMoved += AppWindow_PointerMoved;
+                appWindow.Key.PointerReleased += AppWindow_PointerReleased;
+            }
         }
 
         /// <summary>
@@ -163,6 +173,12 @@ namespace Microsoft.Toolkit.Uwp.UI
 
             Window.Current.CoreWindow.PointerMoved -= CoreWindow_PointerMoved;
             Window.Current.CoreWindow.PointerReleased -= CoreWindow_PointerReleased;
+
+            foreach (var appWindow in NavigationService.AppWindows)
+            {
+                appWindow.Key.PointerMoved -= AppWindow_PointerMoved;
+                appWindow.Key.PointerReleased -= AppWindow_PointerReleased;
+            }
 
             Window.Current.CoreWindow.PointerCursor = new CoreCursor(CoreCursorType.Arrow, 0);
         }
@@ -308,6 +324,78 @@ namespace Microsoft.Toolkit.Uwp.UI
         {
             Window.Current.CoreWindow.PointerPressed -= CoreWindow_PointerPressed;
             Window.Current.CoreWindow.PointerExited -= CoreWindow_PointerExited;
+            UnsubscribeMiddleClickScrolling();
+        }
+
+        private static void AppWindow_PointerMoved(object sender, PointerRoutedEventArgs args)
+        {
+            // If condition that occurs before scrolling begins
+            if (_isPressed && !_isMoved)
+            {
+                PointerPoint pointerPoint = args.GetCurrentPoint(null);
+
+                if (pointerPoint.Properties.IsMiddleButtonPressed)
+                {
+                    _currentPosition = Window.Current.CoreWindow.PointerPosition;
+
+                    var offsetX = _currentPosition.X - _startPosition.X;
+                    var offsetY = _currentPosition.Y - _startPosition.Y;
+
+                    // Setting _isMoved if pointer goes out of threshold value
+                    if (Math.Abs(offsetX) > _threshold || Math.Abs(offsetY) > _threshold)
+                    {
+                        _isMoved = true;
+                    }
+                }
+            }
+
+            // Update current position of the pointer if scrolling started
+            if (CanScroll())
+            {
+                _currentPosition = Window.Current.CoreWindow.PointerPosition;
+            }
+        }
+
+        private static void AppWindow_PointerReleased(object sender, PointerRoutedEventArgs args)
+        {
+            // Start deferred moving if the pointer is pressed and not moved
+            if (_isPressed && !_isMoved)
+            {
+                _isDeferredMovingStarted = true;
+
+                // Event to stop deferred scrolling if pointer exited
+                ((UIElement)sender).PointerExited -= AppWindow_PointerExited;
+                ((UIElement)sender).PointerExited += AppWindow_PointerExited;
+
+                // Event to stop deferred scrolling if pointer pressed
+                ((UIElement)sender).PointerPressed -= AppWindow_PointerPressed;
+                ((UIElement)sender).PointerPressed += AppWindow_PointerPressed;
+
+                SetCursorType(DispatcherQueue.GetForCurrentThread(), 0, 0);
+            }
+            else
+            {
+                _isDeferredMovingStarted = false;
+            }
+
+            // Unsubscribe if the pointer is pressed and not DeferredMoving
+            if (_isPressed && !_isDeferredMovingStarted)
+            {
+                UnsubscribeMiddleClickScrolling();
+            }
+        }
+
+        private static void AppWindow_PointerPressed(object sender, PointerRoutedEventArgs args)
+        {
+            ((UIElement)sender).PointerPressed -= AppWindow_PointerPressed;
+            ((UIElement)sender).PointerExited -= AppWindow_PointerExited;
+            UnsubscribeMiddleClickScrolling();
+        }
+
+        private static void AppWindow_PointerExited(object sender, PointerRoutedEventArgs args)
+        {
+            ((UIElement)sender).PointerPressed -= AppWindow_PointerPressed;
+            ((UIElement)sender).PointerExited -= AppWindow_PointerExited;
             UnsubscribeMiddleClickScrolling();
         }
 

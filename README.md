@@ -49,7 +49,7 @@ The following URLs are supported:
 - `stylophone://?verb=stylophone_volume_down` : Lower volume  
 - `stylophone://?verb=stylophone_volume_set&volume=50` : Set volume to desired value  
 - `stylophone://?verb=stylophone_seek&seek=50` : Seek to desired position in current track, in seconds 
-- `stylophone://?verb=stylophone_load_playlistt&playlist=YourPlaylistName` : Load the desired playlist in queue  
+- `stylophone://?verb=stylophone_load_playlist&playlist=YourPlaylistName` : Load the desired playlist in queue  
 
 ## Translation
 
@@ -96,7 +96,7 @@ You can easily contribute translations to Stylophone! To help translate, follow 
 
 ## Privacy Policy  
 
-If Telemetry is enabled in the app's settings, the application will send detailed crash reports using [App Center](https://appcenter.ms).  
+If Telemetry is enabled in the app's settings, the application will send detailed crash reports using [Sentry](https://sentry.io).  
 Those reports can contain information about your hardware. (Motherboard type, etc)  
 
 Stylophone collects no other data from your device.  

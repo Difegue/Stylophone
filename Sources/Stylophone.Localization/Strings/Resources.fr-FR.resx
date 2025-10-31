@@ -499,4 +499,13 @@ L'activation de cette option affichera un second slider pour contrôler le volum
   <data name="SettingsOutputsText" xml:space="preserve">
     <value>Activez ou désactivez les sorties audio du serveur.</value>
   </data>
+  <data name="PlaylistShowInSecondWindow" xml:space="preserve">
+    <value>Montrer dans une fenêtre à part</value>
+  </data>
+  <data name="QueueScrollTop" xml:space="preserve">
+    <value>Aller en haut de la file</value>
+  </data>
+  <data name="QueueScrollBottom" xml:space="preserve">
+    <value>Aller en bas de la file</value>
+  </data>
 </root>
