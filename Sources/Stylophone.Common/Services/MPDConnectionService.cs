@@ -58,6 +58,7 @@ namespace Stylophone.Common.Services
         private System.Timers.Timer _connectionRetryAttempter;
         private CancellationTokenSource _cancelIdle;
         private CancellationTokenSource _cancelConnect;
+        private SemaphoreSlim _reconnectSemaphore = new SemaphoreSlim(1, 1);
 
         private string _host;
         private int _port;
@@ -73,35 +74,46 @@ namespace Stylophone.Common.Services
 
         public async Task InitializeAsync(bool withRetry = false)
         {
-            IsConnecting = true;
-            CurrentStatus = BOGUS_STATUS; // Reset status
-
-            Disconnect();
-
-            var cancelToken = _cancelConnect.Token;
+            // Prevent concurrent reconnection attempts
+            if (!_reconnectSemaphore.Wait(0))
+                return;
 
             try
             {
-                await TryConnecting(cancelToken);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error while connecting: {e.Message}");
+                IsConnecting = true;
+                CurrentStatus = BOGUS_STATUS; // Reset status
+
+                Disconnect();
+
+                var cancelToken = _cancelConnect.Token;
+
+                try
+                {
+                    await TryConnecting(cancelToken);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error while connecting: {e.Message}");
+
+                    IsConnecting = false;
+                    ConnectionChanged?.Invoke(this, new EventArgs());
+
+                    if (withRetry && !cancelToken.IsCancellationRequested)
+                    {
+                        // The RetryAttempter will call TryConnect() in five seconds.
+                        _connectionRetryAttempter = new System.Timers.Timer(5000);
+                        _connectionRetryAttempter.AutoReset = false;
+                        _connectionRetryAttempter.Elapsed += async (s, e2) => await InitializeAsync(true);
+                        _connectionRetryAttempter.Start();
+                    }
+                }
 
                 IsConnecting = false;
-                ConnectionChanged?.Invoke(this, new EventArgs());
-
-                if (withRetry && !cancelToken.IsCancellationRequested)
-                {
-                    // The RetryAttempter will call TryConnect() in five seconds.
-                    _connectionRetryAttempter = new System.Timers.Timer(5000);
-                    _connectionRetryAttempter.AutoReset = false;
-                    _connectionRetryAttempter.Elapsed += async (s, e2) => await InitializeAsync(true);
-                    _connectionRetryAttempter.Start();
-                }
             }
-            
-            IsConnecting = false;
+            finally
+            {
+                _reconnectSemaphore.Release();
+            }
         }
 
         public void Disconnect()
@@ -123,7 +135,7 @@ namespace Stylophone.Common.Services
             // Stop the status timer before killing the matching connection
             _statusUpdater?.Stop();
             _statusUpdater?.Dispose();
-            _statusConnection?.DisconnectAsync();
+            _statusConnection?.Dispose();
 
             _cancelIdle = new CancellationTokenSource();
 
@@ -132,6 +144,7 @@ namespace Stylophone.Common.Services
 
             ConnectionPool?.Clear();
 
+            _idleConnection?.Dispose();
             _idleConnection = null;
             _statusConnection = null;
         }
