@@ -68,7 +68,6 @@
     <PackageReference Include="SkiaSharp.Views" Version="3.119.0" />
 	<PackageReference Include="Sentry" Version="5.15.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
-	  <PackageReference Include="VideoLAN.LibVLC.iOS" Version="3.6.1" />
     <PackageReference Include="MpcNET" Version="1.6.6" />
   </ItemGroup>
   <ItemGroup>

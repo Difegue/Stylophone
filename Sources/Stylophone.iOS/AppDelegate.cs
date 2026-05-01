@@ -183,6 +183,7 @@ namespace Stylophone.iOS
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<NowPlayingService>();
             services.AddSingleton<IInteropService, InteropService>();
+            services.AddSingleton<IPlaybackService, SoundFlowPlaybackService>();
 
             // Viewmodel Factories
             services.AddSingleton<AlbumViewModelFactory>();

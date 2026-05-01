@@ -14,10 +14,6 @@
     <PackageCertificateKeyFile>Stylophone_TemporaryKey.pfx</PackageCertificateKeyFile>
     <Win32Resource>MiddleClickScrolling-CursorType.res</Win32Resource>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-	  
-    <!-- Workaround to prevent resource.pri exploding for other languages with LibVLC installed -->
-    <AppxBundleAutoResourcePackageQualifiers>DXFeatureLevel</AppxBundleAutoResourcePackageQualifiers>
-    <AppxDefaultResourceQualifiers>Language=en;fr;pt;zh</AppxDefaultResourceQualifiers>
 
 	<WindowsSdkPackageVersion>10.0.26100.38</WindowsSdkPackageVersion>
   </PropertyGroup>

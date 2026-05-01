@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
-//using LibVLCSharp.Shared;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.Services;
 using Stylophone.Localization.Strings;
@@ -13,18 +10,18 @@ namespace Stylophone.Common.ViewModels
     {
         private IInteropService _interopService;
         private INotificationService _notificationService;
+        private IPlaybackService _playbackService;
         private SettingsViewModel _settingsVm;
         private MPDConnectionService _mpdService;
 
-        //private LibVLC _vlcCore;
-        //private MediaPlayer _mediaPlayer;
         private string _serverHost;
         private int _serverPort;
 
-        public LocalPlaybackViewModel(SettingsViewModel settingsVm, MPDConnectionService mpdService, IInteropService interopService, INotificationService notificationService, IDispatcherService dispatcherService) : base(dispatcherService)
+        public LocalPlaybackViewModel(SettingsViewModel settingsVm, MPDConnectionService mpdService, IInteropService interopService, INotificationService notificationService, IPlaybackService playbackService, IDispatcherService dispatcherService) : base(dispatcherService)
         {
             _interopService = interopService;
             _notificationService = notificationService;
+            _playbackService = playbackService;
             _settingsVm = settingsVm;
             _mpdService = mpdService;
 
@@ -42,23 +39,6 @@ namespace Stylophone.Common.ViewModels
                 if (e.PropertyName == nameof(_settingsVm.LocalPlaybackPort))
                     _serverPort = _settingsVm.LocalPlaybackPort;
             };
-
-            // Run an idle loop in a spare thread to make sure the libVLC volume is always accurate
-            // Workaround for UWP, see https://code.videolan.org/videolan/vlc/-/commit/6ea058bf2d0813dab247f973b2d7bc9804486d81
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        //if (IsPlaying && _mediaPlayer != null && _mediaPlayer.Volume != _volume)
-                        //    _mediaPlayer.Volume = _volume;
-
-                        Thread.Sleep(500);
-                    }
-                    catch (Exception) { }
-                }
-            });
         }
 
         public void Initialize(string host, int port, bool isEnabled)
@@ -94,25 +74,13 @@ namespace Stylophone.Common.ViewModels
 
         partial void OnIsEnabledChanged(bool value)
         {
-            /*if (value)
+            if (!value)
             {
-                if (_vlcCore == null)
-                    _vlcCore = new LibVLC();
-
-                _mediaPlayer?.Dispose();
-                
-                _mediaPlayer = new MediaPlayer(_vlcCore);
-            }
-            else
-            {
-                // Reset 
+                // Reset state when local playback is disabled.
                 IsPlaying = false;
                 Volume = 0;
                 _previousVolume = 10;
-
-                _vlcCore?.Dispose();
-                _vlcCore = null;
-            }*/
+            }
         }
 
         partial void OnVolumeChanged(int value)
@@ -121,8 +89,7 @@ namespace Stylophone.Common.ViewModels
             if (!IsPlaying && value != 0)
                 IsPlaying = true;
 
-            //if (_mediaPlayer != null)
-            //    _mediaPlayer.Volume = value;
+            _playbackService.Volume = value;
 
             if (value == 0)
             {
@@ -152,15 +119,12 @@ namespace Stylophone.Common.ViewModels
             {
                 if (value && _serverHost != null && _mpdService.IsConnected)
                 {
-                    var urlString = "http://" + _serverHost + ":" + _serverPort;
-                    var streamUrl = new Uri(urlString);
-                    //var media = new Media(_vlcCore, streamUrl);
-
-                    //_mediaPlayer.Play(media);
+                    var streamUrl = new Uri("http://" + _serverHost + ":" + _serverPort);
+                    _playbackService.Play(streamUrl);
                 }
                 else
                 {
-                    //_mediaPlayer?.Stop();
+                    _playbackService.Stop();
                 }
             }
             catch (Exception e)

@@ -150,6 +150,7 @@ namespace Stylophone
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<SystemMediaControlsService>();
             services.AddSingleton<IInteropService, InteropService>();
+            services.AddSingleton<IPlaybackService, SoundFlowPlaybackService>();
 
             // Viewmodel Factories
             services.AddSingleton<AlbumViewModelFactory>();

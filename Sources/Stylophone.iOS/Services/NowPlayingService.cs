@@ -31,7 +31,6 @@ namespace Stylophone.iOS.Services
             _storageService = storageService;
 
             // https://stackoverflow.com/questions/48289037/using-mpnowplayinginfocenter-without-actually-playing-audio
-            // TODO This breaks when LibVLC playback stops
             if (new NSProcessInfo().IsMacCatalystApplication)
                 return;
 
