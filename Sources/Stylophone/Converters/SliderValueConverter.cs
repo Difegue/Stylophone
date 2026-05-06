@@ -11,7 +11,7 @@ namespace Stylophone.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return Miscellaneous.FormatTimeString(System.Convert.ToDouble(value) * 1000);
+            return Miscellaneous.FormatTimeString(System.Convert.ToDouble(value));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

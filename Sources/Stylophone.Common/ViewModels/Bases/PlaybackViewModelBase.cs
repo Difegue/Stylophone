@@ -61,8 +61,8 @@ namespace Stylophone.Common.ViewModels
 
             _internalVolume = _mpdService.CurrentStatus.Volume;
 
-            // Bind timer methods 
-            _updateInformationTimer = new System.Timers.Timer(500);
+            // Bind timer methods
+            _updateInformationTimer = new System.Timers.Timer(15);
             _updateInformationTimer.Elapsed += UpdateInformation;
 
             // Update info to current track
@@ -88,7 +88,7 @@ namespace Stylophone.Common.ViewModels
         private void Initialize()
         {
             OnTrackChange(this, new SongChangedEventArgs { NewSongId = -1 });
-            CurrentTimeValue = _mpdService.CurrentStatus.Elapsed.TotalSeconds;
+            CurrentTimeValue = _mpdService.CurrentStatus.Elapsed.TotalMilliseconds;
 
             _updateInformationTimer.Start();
             OnStateChange(this, null);
@@ -270,10 +270,15 @@ namespace Stylophone.Common.ViewModels
         #region Timer Methods
 
         /// <summary>
-        ///     This timer runs every 500ms to ensure that the current position,
-        ///     time, remaining time, etc. variables are correct.
+        ///     This timer ensure that the current position, time, remaining time, etc. variables are correct.
+        ///     It also updates the slider position faster than the MPD status updates come in with some basic interpolation. 
         /// </summary>
         private readonly System.Timers.Timer _updateInformationTimer;
+
+        // Keep track of the server-side elapsed time. 
+        // The slider position/CurrentTimeValue uses this as a base then uses the Stopwatch to update every 15ms. 
+        private double _lastServerElapsedMs = -1;
+        private readonly System.Diagnostics.Stopwatch _serverElapsedStopwatch = new();
 
         /// <summary>
         ///     Timer method that is run to make sure the UI is kept up to date
@@ -291,25 +296,43 @@ namespace Stylophone.Common.ViewModels
                 await UpdateUpNextAsync(status);
 
             if (CurrentTrack == null)
-                return;        
+                return;
+
+            var serverElapsedMs = status.Elapsed.TotalMilliseconds;
+
+            // Re-anchor whenever the connectionService has gotten an updated value
+            if (serverElapsedMs != _lastServerElapsedMs)
+            {
+                _lastServerElapsedMs = serverElapsedMs;
+                _serverElapsedStopwatch.Restart();
+            }
 
             // Set the current time value - if the user isn't scrobbling the slider
             if (!_isUserMovingSlider)
             {
-                CurrentTimeValue = status.Elapsed.TotalSeconds;
+                double displayedMs;
+                if (status.State == MpdState.Play)
+                {
+                    displayedMs = _lastServerElapsedMs + _serverElapsedStopwatch.Elapsed.TotalMilliseconds;
+                    displayedMs = Math.Min(displayedMs, status.Duration.TotalMilliseconds);
+                }
+                else
+                {
+                    displayedMs = _lastServerElapsedMs;
+                }
 
-                // Set the time listened text
-                TimeListened = Miscellaneous.FormatTimeString(status.Elapsed.TotalMilliseconds);
+                CurrentTimeValue = displayedMs;
+                TimeListened = Miscellaneous.FormatTimeString(displayedMs);
             }
 
-            // Get the remaining time for the track
-            var remainingTime = _mpdService.CurrentStatus.Duration.Subtract(status.Elapsed);
+            // Get the remaining time for the track (from authoritative server value, no need for sub-second precision)
+            var remainingTime = status.Duration.Subtract(TimeSpan.FromMilliseconds(_lastServerElapsedMs));
 
             // Set the time remaining text
             TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingTime.TotalMilliseconds);
 
             // Set the maximum value
-            MaxTimeValue = status.Duration.TotalSeconds;
+            MaxTimeValue = status.Duration.TotalMilliseconds;
         }
 
         #endregion Timer Methods
@@ -478,14 +501,20 @@ namespace Stylophone.Common.ViewModels
             if (CurrentTrack == null)
                 return;
 
-            // Update TimeListened/Remaining manually according to the new slider position
-            var remainingTime = _mpdService.CurrentStatus.Duration.Subtract(TimeSpan.FromSeconds(CurrentTimeValue));
-            TimeListened = Miscellaneous.FormatTimeString(CurrentTimeValue * 1000);
-            TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingTime.TotalMilliseconds);
+            // SeekCurCommand expects integer seconds; round and snap the slider to the seek target.
+            var seekSeconds = (int)Math.Round(CurrentTimeValue / 1000);
+            CurrentTimeValue = seekSeconds * 1000;
 
-            // Set the track position
-            CurrentTimeValue = Math.Round(CurrentTimeValue); // Fractional values don't seem to work well on iOS
-            await _mpdService.SafelySendCommandAsync(new SeekCurCommand(CurrentTimeValue));
+            // Update TimeListened/Remaining manually according to the new slider position
+            var remainingMs = _mpdService.CurrentStatus.Duration.TotalMilliseconds - CurrentTimeValue;
+            TimeListened = Miscellaneous.FormatTimeString(CurrentTimeValue);
+            TimeRemaining = "-" + Miscellaneous.FormatTimeString(remainingMs);
+
+            await _mpdService.SafelySendCommandAsync(new SeekCurCommand(seekSeconds));
+
+            // Re-anchor the interpolator to the new position so the next tick doesn't snap back
+            _lastServerElapsedMs = CurrentTimeValue;
+            _serverElapsedStopwatch.Restart();
 
             // Wait for MPD Status to catch up before we start auto-updating the slider again
             var timer = new System.Timers.Timer(1000);
@@ -544,10 +573,16 @@ namespace Stylophone.Common.ViewModels
 
             if (CurrentTrack?.File != null)
             {
-                TimeRemaining = "-" + Miscellaneous.FormatTimeString(CurrentTrack.File.Time / 1000);
+                // File.Time is in seconds; UI values are in milliseconds.
+                var trackDurationMs = CurrentTrack.File.Time * 1000;
+                TimeRemaining = "-" + Miscellaneous.FormatTimeString(trackDurationMs);
                 TimeListened = "00:00";
                 CurrentTimeValue = 0;
-                MaxTimeValue = CurrentTrack.File.Time;
+                MaxTimeValue = trackDurationMs;
+
+                // Reset interpolator anchor so the new track starts from 0
+                _lastServerElapsedMs = 0;
+                _serverElapsedStopwatch.Restart();
 
                 _ = Task.Run(async () =>
                 {

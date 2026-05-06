@@ -138,7 +138,7 @@ namespace Stylophone.iOS.ViewControllers
             TrackSlider.AccessibilityLabel = Strings.SongPlaybackLabel;
             TrackSlider.TouchDragInside += (s, e) =>
             {
-                ViewModel.TimeListened = Miscellaneous.FormatTimeString(TrackSlider.Value * 1000);
+                ViewModel.TimeListened = Miscellaneous.FormatTimeString(TrackSlider.Value);
                 ViewModel.OnPlayingSliderMoving();
             };
             TrackSlider.ValueChanged += (s, e) =>
