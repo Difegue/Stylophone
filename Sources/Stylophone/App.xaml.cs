@@ -12,7 +12,6 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Foundation;
-using Microsoft.Services.Store.Engagement;
 using Windows.ApplicationModel;
 using System.Reflection;
 using Sentry;
@@ -69,8 +68,8 @@ namespace Stylophone
             }
 
             // Initialize MS Store Engagement notifications
-            StoreServicesEngagementManager engagementManager = StoreServicesEngagementManager.GetDefault();
-            await engagementManager.RegisterNotificationChannelAsync();
+            //StoreServicesEngagementManager engagementManager = StoreServicesEngagementManager.GetDefault();
+            //await engagementManager.RegisterNotificationChannelAsync();
 
             // Analytics
             SystemInformation.Instance.TrackAppUse(args);

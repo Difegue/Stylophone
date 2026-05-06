@@ -127,6 +127,7 @@ namespace Stylophone.Services
             switch (theme)
             {
                 case ElementTheme.Default:
+                default:
                     color = (Color)Application.Current.Resources["SystemBaseHighColor"];
                     break;
                 case ElementTheme.Light:
@@ -136,8 +137,6 @@ namespace Stylophone.Services
                 case ElementTheme.Dark:
                     if (_appTheme == ApplicationTheme.Light) { color = ((Color)Application.Current.Resources["SystemAltHighColor"]); }
                     else { color = (Color)Application.Current.Resources["SystemBaseHighColor"]; }
-                    break;
-                default:
                     break;
             }
 

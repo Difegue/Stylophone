@@ -120,7 +120,6 @@
                         VerticalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
-                        RepeatBehavior="Forever"
                         Text="{x:Bind Name}"
                         ToolTipService.ToolTip="{x:Bind Name}"
                         Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -155,7 +154,6 @@
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
                     Foreground="{ThemeResource AccentFillColorDefaultBrush}"
-                    RepeatBehavior="Forever"
                     Text="{x:Bind File.Artist}"
                     ToolTipService.ToolTip="{x:Bind File.Artist}"
                     Visibility="{x:Bind IsPlaying, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />

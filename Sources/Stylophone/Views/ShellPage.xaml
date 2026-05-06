@@ -8,7 +8,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="using:Stylophone.Helpers"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
-    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mpcnet="using:MpcNET.Types"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
@@ -69,9 +68,9 @@
 
 
     <i:Interaction.Behaviors>
-        <ic:EventTriggerBehavior EventName="Loaded">
-            <ic:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
-        </ic:EventTriggerBehavior>
+        <i:EventTriggerBehavior EventName="Loaded">
+            <i:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
+        </i:EventTriggerBehavior>
     </i:Interaction.Behaviors>
 
     <Grid>
@@ -182,12 +181,12 @@
 
 
             <i:Interaction.Behaviors>
-                <ic:EventTriggerBehavior EventName="ItemInvoked">
-                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.NavigateCommand}" />
-                </ic:EventTriggerBehavior>
-                <ic:EventTriggerBehavior EventName="Tapped" SourceObject="{x:Bind RandomNavItem}">
-                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.AddRandomTracksCommand}" />
-                </ic:EventTriggerBehavior>
+                <i:EventTriggerBehavior EventName="ItemInvoked">
+                    <i:InvokeCommandAction Command="{x:Bind ViewModel.NavigateCommand}" />
+                </i:EventTriggerBehavior>
+                <i:EventTriggerBehavior EventName="Tapped" SourceObject="{x:Bind RandomNavItem}">
+                    <i:InvokeCommandAction Command="{x:Bind ViewModel.AddRandomTracksCommand}" />
+                </i:EventTriggerBehavior>
             </i:Interaction.Behaviors>
 
             <Grid x:Name="contentContainer">
