@@ -21,8 +21,6 @@ namespace Stylophone.Common.Interfaces
 
     public interface INotificationService
     {
-        void ShowBasicToastNotification(string title, string description);
-
         void ShowInAppNotification(string text, string description = "", NotificationType type = NotificationType.Info);
         void ShowInAppNotification(InAppNotification notification);
 
@@ -53,7 +51,6 @@ namespace Stylophone.Common.Interfaces
             ShowInAppNotification(notification);
         }
         
-        public abstract void ShowBasicToastNotification(string title, string description);
         public abstract void ShowInAppNotification(InAppNotification notification);
     }
 }
