@@ -12,9 +12,6 @@ using Stylophone.Common.Interfaces;
 using MpcNET.Commands.Reflection;
 using Stylophone.Localization.Strings;
 using Stylophone.Common.Helpers;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using Stylophone.Common.ViewModels;
-using Sentry;
 
 namespace Stylophone.Common.Services
 {
