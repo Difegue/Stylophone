@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0-ios26.0</TargetFrameworks>
-    <NoWarn>$(NoWarn);XCODE_26_0_PREVIEW</NoWarn>
+    <TargetFrameworks>net10.0-ios26.5</TargetFrameworks>
+    <ValidateXcodeVersion>false</ValidateXcodeVersion>
     <!--RuntimeIdentifiers>maccatalyst-arm64;maccatalyst-x64</RuntimeIdentifiers-->
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
