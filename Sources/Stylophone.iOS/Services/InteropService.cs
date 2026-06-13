@@ -89,11 +89,11 @@ namespace Stylophone.iOS.Services
                 PlaybackIcon.RepeatOff => "repeat.circle",
                 PlaybackIcon.Repeat => "repeat.circle.fill",
                 PlaybackIcon.RepeatSingle => "repeat.1.circle.fill",
-                PlaybackIcon.VolumeMute => "speaker.slash.circle",
-                PlaybackIcon.Volume25 => "speaker.wave.2.circle",
-                PlaybackIcon.Volume50 => "speaker.wave.2.circle",
-                PlaybackIcon.Volume75 => "speaker.wave.2.circle",
-                PlaybackIcon.VolumeFull => "speaker.wave.2.circle",
+                PlaybackIcon.VolumeMute => "speaker.slash.fill",
+                PlaybackIcon.Volume25 => "speaker.fill",
+                PlaybackIcon.Volume50 => "speaker.wave.1.fill",
+                PlaybackIcon.Volume75 => "speaker.wave.2.fill",
+                PlaybackIcon.VolumeFull => "speaker.wave.3.fill",,
                 _ => "opticaldisc",
             };
         }

@@ -12,6 +12,7 @@ using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using CommunityToolkit.Mvvm.Input;
 using CoreGraphics;
+using Symbols;
 using UIKit;
 
 namespace Stylophone.iOS.ViewControllers
@@ -87,6 +88,8 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewWillAppear(animated);
             NavigationController.NavigationBar.TintColor = UIColor.Label;
+            
+            NavigationController.ToolbarHidden = false;
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -95,6 +98,8 @@ namespace Stylophone.iOS.ViewControllers
             NavigationController.NavigationBar.TintColor = null;
 
             (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+            
+            NavigationController.ToolbarHidden = true;
         }
 
         public override void ViewDidLayoutSubviews()
@@ -172,9 +177,9 @@ namespace Stylophone.iOS.ViewControllers
             SkipPrevButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipPrevious();
             SkipNextButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipNext();
             PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
-            ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
-            RepeatButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleRepeat();
-            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton);
+            ShuffleButton.Clicked += (s, e) => ViewModel.ToggleShuffle();
+            RepeatButton.Clicked += (s, e) => ViewModel.ToggleRepeat();
+            VolumeButton.Clicked += (s, e) => ShowVolumePopover(VolumeButton);
 
             // Add shadow to albumart
             ShadowCaster.Layer.MasksToBounds = false;
@@ -259,6 +264,10 @@ namespace Stylophone.iOS.ViewControllers
 
         private void UpdateButton(UIButton button, string systemImg) =>
             button?.SetImage(UIImage.GetSystemImage(systemImg), UIControlState.Normal);
+        
+        private void UpdateButton(UIBarButtonItem button, string systemImg) =>
+            button?.SetSymbolImage(UIImage.GetSystemImage(systemImg), 
+                NSSymbolReplaceContentTransition.CreateMagicTransition(NSSymbolReplaceContentTransition.CreateReplaceUpUpTransition()));
 
         private UIAction _consumeAction;
         private UIBarButtonItem CreateSettingsButton()
@@ -287,18 +296,31 @@ namespace Stylophone.iOS.ViewControllers
 
             sourceVc.PresentViewController(popover, true, null);
         }
+        
+        public void ShowVolumePopover(UIBarButtonItem sourceButton, UIViewController sourceVc = null)
+        {
+            var sourceBounds = sourceButton.AccessibilityFrame;
+            var size = ViewModel.LocalPlayback.IsEnabled ? new CGSize(276, 176) : new CGSize(276, 96);
+
+            var popover = new VolumePopoverViewController(VolumePopover, sourceButton, sourceBounds, size);
+
+            if (sourceVc == null)
+                sourceVc = this;
+
+            sourceVc.PresentViewController(popover, true, null);
+        }
     }
 
     public class VolumePopoverViewController: UIViewController, IUIPopoverPresentationControllerDelegate
     {
         private UIView _volumeView;
 
-        public VolumePopoverViewController(UIView view, UIButton sourceButton, CGRect sourceBounds, CGSize contentSize)
+        public VolumePopoverViewController(UIView view, IUIPopoverPresentationControllerSourceItem sourceButton, CGRect sourceBounds, CGSize contentSize)
         {
             _volumeView = view;
 
             ModalPresentationStyle = UIModalPresentationStyle.Popover;
-            PopoverPresentationController.SourceItem = sourceButton.ImageView;
+            PopoverPresentationController.SourceItem = sourceButton;
             PopoverPresentationController.Delegate = this;
             PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Down;
             PopoverPresentationController.SourceRect = new CGRect(sourceBounds.Width / 2, -4, 0, 0);

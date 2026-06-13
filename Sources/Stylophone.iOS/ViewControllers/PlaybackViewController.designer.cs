@@ -1,7 +1,8 @@
-// WARNING
+﻿// WARNING
 //
-// This file has been generated automatically by Visual Studio to store outlets and
-// actions made in the UI designer. If it is removed, they will be lost.
+// This file has been generated automatically by Rider IDE
+//   to store outlets and actions made in Xcode.
+// If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
 using Foundation;
@@ -28,7 +29,7 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIView BackgroundTint { get; set; }
 
 		[Outlet]
-		public Stylophone.iOS.ViewControllers.CompactPlaybackView CompactView { get; private set; }
+		public Stylophone.iOS.ViewControllers.CompactPlaybackView CompactView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ElapsedTime { get; set; }
@@ -52,7 +53,7 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UILabel RemainingTime { get; set; }
 
 		[Outlet]
-		UIKit.UIButton RepeatButton { get; set; }
+		UIKit.UIBarButtonItem RepeatButton { get; set; }
 
 		[Outlet]
 		UIKit.UIButton ServerMuteButton { get; set; }
@@ -67,7 +68,7 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIView ShadowCaster { get; set; }
 
 		[Outlet]
-		UIKit.UIButton ShuffleButton { get; set; }
+		UIKit.UIBarButtonItem ShuffleButton { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SkipNextButton { get; set; }
@@ -82,11 +83,11 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UILabel TrackTitle { get; set; }
 
 		[Outlet]
-		UIKit.UIButton VolumeButton { get; set; }
+		UIKit.UIBarButtonItem VolumeButton { get; set; }
 
 		[Outlet]
 		UIKit.UIStackView VolumePopover { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AlbumArt != null) {
@@ -154,11 +155,6 @@ namespace Stylophone.iOS.ViewControllers
 				RemainingTime = null;
 			}
 
-			if (RepeatButton != null) {
-				RepeatButton.Dispose ();
-				RepeatButton = null;
-			}
-
 			if (ServerMuteButton != null) {
 				ServerMuteButton.Dispose ();
 				ServerMuteButton = null;
@@ -174,9 +170,9 @@ namespace Stylophone.iOS.ViewControllers
 				ServerVolumeSlider = null;
 			}
 
-			if (ShuffleButton != null) {
-				ShuffleButton.Dispose ();
-				ShuffleButton = null;
+			if (ShadowCaster != null) {
+				ShadowCaster.Dispose ();
+				ShadowCaster = null;
 			}
 
 			if (SkipNextButton != null) {
@@ -199,20 +195,26 @@ namespace Stylophone.iOS.ViewControllers
 				TrackTitle = null;
 			}
 
-			if (VolumeButton != null) {
-				VolumeButton.Dispose ();
-				VolumeButton = null;
-			}
-
 			if (VolumePopover != null) {
 				VolumePopover.Dispose ();
 				VolumePopover = null;
 			}
 
-			if (ShadowCaster != null) {
-				ShadowCaster.Dispose ();
-				ShadowCaster = null;
+			if (VolumeButton != null) {
+				VolumeButton.Dispose ();
+				VolumeButton = null;
 			}
+
+			if (ShuffleButton != null) {
+				ShuffleButton.Dispose ();
+				ShuffleButton = null;
+			}
+
+			if (RepeatButton != null) {
+				RepeatButton.Dispose ();
+				RepeatButton = null;
+			}
+
 		}
 	}
 }

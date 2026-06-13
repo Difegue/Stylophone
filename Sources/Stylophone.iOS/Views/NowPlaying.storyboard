@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ZMi-Au-TSz">
-    <device id="retina6_72" orientation="portrait" appearance="light">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="25079.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ZMi-Au-TSz">
+    <device id="retina6_12" orientation="portrait" appearance="light">
         <simulatedSceneSize key="mac" width="688" height="450"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="25059"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,52 +20,52 @@
                         <viewControllerLayoutGuide type="bottom" id="9ag-vI-NX6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="i75-3G-leJ">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="hDT-Mu-pHy" userLabel="Album Background">
-                                <rect key="frame" x="-180" y="-96" width="790" height="1030"/>
+                                <rect key="frame" x="-184" y="-96" width="761" height="902"/>
                             </imageView>
                             <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="px8-71-fBL" userLabel="Background Tint">
-                                <rect key="frame" x="-180" y="-96" width="790" height="1030"/>
+                                <rect key="frame" x="-184" y="-96" width="761" height="902"/>
                                 <color key="backgroundColor" systemColor="systemPinkColor"/>
                             </view>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Xs-Z1-yFr">
-                                <rect key="frame" x="-180" y="-96" width="790" height="1064"/>
+                                <rect key="frame" x="-184" y="-96" width="761" height="984"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="b1X-dW-5Dh">
-                                    <rect key="frame" x="0.0" y="0.0" width="790" height="1064"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="761" height="984"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="regular"/>
                             </visualEffectView>
                             <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" id="DG4-0R-Uua">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qgK-bP-GXK" customClass="UIImageView">
-                                        <rect key="frame" x="16" y="138.66666666666663" width="398" height="398"/>
+                                        <rect key="frame" x="16.333333333333343" y="96.000000000000028" width="360.66666666666663" height="360.66666666666674"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Palm Tree Panic Bad Future (Sonic CD USA)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E5Z-bz-pda">
-                                        <rect key="frame" x="12" y="552.66666666666663" width="406" height="67"/>
+                                        <rect key="frame" x="12" y="472.66666666666669" width="369" height="67.000000000000057"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="757" text="Artist Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2x2-ws-IDR">
-                                        <rect key="frame" x="8" y="631.66666666666663" width="414" height="29"/>
+                                        <rect key="frame" x="8" y="551.66666666666663" width="377" height="29"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="756" text="Sonic and The Secret Rings Original Soundtrack Seven Rings in Hand" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWH-34-r0I">
-                                        <rect key="frame" x="12" y="672.66666666666663" width="406" height="57.333333333333371"/>
+                                        <rect key="frame" x="12" y="592.66666666666663" width="369" height="57.333333333333371"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="753" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ndk-fa-CPd" customClass="KvoUISlider">
-                                        <rect key="frame" x="74" y="750" width="282" height="31"/>
+                                        <rect key="frame" x="76" y="670" width="241" height="30"/>
                                         <color key="tintColor" systemColor="systemBlueColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="tLf-xX-qeL"/>
@@ -72,7 +73,7 @@
                                         </constraints>
                                     </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UdR-Zx-KXJ">
-                                        <rect key="frame" x="16" y="758" width="48" height="17"/>
+                                        <rect key="frame" x="16" y="678" width="48" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="kUp-el-Dwf"/>
                                         </constraints>
@@ -81,7 +82,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-05:36" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aed-cf-8Kx">
-                                        <rect key="frame" x="366" y="758" width="48" height="17"/>
+                                        <rect key="frame" x="329" y="678" width="48" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="gyT-j7-ggb"/>
                                         </constraints>
@@ -89,7 +90,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnF-Il-g1n" userLabel="Skip Prev Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="113" y="816" width="42" height="40"/>
+                                        <rect key="frame" x="94.666666666666671" y="728" width="42.000000000000014" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="42" id="PZK-do-YzC"/>
                                             <constraint firstAttribute="height" constant="40" id="eAo-Fe-Ek3"/>
@@ -99,41 +100,8 @@
                                             <imageReference key="image" image="backward.fill" catalog="system" symbolScale="large"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uWp-iF-Upl" userLabel="Repeat Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="370" y="864" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="UE8-bx-YXD"/>
-                                            <constraint firstAttribute="width" constant="40" id="ZDb-ao-4uh"/>
-                                        </constraints>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="repeat.circle" catalog="system" symbolScale="medium"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWt-w6-VmQ" userLabel="Shuffle Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="322" y="864" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="40" id="kBF-62-3VB"/>
-                                            <constraint firstAttribute="height" constant="40" id="oIe-Za-M2q"/>
-                                        </constraints>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="shuffle.circle" catalog="system" symbolScale="medium"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzv-k0-5VN" userLabel="Volume Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="24" y="864" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="40" id="8gi-aB-Ggu"/>
-                                            <constraint firstAttribute="height" constant="40" id="csE-rR-Qwp"/>
-                                        </constraints>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="speaker.wave.2.circle" catalog="system" symbolScale="medium"/>
-                                        </state>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sfs-XQ-aF1" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="275" y="816" width="42" height="40"/>
+                                        <rect key="frame" x="256.66666666666669" y="728" width="42" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="81H-pS-OLq"/>
                                             <constraint firstAttribute="width" constant="42" id="NQN-ln-qOQ"/>
@@ -144,7 +112,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RI5-DA-btJ" customClass="SymbolUIButton">
-                                        <rect key="frame" x="191" y="812" width="48" height="48"/>
+                                        <rect key="frame" x="172.66666666666666" y="724" width="48" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="48" id="PNe-G5-AMX"/>
                                             <constraint firstAttribute="height" constant="48" id="qgi-ao-D5G"/>
@@ -155,7 +123,7 @@
                                         </state>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="745" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="lka-vy-mHi">
-                                        <rect key="frame" x="16" y="138.66666666666663" width="398" height="398"/>
+                                        <rect key="frame" x="16.333333333333343" y="96.000000000000028" width="360.66666666666663" height="360.66666666666674"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="640" id="2BL-kA-zy0"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="256" id="C59-e5-JVo"/>
@@ -168,14 +136,14 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="C59-e5-JVo"/>
                                                 <exclude reference="liU-cM-ILJ"/>
+                                                <exclude reference="C59-e5-JVo"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
                                             <mask key="constraints">
-                                                <include reference="C59-e5-JVo"/>
                                                 <include reference="liU-cM-ILJ"/>
+                                                <include reference="C59-e5-JVo"/>
                                             </mask>
                                         </variation>
                                     </imageView>
@@ -184,18 +152,14 @@
                                     <constraint firstItem="lka-vy-mHi" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" multiplier="3:4" constant="-96" id="0QZ-hU-gzs">
                                         <variation key="heightClass=compact-widthClass=regular" constant="-120"/>
                                     </constraint>
-                                    <constraint firstItem="uWp-iF-Upl" firstAttribute="top" relation="lessThanOrEqual" secondItem="sfs-XQ-aF1" secondAttribute="top" constant="64" id="0hp-1M-Q1p"/>
-                                    <constraint firstItem="hWt-w6-VmQ" firstAttribute="top" secondItem="uWp-iF-Upl" secondAttribute="top" id="1bF-hL-Nld"/>
                                     <constraint firstItem="Ndk-fa-CPd" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" id="2TQ-Au-mbl"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lka-vy-mHi" secondAttribute="trailing" constant="64" id="2XY-Y3-fTc">
                                         <variation key="heightClass=regular-widthClass=compact" constant="16"/>
                                     </constraint>
-                                    <constraint firstItem="uWp-iF-Upl" firstAttribute="leading" secondItem="hWt-w6-VmQ" secondAttribute="trailing" constant="8" id="7Br-ih-jbf"/>
                                     <constraint firstItem="lka-vy-mHi" firstAttribute="bottom" secondItem="qgK-bP-GXK" secondAttribute="bottom" id="8Ua-H4-zBe"/>
-                                    <constraint firstItem="RI5-DA-btJ" firstAttribute="top" secondItem="Ndk-fa-CPd" secondAttribute="bottom" constant="32" id="8io-BZ-uN9"/>
+                                    <constraint firstItem="RI5-DA-btJ" firstAttribute="top" secondItem="Ndk-fa-CPd" secondAttribute="bottom" constant="24" id="8io-BZ-uN9"/>
                                     <constraint firstItem="2x2-ws-IDR" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" id="8tf-vb-MF0"/>
                                     <constraint firstAttribute="trailing" secondItem="aed-cf-8Kx" secondAttribute="trailing" constant="16" id="9DQ-aY-Cew"/>
-                                    <constraint firstItem="kzv-k0-5VN" firstAttribute="top" relation="lessThanOrEqual" secondItem="tnF-Il-g1n" secondAttribute="top" constant="64" id="9wP-Ed-sok"/>
                                     <constraint firstItem="2x2-ws-IDR" firstAttribute="leading" secondItem="DG4-0R-Uua" secondAttribute="leading" constant="56" id="Ab3-bU-FGH">
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
                                         <variation key="heightClass=regular-widthClass=compact" constant="8"/>
@@ -207,13 +171,10 @@
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
                                         <variation key="heightClass=regular-widthClass=compact" constant="12"/>
                                     </constraint>
-                                    <constraint firstItem="uWp-iF-Upl" firstAttribute="leading" secondItem="aed-cf-8Kx" secondAttribute="leading" constant="4" id="GTr-no-sId"/>
                                     <constraint firstItem="UdR-Zx-KXJ" firstAttribute="leading" secondItem="DG4-0R-Uua" secondAttribute="leading" constant="16" id="Jee-Ne-kHV"/>
                                     <constraint firstItem="E5Z-bz-pda" firstAttribute="top" secondItem="lka-vy-mHi" secondAttribute="bottom" constant="24" id="Jqv-ff-4Uy">
                                         <variation key="heightClass=regular-widthClass=compact" constant="16"/>
                                     </constraint>
-                                    <constraint firstItem="kzv-k0-5VN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DG4-0R-Uua" secondAttribute="leading" constant="16" id="KG3-De-EvI"/>
-                                    <constraint firstAttribute="bottom" secondItem="uWp-iF-Upl" secondAttribute="bottom" constant="28" id="KhF-sX-Dsb"/>
                                     <constraint firstItem="Ndk-fa-CPd" firstAttribute="top" secondItem="MWH-34-r0I" secondAttribute="bottom" constant="20" id="LtA-94-x0q">
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
                                         <variation key="heightClass=compact-widthClass=regular" constant="24"/>
@@ -231,7 +192,6 @@
                                     <constraint firstItem="qgK-bP-GXK" firstAttribute="top" secondItem="lka-vy-mHi" secondAttribute="top" id="ZVP-jK-JGa"/>
                                     <constraint firstItem="E5Z-bz-pda" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qgK-bP-GXK" secondAttribute="trailing" constant="8" id="ZYw-4H-VVT"/>
                                     <constraint firstItem="2x2-ws-IDR" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" multiplier="4:3" constant="8" id="a2g-ph-i3t"/>
-                                    <constraint firstItem="UdR-Zx-KXJ" firstAttribute="trailing" secondItem="kzv-k0-5VN" secondAttribute="trailing" id="a6K-S7-aDe"/>
                                     <constraint firstAttribute="trailing" secondItem="E5Z-bz-pda" secondAttribute="trailing" constant="56" id="aCB-rX-iDu">
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
                                         <variation key="heightClass=regular-widthClass=compact" constant="12"/>
@@ -256,16 +216,13 @@
                                     <constraint firstAttribute="bottom" secondItem="RI5-DA-btJ" secondAttribute="bottom" constant="62" id="inO-cX-yOf">
                                         <variation key="heightClass=compact-widthClass=compact" constant="20"/>
                                         <variation key="heightClass=compact-widthClass=regular" constant="40"/>
-                                        <variation key="heightClass=regular-widthClass=compact" constant="72"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="80"/>
                                     </constraint>
                                     <constraint firstItem="RI5-DA-btJ" firstAttribute="leading" secondItem="tnF-Il-g1n" secondAttribute="trailing" constant="36" id="jmj-uQ-Hy1"/>
-                                    <constraint firstItem="tnF-Il-g1n" firstAttribute="top" secondItem="kzv-k0-5VN" secondAttribute="top" id="nKG-fu-mqs"/>
-                                    <constraint firstItem="uWp-iF-Upl" firstAttribute="top" secondItem="sfs-XQ-aF1" secondAttribute="top" id="nVh-du-4GV"/>
                                     <constraint firstItem="lka-vy-mHi" firstAttribute="centerY" secondItem="DG4-0R-Uua" secondAttribute="centerY" constant="-128" id="nie-cO-DlT">
                                         <variation key="heightClass=compact" constant="-50"/>
                                         <variation key="heightClass=regular-widthClass=compact" constant="-180"/>
                                     </constraint>
-                                    <constraint firstAttribute="bottom" secondItem="kzv-k0-5VN" secondAttribute="bottom" constant="28" id="ocU-MS-4o9"/>
                                     <constraint firstItem="2x2-ws-IDR" firstAttribute="top" secondItem="E5Z-bz-pda" secondAttribute="bottom" constant="12" id="qdB-AA-MIa">
                                         <variation key="heightClass=compact-widthClass=compact" constant="4"/>
                                     </constraint>
@@ -282,34 +239,30 @@
                                         <exclude reference="R7B-La-Xhd"/>
                                         <exclude reference="ZYw-4H-VVT"/>
                                         <exclude reference="a2g-ph-i3t"/>
-                                        <exclude reference="g0D-kf-jsk"/>
                                         <exclude reference="zhH-G9-9oD"/>
+                                        <exclude reference="g0D-kf-jsk"/>
                                         <exclude reference="SCv-P0-qBe"/>
-                                        <exclude reference="9wP-Ed-sok"/>
-                                        <exclude reference="ocU-MS-4o9"/>
-                                        <exclude reference="0hp-1M-Q1p"/>
-                                        <exclude reference="KhF-sX-Dsb"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact">
                                     <mask key="constraints">
                                         <include reference="0QZ-hU-gzs"/>
-                                        <exclude reference="2XY-Y3-fTc"/>
                                         <exclude reference="DBh-Jj-3hC"/>
-                                        <exclude reference="DIm-rD-9mB"/>
+                                        <exclude reference="2XY-Y3-fTc"/>
                                         <exclude reference="ue5-NS-PG0"/>
-                                        <exclude reference="Jqv-ff-4Uy"/>
+                                        <exclude reference="DIm-rD-9mB"/>
                                         <include reference="R7B-La-Xhd"/>
                                         <exclude reference="W1k-l1-Uet"/>
-                                        <include reference="ZYw-4H-VVT"/>
                                         <exclude reference="e0R-Qw-omR"/>
+                                        <include reference="ZYw-4H-VVT"/>
+                                        <exclude reference="Jqv-ff-4Uy"/>
                                         <exclude reference="8tf-vb-MF0"/>
-                                        <exclude reference="Ab3-bU-FGH"/>
                                         <include reference="a2g-ph-i3t"/>
+                                        <exclude reference="Ab3-bU-FGH"/>
                                         <exclude reference="C7j-FZ-txa"/>
+                                        <include reference="zhH-G9-9oD"/>
                                         <exclude reference="YIl-td-AKZ"/>
                                         <include reference="g0D-kf-jsk"/>
-                                        <include reference="zhH-G9-9oD"/>
                                         <include reference="SCv-P0-qBe"/>
                                     </mask>
                                 </variation>
@@ -327,12 +280,6 @@
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="constraints">
                                         <exclude reference="nie-cO-DlT"/>
-                                        <exclude reference="nKG-fu-mqs"/>
-                                        <include reference="9wP-Ed-sok"/>
-                                        <include reference="ocU-MS-4o9"/>
-                                        <include reference="0hp-1M-Q1p"/>
-                                        <include reference="KhF-sX-Dsb"/>
-                                        <exclude reference="nVh-du-4GV"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -353,6 +300,13 @@
                             <constraint firstAttribute="bottom" secondItem="4Xs-Z1-yFr" secondAttribute="bottom" constant="-36" id="z8c-UV-hQF"/>
                         </constraints>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem image="speaker.wave.1.fill" catalog="system" id="l8w-0x-hVp"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="fsj-2a-fLL"/>
+                        <barButtonItem image="shuffle" catalog="system" id="2wq-ED-VpA"/>
+                        <barButtonItem image="repeat" catalog="system" id="t8s-HD-hgv"/>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="AlbumArt" destination="lka-vy-mHi" id="ahd-uu-Rxf"/>
                         <outlet property="AlbumBackground" destination="hDT-Mu-pHy" id="MiK-cg-KSG"/>
@@ -367,17 +321,17 @@
                         <outlet property="LocalVolumeSlider" destination="eDD-Zc-6fO" id="fSX-ai-kYJ"/>
                         <outlet property="PlayPauseButton" destination="RI5-DA-btJ" id="BRH-SS-JDd"/>
                         <outlet property="RemainingTime" destination="aed-cf-8Kx" id="chO-IM-09r"/>
-                        <outlet property="RepeatButton" destination="uWp-iF-Upl" id="glE-h8-vMG"/>
+                        <outlet property="RepeatButton" destination="t8s-HD-hgv" id="LWJ-JW-rEw"/>
                         <outlet property="ServerMuteButton" destination="rMl-UN-AUS" id="SMs-M7-9N0"/>
                         <outlet property="ServerVolume" destination="wCV-2J-UVG" id="agT-RJ-1QN"/>
                         <outlet property="ServerVolumeSlider" destination="fh6-q8-ULU" id="os9-LW-pex"/>
                         <outlet property="ShadowCaster" destination="qgK-bP-GXK" id="7oE-fs-J9R"/>
-                        <outlet property="ShuffleButton" destination="hWt-w6-VmQ" id="8c9-4M-c3X"/>
+                        <outlet property="ShuffleButton" destination="2wq-ED-VpA" id="2Uk-C3-NZq"/>
                         <outlet property="SkipNextButton" destination="sfs-XQ-aF1" id="Htz-TN-ji0"/>
                         <outlet property="SkipPrevButton" destination="tnF-Il-g1n" id="xkc-zI-lsJ"/>
                         <outlet property="TrackSlider" destination="Ndk-fa-CPd" id="JnT-nH-0jc"/>
                         <outlet property="TrackTitle" destination="E5Z-bz-pda" id="nA1-CQ-44l"/>
-                        <outlet property="VolumeButton" destination="kzv-k0-5VN" id="E2g-B3-m9P"/>
+                        <outlet property="VolumeButton" destination="l8w-0x-hVp" id="w2G-su-w6E"/>
                         <outlet property="VolumePopover" destination="a6h-ap-Qy1" id="FPA-fF-TbU"/>
                     </connections>
                 </viewController>
@@ -432,7 +386,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWe-5W-eb4" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1260" y="14" width="48" height="36"/>
+                                                <rect key="frame" x="1260" y="192" width="48" height="36"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="IIM-8D-8bv">
                                                         <variation key="heightClass=compact-widthClass=compact" constant="36"/>
@@ -584,20 +538,20 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="rqc-LJ-ZHm"/>
+                                                <exclude reference="KsV-xZ-o8u"/>
                                                 <exclude reference="4la-bA-Etd"/>
                                                 <exclude reference="6Tf-TA-5Xd"/>
-                                                <exclude reference="KsV-xZ-o8u"/>
-                                                <exclude reference="rqc-LJ-ZHm"/>
                                                 <exclude reference="Y2k-vB-tj7"/>
+                                                <exclude reference="sON-QN-IKN"/>
+                                                <exclude reference="hRv-nI-0sI"/>
                                                 <exclude reference="ATW-CF-cR9"/>
                                                 <exclude reference="W4p-ZJ-1br"/>
-                                                <exclude reference="hRv-nI-0sI"/>
-                                                <exclude reference="sON-QN-IKN"/>
-                                                <exclude reference="qdx-KM-zw2"/>
-                                                <exclude reference="4Cw-C8-gfb"/>
                                                 <exclude reference="gvi-Zs-cTV"/>
                                                 <exclude reference="h6q-Om-RsB"/>
+                                                <exclude reference="4Cw-C8-gfb"/>
                                                 <exclude reference="lBY-15-sxl"/>
+                                                <exclude reference="qdx-KM-zw2"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -622,8 +576,8 @@
                                                 <include reference="4la-bA-Etd"/>
                                                 <include reference="6Tf-TA-5Xd"/>
                                                 <include reference="ATW-CF-cR9"/>
-                                                <include reference="1gc-NI-O3C"/>
                                                 <include reference="4Cw-C8-gfb"/>
+                                                <include reference="1gc-NI-O3C"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
@@ -635,9 +589,9 @@
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
                                             <mask key="constraints">
+                                                <include reference="KsV-xZ-o8u"/>
                                                 <include reference="4la-bA-Etd"/>
                                                 <include reference="6Tf-TA-5Xd"/>
-                                                <include reference="KsV-xZ-o8u"/>
                                                 <exclude reference="Sug-uY-M97"/>
                                                 <include reference="W4p-ZJ-1br"/>
                                                 <include reference="lBY-15-sxl"/>
@@ -715,7 +669,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="fh6-q8-ULU" customClass="KvoUISlider">
-                                    <rect key="frame" x="56.999999999999986" y="32.333333333333336" width="166.66666666666663" height="31"/>
+                                    <rect key="frame" x="58.999999999999986" y="32.333333333333336" width="162.66666666666663" height="34.000000000000007"/>
                                 </slider>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rMl-UN-AUS" userLabel="Volume Button" customClass="SymbolUIButton">
                                     <rect key="frame" x="16" y="30.333333333333336" width="35" height="35.000000000000007"/>
@@ -763,7 +717,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="eDD-Zc-6fO" customClass="KvoUISlider">
-                                    <rect key="frame" x="56.999999999999986" y="32.333333333333329" width="166.66666666666663" height="31"/>
+                                    <rect key="frame" x="58.999999999999986" y="32.333333333333329" width="162.66666666666663" height="34"/>
                                 </slider>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bsw-mW-3ej" userLabel="Volume Button" customClass="SymbolUIButton">
                                     <rect key="frame" x="16" y="30.333333333333329" width="35" height="35"/>
@@ -812,20 +766,22 @@
     </scenes>
     <resources>
         <image name="AlbumPlaceholder" width="932" height="932"/>
-        <image name="backward.fill" catalog="system" width="128" height="77"/>
-        <image name="forward.fill" catalog="system" width="128" height="77"/>
-        <image name="play.fill" catalog="system" width="117" height="128"/>
-        <image name="repeat.circle" catalog="system" width="128" height="123"/>
-        <image name="shuffle.circle" catalog="system" width="128" height="123"/>
-        <image name="speaker.wave.2.circle" catalog="system" width="128" height="123"/>
+        <image name="backward.fill" catalog="system" width="128" height="80"/>
+        <image name="forward.fill" catalog="system" width="128" height="80"/>
+        <image name="play.fill" catalog="system" width="115" height="128"/>
+        <image name="repeat" catalog="system" width="128" height="102"/>
+        <image name="shuffle" catalog="system" width="128" height="98"/>
+        <image name="shuffle.circle" catalog="system" width="128" height="128"/>
+        <image name="speaker.wave.1.fill" catalog="system" width="128" height="109"/>
+        <image name="speaker.wave.2.circle" catalog="system" width="128" height="128"/>
         <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.53333333333333333" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
