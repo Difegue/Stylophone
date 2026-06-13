@@ -142,7 +142,7 @@ namespace Stylophone.iOS.ViewControllers
             clearQueueAction.Attributes = UIMenuElementAttributes.Destructive;
 
             var barButtonMenu = UIMenu.Create(new[] { addQueueAction, clearQueueAction });
-            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
         }
     }
 }

@@ -157,7 +157,7 @@ namespace Stylophone.iOS.ViewControllers
             }
 
             var barButtonMenu = GetMenuForViewModel(_currentlyShownVm);
-            NavigationItem.RightBarButtonItem = new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+            NavigationItem.RightBarButtonItem = new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
         }
     }
 

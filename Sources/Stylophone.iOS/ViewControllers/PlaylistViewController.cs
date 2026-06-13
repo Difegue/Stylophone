@@ -182,7 +182,7 @@ namespace Stylophone.iOS.ViewControllers
             var deletePlaylistAction = Binder.GetCommandAction(Strings.ContextMenuDeletePlaylist, "trash", ViewModel.RemovePlaylistCommand);
 
             var barButtonMenu = UIMenu.Create(new[] { playAlbumAction, addAlbumAction, deletePlaylistAction });
-            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
         }
     }
 }

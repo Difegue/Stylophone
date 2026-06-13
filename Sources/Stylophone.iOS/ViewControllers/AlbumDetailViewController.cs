@@ -167,7 +167,7 @@ namespace Stylophone.iOS.ViewControllers
 			var addToPlaylistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.Item.AddToPlaylistCommand);
 
 			var barButtonMenu = UIMenu.Create(new[] { playAlbumAction, addAlbumAction, addToPlaylistAction });
-			return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+			return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
 		}
 	}
 }

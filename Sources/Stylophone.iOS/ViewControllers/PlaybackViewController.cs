@@ -272,7 +272,7 @@ namespace Stylophone.iOS.ViewControllers
                 completion.Invoke(new[] { _consumeAction })));
 
             var barButtonMenu = UIMenu.Create(new UIMenuElement[] { dynamicAction, addQueueAction, viewAlbumAction });
-            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
         }
 
         public void ShowVolumePopover(UIButton sourceButton, UIViewController sourceVc = null)
