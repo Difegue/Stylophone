@@ -93,7 +93,7 @@ namespace Stylophone.iOS.Services
                 PlaybackIcon.Volume25 => "speaker.fill",
                 PlaybackIcon.Volume50 => "speaker.wave.1.fill",
                 PlaybackIcon.Volume75 => "speaker.wave.2.fill",
-                PlaybackIcon.VolumeFull => "speaker.wave.3.fill",,
+                PlaybackIcon.VolumeFull => "speaker.wave.3.fill",
                 _ => "opticaldisc",
             };
         }
