@@ -22,7 +22,14 @@ namespace Stylophone.iOS.ViewControllers
 		{
 		}
 
-		public AlbumDetailViewModel ViewModel => Ioc.Default.GetRequiredService<AlbumDetailViewModel>();
+		// Used by separate windows, which get their own viewmodel instead of the shared one
+		public AlbumDetailViewController (NSCoder coder, AlbumDetailViewModel viewModel) : base (coder)
+		{
+			_viewModel = viewModel;
+		}
+
+		private AlbumDetailViewModel _viewModel;
+		public AlbumDetailViewModel ViewModel => _viewModel ??= Ioc.Default.GetRequiredService<AlbumDetailViewModel>();
 		public PropertyBinder<AlbumDetailViewModel> Binder => new(ViewModel);
 
 		private PropertyBinder<AlbumViewModel> _albumBinder;
@@ -160,13 +167,20 @@ namespace Stylophone.iOS.ViewControllers
 			return UISwipeActionsConfiguration.FromActions(new[] { action });
 		}
 
+
 		private UIBarButtonItem CreateSettingsButton()
 		{
-			var playAlbumAction = Binder.GetCommandAction(Strings.ContextMenuPlay, "play", ViewModel.Item.PlayAlbumCommand);
 			var addAlbumAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "plus", ViewModel.Item.AddAlbumCommand);
 			var addToPlaylistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", ViewModel.Item.AddToPlaylistCommand);
 
-			var barButtonMenu = UIMenu.Create(new[] { playAlbumAction, addAlbumAction, addToPlaylistAction });
+			var menuElements = new List<UIMenuElement> { addAlbumAction, addToPlaylistAction };
+
+			var separateWindowAction = ViewModel.CanShowInSecondWindow ?
+				SeparateWindowHelper.CreateAction(() => ViewModel.OpenInSeparateWindowCommand.Execute(null)) : null;
+			if (separateWindowAction != null)
+				menuElements.Add(UIMenu.Create("", null, UIMenuIdentifier.None, UIMenuOptions.DisplayInline, new[] { separateWindowAction }));
+
+			var barButtonMenu = UIMenu.Create(menuElements.ToArray());
 			return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
 		}
 	}

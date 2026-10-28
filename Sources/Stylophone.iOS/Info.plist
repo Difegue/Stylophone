@@ -48,10 +48,20 @@
 					<key>UISceneDelegateClassName</key>
 					<string>SceneDelegate</string>
 				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Detail Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>DetailSceneDelegate</string>
+				</dict>
 			</array>
 		</dict>
 	</dict>
 	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.tvc16.stylophone.album</string>
+		<string>com.tvc16.stylophone.playlist</string>
+	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

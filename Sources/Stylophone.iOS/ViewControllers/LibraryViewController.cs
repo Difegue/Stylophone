@@ -138,7 +138,15 @@ namespace Stylophone.iOS.ViewControllers
             var addToQueueAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "plus", vm.AddAlbumCommand);
             var addToPlaylistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", vm.AddToPlaylistCommand);
 
-            return UIMenu.Create(new[] { playAction, addToQueueAction, addToPlaylistAction });
+            var menuElements = new List<UIMenuElement> { playAction, addToQueueAction, addToPlaylistAction };
+
+            var separateWindowAction = SeparateWindowHelper.CreateAction(() =>
+                Ioc.Default.GetRequiredService<INavigationService>().ShowInSeparateWindowAsync<AlbumDetailViewModel>(vm));
+            if (separateWindowAction != null)
+                menuElements.Add(UIMenu.Create("", null, UIMenuIdentifier.None, UIMenuOptions.DisplayInline, new[] { separateWindowAction }));
+
+            return UIMenu.Create(menuElements.ToArray());
+        }
 
         public override void ViewDidLoad()
         {

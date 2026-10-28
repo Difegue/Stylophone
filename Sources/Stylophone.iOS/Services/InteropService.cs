@@ -19,9 +19,22 @@ namespace Stylophone.iOS.Services
 
         public static UIWindow GetKeyWindow()
         {
-            return UIApplication.SharedApplication.ConnectedScenes.ToArray()
-                    .Select(s => (UIWindowScene)s)
-                    .First().Windows.Where(w => w.IsKeyWindow).First();
+            // With multiple windows on iPad, prefer the window the user is currently interacting with
+            var windowScenes = UIApplication.SharedApplication.ConnectedScenes.ToArray().OfType<UIWindowScene>().ToList();
+            var scene = windowScenes.FirstOrDefault(s => s.ActivationState == UISceneActivationState.ForegroundActive)
+                        ?? windowScenes.FirstOrDefault();
+
+            return scene?.KeyWindow ?? scene?.Windows.FirstOrDefault() ?? (UIApplication.SharedApplication.Delegate as AppDelegate)?.Window;
+        }
+
+        /// <returns>The view controller to present dialogs from: the topmost one of the key window.</returns>
+        public static UIViewController GetPresentingViewController()
+        {
+            var presenter = GetKeyWindow()?.RootViewController;
+            while (presenter?.PresentedViewController != null && !presenter.PresentedViewController.IsBeingDismissed)
+                presenter = presenter.PresentedViewController;
+
+            return presenter;
         }
 
         public Task SetThemeAsync(Theme theme)
@@ -44,11 +57,10 @@ namespace Stylophone.iOS.Services
 
         public SKColor GetAccentColor()
         {
-            var keyWindow = GetKeyWindow();
             UIColor accent = UIColor.SystemBlue;
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
-                accent = keyWindow.TintColor ?? UIColor.SystemBlue;
+                accent = GetKeyWindow()?.TintColor ?? UIColor.SystemBlue;
             });
             return accent.ToSKColor();
         }

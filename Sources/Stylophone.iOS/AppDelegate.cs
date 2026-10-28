@@ -75,8 +75,14 @@ namespace Stylophone.iOS
             return true;
         }
 
+        [Export("application:configurationForConnectingSceneSession:options:")]
+        public UISceneConfiguration GetConfiguration(UIApplication application, UISceneSession connectingSceneSession, UISceneConnectionOptions options)
         {
+            // Album/playlist windows requested through INavigationService.ShowInSeparateWindowAsync carry a matching user activity
+            var configurationName = DetailSceneDelegate.CanHandle(options.UserActivities) ?
+                DetailSceneDelegate.ConfigurationName : SceneDelegate.ConfigurationName;
 
+            return new UISceneConfiguration(configurationName, connectingSceneSession.Role);
         }
 
         public override void BuildMenu(IUIMenuBuilder builder)

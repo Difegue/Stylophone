@@ -7,6 +7,7 @@ namespace Stylophone.iOS
 {
     /// <summary>
     /// Scene delegate for the main application window, which hosts the split view from Main.storyboard.
+    /// Album/playlist windows opened on iPad are handled by <see cref="DetailSceneDelegate"/>.
     /// </summary>
     [Register(nameof(SceneDelegate))]
     public class SceneDelegate : UIResponder, IUIWindowSceneDelegate

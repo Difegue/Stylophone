@@ -25,7 +25,14 @@ namespace Stylophone.iOS.ViewControllers
         {
         }
 
-        public PlaylistViewModel ViewModel => Ioc.Default.GetRequiredService<PlaylistViewModel>();
+        // Used by separate windows, which get their own viewmodel instead of the shared one
+        public PlaylistViewController(NSCoder coder, PlaylistViewModel viewModel) : base(coder)
+        {
+            _viewModel = viewModel;
+        }
+
+        private PlaylistViewModel _viewModel;
+        public PlaylistViewModel ViewModel => _viewModel ??= Ioc.Default.GetRequiredService<PlaylistViewModel>();
         public PropertyBinder<PlaylistViewModel> Binder => new(ViewModel);
 
         private PropertyBinder<AlbumViewModel> _albumBinder;
