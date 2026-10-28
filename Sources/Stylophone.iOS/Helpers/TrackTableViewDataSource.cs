@@ -25,6 +25,12 @@ namespace Stylophone.iOS.ViewControllers
         private ObservableCollection<TrackViewModel> _sourceCollection;
         private bool _canReorder;
 
+        // Corners of lifted rows, like the system's own row previews
+        private const float PreviewCornerRadius = 12;
+
+        // Keep track of row count independently, as the source collection can change multiple times without the UI being updated yet.
+        private int _rowCount;
+
         public TrackTableViewDataSource(IntPtr handle) : base(handle)
         {
         }
@@ -50,6 +56,7 @@ namespace Stylophone.iOS.ViewControllers
             _canReorder = canReorder;
             _scrollHandler = scrollHandler;
             _primaryAction = primaryAction;
+            _rowCount = _sourceCollection.Count;
 
             _sourceCollection.CollectionChanged += (s,e) => UIApplication.SharedApplication.InvokeOnMainThread(
                 () => UpdateUITableView(s,e));
@@ -62,6 +69,7 @@ namespace Stylophone.iOS.ViewControllers
         {
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
+                _rowCount = _sourceCollection.Count;
                 _tableView.ReloadData();
             }
             else
@@ -76,6 +84,7 @@ namespace Stylophone.iOS.ViewControllers
                     for (var i = e.NewStartingIndex; i < e.NewStartingIndex + e.NewItems.Count; i++)
                         indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
 
+                    _rowCount += e.NewItems.Count;
                     _tableView.InsertRows(indexPaths.ToArray(), UITableViewRowAnimation.Left);
                 }
 
@@ -86,6 +95,7 @@ namespace Stylophone.iOS.ViewControllers
                     for (var i = startIndex; i < startIndex + e.OldItems.Count; i++)
                         indexPaths.Add(NSIndexPath.FromItemSection(i, 0));
 
+                    _rowCount -= e.OldItems.Count;
                     _tableView.DeleteRows(indexPaths.ToArray(), UITableViewRowAnimation.Right);
                 }
 
@@ -100,7 +110,7 @@ namespace Stylophone.iOS.ViewControllers
 
         public nint RowsInSection(UITableView tableView, nint section)
         {
-            return _sourceCollection.Count;
+            return _rowCount;
         }
 
         public UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -173,7 +183,32 @@ namespace Stylophone.iOS.ViewControllers
         public override UIContextMenuConfiguration GetContextMenuConfiguration(UITableView tableView, NSIndexPath indexPath, CoreGraphics.CGPoint point)
         {
             var menu = _menuFactory.Invoke(indexPath);
-            return UIContextMenuConfiguration.Create(null, null, new UIContextMenuActionProvider((arr) => menu));
+
+            // Identify the menu by its row, for the previews below
+            return UIContextMenuConfiguration.Create(indexPath, null, new UIContextMenuActionProvider((arr) => menu));
+        }
+
+        public override UITargetedPreview GetPreviewForHighlightingContextMenu(UITableView tableView, UIContextMenuConfiguration configuration)
+            => GetRowPreview(tableView, configuration);
+
+        public override UITargetedPreview GetPreviewForDismissingContextMenu(UITableView tableView, UIContextMenuConfiguration configuration)
+            => GetRowPreview(tableView, configuration);
+
+        /// <summary>
+        /// Rows span the whole table, which goes under floating sidebars, while their content stays within the safe area:
+        /// only lift the part of the row that's visible, its content view.
+        /// </summary>
+        private static UITargetedPreview GetRowPreview(UITableView tableView, UIContextMenuConfiguration configuration)
+        {
+            // Rows scrolled away fall back to the default preview
+            if (configuration.Identifier is not NSIndexPath indexPath || tableView.CellAt(indexPath) is not UITableViewCell cell)
+                return null;
+
+            var parameters = new UIPreviewParameters
+            {
+                VisiblePath = UIBezierPath.FromRoundedRect(cell.ContentView.Frame, PreviewCornerRadius)
+            };
+            return new UITargetedPreview(cell, parameters);
         }
 
         public override UISwipeActionsConfiguration GetLeadingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)
