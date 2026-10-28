@@ -80,8 +80,8 @@ namespace Stylophone.iOS.ViewControllers
             _propertyBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _propertyBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
             _propertyBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
-            _propertyBinder.Bind<SKColor>(CircularProgressView, nameof(CircularProgressView.BackgroundCircleColor),
-                nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            _propertyBinder.Bind<SKColor>(CircularProgressView, nameof(CircularProgressView.FillColor),
+                nameof(currentTrack.VibrantColor), valueTransformer: colorConverter);
         }
     }
 }
