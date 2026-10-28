@@ -78,6 +78,10 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            // Pages go on under the sidebar, whose material lets them show through: don't cover it with the storyboard's opaque background
+            if (OperatingSystem.IsIOSVersionAtLeast(26))
+                View.BackgroundColor = UIColor.Clear;
+
             Title = Strings.AppDisplayName;
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
 

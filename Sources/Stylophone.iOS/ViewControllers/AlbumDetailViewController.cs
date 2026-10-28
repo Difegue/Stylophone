@@ -34,11 +34,17 @@ namespace Stylophone.iOS.ViewControllers
 
 		private PropertyBinder<AlbumViewModel> _albumBinder;
 		private AlbumViewModel _album;
+		private NarrowLayoutSwitch _narrowLayout;
+		private VerticalBarHeaderLayout _verticalBarLayout;
 
 		public override void AwakeFromNib()
 		{
 			base.AwakeFromNib();
 			NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
+
+			// Switch to the layout of phones when sidebars leave too little room for the album art
+			_narrowLayout = new NarrowLayoutSwitch(this, DetailHeaderHelper.RegularLayoutMinWidth);
+
 			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
 				GetRowContextMenu, GetRowSwipeActions, false, OnScroll, OnTap);
 			TableView.DataSource = trackDataSource;
@@ -61,7 +67,27 @@ namespace Stylophone.iOS.ViewControllers
 		{
 			base.ViewDidLoad();
 			DetailHeaderHelper.FollowSafeArea(HeaderBlur, BackgroundArt);
+			_verticalBarLayout = new VerticalBarHeaderLayout(this, HeaderBlur, ArtContainer, AlbumTitle);
 		}
+
+		public override void ViewIsAppearing(bool animated)
+		{
+			base.ViewIsAppearing(animated);
+			_narrowLayout.Update();
+		}
+
+		public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+		{
+			base.ViewWillTransitionToSize(toSize, coordinator);
+			coordinator.AnimateAlongsideTransition(_ => _narrowLayout.Update(), null);
+		}
+
+		public override void ViewSafeAreaInsetsDidChange()
+		{
+			base.ViewSafeAreaInsetsDidChange();
+
+			// Sidebars showing up or going away change the room left for the page. Wait for the current layout pass to end.
+			UIApplication.SharedApplication.BeginInvokeOnMainThread(_narrowLayout.Update);
 		}
 
         private void OnTap(NSIndexPath indexPath) =>
@@ -90,6 +116,7 @@ namespace Stylophone.iOS.ViewControllers
             base.ViewDidLayoutSubviews();
 
 			// The header's content depends on size classes and the album, so fit it whenever the layout changes
+			_verticalBarLayout.Update();
 			DetailHeaderHelper.UpdateHeaderHeight(TableView);
 			DetailHeaderHelper.UpdateTopEdgeEffect(TableView);
 			DetailHeaderHelper.UpdateHeaderFade(TableView, HeaderBlur.ContentView);

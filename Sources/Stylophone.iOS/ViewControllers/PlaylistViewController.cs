@@ -37,6 +37,8 @@ namespace Stylophone.iOS.ViewControllers
 
         private PropertyBinder<AlbumViewModel> _albumBinder;
         private string _playlistName;
+        private NarrowLayoutSwitch _narrowLayout;
+        private VerticalBarHeaderLayout _verticalBarLayout;
 
         void IPreparableViewController.Prepare(object parameter)
         {
@@ -67,6 +69,8 @@ namespace Stylophone.iOS.ViewControllers
             base.AwakeFromNib();
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
 
+            // Switch to the layout of phones when sidebars leave too little room for the playlist art
+            _narrowLayout = new NarrowLayoutSwitch(this, DetailHeaderHelper.RegularLayoutMinWidth);
 
             // The playlist's actions live in the navigation bar, with "Play" as the principal one. 
             NavigationItem.RightBarButtonItems = new[] { CreateSettingsButton(), CreatePlayButton(), EditButtonItem };
@@ -111,7 +115,29 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewDidLoad();
             DetailHeaderHelper.FollowSafeArea(HeaderBlur, BackgroundArt);
+            _verticalBarLayout = new VerticalBarHeaderLayout(this, HeaderBlur, ArtContainer, PlaylistTitle);
         }
+
+        public override void ViewIsAppearing(bool animated)
+        {
+            base.ViewIsAppearing(animated);
+            _narrowLayout.Update();
+        }
+
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+            coordinator.AnimateAlongsideTransition(_ => _narrowLayout.Update(), null);
+        }
+
+        public override void ViewSafeAreaInsetsDidChange()
+        {
+            base.ViewSafeAreaInsetsDidChange();
+
+            // Sidebars showing up or going away change the room left for the page. Wait for the current layout pass to end.
+            UIApplication.SharedApplication.BeginInvokeOnMainThread(_narrowLayout.Update);
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
@@ -144,6 +170,7 @@ namespace Stylophone.iOS.ViewControllers
             base.ViewDidLayoutSubviews();
 
             // The header's content depends on size classes and the playlist, so fit it whenever the layout changes
+            _verticalBarLayout.Update();
             DetailHeaderHelper.UpdateHeaderHeight(TableView);
             DetailHeaderHelper.UpdateTopEdgeEffect(TableView);
             DetailHeaderHelper.UpdateHeaderFade(TableView, HeaderBlur.ContentView);

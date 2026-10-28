@@ -10,6 +10,7 @@ using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Services;
 using Stylophone.iOS.ViewControllers;
+using Stylophone.iOS.ViewModels;
 using UIKit;
 
 namespace Stylophone.iOS
@@ -22,6 +23,9 @@ namespace Stylophone.iOS
         private NSLayoutConstraint _compactViewBottomConstraint;
         private NSLayoutConstraint _compactViewLeftConstraint;
         private NSLayoutConstraint _compactViewRightConstraint;
+        // Regular widths keep the compact view out of the sidebar's side of the safe area, so it moves aside for the sidebar
+        // instead of going under it. On the other side, it can go under the bars' buttons (like the Duo's side column) as toolbars do.
+        private NSLayoutConstraint[] _compactViewSafeAreaConstraints;
 
         public NavigationController (IntPtr handle) : base (handle)
 		{
@@ -60,6 +64,12 @@ namespace Stylophone.iOS
             _compactViewLeftConstraint = _compactView.LeftAnchor.ConstraintEqualTo(View.LeftAnchor, 32);
             _compactViewRightConstraint = _compactView.RightAnchor.ConstraintEqualTo(View.RightAnchor, -32);
 
+            _compactViewSafeAreaConstraints = new[]
+            {
+                _compactView.LeftAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.LeftAnchor, 32),
+                _compactView.RightAnchor.ConstraintEqualTo(View.RightAnchor, -32)
+            };
+
             constraints.Add(_compactViewBottomConstraint);
             constraints.Add(_compactViewLeftConstraint);
             constraints.Add(_compactViewRightConstraint);
@@ -79,8 +89,13 @@ namespace Stylophone.iOS
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
-                _compactViewLeftConstraint.Constant = -8;
-                _compactViewRightConstraint.Constant = 8;
+                // Compact widths span the screen, past the safe area, with the bottom corners following the screen's.
+                // Short windows can still show the sidebar beside the page (like on iPad and Mac): stay out of it then.
+                SetCompactViewFollowsSafeArea(false);
+                var sidebarInsets = IsSidebarBesidePage() ? View.SafeAreaInsets : UIEdgeInsets.Zero;
+                var isRightToLeft = View.EffectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.RightToLeft;
+                _compactViewLeftConstraint.Constant = isRightToLeft ? 0 : sidebarInsets.Left;
+                _compactViewRightConstraint.Constant = isRightToLeft ? -sidebarInsets.Right : 0;
 
                 if (_compactViewBottomConstraint.Constant < 128)
                 {
@@ -92,8 +107,7 @@ namespace Stylophone.iOS
             }
             else
             {
-                _compactViewLeftConstraint.Constant = 32;
-                _compactViewRightConstraint.Constant = -32;
+                SetCompactViewFollowsSafeArea(true);
 
                 if (_compactViewBottomConstraint.Constant >= 0 && _compactViewBottomConstraint.Constant < 128)
                     _compactViewBottomConstraint.Constant = -16;
@@ -117,6 +131,25 @@ namespace Stylophone.iOS
             return (page, NotificationPopoverViewController.GetPageBottom(page));
         }
 
+        /// <returns>Whether the sidebar shows next to the page, which then extends under it with its safe area inset by the sidebar's width.</returns>
+        private bool IsSidebarBesidePage() =>
+            SplitViewController is { Collapsed: false } splitView && splitView.DisplayMode == UISplitViewControllerDisplayMode.OneBesideSecondary;
+
+        private void SetCompactViewFollowsSafeArea(bool followsSafeArea)
+        {
+            // Floating within the safe area, or along the bottom edge of the screen
+            _compactView.SetFloating(followsSafeArea);
+
+            if (_compactViewSafeAreaConstraints[0].Active == followsSafeArea)
+                return;
+
+            // Deactivate first, so both sets of constraints are never active together
+            var edgeConstraints = new[] { _compactViewLeftConstraint, _compactViewRightConstraint };
+            NSLayoutConstraint.DeactivateConstraints(followsSafeArea ? edgeConstraints : _compactViewSafeAreaConstraints);
+            NSLayoutConstraint.ActivateConstraints(followsSafeArea ? _compactViewSafeAreaConstraints : edgeConstraints);
+        }
+
+
         [Export("navigationController:willShowViewController:animated:")] 
         public void WillShowViewController(UINavigationController navigationController, [Transient] UIViewController viewController, bool animated)
         {
@@ -126,7 +159,13 @@ namespace Stylophone.iOS
             var navService = Ioc.Default.GetRequiredService<INavigationService>() as NavigationService;
             navService.Navigate(navService.CurrentPageViewModelType);
 
-            if (navService.CurrentPageViewModelType == typeof(PlaybackViewModelBase))
+            // Hide the compact view on the fullscreen playback page, as well as on the library on phones,
+            // where it would conflict with the search field at the bottom of the screen
+            var hideCompactView = navService.CurrentPageViewModelType == typeof(PlaybackViewModelBase) ||
+                                  (navService.CurrentPageViewModelType == typeof(LibraryViewModel) &&
+                                   UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone);
+
+            if (hideCompactView)
             {
                 View.LayoutIfNeeded();
                 UIView.Animate(0.2, 0, UIViewAnimationOptions.CurveEaseIn, () =>
