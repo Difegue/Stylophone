@@ -100,6 +100,22 @@ namespace Stylophone.iOS
             }
         }
 
+        /// <summary>
+        /// Where in-app notifications pop out of: the compact player while it's on screen, or else the bottom of the page.
+        /// </summary>
+        /// <returns>The view and the area within it to point notifications at, or null while this isn't on screen.</returns>
+        internal (UIView View, CGRect Rect)? GetNotificationSource()
+        {
+            if (View.Window == null)
+                return null;
+
+            // The compact player is hidden without track info, and moved below the screen on some pages (see WillShowViewController)
+            if (!_compactView.Hidden && _compactViewBottomConstraint.Constant < 128)
+                return (_compactView, new CGRect(0, -NotificationPopoverViewController.SourceGap, _compactView.Bounds.Width, 0));
+
+            var page = TopViewController?.View ?? View;
+            return (page, NotificationPopoverViewController.GetPageBottom(page));
+        }
 
         [Export("navigationController:willShowViewController:animated:")] 
         public void WillShowViewController(UINavigationController navigationController, [Transient] UIViewController viewController, bool animated)
