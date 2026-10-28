@@ -37,19 +37,40 @@ namespace Stylophone.iOS.ViewControllers
             base.ViewDidLoad();
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;
             Title = FoldersViewModel.GetHeader();
+            GridLayoutHelper.FollowSafeArea(CollectionView);
 
             await InitTreeAsync();
         }
 
-        
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+            coordinator.AnimateAlongsideTransition(_ => InvalidateItemSizes(), null);
+        }
+
+        public override void ViewSafeAreaInsetsDidChange()
+        {
+            base.ViewSafeAreaInsetsDidChange();
+
+            // Sidebars showing up or going away change the room left for the grid
+            InvalidateItemSizes();
+        }
+
+        private void InvalidateItemSizes()
+        {
+            var invalidation = new UICollectionViewFlowLayoutInvalidationContext();
+            invalidation.InvalidateFlowLayoutDelegateMetrics = true;
+
+            CollectionView.CollectionViewLayout.InvalidateLayout(invalidation);
+        }
+
         [Export("collectionView:layout:sizeForItemAtIndexPath:")]
         public CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
-                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular)
-                return new CGSize(96, 96);
-            else
-                return new CGSize(128, 128);
+            var minSize = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
+                          TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular ? 96 : 128;
+
+            return GridLayoutHelper.GetItemSize(collectionView, GridLayoutHelper.GetContentWidth(collectionView, collectionView.Frame.Width), minSize);
         }
 
         public override async void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)

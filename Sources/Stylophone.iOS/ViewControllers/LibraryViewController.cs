@@ -8,7 +8,9 @@ using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using Strings = Stylophone.Localization.Strings.Resources;
 using UIKit;
+using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using CoreGraphics;
@@ -114,8 +116,21 @@ namespace Stylophone.iOS.ViewControllers
                 menu = GetMenuForViewModel(holder.ViewModel);
             }
 
-            return UIContextMenuConfiguration.Create(null, null, new UIContextMenuActionProvider((arr) => menu));
+            // Identify the menu by its album, for the previews below
+            return UIContextMenuConfiguration.Create(indexPath, null, new UIContextMenuActionProvider((arr) => menu));
         }
+
+        // Customize previews for the context menu, so that the album cell is used instead of its bounds
+        public override UITargetedPreview GetPreviewForHighlightingContextMenu(UICollectionView collectionView, UIContextMenuConfiguration configuration) =>
+            GetAlbumPreview(collectionView, configuration);
+
+        public override UITargetedPreview GetPreviewForDismissingContextMenu(UICollectionView collectionView, UIContextMenuConfiguration configuration) =>
+            GetAlbumPreview(collectionView, configuration);
+
+        private static UITargetedPreview GetAlbumPreview(UICollectionView collectionView, UIContextMenuConfiguration configuration) =>
+            // Albums scrolled away fall back to the default preview
+            configuration.Identifier is NSIndexPath indexPath && collectionView.CellForItem(indexPath) is AlbumCollectionViewCell cell ?
+                cell.CreateContextMenuPreview() : null;
 
         private UIMenu GetMenuForViewModel(AlbumViewModel vm)
         {
@@ -124,6 +139,11 @@ namespace Stylophone.iOS.ViewControllers
             var addToPlaylistAction = Binder.GetCommandAction(Strings.ContextMenuAddToPlaylist, "music.note.list", vm.AddToPlaylistCommand);
 
             return UIMenu.Create(new[] { playAction, addToQueueAction, addToPlaylistAction });
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            GridLayoutHelper.FollowSafeArea(CollectionView);
         }
 
         private CGSize? _incomingSize;
@@ -133,6 +153,20 @@ namespace Stylophone.iOS.ViewControllers
 
             // Keep track of the incoming size, since when we invalidate the collectionview's size won't have updated yet
             _incomingSize = toSize;
+            InvalidateItemSizes();
+        }
+
+        public override void ViewSafeAreaInsetsDidChange()
+        {
+            base.ViewSafeAreaInsetsDidChange();
+
+            // Sidebars showing up or going away change the room left for the grid
+            _incomingSize = null;
+            InvalidateItemSizes();
+        }
+
+        private void InvalidateItemSizes()
+        {
             var invalidation = new UICollectionViewFlowLayoutInvalidationContext();
             invalidation.InvalidateFlowLayoutDelegateMetrics = true;
 
@@ -142,16 +176,16 @@ namespace Stylophone.iOS.ViewControllers
         [Export("collectionView:layout:sizeForItemAtIndexPath:")]
         public CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            var referenceSize = _incomingSize ?? collectionView.Frame.Size;
-            var size = new CGSize(192, 192);
+            var width = GridLayoutHelper.GetContentWidth(collectionView, (_incomingSize ?? collectionView.Frame.Size).Width);
 
-            if (referenceSize.Width < 600)
-                size = new CGSize(148, 148);
+            // Smaller albums on narrower grids
+            var minSize = 192;
+            if (width < 536)
+                minSize = 148;
+            if (width < 286)
+                minSize = 120;
 
-            if (referenceSize.Width < 350 || referenceSize.Width == 490) 
-                size = new CGSize(120, 120);
-
-            return size;
+            return GridLayoutHelper.GetItemSize(collectionView, width, minSize);
         }
 
         [Export("searchBar:textDidChange:")]
