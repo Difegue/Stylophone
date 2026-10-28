@@ -18,6 +18,7 @@ namespace Stylophone.Common.Services
     {
         public SKImage ArtBitmap { get; set; }
         public QuantizedColor DominantColor { get; set; }
+        public QuantizedColor VibrantColor { get; set; }
     }
 
     public class AlbumArtService
@@ -117,7 +118,7 @@ namespace Stylophone.Common.Services
                 result.ArtBitmap = SKImage.FromBitmap(bitmap);
 
                 if (calculateDominantColor)
-                    result.DominantColor = GetDominantColor(bitmap);
+                    (result.DominantColor, result.VibrantColor) = GetArtColors(bitmap);
 
                 return result;
             }
@@ -210,15 +211,13 @@ namespace Stylophone.Common.Services
             return result;
         }
 
-        private QuantizedColor GetDominantColor(SKBitmap art)
+        private (QuantizedColor dominant, QuantizedColor vibrant) GetArtColors(SKBitmap art)
         {
-            // Get dominant color of albumart
+            // Get dominant and most vivid colors of albumart
             var smallArt = art.Resize(new SKImageInfo(50, 50), SKFilterQuality.Low);
 
             var colorThief = new ColorThief();
-            var quantizedColor = colorThief.GetColor(smallArt);
-
-            return quantizedColor;
+            return (colorThief.GetColor(smallArt), colorThief.GetVibrantColor(smallArt));
         }
 
 

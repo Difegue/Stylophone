@@ -72,7 +72,7 @@ namespace Stylophone.Common.ViewModels
 
             File = file;
 
-            _dispatcherService.ExecuteOnUIThreadAsync(() => DominantColor = _interop.GetAccentColor());
+            _dispatcherService.ExecuteOnUIThreadAsync(() => DominantColor = VibrantColor = _interop.GetAccentColor());
         }
 
         public IMpdFile File { get; }
@@ -85,6 +85,10 @@ namespace Stylophone.Common.ViewModels
         
         [ObservableProperty]
         private SKColor _dominantColor;
+
+        // Most vivid color of the album art, for accents that should stand out
+        [ObservableProperty]
+        private SKColor _vibrantColor;
 
         [ObservableProperty]
         private bool _isLight;
@@ -156,6 +160,7 @@ namespace Stylophone.Common.ViewModels
                 if (calculateDominantColor)
                 {
                     DominantColor = art.DominantColor.Color;
+                    VibrantColor = art.VibrantColor.Color;
                     IsLight = !(art.DominantColor.IsDark);
                 }
 
@@ -165,7 +170,9 @@ namespace Stylophone.Common.ViewModels
 
         public void Dispose()
         {
-            AlbumArt?.Dispose();
+            // Views showing this track can still have art updates queued on the UI thread: release the art after them
+            var albumArt = AlbumArt;
+            _dispatcherService.ExecuteOnUIThreadAsync(() => albumArt?.Dispose());
         }
 
         public override string ToString()

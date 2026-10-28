@@ -111,6 +111,47 @@ namespace Stylophone.Common.Helpers
         }
 
         /// <summary>
+        ///     Pick the most vivid color of the image, and make it saturated and bright enough to work as an accent.
+        ///     Unlike <see cref="GetColor"/>, swatches aren't averaged together, so the color doesn't get muddied.
+        /// </summary>
+        /// <param name="sourceImage">The source image.</param>
+        /// <param name="colorCount">How many swatches to choose from.</param>
+        /// <param name="quality">See <see cref="GetColor"/>.</param>
+        /// <param name="ignoreWhite">if set to <c>true</c> [ignore white].</param>
+        /// <returns></returns>
+        public QuantizedColor GetVibrantColor(SKBitmap sourceImage, int colorCount = 8, int quality = DefaultQuality, bool ignoreWhite = DefaultIgnoreWhite)
+        {
+            var palette = GetPalette(sourceImage, colorCount, quality, ignoreWhite);
+
+            if (palette.Count == 0)
+            {
+                return new QuantizedColor(SKColors.Gray, 1);
+            }
+            float Saturation(QuantizedColor c) { c.Color.ToHsl(out _, out var s, out _); return s / 100; }
+            float Lightness(QuantizedColor c) { c.Color.ToHsl(out _, out _, out var l); return l / 100; }
+
+            // Like Android's Palette, only consider colorful swatches whose lightness doesn't wash out their hue
+            var candidates = palette.Where(c => Saturation(c) >= 0.25 && Lightness(c) is >= 0.15f and <= 0.85f).ToList();
+            if (candidates.Count == 0)
+            {
+                candidates = palette;
+            }
+
+            var highestPopulation = candidates.Max(c => c.Population);
+            var vibrant = candidates.OrderByDescending(c =>
+                Mmcq.CreateComparisonValue(Saturation(c), 1, Lightness(c), 0.5, c.Population, highestPopulation)).First();
+
+            vibrant.Color.ToHsl(out var hue, out var saturation, out var lightness);
+
+            // Leave grays alone, as boosting their saturation would make up a hue
+            var vibrantColor = saturation < 10 ?
+                SKColor.FromHsl(hue, saturation, Math.Min(Math.Max(lightness, 45), 65)) :
+                SKColor.FromHsl(hue, Math.Max(saturation, 60), Math.Min(Math.Max(lightness, 45), 60));
+
+            return new QuantizedColor(vibrantColor, vibrant.Population);
+        }
+
+        /// <summary>
         ///     Use the median cut algorithm to cluster similar colors.
         /// </summary>
         /// <param name="sourceImage">The source image.</param>
