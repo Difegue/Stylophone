@@ -26,7 +26,7 @@
                                         <constraint firstAttribute="width" constant="96" id="prh-5R-Det"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There's no music here right now." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qxc-07-gjr" customClass="LocalizedLabel">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There's no music here right now." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qxc-07-gjr" customClass="LocalizedLabel">
                                     <rect key="frame" x="82.666666666666686" y="227.66666666666666" width="265" height="20.333333333333343"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -35,7 +35,7 @@
                                         <userDefinedRuntimeAttribute type="string" keyPath="stringIdentifier" value="EmptyQueueTitle"/>
                                     </userDefinedRuntimeAttributes>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0h-jP-Tr6" customClass="LocalizedLabel">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0h-jP-Tr6" customClass="LocalizedLabel">
                                     <rect key="frame" x="194.33333333333334" y="256" width="41.333333333333343" height="20.333333333333314"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -47,12 +47,16 @@
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstItem="Qxc-07-gjr" firstAttribute="centerX" secondItem="Qis-5w-PWd" secondAttribute="centerX" id="2lc-fz-fTp"/>
-                                <constraint firstItem="N0h-jP-Tr6" firstAttribute="centerX" secondItem="Qis-5w-PWd" secondAttribute="centerX" id="LNU-se-mAo"/>
-                                <constraint firstItem="TsB-oI-Eq7" firstAttribute="centerX" secondItem="Qis-5w-PWd" secondAttribute="centerX" id="Mga-y5-tWi"/>
+                                <constraint firstItem="Qxc-07-gjr" firstAttribute="centerX" secondItem="Qis-5w-PWd" secondAttribute="centerXWithinMargins" id="2lc-fz-fTp"/>
+                                <constraint firstItem="N0h-jP-Tr6" firstAttribute="centerX" secondItem="Qis-5w-PWd" secondAttribute="centerXWithinMargins" id="LNU-se-mAo"/>
+                                <constraint firstItem="TsB-oI-Eq7" firstAttribute="centerX" secondItem="Qis-5w-PWd" secondAttribute="centerXWithinMargins" id="Mga-y5-tWi"/>
                                 <constraint firstItem="TsB-oI-Eq7" firstAttribute="centerY" secondItem="Qis-5w-PWd" secondAttribute="centerY" constant="-32" id="kTV-Lx-WMX"/>
                                 <constraint firstItem="N0h-jP-Tr6" firstAttribute="top" secondItem="Qxc-07-gjr" secondAttribute="bottom" constant="8" symbolic="YES" id="lfF-C7-juF"/>
                                 <constraint firstItem="Qxc-07-gjr" firstAttribute="top" secondItem="TsB-oI-Eq7" secondAttribute="bottom" constant="16" id="mdp-fG-Ypd"/>
+                                <constraint firstItem="Qxc-07-gjr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Qis-5w-PWd" secondAttribute="leadingMargin" id="eQL-ld-Ttl"/>
+                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="Qxc-07-gjr" secondAttribute="trailing" id="eQT-tr-Ttl"/>
+                                <constraint firstItem="N0h-jP-Tr6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Qis-5w-PWd" secondAttribute="leadingMargin" id="eQL-ld-Dsc"/>
+                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="N0h-jP-Tr6" secondAttribute="trailing" id="eQT-tr-Dsc"/>
                             </constraints>
                         </view>
                         <prototypes>

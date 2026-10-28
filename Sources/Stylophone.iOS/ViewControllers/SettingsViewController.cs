@@ -122,6 +122,11 @@ namespace Stylophone.iOS.ViewControllers
                 ViewModel.RetryConnection();
             };
 
+            // Line the server outputs up with the other rows by nuking their margins
+            ServerOutputsTable.PreservesSuperviewLayoutMargins = true;
+            ServerOutputsTable.InsetsLayoutMarginsFromSafeArea = false;
+            ServerOutputsTable.DirectionalLayoutMargins = NSDirectionalEdgeInsets.Zero;
+
             var outputsDataSource = new ServerOutputsDataSource(ServerOutputsTable, ViewModel.Outputs);
 
             ServerOutputsTable.DataSource = outputsDataSource;

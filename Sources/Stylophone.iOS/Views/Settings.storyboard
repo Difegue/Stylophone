@@ -318,8 +318,8 @@
                                                 </tableView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Zm5-hy-gFk" secondAttribute="trailing" constant="-16" id="Ga0-ss-lY8"/>
-                                                <constraint firstItem="Zm5-hy-gFk" firstAttribute="leading" secondItem="afr-Mx-hsq" secondAttribute="leadingMargin" constant="-16" id="mMF-cf-eCt"/>
+                                                <constraint firstAttribute="trailing" secondItem="Zm5-hy-gFk" secondAttribute="trailing" id="Ga0-ss-lY8"/>
+                                                <constraint firstItem="Zm5-hy-gFk" firstAttribute="leading" secondItem="afr-Mx-hsq" secondAttribute="leading" id="mMF-cf-eCt"/>
                                                 <constraint firstItem="Zm5-hy-gFk" firstAttribute="top" secondItem="afr-Mx-hsq" secondAttribute="topMargin" id="oId-R3-FNu"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="Zm5-hy-gFk" secondAttribute="bottom" id="rSf-EI-nG6"/>
                                             </constraints>
@@ -355,7 +355,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="R7N-Vk-Igy" secondAttribute="trailing" constant="20" symbolic="YES" id="K7X-XW-u0X"/>
                                                 <constraint firstItem="NCg-vq-ucy" firstAttribute="centerY" secondItem="cMx-ar-acz" secondAttribute="centerY" id="OSw-54-GdV"/>
-                                                <constraint firstItem="NCg-vq-ucy" firstAttribute="leading" secondItem="cMx-ar-acz" secondAttribute="leading" constant="20" symbolic="YES" id="P8Y-8P-XJB"/>
+                                                <constraint firstItem="NCg-vq-ucy" firstAttribute="leading" secondItem="cMx-ar-acz" secondAttribute="leadingMargin" id="P8Y-8P-XJB"/>
                                                 <constraint firstItem="R7N-Vk-Igy" firstAttribute="leadingMargin" secondItem="NCg-vq-ucy" secondAttribute="trailing" constant="16" id="yCQ-rr-Qa0"/>
                                                 <constraint firstItem="R7N-Vk-Igy" firstAttribute="centerY" secondItem="cMx-ar-acz" secondAttribute="centerY" id="yI6-xA-Ie3"/>
                                             </constraints>
@@ -375,7 +375,7 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="LqQ-fU-y0K" firstAttribute="leading" secondItem="t4y-dt-6yL" secondAttribute="leading" constant="20" symbolic="YES" id="IB3-Rk-9s0"/>
+                                                <constraint firstItem="LqQ-fU-y0K" firstAttribute="leading" secondItem="t4y-dt-6yL" secondAttribute="leadingMargin" id="IB3-Rk-9s0"/>
                                                 <constraint firstItem="LqQ-fU-y0K" firstAttribute="centerY" secondItem="t4y-dt-6yL" secondAttribute="centerY" id="mxP-RG-vjK"/>
                                                 <constraint firstAttribute="trailing" secondItem="LqQ-fU-y0K" secondAttribute="trailing" constant="20" symbolic="YES" id="w51-rS-6zl"/>
                                             </constraints>
@@ -397,7 +397,7 @@
                                             <constraints>
                                                 <constraint firstItem="hyY-4h-Tw9" firstAttribute="centerY" secondItem="hCI-mQ-Nzb" secondAttribute="centerY" id="4T5-A9-Att"/>
                                                 <constraint firstAttribute="trailing" secondItem="hyY-4h-Tw9" secondAttribute="trailing" constant="20" symbolic="YES" id="UA1-yY-Ccf"/>
-                                                <constraint firstItem="hyY-4h-Tw9" firstAttribute="leading" secondItem="hCI-mQ-Nzb" secondAttribute="leading" constant="20" symbolic="YES" id="ymL-ex-xaX"/>
+                                                <constraint firstItem="hyY-4h-Tw9" firstAttribute="leading" secondItem="hCI-mQ-Nzb" secondAttribute="leadingMargin" id="ymL-ex-xaX"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -441,7 +441,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="About" id="GY0-TS-0if">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="90" id="Is7-kb-42L">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Is7-kb-42L">
                                         <rect key="frame" x="20" y="1071.6666564941406" width="353" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Is7-kb-42L" id="9aU-U9-lJz">
@@ -490,6 +490,8 @@
                                                 <constraint firstItem="0tG-nc-Geh" firstAttribute="leading" secondItem="24S-8r-pAn" secondAttribute="trailing" constant="8" symbolic="YES" id="shT-ZX-VwW"/>
                                                 <constraint firstItem="24S-8r-pAn" firstAttribute="leading" secondItem="9aU-U9-lJz" secondAttribute="leadingMargin" id="vMi-M8-Br4"/>
                                                 <constraint firstItem="24S-8r-pAn" firstAttribute="centerY" secondItem="9aU-U9-lJz" secondAttribute="centerY" id="y4Z-bA-oFO"/>
+                                                <constraint firstItem="24S-8r-pAn" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9aU-U9-lJz" secondAttribute="top" constant="13" id="Abt-ic-Top"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="2eY-wb-eIU" secondAttribute="bottom" constant="16" id="Abt-tx-Btm"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -506,7 +508,7 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="8NH-3O-sbO" firstAttribute="leading" secondItem="VIk-fl-d3O" secondAttribute="leading" constant="20" symbolic="YES" id="aFr-48-Q5s"/>
+                                                <constraint firstItem="8NH-3O-sbO" firstAttribute="leading" secondItem="VIk-fl-d3O" secondAttribute="leadingMargin" id="aFr-48-Q5s"/>
                                                 <constraint firstAttribute="trailing" secondItem="8NH-3O-sbO" secondAttribute="trailing" constant="20" symbolic="YES" id="dGx-P6-lhO"/>
                                                 <constraint firstItem="8NH-3O-sbO" firstAttribute="centerY" secondItem="VIk-fl-d3O" secondAttribute="centerY" id="qiI-WV-li8"/>
                                             </constraints>
@@ -527,7 +529,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="iBX-d3-ohi" secondAttribute="trailing" constant="20" symbolic="YES" id="JAw-AR-SFO"/>
                                                 <constraint firstItem="iBX-d3-ohi" firstAttribute="centerY" secondItem="iGY-wp-Q7u" secondAttribute="centerY" id="U6U-k4-Vlu"/>
-                                                <constraint firstItem="iBX-d3-ohi" firstAttribute="leading" secondItem="iGY-wp-Q7u" secondAttribute="leading" constant="20" symbolic="YES" id="wAj-Ra-c9q"/>
+                                                <constraint firstItem="iBX-d3-ohi" firstAttribute="leading" secondItem="iGY-wp-Q7u" secondAttribute="leadingMargin" id="wAj-Ra-c9q"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
