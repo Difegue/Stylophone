@@ -28,7 +28,7 @@ namespace Stylophone.iOS.ViewControllers
         public PropertyBinder<LocalPlaybackViewModel> LocalPlaybackBinder { get; private set; }
         private PropertyBinder<TrackViewModel> _trackBinder;
 
-        private UILabel upNextView = new UILabel();
+        private FlexibleTitleView upNextView = new FlexibleTitleView();
 
         public override void AwakeFromNib()
         {
@@ -42,11 +42,12 @@ namespace Stylophone.iOS.ViewControllers
 
             ViewModel.PropertyChanged += OnVmPropertyChanged;
             NavigationItem.TitleView = upNextView;
-            upNextView.TextAlignment = UITextAlignment.Right;
-            upNextView.Lines = 2;
-            upNextView.AdjustsFontForContentSizeCategory = true;
-            upNextView.AdjustsFontSizeToFitWidth = true;
-            upNextView.AdjustsLetterSpacingToFitWidth = true;
+            upNextView.Label.TextAlignment = UITextAlignment.Right;
+            upNextView.Label.Lines = 2;
+            upNextView.Label.AdjustsFontForContentSizeCategory = true;
+            upNextView.Label.AdjustsFontSizeToFitWidth = true;
+            upNextView.Label.AdjustsLetterSpacingToFitWidth = true;
+            upNextView.InvalidateIntrinsicContentSize();
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
             // Bind
@@ -110,7 +111,7 @@ namespace Stylophone.iOS.ViewControllers
 
             // Different multi-line behavior depending on size classes
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
-                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular && 
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular &&
                 UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
                 TrackTitle.Lines = 2;
@@ -152,8 +153,6 @@ namespace Stylophone.iOS.ViewControllers
                 TrackSlider.AccessibilityValue = ViewModel.TimeListened;
             };
 
-            var upNextTransformer = NSValueTransformer.GetValueTransformer(nameof(NextTrackToStringValueTransformer));
-
             // Full View Binding
             Binder.Bind<string>(ElapsedTime, "text", nameof(ViewModel.TimeListened));
             Binder.Bind<string>(RemainingTime, "text", nameof(ViewModel.TimeRemaining));
@@ -161,7 +160,7 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<double>(TrackSlider, "maximumValue", nameof(ViewModel.MaxTimeValue));
             Binder.Bind<string>(TrackSlider, "accessibilityValue", nameof(ViewModel.TimeListened));
 
-            Binder.Bind<TrackViewModel>(upNextView, "text", nameof(ViewModel.NextTrack), valueTransformer:upNextTransformer);
+            UpdateUpNext();
             UpdateFullView(ViewModel.CurrentTrack);
 
             UpdateButton(PlayPauseButton, ViewModel.PlayButtonContent);
@@ -229,6 +228,9 @@ namespace Stylophone.iOS.ViewControllers
                 UpdateButton(RepeatButton, ViewModel.RepeatIcon);
             }
 
+            if (e.PropertyName == nameof(ViewModel.NextTrack))
+                UpdateUpNext();
+
             if (e.PropertyName == nameof(ViewModel.CurrentTimeValue))
             {
                 var progress = (float)(ViewModel.CurrentTimeValue / ViewModel.MaxTimeValue);
@@ -268,6 +270,15 @@ namespace Stylophone.iOS.ViewControllers
         private void UpdateButton(UIBarButtonItem button, string systemImg) =>
             button?.SetSymbolImage(UIImage.GetSystemImage(systemImg), 
                 NSSymbolReplaceContentTransition.CreateMagicTransition(NSSymbolReplaceContentTransition.CreateReplaceUpUpTransition()));
+
+        private void UpdateUpNext()
+        {
+            var upNextTransformer = NSValueTransformer.GetValueTransformer(nameof(NextTrackToStringValueTransformer));
+            var text = ViewModel.NextTrack == null ? "" :
+                upNextTransformer.TransformedValue(new NSWrapper { ManagedObject = ViewModel.NextTrack })?.ToString();
+
+            upNextView.Text = text;
+        }
 
         private UIAction _consumeAction;
         private UIBarButtonItem CreateSettingsButton()
