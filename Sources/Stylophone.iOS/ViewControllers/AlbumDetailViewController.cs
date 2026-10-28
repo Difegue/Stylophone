@@ -33,14 +33,12 @@ namespace Stylophone.iOS.ViewControllers
 		public PropertyBinder<AlbumDetailViewModel> Binder => new(ViewModel);
 
 		private PropertyBinder<AlbumViewModel> _albumBinder;
-		private UIBarButtonItem _settingsBtn;
+		private AlbumViewModel _album;
 
 		public override void AwakeFromNib()
 		{
 			base.AwakeFromNib();
-			TraitCollectionDidChange(null);
 			NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
-			
 			var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
 				GetRowContextMenu, GetRowSwipeActions, false, OnScroll, OnTap);
 			TableView.DataSource = trackDataSource;
@@ -50,6 +48,20 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(EmptyView, "hidden", nameof(ViewModel.IsSourceEmpty),
 				valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 			Binder.Bind<string>(AlbumTrackInfo, "text", nameof(ViewModel.PlaylistInfo));
+
+			// Refit the header once the binding has updated its text
+			ViewModel.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == nameof(ViewModel.PlaylistInfo))
+					UIApplication.SharedApplication.BeginInvokeOnMainThread(View.SetNeedsLayout);
+			};
+		}
+
+		public override void ViewDidLoad()
+		{
+			base.ViewDidLoad();
+			DetailHeaderHelper.FollowSafeArea(HeaderBlur, BackgroundArt);
+		}
 		}
 
         private void OnTap(NSIndexPath indexPath) =>
@@ -57,34 +69,31 @@ namespace Stylophone.iOS.ViewControllers
 
         private void OnScroll(UIScrollView scrollView)
         {
-            if (scrollView.ContentOffset.Y > 192)
-            {
-				Title = ViewModel?.Item.Name;
-				NavigationItem.RightBarButtonItem = _settingsBtn;
-			}	
-			else
-            {
-				Title = "";
-				NavigationItem.RightBarButtonItem = null;
-			}
+            DetailHeaderHelper.UpdateTopEdgeEffect(TableView);
+            DetailHeaderHelper.UpdateHeaderFade(TableView, HeaderBlur.ContentView);
+			UpdateNavigationTitle();
 		}
 
-        public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
-        {
-            base.TraitCollectionDidChange(previousTraitCollection);
+		private void UpdateNavigationTitle()
+		{
+			// Regular widths show the title in the header next to the art, so only put it in the bar once it scrolls away
+			var showsHeaderTitle = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular &&
+				!DetailHeaderHelper.IsUnderNavigationBar(TableView, AlbumTitle);
+			var title = showsHeaderTitle ? null : _album?.Name;
 
-			var headerView = TableView.TableHeaderView;
-			CGRect newFrame = headerView.Frame;
-			if (TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
-			{
-				newFrame.Height = 242;
-			}
-			else
-			{
-				newFrame.Height = 296;
-			}
-			headerView.Frame = newFrame;
-			TableView.TableHeaderView = headerView;
+			if (Title != title)
+				Title = title;
+		}
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+			// The header's content depends on size classes and the album, so fit it whenever the layout changes
+			DetailHeaderHelper.UpdateHeaderHeight(TableView);
+			DetailHeaderHelper.UpdateTopEdgeEffect(TableView);
+			DetailHeaderHelper.UpdateHeaderFade(TableView, HeaderBlur.ContentView);
+			UpdateNavigationTitle();
 		}
 
 		void IPreparableViewController.Prepare(object parameter)
@@ -106,23 +115,13 @@ namespace Stylophone.iOS.ViewControllers
 			_albumBinder.Bind<bool>(AlbumArtLoadingIndicator, "animating", nameof(album.AlbumArtLoaded),
 				valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 
-			_albumBinder.BindButton(PlayButton, Strings.ContextMenuPlay, album.PlayAlbumCommand);
-			PlayButton.Layer.CornerRadius = 8;
-			_albumBinder.BindButton(AddToQueueButton, Strings.ContextMenuAddToQueue, album.AddAlbumCommand);
-			AddToQueueButton.Layer.CornerRadius = 8;
-			_albumBinder.BindButton(PlaylistButton, Strings.ContextMenuAddToPlaylist, album.AddToPlaylistCommand);
-			PlaylistButton.Layer.CornerRadius = 8;
-
-			_settingsBtn = CreateSettingsButton();
+			// The album's actions live in the navigation bar, with "Play" as the main action
+			NavigationItem.RightBarButtonItems = new[] { CreateSettingsButton(), CreatePlayButton(album) };
 
 			var imageConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer));
-			var colorConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIColorValueTransformer));
 
 			_albumBinder.Bind<SKImage>(AlbumArt, "image", nameof(album.AlbumArt), valueTransformer: imageConverter);
 			_albumBinder.Bind<SKImage>(BackgroundArt, "image", nameof(album.AlbumArt), valueTransformer: imageConverter);
-			_albumBinder.Bind<SKColor>(PlayButton, "backgroundColor", nameof(album.DominantColor), valueTransformer: colorConverter);
-			_albumBinder.Bind<SKColor>(AddToQueueButton, "backgroundColor", nameof(album.DominantColor), valueTransformer: colorConverter);
-			_albumBinder.Bind<SKColor>(PlaylistButton, "backgroundColor", nameof(album.DominantColor), valueTransformer: colorConverter);
 
 			// Add radius to AlbumArt
 			AlbumArt.Layer.CornerRadius = 8;
@@ -132,6 +131,20 @@ namespace Stylophone.iOS.ViewControllers
 			ArtContainer.Layer.ShadowOpacity = 0.5F;
 			ArtContainer.Layer.ShadowOffset = new CGSize(0, 0);
 			ArtContainer.Layer.ShadowRadius = 4;
+
+			if (_album != null)
+				_album.PropertyChanged -= OnAlbumPropertyChanged;
+			_album = album;
+			_album.PropertyChanged += OnAlbumPropertyChanged;
+			UpdateNavigationTitle();
+			View.SetNeedsLayout();
+		}
+
+		private void OnAlbumPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			// Refit the header once the binding has updated the artists
+			if (e.PropertyName == nameof(AlbumViewModel.Artist))
+				UIApplication.SharedApplication.BeginInvokeOnMainThread(View.SetNeedsLayout);
 		}
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)
@@ -167,6 +180,12 @@ namespace Stylophone.iOS.ViewControllers
 			return UISwipeActionsConfiguration.FromActions(new[] { action });
 		}
 
+		// Done is the prominent style on iOS 26
+		private static UIBarButtonItem CreatePlayButton(AlbumViewModel album) =>
+			new UIBarButtonItem(UIImage.GetSystemImage("play.fill"), UIBarButtonItemStyle.Done, (s, e) => album.PlayAlbumCommand.Execute(null))
+			{
+				AccessibilityLabel = Strings.ContextMenuPlay
+			};
 
 		private UIBarButtonItem CreateSettingsButton()
 		{

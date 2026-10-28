@@ -13,9 +13,6 @@ namespace Stylophone.iOS.ViewControllers
 	partial class PlaylistViewController
 	{
 		[Outlet]
-		UIKit.UIButton AddToQueueButton { get; set; }
-
-		[Outlet]
 		UIKit.UIImageView AlbumArt { get; set; }
 
 		[Outlet]
@@ -28,13 +25,10 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIImageView BackgroundArt { get; set; }
 
 		[Outlet]
-		UIKit.UIButton DeleteButton { get; set; }
-
-		[Outlet]
 		UIKit.UIView EmptyView { get; set; }
 
 		[Outlet]
-		UIKit.UIButton PlayButton { get; set; }
+		UIKit.UIVisualEffectView HeaderBlur { get; set; }
 
 		[Outlet]
 		UIKit.UILabel PlaylistArtists { get; set; }
@@ -44,14 +38,10 @@ namespace Stylophone.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel PlaylistTitle { get; set; }
-		
+
+
 		void ReleaseDesignerOutlets ()
 		{
-			if (AddToQueueButton != null) {
-				AddToQueueButton.Dispose ();
-				AddToQueueButton = null;
-			}
-
 			if (AlbumArt != null) {
 				AlbumArt.Dispose ();
 				AlbumArt = null;
@@ -72,24 +62,14 @@ namespace Stylophone.iOS.ViewControllers
 				BackgroundArt = null;
 			}
 
-			if (DeleteButton != null) {
-				DeleteButton.Dispose ();
-				DeleteButton = null;
-			}
-
-			if (PlayButton != null) {
-				PlayButton.Dispose ();
-				PlayButton = null;
-			}
-
 			if (EmptyView != null) {
 				EmptyView.Dispose ();
 				EmptyView = null;
 			}
 
-			if (PlaylistTitle != null) {
-				PlaylistTitle.Dispose ();
-				PlaylistTitle = null;
+			if (HeaderBlur != null) {
+				HeaderBlur.Dispose ();
+				HeaderBlur = null;
 			}
 
 			if (PlaylistInfo != null) {
@@ -100,6 +80,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (PlaylistArtists != null) {
 				PlaylistArtists.Dispose ();
 				PlaylistArtists = null;
+			}
+
+			if (PlaylistTitle != null) {
+				PlaylistTitle.Dispose ();
+				PlaylistTitle = null;
 			}
 		}
 	}
