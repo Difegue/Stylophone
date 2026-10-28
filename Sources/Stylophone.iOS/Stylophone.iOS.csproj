@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net10.0-ios26.5</TargetFrameworks>
+    <TargetFrameworks>net10.0-ios26.5;net10.0-maccatalyst26.5</TargetFrameworks>
     <ValidateXcodeVersion>false</ValidateXcodeVersion>
     <!--RuntimeIdentifiers>maccatalyst-arm64;maccatalyst-x64</RuntimeIdentifiers-->
     <OutputType>Exe</OutputType>

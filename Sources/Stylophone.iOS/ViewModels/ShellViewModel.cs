@@ -29,13 +29,21 @@ namespace Stylophone.iOS.ViewModels
 
         internal void Initialize(UICollectionView collectionView, UICollectionViewDiffableDataSource<NSString, NavigationSidebarItem> sidebarDataSource)
         {
+            // This can be called again if the system recreates the main window, so avoid double subscriptions
+            var isReinitializing = _sidebarDataSource != null;
+
             _sidebarDataSource = sidebarDataSource;
             _collectionView = collectionView;
 
             var concreteNavService = _navigationService as NavigationService;
+            concreteNavService.Navigated -= UpdateNavigationViewSelection;
             concreteNavService.Navigated += UpdateNavigationViewSelection;
 
+            PropertyChanged -= UpdateDatabaseIndicator;
             PropertyChanged += UpdateDatabaseIndicator;
+
+            if (isReinitializing)
+                UpdatePlaylistNavigation();
         }
 
         private void UpdateDatabaseIndicator(object sender, PropertyChangedEventArgs e)

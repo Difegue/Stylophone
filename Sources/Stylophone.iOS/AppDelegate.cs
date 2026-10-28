@@ -25,13 +25,16 @@ namespace Stylophone.iOS
     {
         public IServiceProvider Services { get; }
 
-        [Export("window")]
+        // Main window, owned by the main scene (see SceneDelegate)
         public UIWindow Window { get; set; }
 
         public event EventHandler<EventArgs> ApplicationWillResign;
         public event EventHandler<EventArgs> ApplicationWillBecomeActive;
 
         public UISplitViewController RootViewController { get; set; }
+
+        private NSObject _willResignActiveObserver;
+        private NSObject _didBecomeActiveObserver;
 
         public UIColor AppColor => UIColor.FromDynamicProvider((traitCollection) =>
         {
@@ -61,25 +64,19 @@ namespace Stylophone.iOS
             AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
             //AVAudioSession.SharedInstance().SetPrefersNoInterruptionsFromSystemAlerts(true, out _);
 
+            // With the UIScene lifecycle, activation events go to the scene delegates instead of the app delegate.
+            // The app-wide notifications are still posted though, so use those to keep our events app-wide.
+            _willResignActiveObserver = UIApplication.Notifications.ObserveWillResignActive((s, e) => ApplicationWillResign?.Invoke(this, EventArgs.Empty));
+            _didBecomeActiveObserver = UIApplication.Notifications.ObserveDidBecomeActive((s, e) => ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty));
+
             // Override point for customization after application launch
             Task.Run(async () => await InitializeApplicationAsync());
-
-            RootViewController = Window.RootViewController as UISplitViewController;
-            Window.TintColor = AppColor;
 
             return true;
         }
 
-        [Export("applicationWillResignActive:")]
-        public void OnResignActivation(UIApplication application)
         {
-            ApplicationWillResign?.Invoke(this, EventArgs.Empty);
-        }
 
-        [Export("applicationDidBecomeActive:")]
-        public void OnActivated(UIApplication application)
-        {
-            ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty);
         }
 
         public override void BuildMenu(IUIMenuBuilder builder)
