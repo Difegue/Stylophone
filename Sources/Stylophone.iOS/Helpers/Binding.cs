@@ -23,6 +23,9 @@ namespace Stylophone.iOS.Helpers
         public PropertyInfo Property { get; set; }
         public NSValueTransformer ValueTransformer { get; set; }
 
+        // Set while the NSObject is being updated from the property, so two-way bindings don't send that change back (see UpdateProperty)
+        private bool _isUpdatingNSObject;
+
         /// <summary>
         /// Update the NSObject's keypath with the given value from the property.
         /// </summary>
@@ -47,7 +50,10 @@ namespace Stylophone.iOS.Helpers
                         throw new ArgumentNullException("Backing NSObject is null!", new Exception());
 
                     if (!(nativeValue is NSNull))
+                    {
+                        _isUpdatingNSObject = true;
                         Object.SetValueForKeyPath(nativeValue, Keypath);
+                    }
                 }
                 catch (ObjectDisposedException)
                 {
@@ -57,11 +63,19 @@ namespace Stylophone.iOS.Helpers
                     Debugger.Break();
 #endif
                 }
+                finally
+                {
+                    _isUpdatingNSObject = false;
+                }
             });
         }
 
         public void UpdateProperty<T>(ObservableObject targetObservable, NSObservedChange change)
         {
+            // Ignore a property change coming from ourselves in the case of 2way bindings
+            if (_isUpdatingNSObject)
+                return;
+
             var nativeValue = change.NewValue;
 
             // Apply the ValueTransformer in reverse if it is set.
