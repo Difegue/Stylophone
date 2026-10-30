@@ -30,6 +30,13 @@ namespace Stylophone.iOS.Helpers
         [Export("glassClear")]
         public bool Clear { get; set; }
 
+        /// <summary>
+        /// Opaque version of the label color, for text and glyphs on glass. Macs' label color is slightly translucent (like AppKit's),
+        /// which lets what's behind the glass show through them.
+        /// </summary>
+        public static UIColor OpaqueLabelColor { get; } =
+            UIColor.FromDynamicProvider(traits => UIColor.Label.GetResolvedColor(traits).ColorWithAlpha(1));
+
         private UIColor _glassTintColor;
 
         public GlassEffectView(NativeHandle handle) : base(handle)

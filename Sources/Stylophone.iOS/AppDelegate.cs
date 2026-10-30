@@ -156,7 +156,7 @@ namespace Stylophone.iOS
                 SentrySdk.ConfigureScope(scope =>
                 {
                     scope.Release = assembly.Version.ToString();
-                    scope.SetTag("total_launch_count", launchCount);
+                    scope.SetTag("total_launch_count", launchCount.ToString());
                 });
 
                 SentrySdk.CaptureMessage($"{assembly.Name} - {assembly.Version} ");

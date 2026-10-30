@@ -1,3 +1,5 @@
+using System;
+using CoreGraphics;
 using Foundation;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.Services;
@@ -13,6 +15,10 @@ namespace Stylophone.iOS
     public class SceneDelegate : UIResponder, IUIWindowSceneDelegate
     {
         public const string ConfigurationName = "Default Configuration";
+
+        // Short Mac windows get the playback page's side by side layout, whose playback controls would go past the bottom of the window.
+        // From this height, they sit on the same line as the toolbar's buttons beside them.
+        private const float MacMinimumHeight = 441;
 
         [Export("window")]
         public UIWindow Window { get; set; }
@@ -37,6 +43,12 @@ namespace Stylophone.iOS
                 return;
             }
 
+            // Only the height needs raising, keep the system's minimum width
+            if (OperatingSystem.IsMacCatalyst() && windowScene.SizeRestrictions != null)
+            {
+                var minimumSize = windowScene.SizeRestrictions.MinimumSize;
+                windowScene.SizeRestrictions.MinimumSize = new CGSize(minimumSize.Width, Math.Max(minimumSize.Height, MacMinimumHeight));
+            }
 
             Window = new PassThroughBarsWindow(windowScene)
             {

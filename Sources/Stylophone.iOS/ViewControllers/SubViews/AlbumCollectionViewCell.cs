@@ -40,6 +40,9 @@ namespace Stylophone.iOS.ViewControllers
             Layer.ShadowOffset = new CGSize(0, 0);
             Layer.ShadowRadius = 4;
             Layer.ShadowPath = UIBezierPath.FromRoundedRect(Bounds, CornerRadius).CGPath;
+
+            // The album info sits on glass, which the default label color would let show through the text on Macs
+            AlbumName.TextColor = AlbumArtist.TextColor = GlassEffectView.OpaqueLabelColor;
         }
 
         public override void LayoutSubviews()

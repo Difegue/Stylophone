@@ -15,10 +15,14 @@
 		<string>pt</string>
 		<string>zh</string>
 	</array>
+	<key>CFBundleName</key>
+	<string>Stylophone</string>
 	<key>CFBundleShortVersionString</key>
 	<string>2.8.0</string>
 	<key>CFBundleVersion</key>
 	<string>2.8.0.0</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.music</string>
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
 	<key>MinimumOSVersion</key>

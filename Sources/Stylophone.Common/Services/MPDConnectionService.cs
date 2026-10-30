@@ -12,6 +12,12 @@ using Stylophone.Common.Interfaces;
 using MpcNET.Commands.Reflection;
 using Stylophone.Localization.Strings;
 using Stylophone.Common.Helpers;
+#if !DEBUG
+// Only used by Release builds' error reporting in SafelySendCommandAsync
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Stylophone.Common.ViewModels;
+using Sentry;
+#endif
 
 namespace Stylophone.Common.Services
 {
