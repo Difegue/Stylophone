@@ -154,8 +154,13 @@ namespace Stylophone.iOS.ViewControllers
         {
             base.ViewSafeAreaInsetsDidChange();
 
-            // Sidebars showing up or going away change the room left for the content. Wait for the current layout pass to end.
-            UIApplication.SharedApplication.BeginInvokeOnMainThread(UpdateLayoutSizeClass);
+            // Sidebars showing up or going away change the room left for the content, and the center of the bar that the "Up next" title follows
+            // (whose own size doesn't always change with them). Wait for the current layout pass to end.
+            UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
+            {
+                UpdateLayoutSizeClass();
+                upNextView.SetNeedsLayout();
+            });
         }
 
         public override void ViewWillLayoutSubviews()

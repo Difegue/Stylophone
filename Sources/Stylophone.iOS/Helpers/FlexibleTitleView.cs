@@ -50,13 +50,16 @@ namespace Stylophone.iOS.Helpers
             var width = nfloat.Min(size.Width, Bounds.Width);
             var height = nfloat.Min(size.Height, Bounds.Height);
 
-            // The room between the bar's buttons isn't centered when they differ on each side
+            // The room between the bar's buttons isn't centered when they differ on each side: center on the bar instead, like its titles.
+            // Bars can extend under sidebars and vertical bars, which their safe area leaves out.
             var centerX = Bounds.GetMidX();
             for (var view = Superview; view != null; view = view.Superview)
             {
                 if (view is UINavigationBar bar)
                 {
-                    centerX = ConvertPointFromView(new CGPoint(bar.Bounds.GetMidX(), 0), bar).X;
+                    var insets = bar.SafeAreaInsets;
+                    var barCenterX = bar.Bounds.GetMinX() + insets.Left + (bar.Bounds.Width - insets.Left - insets.Right) / 2;
+                    centerX = ConvertPointFromView(new CGPoint(barCenterX, 0), bar).X;
                     break;
                 }
             }
