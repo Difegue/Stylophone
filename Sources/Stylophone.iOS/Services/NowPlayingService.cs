@@ -81,6 +81,8 @@ namespace Stylophone.iOS.Services
             MPRemoteCommandCenter.Shared.NextTrackCommand.Enabled = isConnected;
             MPRemoteCommandCenter.Shared.ChangePlaybackPositionCommand.Enabled = isConnected;
             MPRemoteCommandCenter.Shared.TogglePlayPauseCommand.Enabled = isConnected;
+            MPRemoteCommandCenter.Shared.PlayCommand.Enabled = isConnected;
+            MPRemoteCommandCenter.Shared.PauseCommand.Enabled = isConnected;
             MPRemoteCommandCenter.Shared.ChangeRepeatModeCommand.Enabled = isConnected;
             MPRemoteCommandCenter.Shared.ChangeShuffleModeCommand.Enabled = isConnected;
             MPRemoteCommandCenter.Shared.StopCommand.Enabled = isConnected;
@@ -90,6 +92,19 @@ namespace Stylophone.iOS.Services
         {
             MPRemoteCommandCenter.Shared.TogglePlayPauseCommand.AddTarget((evt) => {
                 _mpdService.SafelySendCommandAsync(new PauseResumeCommand());
+                return MPRemoteCommandHandlerStatus.Success;
+            });
+
+            MPRemoteCommandCenter.Shared.PlayCommand.AddTarget((evt) => {
+                if (_mpdService.CurrentStatus.State == MpdState.Stop)
+                    _mpdService.SafelySendCommandAsync(new PlayCommand(0));
+                else
+                    _mpdService.SafelySendCommandAsync(new PauseResumeCommand(false));
+                return MPRemoteCommandHandlerStatus.Success;
+            });
+
+            MPRemoteCommandCenter.Shared.PauseCommand.AddTarget((evt) => {
+                _mpdService.SafelySendCommandAsync(new PauseResumeCommand(true));
                 return MPRemoteCommandHandlerStatus.Success;
             });
 
@@ -137,18 +152,22 @@ namespace Stylophone.iOS.Services
                 case MpdState.Play:
                     _silencePlayer?.Play(); 
                     _nowPlayingInfo.PlaybackRate = 1;
+                    SetMacPlaybackState(MPNowPlayingPlaybackState.Playing);
                     break;
                 case MpdState.Pause:
                     _silencePlayer?.Stop();
                     _nowPlayingInfo.PlaybackRate = 0;
+                    SetMacPlaybackState(MPNowPlayingPlaybackState.Paused);
                     break;
                 case MpdState.Stop:
                     _silencePlayer?.Stop();
                     _nowPlayingInfo.PlaybackRate = 0;
+                    SetMacPlaybackState(MPNowPlayingPlaybackState.Stopped);
                     break;
                 case MpdState.Unknown:
                     _silencePlayer?.Stop();
                     _nowPlayingInfo.PlaybackRate = 0;
+                    SetMacPlaybackState(MPNowPlayingPlaybackState.Unknown);
                     break;
                 default:
                     break;
@@ -158,6 +177,16 @@ namespace Stylophone.iOS.Services
             _nowPlayingInfo.PlaybackDuration = status.Duration.TotalSeconds;
 
             MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = _nowPlayingInfo;
+        }
+
+        /// <summary>
+        /// Macs show the Now Playing controls from this state (sending play or pause commands accordingly), where iOS goes by the audio session.
+        /// It isn't bound for Mac Catalyst, so it's set through KVC. (we're so back)
+        /// </summary>
+        private static void SetMacPlaybackState(MPNowPlayingPlaybackState state)
+        {
+            if (OperatingSystem.IsMacCatalyst())
+                MPNowPlayingInfoCenter.DefaultCenter.SetValueForKey(NSNumber.FromNUInt((nuint)(ulong)state), new NSString("playbackState"));
         }
 
         public async Task UpdateMetadataAsync(TrackViewModel track)

@@ -39,13 +39,21 @@ namespace Stylophone.iOS.Services
             var dialog = new AddToPlaylistViewController(_mpdService, allowExistingPlaylists);
             var navigationController = new UINavigationController(dialog);
 
+            // The Add button keeps the app's accent, even where the window's tint is changed (like on the playback page)
+            navigationController.View.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+
             // Custom size detent since the addToPlaylist view is quite small
             UISheetPresentationController uspc = (UISheetPresentationController)navigationController.PresentationController;
 
-            var detent = UISheetPresentationControllerDetent.Create(null, (context) => 240);
+            var detent = UISheetPresentationControllerDetent.Create(null, (context) => AddToPlaylistViewController.SheetHeight);
             uspc.Detents = new [] { detent };
 
-            InteropService.GetKeyWindow().RootViewController?.PresentViewController(navigationController, true, null);
+            // Present over whatever is already shown, or the dialog would never show up (nor complete)
+            var presenter = InteropService.GetPresentingViewController();
+            if (presenter == null)
+                return null;
+
+            presenter.PresentViewController(navigationController, true, null);
 
             var result = await dialog.CompletionTask;
 
@@ -96,7 +104,11 @@ namespace Stylophone.iOS.Services
                 confirmDialog.AddAction(cancelAction);
             }
 
-            InteropService.GetKeyWindow().RootViewController?.PresentViewController(confirmDialog, true, null);
+            var presenter = InteropService.GetPresentingViewController();
+            if (presenter == null)
+                return false;
+
+            presenter.PresentViewController(confirmDialog, true, null);
 
             return await tcs.Task;
         }

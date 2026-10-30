@@ -18,6 +18,7 @@ namespace Stylophone.Common.Services
     {
         public SKImage ArtBitmap { get; set; }
         public QuantizedColor DominantColor { get; set; }
+        public QuantizedColor VibrantColor { get; set; }
     }
 
     public class AlbumArtService
@@ -117,7 +118,7 @@ namespace Stylophone.Common.Services
                 result.ArtBitmap = SKImage.FromBitmap(bitmap);
 
                 if (calculateDominantColor)
-                    result.DominantColor = GetDominantColor(bitmap);
+                    (result.DominantColor, result.VibrantColor) = GetArtColors(bitmap);
 
                 return result;
             }
@@ -131,9 +132,13 @@ namespace Stylophone.Common.Services
             var foundUsableArt = false;
             var fileName = Miscellaneous.GetFileIdentifier(f);
 
-            // Try loading from art cache first
+            // Try loading from art cache first, and fetch the art again if what's cached can't be decoded
             if (await IsAlbumArtCachedAsync(f))
-                return await LoadImageFromFile(fileName);
+            {
+                var cachedArt = await LoadImageFromFile(fileName);
+                if (cachedArt != null)
+                    return cachedArt;
+            }
 
             // No cache, check if remote fetching is enabled before going further
             var isAlbumArtFetchingEnabled = _applicationStorageService.GetValue<bool>(nameof(SettingsViewModel.IsAlbumArtFetchingEnabled), true);
@@ -204,21 +209,20 @@ namespace Stylophone.Common.Services
                 return null;
             }
 
-            if (foundUsableArt)
+            // Only cache art that decodes, so downloads that were cut short get another try
+            if (result != null)
                 await SaveArtToFileAsync(fileName, data);
 
             return result;
         }
 
-        private QuantizedColor GetDominantColor(SKBitmap art)
+        private (QuantizedColor dominant, QuantizedColor vibrant) GetArtColors(SKBitmap art)
         {
-            // Get dominant color of albumart
+            // Get dominant and most vivid colors of albumart
             var smallArt = art.Resize(new SKImageInfo(50, 50), SKFilterQuality.Low);
 
             var colorThief = new ColorThief();
-            var quantizedColor = colorThief.GetColor(smallArt);
-
-            return quantizedColor;
+            return (colorThief.GetColor(smallArt), colorThief.GetVibrantColor(smallArt));
         }
 
 
@@ -248,7 +252,10 @@ namespace Stylophone.Common.Services
         {
             try
             {
-                SKBitmap image = SKBitmap.Decode(bytes);
+                // Unlike the byte[] overload, which throws, decoding SKData returns null for data that isn't an image Skia can read
+                SKBitmap image;
+                using (var data = SKData.CreateCopy(bytes))
+                    image = SKBitmap.Decode(data);
 
                 if (image == null)
                     return null;

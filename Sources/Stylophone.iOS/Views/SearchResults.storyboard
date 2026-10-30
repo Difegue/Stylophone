@@ -29,10 +29,10 @@
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstItem="EiM-Od-kXY" firstAttribute="centerX" secondItem="FTL-Xj-ay5" secondAttribute="centerX" id="37J-Et-7IT"/>
-                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="EiM-Od-kXY" secondAttribute="trailing" constant="16" id="5b9-lb-TEY"/>
-                                <constraint firstItem="EiM-Od-kXY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="FTL-Xj-ay5" secondAttribute="leading" constant="16" id="B98-b8-QPj"/>
-                                <constraint firstItem="EiM-Od-kXY" firstAttribute="centerX" secondItem="FTL-Xj-ay5" secondAttribute="centerX" id="Uou-Tx-KQU"/>
+                                <constraint firstItem="EiM-Od-kXY" firstAttribute="centerX" secondItem="FTL-Xj-ay5" secondAttribute="centerXWithinMargins" id="37J-Et-7IT"/>
+                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="EiM-Od-kXY" secondAttribute="trailing" constant="8" id="5b9-lb-TEY"/>
+                                <constraint firstItem="EiM-Od-kXY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="FTL-Xj-ay5" secondAttribute="leadingMargin" constant="8" id="B98-b8-QPj"/>
+                                <constraint firstItem="EiM-Od-kXY" firstAttribute="centerX" secondItem="FTL-Xj-ay5" secondAttribute="centerXWithinMargins" id="Uou-Tx-KQU"/>
                                 <constraint firstItem="EiM-Od-kXY" firstAttribute="centerY" secondItem="FTL-Xj-ay5" secondAttribute="centerY" id="dWK-jn-zbN"/>
                             </constraints>
                         </view>
@@ -72,10 +72,10 @@
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstItem="Qxc-07-gjr" firstAttribute="top" secondItem="TsB-oI-Eq7" secondAttribute="bottom" constant="16" id="7LE-5q-X7r"/>
-                                        <constraint firstItem="TsB-oI-Eq7" firstAttribute="centerX" secondItem="2pl-vG-OKK" secondAttribute="centerX" id="HAQ-wq-PpL"/>
-                                        <constraint firstItem="N0h-jP-Tr6" firstAttribute="centerX" secondItem="2pl-vG-OKK" secondAttribute="centerX" id="Zbf-RM-Q33"/>
+                                        <constraint firstItem="TsB-oI-Eq7" firstAttribute="centerX" secondItem="2pl-vG-OKK" secondAttribute="centerXWithinMargins" id="HAQ-wq-PpL"/>
+                                        <constraint firstItem="N0h-jP-Tr6" firstAttribute="centerX" secondItem="2pl-vG-OKK" secondAttribute="centerXWithinMargins" id="Zbf-RM-Q33"/>
                                         <constraint firstItem="N0h-jP-Tr6" firstAttribute="top" secondItem="Qxc-07-gjr" secondAttribute="bottom" constant="8" symbolic="YES" id="hOA-t1-phu"/>
-                                        <constraint firstItem="Qxc-07-gjr" firstAttribute="centerX" secondItem="2pl-vG-OKK" secondAttribute="centerX" id="iUJ-AO-IDb"/>
+                                        <constraint firstItem="Qxc-07-gjr" firstAttribute="centerX" secondItem="2pl-vG-OKK" secondAttribute="centerXWithinMargins" id="iUJ-AO-IDb"/>
                                         <constraint firstItem="TsB-oI-Eq7" firstAttribute="centerY" secondItem="2pl-vG-OKK" secondAttribute="centerY" id="zw2-O9-n8w"/>
                                     </constraints>
                                 </view>
@@ -89,7 +89,7 @@
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstItem="l2i-3Z-hsP" firstAttribute="centerY" secondItem="hhc-Ld-wpw" secondAttribute="centerY" id="OQD-Bg-vgE"/>
-                                        <constraint firstItem="l2i-3Z-hsP" firstAttribute="centerX" secondItem="hhc-Ld-wpw" secondAttribute="centerX" id="jvf-gd-0yB"/>
+                                        <constraint firstItem="l2i-3Z-hsP" firstAttribute="centerX" secondItem="hhc-Ld-wpw" secondAttribute="centerXWithinMargins" id="jvf-gd-0yB"/>
                                     </constraints>
                                 </view>
                             </subviews>

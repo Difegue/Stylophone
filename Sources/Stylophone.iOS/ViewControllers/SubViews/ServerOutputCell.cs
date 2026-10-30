@@ -19,6 +19,21 @@ namespace Stylophone.iOS.Views
         private PropertyBinder<OutputViewModel> _propertyBinder;
         private OutputViewModel _outputViewModel;
 
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            // This list sits in a settings row: show that row's background, instead of the darker one of plain lists in dark mode
+            BackgroundConfiguration = UIBackgroundConfiguration.ClearConfiguration;
+        }
+
+        // Start the separator under the label, like in the other settings rows: the default inset doesn't follow the margins
+        public override void LayoutMarginsDidChange()
+        {
+            base.LayoutMarginsDidChange();
+            SeparatorInset = new UIEdgeInsets(0, LayoutMargins.Left, 0, LayoutMargins.Right);
+        }
+
         internal void Configure(int row, OutputViewModel outputViewModel)
         {
             // Bind output

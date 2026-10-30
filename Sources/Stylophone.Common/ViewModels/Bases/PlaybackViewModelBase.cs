@@ -525,16 +525,30 @@ namespace Stylophone.Common.ViewModels
             // Cancel previous track art load
             _albumArtCancellationSource.Cancel();
             _albumArtCancellationSource = new CancellationTokenSource();
+            var albumArtToken = _albumArtCancellationSource.Token;
+            var isAlbumArtLoaded = false;
 
             if (response != null)
             {
                 IsTrackInfoAvailable = true;
 
+                var track = _trackVmFactory.GetTrackViewModel(response);
+
+                // Try to load album art from the cache right after we create the trackVM, to avoid flashing the placeholder 
+                isAlbumArtLoaded = await track.TryLoadCachedAlbumArtAsync(HostType, albumArtToken);
+
+                // A newer track change took over meanwhile
+                if (albumArtToken.IsCancellationRequested)
+                {
+                    track.Dispose();
+                    return;
+                }
+
                 // Dispose previous track
                 CurrentTrack?.Dispose();
 
                 // Set the new current track
-                CurrentTrack = _trackVmFactory.GetTrackViewModel(response);
+                CurrentTrack = track;
             }
             else
             {
@@ -552,6 +566,9 @@ namespace Stylophone.Common.ViewModels
                 _ = Task.Run(async () =>
                 {
                     await _interop.UpdateOperatingSystemIntegrationsAsync(CurrentTrack);
+                    if (isAlbumArtLoaded)
+                        return;
+
                     await CurrentTrack.GetAlbumArtAsync(HostType, _albumArtCancellationSource.Token);
 
                     // Re-update OS integrations, as we have album art now

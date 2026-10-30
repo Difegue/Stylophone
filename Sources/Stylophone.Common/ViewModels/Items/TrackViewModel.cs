@@ -72,7 +72,7 @@ namespace Stylophone.Common.ViewModels
 
             File = file;
 
-            _dispatcherService.ExecuteOnUIThreadAsync(() => DominantColor = _interop.GetAccentColor());
+            _dispatcherService.ExecuteOnUIThreadAsync(() => DominantColor = VibrantColor = _interop.GetAccentColor());
         }
 
         public IMpdFile File { get; }
@@ -85,6 +85,10 @@ namespace Stylophone.Common.ViewModels
         
         [ObservableProperty]
         private SKColor _dominantColor;
+
+        // Most vivid color of the album art, for accents that should stand out
+        [ObservableProperty]
+        private SKColor _vibrantColor;
 
         [ObservableProperty]
         private bool _isLight;
@@ -156,6 +160,7 @@ namespace Stylophone.Common.ViewModels
                 if (calculateDominantColor)
                 {
                     DominantColor = art.DominantColor.Color;
+                    VibrantColor = art.VibrantColor.Color;
                     IsLight = !(art.DominantColor.IsDark);
                 }
 
@@ -163,9 +168,24 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        /// <summary>
+        /// Load the album art if it's in the local cache, otherwise do nothing. 
+        /// </summary>
+        /// <returns>Whether the art was cached, and is now loaded.</returns>
+        public async Task<bool> TryLoadCachedAlbumArtAsync(VisualizationType hostType = VisualizationType.None, CancellationToken albumArtCancellationToken = default)
+        {
+            if (!await _albumArtService.IsAlbumArtCachedAsync(File))
+                return false;
+
+            await GetAlbumArtAsync(hostType, albumArtCancellationToken);
+            return true;
+        }
+
         public void Dispose()
         {
-            AlbumArt?.Dispose();
+            // Views showing this track can still have art updates queued on the UI thread: release the art after them
+            var albumArt = AlbumArt;
+            _dispatcherService.ExecuteOnUIThreadAsync(() => albumArt?.Dispose());
         }
 
         public override string ToString()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
 using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
@@ -57,9 +58,29 @@ namespace Stylophone.iOS.ViewControllers
             _viewModel?.NavigateCommand.Execute(sidebarItem);
         }
 
+        [Export("collectionView:contextMenuConfigurationForItemAtIndexPath:point:")]
+        protected UIContextMenuConfiguration GetContextMenuConfiguration(UICollectionView collectionView, NSIndexPath indexPath, CoreGraphics.CGPoint point)
+        {
+            var sidebarItem = _dataSource.GetItemIdentifier(indexPath);
+
+            // Playlists can be opened in their own window on iPad
+            if (sidebarItem?.Target != typeof(PlaylistViewModel))
+                return null;
+
+            var separateWindowAction = SeparateWindowHelper.CreateAction(() =>
+                Ioc.Default.GetRequiredService<INavigationService>().ShowInSeparateWindowAsync<PlaylistViewModel>(sidebarItem.Title));
+
+            return separateWindowAction == null ? null : UIContextMenuConfiguration.Create(null, null,
+                new UIContextMenuActionProvider(_ => UIMenu.Create(new UIMenuElement[] { separateWindowAction })));
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            // Pages go on under the sidebar, whose material lets them show through: don't cover it with the storyboard's opaque background
+            if (OperatingSystem.IsIOSVersionAtLeast(26))
+                View.BackgroundColor = UIColor.Clear;
 
             Title = Strings.AppDisplayName;
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Always;

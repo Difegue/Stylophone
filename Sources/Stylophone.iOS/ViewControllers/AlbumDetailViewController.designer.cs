@@ -13,28 +13,16 @@ namespace Stylophone.iOS.ViewControllers
 	partial class AlbumDetailViewController
 	{
 		[Outlet]
-		UIKit.UIButton AddToQueueButton { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint AddToQueueCompactLeftConstraint { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint AddToQueueLeftConstraint { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint AddToQueueTopConstraint { get; set; }
-
-		[Outlet]
 		UIKit.UIImageView AlbumArt { get; set; }
 
 		[Outlet]
 		UIKit.UILabel AlbumArtists { get; set; }
 
 		[Outlet]
-		UIKit.UIActivityIndicatorView AlbumArtLoadingIndicator { get; set; }
+		UIKit.UILabel AlbumTitle { get; set; }
 
 		[Outlet]
-		UIKit.UILabel AlbumTitle { get; set; }
+		UIKit.UIActivityIndicatorView AlbumArtLoadingIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UILabel AlbumTrackInfo { get; set; }
@@ -52,18 +40,10 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIView EmptyView { get; set; }
 
 		[Outlet]
-		UIKit.UIButton PlayButton { get; set; }
+		UIKit.UIVisualEffectView HeaderBlur { get; set; }
 
-		[Outlet]
-		UIKit.UIButton PlaylistButton { get; set; }
-		
 		void ReleaseDesignerOutlets ()
 		{
-			if (AddToQueueButton != null) {
-				AddToQueueButton.Dispose ();
-				AddToQueueButton = null;
-			}
-
 			if (AlbumArt != null) {
 				AlbumArt.Dispose ();
 				AlbumArt = null;
@@ -74,14 +54,14 @@ namespace Stylophone.iOS.ViewControllers
 				AlbumArtists = null;
 			}
 
-			if (AlbumArtLoadingIndicator != null) {
-				AlbumArtLoadingIndicator.Dispose ();
-				AlbumArtLoadingIndicator = null;
-			}
-
 			if (AlbumTitle != null) {
 				AlbumTitle.Dispose ();
 				AlbumTitle = null;
+			}
+
+			if (AlbumArtLoadingIndicator != null) {
+				AlbumArtLoadingIndicator.Dispose ();
+				AlbumArtLoadingIndicator = null;
 			}
 
 			if (AlbumTrackInfo != null) {
@@ -104,34 +84,14 @@ namespace Stylophone.iOS.ViewControllers
 				EmptyView = null;
 			}
 
-			if (PlayButton != null) {
-				PlayButton.Dispose ();
-				PlayButton = null;
-			}
-
-			if (PlaylistButton != null) {
-				PlaylistButton.Dispose ();
-				PlaylistButton = null;
+			if (HeaderBlur != null) {
+				HeaderBlur.Dispose ();
+				HeaderBlur = null;
 			}
 
 			if (ArtWidthConstraint != null) {
 				ArtWidthConstraint.Dispose ();
 				ArtWidthConstraint = null;
-			}
-
-			if (AddToQueueTopConstraint != null) {
-				AddToQueueTopConstraint.Dispose ();
-				AddToQueueTopConstraint = null;
-			}
-
-			if (AddToQueueLeftConstraint != null) {
-				AddToQueueLeftConstraint.Dispose ();
-				AddToQueueLeftConstraint = null;
-			}
-
-			if (AddToQueueCompactLeftConstraint != null) {
-				AddToQueueCompactLeftConstraint.Dispose ();
-				AddToQueueCompactLeftConstraint = null;
 			}
 		}
 	}

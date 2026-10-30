@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
+using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewControllers;
 using Stylophone.iOS.ViewModels;
 using System;
@@ -114,6 +115,23 @@ namespace Stylophone.iOS.Services
             return false;
         }
 
+        public override Task ShowInSeparateWindowAsync<T>(object parameter = null)
+        {
+            if (!SeparateWindowHelper.IsSupported)
+                return Task.CompletedTask;
+
+            var activity = DetailSceneDelegate.CreateUserActivity(typeof(T), parameter);
+            if (activity == null)
+                throw new NotSupportedException($"{typeof(T).Name} can't be shown in a separate window.");
+
+            // Bring an existing window showing the same content forward instead of opening a duplicate
+            var existingSession = DetailSceneDelegate.FindOpenSession(activity);
+            SeparateWindowHelper.ActivateSceneSession(existingSession, existingSession == null ? activity : null,
+                InteropService.GetKeyWindow()?.WindowScene);
+
+            return Task.CompletedTask;
+        }
+
         private UINavigationController _navController;
         public UINavigationController NavigationController
         {
@@ -124,6 +142,10 @@ namespace Stylophone.iOS.Services
 
             set
             {
+                // If the main window got recreated, the viewcontrollers we kept around belong to the old one
+                if (_navController != null && _navController != value)
+                    _viewControllers.Clear();
+
                 _navController = value;
             }
         }

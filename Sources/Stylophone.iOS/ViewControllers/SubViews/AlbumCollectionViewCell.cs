@@ -21,12 +21,15 @@ namespace Stylophone.iOS.ViewControllers
         private PropertyBinder<AlbumViewModel> _propertyBinder;
         private AlbumViewModel _viewModel;
 
+        // The album info glass is inset by 6pt in IB, with a radius of 8 to keep its corners concentric with these
+        private const float CornerRadius = 14;
+
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
 
             // Add corner radii
-            ContentView.Layer.CornerRadius = 8;
+            ContentView.Layer.CornerRadius = CornerRadius;
             ContentView.Layer.BorderWidth = 1.0F;
             ContentView.Layer.BorderColor = UIColor.Clear.CGColor;
             ContentView.Layer.MasksToBounds = true;
@@ -36,7 +39,10 @@ namespace Stylophone.iOS.ViewControllers
             Layer.ShadowOpacity = 0.5F;
             Layer.ShadowOffset = new CGSize(0, 0);
             Layer.ShadowRadius = 4;
-            Layer.ShadowPath = UIBezierPath.FromRoundedRect(Bounds, 8).CGPath;
+            Layer.ShadowPath = UIBezierPath.FromRoundedRect(Bounds, CornerRadius).CGPath;
+
+            // The album info sits on glass, which the default label color would let show through the text on Macs
+            AlbumName.TextColor = AlbumArtist.TextColor = GlassEffectView.OpaqueLabelColor;
         }
 
         public override void LayoutSubviews()
@@ -46,7 +52,14 @@ namespace Stylophone.iOS.ViewControllers
             // Adjust content and shadow to current bounds of cell
             var bounds = Bounds;
             ContentView.Bounds = bounds;
-            Layer.ShadowPath = UIBezierPath.FromRoundedRect(bounds, 8).CGPath;
+            Layer.ShadowPath = UIBezierPath.FromRoundedRect(bounds, CornerRadius).CGPath;
+        }
+
+        /// <returns>A preview lifting the cell with its rounded corners, for context menus.</returns>
+        internal UITargetedPreview CreateContextMenuPreview()
+        {
+            var parameters = new UIPreviewParameters { VisiblePath = UIBezierPath.FromRoundedRect(Bounds, CornerRadius) };
+            return new UITargetedPreview(this, parameters);
         }
 
         internal void Initialize(AlbumViewModel viewModel)

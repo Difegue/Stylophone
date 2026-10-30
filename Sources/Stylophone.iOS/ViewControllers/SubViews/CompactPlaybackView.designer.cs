@@ -49,11 +49,23 @@ namespace Stylophone.iOS.ViewControllers
 		public UIKit.UIButton ShuffleButton { get; private set; }
 
 		[Outlet]
+		public Stylophone.iOS.Helpers.GlassEffectView ShuffleGlass { get; private set; }
+
+		[Outlet]
+		Stylophone.iOS.Helpers.GlassEffectView SkipNextGlass { get; set; }
+
+		[Outlet]
+		Stylophone.iOS.Helpers.GlassEffectView SkipPrevGlass { get; set; }
+
+		[Outlet]
 		UIKit.UILabel TrackTitle { get; set; }
 
 		[Outlet]
 		public UIKit.UIButton VolumeButton { get; private set; }
-		
+
+		[Outlet]
+		UIKit.NSLayoutConstraint VolumeTrailing { get; set; }
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (AlbumArt != null) {
@@ -111,6 +123,21 @@ namespace Stylophone.iOS.ViewControllers
 				ShuffleButton = null;
 			}
 
+			if (ShuffleGlass != null) {
+				ShuffleGlass.Dispose ();
+				ShuffleGlass = null;
+			}
+
+			if (SkipNextGlass != null) {
+				SkipNextGlass.Dispose ();
+				SkipNextGlass = null;
+			}
+
+			if (SkipPrevGlass != null) {
+				SkipPrevGlass.Dispose ();
+				SkipPrevGlass = null;
+			}
+
 			if (TrackTitle != null) {
 				TrackTitle.Dispose ();
 				TrackTitle = null;
@@ -119,6 +146,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (VolumeButton != null) {
 				VolumeButton.Dispose ();
 				VolumeButton = null;
+			}
+
+			if (VolumeTrailing != null) {
+				VolumeTrailing.Dispose ();
+				VolumeTrailing = null;
 			}
 
 			if (ShadowCaster != null) {

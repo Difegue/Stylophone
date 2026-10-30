@@ -16,7 +16,25 @@ namespace Stylophone.iOS.ViewControllers
 {
 	public partial class CompactPlaybackView : UIView
 	{
+        // Narrowest compact width bar (iPhones) where the skip buttons still leave room for the track info
+        private const float SkipButtonsMinWidth = 440;
+
+        // Narrowest regular width bars (iPad or iPhone Duo) showing each element. 
+        // We hide the matching element when the width goes under this. 
+        private const float RegularSkipButtonsMinWidth = 580;
+        private const float RegularArtMinWidth = 468;
+        private const float RegularTrackInfoMinWidth = 372;
+
         private PropertyBinder<TrackViewModel> _propertyBinder;
+        private bool _isShuffleEnabled;
+        // Fill of enabled shuffle behind its glass, like the playback bubble's (see UpdateShuffleGlass)
+        private GlassFillView _shuffleFill;
+        private bool? _isFloating;
+        private NSLayoutConstraint[] _skipButtonsConstraints;
+        private NSLayoutConstraint[] _collapseSkipButtonsConstraints;
+        private NSLayoutConstraint _collapseArtConstraint;
+        // Storyboard value of VolumeTrailing while the volume button is moved away from the trailing edge (see UpdateTrailingButtons)
+        private nfloat? _volumeTrailingDefault;
 
         public CompactPlaybackView (IntPtr handle) : base (handle)
 		{
@@ -27,8 +45,11 @@ namespace Stylophone.iOS.ViewControllers
             base.AwakeFromNib();
             Hidden = true;
 
-            // Round off CompactView edges and give it a shadow
-            CornerRadiusContainer.Layer.CornerRadius = 12;
+            // This view is always dark with white text, make sure the glass controls match that
+            OverrideUserInterfaceStyle = UIUserInterfaceStyle.Dark;
+
+            // Round off CompactView edges depending on OS version and give it a shadow
+            UpdateCornerRadii(true);
             CornerRadiusContainer.Layer.MasksToBounds = true;
 
             Layer.ShadowColor = UIColor.Black.CGColor;
@@ -46,8 +67,65 @@ namespace Stylophone.iOS.ViewControllers
 
             AlbumArt.Layer.CornerRadius = 8;
 
+            /// Constraints that cover edge cases where the UIKit size classes aren't enough. 
+            /// (Compact class with larger screens, eg Folded Duo or iPhone Max, 
+            ///  or regular class with smaller usable areas, eg iPad/unfolded Duo with sidebar open)
+
+            // If the bar is wide enough even on compact, tweak the positioning to show the skip buttons properly. 
+            _skipButtonsConstraints = new[]
+            {
+                CornerRadiusContainer.TrailingAnchor.ConstraintEqualTo(SkipNextGlass.TrailingAnchor, 28),
+                SkipPrevGlass.LeadingAnchor.ConstraintGreaterThanOrEqualTo(TrackTitle.TrailingAnchor, 16),
+                SkipPrevGlass.LeadingAnchor.ConstraintGreaterThanOrEqualTo(ArtistName.TrailingAnchor, 16)
+            };
+            foreach (var constraint in _skipButtonsConstraints)
+                constraint.Priority = 950;
+
+            // Hide skip buttons when enabled (on normal size class)
+            _collapseSkipButtonsConstraints = new[]
+            {
+                SkipPrevGlass.WidthAnchor.ConstraintEqualTo(0),
+                SkipNextGlass.WidthAnchor.ConstraintEqualTo(0)
+            };
+
+            // Hide album art when enabled (on normal size class)
+            _collapseArtConstraint = AlbumArt.WidthAnchor.ConstraintEqualTo(0);
+
+            // Enabled shuffle follows the bubble's color as tracks change
+            if (OperatingSystem.IsIOSVersionAtLeast(26))
+            {
+                _shuffleFill = GlassFillView.InsertBehind(ShuffleGlass);
+                _shuffleFill.FollowPresses(ShuffleButton);
+                _shuffleFill.Alpha = 0;
+            }
+            CircularProgressView.FillColorChanged += (s, e) => UpdateShuffleGlass();
+
             // Fallback default
             TrackTitle.Text = Localization.Strings.Resources.NotificationNoTrackPlaying;
+
+            UpdateGlyphSizes();
+        }
+
+        /// <summary>
+        /// Set the corner radii of the compact playback bar.  
+        /// If the bar is anchored to the bottom of the screen, its bottom corners follow the screen's own, which differ in the case of the Duo when closed.
+        /// If it's floating above the content, its corners are concentric with the window's, and no smaller than 24pt.
+        /// </summary>
+        internal void UpdateCornerRadii(bool isFloating)
+        {
+            if (_isFloating == isFloating)
+                return;
+
+            _isFloating = isFloating;
+
+            if (!OperatingSystem.IsIOSVersionAtLeast(26)) {
+                CornerRadiusContainer.Layer.CornerRadius = 12;
+                return;
+            }
+
+            var radius = UICornerRadius.CreateContainerConcentric(24);
+            var bottomRadius = isFloating ? radius : UICornerRadius.CreateContainerConcentric();
+            CornerRadiusContainer.CornerConfiguration = UICornerConfiguration.CreateCorners(radius, radius, bottomRadius, bottomRadius);
         }
 
         public override void LayoutSubviews()
@@ -58,7 +136,146 @@ namespace Stylophone.iOS.ViewControllers
                 TrackTitle.Lines = 1;
             else
                 TrackTitle.Lines = 2;
+
+            UpdateSkipButtons();
+            UpdateRegularWidthElements();
+            UpdateTrailingButtons();
         }
+
+        private void UpdateSkipButtons()
+        {
+            // Other size classes lay out (or push away) the skip buttons in the storyboard
+            var isCompactWidth = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
+                                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular;
+            var showInCompactWidth = isCompactWidth && Bounds.Width >= SkipButtonsMinWidth;
+
+            SetConstraintsActive(_skipButtonsConstraints, showInCompactWidth);
+        }
+
+        /// <summary>
+        /// Regular width bars get narrowed when a sidebar is open: hide the skip buttons, then the art, then the track info as space runs out.
+        /// </summary>
+        private void UpdateRegularWidthElements()
+        {
+            var isRegularWidth = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular;
+            var isCompactWidth = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
+                                 TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular;
+            var width = Bounds.Width;
+
+            var collapseSkipButtons = isRegularWidth && width < RegularSkipButtonsMinWidth;
+            var collapseArt = isRegularWidth && width < RegularArtMinWidth;
+            var hideTrackInfo = isRegularWidth && width < RegularTrackInfoMinWidth;
+
+            SetConstraintsActive(_collapseSkipButtonsConstraints, collapseSkipButtons);
+            SetConstraintsActive(new[] { _collapseArtConstraint }, collapseArt);
+
+            SkipPrevGlass.Hidden = SkipNextGlass.Hidden = collapseSkipButtons || (isCompactWidth && width < SkipButtonsMinWidth);
+            AlbumArt.Hidden = ShadowCaster.Hidden = collapseArt;
+            TrackTitle.Hidden = ArtistName.Hidden = hideTrackInfo;
+        }
+
+        /// <summary>
+        /// Bars of phones in landscape span the screen, under the vertical bar some phones have along their trailing edge (like folded foldables),
+        /// which also holds their front camera. Keep the volume button out of the bar's column there, dropping the shuffle button for room.
+        /// </summary>
+        private void UpdateTrailingButtons()
+        {
+            var volumeTrailing = VolumeTrailing;
+            var window = Window;
+            if (volumeTrailing == null || window == null)
+                return;
+
+            // How far this bar goes into the column: it stays out of it entirely with Reduce Transparency (see NavigationController)
+            var frame = ConvertRectToView(Bounds, window);
+            var trailingInset = EffectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.RightToLeft ?
+                window.SafeAreaInsets.Left - frame.Left : window.SafeAreaInsets.Right - (window.Bounds.Right - frame.Right);
+            var avoidsVerticalBar = TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact &&
+                                    VerticalBarHelper.HasVerticalBar(window.TraitCollection) &&
+                                    trailingInset > (_volumeTrailingDefault ?? volumeTrailing.Constant);
+
+            ShuffleGlass.Hidden = avoidsVerticalBar;
+            if (_shuffleFill != null)
+                _shuffleFill.Hidden = avoidsVerticalBar;
+
+            if (avoidsVerticalBar)
+            {
+                _volumeTrailingDefault ??= volumeTrailing.Constant;
+                if (volumeTrailing.Constant != trailingInset)
+                    volumeTrailing.Constant = trailingInset;
+            }
+            else if (_volumeTrailingDefault is nfloat defaultConstant)
+            {
+                _volumeTrailingDefault = null;
+                volumeTrailing.Constant = defaultConstant;
+            }
+        }
+
+        public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
+        {
+            base.TraitCollectionDidChange(previousTraitCollection);
+
+            if (previousTraitCollection?.VerticalSizeClass != TraitCollection.VerticalSizeClass)
+            {
+                UpdateGlyphSizes();
+                // Size classes have their own distances to the trailing edge in the storyboard, which apply again
+                _volumeTrailingDefault = null;
+            }
+        }
+
+        private static void SetConstraintsActive(NSLayoutConstraint[] constraints, bool active)
+        {
+            if (constraints[0].Active == active)
+                return;
+
+            if (active)
+                NSLayoutConstraint.ActivateConstraints(constraints);
+            else
+                NSLayoutConstraint.DeactivateConstraints(constraints);
+        }
+
+        /// <summary>
+        /// Show the shuffle state by tinting its glass button, like toggled toolbar items.
+        /// </summary>
+        internal void UpdateShuffle(bool isEnabled)
+        {
+            _isShuffleEnabled = isEnabled;
+            UpdateShuffleGlass();
+        }
+
+        /// <summary>
+        /// Enabled shuffle looks like the playback bubble once full, keeping a white glyph like the bubble's:
+        /// the same glass tint, over the same fill behind the glass. Without Liquid Glass, there's only the tint.
+        /// </summary>
+        private void UpdateShuffleGlass()
+        {
+            if (_shuffleFill == null)
+            {
+                ShuffleGlass.SetGlassTintColor(_isShuffleEnabled ? CircularProgressView.FillColor : null, true);
+                return;
+            }
+
+            ShuffleGlass.SetGlassTintColor(_isShuffleEnabled ? CircularProgressView.GlassTint : null, true);
+            Animate(0.3, () =>
+            {
+                _shuffleFill.BackgroundColor = CircularProgressView.FillColor?.ColorWithAlpha(GlassFillView.FillAlpha);
+                _shuffleFill.Alpha = _isShuffleEnabled ? 1 : 0;
+            });
+        }
+
+        private void UpdateGlyphSizes()
+        {
+            // The glass buttons are smaller when the bar is compact (eg. phones in landscape)
+            var isCompact = TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact;
+
+            SetGlyphSize(PlayPauseButton, isCompact ? 22 : 34);
+            SetGlyphSize(PrevButton, isCompact ? 16 : 20);
+            SetGlyphSize(NextButton, isCompact ? 16 : 20);
+            SetGlyphSize(VolumeButton, isCompact ? 15 : 18);
+            SetGlyphSize(ShuffleButton, isCompact ? 15 : 18);
+        }
+
+        private static void SetGlyphSize(UIButton button, nfloat pointSize) =>
+            button.SetPreferredSymbolConfiguration(UIImageSymbolConfiguration.Create(pointSize, UIImageSymbolWeight.Semibold), UIControlState.Normal);
 
         internal void Bind(TrackViewModel currentTrack)
         {
@@ -77,11 +294,13 @@ namespace Stylophone.iOS.ViewControllers
             var imageConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer));
             var colorConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIColorValueTransformer));
 
-            _propertyBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _propertyBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _propertyBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
-            _propertyBinder.Bind<SKColor>(CircularProgressView, nameof(CircularProgressView.BackgroundCircleColor),
-                nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            // Fade over to the new track's art: it comes with the track when it's cached, or else follows the placeholder
+            _propertyBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _propertyBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _propertyBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter, crossDissolve: true);
+            // The bubble animates changes to its fill itself
+            _propertyBinder.Bind<SKColor>(CircularProgressView, nameof(CircularProgressView.FillColor),
+                nameof(currentTrack.VibrantColor), valueTransformer: colorConverter);
         }
     }
 }
