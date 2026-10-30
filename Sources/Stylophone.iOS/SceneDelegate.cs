@@ -37,7 +37,8 @@ namespace Stylophone.iOS
                 return;
             }
 
-            Window = new UIWindow(windowScene)
+
+            Window = new PassThroughBarsWindow(windowScene)
             {
                 RootViewController = UIStoryboard.FromName("Main", null).InstantiateInitialViewController(),
                 TintColor = appDelegate.AppColor
