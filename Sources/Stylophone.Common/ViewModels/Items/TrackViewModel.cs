@@ -168,6 +168,19 @@ namespace Stylophone.Common.ViewModels
             }
         }
 
+        /// <summary>
+        /// Load the album art if it's in the local cache, otherwise do nothing. 
+        /// </summary>
+        /// <returns>Whether the art was cached, and is now loaded.</returns>
+        public async Task<bool> TryLoadCachedAlbumArtAsync(VisualizationType hostType = VisualizationType.None, CancellationToken albumArtCancellationToken = default)
+        {
+            if (!await _albumArtService.IsAlbumArtCachedAsync(File))
+                return false;
+
+            await GetAlbumArtAsync(hostType, albumArtCancellationToken);
+            return true;
+        }
+
         public void Dispose()
         {
             // Views showing this track can still have art updates queued on the UI thread: release the art after them

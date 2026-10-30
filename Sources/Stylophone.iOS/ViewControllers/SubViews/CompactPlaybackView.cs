@@ -294,9 +294,11 @@ namespace Stylophone.iOS.ViewControllers
             var imageConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer));
             var colorConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIColorValueTransformer));
 
-            _propertyBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _propertyBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _propertyBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            // Fade over to the new track's art: it comes with the track when it's cached, or else follows the placeholder
+            _propertyBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _propertyBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _propertyBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter, crossDissolve: true);
+            // The bubble animates changes to its fill itself
             _propertyBinder.Bind<SKColor>(CircularProgressView, nameof(CircularProgressView.FillColor),
                 nameof(currentTrack.VibrantColor), valueTransformer: colorConverter);
         }

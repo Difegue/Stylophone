@@ -74,16 +74,16 @@ namespace Stylophone.iOS.Helpers
             );
         }
 
-        public void Bind<T>(NSObject obj, string keypath, string property, bool isTwoWay = false, NSValueTransformer valueTransformer = null)
-            => Bind<T>(obj, new NSString(keypath), property, isTwoWay, valueTransformer);
+        public void Bind<T>(NSObject obj, string keypath, string property, bool isTwoWay = false, NSValueTransformer valueTransformer = null, bool crossDissolve = false)
+            => Bind<T>(obj, new NSString(keypath), property, isTwoWay, valueTransformer, crossDissolve);
 
-        public void Bind<T>(NSObject obj, NSString keypath, string property, bool isTwoWay = false, NSValueTransformer valueTransformer = null)
+        public void Bind<T>(NSObject obj, NSString keypath, string property, bool isTwoWay = false, NSValueTransformer valueTransformer = null, bool crossDissolve = false)
         {
             var propertyInfo = GetProperty(property);
             var propertyValue = (T)propertyInfo.GetValue(_observableObject);
 
             var binding =
-                new Binding { Object = obj, Keypath = keypath, Property = propertyInfo, ValueTransformer = valueTransformer };
+                new Binding { Object = obj, Keypath = keypath, Property = propertyInfo, ValueTransformer = valueTransformer, CrossDissolve = crossDissolve };
 
             if (_bindings.ContainsKey(property))
                 _bindings.GetValueOrDefault(property).Add(binding);

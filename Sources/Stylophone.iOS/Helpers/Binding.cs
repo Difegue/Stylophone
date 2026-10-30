@@ -23,6 +23,9 @@ namespace Stylophone.iOS.Helpers
         public PropertyInfo Property { get; set; }
         public NSValueTransformer ValueTransformer { get; set; }
 
+        // Fade views over to their new values instead of switching them at once
+        public bool CrossDissolve { get; set; }
+
         // Set while the NSObject is being updated from the property, so two-way bindings don't send that change back (see UpdateProperty)
         private bool _isUpdatingNSObject;
 
@@ -52,7 +55,12 @@ namespace Stylophone.iOS.Helpers
                     if (!(nativeValue is NSNull))
                     {
                         _isUpdatingNSObject = true;
-                        Object.SetValueForKeyPath(nativeValue, Keypath);
+
+                        if (CrossDissolve && Object is UIView view)
+                            UIView.Transition(view, 0.3, UIViewAnimationOptions.TransitionCrossDissolve | UIViewAnimationOptions.AllowUserInteraction,
+                                () => view.SetValueForKeyPath(nativeValue, Keypath), null);
+                        else
+                            Object.SetValueForKeyPath(nativeValue, Keypath);
                     }
                 }
                 catch (ObjectDisposedException)

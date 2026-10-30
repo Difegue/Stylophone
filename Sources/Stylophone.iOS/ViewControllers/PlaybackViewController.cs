@@ -446,11 +446,12 @@ namespace Stylophone.iOS.ViewControllers
             var imageConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer));
             var colorConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIColorValueTransformer));
 
-            _trackBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _trackBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _trackBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            // Fade over to the new track's art: it comes with the track when it's cached, or else follows the placeholder
+            _trackBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _trackBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _trackBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter, crossDissolve: true);
+            // Fading the slider would leave a fading copy of its thumb behind as it goes back to the start
             _trackBinder.Bind<SKColor>(TrackSlider, "maximumTrackTintColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
-            
         }
 
         public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
