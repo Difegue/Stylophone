@@ -81,6 +81,10 @@ namespace Stylophone.iOS.Helpers
             {
                 CornerConfiguration = Capsule ? UICornerConfiguration.CreateCapsule() :
                     UICornerConfiguration.CreateUniformCorners(UICornerRadius.CreateFixed(CornerRadius));
+
+                // Clear glass follows the Reduce Transparency setting (see UpdateEffect)
+                if (Clear)
+                    UIView.Notifications.ObserveReduceTransparencyStatusDidChange((s, e) => UpdateEffect());
             }
             else
             {
@@ -94,7 +98,10 @@ namespace Stylophone.iOS.Helpers
         {
             if (OperatingSystem.IsIOSVersionAtLeast(26))
             {
-                var glass = UIGlassEffect.Create(Clear ? UIGlassEffectStyle.Clear : UIGlassEffectStyle.Regular);
+                // With Reduce Transparency, clear glass gets a dark backing even in light mode, where what's on it uses dark colors.
+                // Regular glass gets a light or dark one following the appearance, like those colors do: use it then.
+                var isClear = Clear && !UIAccessibility.IsReduceTransparencyEnabled;
+                var glass = UIGlassEffect.Create(isClear ? UIGlassEffectStyle.Clear : UIGlassEffectStyle.Regular);
                 glass.Interactive = Interactive;
                 glass.TintColor = _glassTintColor;
                 Effect = glass;

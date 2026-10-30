@@ -185,8 +185,10 @@ namespace Stylophone.iOS.ViewControllers
             if (volumeTrailing == null || window == null)
                 return;
 
+            // How far this bar goes into the column: it stays out of it entirely with Reduce Transparency (see NavigationController)
+            var frame = ConvertRectToView(Bounds, window);
             var trailingInset = EffectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.RightToLeft ?
-                window.SafeAreaInsets.Left : window.SafeAreaInsets.Right;
+                window.SafeAreaInsets.Left - frame.Left : window.SafeAreaInsets.Right - (window.Bounds.Right - frame.Right);
             var avoidsVerticalBar = TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact &&
                                     VerticalBarHelper.HasVerticalBar(window.TraitCollection) &&
                                     trailingInset > (_volumeTrailingDefault ?? volumeTrailing.Constant);

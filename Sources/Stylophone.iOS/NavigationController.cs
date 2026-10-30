@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using ObjCRuntime;
 using Stylophone.Common.Interfaces;
 using Stylophone.Common.ViewModels;
+using Stylophone.iOS.Helpers;
 using Stylophone.iOS.Services;
 using Stylophone.iOS.ViewControllers;
 using Stylophone.iOS.ViewModels;
@@ -24,7 +25,8 @@ namespace Stylophone.iOS
         private NSLayoutConstraint _compactViewLeftConstraint;
         private NSLayoutConstraint _compactViewRightConstraint;
         // Regular widths keep the compact view out of the sidebar's side of the safe area, so it moves aside for the sidebar
-        // instead of going under it. On the other side, it can go under the bars' buttons (like the Duo's side column) as toolbars do.
+        // instead of going under it. On the other side, it can go under the bars' buttons (like the Duo's side column) as toolbars do,
+        // unless Reduce Transparency makes them opaque (see ViewDidLayoutSubviews).
         private NSLayoutConstraint[] _compactViewSafeAreaConstraints;
 
         public NavigationController (IntPtr handle) : base (handle)
@@ -77,6 +79,9 @@ namespace Stylophone.iOS
 
             NSLayoutConstraint.ActivateConstraints(constraints.ToArray());
 
+            // Reduce Transparency changes whether the compact view goes under vertical bars (see ViewDidLayoutSubviews)
+            UIView.Notifications.ObserveReduceTransparencyStatusDidChange((s, e) => View.SetNeedsLayout());
+
             // Navigate to the queue
             concreteNavService.Navigate<QueueViewModel>();
         }
@@ -84,6 +89,10 @@ namespace Stylophone.iOS
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
+
+            var verticalBarInsets = UIAccessibility.IsReduceTransparencyEnabled && VerticalBarHelper.HasVerticalBar(TraitCollection) ?
+                View.SafeAreaInsets : UIEdgeInsets.Zero;
+            var isRightToLeft = View.EffectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.RightToLeft;
 
             // Move elements depending on available screen estate
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
@@ -93,9 +102,8 @@ namespace Stylophone.iOS
                 // Short windows can still show the sidebar beside the page (like on iPad and Mac): stay out of it then.
                 SetCompactViewFollowsSafeArea(false);
                 var sidebarInsets = IsSidebarBesidePage() ? View.SafeAreaInsets : UIEdgeInsets.Zero;
-                var isRightToLeft = View.EffectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.RightToLeft;
-                _compactViewLeftConstraint.Constant = isRightToLeft ? 0 : sidebarInsets.Left;
-                _compactViewRightConstraint.Constant = isRightToLeft ? -sidebarInsets.Right : 0;
+                _compactViewLeftConstraint.Constant = isRightToLeft ? verticalBarInsets.Left : sidebarInsets.Left;
+                _compactViewRightConstraint.Constant = isRightToLeft ? -sidebarInsets.Right : -verticalBarInsets.Right;
 
                 if (_compactViewBottomConstraint.Constant < 128)
                 {
@@ -108,6 +116,8 @@ namespace Stylophone.iOS
             else
             {
                 SetCompactViewFollowsSafeArea(true);
+
+                _compactViewSafeAreaConstraints[1].Constant = isRightToLeft ? -32 : -32 - verticalBarInsets.Right;
 
                 if (_compactViewBottomConstraint.Constant >= 0 && _compactViewBottomConstraint.Constant < 128)
                     _compactViewBottomConstraint.Constant = -16;
