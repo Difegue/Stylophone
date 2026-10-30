@@ -50,6 +50,9 @@ namespace Stylophone.iOS.ViewControllers
 		UIKit.UIButton PlayPauseButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView PlaybackContent { get; set; }
+
+		[Outlet]
 		UIKit.UILabel RemainingTime { get; set; }
 
 		[Outlet]
@@ -148,6 +151,11 @@ namespace Stylophone.iOS.ViewControllers
 			if (PlayPauseButton != null) {
 				PlayPauseButton.Dispose ();
 				PlayPauseButton = null;
+			}
+
+			if (PlaybackContent != null) {
+				PlaybackContent.Dispose ();
+				PlaybackContent = null;
 			}
 
 			if (RemainingTime != null) {

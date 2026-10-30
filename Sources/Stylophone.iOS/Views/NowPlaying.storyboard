@@ -89,39 +89,141 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnF-Il-g1n" userLabel="Skip Prev Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="94.666666666666671" y="728" width="42.000000000000014" height="40"/>
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fGC-ct-Pbk" userLabel="Playback Controls Glass Container" customClass="GlassContainerEffectView">
+                                        <rect key="frame" x="76.5" y="696" width="240" height="104"/>
+                                        <view key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fGC-cv-Pbk">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="104"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fPG-as-Prv" userLabel="Skip Prev Glass" customClass="GlassEffectView">
+                                                    <rect key="frame" x="16" y="24" width="56" height="56"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fPG-cv-Prv">
+                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnF-Il-g1n" userLabel="Skip Prev Button" customClass="SymbolUIButton">
+                                                                <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                                <color key="tintColor" systemColor="labelColor"/>
+                                                                <state key="normal">
+                                                                    <imageReference key="image" image="backward.fill" catalog="system" symbolScale="large"/>
+                                                                </state>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="tnF-Il-g1n" firstAttribute="top" secondItem="fPG-cv-Prv" secondAttribute="top" id="tnF-t1-Pin"/>
+                                                            <constraint firstItem="tnF-Il-g1n" firstAttribute="leading" secondItem="fPG-cv-Prv" secondAttribute="leading" id="tnF-l1-Pin"/>
+                                                            <constraint firstAttribute="bottom" secondItem="tnF-Il-g1n" secondAttribute="bottom" id="tnF-b1-Pin"/>
+                                                            <constraint firstAttribute="trailing" secondItem="tnF-Il-g1n" secondAttribute="trailing" id="tnF-r1-Pin"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="56" id="PZK-do-YzC">
+                                                            <variation key="heightClass=compact" constant="48"/>
+                                                        </constraint>
+                                                        <constraint firstAttribute="height" constant="56" id="eAo-Fe-Ek3">
+                                                            <variation key="heightClass=compact" constant="48"/>
+                                                        </constraint>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </visualEffectView>
+                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fBG-as-Ply" userLabel="Play Pause Glass" customClass="GlassEffectView">
+                                                    <rect key="frame" x="84" y="16" width="72" height="72"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fBG-cv-Ply">
+                                                        <rect key="frame" x="0.0" y="0.0" width="72" height="72"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RI5-DA-btJ" userLabel="Play Pause Button" customClass="SymbolUIButton">
+                                                                <rect key="frame" x="0.0" y="0.0" width="72" height="72"/>
+                                                                <color key="tintColor" systemColor="labelColor"/>
+                                                                <state key="normal">
+                                                                    <imageReference key="image" image="play.fill" catalog="system" symbolScale="large"/>
+                                                                </state>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="RI5-DA-btJ" firstAttribute="top" secondItem="fBG-cv-Ply" secondAttribute="top" id="RI5-t1-Pin"/>
+                                                            <constraint firstItem="RI5-DA-btJ" firstAttribute="leading" secondItem="fBG-cv-Ply" secondAttribute="leading" id="RI5-l1-Pin"/>
+                                                            <constraint firstAttribute="bottom" secondItem="RI5-DA-btJ" secondAttribute="bottom" id="RI5-b1-Pin"/>
+                                                            <constraint firstAttribute="trailing" secondItem="RI5-DA-btJ" secondAttribute="trailing" id="RI5-r1-Pin"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="72" id="PNe-G5-AMX">
+                                                            <variation key="heightClass=compact" constant="60"/>
+                                                        </constraint>
+                                                        <constraint firstAttribute="height" constant="72" id="qgi-ao-D5G">
+                                                            <variation key="heightClass=compact" constant="60"/>
+                                                        </constraint>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </visualEffectView>
+                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fNG-as-Nxt" userLabel="Skip Next Glass" customClass="GlassEffectView">
+                                                    <rect key="frame" x="168" y="24" width="56" height="56"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fNG-cv-Nxt">
+                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sfs-XQ-aF1" userLabel="Skip Next Button" customClass="SymbolUIButton">
+                                                                <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                                <color key="tintColor" systemColor="labelColor"/>
+                                                                <state key="normal">
+                                                                    <imageReference key="image" image="forward.fill" catalog="system" symbolScale="large"/>
+                                                                </state>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="sfs-XQ-aF1" firstAttribute="top" secondItem="fNG-cv-Nxt" secondAttribute="top" id="sfs-t1-Pin"/>
+                                                            <constraint firstItem="sfs-XQ-aF1" firstAttribute="leading" secondItem="fNG-cv-Nxt" secondAttribute="leading" id="sfs-l1-Pin"/>
+                                                            <constraint firstAttribute="bottom" secondItem="sfs-XQ-aF1" secondAttribute="bottom" id="sfs-b1-Pin"/>
+                                                            <constraint firstAttribute="trailing" secondItem="sfs-XQ-aF1" secondAttribute="trailing" id="sfs-r1-Pin"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="56" id="NQN-ln-qOQ">
+                                                            <variation key="heightClass=compact" constant="48"/>
+                                                        </constraint>
+                                                        <constraint firstAttribute="height" constant="56" id="81H-pS-OLq">
+                                                            <variation key="heightClass=compact" constant="48"/>
+                                                        </constraint>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </visualEffectView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="fBG-as-Ply" firstAttribute="centerX" secondItem="fGC-cv-Pbk" secondAttribute="centerX" id="fGC-cx-Pbk"/>
+                                                <constraint firstItem="fBG-as-Ply" firstAttribute="centerY" secondItem="fGC-cv-Pbk" secondAttribute="centerY" id="fGC-cy-Pbk"/>
+                                                <constraint firstItem="fBG-as-Ply" firstAttribute="leading" secondItem="fPG-as-Prv" secondAttribute="trailing" constant="2" id="jmj-uQ-Hy1"/>
+                                                <constraint firstItem="fNG-as-Nxt" firstAttribute="leading" secondItem="fBG-as-Ply" secondAttribute="trailing" constant="2" id="aqk-X9-EVu"/>
+                                                <constraint firstItem="fPG-as-Prv" firstAttribute="centerY" secondItem="fBG-as-Ply" secondAttribute="centerY" id="WHe-xa-Ktv"/>
+                                                <constraint firstItem="fNG-as-Nxt" firstAttribute="centerY" secondItem="fBG-as-Ply" secondAttribute="centerY" id="fll-BW-4kf"/>
+                                            </constraints>
+                                        </view>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="42" id="PZK-do-YzC"/>
-                                            <constraint firstAttribute="height" constant="40" id="eAo-Fe-Ek3"/>
+                                            <constraint firstAttribute="width" constant="220" id="fGC-w1-Pbk">
+                                                <variation key="heightClass=compact" constant="192"/>
+                                            </constraint>
+                                            <constraint firstAttribute="height" constant="104" id="fGC-h1-Pbk">
+                                                <variation key="heightClass=compact" constant="92"/>
+                                            </constraint>
                                         </constraints>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="backward.fill" catalog="system" symbolScale="large"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sfs-XQ-aF1" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                        <rect key="frame" x="256.66666666666669" y="728" width="42" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="81H-pS-OLq"/>
-                                            <constraint firstAttribute="width" constant="42" id="NQN-ln-qOQ"/>
-                                        </constraints>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="forward.fill" catalog="system" symbolScale="large"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RI5-DA-btJ" customClass="SymbolUIButton">
-                                        <rect key="frame" x="172.66666666666666" y="724" width="48" height="48"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="48" id="PNe-G5-AMX"/>
-                                            <constraint firstAttribute="height" constant="48" id="qgi-ao-D5G"/>
-                                        </constraints>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="play.fill" catalog="system" symbolScale="default"/>
-                                        </state>
-                                    </button>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="glassSpacing">
+                                                <real key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </visualEffectView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="745" image="AlbumPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="lka-vy-mHi">
                                         <rect key="frame" x="16.333333333333343" y="96.000000000000028" width="360.66666666666663" height="360.66666666666674"/>
                                         <constraints>
@@ -133,17 +235,20 @@
                                                 <variation key="heightClass=compact-widthClass=compact" constant="400"/>
                                             </constraint>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="256" id="liU-cM-ILJ"/>
+                                            <constraint firstAttribute="height" constant="640" priority="253" id="Fil-ar-T64"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="liU-cM-ILJ"/>
                                                 <exclude reference="C59-e5-JVo"/>
+                                                <exclude reference="Fil-ar-T64"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
                                             <mask key="constraints">
                                                 <include reference="liU-cM-ILJ"/>
                                                 <include reference="C59-e5-JVo"/>
+                                                <include reference="Fil-ar-T64"/>
                                             </mask>
                                         </variation>
                                     </imageView>
@@ -157,7 +262,9 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="16"/>
                                     </constraint>
                                     <constraint firstItem="lka-vy-mHi" firstAttribute="bottom" secondItem="qgK-bP-GXK" secondAttribute="bottom" id="8Ua-H4-zBe"/>
-                                    <constraint firstItem="RI5-DA-btJ" firstAttribute="top" secondItem="Ndk-fa-CPd" secondAttribute="bottom" constant="24" id="8io-BZ-uN9"/>
+                                    <constraint firstItem="fGC-ct-Pbk" firstAttribute="top" secondItem="Ndk-fa-CPd" secondAttribute="bottom" constant="-4" id="8io-BZ-uN9">
+                                        <variation key="heightClass=compact" constant="2"/>
+                                    </constraint>
                                     <constraint firstItem="2x2-ws-IDR" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" id="8tf-vb-MF0"/>
                                     <constraint firstAttribute="trailing" secondItem="aed-cf-8Kx" secondAttribute="trailing" constant="16" id="9DQ-aY-Cew"/>
                                     <constraint firstItem="2x2-ws-IDR" firstAttribute="leading" secondItem="DG4-0R-Uua" secondAttribute="leading" constant="56" id="Ab3-bU-FGH">
@@ -183,7 +290,6 @@
                                     <constraint firstItem="E5Z-bz-pda" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" multiplier="4:3" constant="8" id="R7B-La-Xhd"/>
                                     <constraint firstItem="Ndk-fa-CPd" firstAttribute="top" secondItem="lka-vy-mHi" secondAttribute="bottom" constant="8" id="SCv-P0-qBe"/>
                                     <constraint firstItem="E5Z-bz-pda" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" id="W1k-l1-Uet"/>
-                                    <constraint firstItem="tnF-Il-g1n" firstAttribute="top" secondItem="RI5-DA-btJ" secondAttribute="top" constant="4" id="WHe-xa-Ktv"/>
                                     <constraint firstItem="aed-cf-8Kx" firstAttribute="leading" secondItem="Ndk-fa-CPd" secondAttribute="trailing" constant="12" id="Wq1-es-t2G"/>
                                     <constraint firstItem="MWH-34-r0I" firstAttribute="leading" secondItem="DG4-0R-Uua" secondAttribute="leading" constant="56" id="YIl-td-AKZ">
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
@@ -196,7 +302,6 @@
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
                                         <variation key="heightClass=regular-widthClass=compact" constant="12"/>
                                     </constraint>
-                                    <constraint firstItem="sfs-XQ-aF1" firstAttribute="leading" secondItem="RI5-DA-btJ" secondAttribute="trailing" constant="36" id="aqk-X9-EVu"/>
                                     <constraint firstItem="MWH-34-r0I" firstAttribute="top" secondItem="2x2-ws-IDR" secondAttribute="bottom" constant="12" id="bNF-Ix-jUB">
                                         <variation key="heightClass=compact-widthClass=compact" constant="4"/>
                                     </constraint>
@@ -206,20 +311,19 @@
                                     </constraint>
                                     <constraint firstItem="lka-vy-mHi" firstAttribute="trailing" secondItem="qgK-bP-GXK" secondAttribute="trailing" id="eFt-lt-OnQ"/>
                                     <constraint firstItem="aed-cf-8Kx" firstAttribute="top" secondItem="Ndk-fa-CPd" secondAttribute="top" constant="8" id="fCt-H8-AKP"/>
-                                    <constraint firstItem="sfs-XQ-aF1" firstAttribute="top" secondItem="RI5-DA-btJ" secondAttribute="top" constant="4" id="fll-BW-4kf"/>
                                     <constraint firstItem="MWH-34-r0I" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qgK-bP-GXK" secondAttribute="trailing" constant="8" id="g0D-kf-jsk"/>
                                     <constraint firstAttribute="trailing" secondItem="2x2-ws-IDR" secondAttribute="trailing" constant="56" id="gag-YK-HBl">
                                         <variation key="heightClass=compact-widthClass=compact" constant="16"/>
                                         <variation key="heightClass=regular-widthClass=compact" constant="8"/>
                                     </constraint>
-                                    <constraint firstItem="RI5-DA-btJ" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" id="hkA-9X-5hD"/>
-                                    <constraint firstAttribute="bottom" secondItem="RI5-DA-btJ" secondAttribute="bottom" constant="62" id="inO-cX-yOf">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="20"/>
-                                        <variation key="heightClass=compact-widthClass=regular" constant="40"/>
-                                        <variation key="heightClass=regular-widthClass=compact" constant="80"/>
+                                    <constraint firstItem="fGC-ct-Pbk" firstAttribute="centerX" secondItem="DG4-0R-Uua" secondAttribute="centerX" id="hkA-9X-5hD"/>
+                                    <constraint firstAttribute="bottom" secondItem="fGC-ct-Pbk" secondAttribute="bottom" constant="34" id="inO-cX-yOf">
+                                        <variation key="heightClass=compact-widthClass=compact" constant="4"/>
+                                        <variation key="heightClass=compact-widthClass=regular" constant="18"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="68"/>
                                     </constraint>
-                                    <constraint firstItem="RI5-DA-btJ" firstAttribute="leading" secondItem="tnF-Il-g1n" secondAttribute="trailing" constant="36" id="jmj-uQ-Hy1"/>
-                                    <constraint firstItem="lka-vy-mHi" firstAttribute="centerY" secondItem="DG4-0R-Uua" secondAttribute="centerY" constant="-128" id="nie-cO-DlT">
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fGC-ct-Pbk" secondAttribute="bottom" constant="34" id="inG-cX-yOf"/>
+                                    <constraint firstItem="lka-vy-mHi" firstAttribute="centerY" secondItem="DG4-0R-Uua" secondAttribute="centerY" constant="-128" priority="750" id="nie-cO-DlT">
                                         <variation key="heightClass=compact" constant="-50"/>
                                         <variation key="heightClass=regular-widthClass=compact" constant="-180"/>
                                     </constraint>
@@ -242,6 +346,7 @@
                                         <exclude reference="zhH-G9-9oD"/>
                                         <exclude reference="g0D-kf-jsk"/>
                                         <exclude reference="SCv-P0-qBe"/>
+                                        <exclude reference="inG-cX-yOf"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact">
@@ -282,6 +387,13 @@
                                         <exclude reference="nie-cO-DlT"/>
                                     </mask>
                                 </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <exclude reference="inO-cX-yOf"/>
+                                        <include reference="inG-cX-yOf"/>
+                                        <exclude reference="nie-cO-DlT"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -289,14 +401,17 @@
                             <constraint firstItem="4Xs-Z1-yFr" firstAttribute="top" secondItem="i75-3G-leJ" secondAttribute="top" constant="-96" id="6Wp-gg-Qqc"/>
                             <constraint firstItem="px8-71-fBL" firstAttribute="top" secondItem="i75-3G-leJ" secondAttribute="top" constant="-96" id="GJq-2V-wBY"/>
                             <constraint firstAttribute="trailingMargin" secondItem="px8-71-fBL" secondAttribute="trailing" constant="-200" id="JcD-a2-3Po"/>
-                            <constraint firstItem="hDT-Mu-pHy" firstAttribute="leading" secondItem="i75-3G-leJ" secondAttribute="leadingMargin" constant="-200" id="N93-6i-2ZL"/>
-                            <constraint firstItem="4Xs-Z1-yFr" firstAttribute="leading" secondItem="i75-3G-leJ" secondAttribute="leadingMargin" constant="-200" id="VfI-3g-sEz"/>
+                            <constraint firstItem="hDT-Mu-pHy" firstAttribute="leading" secondItem="i75-3G-leJ" secondAttribute="leadingMargin" constant="-200" priority="999" id="N93-6i-2ZL"/>
+                            <constraint firstItem="hDT-Mu-pHy" firstAttribute="leading" relation="lessThanOrEqual" secondItem="i75-3G-leJ" secondAttribute="leading" id="N9E-dg-Bkg"/>
+                            <constraint firstItem="4Xs-Z1-yFr" firstAttribute="leading" secondItem="i75-3G-leJ" secondAttribute="leadingMargin" constant="-200" priority="999" id="VfI-3g-sEz"/>
+                            <constraint firstItem="4Xs-Z1-yFr" firstAttribute="leading" relation="lessThanOrEqual" secondItem="i75-3G-leJ" secondAttribute="leading" id="VfE-dg-Blr"/>
                             <constraint firstItem="hDT-Mu-pHy" firstAttribute="top" secondItem="i75-3G-leJ" secondAttribute="top" constant="-96" id="dlq-4c-C09"/>
                             <constraint firstItem="4Xs-Z1-yFr" firstAttribute="trailing" secondItem="i75-3G-leJ" secondAttribute="trailingMargin" constant="200" id="dmg-CN-yQT"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hDT-Mu-pHy" secondAttribute="trailing" constant="-200" id="h7n-c6-eAB"/>
-                            <constraint firstItem="9ag-vI-NX6" firstAttribute="top" secondItem="px8-71-fBL" secondAttribute="bottom" constant="-36" id="ohf-D7-5UX"/>
-                            <constraint firstItem="9ag-vI-NX6" firstAttribute="top" secondItem="hDT-Mu-pHy" secondAttribute="bottom" constant="-36" id="q2Q-Yo-SvI"/>
-                            <constraint firstItem="px8-71-fBL" firstAttribute="leading" secondItem="i75-3G-leJ" secondAttribute="leadingMargin" constant="-200" id="yUF-hC-4Ui"/>
+                            <constraint firstAttribute="bottom" secondItem="px8-71-fBL" secondAttribute="bottom" constant="-36" id="ohf-D7-5UX"/>
+                            <constraint firstAttribute="bottom" secondItem="hDT-Mu-pHy" secondAttribute="bottom" constant="-36" id="q2Q-Yo-SvI"/>
+                            <constraint firstItem="px8-71-fBL" firstAttribute="leading" secondItem="i75-3G-leJ" secondAttribute="leadingMargin" constant="-200" priority="999" id="yUF-hC-4Ui"/>
+                            <constraint firstItem="px8-71-fBL" firstAttribute="leading" relation="lessThanOrEqual" secondItem="i75-3G-leJ" secondAttribute="leading" id="yUE-dg-Tnt"/>
                             <constraint firstAttribute="bottom" secondItem="4Xs-Z1-yFr" secondAttribute="bottom" constant="-36" id="z8c-UV-hQF"/>
                         </constraints>
                     </view>
@@ -319,6 +434,7 @@
                         <outlet property="LocalPlaybackView" destination="tAZ-SV-Q6b" id="H7j-01-3wz"/>
                         <outlet property="LocalVolume" destination="xll-M7-TCe" id="sDH-nb-Tkb"/>
                         <outlet property="LocalVolumeSlider" destination="eDD-Zc-6fO" id="fSX-ai-kYJ"/>
+                        <outlet property="PlaybackContent" destination="DG4-0R-Uua" id="DG4-ot-Pbc"/>
                         <outlet property="PlayPauseButton" destination="RI5-DA-btJ" id="BRH-SS-JDd"/>
                         <outlet property="RemainingTime" destination="aed-cf-8Kx" id="chO-IM-09r"/>
                         <outlet property="RepeatButton" destination="t8s-HD-hgv" id="LWJ-JW-rEw"/>
@@ -364,17 +480,19 @@
                                                 <rect key="frame" x="16" y="16" width="0.0" height="96"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="96" id="0Mw-lU-IW0">
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="48"/>
+                                                        <variation key="heightClass=compact" constant="48"/>
                                                     </constraint>
-                                                    <constraint firstAttribute="width" constant="96" id="r4a-LS-STY">
-                                                        <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="48"/>
+                                                    <constraint firstAttribute="width" constant="96" priority="999" id="r4a-LS-STY">
+                                                        <variation key="heightClass=compact" constant="48"/>
                                                         <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
                                                     </constraint>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track now Playing..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="16" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rwy-TS-6DM">
                                                 <rect key="frame" x="32" y="33.666666666666664" width="214" height="28.666666666666664"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="10000" priority="252" id="Ttl-Fl-Wdt" userLabel="Title Fills Room"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -385,156 +503,273 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWe-5W-eb4" userLabel="Skip Next Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1260" y="192" width="48" height="36"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="48" id="IIM-8D-8bv">
-                                                        <variation key="heightClass=compact-widthClass=compact" constant="36"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="36"/>
-                                                    </constraint>
-                                                    <constraint firstAttribute="width" constant="48" id="YO2-5W-K5q">
-                                                        <variation key="heightClass=compact-widthClass=compact" constant="36"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="36"/>
-                                                    </constraint>
-                                                </constraints>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal">
-                                                    <imageReference key="image" image="forward.fill" catalog="system" symbolScale="large"/>
-                                                </state>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="poz-3g-api" userLabel="Volume Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1202" y="11" width="50" height="50"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="50" id="6M5-Mj-2Mq">
-                                                        <variation key="heightClass=compact-widthClass=compact" constant="35"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="35"/>
-                                                    </constraint>
-                                                    <constraint firstAttribute="height" constant="50" id="9Xm-SN-oej">
-                                                        <variation key="heightClass=compact-widthClass=compact" constant="35"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="35"/>
-                                                    </constraint>
-                                                </constraints>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal">
-                                                    <imageReference key="image" image="speaker.wave.2.circle" catalog="system" symbolScale="large"/>
-                                                </state>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fbv-li-bzQ" userLabel="Skip Prev Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="-128" y="40" width="48" height="48"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="48" id="eGF-5v-Pgk">
-                                                        <variation key="heightClass=compact-widthClass=compact" constant="36"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="36"/>
-                                                    </constraint>
-                                                    <constraint firstAttribute="height" constant="48" id="m3I-K2-qCq">
-                                                        <variation key="heightClass=compact-widthClass=compact" constant="36"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" constant="36"/>
-                                                    </constraint>
-                                                </constraints>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal">
-                                                    <imageReference key="image" image="backward.fill" catalog="system" symbolScale="large"/>
-                                                </state>
-                                            </button>
-                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MMx-P1-0Cf" customClass="UICircularProgressView">
-                                                <rect key="frame" x="1056" y="16" width="96" height="96"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="96" id="8HL-Sa-QLA"/>
-                                                    <constraint firstAttribute="height" constant="96" id="eOb-ba-geX"/>
-                                                </constraints>
-                                            </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xJI-gJ-y33">
-                                                <rect key="frame" x="0.0" y="0.0" width="1020" height="128"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="832" height="128"/>
                                                 <accessibility key="accessibilityConfiguration" hint="Control " label="Open fullscreen playback"/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DlZ-qx-4Nb" userLabel="Shuffle Button" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1202" y="67" width="50" height="50"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="50" id="CZl-WI-puR">
-                                                        <variation key="heightClass=compact" constant="35"/>
-                                                    </constraint>
-                                                    <constraint firstAttribute="height" constant="50" id="RgZ-Ie-Nb3">
-                                                        <variation key="heightClass=compact" constant="35"/>
-                                                    </constraint>
-                                                </constraints>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal">
-                                                    <imageReference key="image" image="shuffle.circle" catalog="system" symbolScale="large"/>
-                                                </state>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ugU-4p-yom" customClass="SymbolUIButton">
-                                                <rect key="frame" x="1076" y="36" width="56" height="56"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="56" id="9Zn-x0-10S">
-                                                        <variation key="heightClass=compact" constant="48"/>
-                                                    </constraint>
-                                                    <constraint firstAttribute="height" constant="56" id="yf3-nU-PD0">
-                                                        <variation key="heightClass=compact" constant="48"/>
-                                                    </constraint>
-                                                </constraints>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal">
-                                                    <imageReference key="image" image="play.fill" catalog="system" symbolScale="default"/>
-                                                </state>
-                                            </button>
+                                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gC1-ct-Pbk" userLabel="Playback Controls Glass Container" customClass="GlassContainerEffectView">
+                                                <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                                <view key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gC1-cv-Pbk">
+                                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pGl-as-Prv" userLabel="Skip Prev Glass" customClass="GlassEffectView">
+                                                            <rect key="frame" x="848" y="36" width="56" height="56"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pGl-cv-Prv">
+                                                                <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fbv-li-bzQ" userLabel="Skip Prev Button" customClass="SymbolUIButton">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <state key="normal">
+                                                                            <imageReference key="image" image="backward.fill" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                    </button>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="Fbv-li-bzQ" firstAttribute="top" secondItem="pGl-cv-Prv" secondAttribute="top" id="Fbv-t1-Pin"/>
+                                                                    <constraint firstItem="Fbv-li-bzQ" firstAttribute="leading" secondItem="pGl-cv-Prv" secondAttribute="leading" id="Fbv-l1-Pin"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="Fbv-li-bzQ" secondAttribute="bottom" id="Fbv-b1-Pin"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="Fbv-li-bzQ" secondAttribute="trailing" id="Fbv-r1-Pin"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="56" priority="999" id="eGF-5v-Pgk">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                                <constraint firstAttribute="height" constant="56" id="m3I-K2-qCq">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </visualEffectView>
+                                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MMx-P1-0Cf" userLabel="Progress Bubble" customClass="UICircularProgressView">
+                                                            <rect key="frame" x="914" y="16" width="96" height="96"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="MMx-cv-Bbl">
+                                                                <rect key="frame" x="0.0" y="0.0" width="96" height="96"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ugU-4p-yom" userLabel="Play Pause Button" customClass="SymbolUIButton">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="96" height="96"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <state key="normal">
+                                                                            <imageReference key="image" image="play.fill" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                    </button>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="ugU-4p-yom" firstAttribute="top" secondItem="MMx-cv-Bbl" secondAttribute="top" id="ugU-t1-Pin"/>
+                                                                    <constraint firstItem="ugU-4p-yom" firstAttribute="leading" secondItem="MMx-cv-Bbl" secondAttribute="leading" id="ugU-l1-Pin"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="ugU-4p-yom" secondAttribute="bottom" id="ugU-b1-Pin"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="ugU-4p-yom" secondAttribute="trailing" id="ugU-r1-Pin"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="96" id="8HL-Sa-QLA">
+                                                                    <variation key="heightClass=compact" constant="52"/>
+                                                                </constraint>
+                                                                <constraint firstAttribute="height" constant="96" id="eOb-ba-geX">
+                                                                    <variation key="heightClass=compact" constant="52"/>
+                                                                </constraint>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </visualEffectView>
+                                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nGl-as-Nxt" userLabel="Skip Next Glass" customClass="GlassEffectView">
+                                                            <rect key="frame" x="1020" y="36" width="56" height="56"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="nGl-cv-Nxt">
+                                                                <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWe-5W-eb4" userLabel="Skip Next Button" customClass="SymbolUIButton">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <state key="normal">
+                                                                            <imageReference key="image" image="forward.fill" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                    </button>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="cWe-5W-eb4" firstAttribute="top" secondItem="nGl-cv-Nxt" secondAttribute="top" id="cWe-t1-Pin"/>
+                                                                    <constraint firstItem="cWe-5W-eb4" firstAttribute="leading" secondItem="nGl-cv-Nxt" secondAttribute="leading" id="cWe-l1-Pin"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="cWe-5W-eb4" secondAttribute="bottom" id="cWe-b1-Pin"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="cWe-5W-eb4" secondAttribute="trailing" id="cWe-r1-Pin"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="56" priority="999" id="YO2-5W-K5q">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                                <constraint firstAttribute="height" constant="56" id="IIM-8D-8bv">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </visualEffectView>
+                                                    </subviews>
+                                                </view>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="glassSpacing">
+                                                        <real key="value" value="20"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </visualEffectView>
+                                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oC1-ct-Opt" userLabel="Options Glass Container" customClass="GlassContainerEffectView">
+                                                <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                                <view key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="oC1-cv-Opt">
+                                                    <rect key="frame" x="0.0" y="0.0" width="1180" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vGl-as-Vol" userLabel="Volume Glass" customClass="GlassEffectView">
+                                                            <rect key="frame" x="1112" y="12" width="48" height="48"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="vGl-cv-Vol">
+                                                                <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="poz-3g-api" userLabel="Volume Button" customClass="SymbolUIButton">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <state key="normal">
+                                                                            <imageReference key="image" image="speaker.wave.2.fill" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                    </button>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="poz-3g-api" firstAttribute="top" secondItem="vGl-cv-Vol" secondAttribute="top" id="poz-t1-Pin"/>
+                                                                    <constraint firstItem="poz-3g-api" firstAttribute="leading" secondItem="vGl-cv-Vol" secondAttribute="leading" id="poz-l1-Pin"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="poz-3g-api" secondAttribute="bottom" id="poz-b1-Pin"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="poz-3g-api" secondAttribute="trailing" id="poz-r1-Pin"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="48" id="6M5-Mj-2Mq">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                                <constraint firstAttribute="height" constant="48" id="9Xm-SN-oej">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </visualEffectView>
+                                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sGl-as-Shf" userLabel="Shuffle Glass" customClass="GlassEffectView">
+                                                            <rect key="frame" x="1112" y="68" width="48" height="48"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="sGl-cv-Shf">
+                                                                <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DlZ-qx-4Nb" userLabel="Shuffle Button" customClass="SymbolUIButton">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <state key="normal">
+                                                                            <imageReference key="image" image="shuffle" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                    </button>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="DlZ-qx-4Nb" firstAttribute="top" secondItem="sGl-cv-Shf" secondAttribute="top" id="DlZ-t1-Pin"/>
+                                                                    <constraint firstItem="DlZ-qx-4Nb" firstAttribute="leading" secondItem="sGl-cv-Shf" secondAttribute="leading" id="DlZ-l1-Pin"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="DlZ-qx-4Nb" secondAttribute="bottom" id="DlZ-b1-Pin"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="DlZ-qx-4Nb" secondAttribute="trailing" id="DlZ-r1-Pin"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="48" id="CZl-WI-puR">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                                <constraint firstAttribute="height" constant="48" id="RgZ-Ie-Nb3">
+                                                                    <variation key="heightClass=compact" constant="40"/>
+                                                                </constraint>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassInteractive" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassCapsule" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="glassClear" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </visualEffectView>
+                                                    </subviews>
+                                                </view>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="glassSpacing">
+                                                        <real key="value" value="20"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </visualEffectView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="xJI-gJ-y33" secondAttribute="bottom" id="0vx-Un-Ams"/>
-                                            <constraint firstItem="poz-3g-api" firstAttribute="trailing" secondItem="DlZ-qx-4Nb" secondAttribute="trailing" id="1gc-NI-O3C">
-                                                <variation key="heightClass=compact" constant="40"/>
+                                            <constraint firstItem="vGl-as-Vol" firstAttribute="trailing" secondItem="sGl-as-Shf" secondAttribute="trailing" id="1gc-NI-O3C">
+                                                <variation key="heightClass=compact" constant="42"/>
                                             </constraint>
-                                            <constraint firstAttribute="trailing" secondItem="poz-3g-api" secondAttribute="trailing" constant="20" id="288-Pb-upZ">
+                                            <constraint firstAttribute="trailing" secondItem="vGl-as-Vol" secondAttribute="trailing" constant="20" id="288-Pb-upZ">
                                                 <variation key="heightClass=compact" constant="28"/>
                                                 <variation key="heightClass=regular-widthClass=compact" constant="-72"/>
                                             </constraint>
-                                            <constraint firstItem="cWe-5W-eb4" firstAttribute="leading" secondItem="ugU-4p-yom" secondAttribute="trailing" constant="12" id="4Cw-C8-gfb"/>
-                                            <constraint firstItem="Fbv-li-bzQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="rwy-TS-6DM" secondAttribute="trailing" constant="16" id="4la-bA-Etd"/>
-                                            <constraint firstItem="Fbv-li-bzQ" firstAttribute="leading" secondItem="xJI-gJ-y33" secondAttribute="trailing" constant="16" id="6Tf-TA-5Xd"/>
-                                            <constraint firstItem="Fbv-li-bzQ" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" id="ALo-sd-bDY"/>
-                                            <constraint firstItem="ugU-4p-yom" firstAttribute="leading" secondItem="Fbv-li-bzQ" secondAttribute="trailing" constant="12" id="ATW-CF-cR9"/>
+                                            <constraint firstItem="nGl-as-Nxt" firstAttribute="leading" secondItem="MMx-P1-0Cf" secondAttribute="trailing" constant="2" id="4Cw-C8-gfb"/>
+                                            <constraint firstItem="pGl-as-Prv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="rwy-TS-6DM" secondAttribute="trailing" constant="16" id="4la-bA-Etd"/>
+                                            <constraint firstItem="pGl-as-Prv" firstAttribute="leading" secondItem="xJI-gJ-y33" secondAttribute="trailing" constant="16" id="6Tf-TA-5Xd"/>
+                                            <constraint firstItem="pGl-as-Prv" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" id="ALo-sd-bDY"/>
+                                            <constraint firstItem="MMx-P1-0Cf" firstAttribute="leading" secondItem="pGl-as-Prv" secondAttribute="trailing" constant="2" id="ATW-CF-cR9"/>
                                             <constraint firstItem="e9S-Rc-HA6" firstAttribute="bottom" secondItem="05J-Ld-RDm" secondAttribute="bottom" id="AYv-2Z-pCo"/>
                                             <constraint firstItem="xJI-gJ-y33" firstAttribute="top" secondItem="DXd-9F-gc4" secondAttribute="top" id="CMj-pz-jiH"/>
                                             <constraint firstItem="e9S-Rc-HA6" firstAttribute="trailing" secondItem="05J-Ld-RDm" secondAttribute="trailing" id="DQa-E3-1iK"/>
                                             <constraint firstItem="Pu2-Xs-TVz" firstAttribute="top" secondItem="rwy-TS-6DM" secondAttribute="bottom" constant="8" id="Gpf-jj-9yD"/>
-                                            <constraint firstItem="Fbv-li-bzQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Pu2-Xs-TVz" secondAttribute="trailing" constant="16" id="KsV-xZ-o8u"/>
+                                            <constraint firstItem="pGl-as-Prv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Pu2-Xs-TVz" secondAttribute="trailing" constant="16" id="KsV-xZ-o8u"/>
                                             <constraint firstItem="e9S-Rc-HA6" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" id="L5O-Ls-iN8"/>
                                             <constraint firstItem="xJI-gJ-y33" firstAttribute="leading" secondItem="DXd-9F-gc4" secondAttribute="leading" id="Pri-Ft-qHP"/>
-                                            <constraint firstItem="ugU-4p-yom" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="rwy-TS-6DM" secondAttribute="trailing" constant="48" id="Sug-uY-M97"/>
-                                            <constraint firstItem="rwy-TS-6DM" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" constant="-16" id="U1F-m0-cXU"/>
-                                            <constraint firstAttribute="trailing" secondItem="cWe-5W-eb4" secondAttribute="trailing" constant="112" id="VoF-aI-gNk">
-                                                <variation key="heightClass=compact-widthClass=regular" constant="140"/>
-                                                <variation key="heightClass=regular-widthClass=compact" constant="-128"/>
+                                            <constraint firstItem="MMx-P1-0Cf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="rwy-TS-6DM" secondAttribute="trailing" constant="28" id="Sug-uY-M97">
+                                                <variation key="heightClass=compact" constant="46"/>
                                             </constraint>
-                                            <constraint firstItem="ugU-4p-yom" firstAttribute="leading" secondItem="Fbv-li-bzQ" secondAttribute="trailing" constant="36" id="W4p-ZJ-1br"/>
+                                            <constraint firstItem="rwy-TS-6DM" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" constant="-16" id="U1F-m0-cXU"/>
+                                            <constraint firstAttribute="trailing" secondItem="nGl-as-Nxt" secondAttribute="trailing" constant="104" id="VoF-aI-gNk">
+                                                <variation key="heightClass=compact" constant="140"/>
+                                            </constraint>
+                                            <constraint firstItem="MMx-P1-0Cf" firstAttribute="leading" secondItem="pGl-as-Prv" secondAttribute="trailing" constant="2" id="W4p-ZJ-1br"/>
                                             <constraint firstItem="MMx-P1-0Cf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Pu2-Xs-TVz" secondAttribute="trailing" constant="48" id="Y2k-vB-tj7"/>
                                             <constraint firstItem="Pu2-Xs-TVz" firstAttribute="leading" secondItem="e9S-Rc-HA6" secondAttribute="trailing" constant="16" id="ddI-bN-RWD"/>
                                             <constraint firstItem="MMx-P1-0Cf" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" id="dns-NL-raO"/>
-                                            <constraint firstItem="DlZ-qx-4Nb" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" constant="28" id="fST-UQ-JMt">
+                                            <constraint firstItem="sGl-as-Shf" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" constant="25" id="fST-UQ-JMt">
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
-                                            <constraint firstItem="cWe-5W-eb4" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" id="gvi-Zs-cTV"/>
-                                            <constraint firstItem="cWe-5W-eb4" firstAttribute="top" secondItem="DXd-9F-gc4" secondAttribute="bottom" constant="128" id="h6q-Om-RsB"/>
-                                            <constraint firstItem="ugU-4p-yom" firstAttribute="leading" secondItem="xJI-gJ-y33" secondAttribute="trailing" constant="56" id="hRv-nI-0sI">
-                                                <variation key="heightClass=compact-widthClass=compact" constant="16"/>
-                                            </constraint>
-                                            <constraint firstItem="ugU-4p-yom" firstAttribute="leading" secondItem="MMx-P1-0Cf" secondAttribute="trailing" constant="-76" id="hVz-kx-U0v">
-                                                <variation key="heightClass=compact" constant="-500"/>
-                                            </constraint>
+                                            <constraint firstItem="nGl-as-Nxt" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" id="gvi-Zs-cTV"/>
+                                            <constraint firstItem="nGl-as-Nxt" firstAttribute="top" secondItem="DXd-9F-gc4" secondAttribute="bottom" constant="128" id="h6q-Om-RsB"/>
+                                            <constraint firstItem="MMx-P1-0Cf" firstAttribute="leading" secondItem="xJI-gJ-y33" secondAttribute="trailing" constant="36" id="hRv-nI-0sI"/>
                                             <constraint firstItem="05J-Ld-RDm" firstAttribute="leading" secondItem="e9S-Rc-HA6" secondAttribute="leading" id="kdC-Of-fr7"/>
-                                            <constraint firstItem="cWe-5W-eb4" firstAttribute="leading" secondItem="ugU-4p-yom" secondAttribute="trailing" constant="36" id="lBY-15-sxl"/>
+                                            <constraint firstItem="nGl-as-Nxt" firstAttribute="leading" secondItem="MMx-P1-0Cf" secondAttribute="trailing" constant="2" id="lBY-15-sxl"/>
                                             <constraint firstItem="05J-Ld-RDm" firstAttribute="top" secondItem="e9S-Rc-HA6" secondAttribute="top" id="lej-Ws-sNz"/>
-                                            <constraint firstItem="poz-3g-api" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" constant="-28" id="n7W-Gd-UYQ">
+                                            <constraint firstItem="vGl-as-Vol" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" constant="-25" id="n7W-Gd-UYQ">
                                                 <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
                                                 <variation key="heightClass=compact-widthClass=regular" constant="0.0"/>
                                             </constraint>
                                             <constraint firstItem="rwy-TS-6DM" firstAttribute="leading" secondItem="e9S-Rc-HA6" secondAttribute="trailing" constant="16" id="piZ-ch-FmW"/>
-                                            <constraint firstItem="DlZ-qx-4Nb" firstAttribute="leading" secondItem="ugU-4p-yom" secondAttribute="trailing" constant="20" id="qdx-KM-zw2"/>
-                                            <constraint firstItem="Fbv-li-bzQ" firstAttribute="leading" secondItem="DXd-9F-gc4" secondAttribute="leading" constant="-128" id="rqc-LJ-ZHm"/>
-                                            <constraint firstAttribute="trailing" secondItem="ugU-4p-yom" secondAttribute="trailing" constant="48" id="sON-QN-IKN"/>
+                                            <constraint firstItem="pGl-as-Prv" firstAttribute="leading" secondItem="DXd-9F-gc4" secondAttribute="leading" constant="-128" id="rqc-LJ-ZHm"/>
+                                            <constraint firstAttribute="trailing" secondItem="MMx-P1-0Cf" secondAttribute="trailing" constant="28" priority="900" id="sON-QN-IKN"/>
                                             <constraint firstItem="e9S-Rc-HA6" firstAttribute="leading" secondItem="DXd-9F-gc4" secondAttribute="leading" constant="16" id="xML-2W-2H3">
-                                                <variation key="heightClass=compact-widthClass=regular" constant="46"/>
+                                                <variation key="heightClass=compact" constant="46"/>
                                             </constraint>
-                                            <constraint firstItem="ugU-4p-yom" firstAttribute="centerY" secondItem="DXd-9F-gc4" secondAttribute="centerY" id="zbZ-qP-Wzz"/>
+                                            <constraint firstItem="gC1-ct-Pbk" firstAttribute="top" secondItem="DXd-9F-gc4" secondAttribute="top" id="gC1-t1-Pbk"/>
+                                            <constraint firstItem="gC1-ct-Pbk" firstAttribute="leading" secondItem="DXd-9F-gc4" secondAttribute="leading" id="gC1-l1-Pbk"/>
+                                            <constraint firstAttribute="bottom" secondItem="gC1-ct-Pbk" secondAttribute="bottom" id="gC1-b1-Pbk"/>
+                                            <constraint firstAttribute="trailing" secondItem="gC1-ct-Pbk" secondAttribute="trailing" id="gC1-r1-Pbk"/>
+                                            <constraint firstItem="oC1-ct-Opt" firstAttribute="top" secondItem="DXd-9F-gc4" secondAttribute="top" id="oC1-t1-Opt"/>
+                                            <constraint firstItem="oC1-ct-Opt" firstAttribute="leading" secondItem="DXd-9F-gc4" secondAttribute="leading" id="oC1-l1-Opt"/>
+                                            <constraint firstAttribute="bottom" secondItem="oC1-ct-Opt" secondAttribute="bottom" id="oC1-b1-Opt"/>
+                                            <constraint firstAttribute="trailing" secondItem="oC1-ct-Opt" secondAttribute="trailing" id="oC1-r1-Opt"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -551,7 +786,6 @@
                                                 <exclude reference="h6q-Om-RsB"/>
                                                 <exclude reference="4Cw-C8-gfb"/>
                                                 <exclude reference="lBY-15-sxl"/>
-                                                <exclude reference="qdx-KM-zw2"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -568,12 +802,21 @@
                                         </variation>
                                         <variation key="heightClass=compact-widthClass=compact">
                                             <mask key="constraints">
-                                                <include reference="qdx-KM-zw2"/>
+                                                <exclude reference="rqc-LJ-ZHm"/>
+                                                <exclude reference="hRv-nI-0sI"/>
+                                                <exclude reference="h6q-Om-RsB"/>
+                                                <include reference="4la-bA-Etd"/>
+                                                <include reference="KsV-xZ-o8u"/>
+                                                <include reference="6Tf-TA-5Xd"/>
+                                                <include reference="ATW-CF-cR9"/>
+                                                <include reference="4Cw-C8-gfb"/>
+                                                <include reference="gvi-Zs-cTV"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact-widthClass=regular">
                                             <mask key="constraints">
                                                 <include reference="4la-bA-Etd"/>
+                                                <include reference="KsV-xZ-o8u"/>
                                                 <include reference="6Tf-TA-5Xd"/>
                                                 <include reference="ATW-CF-cR9"/>
                                                 <include reference="4Cw-C8-gfb"/>
@@ -585,6 +828,11 @@
                                                 <include reference="Y2k-vB-tj7"/>
                                                 <include reference="sON-QN-IKN"/>
                                                 <exclude reference="h6q-Om-RsB"/>
+                                                <exclude reference="rqc-LJ-ZHm"/>
+                                                <exclude reference="VoF-aI-gNk"/>
+                                                <include reference="W4p-ZJ-1br"/>
+                                                <include reference="lBY-15-sxl"/>
+                                                <include reference="gvi-Zs-cTV"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
@@ -642,8 +890,12 @@
                         <outlet property="PrevButton" destination="Fbv-li-bzQ" id="GaS-gE-ho8"/>
                         <outlet property="ShadowCaster" destination="05J-Ld-RDm" id="LhJ-iN-2ix"/>
                         <outlet property="ShuffleButton" destination="DlZ-qx-4Nb" id="og0-A9-fMJ"/>
+                        <outlet property="ShuffleGlass" destination="sGl-as-Shf" id="sGl-ot-Shf"/>
+                        <outlet property="SkipNextGlass" destination="nGl-as-Nxt" id="nGl-ot-Nxt"/>
+                        <outlet property="SkipPrevGlass" destination="pGl-as-Prv" id="pGl-ot-Prv"/>
                         <outlet property="TrackTitle" destination="rwy-TS-6DM" id="6mI-iV-E7r"/>
                         <outlet property="VolumeButton" destination="poz-3g-api" id="dIA-Pd-UIX"/>
+                        <outlet property="VolumeTrailing" destination="288-Pb-upZ" id="vTr-ot-Vol"/>
                     </connections>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="4" id="a6h-ap-Qy1" userLabel="VolumePopover">
@@ -678,7 +930,7 @@
                                         <constraint firstAttribute="height" constant="35" id="cvI-GY-bFd"/>
                                     </constraints>
                                     <state key="normal">
-                                        <imageReference key="image" image="speaker.wave.2.circle" catalog="system" symbolScale="small"/>
+                                        <imageReference key="image" image="speaker.wave.2.fill" catalog="system" symbolScale="small"/>
                                     </state>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wCV-2J-UVG">
@@ -726,7 +978,7 @@
                                         <constraint firstAttribute="width" constant="35" id="mUH-le-CTt"/>
                                     </constraints>
                                     <state key="normal">
-                                        <imageReference key="image" image="speaker.wave.2.circle" catalog="system" symbolScale="small"/>
+                                        <imageReference key="image" image="speaker.wave.2.fill" catalog="system" symbolScale="small"/>
                                     </state>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xll-M7-TCe">
@@ -771,9 +1023,8 @@
         <image name="play.fill" catalog="system" width="115" height="128"/>
         <image name="repeat" catalog="system" width="128" height="102"/>
         <image name="shuffle" catalog="system" width="128" height="98"/>
-        <image name="shuffle.circle" catalog="system" width="128" height="128"/>
+        <image name="speaker.wave.2.fill" catalog="system" width="128" height="91"/>
         <image name="speaker.wave.1.fill" catalog="system" width="128" height="109"/>
-        <image name="speaker.wave.2.circle" catalog="system" width="128" height="128"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

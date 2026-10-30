@@ -138,7 +138,7 @@ namespace Stylophone.iOS
         private void SetCompactViewFollowsSafeArea(bool followsSafeArea)
         {
             // Floating within the safe area, or along the bottom edge of the screen
-            _compactView.SetFloating(followsSafeArea);
+            _compactView.UpdateCornerRadii(followsSafeArea);
 
             if (_compactViewSafeAreaConstraints[0].Active == followsSafeArea)
                 return;
