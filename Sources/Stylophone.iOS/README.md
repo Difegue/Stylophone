@@ -9,3 +9,13 @@ for scale in 2 3; do "$ICTOOL" AppIcon.icon --export-image --output-file Assets.
 mkdir -p /tmp/appicon
 xcrun actool Assets.xcassets AppIcon.icon --app-icon AppIcon --platform iphoneos --target-device iphone --target-device ipad --minimum-deployment-target 16.0 --compile /tmp/appicon --output-partial-info-plist /tmp/appicon/partial.plist
 cp /tmp/appicon/Assets.car .
+
+The Mac app also bundles `AppIcon.icns`, which the Mac App Store requires:  
+
+mkdir -p /tmp/AppIcon.iconset
+"$ICTOOL" AppIcon.icon --export-image --output-file /tmp/appicon-full.png --platform macOS --rendition Default --width 512 --height 512 --scale 2
+sips -Z 824 /tmp/appicon-full.png --out /tmp/appicon-body.png
+sips --padToHeightWidth 1024 1024 /tmp/appicon-body.png --out /tmp/AppIcon.iconset/icon_512x512@2x.png
+for size in 16 32 128 256 512; do sips -z $size $size /tmp/AppIcon.iconset/icon_512x512@2x.png --out /tmp/AppIcon.iconset/icon_${size}x${size}.png; done
+for size in 16 32 128 256; do sips -z $((size * 2)) $((size * 2)) /tmp/AppIcon.iconset/icon_512x512@2x.png --out /tmp/AppIcon.iconset/icon_${size}x${size}@2x.png; done
+iconutil -c icns /tmp/AppIcon.iconset -o AppIcon.icns

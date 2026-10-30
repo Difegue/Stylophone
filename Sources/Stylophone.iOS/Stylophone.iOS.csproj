@@ -85,4 +85,8 @@
     <BundleResource Include="Resources\silence.wav" />
     <BundleResource Include="Assets.car" />
   </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+    <PartialAppManifest Include="Info.MacCatalyst.plist" />
+    <BundleResource Include="AppIcon.icns" />
+  </ItemGroup>
 </Project>
