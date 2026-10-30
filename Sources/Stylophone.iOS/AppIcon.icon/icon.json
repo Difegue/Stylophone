@@ -72,7 +72,15 @@
         }
       ],
       "lighting" : "individual",
+      "name" : "Group",
       "opacity" : 1,
+      "position" : {
+        "scale" : 0.9,
+        "translation-in-points" : [
+          2,
+          0
+        ]
+      },
       "shadow" : {
         "kind" : "none",
         "opacity" : 1
@@ -258,6 +266,13 @@
         }
       ],
       "lighting" : "individual",
+      "position" : {
+        "scale" : 0.9,
+        "translation-in-points" : [
+          2,
+          0
+        ]
+      },
       "shadow-specializations" : [
         {
           "value" : {
