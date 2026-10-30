@@ -92,6 +92,11 @@ namespace Stylophone.iOS.ViewControllers
             LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
 
             LocalMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.LocalPlayback.ToggleMute();
+            ViewModel.LocalPlayback.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModel.LocalPlayback.VolumeIcon))
+                    UpdateButton(LocalMuteButton, ViewModel.LocalPlayback.VolumeIcon);
+            };
             LocalPlaybackBinder.Bind<int>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
             LocalPlaybackBinder.Bind<int>(LocalVolume, "text", nameof(ViewModel.LocalPlayback.Volume), valueTransformer: intToStringTransformer);
             LocalVolumeSlider.AccessibilityLabel = Strings.LocalVolumeHeader;
@@ -316,6 +321,7 @@ namespace Stylophone.iOS.ViewControllers
             UpdateButton(PlayPauseButton, ViewModel.PlayButtonContent);
             UpdateButton(VolumeButton, ViewModel.VolumeIcon);
             UpdateButton(ServerMuteButton, ViewModel.VolumeIcon);
+            UpdateButton(LocalMuteButton, ViewModel.LocalPlayback.VolumeIcon);
             UpdateButton(RepeatButton, ViewModel.RepeatIcon);
             UpdateToggleButtons();
 
@@ -323,6 +329,9 @@ namespace Stylophone.iOS.ViewControllers
             ShuffleButton.AccessibilityLabel = Strings.ActionToggleShuffle;
             RepeatButton.AccessibilityLabel = Strings.ActionToggleRepeat;
             UpdateGlyphSizes();
+
+            // The storyboard gives the playback glyphs the label color, which would let the album art show through them on Macs
+            SkipPrevButton.TintColor = PlayPauseButton.TintColor = SkipNextButton.TintColor = GlassEffectView.OpaqueLabelColor;
 
             SkipPrevButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipPrevious();
             SkipNextButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipNext();
