@@ -25,13 +25,16 @@ namespace Stylophone.iOS
     {
         public IServiceProvider Services { get; }
 
-        [Export("window")]
+        // Main window, owned by the main scene (see SceneDelegate)
         public UIWindow Window { get; set; }
 
         public event EventHandler<EventArgs> ApplicationWillResign;
         public event EventHandler<EventArgs> ApplicationWillBecomeActive;
 
         public UISplitViewController RootViewController { get; set; }
+
+        private NSObject _willResignActiveObserver;
+        private NSObject _didBecomeActiveObserver;
 
         public UIColor AppColor => UIColor.FromDynamicProvider((traitCollection) =>
         {
@@ -61,25 +64,25 @@ namespace Stylophone.iOS
             AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
             //AVAudioSession.SharedInstance().SetPrefersNoInterruptionsFromSystemAlerts(true, out _);
 
+            // With the UIScene lifecycle, activation events go to the scene delegates instead of the app delegate.
+            // The app-wide notifications are still posted though, so use those to keep our events app-wide.
+            _willResignActiveObserver = UIApplication.Notifications.ObserveWillResignActive((s, e) => ApplicationWillResign?.Invoke(this, EventArgs.Empty));
+            _didBecomeActiveObserver = UIApplication.Notifications.ObserveDidBecomeActive((s, e) => ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty));
+
             // Override point for customization after application launch
             Task.Run(async () => await InitializeApplicationAsync());
-
-            RootViewController = Window.RootViewController as UISplitViewController;
-            Window.TintColor = AppColor;
 
             return true;
         }
 
-        [Export("applicationWillResignActive:")]
-        public void OnResignActivation(UIApplication application)
+        [Export("application:configurationForConnectingSceneSession:options:")]
+        public UISceneConfiguration GetConfiguration(UIApplication application, UISceneSession connectingSceneSession, UISceneConnectionOptions options)
         {
-            ApplicationWillResign?.Invoke(this, EventArgs.Empty);
-        }
+            // Album/playlist windows requested through INavigationService.ShowInSeparateWindowAsync carry a matching user activity
+            var configurationName = DetailSceneDelegate.CanHandle(options.UserActivities) ?
+                DetailSceneDelegate.ConfigurationName : SceneDelegate.ConfigurationName;
 
-        [Export("applicationDidBecomeActive:")]
-        public void OnActivated(UIApplication application)
-        {
-            ApplicationWillBecomeActive?.Invoke(this, EventArgs.Empty);
+            return new UISceneConfiguration(configurationName, connectingSceneSession.Role);
         }
 
         public override void BuildMenu(IUIMenuBuilder builder)
@@ -153,7 +156,7 @@ namespace Stylophone.iOS
                 SentrySdk.ConfigureScope(scope =>
                 {
                     scope.Release = assembly.Version.ToString();
-                    scope.SetTag("total_launch_count", launchCount);
+                    scope.SetTag("total_launch_count", launchCount.ToString());
                 });
 
                 SentrySdk.CaptureMessage($"{assembly.Name} - {assembly.Version} ");

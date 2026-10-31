@@ -15,10 +15,14 @@
 		<string>pt</string>
 		<string>zh</string>
 	</array>
+	<key>CFBundleName</key>
+	<string>Stylophone</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.7.3</string>
+	<string>2.8.0</string>
 	<key>CFBundleVersion</key>
-	<string>2.7.3.0</string>
+	<string>2.8.0</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.music</string>
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
 	<key>MinimumOSVersion</key>
@@ -34,10 +38,34 @@
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UIMainStoryboardFile~ipad</key>
-	<string>Main</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>SceneDelegate</string>
+				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Detail Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>DetailSceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.tvc16.stylophone.album</string>
+		<string>com.tvc16.stylophone.playlist</string>
+	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -56,7 +84,30 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon60x60</string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+		</dict>
+	</dict>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon60x60</string>
+				<string>AppIcon76x76</string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

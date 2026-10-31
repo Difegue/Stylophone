@@ -25,18 +25,31 @@ namespace Stylophone.iOS.ViewControllers
         {
         }
 
-        public PlaylistViewModel ViewModel => Ioc.Default.GetRequiredService<PlaylistViewModel>();
+        // Used by separate windows, which get their own viewmodel instead of the shared one
+        public PlaylistViewController(NSCoder coder, PlaylistViewModel viewModel) : base(coder)
+        {
+            _viewModel = viewModel;
+        }
+
+        private PlaylistViewModel _viewModel;
+        public PlaylistViewModel ViewModel => _viewModel ??= Ioc.Default.GetRequiredService<PlaylistViewModel>();
         public PropertyBinder<PlaylistViewModel> Binder => new(ViewModel);
 
         private PropertyBinder<AlbumViewModel> _albumBinder;
-        private UIBarButtonItem _settingsBtn;
+        private string _playlistName;
+        private NarrowLayoutSwitch _narrowLayout;
+        private VerticalBarHeaderLayout _verticalBarLayout;
 
         void IPreparableViewController.Prepare(object parameter)
         {
             TableView.ScrollRectToVisible(new CGRect(0, 0, 1, 1), false);
 
-            // Reset label texts
-            PlaylistArtists.Text = "...";
+            // Reset label texts when switching playlists. The viewmodel is shared, so reopening the same playlist sets the same artists again,
+            // which doesn't notify the binding: the placeholder would stay.
+            if (_playlistName != parameter as string)
+                PlaylistArtists.Text = "...";
+            _playlistName = parameter as string;
+            UpdateNavigationTitle();
 
             Task.Run(async () =>
             {
@@ -54,10 +67,13 @@ namespace Stylophone.iOS.ViewControllers
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
-            TraitCollectionDidChange(null);
             NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
 
-            _settingsBtn = CreateSettingsButton();
+            // Switch to the layout of phones when sidebars leave too little room for the playlist art
+            _narrowLayout = new NarrowLayoutSwitch(this, DetailHeaderHelper.RegularLayoutMinWidth);
+
+            // The playlist's actions live in the navigation bar, with "Play" as the principal one. 
+            NavigationItem.RightBarButtonItems = new[] { CreateSettingsButton(), CreatePlayButton(), EditButtonItem };
 
             var trackDataSource = new TrackTableViewDataSource(TableView, ViewModel.Source,
                 GetRowContextMenu, GetRowSwipeActions, true, OnScroll, OnTap);
@@ -73,20 +89,10 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<bool>(AlbumArtLoadingIndicator, "animating", nameof(ViewModel.ArtLoaded),
                 valueTransformer: NSValueTransformer.GetValueTransformer(nameof(ReverseBoolValueTransformer)));
 
-            Binder.BindButton(PlayButton, Strings.ContextMenuPlay, ViewModel.PlayPlaylistCommand);
-            PlayButton.Layer.CornerRadius = 8;
-            Binder.BindButton(AddToQueueButton, Strings.ContextMenuAddToQueue, ViewModel.LoadPlaylistCommand);
-            AddToQueueButton.Layer.CornerRadius = 8;
-            Binder.BindButton(DeleteButton, Strings.ContextMenuDeletePlaylist, ViewModel.RemovePlaylistCommand);
-            DeleteButton.Layer.CornerRadius = 8;
-
             var imageConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer));
-            var colorConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIColorValueTransformer));
 
             Binder.Bind<SKImage>(AlbumArt, "image", nameof(ViewModel.PlaylistArt), valueTransformer: imageConverter);
             Binder.Bind<SKImage>(BackgroundArt, "image", nameof(ViewModel.PlaylistArt), valueTransformer: imageConverter);
-            Binder.Bind<SKColor>(PlayButton, "backgroundColor", nameof(ViewModel.DominantColor), valueTransformer: colorConverter);
-            Binder.Bind<SKColor>(AddToQueueButton, "backgroundColor", nameof(ViewModel.DominantColor), valueTransformer: colorConverter);
 
             // Add radius to AlbumArt
             AlbumArt.Layer.CornerRadius = 8;
@@ -97,7 +103,39 @@ namespace Stylophone.iOS.ViewControllers
             ArtContainer.Layer.ShadowOffset = new CGSize(0, 0);
             ArtContainer.Layer.ShadowRadius = 4;
 
-            NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { EditButtonItem };
+            // Refit the header once the bindings have updated its text
+            ViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName is nameof(ViewModel.Name) or nameof(ViewModel.Artists) or nameof(ViewModel.PlaylistInfo))
+                    UIApplication.SharedApplication.BeginInvokeOnMainThread(View.SetNeedsLayout);
+            };
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            DetailHeaderHelper.FollowSafeArea(HeaderBlur, BackgroundArt);
+            _verticalBarLayout = new VerticalBarHeaderLayout(this, HeaderBlur, ArtContainer, PlaylistTitle);
+        }
+
+        public override void ViewIsAppearing(bool animated)
+        {
+            base.ViewIsAppearing(animated);
+            _narrowLayout.Update();
+        }
+
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+            coordinator.AnimateAlongsideTransition(_ => _narrowLayout.Update(), null);
+        }
+
+        public override void ViewSafeAreaInsetsDidChange()
+        {
+            base.ViewSafeAreaInsetsDidChange();
+
+            // Sidebars showing up or going away change the room left for the page. Wait for the current layout pass to end.
+            UIApplication.SharedApplication.BeginInvokeOnMainThread(_narrowLayout.Update);
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -111,34 +149,32 @@ namespace Stylophone.iOS.ViewControllers
 
         private void OnScroll(UIScrollView scrollView)
         {
-            if (scrollView.ContentOffset.Y > 192)
-            {
-                Title = ViewModel?.Name;
-                NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { _settingsBtn, EditButtonItem };
-            }
-            else
-            {
-                Title = "";
-                NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { EditButtonItem };
-            }
+            DetailHeaderHelper.UpdateTopEdgeEffect(TableView);
+            DetailHeaderHelper.UpdateHeaderFade(TableView, HeaderBlur.ContentView);
+            UpdateNavigationTitle();
         }
 
-        public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
+        private void UpdateNavigationTitle()
         {
-            base.TraitCollectionDidChange(previousTraitCollection);
+            // Regular widths show the title in the header next to the art, so only put it in the bar once it scrolls away
+            var showsHeaderTitle = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular &&
+                !DetailHeaderHelper.IsUnderNavigationBar(TableView, PlaylistTitle);
+            var title = showsHeaderTitle ? null : _playlistName;
 
-            var headerView = TableView.TableHeaderView;
-            CGRect newFrame = headerView.Frame;
-            if (TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
-            {
-                newFrame.Height = 242;
-            }
-            else
-            {
-                newFrame.Height = 296;
-            }
-            headerView.Frame = newFrame;
-            TableView.TableHeaderView = headerView;
+            if (Title != title)
+                Title = title;
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            // The header's content depends on size classes and the playlist, so fit it whenever the layout changes
+            _verticalBarLayout.Update();
+            DetailHeaderHelper.UpdateHeaderHeight(TableView);
+            DetailHeaderHelper.UpdateTopEdgeEffect(TableView);
+            DetailHeaderHelper.UpdateHeaderFade(TableView, HeaderBlur.ContentView);
+            UpdateNavigationTitle();
         }
 
         private UIMenu GetRowContextMenu(NSIndexPath indexPath)
@@ -175,14 +211,31 @@ namespace Stylophone.iOS.ViewControllers
             return UISwipeActionsConfiguration.FromActions(new[] { action });
         }
 
+        // Done is the prominent style on iOS 26
+        private UIBarButtonItem CreatePlayButton() =>
+            new UIBarButtonItem(UIImage.GetSystemImage("play.fill"), UIBarButtonItemStyle.Done, (s, e) => ViewModel.PlayPlaylistCommand.Execute(null))
+            {
+                AccessibilityLabel = Strings.ContextMenuPlay
+            };
+
         private UIBarButtonItem CreateSettingsButton()
         {
-            var playAlbumAction = Binder.GetCommandAction(Strings.ContextMenuPlay, "play", ViewModel.PlayPlaylistCommand);
             var addAlbumAction = Binder.GetCommandAction(Strings.ContextMenuAddToQueue, "plus", ViewModel.LoadPlaylistCommand);
             var deletePlaylistAction = Binder.GetCommandAction(Strings.ContextMenuDeletePlaylist, "trash", ViewModel.RemovePlaylistCommand);
+            deletePlaylistAction.Attributes = UIMenuElementAttributes.Destructive;
 
-            var barButtonMenu = UIMenu.Create(new[] { playAlbumAction, addAlbumAction, deletePlaylistAction });
-            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+            var menuElements = new List<UIMenuElement> { addAlbumAction };
+
+            var separateWindowAction = ViewModel.CanShowInSecondWindow ?
+                SeparateWindowHelper.CreateAction(() => ViewModel.OpenInSeparateWindowCommand.Execute(null)) : null;
+            if (separateWindowAction != null)
+                menuElements.Add(UIMenu.Create("", null, UIMenuIdentifier.None, UIMenuOptions.DisplayInline, new[] { separateWindowAction }));
+
+            // Keep the destructive action apart from the others
+            menuElements.Add(UIMenu.Create("", null, UIMenuIdentifier.None, UIMenuOptions.DisplayInline, new[] { deletePlaylistAction }));
+
+            var barButtonMenu = UIMenu.Create(menuElements.ToArray());
+            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
         }
     }
 }

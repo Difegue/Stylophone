@@ -19,9 +19,22 @@ namespace Stylophone.iOS.Services
 
         public static UIWindow GetKeyWindow()
         {
-            return UIApplication.SharedApplication.ConnectedScenes.ToArray()
-                    .Select(s => (UIWindowScene)s)
-                    .First().Windows.Where(w => w.IsKeyWindow).First();
+            // With multiple windows on iPad, prefer the window the user is currently interacting with
+            var windowScenes = UIApplication.SharedApplication.ConnectedScenes.ToArray().OfType<UIWindowScene>().ToList();
+            var scene = windowScenes.FirstOrDefault(s => s.ActivationState == UISceneActivationState.ForegroundActive)
+                        ?? windowScenes.FirstOrDefault();
+
+            return scene?.KeyWindow ?? scene?.Windows.FirstOrDefault() ?? (UIApplication.SharedApplication.Delegate as AppDelegate)?.Window;
+        }
+
+        /// <returns>The view controller to present dialogs from: the topmost one of the key window.</returns>
+        public static UIViewController GetPresentingViewController()
+        {
+            var presenter = GetKeyWindow()?.RootViewController;
+            while (presenter?.PresentedViewController != null && !presenter.PresentedViewController.IsBeingDismissed)
+                presenter = presenter.PresentedViewController;
+
+            return presenter;
         }
 
         public Task SetThemeAsync(Theme theme)
@@ -44,11 +57,10 @@ namespace Stylophone.iOS.Services
 
         public SKColor GetAccentColor()
         {
-            var keyWindow = GetKeyWindow();
             UIColor accent = UIColor.SystemBlue;
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
-                accent = keyWindow.TintColor ?? UIColor.SystemBlue;
+                accent = GetKeyWindow()?.TintColor ?? UIColor.SystemBlue;
             });
             return accent.ToSKColor();
         }
@@ -86,14 +98,15 @@ namespace Stylophone.iOS.Services
             {
                 PlaybackIcon.Play => "play.fill",
                 PlaybackIcon.Pause => "pause.fill",
-                PlaybackIcon.RepeatOff => "repeat.circle",
-                PlaybackIcon.Repeat => "repeat.circle.fill",
-                PlaybackIcon.RepeatSingle => "repeat.1.circle.fill",
-                PlaybackIcon.VolumeMute => "speaker.slash.circle",
-                PlaybackIcon.Volume25 => "speaker.wave.2.circle",
-                PlaybackIcon.Volume50 => "speaker.wave.2.circle",
-                PlaybackIcon.Volume75 => "speaker.wave.2.circle",
-                PlaybackIcon.VolumeFull => "speaker.wave.2.circle",
+                // The playback page shows repeat being on with the button's background
+                PlaybackIcon.RepeatOff => "repeat",
+                PlaybackIcon.Repeat => "repeat",
+                PlaybackIcon.RepeatSingle => "repeat.1",
+                PlaybackIcon.VolumeMute => "speaker.slash.fill",
+                PlaybackIcon.Volume25 => "speaker.fill",
+                PlaybackIcon.Volume50 => "speaker.wave.1.fill",
+                PlaybackIcon.Volume75 => "speaker.wave.2.fill",
+                PlaybackIcon.VolumeFull => "speaker.wave.3.fill",
                 _ => "opticaldisc",
             };
         }

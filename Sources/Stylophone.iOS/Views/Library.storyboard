@@ -76,10 +76,10 @@
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="52V-vM-5Zf">
                                             <rect key="frame" x="77.5" y="77.5" width="37" height="37"/>
                                         </activityIndicatorView>
-                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J5h-Hf-IO9">
-                                            <rect key="frame" x="0.0" y="140" width="192" height="52"/>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J5h-Hf-IO9" userLabel="Album Info Glass" customClass="GlassEffectView">
+                                            <rect key="frame" x="6" y="134" width="180" height="52"/>
                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="HY7-Dc-fz9">
-                                                <rect key="frame" x="0.0" y="0.0" width="192" height="52"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="180" height="52"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.90000000000000002" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oZ8-OH-wbQ">
@@ -115,18 +115,22 @@
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="52" id="jQW-4t-pnI"/>
                                             </constraints>
-                                            <blurEffect style="regular"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="glassCornerRadius">
+                                                    <real key="value" value="8"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </visualEffectView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="Ghs-Wy-Lzw" secondAttribute="trailing" id="2tb-se-1PY"/>
                                         <constraint firstItem="52V-vM-5Zf" firstAttribute="centerX" secondItem="tCg-e2-Srh" secondAttribute="centerX" id="8md-Ha-zbH"/>
-                                        <constraint firstAttribute="trailing" secondItem="J5h-Hf-IO9" secondAttribute="trailing" id="Dg5-pF-em5"/>
-                                        <constraint firstAttribute="bottom" secondItem="J5h-Hf-IO9" secondAttribute="bottom" id="HD1-qt-bru"/>
+                                        <constraint firstAttribute="trailing" secondItem="J5h-Hf-IO9" secondAttribute="trailing" constant="6" id="Dg5-pF-em5"/>
+                                        <constraint firstAttribute="bottom" secondItem="J5h-Hf-IO9" secondAttribute="bottom" constant="6" id="HD1-qt-bru"/>
                                         <constraint firstItem="J5h-Hf-IO9" firstAttribute="centerX" secondItem="tCg-e2-Srh" secondAttribute="centerX" id="L8z-Qu-OJP"/>
                                         <constraint firstItem="52V-vM-5Zf" firstAttribute="centerY" secondItem="tCg-e2-Srh" secondAttribute="centerY" id="TXc-mW-1bB"/>
                                         <constraint firstAttribute="bottom" secondItem="Ghs-Wy-Lzw" secondAttribute="bottom" id="Uhl-E2-kYw"/>
-                                        <constraint firstItem="J5h-Hf-IO9" firstAttribute="leading" secondItem="tCg-e2-Srh" secondAttribute="leading" id="WEi-kE-uD4"/>
+                                        <constraint firstItem="J5h-Hf-IO9" firstAttribute="leading" secondItem="tCg-e2-Srh" secondAttribute="leading" constant="6" id="WEi-kE-uD4"/>
                                         <constraint firstItem="Ghs-Wy-Lzw" firstAttribute="top" secondItem="tCg-e2-Srh" secondAttribute="top" id="XQY-6f-iNh"/>
                                         <constraint firstItem="Ghs-Wy-Lzw" firstAttribute="leading" secondItem="tCg-e2-Srh" secondAttribute="leading" id="dts-0C-6pY"/>
                                     </constraints>

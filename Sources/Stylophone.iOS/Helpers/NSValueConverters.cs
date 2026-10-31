@@ -42,6 +42,12 @@ namespace Stylophone.iOS.Helpers
             if (value is NSWrapper wrap)
             {
                 var skiaImage = wrap.ManagedObject as SKImage;
+
+                // The art of tracks going away gets disposed, while their views can still be bound to it.
+                // Leave those views as they are until they're bound to the next track.
+                if (skiaImage == null || skiaImage.Handle == IntPtr.Zero)
+                    return NSNull.Null;
+
                 img = skiaImage.ToUIImage();
             }
             else

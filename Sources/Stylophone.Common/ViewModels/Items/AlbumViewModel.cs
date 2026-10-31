@@ -188,7 +188,10 @@ namespace Stylophone.Common.ViewModels
             var cacheName = Miscellaneous.EscapeFilename(Name);
             if (await _albumArtService.IsAlbumArtCachedAsync(cacheName))
             {
-                AlbumArt = SKImage.FromBitmap(await _albumArtService.LoadImageFromFile(cacheName));
+                // Cached art that can't be decoded is fetched again along with the album's data
+                var art = await _albumArtService.LoadImageFromFile(cacheName);
+                if (art != null)
+                    AlbumArt = SKImage.FromBitmap(art);
             }
         }
 

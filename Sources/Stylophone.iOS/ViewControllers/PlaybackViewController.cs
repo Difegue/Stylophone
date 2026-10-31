@@ -12,6 +12,7 @@ using Stylophone.iOS.Helpers;
 using Stylophone.iOS.ViewModels;
 using CommunityToolkit.Mvvm.Input;
 using CoreGraphics;
+using Symbols;
 using UIKit;
 
 namespace Stylophone.iOS.ViewControllers
@@ -22,12 +23,23 @@ namespace Stylophone.iOS.ViewControllers
 		{
 		}
 
+        // Shortest view that still fits the stacked layout's smallest album art
+        private const float StackedLayoutMinHeight = 720;
+        // Narrowest room beside sidebars for the stacked layout (its smallest art with its margins), and for the side by side one
+        private const float StackedLayoutMinWidth = 480;
+        private const float SideBySideLayoutMinWidth = 600;
+        private bool _usesSideBySideLayout;
+        private bool _usesNarrowLayout;
+        private bool _isShown;
+        private UINavigationController _shownInNavigationController;
+        private NSLayoutConstraint _contentBottom;
+
         public PlaybackViewModel ViewModel { get; private set; }
 		public PropertyBinder<PlaybackViewModel> Binder { get; private set; }
         public PropertyBinder<LocalPlaybackViewModel> LocalPlaybackBinder { get; private set; }
         private PropertyBinder<TrackViewModel> _trackBinder;
 
-        private UILabel upNextView = new UILabel();
+        private FlexibleTitleView upNextView = new FlexibleTitleView();
 
         public override void AwakeFromNib()
         {
@@ -41,11 +53,12 @@ namespace Stylophone.iOS.ViewControllers
 
             ViewModel.PropertyChanged += OnVmPropertyChanged;
             NavigationItem.TitleView = upNextView;
-            upNextView.TextAlignment = UITextAlignment.Right;
-            upNextView.Lines = 2;
-            upNextView.AdjustsFontForContentSizeCategory = true;
-            upNextView.AdjustsFontSizeToFitWidth = true;
-            upNextView.AdjustsLetterSpacingToFitWidth = true;
+            upNextView.Label.TextAlignment = UITextAlignment.Right;
+            upNextView.Label.Lines = 2;
+            upNextView.Label.AdjustsFontForContentSizeCategory = true;
+            upNextView.Label.AdjustsFontSizeToFitWidth = true;
+            upNextView.Label.AdjustsLetterSpacingToFitWidth = true;
+            upNextView.InvalidateIntrinsicContentSize();
             NavigationItem.RightBarButtonItem = CreateSettingsButton();
 
             // Bind
@@ -64,14 +77,26 @@ namespace Stylophone.iOS.ViewControllers
             CompactView.VolumeButton.AccessibilityLabel = Strings.ActionChangeVolume;
             CompactView.ShuffleButton.AccessibilityLabel = Strings.ActionToggleShuffle;
 
+            // The playback bar and the enabled toggles fill with the same tint as the compact player's bubble
+            CompactView.CircularProgressView.FillColorChanged += (s, e) =>
+            {
+                UpdateTrackSliderTint();
+                UpdateToggleButtons();
+            };
+
             CompactView.OpenFullScreenButton.PrimaryActionTriggered += (s, e) => ViewModel.NavigateNowPlaying();
             CompactView.OpenFullScreenButton.AccessibilityLabel = Strings.ActionFullscreenPlayback;
-            Binder.Bind<string>(CompactView.OpenFullScreenButton, "accessibilityValue", nameof(ViewModel.CurrentTrack), valueTransformer: trackToStringTransformer);
+            Binder.Bind<TrackViewModel>(CompactView.OpenFullScreenButton, "accessibilityValue", nameof(ViewModel.CurrentTrack), valueTransformer: trackToStringTransformer);
 
             // Volume Popover Binding
             LocalPlaybackBinder.Bind<bool>(LocalPlaybackView, "hidden", nameof(ViewModel.LocalPlayback.IsEnabled), valueTransformer: negateBoolTransformer);
 
             LocalMuteButton.PrimaryActionTriggered += (s, e) => ViewModel.LocalPlayback.ToggleMute();
+            ViewModel.LocalPlayback.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModel.LocalPlayback.VolumeIcon))
+                    UpdateButton(LocalMuteButton, ViewModel.LocalPlayback.VolumeIcon);
+            };
             LocalPlaybackBinder.Bind<int>(LocalVolumeSlider, "value", nameof(ViewModel.LocalPlayback.Volume), true);
             LocalPlaybackBinder.Bind<int>(LocalVolume, "text", nameof(ViewModel.LocalPlayback.Volume), valueTransformer: intToStringTransformer);
             LocalVolumeSlider.AccessibilityLabel = Strings.LocalVolumeHeader;
@@ -86,15 +111,145 @@ namespace Stylophone.iOS.ViewControllers
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            NavigationController.NavigationBar.TintColor = UIColor.Label;
+            _isShown = true;
+
+            // Navigating from the sidebar replaces this page in the navigation stack before it disappears,
+            // which leaves it without a NavigationController by then: keep the one to restore
+            _shownInNavigationController = NavigationController;
+            _shownInNavigationController.NavigationBar.TintColor = UIColor.Label;
+
+            _shownInNavigationController.ToolbarHidden = false;
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            NavigationController.NavigationBar.TintColor = null;
+            var navigationController = NavigationController ?? _shownInNavigationController;
+            if (navigationController != null)
+            {
+                navigationController.NavigationBar.TintColor = null;
+                navigationController.ToolbarHidden = true;
+            }
 
-            (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+            var window = View.Window ?? (UIApplication.SharedApplication.Delegate as AppDelegate).Window;
+            if (window != null)
+                window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+
+            // The compact player comes from this page's storyboard scene, so its layout follows our traits as well:
+            // only keep the overrides while it's hidden behind this page
+            _isShown = false;
+            SetLayoutOverrides(false, false);
+        }
+
+        public override void ViewIsAppearing(bool animated)
+        {
+            base.ViewIsAppearing(animated);
+            UpdateLayoutSizeClass();
+        }
+
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+
+            // The new size and size classes are applied by the time the transition animates
+            coordinator.AnimateAlongsideTransition(_ => UpdateLayoutSizeClass(), null);
+        }
+
+        public override void ViewSafeAreaInsetsDidChange()
+        {
+            base.ViewSafeAreaInsetsDidChange();
+
+            // Sidebars showing up or going away change the room left for the content, and the center of the bar that the "Up next" title follows
+            // (whose own size doesn't always change with them). Wait for the current layout pass to end.
+            UIApplication.SharedApplication.BeginInvokeOnMainThread(() =>
+            {
+                UpdateLayoutSizeClass();
+                upNextView.SetNeedsLayout();
+            });
+        }
+
+        public override void ViewWillLayoutSubviews()
+        {
+            base.ViewWillLayoutSubviews();
+            UpdateContentBottom();
+        }
+
+        /// <summary>
+        /// The storyboard's layouts keep room for the toolbar at the bottom of the page. Where the system puts it in a vertical bar
+        /// instead (like on foldable iPhones), extend the content below the screen by the toolbar's height: the controls then follow
+        /// the safe area down rather than leaving that room empty, and the layouts centered on the page stay centered.
+        /// Phones in landscape are left as they are: their layout puts the controls in the toolbar's row instead of above it.
+        /// </summary>
+        private void UpdateContentBottom()
+        {
+            var navigationController = NavigationController;
+            var window = View.Window;
+            if (_contentBottom == null || navigationController == null || window == null)
+                return;
+
+            // A toolbar at the bottom adds its height to the bottom of our safe area
+            var toolbarInset = View.SafeAreaInsets.Bottom - window.SafeAreaInsets.Bottom;
+            var isToolbarInVerticalBar = VerticalBarHelper.HasVerticalBar(window.TraitCollection) && !navigationController.ToolbarHidden && toolbarInset < 1;
+
+            // Our own traits may be overridden for the side by side layout, which does keep room for the toolbar: go by the window's
+            var isPhoneLandscape = navigationController.TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact;
+
+            var offset = isToolbarInVerticalBar && !isPhoneLandscape ? navigationController.Toolbar.SizeThatFits(new CGSize(View.Bounds.Width, 0)).Height : 0;
+
+            if (_contentBottom.Constant != offset)
+                _contentBottom.Constant = offset;
+        }
+
+        /// <summary>
+        /// Wide windows too short for the stacked layout get the one of phones in landscape, with the album art on the side.
+        /// When sidebars leave too little room for either, the page gets the layout of phones in portrait.
+        /// Changing traits invalidates layout, so this only runs when the page appears, is resized, or its safe area changes.
+        /// </summary>
+        private void UpdateLayoutSizeClass()
+        {
+            // The overrides are only kept while this page is shown, see ViewWillDisappear.
+            // Our view stays in its window while transitioning away, so that isn't enough to tell.
+            if (!_isShown || ViewIfLoaded?.Window == null)
+                return;
+
+            // Our own traits may be overridden, so go by the navigation controller's
+            var windowTraits = NavigationController?.TraitCollection ?? TraitCollection;
+            var isRegular = windowTraits.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular &&
+                            windowTraits.VerticalSizeClass == UIUserInterfaceSizeClass.Regular;
+
+            var width = NarrowLayoutSwitch.GetContentWidth(View);
+            var isShort = View.Bounds.Height < StackedLayoutMinHeight;
+            var isNarrow = isRegular && (width < StackedLayoutMinWidth || (isShort && width < SideBySideLayoutMinWidth));
+
+            SetLayoutOverrides(isNarrow, isRegular && !isNarrow && isShort);
+        }
+
+        /// <summary>
+        /// Storyboard size class variations follow the traits of their scene's view controller (not of each view),
+        /// so the alternate layouts override our size classes.
+        /// </summary>
+        private void SetLayoutOverrides(bool narrow, bool sideBySide)
+        {
+            if (!OperatingSystem.IsIOSVersionAtLeast(17))
+                return;
+
+            if (narrow != _usesNarrowLayout)
+            {
+                _usesNarrowLayout = narrow;
+                if (narrow)
+                    TraitOverrides.HorizontalSizeClass = UIUserInterfaceSizeClass.Compact;
+                else
+                    TraitOverrides.RemoveTrait(typeof(UITraitHorizontalSizeClass));
+            }
+
+            if (sideBySide != _usesSideBySideLayout)
+            {
+                _usesSideBySideLayout = sideBySide;
+                if (sideBySide)
+                    TraitOverrides.VerticalSizeClass = UIUserInterfaceSizeClass.Compact;
+                else
+                    TraitOverrides.RemoveTrait(typeof(UITraitVerticalSizeClass));
+            }
         }
 
         public override void ViewDidLayoutSubviews()
@@ -105,7 +260,7 @@ namespace Stylophone.iOS.ViewControllers
 
             // Different multi-line behavior depending on size classes
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact &&
-                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular && 
+                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular &&
                 UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
                 TrackTitle.Lines = 2;
@@ -116,15 +271,20 @@ namespace Stylophone.iOS.ViewControllers
                     TrackTitle.Lines = 3;
             }
 
-            // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's
-            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
-                TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
+            // On compact widths, change the application tintcolor, as that's what is used instead of the navigation bar's.
+            // This goes by the window's size classes, not the ones overridden for the side by side layout.
+            var window = View.Window ?? (UIApplication.SharedApplication.Delegate as AppDelegate).Window;
+            var windowTraits = NavigationController?.TraitCollection ?? TraitCollection;
+            if (windowTraits.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact ||
+                windowTraits.VerticalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
-                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = UIColor.Label;
+                if (window != null)
+                    window.TintColor = UIColor.Label;
             }
-            else 
+            else
             {
-                (UIApplication.SharedApplication.Delegate as AppDelegate).Window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+                if (window != null)
+                    window.TintColor = (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
                 // Reset TitleView as it can disappear when moving from compact to normal size class
                 // TODO: this doesn't do anything..
                 NavigationItem.TitleView = upNextView;
@@ -136,6 +296,7 @@ namespace Stylophone.iOS.ViewControllers
             base.ViewDidLoad();
 
             TrackSlider.AccessibilityLabel = Strings.SongPlaybackLabel;
+            UpdateTrackSliderTint();
             TrackSlider.TouchDragInside += (s, e) =>
             {
                 ViewModel.TimeListened = Miscellaneous.FormatTimeString(TrackSlider.Value * 1000);
@@ -147,8 +308,6 @@ namespace Stylophone.iOS.ViewControllers
                 TrackSlider.AccessibilityValue = ViewModel.TimeListened;
             };
 
-            var upNextTransformer = NSValueTransformer.GetValueTransformer(nameof(NextTrackToStringValueTransformer));
-
             // Full View Binding
             Binder.Bind<string>(ElapsedTime, "text", nameof(ViewModel.TimeListened));
             Binder.Bind<string>(RemainingTime, "text", nameof(ViewModel.TimeRemaining));
@@ -156,25 +315,30 @@ namespace Stylophone.iOS.ViewControllers
             Binder.Bind<double>(TrackSlider, "maximumValue", nameof(ViewModel.MaxTimeValue));
             Binder.Bind<string>(TrackSlider, "accessibilityValue", nameof(ViewModel.TimeListened));
 
-            Binder.Bind<TrackViewModel>(upNextView, "text", nameof(ViewModel.NextTrack), valueTransformer:upNextTransformer);
+            UpdateUpNext();
             UpdateFullView(ViewModel.CurrentTrack);
 
             UpdateButton(PlayPauseButton, ViewModel.PlayButtonContent);
             UpdateButton(VolumeButton, ViewModel.VolumeIcon);
             UpdateButton(ServerMuteButton, ViewModel.VolumeIcon);
+            UpdateButton(LocalMuteButton, ViewModel.LocalPlayback.VolumeIcon);
             UpdateButton(RepeatButton, ViewModel.RepeatIcon);
-            UpdateButton(ShuffleButton, ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle");
+            UpdateToggleButtons();
 
             VolumeButton.AccessibilityLabel = Strings.ActionChangeVolume;
             ShuffleButton.AccessibilityLabel = Strings.ActionToggleShuffle;
             RepeatButton.AccessibilityLabel = Strings.ActionToggleRepeat;
+            UpdateGlyphSizes();
+
+            // The storyboard gives the playback glyphs the label color, which would let the album art show through them on Macs
+            SkipPrevButton.TintColor = PlayPauseButton.TintColor = SkipNextButton.TintColor = GlassEffectView.OpaqueLabelColor;
 
             SkipPrevButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipPrevious();
             SkipNextButton.PrimaryActionTriggered += (s, e) => ViewModel.SkipNext();
             PlayPauseButton.PrimaryActionTriggered += (s, e) => ViewModel.ChangePlaybackState();
-            ShuffleButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleShuffle();
-            RepeatButton.PrimaryActionTriggered += (s, e) => ViewModel.ToggleRepeat();
-            VolumeButton.PrimaryActionTriggered += (s, e) => ShowVolumePopover(VolumeButton);
+            ShuffleButton.Clicked += (s, e) => ViewModel.ToggleShuffle();
+            RepeatButton.Clicked += (s, e) => ViewModel.ToggleRepeat();
+            VolumeButton.Clicked += (s, e) => ShowVolumePopover(VolumeButton);
 
             // Add shadow to albumart
             ShadowCaster.Layer.MasksToBounds = false;
@@ -186,6 +350,36 @@ namespace Stylophone.iOS.ViewControllers
 
             AlbumArt.Layer.CornerRadius = 8;
             //View.BringSubviewToFront(AlbumArt);
+
+            // Keep the album art background going under sidebars, while the page's content moves aside for them
+            BackgroundExtensionHelper.ExtendUnderSidebars(AlbumBackground);
+
+            PlaybackContent.TranslatesAutoresizingMaskIntoConstraints = false;
+            _contentBottom = PlaybackContent.BottomAnchor.ConstraintEqualTo(View.BottomAnchor);
+            NSLayoutConstraint.ActivateConstraints(new[]
+            {
+                PlaybackContent.TopAnchor.ConstraintEqualTo(View.TopAnchor),
+                _contentBottom,
+                PlaybackContent.LeadingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.LeadingAnchor),
+                PlaybackContent.TrailingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TrailingAnchor)
+            });
+
+            // The page is laid out from the playback controls up: when the track info takes more room (eg. long titles),
+            // the art shrinks rather than going under the navigation bar.
+            // The side by side layout centers its art below this, so it shrinks too on short screens (like phones in landscape),
+            // instead of running into the bar's buttons and title.
+            var artBelowBars = AlbumArt.TopAnchor.ConstraintGreaterThanOrEqualTo(View.SafeAreaLayoutGuide.TopAnchor, 8);
+            artBelowBars.Priority = (float)UILayoutPriority.Required - 1;
+            artBelowBars.Active = true;
+
+            // Pages with room to spare around the art and controls (like iPads in full screen) keep them centered between the bars.
+            // This ranks below the hugging of the track info, so it moves them all together and never spreads the labels apart.
+            // Layouts that place them otherwise leave it no room to act.
+            var spaceAbove = View.SafeAreaLayoutGuide.TopAnchor.CreateAnchorWithOffset(AlbumArt.TopAnchor);
+            var spaceBelow = PlayPauseButton.BottomAnchor.CreateAnchorWithOffset(View.SafeAreaLayoutGuide.BottomAnchor);
+            var centered = spaceAbove.ConstraintEqualTo(spaceBelow);
+            centered.Priority = (float)UILayoutPriority.DefaultLow - 1;
+            centered.Active = true;
         }
 
         private void OnVmPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -210,11 +404,10 @@ namespace Stylophone.iOS.ViewControllers
             }
 
             if (e.PropertyName == nameof(ViewModel.IsShuffleEnabled))
-            {
-                var image = ViewModel.IsShuffleEnabled ? "shuffle.circle.fill" : "shuffle.circle";
-                UpdateButton(CompactView.ShuffleButton, image);
-                UpdateButton(ShuffleButton, image);
-            }
+                CompactView.UpdateShuffle(ViewModel.IsShuffleEnabled);
+
+            if (e.PropertyName is nameof(ViewModel.IsShuffleEnabled) or nameof(ViewModel.IsRepeatEnabled) or nameof(ViewModel.IsSingleEnabled))
+                UpdateToggleButtons();
 
             if (e.PropertyName == nameof(ViewModel.IsConsumeEnabled))
                 _consumeAction.State = ViewModel.IsConsumeEnabled ? UIMenuElementState.On : UIMenuElementState.Off;
@@ -223,6 +416,9 @@ namespace Stylophone.iOS.ViewControllers
             {
                 UpdateButton(RepeatButton, ViewModel.RepeatIcon);
             }
+
+            if (e.PropertyName == nameof(ViewModel.NextTrack))
+                UpdateUpNext();
 
             if (e.PropertyName == nameof(ViewModel.CurrentTimeValue))
             {
@@ -250,15 +446,84 @@ namespace Stylophone.iOS.ViewControllers
             var imageConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIImageValueTransformer));
             var colorConverter = NSValueTransformer.GetValueTransformer(nameof(SkiaToUIColorValueTransformer));
 
-            _trackBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _trackBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter);
-            _trackBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
+            // Fade over to the new track's art: it comes with the track when it's cached, or else follows the placeholder
+            _trackBinder.Bind<SKImage>(AlbumArt, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _trackBinder.Bind<SKImage>(AlbumBackground, "image", nameof(currentTrack.AlbumArt), valueTransformer: imageConverter, crossDissolve: true);
+            _trackBinder.Bind<SKColor>(BackgroundTint, "backgroundColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter, crossDissolve: true);
+            // Fading the slider would leave a fading copy of its thumb behind as it goes back to the start
             _trackBinder.Bind<SKColor>(TrackSlider, "maximumTrackTintColor", nameof(currentTrack.DominantColor), valueTransformer: colorConverter);
-            
         }
+
+        public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
+        {
+            base.TraitCollectionDidChange(previousTraitCollection);
+
+            if (previousTraitCollection?.VerticalSizeClass != TraitCollection.VerticalSizeClass)
+                UpdateGlyphSizes();
+        }
+
+        private void UpdateGlyphSizes()
+        {
+            // Don't update if the view isn't loaded yet
+            if (PlayPauseButton == null)
+                return;
+
+            // The glass buttons are smaller on compact heights (eg. phones in landscape)
+            var isCompact = TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact;
+
+            SetGlyphSize(PlayPauseButton, isCompact ? 26 : 30);
+            SetGlyphSize(SkipPrevButton, isCompact ? 16 : 19);
+            SetGlyphSize(SkipNextButton, isCompact ? 16 : 19);
+        }
+
+        private static void SetGlyphSize(UIButton button, nfloat pointSize) =>
+            button.SetPreferredSymbolConfiguration(UIImageSymbolConfiguration.Create(pointSize, UIImageSymbolWeight.Semibold), UIControlState.Normal);
 
         private void UpdateButton(UIButton button, string systemImg) =>
             button?.SetImage(UIImage.GetSystemImage(systemImg), UIControlState.Normal);
+        
+        private void UpdateButton(UIBarButtonItem button, string systemImg) =>
+            button?.SetSymbolImage(UIImage.GetSystemImage(systemImg),
+                NSSymbolReplaceContentTransition.CreateMagicTransition(NSSymbolReplaceContentTransition.CreateReplaceUpUpTransition()));
+
+        private void UpdateTrackSliderTint()
+        {
+            // Don't update if the view isn't loaded yet
+            if (TrackSlider != null) {
+                var fillColor = CompactView.CircularProgressView.FillColor ?? (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+                TrackSlider.MinimumTrackTintColor = fillColor;
+            }   
+        }
+
+        /// <summary>
+        /// Use the same accent color for the shuffle and repeat toggles as the compact player's bubble fill
+        /// </summary>
+        private void UpdateToggleButtons()
+        {
+            // Don't update if the view isn't loaded yet
+            if (ShuffleButton == null || RepeatButton == null)
+                return;
+
+            var fillColor = CompactView.CircularProgressView.FillColor ?? (UIApplication.SharedApplication.Delegate as AppDelegate).AppColor;
+            SetToggled(ShuffleButton, ViewModel.IsShuffleEnabled, fillColor);
+            SetToggled(RepeatButton, ViewModel.IsRepeatEnabled || ViewModel.IsSingleEnabled, fillColor);
+        }
+
+        private static void SetToggled(UIBarButtonItem button, bool isOn, UIColor fillColor)
+        {
+            // Selected items are filled with their tint (otherwise the label color on compact widths)
+            button.Selected = isOn;
+            button.TintColor = isOn ? fillColor : null;
+        }
+
+        private void UpdateUpNext()
+        {
+            var upNextTransformer = NSValueTransformer.GetValueTransformer(nameof(NextTrackToStringValueTransformer));
+            var text = ViewModel.NextTrack == null ? "" :
+                upNextTransformer.TransformedValue(new NSWrapper { ManagedObject = ViewModel.NextTrack })?.ToString();
+
+            upNextView.Text = text;
+        }
 
         private UIAction _consumeAction;
         private UIBarButtonItem CreateSettingsButton()
@@ -272,12 +537,25 @@ namespace Stylophone.iOS.ViewControllers
                 completion.Invoke(new[] { _consumeAction })));
 
             var barButtonMenu = UIMenu.Create(new UIMenuElement[] { dynamicAction, addQueueAction, viewAlbumAction });
-            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis.circle"), barButtonMenu);
+            return new UIBarButtonItem(UIImage.GetSystemImage("ellipsis"), barButtonMenu);
         }
 
         public void ShowVolumePopover(UIButton sourceButton, UIViewController sourceVc = null)
         {
-            var sourceBounds = sourceButton.ImageView.Bounds;
+            var sourceBounds = sourceButton.Bounds;
+            var size = ViewModel.LocalPlayback.IsEnabled ? new CGSize(276, 176) : new CGSize(276, 96);
+
+            var popover = new VolumePopoverViewController(VolumePopover, sourceButton, sourceBounds, size);
+
+            if (sourceVc == null)
+                sourceVc = this;
+
+            sourceVc.PresentViewController(popover, true, null);
+        }
+        
+        public void ShowVolumePopover(UIBarButtonItem sourceButton, UIViewController sourceVc = null)
+        {
+            var sourceBounds = sourceButton.AccessibilityFrame;
             var size = ViewModel.LocalPlayback.IsEnabled ? new CGSize(276, 176) : new CGSize(276, 96);
 
             var popover = new VolumePopoverViewController(VolumePopover, sourceButton, sourceBounds, size);
@@ -293,12 +571,12 @@ namespace Stylophone.iOS.ViewControllers
     {
         private UIView _volumeView;
 
-        public VolumePopoverViewController(UIView view, UIButton sourceButton, CGRect sourceBounds, CGSize contentSize)
+        public VolumePopoverViewController(UIView view, IUIPopoverPresentationControllerSourceItem sourceButton, CGRect sourceBounds, CGSize contentSize)
         {
             _volumeView = view;
 
             ModalPresentationStyle = UIModalPresentationStyle.Popover;
-            PopoverPresentationController.SourceItem = sourceButton.ImageView;
+            PopoverPresentationController.SourceItem = sourceButton;
             PopoverPresentationController.Delegate = this;
             PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Down;
             PopoverPresentationController.SourceRect = new CGRect(sourceBounds.Width / 2, -4, 0, 0);
