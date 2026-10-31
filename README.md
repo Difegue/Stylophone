@@ -8,8 +8,6 @@ Based on [MpcNET](https://github.com/Difegue/MpcNET), my own fork of the origina
 
 [<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="244"/>](https://www.microsoft.com/store/apps/9NCB693428T8?cid=storebadge&ocid=badge) [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="216"/>](https://apps.apple.com/us/app/stylophone/id1644672889?itsct=apps_box_link&itscg=30200)
 
-Get the macOS version for free from the [Releases!](https://github.com/Difegue/Stylophone/releases)  
-
 [Buy a sticker if you want!](https://ko-fi.com/s/9fcf421b6e)  
 
 ## Features
@@ -90,6 +88,10 @@ You can easily contribute translations to Stylophone! To help translate, follow 
 |---|---|
 | ![nowplaying_win](Screenshots/Screen4.jpg)| ![nowplaying_ios](Screenshots/Screen8.jpg) |
 
+|Now Playing, iPhone Duo (folded) | Now Playing, iPhone Duo (unfolded) |
+|---|---|
+| ![nowplaying_win](Screenshots/ScreenDuo.jpeg)| ![nowplaying_ios](Screenshots/ScreenDuo2.jpeg) |
+
 |Xbox Integration | iOS Control Center Integration |
 |---|---|
 | ![xbox](Screenshots/ScreenXbox.jpg)| ![controlcenter](Screenshots/ScreenNowPlaying.jpg) |
@@ -100,4 +102,4 @@ If Telemetry is enabled in the app's settings, the application will send detaile
 Those reports can contain information about your hardware. (Motherboard type, etc)  
 
 Stylophone collects no other data from your device.  
-The Windows Store version can send anonymized error reports related to crashes of the application back to me.  
+The Microsoft Store version can send anonymized error reports related to crashes of the application back to me.  
